@@ -44,7 +44,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- Structured Data -->
   <!-- Structured Data (JSON-LD) -->
   <script type="application/ld+json">
   {
@@ -109,7 +108,9 @@
         </span>
       </a>
       <div class="nav-links" id="nav-links">
+        <a href="#featured">精选</a>
         <a href="#articles">文章</a>
+        <a href="#models">模型</a>
         <a href="#topics">主题</a>
         <a href="#about">关于</a>
         <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener">GitHub</a>
@@ -164,9 +165,62 @@
     </div>
   </header>
 
-  <!-- Articles -->
   <main>
-    <section id="articles" class="section">
+
+    <!-- ====== Featured Article ====== -->
+    <section id="featured" class="section section-tight">
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="section-tag">FEATURED</div>
+          <h2>精选推荐</h2>
+          <p class="section-sub">编辑精选的深度好文</p>
+        </div>
+        <div class="featured-card fade-in">
+          <div class="featured-glow"></div>
+          <div class="featured-badge">
+            <span class="badge-pulse"></span>
+            <span>HOT</span>
+          </div>
+          <div class="featured-content">
+            <div class="featured-meta">
+              <span class="tag">深度解析</span>
+              <time datetime="2026-03-09">2026.03.09</time>
+            </div>
+            <h3>GPT-5 vs Claude 4 vs Gemini 2：2026 三大模型终极横评</h3>
+            <p>从推理能力、代码生成、多模态理解、长上下文处理四大维度，全面对比 2026 年三大顶级 AI 模型的真实表现。附带 50+ 测试用例的详细评测数据与可视化对比图表。</p>
+            <div class="featured-tags">
+              <span class="mini-tag">GPT-5</span>
+              <span class="mini-tag">Claude 4</span>
+              <span class="mini-tag">Gemini 2</span>
+              <span class="mini-tag">评测</span>
+            </div>
+            <a href="#" class="card-link">阅读全文 <span class="arrow">→</span></a>
+          </div>
+          <div class="featured-stats">
+            <div class="featured-stat">
+              <span class="featured-stat-value">50+</span>
+              <span class="featured-stat-label">测试用例</span>
+            </div>
+            <div class="featured-stat">
+              <span class="featured-stat-value">4</span>
+              <span class="featured-stat-label">评测维度</span>
+            </div>
+            <div class="featured-stat">
+              <span class="featured-stat-value">3</span>
+              <span class="featured-stat-label">顶级模型</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Divider -->
+    <div class="section-divider" aria-hidden="true">
+      <span class="divider-dot">◆</span>
+    </div>
+
+    <!-- ====== Articles ====== -->
+    <section id="articles" class="section section-tight">
       <div class="container">
         <div class="section-header fade-in">
           <div class="section-tag">LATEST POSTS</div>
@@ -211,12 +265,163 @@
             <a href="#" class="card-link">阅读全文 <span class="arrow">→</span></a>
           </article>
 
+          <article class="article-card fade-in">
+            <div class="card-corner card-corner-tl"></div>
+            <div class="card-corner card-corner-br"></div>
+            <div class="card-meta">
+              <span class="tag tag-cyan">RAG</span>
+              <time datetime="2026-03-03">2026.03.03</time>
+            </div>
+            <h3>RAG 检索增强生成实战</h3>
+            <p>从向量数据库选型到 Embedding 策略，完整构建一套企业级 RAG 系统。含 Pinecone、Weaviate 对比实测。</p>
+            <a href="#" class="card-link">阅读全文 <span class="arrow">→</span></a>
+          </article>
+
+          <article class="article-card fade-in">
+            <div class="card-corner card-corner-tl"></div>
+            <div class="card-corner card-corner-br"></div>
+            <div class="card-meta">
+              <span class="tag tag-rose">多模态</span>
+              <time datetime="2026-02-28">2026.02.28</time>
+            </div>
+            <h3>多模态大模型入门指南</h3>
+            <p>探索 GPT-4V、Gemini Pro Vision 等多模态模型的图文理解能力，附带图像分析、文档解读等应用案例。</p>
+            <a href="#" class="card-link">阅读全文 <span class="arrow">→</span></a>
+          </article>
+
+          <article class="article-card fade-in">
+            <div class="card-corner card-corner-tl"></div>
+            <div class="card-corner card-corner-br"></div>
+            <div class="card-meta">
+              <span class="tag tag-purple">微调</span>
+              <time datetime="2026-02-25">2026.02.25</time>
+            </div>
+            <h3>大模型微调全流程详解</h3>
+            <p>LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。</p>
+            <a href="#" class="card-link">阅读全文 <span class="arrow">→</span></a>
+          </article>
+
+        </div>
+        <div class="section-action fade-in">
+          <a href="#" class="btn-ghost">查看全部文章 →</a>
         </div>
       </div>
     </section>
 
-    <!-- Topics -->
-    <section id="topics" class="section">
+    <!-- Section Divider -->
+    <div class="section-divider" aria-hidden="true">
+      <span class="divider-dot">◆</span>
+    </div>
+
+    <!-- ====== Model Comparison ====== -->
+    <section id="models" class="section section-tight">
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="section-tag">MODEL COMPARISON</div>
+          <h2>模型对比</h2>
+          <p class="section-sub">三大主流 AI 模型能力全景一览</p>
+        </div>
+        <div class="model-grid fade-in">
+
+          <div class="model-card model-card-gpt">
+            <div class="model-icon">🧠</div>
+            <h3 class="model-name">GPT-4o</h3>
+            <span class="model-maker">OpenAI</span>
+            <div class="model-specs">
+              <div class="spec-row">
+                <span class="spec-label">上下文窗口</span>
+                <span class="spec-value">128K</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">多模态</span>
+                <span class="spec-value spec-yes">✓ 支持</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">代码能力</span>
+                <span class="spec-value">★★★★★</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">推理速度</span>
+                <span class="spec-value">★★★★☆</span>
+              </div>
+            </div>
+            <div class="model-tags">
+              <span class="mini-tag">函数调用</span>
+              <span class="mini-tag">DALL·E</span>
+              <span class="mini-tag">插件生态</span>
+            </div>
+          </div>
+
+          <div class="model-card model-card-claude model-card-highlight">
+            <div class="model-popular">POPULAR</div>
+            <div class="model-icon">🎭</div>
+            <h3 class="model-name">Claude 3.5</h3>
+            <span class="model-maker">Anthropic</span>
+            <div class="model-specs">
+              <div class="spec-row">
+                <span class="spec-label">上下文窗口</span>
+                <span class="spec-value">200K</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">多模态</span>
+                <span class="spec-value spec-yes">✓ 支持</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">代码能力</span>
+                <span class="spec-value">★★★★★</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">推理速度</span>
+                <span class="spec-value">★★★★★</span>
+              </div>
+            </div>
+            <div class="model-tags">
+              <span class="mini-tag">Artifacts</span>
+              <span class="mini-tag">长文本</span>
+              <span class="mini-tag">安全对齐</span>
+            </div>
+          </div>
+
+          <div class="model-card model-card-gemini">
+            <div class="model-icon">✨</div>
+            <h3 class="model-name">Gemini Ultra</h3>
+            <span class="model-maker">Google DeepMind</span>
+            <div class="model-specs">
+              <div class="spec-row">
+                <span class="spec-label">上下文窗口</span>
+                <span class="spec-value">1M+</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">多模态</span>
+                <span class="spec-value spec-yes">✓ 原生</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">代码能力</span>
+                <span class="spec-value">★★★★☆</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">推理速度</span>
+                <span class="spec-value">★★★★☆</span>
+              </div>
+            </div>
+            <div class="model-tags">
+              <span class="mini-tag">长上下文</span>
+              <span class="mini-tag">搜索整合</span>
+              <span class="mini-tag">视频理解</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Divider -->
+    <div class="section-divider" aria-hidden="true">
+      <span class="divider-dot">◆</span>
+    </div>
+
+    <!-- ====== Topics ====== -->
+    <section id="topics" class="section section-tight">
       <div class="container">
         <div class="section-header fade-in">
           <div class="section-tag">TECH DOMAINS</div>
@@ -286,8 +491,33 @@
       </div>
     </section>
 
-    <!-- About -->
-    <section id="about" class="section">
+    <!-- ====== Newsletter CTA ====== -->
+    <section class="newsletter-section section-tight">
+      <div class="container">
+        <div class="newsletter-card fade-in">
+          <div class="newsletter-glow"></div>
+          <div class="newsletter-icon">📬</div>
+          <h2>订阅 AI 前沿速递</h2>
+          <p>每周精选大模型领域的技术突破、实践案例与行业洞察，直达你的邮箱。</p>
+          <form class="newsletter-form" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="输入你的邮箱地址" required>
+            <button type="submit" class="btn-primary">
+              <span class="btn-glow"></span>
+              订阅
+            </button>
+          </form>
+          <span class="newsletter-note">🔒 我们尊重你的隐私，随时退订</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Divider -->
+    <div class="section-divider" aria-hidden="true">
+      <span class="divider-dot">◆</span>
+    </div>
+
+    <!-- ====== About ====== -->
+    <section id="about" class="section section-tight">
       <div class="container">
         <div class="about-card fade-in">
           <div class="about-hud-corner about-hud-tl"></div>
@@ -298,6 +528,30 @@
             专注于 AI 大模型领域的技术研究与实践分享。<br>
             记录前沿技术的发展脉络，探索人工智能的应用边界。
           </p>
+
+          <!-- Stats -->
+          <div class="about-stats">
+            <div class="about-stat-item">
+              <span class="about-stat-number">50+</span>
+              <span class="about-stat-text">技术文章</span>
+            </div>
+            <div class="about-stat-divider"></div>
+            <div class="about-stat-item">
+              <span class="about-stat-number">10+</span>
+              <span class="about-stat-text">覆盖模型</span>
+            </div>
+            <div class="about-stat-divider"></div>
+            <div class="about-stat-item">
+              <span class="about-stat-number">6</span>
+              <span class="about-stat-text">核心专题</span>
+            </div>
+            <div class="about-stat-divider"></div>
+            <div class="about-stat-item">
+              <span class="about-stat-number">2K+</span>
+              <span class="about-stat-text">月读者</span>
+            </div>
+          </div>
+
           <div class="about-features">
             <div class="feature-chip">
               <span class="feature-dot"></span>
@@ -311,11 +565,19 @@
               <span class="feature-dot"></span>
               前沿趋势洞察
             </div>
+            <div class="feature-chip">
+              <span class="feature-dot"></span>
+              开源项目实践
+            </div>
           </div>
           <div class="about-links">
             <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="social-link">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
               GitHub
+            </a>
+            <a href="mailto:ifnodoraemon@gmail.com" class="social-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              Email
             </a>
           </div>
         </div>
@@ -326,8 +588,32 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-inner">
-        <span class="footer-brand">◆ AI 大模型观察</span>
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <span class="footer-logo">◆ AI 大模型观察</span>
+          <p class="footer-desc">专注 AI 大模型技术研究与实践分享。记录前沿技术的发展脉络。</p>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">快速链接</h4>
+          <a href="#featured" class="footer-link">精选推荐</a>
+          <a href="#articles" class="footer-link">最新文章</a>
+          <a href="#models" class="footer-link">模型对比</a>
+          <a href="#topics" class="footer-link">技术主题</a>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">热门主题</h4>
+          <a href="#" class="footer-link">提示工程</a>
+          <a href="#" class="footer-link">AI Agent</a>
+          <a href="#" class="footer-link">RAG 应用</a>
+          <a href="#" class="footer-link">模型微调</a>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">联系我们</h4>
+          <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="footer-link">GitHub</a>
+          <a href="mailto:ifnodoraemon@gmail.com" class="footer-link">Email</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
         <span class="footer-copy">© 2026 ifnodoraemon · Built with ❤️ and AI</span>
       </div>
     </div>
