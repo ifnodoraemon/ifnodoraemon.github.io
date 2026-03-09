@@ -22,16 +22,17 @@ AI Agent（智能代理）是能够**感知环境、自主决策、执行行动*
 
 ```mermaid
 graph TD
-    A["\ud83e\udd16 AI Agent"] --> B["\ud83e\udde0 \u5927\u6a21\u578b LLM"]
-    A --> C["\ud83d\udccb \u63d0\u793a\u7ba1\u7406\u5668"]
-    B <--> C
-    B --> D["\u26a1 \u51b3\u7b56\u5f15\u64ce Router"]
-    D <--> E["\ud83d\udcbe \u8bb0\u5fc6\u7cfb\u7edf Memory"]
-    D --> F["\ud83d\udee0\ufe0f \u5de5\u5177\u96c6 Tools"]
-    F --> G["\ud83d\udd0d \u641c\u7d22"]
-    F --> H["\ud83d\udcbb \u4ee3\u7801\u6267\u884c"]
-    F --> I["\ud83d\uddc4\ufe0f \u6570\u636e\u5e93"]
-    F --> J["\ud83c\udf10 \u5916\u90e8 API"]
+    A["AI Agent"] --> B["大模型 LLM"]
+    A --> C["提示管理器"]
+    B --> D["决策引擎 Router"]
+    C --> D
+    D --> E["记忆系统 Memory"]
+    E --> D
+    D --> F["工具集 Tools"]
+    F --> G["搜索"]
+    F --> H["代码执行"]
+    F --> I["数据库"]
+    F --> J["外部 API"]
 ```
 
 ## 实现步骤

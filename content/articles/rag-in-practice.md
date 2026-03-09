@@ -13,11 +13,11 @@ RAG（Retrieval-Augmented Generation，检索增强生成）是一种通过**外
 
 ```mermaid
 graph LR
-    subgraph \u4f20\u7edf LLM
-        A1["\u7528\u6237\u63d0\u95ee"] --> A2["\u6a21\u578b\u8bb0\u5fc6"] --> A3["\u26a0\ufe0f \u56de\u7b54 - \u53ef\u80fd\u5e7b\u89c9"]
+    subgraph 传统 LLM
+        A1["用户提问"] --> A2["模型记忆"] --> A3["回答 - 可能幻觉"]
     end
-    subgraph RAG \u589e\u5f3a
-        B1["\u7528\u6237\u63d0\u95ee"] --> B2["\ud83d\udd0d \u68c0\u7d22\u6587\u6863"] --> B3["\u6587\u6863+\u63d0\u95ee"] --> B4["\u6a21\u578b\u751f\u6210"] --> B5["\u2705 \u6709\u636e\u53ef\u67e5"]
+    subgraph RAG 增强
+        B1["用户提问"] --> B2["检索文档"] --> B3["文档+提问"] --> B4["模型生成"] --> B5["有据可查"]
     end
 ```
 
@@ -31,14 +31,14 @@ graph LR
 
 ```mermaid
 graph LR
-    subgraph \ud83d\udce5 \u7d22\u5f15\u9636\u6bb5
-        A1["\u6570\u636e\u6e90"] --> A2["\u6587\u6863\u52a0\u8f7d"] --> A3["\u6587\u672c\u5207\u5206"] --> A4["Embedding"] --> A5["\ud83d\udcbe \u5411\u91cf\u5b58\u50a8"]
+    subgraph 索引阶段
+        A1["数据源"] --> A2["文档加载"] --> A3["文本切分"] --> A4["Embedding"] --> A5["向量存储"]
     end
-    subgraph \ud83d\udd0d \u67e5\u8be2\u9636\u6bb5
-        B1["\u7528\u6237\u67e5\u8be2"] --> B2["Query Embedding"] --> B3["\u76f8\u4f3c\u5ea6\u68c0\u7d22"]
-        B3 --> A5
-        A5 --> B4["\u4e0a\u4e0b\u6587\u7ec4\u88c5"] --> B5["\u2705 LLM \u751f\u6210"]
+    subgraph 查询阶段
+        B1["用户查询"] --> B2["Query Embedding"] --> B3["相似度检索"] --> B4["上下文组装"] --> B5["LLM 生成"]
     end
+    B3 --> A5
+    A5 --> B4
 ```
 
 ### 核心组件详解

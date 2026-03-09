@@ -22,10 +22,10 @@ GPT-5.4 的 Thinking 变体和 Gemini 3.1 的 Thinking Levels 机制代表了一
 ```mermaid
 graph LR
     subgraph 传统模型
-        A1["\ud83d\udcac \u7528\u6237\u63d0\u95ee"] --> A2["\u76f4\u63a5\u8f93\u51fa\u7b54\u6848"]
+        A1["用户提问"] --> A2["直接输出答案"]
     end
-    subgraph Thinking \u6a21\u578b
-        B1["\ud83d\udcac \u7528\u6237\u63d0\u95ee"] --> B2["\ud83e\udde0 \u5185\u90e8\u63a8\u7406\u94fe"] --> B3["\u2705 \u9a8c\u8bc1\u63a8\u7406"] --> B4["\u2728 \u8f93\u51fa\u7b54\u6848"]
+    subgraph Thinking 模型
+        B1["用户提问"] --> B2["内部推理链"] --> B3["验证推理"] --> B4["输出答案"]
     end
 ```
 
