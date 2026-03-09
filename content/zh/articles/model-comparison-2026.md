@@ -150,13 +150,44 @@ response = model.generate_content("解释量子计算的基本原理")
 | 预算敏感 | GPT-5-mini | $0.25/$2.00 极低成本 |
 | 事实准确性 | GPT-5.4 | 幻觉比 GPT-5.2 减少 33% |
 
-### 成本优化策略
+### 企业级 Tokenomics：成本削减与交叉点分析
 
-1. **分级路由**：简单任务用 GPT-5-mini（$0.25/M），复杂任务路由到 Claude / GPT-5.4
-2. **Prompt Caching**：对 Claude 启用缓存，重复前缀最高省 90%
-3. **Batch API**：非实时任务用批处理，Claude 和 Gemini 均提供 50% 折扣
-4. **Tool Search**：GPT-5.4 API 的 Tool Search 功能减少近 50% token 消耗
-5. **长上下文优化**：>200K tokens 的任务优先用 Gemini（无额外阶梯价）或 GPT-5.4（原生 1M）
+在企业级生产环境中，直接将应用硬编码绑定到某一个大模型 API 是非常危险且易破产的。
+
+当流量到达一定规模时，你必须计算**自托管模型（Self-hosting）**与**商业 API** 的成本交叉点（Breakeven Point）。
+
+我们以购买/租赁 1 台 **8x H100 (80GB)** 服务器（约 $30/小时 按需租赁，或整机买断折旧）运行 **Llama-4-70B** 为例：
+- 假设 API (比如 GPT-5.4) 的混合成本估算为 **$5.00 / 1M tokens**。
+- 一台 8x H100 开满 Continuous Batching 并使用 vLLM 的 PagedAttention 后，假设每秒吞吐量（Tokens per Second）为 $T$。
+
+**推算极速法则**：
+当你的业务持续请求量达到每秒大约 **1,600 Tokens (输入+输出)** 时，自托管 70B 模型与调用 API 的成本开始持平。一旦越过这个 **Breakeven Point**，流量越大，自托管省下的钱成指数级增长。
+
+> **架构师建议**：引入 **AI Gateway (如 Kong AI Gateway 或 LiteLLM)** 进行统一调度分流。将 80% 的日常对话打入本地免费的 Llama 4 8B，仅将 20% 的极端复杂推理路由或 Failback 到 GPT-5.4。
+
+### 显存暴漏：KV Cache 的物理极客公式
+
+支撑长上下文的核心痛点是 **KV Cache 显存暴漏**。模型参数占据的显存是固定的，但随着上下文变长，KV Cache 的体积会失控。
+
+在 2026 年，作为 AI 架构师，你必须会心算这段公式：
+
+```text
+KV_Cache_Size_Per_Token = 2 * 2 * n_layers * d_model
+// 2 代表 Key 和 Value 两个矩阵
+// 第二个 2 代表 FP16/BF16 占用的字节数 (2 bytes)
+// n_layers：模型层数（70B 模型一般是 80）
+// d_model：隐藏层维度（70B 模型一般是 8192）
+```
+
+以 70B 模型为例，每一个 Token 消耗约 **2.6MB** 显存。
+如果你想支持 **1M（一百万）Tokens** 的超长上下文单次对话，它的 KV Cache 就需要吃掉：
+`1,000,000 * 2.6 MB ≈ 2,600,000 MB ≈ 2.6 TB`
+
+**这也就是为什么你个人的 24G 显卡永远跑不了 1M 上下文的原因。**
+
+企业破局方案：
+1. **vLLM PagedAttention**：像操作系统管理虚拟内存一样，将 KV Cache 按块（block）分页存储，解决显存碎片化，提升 30%-50% 并发吞吐量。
+2. **Prompt Caching（提示缓存）**：将极其冗长的系统前置 prompt 预先计算出 KV Cache 后持久化到 Redis / 显存池中。下次相同请求进来，直接跳过 Prefill 阶段，第一 Token 延迟（TTFT）从几秒降至几十毫秒。这也是目前 Claude API 能省下 90% 开销的技术底座。
 
 ## 总结
 

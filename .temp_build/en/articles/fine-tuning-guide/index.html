@@ -101,14 +101,15 @@
             <div class="toc-container"><h4>Table of Contents</h4><ul class="article-toc-list">
   <li class="toc-level-2"><a href="#why-do-we-need-fine-tuning">Why Do We Need Fine-Tuning?</a></li>
   <li class="toc-level-2"><a href="#comparison-of-three-fine-tuning-approaches">Comparison of Three Fine-Tuning Approaches</a></li>
-  <li class="toc-level-3"><a href="#lora-principle">LoRA Principle</a></li>
-  <li class="toc-level-3"><a href="#qlora-enhancement">QLoRA Enhancement</a></li>
+  <li class="toc-level-3"><a href="#vram-assassins-qlora-gradient-checkpointing">VRAM Assassins: QLoRA & Gradient Checkpointing</a></li>
   <li class="toc-level-2"><a href="#complete-fine-tuning-workflow">Complete Fine-Tuning Workflow</a></li>
   <li class="toc-level-3"><a href="#step-1-prepare-the-dataset">Step 1: Prepare the Dataset</a></li>
   <li class="toc-level-3"><a href="#step-2-configure-lora-training">Step 2: Configure LoRA Training</a></li>
-  <li class="toc-level-3"><a href="#step-3-training">Step 3: Training</a></li>
+  <li class="toc-level-3"><a href="#step-3-large-scale-multi-gpu-training-deepspeed-zero">Step 3: Large-Scale Multi-GPU Training (DeepSpeed ZeRO)</a></li>
   <li class="toc-level-3"><a href="#step-4-evaluation-and-deployment">Step 4: Evaluation and Deployment</a></li>
-  <li class="toc-level-2"><a href="#key-parameter-tuning">Key Parameter Tuning</a></li>
+  <li class="toc-level-3"><a href="#step-5-model-alignment-dpo-phase">Step 5: Model Alignment (DPO Phase)</a></li>
+  <li class="toc-level-3"><a href="#step-6-production-grade-deployment-vllm-tgi">Step 6: Production-Grade Deployment (vLLM / TGI)</a></li>
+  <li class="toc-level-2"><a href="#the-engineering-philosophy-of-core-hyperparameters">The Engineering Philosophy of Core Hyperparameters</a></li>
   <li class="toc-level-2"><a href="#common-pitfalls">Common Pitfalls</a></li>
   <li class="toc-level-2"><a href="#commercial-api-fine-tuning">Commercial API Fine-Tuning</a></li>
 </ul></div>
@@ -161,24 +162,15 @@ Only consider fine-tuning when prompt engineering fails to achieve the required 
 <td>Consumer-grade GPUs</td>
 </tr>
 </tbody></table>
-<h3 id="lora-principle">LoRA Principle</h3>
-<p>The core idea of LoRA (Low-Rank Adaptation) is to decompose weight updates into two low-rank matrices:</p>
-<pre><code class="language-text">Original weight W ∈ R^(d×d)
-
-LoRA decomposition:
-ΔW = A × B
-A ∈ R^(d×r)   ← r &lt;&lt; d (rank is usually 8~64)
-B ∈ R^(r×d)
-
-After update: W' = W + α · (A × B)</code></pre>
-<p>This way, only the two small matrices <code>A</code> and <code>B</code> need to be trained, reducing the number of parameters from <code>d²</code> to <code>2dr</code>.</p>
-<h3 id="qlora-enhancement">QLoRA Enhancement</h3>
-<p>QLoRA adds 4-bit quantization on top of LoRA:</p>
-<ul>
-<li>Model weights are stored in NF4 (4-bit NormalFloat).</li>
-<li>Dequantized back to BF16 during computation.</li>
-<li>Saves about 60% of VRAM with almost no loss in precision.</li>
-</ul>
+<h3 id="vram-assassins-qlora-gradient-checkpointing">VRAM Assassins: QLoRA & Gradient Checkpointing</h3>
+<p>In enterprise on-premise deployments, the biggest bottleneck is always the <strong>VRAM Wall</strong>.</p>
+<p>Even running 16-bit LoRA fine-tuning on a traditional 70B model (like Llama-3-70B) will easily devour 150GB+ of VRAM (because you must store model weights, activations, gradients, and optimizer states).</p>
+<p><strong>Extreme Memory Compression Strategies (Running 70B on a single node):</strong></p>
+<ol>
+<li><strong>QLoRA (4-bit NormalFloat Compression)</strong>: Load the foundational base model in 4-bit quantization. This immediately slashes the static VRAM footprint of a 70B model from ~140GB down to approximately <strong>39GB</strong>.</li>
+<li><strong>Gradient Checkpointing</strong>: The other half of the VRAM assassin is the forward-pass Activations. By enabling this, you trade <strong>compute time for storage space</strong>—discarding intermediate activations and recomputing them during backpropagation. This can slash activation VRAM usage by up to 70%.</li>
+</ol>
+<p><strong>The Trade-off</strong>: QLoRA + Gradient Checkpointing results in roughly a 25%-40% slowdown in overall training time. However, in the GPU-constrained landscape of 2026, this is the golden compromise.</p>
 <h2 id="complete-fine-tuning-workflow">Complete Fine-Tuning Workflow</h2>
 <h3 id="step-1-prepare-the-dataset">Step 1: Prepare the Dataset</h3>
 <p>Example data format (JSONL):</p>
@@ -222,70 +214,93 @@ lora_config = LoraConfig(
 model = get_peft_model(model, lora_config)
 model.print_trainable_parameters()
 # → trainable params: 13.6M || all params: 8.03B || 0.17%</code></pre>
-<h3 id="step-3-training">Step 3: Training</h3>
-<pre><code class="language-python">from transformers import TrainingArguments, Trainer
-
-training_args = TrainingArguments(
-    output_dir=&quot;./output&quot;,
-    num_train_epochs=3,
-    per_device_train_batch_size=4,
-    gradient_accumulation_steps=4,
-    learning_rate=2e-4,
-    warmup_ratio=0.1,
-    lr_scheduler_type=&quot;cosine&quot;,
-    bf16=True,
-    logging_steps=10,
-    save_strategy=&quot;epoch&quot;,
-    evaluation_strategy=&quot;epoch&quot;,
-)
-
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=eval_dataset,
-)
-trainer.train()</code></pre>
+<h3 id="step-3-large-scale-multi-gpu-training-deepspeed-zero">Step 3: Large-Scale Multi-GPU Training (DeepSpeed ZeRO)</h3>
+<p>Single-GPU QLoRA is only suitable for small-scale validation. Once you move to production Full Fine-Tuning or SFT over 10 billion tokens, you must leverage multi-node GPU clusters, making <strong>DeepSpeed ZeRO (Zero Redundancy Optimizer)</strong> your only viable option:</p>
+<ul>
+<li><strong>ZeRO-1</strong>: Partitions only the optimizer states (each GPU stores only 1/N).</li>
+<li><strong>ZeRO-2</strong>: Partitions both optimizer states + gradients. Ideal for 8x A100 single-node training with virtually no speed degradation.</li>
+<li><strong>ZeRO-3</strong>: Partitions optimizer states, gradients, <strong>and the model parameters themselves</strong>. Necessary for extreme cross-node training of models with billions/trillions of parameters, but will result in catastrophic slowdowns if the RDMA network is subpar due to hyper-frequent communication overhead.</li>
+</ul>
+<pre><code class="language-javascript">// deepspeed_config.json (Enterprise ZeRO-2 Configuration Example)
+{
+    &quot;fp16&quot;: { &quot;enabled&quot;: &quot;auto&quot;, &quot;loss_scale&quot;: 0 },
+    &quot;bf16&quot;: { &quot;enabled&quot;: &quot;auto&quot; },
+    &quot;zero_optimization&quot;: {
+        &quot;stage&quot;: 2, // Enable ZeRO-2 gradient &amp; optimizer partitioning
+        &quot;allgather_partitions&quot;: true,
+        &quot;allgather_bucket_size&quot;: 2e8,
+        &quot;overlap_comm&quot;: true, // Overlap compute and communication to hide network latency
+        &quot;reduce_scatter&quot;: true,
+        &quot;reduce_bucket_size&quot;: 2e8
+    },
+    &quot;gradient_accumulation_steps&quot;: &quot;auto&quot;,
+    &quot;gradient_clipping&quot;: &quot;auto&quot; // Crucial to prevent Loss explosion
+}</code></pre>
+<p>Training Launch Command:</p>
+<pre><code class="language-bash">accelerate launch \
+    --config_file accelerate_deepspeed_config.yaml \
+    train.py \
+    --gradient_checkpointing True \ # Mandatory in production
+    --learning_rate 2e-5</code></pre>
 <h3 id="step-4-evaluation-and-deployment">Step 4: Evaluation and Deployment</h3>
 <pre><code class="language-python"># Merge LoRA weights into the base model
 merged_model = model.merge_and_unload()
-merged_model.save_pretrained(&quot;./merged_model&quot;)
+merged_model.save_pretrained(&quot;./merged_model&quot;)</code></pre>
+<h3 id="step-5-model-alignment-dpo-phase">Step 5: Model Alignment (DPO Phase)</h3>
+<p>After traditional Supervised Fine-Tuning (SFT), enterprise workflows typically add <strong>Direct Preference Optimization (DPO)</strong> to improve model safety or adjust tone preferences:</p>
+<pre><code class="language-python">from trl import DPOTrainer
 
-# Use vLLM to deploy inference service
-# vllm serve ./merged_model --port 8000</code></pre>
-<h2 id="key-parameter-tuning">Key Parameter Tuning</h2>
+dpo_trainer = DPOTrainer(
+    model,
+    ref_model=None, # PEFT handles reference automatically
+    args=training_args,
+    beta=0.1,
+    train_dataset=preference_dataset, # Dataset with prompt, chosen, rejected
+    tokenizer=tokenizer,
+)
+dpo_trainer.train()</code></pre>
+<h3 id="step-6-production-grade-deployment-vllm-tgi">Step 6: Production-Grade Deployment (vLLM / TGI)</h3>
+<p>In enterprise environments, we avoid HuggingFace <code>pipeline</code> and instead use high-performance inference engines that support <strong>Continuous Batching</strong> and <strong>PagedAttention</strong> to deploy the merged model:</p>
+<pre><code class="language-bash"># Deploy with vLLM, enabling an OpenAI-compatible API
+python -m vllm.entrypoints.openai.api_server \
+    --model /path/to/merged_model \
+    --tensor-parallel-size 2 \
+    --max-model-len 8192 \
+    --port 8000</code></pre>
+<h2 id="the-engineering-philosophy-of-core-hyperparameters">The Engineering Philosophy of Core Hyperparameters</h2>
+<p>In 2026, ML alchemy has transitioned from &quot;voodoo parameter tweaking&quot; to quantifiable formulas. Please remember the following enterprise-grade baselines:</p>
 <table>
 <thead>
 <tr>
 <th>Parameter</th>
-<th>Recommended Range</th>
-<th>Description</th>
+<th>Industrial Standard</th>
+<th>Physical Meaning &amp; Destructive Power</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>rank (r)</td>
-<td>8~64</td>
-<td>Larger rank adapts better. 16 is a good starting point.</td>
+<td><code>rank (r)</code></td>
+<td>16 ~ 128</td>
+<td><code>r</code> is not &quot;the bigger the better.&quot; For simple tone matching, <code>r=16</code> is ample. For complex logical reasoning or vertical domain knowledge injection, <code>r</code> must be pushed to 128. Setting it excessively large triggers severe overfitting.</td>
 </tr>
 <tr>
-<td>lora_alpha</td>
-<td>2r</td>
-<td>Controls the scaling of the LoRA update.</td>
+<td><code>lora_alpha</code></td>
+<td><code>2 × r</code></td>
+<td>This is an incredibly dangerous multiplier. It acts as the scaling factor when LoRA weights are added back to the base model. If you double <code>r</code> from 16 to 32, you <strong>must</strong> correspondingly double <code>alpha</code> to 64; otherwise, your effective learning rate is silently halved.</td>
 </tr>
 <tr>
-<td>learning_rate</td>
-<td>1e-4 ~ 5e-4</td>
-<td>Too high leads to overfitting, too low converges slowly.</td>
+<td><code>learning_rate</code></td>
+<td>1e-4 ~ 5e-5</td>
+<td>LoRA requires an LR roughly 10x higher than full-parameter fine-tuning (usually <code>2e-4</code> is a safe bet). If you observe violent, jagged oscillations in the loss curve, lower the LR. If the loss remains completely flat after hours of training, immediately check if you forgot to unfreeze the weights.</td>
 </tr>
 <tr>
-<td>epochs</td>
-<td>2~5</td>
-<td>3 epochs for small datasets, 1-2 epochs for large ones.</td>
+<td><code>warmup_ratio</code></td>
+<td>0.05 ~ 0.1</td>
+<td>Absolute rule: Never set this to 0. When training begins, the model state is chaotic; instantly slamming it with the maximum LR causes irreversible weight destruction (Loss explodes to NaN). Gradual ramp-up is mandatory.</td>
 </tr>
 <tr>
-<td>batch_size</td>
-<td>4~16</td>
-<td>Limited by VRAM; use gradient accumulation to effectively increase it.</td>
+<td><code>dropout</code></td>
+<td>0.05 ~ 0.1</td>
+<td>When your high-quality dataset is severely limited (e.g., only 500 premium Q&amp;A pairs), bump the Dropout up to <code>0.15</code>. This is your absolute last line of defense against overfitting in low-resource environments.</td>
 </tr>
 </tbody></table>
 <h2 id="common-pitfalls">Common Pitfalls</h2>
@@ -294,6 +309,7 @@ merged_model.save_pretrained(&quot;./merged_model&quot;)
 <li><strong>Catastrophic Forgetting</strong>: The model loses its general capabilities after fine-tuning. Solution: mix in 5-10% general data.</li>
 <li><strong>Data Leakage</strong>: Overlap between evaluation and training sets. Solution: strictly partition datasets.</li>
 <li><strong>Format Inconsistency</strong>: Training chat template differs from inference. Solution: use the tokenizer&#39;s <code>apply_chat_template</code>.</li>
+<li><strong>Eyeball Evaluation</strong>: This is the most common enterprise anti-pattern. Solution: Use <code>lm-eval-harness</code> for objective benchmarks, and use GPT-5.4 as a judge (LLM-as-a-Judge) for subjective evaluation to quantify win rates before and after fine-tuning.</li>
 </ol>
 <h2 id="commercial-api-fine-tuning">Commercial API Fine-Tuning</h2>
 <p>If you don&#39;t want to manage GPU infrastructure, you can use commercial API fine-tuning services:</p>

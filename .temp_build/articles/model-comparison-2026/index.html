@@ -110,7 +110,8 @@
   <li class="toc-level-3"><a href="#api-调用示例">API 调用示例</a></li>
   <li class="toc-level-2"><a href="#选型建议">选型建议</a></li>
   <li class="toc-level-3"><a href="#按场景推荐">按场景推荐</a></li>
-  <li class="toc-level-3"><a href="#成本优化策略">成本优化策略</a></li>
+  <li class="toc-level-3"><a href="#企业级-tokenomics-成本削减与交叉点分析">企业级 Tokenomics：成本削减与交叉点分析</a></li>
+  <li class="toc-level-3"><a href="#显存暴漏-kv-cache-的物理极客公式">显存暴漏：KV Cache 的物理极客公式</a></li>
   <li class="toc-level-2"><a href="#总结">总结</a></li>
 </ul></div>
           </aside>
@@ -457,13 +458,35 @@ response = model.generate_content(&quot;解释量子计算的基本原理&quot;)
 <td>幻觉比 GPT-5.2 减少 33%</td>
 </tr>
 </tbody></table>
-<h3 id="成本优化策略">成本优化策略</h3>
+<h3 id="企业级-tokenomics-成本削减与交叉点分析">企业级 Tokenomics：成本削减与交叉点分析</h3>
+<p>在企业级生产环境中，直接将应用硬编码绑定到某一个大模型 API 是非常危险且易破产的。</p>
+<p>当流量到达一定规模时，你必须计算<strong>自托管模型（Self-hosting）<strong>与</strong>商业 API</strong> 的成本交叉点（Breakeven Point）。</p>
+<p>我们以购买/租赁 1 台 <strong>8x H100 (80GB)</strong> 服务器（约 $30/小时 按需租赁，或整机买断折旧）运行 <strong>Llama-4-70B</strong> 为例：</p>
+<ul>
+<li>假设 API (比如 GPT-5.4) 的混合成本估算为 <strong>$5.00 / 1M tokens</strong>。</li>
+<li>一台 8x H100 开满 Continuous Batching 并使用 vLLM 的 PagedAttention 后，假设每秒吞吐量（Tokens per Second）为 $T$。</li>
+</ul>
+<p><strong>推算极速法则</strong>：
+当你的业务持续请求量达到每秒大约 <strong>1,600 Tokens (输入+输出)</strong> 时，自托管 70B 模型与调用 API 的成本开始持平。一旦越过这个 <strong>Breakeven Point</strong>，流量越大，自托管省下的钱成指数级增长。</p>
+<blockquote>
+<p><strong>架构师建议</strong>：引入 <strong>AI Gateway (如 Kong AI Gateway 或 LiteLLM)</strong> 进行统一调度分流。将 80% 的日常对话打入本地免费的 Llama 4 8B，仅将 20% 的极端复杂推理路由或 Failback 到 GPT-5.4。</p>
+</blockquote>
+<h3 id="显存暴漏-kv-cache-的物理极客公式">显存暴漏：KV Cache 的物理极客公式</h3>
+<p>支撑长上下文的核心痛点是 <strong>KV Cache 显存暴漏</strong>。模型参数占据的显存是固定的，但随着上下文变长，KV Cache 的体积会失控。</p>
+<p>在 2026 年，作为 AI 架构师，你必须会心算这段公式：</p>
+<pre><code class="language-text">KV_Cache_Size_Per_Token = 2 * 2 * n_layers * d_model
+// 2 代表 Key 和 Value 两个矩阵
+// 第二个 2 代表 FP16/BF16 占用的字节数 (2 bytes)
+// n_layers：模型层数（70B 模型一般是 80）
+// d_model：隐藏层维度（70B 模型一般是 8192）</code></pre>
+<p>以 70B 模型为例，每一个 Token 消耗约 <strong>2.6MB</strong> 显存。
+如果你想支持 <strong>1M（一百万）Tokens</strong> 的超长上下文单次对话，它的 KV Cache 就需要吃掉：
+<code>1,000,000 * 2.6 MB ≈ 2,600,000 MB ≈ 2.6 TB</code></p>
+<p><strong>这也就是为什么你个人的 24G 显卡永远跑不了 1M 上下文的原因。</strong></p>
+<p>企业破局方案：</p>
 <ol>
-<li><strong>分级路由</strong>：简单任务用 GPT-5-mini（$0.25/M），复杂任务路由到 Claude / GPT-5.4</li>
-<li><strong>Prompt Caching</strong>：对 Claude 启用缓存，重复前缀最高省 90%</li>
-<li><strong>Batch API</strong>：非实时任务用批处理，Claude 和 Gemini 均提供 50% 折扣</li>
-<li><strong>Tool Search</strong>：GPT-5.4 API 的 Tool Search 功能减少近 50% token 消耗</li>
-<li><strong>长上下文优化</strong>：&gt;200K tokens 的任务优先用 Gemini（无额外阶梯价）或 GPT-5.4（原生 1M）</li>
+<li><strong>vLLM PagedAttention</strong>：像操作系统管理虚拟内存一样，将 KV Cache 按块（block）分页存储，解决显存碎片化，提升 30%-50% 并发吞吐量。</li>
+<li><strong>Prompt Caching（提示缓存）</strong>：将极其冗长的系统前置 prompt 预先计算出 KV Cache 后持久化到 Redis / 显存池中。下次相同请求进来，直接跳过 Prefill 阶段，第一 Token 延迟（TTFT）从几秒降至几十毫秒。这也是目前 Claude API 能省下 90% 开销的技术底座。</li>
 </ol>
 <h2 id="总结">总结</h2>
 <p>2026 年 3 月的大模型格局：</p>

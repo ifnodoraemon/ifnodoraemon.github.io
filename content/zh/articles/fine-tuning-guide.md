@@ -28,29 +28,17 @@ description: LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准�
 | LoRA | 0.1%~1% | 中等 (16GB) | 快 | 通用推荐方案 |
 | QLoRA | 0.1%~1% | 低 (8GB) | 较快 | 消费级 GPU |
 
-### LoRA 原理
+### 显存刺客：QLoRA 与 Gradient Checkpointing
 
-LoRA（Low-Rank Adaptation）的核心思想是将权重更新分解为两个低秩矩阵：
+在企业私有化部署中，最大的痛点永远是 **VRAM（显存）墙**。
 
-```text
-原始权重 W ∈ R^(d×d)
+传统的 70B 模型（如 Llama-3-70B）哪怕是做 16-bit LoRA 微调，也会轻易吃掉 150GB+ 的显存（因为你需要保存模型权重、激活值、梯度和优化器状态）。
 
-LoRA 分解：
-ΔW = A × B
-A ∈ R^(d×r)   ← r << d（rank 通常为 8~64）
-B ∈ R^(r×d)
+**极致显存压缩方案 (单卡玩转 70B)：**
+1. **QLoRA (4-bit NormalFloat 压缩)**：将基础底座加载为 4-bit 量化。这能将 70B 模型的静态显存占用从 140GB 暴降到约 **39GB**。
+2. **Gradient Checkpointing (梯度检查点)**：显存杀手的另一半是前向传播的激活值（Activations）。通过开启此功能，用**计算时间换存储空间**，丢弃中间激活值，在反向传播时重新计算。这能将激活值显存占用锐减 70%。
 
-更新后：W' = W + α · (A × B)
-```
-
-这样只需训练 `A` 和 `B` 两个小矩阵，参数量从 `d²` 降低到 `2dr`。
-
-### QLoRA 增强
-
-QLoRA 在 LoRA 基础上增加了 4-bit 量化：
-- 模型权重用 NF4（4 位 NormalFloat）存储
-- 计算时反量化为 BF16
-- 显存节省约 60%，几乎不损失精度
+**权衡 (Trade-off)**：QLoRA + Gradient Checkpointing 会导致整体训练时间减慢约 25%-40%，但在显卡极度紧缺的 2026 年，这是最黄金的妥协方案。
 
 ## 完整微调流程
 
@@ -104,32 +92,39 @@ model.print_trainable_parameters()
 # → trainable params: 13.6M || all params: 8.03B || 0.17%
 ```
 
-### Step 3：训练
+### Step 3：大规模多卡训练 (DeepSpeed ZeRO)
 
-```python
-from transformers import TrainingArguments, Trainer
+单卡 QLoRA 仅适合小规模验证。一旦进入生产环境的 Full Fine-Tuning 或 100 亿 Token 以上的全量 SFT，必须动用多机多卡集群，此时 **DeepSpeed ZeRO (Zero Redundancy Optimizer)** 是唯一选择：
 
-training_args = TrainingArguments(
-    output_dir="./output",
-    num_train_epochs=3,
-    per_device_train_batch_size=4,
-    gradient_accumulation_steps=4,
-    learning_rate=2e-4,
-    warmup_ratio=0.1,
-    lr_scheduler_type="cosine",
-    bf16=True,
-    logging_steps=10,
-    save_strategy="epoch",
-    evaluation_strategy="epoch",
-)
+- **ZeRO-1**：仅对优化器状态进行分片（每张卡只存 1/N）。
+- **ZeRO-2**：同时分片优化器状态 + 梯度。适合 8x A100 单机训练，基本不掉速。
+- **ZeRO-3**：将优化器、梯度、**以及模型权重本身**全部分片。适合百亿/千亿参数极限跨机训练，但由于通信极其频繁，如果 RDMA 网络不行，速度会灾难性下降。
 
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=eval_dataset,
-)
-trainer.train()
+```javascript
+// deepspeed_config.json (企业级 ZeRO-2 配置示例)
+{
+    "fp16": { "enabled": "auto", "loss_scale": 0 },
+    "bf16": { "enabled": "auto" },
+    "zero_optimization": {
+        "stage": 2, // 开启 ZeRO-2 梯度与优化器状态切分
+        "allgather_partitions": true,
+        "allgather_bucket_size": 2e8,
+        "overlap_comm": true, // 开启计算与通信重叠，隐藏网络延迟
+        "reduce_scatter": true,
+        "reduce_bucket_size": 2e8
+    },
+    "gradient_accumulation_steps": "auto",
+    "gradient_clipping": "auto" // 必须开启梯度裁剪，防止 Loss 爆炸
+}
+```
+
+训练启动命令：
+```bash
+accelerate launch \
+    --config_file accelerate_deepspeed_config.yaml \
+    train.py \
+    --gradient_checkpointing True \ # 生产环境必开
+    --learning_rate 2e-5
 ```
 
 ### Step 4：评估与部署
@@ -138,20 +133,47 @@ trainer.train()
 # 合并 LoRA 权重到基础模型
 merged_model = model.merge_and_unload()
 merged_model.save_pretrained("./merged_model")
-
-# 使用 vLLM 部署推理服务
-# vllm serve ./merged_model --port 8000
 ```
 
-## 关键参数调优
+### Step 5：模型对齐 (DPO 阶段)
+在传统的监督微调(SFT)之后，企业级流程通常会加入**直接偏好优化 (DPO)** 来提升模型的安全性或调整语气偏好：
+```python
+from trl import DPOTrainer
 
-| 参数 | 建议范围 | 说明 |
-|------|----------|------|
-| rank (r) | 8~64 | 越大适应能力越强，16 是常用起始值 |
-| lora_alpha | 2r | 控制 LoRA 更新的缩放 |
-| learning_rate | 1e-4 ~ 5e-4 | 太高易过拟合，太低收敛慢 |
-| epochs | 2~5 | 数据量小时 3 epoch，大时 1-2 epoch |
-| batch_size | 4~16 | 受显存限制，用梯度累积等效增大 |
+dpo_trainer = DPOTrainer(
+    model,
+    ref_model=None, # PEFT 自动处理 reference
+    args=training_args,
+    beta=0.1,
+    train_dataset=preference_dataset, # 包含 prompt, chosen, rejected 的数据集
+    tokenizer=tokenizer,
+)
+dpo_trainer.train()
+```
+
+### Step 6：生产级部署部署 (vLLM / TGI)
+在企业环境，我们不使用 HuggingFace `pipeline`，而是使用支持**连续批处理 (Continuous Batching)** 和 **PagedAttention** 的高性能推理引擎部署合并后的模型：
+
+```bash
+# 使用 vLLM 部署，并开启 OpenAI 兼容 API
+python -m vllm.entrypoints.openai.api_server \
+    --model /path/to/merged_model \
+    --tensor-parallel-size 2 \
+    --max-model-len 8192 \
+    --port 8000
+```
+
+## 核心超参的工程哲学
+
+在 2026 年，炼丹已经从“玄学调参”变成可量化的公式。请牢记以下企业级经验底线：
+
+| 参数 | 工业标准 | 物理意义与破坏力 |
+|------|----------|------------------|
+| `rank (r)` | 16 ~ 128 | `r` 并不是越大越好。对于简单的语气转换模式匹配，`r=16` 足矣。对于复杂的逻辑推理或垂类知识注入，`r` 需拉高至 128。过大会导致极其严重的过拟合。 |
+| `lora_alpha` | `2 × r` | 这是一个极其危险的乘数。它是 LoRA 权重添加到基础模型的缩放因子（Scaling factor）。如果你把 `r` 从 16 翻倍到了 32，请**务必**把 `alpha` 也同步翻倍到 64，否则你的学习率等同于隐性减半。 |
+| `learning_rate`| 1e-4 ~ 5e-5| LoRA 需要比全参数微调高约 10 倍的学习率（通常 `2e-4` 是安全值）。如果 loss 出现锯齿状剧烈震荡，请调低 LR ；如果训练了半天 loss 不动，请优先检查是否忘记解冻（unfreeze）权重。 |
+| `warmup_ratio` | 0.05 ~ 0.1 | 绝对不能设为 0。模型在刚开始训练时处于混沌状态，直接给最大 LR 会导致权重产生不可逆的破坏（Loss 爆炸成 NaN）。必须循序渐进。 |
+| `dropout` | 0.05 ~ 0.1 | 当你的高质量数据集极其少（例如只有 500 条高质量问答）时，把 Dropout 提高到 `0.15`，这是你在低资源下对抗过拟合的最后一道护城河。 |
 
 ## 常见陷阱
 
@@ -159,6 +181,7 @@ merged_model.save_pretrained("./merged_model")
 2. **灾难性遗忘**：微调后模型丧失通用能力。解决方案：混入 5-10% 的通用数据
 3. **数据泄漏**：评估集与训练集有重叠。解决方案：严格划分数据集
 4. **格式不一致**：训练数据的 chat template 与推理时不一致。解决方案：使用 tokenizer 的 `apply_chat_template`
+5. **靠肉眼评估**：这是最常见的企业级错误。解决方案：使用 `lm-eval-harness` 跑客观题，使用 GPT-5.4 作为裁判 (LLM-as-a-Judge) 跑主观评测，量化微调前后的胜率。
 
 ## 商业 API 微调
 

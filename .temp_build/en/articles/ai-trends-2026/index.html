@@ -100,12 +100,23 @@
           <aside class="article-sidebar fade-in">
             <div class="toc-container"><h4>Table of Contents</h4><ul class="article-toc-list">
   <li class="toc-level-2"><a href="#trend-1-massive-leap-in-reasoning">Trend 1: Massive Leap in Reasoning</a></li>
-  <li class="toc-level-3"><a href="#thinking-mode-becomes-standard">Thinking Mode Becomes Standard</a></li>
+  <li class="toc-level-3"><a href="#1-test-time-compute-ttc-scaling-laws">1. Test-Time Compute (TTC) Scaling Laws</a></li>
+  <li class="toc-level-3"><a href="#2-prm-process-reward-models-usurp-orms">2. PRM (Process Reward Models) Usurp ORMs</a></li>
   <li class="toc-level-2"><a href="#trend-2-context-windows-break-the-million-mark">Trend 2: Context Windows Break the Million Mark</a></li>
-  <li class="toc-level-2"><a href="#trend-3-native-computer-control-capabilities">Trend 3: Native Computer Control Capabilities</a></li>
+  <li class="toc-level-3"><a href="#1-the-brute-force-aesthetics-of-ring-attention">1. The Brute-Force Aesthetics of Ring Attention</a></li>
+  <li class="toc-level-3"><a href="#2-radixattention-prefix-tree-cache-cost-slicing">2. RadixAttention (Prefix Tree Cache) Cost-Slicing</a></li>
+  <li class="toc-level-2"><a href="#trend-3-native-computer-use-through-the-geek-lens">Trend 3: Native Computer Use Through the Geek Lens</a></li>
   <li class="toc-level-2"><a href="#trend-4-agentification-becomes-the-core-direction">Trend 4: Agentification Becomes the Core Direction</a></li>
   <li class="toc-level-2"><a href="#trend-5-api-pricing-continues-to-drop">Trend 5: API Pricing Continues to Drop</a></li>
-  <li class="toc-level-2"><a href="#trend-6-open-source-models-narrow-the-gap">Trend 6: Open Source Models Narrow the Gap</a></li>
+  <li class="toc-level-2"><a href="#trend-6-the-counterattack-of-non-transformer-architectures">Trend 6: The Counterattack of Non-Transformer Architectures</a></li>
+  <li class="toc-level-2"><a href="#trend-7-on-device-edge-ai-and-the-npu-explosion">Trend 7: On-Device Edge AI and the NPU Explosion</a></li>
+  <li class="toc-level-2"><a href="#trend-8-synthetic-data-post-training-paradigms">Trend 8: Synthetic Data & Post-Training Paradigms</a></li>
+  <li class="toc-level-2"><a href="#trend-9-embodied-ai-and-continuous-action-spaces">Trend 9: Embodied AI and Continuous Action Spaces</a></li>
+  <li class="toc-level-2"><a href="#trend-10-open-source-models-narrow-the-gap">Trend 10: Open Source Models Narrow the Gap</a></li>
+  <li class="toc-level-2"><a href="#trend-7-the-underlying-infrastructure-revolution">Trend 7: The Underlying Infrastructure Revolution</a></li>
+  <li class="toc-level-3"><a href="#1-speculative-decoding">1. Speculative Decoding</a></li>
+  <li class="toc-level-3"><a href="#2-extreme-semantic-complexity-routing">2. Extreme Semantic Complexity Routing</a></li>
+  <li class="toc-level-3"><a href="#3-latency-vs-throughput-the-ultimate-trade-off">3. Latency vs Throughput: The Ultimate Trade-off</a></li>
   <li class="toc-level-2"><a href="#conclusion">Conclusion</a></li>
 </ul></div>
           </aside>
@@ -113,75 +124,83 @@
           <!-- Main Content -->
           <div class="article-detail-content fade-in">
             <h2 id="trend-1-massive-leap-in-reasoning">Trend 1: Massive Leap in Reasoning</h2>
-<h3 id="thinking-mode-becomes-standard">Thinking Mode Becomes Standard</h3>
-<p>In 2025-2026, major vendors built &quot;Chain of Thought&quot; capabilities into their models. Instead of outputting an answer directly, models now perform internal reasoning before concluding:</p>
+<h3 id="1-test-time-compute-ttc-scaling-laws">1. Test-Time Compute (TTC) Scaling Laws</h3>
+<p>In 2025-2026, major vendors pivoted away from exclusively scaling pre-training datasets, opting instead to inject massive compute into <strong>Test-Time Compute (Inference)</strong>.
+The traditional Scaling Law dictated &quot;the more compute you shove into pre-training, the smarter the model.&quot; The new TTC Scaling Law dictates: <strong>&quot;The longer you allow a model to think before answering (consuming more inference compute), its final accuracy increases logarithmically.&quot;</strong></p>
 <ul>
-<li><strong>OpenAI</strong>: GPT-5 (August 2025) integrated the o3 reasoning engine, GPT-5.4 Thinking (March 5, 2026) goes further, supporting visible thinking plans and on-the-fly adjustment, with an Extreme mode for research-grade problems.</li>
-<li><strong>Google</strong>: Gemini 2.5 Pro (March 2025) introduced the Deep Think experimental mode, which was formalized in Gemini 3.1 Pro (February 2026).</li>
-<li><strong>Anthropic</strong>: Claude Sonnet 4.6 (February 17, 2026) supports dual modes: Extended Thinking and Adaptive Thinking.</li>
+<li><strong>OpenAI</strong>: GPT-5 ships with the o3 engine. GPT-5.4 decouples Thinking into three hardcore tiers (Fast/Advanced/Extreme), raising the physical compute ceiling by controlling $N$ Parallel Sampling streams.</li>
+<li><strong>Anthropic</strong>: Claude 4.6&#39;s Adaptive Thinking dynamically allocates thought duration based on the Token Perplexity of the prompt, refusing to blindly burn VRAM on simple questions.</li>
+<li><strong>Google</strong>: Gemini 3.1 Pro runs Deep Think natively on its MTP (Multi-Token Prediction) architecture.</li>
 </ul>
-<pre class="mermaid">
-graph LR
-    subgraph Traditional Models
-        A1["User Prompt"] --> A2["Direct Answer"]
-    end
-    subgraph Thinking Models
-        B1["User Prompt"] --> B2["Internal Chain of Thought"] --> B3["Verify Reasoning"] --> B4["Output Answer"]
-    end
-</pre>
-<p>This paradigm shift brought critical breakthroughs:</p>
+<h3 id="2-prm-process-reward-models-usurp-orms">2. PRM (Process Reward Models) Usurp ORMs</h3>
+<p>Why does a model &quot;think&quot;? The underlying engineering breakthrough is the paradigm shift from ORM to PRM:</p>
 <ul>
-<li><strong>GPT-5</strong> was the first model to surpass average human scores on SimpleBench (90% vs 83%).</li>
-<li><strong>GPT-5.4</strong> reduced factual errors by 33% compared to GPT-5.2, making it OpenAI&#39;s &quot;most accurate model.&quot;</li>
-<li><strong>Gemini 3.1 Pro</strong> Deep Think scored 89.7% on the MATH benchmark.</li>
-<li><strong>The Cost of Thinking Mode</strong>: Higher token consumption and latency; developers must trade off reasoning depth for response speed.</li>
+<li><strong>ORM (Outcome Reward Model)</strong>: Only scores whether the final answer is correct. When an LLM solves a massive mathematical proof, if the steps are convoluted, the ORM provides extremely sparse and weak feedback.</li>
+<li><strong>PRM (Process Reward Model)</strong>: Scores <strong>each individual step (Step-by-step)</strong> of the Chain-of-Thought. When GPT-5.4 generates a Candidate Tree, the PRM actively prunes dead-end branches in real-time, executing Monte Carlo Tree Search (MCTS) at scale.</li>
 </ul>
+<p><strong>The Price and The Trade-offs</strong>:
+In enterprise production, developers must tightly leash <code>max_reasoning_tokens</code>. Excessive thinking won&#39;t just burn through your API quotas yielding tens of thousands of hidden tokens; it will drag your TTFT (Time-To-First-Token) out to an agonizing 10-30 seconds—an absolute disaster for any B2C real-time conversational product.</p>
 <h2 id="trend-2-context-windows-break-the-million-mark">Trend 2: Context Windows Break the Million Mark</h2>
-<p>One of the most exciting developments in 2026 is the dramatic expansion of context windows:</p>
+<p>Million-token contexts became standard in 2026, but behind the scenes lies geek-tier <strong>KV Cache Memory Engineering breakthroughs</strong>:</p>
 <table>
 <thead>
 <tr>
 <th>Model</th>
 <th>Context Window</th>
 <th>Max Output</th>
-<th>Release Date</th>
+<th>Attention Sharding Architecture</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>GPT-5.4</td>
-<td>1.05M (922K In / 128K Out)</td>
-<td>128K tokens</td>
-<td>2026.03.05</td>
+<td>1.05M</td>
+<td>128K</td>
+<td>Ring Attention + Sequence Parallelism</td>
 </tr>
 <tr>
 <td>Claude Sonnet 4.6</td>
-<td>200K (Standard) / 1M (Beta)</td>
-<td>8K tokens</td>
-<td>2026.02.17</td>
+<td>1M (Beta)</td>
+<td>8K</td>
+<td>YaRN RoPE Scaling</td>
 </tr>
 <tr>
 <td>Gemini 3.1 Pro</td>
 <td>1M In / 64K Out</td>
-<td>64K tokens</td>
-<td>2026.02.19</td>
+<td>64K</td>
+<td>Blockwise Compute + Sparsification</td>
 </tr>
 </tbody></table>
-<p>A million-token context means:</p>
+<h3 id="1-the-brute-force-aesthetics-of-ring-attention">1. The Brute-Force Aesthetics of Ring Attention</h3>
+<p>The complexity of traditional Self-Attention is $O(N^2)$. When tokens inflate to 1 million, a single 80GB GPU will immediately trigger an Out-Of-Memory (OOM) error.
+The engineering solution for 1M context across clusters is <strong>Ring Attention</strong>: It slices these million tokens along the Sequence Dimension into countless micro-chunks, distributing them across multiple GPUs on multiple nodes.</p>
 <ul>
-<li>Reading approximately <strong>750,000 Chinese characters</strong> at once (a full-length novel)</li>
-<li>Processing <strong>1 hour of video</strong> or thousands of pages of PDFs</li>
-<li>Loading entire medium-sized codebases for analysis and refactoring</li>
+<li>GPUs are linked together into a Ring Topology network.</li>
+<li>During computation, each GPU acts like it&#39;s playing hot potato, transferring only a fraction of its Key and Value matrices to the next GPU via high-speed interconnects (NVLink/InfiniBand). By doing this, it computes globally exact attention, amortizing the $O(N^2)$ single-card memory disaster across the entire cluster.</li>
 </ul>
-<blockquote>
-<p><strong>Note</strong>: GPT-5.4 boasts the largest 128K output capacity, ideal for generating ultra-long content. While Gemini 3.1 Pro has a massive context, its pricing doubles after 200K tokens.</p>
-</blockquote>
-<h2 id="trend-3-native-computer-control-capabilities">Trend 3: Native Computer Control Capabilities</h2>
-<p>A major breakthrough in 2026 is <strong>AI models gaining native computer control for the first time</strong>:</p>
+<h3 id="2-radixattention-prefix-tree-cache-cost-slicing">2. RadixAttention (Prefix Tree Cache) Cost-Slicing</h3>
+<p>For enterprise developers, loading an &quot;entire medium-sized codebase&quot; or &quot;hundreds of PDFs&quot; cannot trigger a total recalculation upon every prompt. By 2026, the industry standardized on vLLM&#39;s Radix Tree-based Prompt Caching mechanism.</p>
 <ul>
-<li><strong>GPT-5.4</strong> (March 2026) is the first to support native computer usage—able to interpret screenshots, send keyboard/mouse commands, and control software via tools like Playwright. It scored 75.0% on the OSWorld-Verified benchmark, <strong>surpassing human performance</strong>.</li>
-<li><strong>Claude Opus 4.6</strong> (February 2026) continued its Computer Use capability, offering the highest maturity in Agent automation scenarios.</li>
+<li>When you ingest 500,000 code tokens from the <code>/src</code> directory, they remain Active in GPU VRAM structured as a topological tree.</li>
+<li>If the first half of the token sequence for the next request matches exactly, the underlying system <strong>directly maps to the existing KV Cache branch pointers</strong>.</li>
+<li>This doesn&#39;t just evaporate 90% of your API billing costs; it accelerates long-document reasoning speeds by entire orders of magnitude.</li>
 </ul>
-<p>This means AI can directly operate spreadsheets, presentations, browsers, and other desktop apps, truly becoming a &quot;digital worker.&quot;</p>
+<h2 id="trend-3-native-computer-use-through-the-geek-lens">Trend 3: Native Computer Use Through the Geek Lens</h2>
+<p>A massive breakthrough in 2026 was AI models acquiring &quot;native computer usage.&quot; But this is far from simple &quot;screenshot OCR&quot;; underneath lies the brutal engineering collision of <strong>GUI Grounding</strong>.</p>
+<p>The industry currently splits into two major technical factions:</p>
+<ol>
+<li><strong>The DOM/Accessibility Tree Faction (OS-Level Intercepts)</strong><ul>
+<li><strong>Mechanism</strong>: It doesn&#39;t look at the image. It directly parses the operating system&#39;s Accessibility Tree or the browser&#39;s DOM structure to extract the absolute coordinates and names of buttons.</li>
+<li><strong>Pros</strong>: Extremely precise with near 100% action routing, consuming very few tokens.</li>
+<li><strong>Cons</strong>: Catastrophically fails when encountering Canvas renders or custom UI frameworks (e.g., legacy banking mainframes or video game interfaces).</li>
+</ul>
+</li>
+<li><strong>Pure Pixel-Based Visual Regression</strong><ul>
+<li><strong>Mechanism</strong>: It &quot;looks&quot; at the screenshot just like a human. The model is trained to output a normalized floating-point coordinate array like <code>[y, x]</code> (e.g., <code>[0.452, 0.811]</code>), representing relative screen positions before executing <code>pyautogui.click()</code>.</li>
+<li><em>(Anthropic&#39;s Claude Opus 4.6 and GPT-5.4 both utilize hybrid variants leaning heavily on this approach)</em></li>
+<li><strong>The Pitfalls &amp; Engineering Mitigation</strong>: Pure pixel regression inherently suffers from &quot;off-by-a-few-pixels&quot; coordinate drift. In robust 2026 systems, architects must inject an intermediate <strong>Region Object Detection</strong> step right before the model clicks, forcing the coordinate to &quot;Snap&quot; to the mathematical center of the nearest recognized button.</li>
+</ul>
+</li>
+</ol>
 <h2 id="trend-4-agentification-becomes-the-core-direction">Trend 4: Agentification Becomes the Core Direction</h2>
 <p>The transition from Chat AI to Agent AI is the most significant trend of 2026:</p>
 <table>
@@ -262,7 +281,43 @@ graph LR
 <li><strong>GPT-5.4</strong> introduced the Tool Search feature, reducing token consumption by nearly 50%.</li>
 <li>All vendors provide <strong>Batch APIs</strong> (50% discount), and Claude also supports <strong>Prompt Caching</strong> (saving up to 90%).</li>
 </ul>
-<h2 id="trend-6-open-source-models-narrow-the-gap">Trend 6: Open Source Models Narrow the Gap</h2>
+<h2 id="trend-6-the-counterattack-of-non-transformer-architectures">Trend 6: The Counterattack of Non-Transformer Architectures</h2>
+<p>Transformers dominated the industry for 8 years, but their $O(N^2)$ attention mechanism remains a grueling bottleneck against million-token contexts. In 2026, alternative architectures finally tore open specific enterprise niches:</p>
+<ul>
+<li><strong>SSMs (State Space Models, e.g., Mamba / Jamba)</strong>:<ul>
+<li><strong>The Advantage</strong>: They boast a constant $O(1)$ inference VRAM footprint. Whether your prompt is one thousand words or one million words, its KV Cache (strictly speaking, its Hidden State) remains definitively fixed in size! This delivers terrifying cost advantages for ultra-long document QA or infinite-state-machine code generation.</li>
+</ul>
+</li>
+<li><strong>Linear Attention (e.g., RWKV-6 / 7)</strong>:<ul>
+<li>By combining the efficiency of RNNs with the parallelizability of Transformers, these models exhibit overwhelming generation speeds when constrained to 7B-14B edge contexts.</li>
+</ul>
+</li>
+</ul>
+<h2 id="trend-7-on-device-edge-ai-and-the-npu-explosion">Trend 7: On-Device Edge AI and the NPU Explosion</h2>
+<p>The &quot;Everything in the Cloud&quot; paradigm was shattered by exorbitant bandwidth costs and corporate privacy red lines. The 2026 doctrine is: &quot;If it can run on the phone, never send it to the cloud.&quot;</p>
+<ul>
+<li><strong>The Extreme Compression of SLMs (Small Language Models)</strong>: 1B to 8B parameter models (like Llama-4-8B, Qwen-2.5-3B) became the undisputed protagonists of edge arrays.</li>
+<li><strong>Heterogeneous Compute &amp; 4-Bit Quantization</strong>:<ul>
+<li>On iOS and Android, developers use <code>MLX</code> or <code>ExecuTorch</code> to push models entirely offline.</li>
+<li>Using extreme 4-bit or 3-bit quantization formats like <strong>GGUF</strong> or <strong>EXL2</strong> allows a 7B model to run comfortably within less than 4GB of mobile RAM.</li>
+<li><strong>NPU Acceleration</strong>: Apple&#39;s A19 chip and the Snapdragon 8 Gen 5 shipped with proprietary NPUs (Neural Processing Units) explicitly designed for hardware-accelerated matrix multiplication, pushing edge-device token generation past 30 Tokens/s—breaching the limit of human speed-reading.</li>
+</ul>
+</li>
+</ul>
+<h2 id="trend-8-synthetic-data-post-training-paradigms">Trend 8: Synthetic Data & Post-Training Paradigms</h2>
+<p>The &quot;High-Quality Human Data Wall&quot; for the pre-training phase was thoroughly exhausted by late 2025. The monumental leaps in AI intelligence in 2026 are entirely credited to <strong>Post-Training</strong> wizardry.</p>
+<ul>
+<li><strong>Rejection Sampling</strong>: Employ the most powerful instructor model (e.g., GPT-5.4) to generate one million answers to math problems. Then run them through a Reward Model to filter out only the highest-quality subsets to Fine-tune smaller SLMs.</li>
+<li><strong>RLAIF (Reinforcement Learning from AI Feedback)</strong>: Due to limited knowledge reserves, human labelers became incapable of providing accurate corrective feedback to hyper-intelligent models like o3. RLAIF introduces &quot;Stronger AIs&quot; to supervise &quot;Training AIs.&quot;</li>
+<li>If an AI startup in 2026 is still relying on outsourced human data labeling teams to perform mass-scale SFT, it is months away from bankruptcy.</li>
+</ul>
+<h2 id="trend-9-embodied-ai-and-continuous-action-spaces">Trend 9: Embodied AI and Continuous Action Spaces</h2>
+<p>Multimodal foundation models officially leaped from &quot;looking at pictures to talk&quot; into &quot;looking at pictures to manipulate the physical world.&quot;</p>
+<ul>
+<li><strong>VLA (Vision-Language-Action) Models</strong>: They no longer merely output text. The VLM onboard a robot ingests 3D depth pixels frame-by-frame from stereoscopic cameras, directly predicting and outputting a <strong>Continuous Action Vector</strong> mapping to a robotic dog&#39;s twelve multi-axis joints.</li>
+<li>The fundamental difficulty lies in environmental irreversibility: Generating a wrong token in a text editor allows you to press Backspace. Knocking a cup off a table in the physical world has no <code>Ctrl+Z</code>. Thus, Embodied AI relies intensely on the aforementioned <strong>Thinking Verification closed-loop controls</strong>.</li>
+</ul>
+<h2 id="trend-10-open-source-models-narrow-the-gap">Trend 10: Open Source Models Narrow the Gap</h2>
 <p>In 2025-2026, the gap between open-source and closed-source models shrank rapidly:</p>
 <table>
 <thead>
@@ -299,6 +354,39 @@ graph LR
 <li><strong>Customization</strong>: Can be fine-tuned to adapt to specific business needs.</li>
 <li><strong>Compliance Requirements</strong>: Meets legal requirements for data residency in specific regions.</li>
 <li><strong>Batch Inference</strong>: Large-scale inference costs are much lower than API calls.</li>
+</ul>
+<h2 id="trend-7-the-underlying-infrastructure-revolution">Trend 7: The Underlying Infrastructure Revolution</h2>
+<p>With parameter counts exploding phenomenally, Enterprise Architects in 2026 are no longer agonizing over &quot;which model to pick.&quot; Instead, they are deeply entrenched in <strong>Inference Acceleration</strong> and <strong>GPU Compute Orchestration</strong>.</p>
+<h3 id="1-speculative-decoding">1. Speculative Decoding</h3>
+<p>This is the most dominant inference acceleration technique of 2026. It completely shatters the <strong>Memory-Bandwidth Bound</strong> bottleneck inherent in LLM generation.</p>
+<p>During traditional autoregressive generation, because the immense model weights must be hauled out of VRAM for every single Token generated, GPU compute cores are essentially idling 80% of the time waiting for memory transfers.
+<strong>How Speculative Decoding Works</strong>:</p>
+<ol>
+<li><strong>Drafting</strong>: A tiny, blazing-fast &quot;draft&quot; model (e.g., Llama-3-8B) rapidly guesses the next $K$ tokens (e.g., writing out 5 words ahead).</li>
+<li><strong>Verifying</strong>: The massive main model (e.g., Llama-4-70B) takes all $K$ tokens simultaneously and performs a <strong>parallel</strong> forward pass to verify them.</li>
+<li><strong>The ROI</strong>: As long as the draft model gets it right even half the time, the large model accepts multiple tokens while only paying the memory fetch penalty once. This boosts generation speed (Tokens/s) by <strong>2x to 2.5x</strong> with zero degradation in mathematical precision.</li>
+</ol>
+<h3 id="2-extreme-semantic-complexity-routing">2. Extreme Semantic Complexity Routing</h3>
+<p>Enterprise deployment is no longer about routing 100% of traffic to GPT-5.4—that will bankrupt a startup overnight. The 2026 gold standard involves building an <strong>Evaluator Middleware</strong> to divert traffic based on computational complexity:</p>
+<ul>
+<li><strong>Tier 1 (Trivial Tasks, 60% volume)</strong>: JSON formatting, punctuation correction, translation.<ul>
+<li><strong>Routing Destination</strong>: A self-hosted cluster running <strong>Qwen-2.5-7B</strong> on vLLM. Marginal cost approaches zero; latency plunges to 10ms.</li>
+</ul>
+</li>
+<li><strong>Tier 2 (Standard Apps, 30% volume)</strong>: RAG summarization, generic email replies.<ul>
+<li><strong>Routing Destination</strong>: Claude Sonnet 4.6 or lightweight closed-source models.</li>
+</ul>
+</li>
+<li><strong>Tier 3 (Complex Intelligence, 10% volume)</strong>: Multi-step logical theorem proving, thousand-line codebase refactoring.<ul>
+<li><strong>Routing Destination</strong>: The exorbitantly priced GPT-5.4 Thinking mode, ensuring sufficient timeout logic is coded.</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-latency-vs-throughput-the-ultimate-trade-off">3. Latency vs Throughput: The Ultimate Trade-off</h3>
+<p>When serving open-source models, you must make a brutal choice on your Continuous Batching scheduling policy:</p>
+<ul>
+<li><strong>If building consumer-facing Chat UI</strong>: You must ruthlessly optimize for <strong>TTFT (Time-To-First-Token)</strong>. You dial down the <code>max_num_batched_tokens</code> to absolute lows. You willingly sacrifice overall server throughput just to ensure characters start popping up instantly after the user hits send.</li>
+<li><strong>If building backend batch jobs (Data scrubbing, Async Invoice parsing)</strong>: First-token latency is useless here. You must heavily optimize for <strong>Throughput</strong>. You crank the Batch Size up to the physical VRAM explosion threshold, driving GPU CUDA core utilization upward of 95%.</li>
 </ul>
 <h2 id="conclusion">Conclusion</h2>
 <p>As of March 2026, the AI foundation model landscape is dominated by a triopoly:</p>

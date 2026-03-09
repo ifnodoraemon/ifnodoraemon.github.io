@@ -102,13 +102,15 @@
   <li class="toc-level-2"><a href="#what-is-rag">What is RAG?</a></li>
   <li class="toc-level-2"><a href="#system-architecture">System Architecture</a></li>
   <li class="toc-level-3"><a href="#core-components-explained">Core Components Explained</a></li>
-  <li class="toc-level-2"><a href="#vector-database-selection">Vector Database Selection</a></li>
-  <li class="toc-level-3"><a href="#pinecone-vs-weaviate">Pinecone vs. Weaviate</a></li>
+  <li class="toc-level-2"><a href="#vector-database-architecture-low-level-tuning">Vector Database Architecture & Low-Level Tuning</a></li>
+  <li class="toc-level-3"><a href="#hnsw-core-parameters-demystified-and-trade-offs">HNSW Core Parameters Demystified and Trade-offs</a></li>
   <li class="toc-level-3"><a href="#retrieval-strategy">Retrieval Strategy</a></li>
   <li class="toc-level-2"><a href="#optimization-techniques">Optimization Techniques</a></li>
   <li class="toc-level-3"><a href="#1-query-rewriting">1. Query Rewriting</a></li>
-  <li class="toc-level-3"><a href="#2-re-ranking">2. Re-ranking</a></li>
+  <li class="toc-level-3"><a href="#2-millisecond-high-concurrency-reranking-colbert-v2-late-interaction">2. Millisecond High-Concurrency Reranking (ColBERT v2 Late Interaction)</a></li>
   <li class="toc-level-3"><a href="#3-context-assembly">3. Context Assembly</a></li>
+  <li class="toc-level-3"><a href="#4-advanced-rag-architectures">4. Advanced RAG Architectures</a></li>
+  <li class="toc-level-3"><a href="#5-automated-rag-quantitative-evaluation">5. Automated RAG Quantitative Evaluation</a></li>
   <li class="toc-level-2"><a href="#frequently-asked-questions">Frequently Asked Questions</a></li>
 </ul></div>
           </aside>
@@ -161,49 +163,25 @@ docs = loader.load()
 # Load Webpage
 web_loader = WebBaseLoader(&quot;https://docs.example.com&quot;)
 web_docs = web_loader.load()</code></pre>
-<p><strong>2. Text Splitting Strategies</strong></p>
-<p>The chunking strategy directly impacts retrieval quality. This is the most easily overlooked yet critical step in RAG:</p>
-<table>
-<thead>
-<tr>
-<th>Strategy</th>
-<th>Applicable Scenario</th>
-<th>Characteristics</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Fixed-length splitting</td>
-<td>General text</td>
-<td>Simple and fast, but may break semantic meaning</td>
-</tr>
-<tr>
-<td>Recursive character splitting</td>
-<td>Structured documents</td>
-<td>Splits by paragraph/sentence boundaries</td>
-</tr>
-<tr>
-<td>Semantic splitting</td>
-<td>Technical documents</td>
-<td>Segments based on Embedding similarity</td>
-</tr>
-<tr>
-<td>Document structure splitting</td>
-<td>Markdown/HTML</td>
-<td>Splits by heading hierarchies</td>
-</tr>
-</tbody></table>
-<p>Recommended configuration:</p>
-<pre><code class="language-python">from langchain.text_splitter import RecursiveCharacterTextSplitter
+<p><strong>2. Text Splitting Strategies (Semantic Chunking)</strong></p>
+<p>The chunking strategy dictates the upper ceiling of RAG recall. In 2026, enterprise RAG has abandoned brute-force length splitting, which easily severs context, completely pivoting to <strong>Semantic Chunking</strong>.</p>
+<p>The underlying algorithm logic is:</p>
+<ol>
+<li>Initially split the document into minimum units (e.g., sentences).</li>
+<li>Calculate the Embedding cosine similarity between adjacent sentences.</li>
+<li>If the similarity is higher than a set threshold (or lower than a percentile breakpoint), the semantic flow is considered continuous, and they are merged into a larger chunk. Otherwise, a &quot;split&quot; is asserted there.</li>
+</ol>
+<pre><code class="language-python">from langchain_experimental.text_splitter import SemanticChunker
+from langchain_openai import OpenAIEmbeddings
 
-splitter = RecursiveCharacterTextSplitter(
-    chunk_size=512,       # 512 tokens per chunk
-    chunk_overlap=64,     # 64 tokens overlap to retain context
-    separators=[&quot;\n\n&quot;, &quot;\n&quot;, &quot;.&quot;, &quot;;&quot;, &quot; &quot;],  
+# Using a semantic similarity sliding window splitter
+semantic_splitter = SemanticChunker(
+    OpenAIEmbeddings(model=&quot;text-embedding-3-small&quot;),
+    breakpoint_threshold_type=&quot;percentile&quot;, # Split when encountering a semantic shift (top 95% difference)
+    breakpoint_threshold_amount=95
 )
-chunks = splitter.split_documents(docs)</code></pre>
-<blockquote>
-<p><strong>Tips</strong>: The choice of <code>chunk_size</code> should match the optimal input length of your Embedding model. For OpenAI&#39;s <code>text-embedding-3-large</code>, the optimal length is around 512 tokens.</p>
-</blockquote>
+chunks = semantic_splitter.create_documents([raw_text])</code></pre>
+<p><em>This chunking methodology ensures that every Chunk is a complete semantic cluster internally, completely eliminating the disaster of &quot;half a sentence being cut into the next chunk.&quot;</em></p>
 <p><strong>3. Choosing an Embedding Model</strong></p>
 <p>Comparison of mainstream Embedding models in 2026:</p>
 <table>
@@ -239,47 +217,34 @@ chunks = splitter.split_documents(docs)</code></pre>
 </tr>
 </tbody></table>
 <p>For Chinese-heavy scenarios, <strong>BGE-M3</strong> or <strong>Cohere embed-v4</strong> are recommended.</p>
-<h2 id="vector-database-selection">Vector Database Selection</h2>
-<h3 id="pinecone-vs-weaviate">Pinecone vs. Weaviate</h3>
+<h2 id="vector-database-architecture-low-level-tuning">Vector Database Architecture & Low-Level Tuning</h2>
+<p>In an enterprise environment with hundreds of millions of vectors, choosing a DB is just the first step. True hardcore engineering lies in <strong>HNSW (Hierarchical Navigable Small World) index parameter tuning</strong> and <strong>Product Quantization (PQ)</strong> compression. Without tuning, full Float32 vectors will overflow extremely expensive RAM.</p>
+<h3 id="hnsw-core-parameters-demystified-and-trade-offs">HNSW Core Parameters Demystified and Trade-offs</h3>
+<p>If you self-host Weaviate or Milvus, you must master the following two low-level control parameters:</p>
 <table>
 <thead>
 <tr>
-<th>Feature</th>
-<th>Pinecone</th>
-<th>Weaviate</th>
+<th>Parameter</th>
+<th>Physical Meaning</th>
+<th>Impact on Memory &amp; Performance</th>
+<th>Impact on Recall</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>Deployment</td>
-<td>Cloud Managed</td>
-<td>Self-hosted / Cloud</td>
+<td><code>m</code> (Max Connections)</td>
+<td>The maximum number of bidirectional edges per node in the graph.</td>
+<td><strong>Dictates Memory Overhead</strong>: The larger <code>m</code> is, the more edges are stored, leading to a linear explosion in RAM usage.</td>
+<td>Larger <code>m</code> yields a denser graph, logarithmically improving recall (with rapid diminishing returns).</td>
 </tr>
 <tr>
-<td>Scalability</td>
-<td>Auto-scaling</td>
-<td>Manual configuration</td>
-</tr>
-<tr>
-<td>Hybrid Search</td>
-<td>✅ Keyword + Vector</td>
-<td>✅ BM25 + Vector</td>
-</tr>
-<tr>
-<td>Filtering</td>
-<td>✅ Metadata filtering</td>
-<td>✅ GraphQL</td>
-</tr>
-<tr>
-<td>Free Tier</td>
-<td>100K vectors</td>
-<td>Open source free</td>
-</tr>
-<tr>
-<td>Best For</td>
-<td>Quick Prototypes / SaaS</td>
-<td>Enterprise / Complete control</td>
+<td><code>efConstruction</code></td>
+<td>The depth of the candidate queue explored during neighbor search when inserting into the index.</td>
+<td><strong>Dictates Build Time</strong>: Does not directly increase memory size, but doubling this parameter can slow down data ingestion by 4x.</td>
+<td>Higher values yield a more optimized graph topology, significantly improving concurrent query speeds and maximum recall.</td>
 </tr>
 </tbody></table>
+<p><strong>Enterprise Best Practice</strong>:
+If budget constraints prevent keeping all vectors in memory, you must enable <strong>IVF-PQ (Inverted File + Product Quantization)</strong>. It compresses 3072-dimensional floats into 8-bit cluster centroid IDs, reducing memory footprint by ~90%, at the cost of roughly a 3-5% recall drop (which can be compensated by a precise post-retrieval Rerank).</p>
 <h3 id="retrieval-strategy">Retrieval Strategy</h3>
 <pre><code class="language-python">from langchain_community.vectorstores import Weaviate
 import weaviate
@@ -306,16 +271,14 @@ rewritten = [
     &quot;Techniques to improve vector search accuracy&quot;,
     &quot;Best practices for RAG system chunking strategies&quot;,
 ]</code></pre>
-<h3 id="2-re-ranking">2. Re-ranking</h3>
-<p>After retrieving candidate documents, re-rank them using a Cross-Encoder:</p>
-<pre><code class="language-python">from langchain.retrievers import ContextualCompressionRetriever
-from langchain.retrievers.document_compressors import CohereRerank
-
-reranker = CohereRerank(model=&quot;rerank-v3.5&quot;, top_n=3)
-compression_retriever = ContextualCompressionRetriever(
-    base_compressor=reranker,
-    base_retriever=retriever
-)</code></pre>
+<h3 id="2-millisecond-high-concurrency-reranking-colbert-v2-late-interaction">2. Millisecond High-Concurrency Reranking (ColBERT v2 Late Interaction)</h3>
+<p>Traditional Rerankers (like BGE-Reranker or Cohere) utilize a <strong>Cross-Encoder</strong>. It concatenates the user&#39;s Query and the candidate Document into a single sequence and feeds it into the Transformer. This is the most accurate method, but its computational complexity is O(N). If you retrieve 100 Chunks for reranking, it adds hundreds of milliseconds or even a full second of extreme latency, causing direct timeouts in production APIs.</p>
+<p>The standard architecture for 2026 is the <strong>Late Interaction Architecture</strong> utilized by <strong>ColBERT v2 (e.g., Flash-Reranker)</strong>:</p>
+<ul>
+<li>It <strong>pre-computes</strong> all Documents offline into microscopic Token-level Multi-vectors and caches them.</li>
+<li>When a Query arrives, it only performs a lightweight <code>MaxSim</code> (maximum cosine similarity summation) dot-product matrix operation between the Query and Document tokens.</li>
+<li><strong>Result</strong>: It maintains extreme precision remarkably close to Cross-Encoders, but latency plunges from 300ms down to 15-40ms, making &quot;fine-ranking&quot; of massive document pools plausible in production environments.</li>
+</ul>
 <h3 id="3-context-assembly">3. Context Assembly</h3>
 <p>Inject the retrieved document snippets structurally into the prompt:</p>
 <pre><code class="language-text">Answer the user's question based on the following reference documents. If the information is not in the documents, state clearly that you do not know.
@@ -327,6 +290,45 @@ compression_retriever = ContextualCompressionRetriever(
 --- End of Documents ---
 
 User Question: {user_query}</code></pre>
+<h3 id="4-advanced-rag-architectures">4. Advanced RAG Architectures</h3>
+<p>Enterprise RAG in 2026 has moved far beyond simple &quot;text chunking + vector search.&quot; To handle complex, long documents and cross-document reasoning, the following advanced architectures are standards:</p>
+<ul>
+<li><strong>Multi-Vector Retrieval</strong>: Summarize the documents and create embeddings of the <strong>summaries</strong> for search, but inject the <strong>full original text chunks</strong> into the prompt. This ensures high search precision while retaining deep context.</li>
+<li><strong>HyDE (Hypothetical Document Embeddings)</strong>: Instead of searching with a short user query, have the LLM hallucinate a &quot;hypothetical answer&quot; first. Then, use the <strong>embedding of that fake answer</strong> to search the vector database for real documents. This drastically mitigates the Vocabulary Mismatch problem between short questions and long technical documents.</li>
+<li><strong>GraphRAG (Knowledge Graph RAG)</strong>: For macro-global questions like &quot;Summarize the risk factors across all products in Q3&quot;, pure vector search will always fail due to Top-K limits, because the answer is scattered across hundreds of fragmented docs.<ul>
+<li><strong>Extraction Engine</strong>: Utilize <code>instructor</code> or Pydantic representations to constrain the LLM, coercing it to extract <code>(Entity_A, Relationship, Entity_B)</code> triplets and ingesting them into Neo4j.</li>
+<li><strong>Community Detection</strong>: Invoke Python&#39;s <code>NetworkX</code> library to run the <strong>Hierarchical Leiden Algorithm</strong>. This algorithm mathematically clusters tens of thousands of nodes into densely connected &quot;Communities&quot; based on graph network connectivity.</li>
+<li><strong>Map-Reduce Macro Reasoning</strong>: The LLM pre-summarizes each clustered &quot;Community&quot;. When faced with a global narrative query, RAG performs a Map-Reduce aggregation directly over these high-level community summaries rather than fighting with isolated raw chunks.</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-automated-rag-quantitative-evaluation">5. Automated RAG Quantitative Evaluation</h3>
+<p>Saying &quot;the RAG feels inaccurate&quot; doesn&#39;t help engineering teams iterate. Enterprise deployment requires quantitative metrics. We recommend frameworks like <strong><a href="https://github.com/explodinggradients/ragas">Ragas</a></strong> or <strong>TruLens</strong>, which use LLM-as-a-Judge to score RAG systems across three dimensions:</p>
+<ol>
+<li><strong>Context Precision</strong>: Are the most relevant retrieved documents ranked at the very top? (Evaluates the retriever and re-ranker).</li>
+<li><strong>Context Recall</strong>: Do the retrieved documents contain all the necessary information to answer the question? (Evaluates chunking and indexing strategies).</li>
+<li><strong>Faithfulness (Anti-Hallucination Index)</strong>: Is the final answer generated by the LLM 100% deducible from the retrieved context? (Evaluates the generator&#39;s resistance to hallucinations).</li>
+</ol>
+<p><strong>Evaluation Code Example</strong>:</p>
+<pre><code class="language-python">from ragas import evaluate
+from ragas.metrics import faithfulness, answer_relevancy, context_precision, context_recall
+from datasets import Dataset
+
+# Prepare Testset: Query, RAG Answer, Retrieved Contexts, Ground Truth
+data = {
+    &quot;question&quot;: [&quot;What is GraphRAG?&quot;],
+    &quot;answer&quot;: [&quot;GraphRAG combines knowledge graphs and vector search...&quot;],
+    &quot;contexts&quot;: [[&quot;Chunk 1...&quot;, &quot;Chunk 2...&quot;]],
+    &quot;ground_truth&quot;: [&quot;GraphRAG is an architecture that utilizes graph structures for global reasoning...&quot;]
+}
+
+# Run automated scoring
+result = evaluate(
+    Dataset.from_dict(data),
+    metrics=[context_precision, context_recall, faithfulness, answer_relevancy]
+)
+print(result) # Outputs specific scores between 0 and 1 for each metric</code></pre>
+<p><em>Run this evaluation script every time you modify chunking strategies or swap Embedding models. Deploy changes only if the scores (especially Faithfulness) strictly improve or remain perfectly stable.</em></p>
 <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
 <ul>
 <li><strong>Inaccurate Retrieval</strong>: First check the match between your splitting strategy and the Embedding model.</li>

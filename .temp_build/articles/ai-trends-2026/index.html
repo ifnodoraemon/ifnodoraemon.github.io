@@ -100,12 +100,23 @@
           <aside class="article-sidebar fade-in">
             <div class="toc-container"><h4>文章目录</h4><ul class="article-toc-list">
   <li class="toc-level-2"><a href="#趋势一-推理能力大跃进">趋势一：推理能力大跃进</a></li>
-  <li class="toc-level-3"><a href="#thinking-模式成为标配">Thinking 模式成为标配</a></li>
+  <li class="toc-level-3"><a href="#1-test-time-compute-ttc-缩放定律">1. Test-Time Compute (TTC) 缩放定律</a></li>
+  <li class="toc-level-3"><a href="#2-prm-过程奖励模型-取代-orm">2. PRM (过程奖励模型) 取代 ORM</a></li>
   <li class="toc-level-2"><a href="#趋势二-上下文窗口突破百万级">趋势二：上下文窗口突破百万级</a></li>
-  <li class="toc-level-2"><a href="#趋势三-原生计算机操控能力">趋势三：原生计算机操控能力</a></li>
+  <li class="toc-level-3"><a href="#1-ring-attention-环形注意力-的暴力美学">1. Ring Attention (环形注意力) 的暴力美学</a></li>
+  <li class="toc-level-3"><a href="#2-radixattention-前缀树缓存-省钱大法">2. RadixAttention (前缀树缓存) 省钱大法</a></li>
+  <li class="toc-level-2"><a href="#趋势三-极客视角的原生计算机操控-computer-use">趋势三：极客视角的原生计算机操控 (Computer Use)</a></li>
   <li class="toc-level-2"><a href="#趋势四-agent-化成为核心方向">趋势四：Agent 化成为核心方向</a></li>
   <li class="toc-level-2"><a href="#趋势五-api-定价持续走低">趋势五：API 定价持续走低</a></li>
-  <li class="toc-level-2"><a href="#趋势六-开源模型缩小差距">趋势六：开源模型缩小差距</a></li>
+  <li class="toc-level-2"><a href="#趋势六-非-transformer-架构的逆袭-alternative-architectures">趋势六：非 Transformer 架构的逆袭 (Alternative Architectures)</a></li>
+  <li class="toc-level-2"><a href="#趋势七-端侧-ai-与-npu-算力爆发-on-device-edge-ai">趋势七：端侧 AI 与 NPU 算力爆发 (On-Device & Edge AI)</a></li>
+  <li class="toc-level-2"><a href="#趋势八-合成数据与后训练范式-synthetic-data-post-training">趋势八：合成数据与后训练范式 (Synthetic Data & Post-Training)</a></li>
+  <li class="toc-level-2"><a href="#趋势九-具身智能与连续动作空间-embodied-ai">趋势九：具身智能与连续动作空间 (Embodied AI)</a></li>
+  <li class="toc-level-2"><a href="#趋势十-开源模型缩小差距">趋势十：开源模型缩小差距</a></li>
+  <li class="toc-level-2"><a href="#趋势七-大模型基建的底层革命">趋势七：大模型基建的底层革命</a></li>
+  <li class="toc-level-3"><a href="#1-speculative-decoding-推测解码-投机采样">1. Speculative Decoding (推测解码/投机采样)</a></li>
+  <li class="toc-level-3"><a href="#2-极致的语义路由-semantic-complexity-routing">2. 极致的语义路由 (Semantic Complexity Routing)</a></li>
+  <li class="toc-level-3"><a href="#3-latency-vs-throughput-延迟与吞吐的生死抉择">3. Latency vs Throughput (延迟与吞吐的生死抉择)</a></li>
   <li class="toc-level-2"><a href="#总结">总结</a></li>
 </ul></div>
           </aside>
@@ -113,75 +124,83 @@
           <!-- Main Content -->
           <div class="article-detail-content fade-in">
             <h2 id="趋势一-推理能力大跃进">趋势一：推理能力大跃进</h2>
-<h3 id="thinking-模式成为标配">Thinking 模式成为标配</h3>
-<p>2025-2026 年，各大厂商纷纷在模型中内置「思考链」能力，模型不再直接输出答案，而是先进行内部推理再给出结论：</p>
+<h3 id="1-test-time-compute-ttc-缩放定律">1. Test-Time Compute (TTC) 缩放定律</h3>
+<p>2025-2026 年，各大厂商放弃了单纯扩大前期预训练规模的路径，转而向 <strong>推理期间计算 (Test-Time Compute)</strong> 注入算力。
+传统的 Scaling Law 指的是“在预训练期填进去越多的算力，模型越聪明”。而新的 TTC Scaling Law 意味着：<strong>“你允许模型在回答前思考越久（消耗的推理算力越多），它的最终准确率就呈对数增加”</strong>。</p>
 <ul>
-<li><strong>OpenAI</strong>：GPT-5（2025 年 8 月）内置 o3 推理引擎，GPT-5.4 Thinking（2026 年 3 月 5 日）更进一步，支持查看思考计划并可中途调整，还有 Extreme 模式用于科研级难题</li>
-<li><strong>Google</strong>：Gemini 2.5 Pro（2025 年 3 月）引入 Deep Think 实验模式，Gemini 3.1 Pro（2026 年 2 月）正式化</li>
-<li><strong>Anthropic</strong>：Claude Sonnet 4.6（2026 年 2 月 17 日）支持 Extended Thinking 和 Adaptive Thinking 双模式</li>
+<li><strong>OpenAI</strong>：GPT-5 搭载 o3 引擎，GPT-5.4 更是将 Thinking 解耦为三个硬核档位（Fast/Advanced/Extreme），并通过控制 $N$ 个并行采样流（Parallel Sampling）来提高物理计算上限。</li>
+<li><strong>Anthropic</strong>：Claude 4.6 的 Adaptive Thinking 根据问题的 Token 困惑度（Perplexity）动态决定思考时长，拒绝盲目浪费显存。</li>
+<li><strong>Google</strong>：Gemini 3.1 Pro 让 Deep Think 在 MTP (Multi-Token Prediction) 架构上运行。</li>
 </ul>
-<pre class="mermaid">
-graph LR
-    subgraph 传统模型
-        A1["用户提问"] --> A2["直接输出答案"]
-    end
-    subgraph Thinking 模型
-        B1["用户提问"] --> B2["内部推理链"] --> B3["验证推理"] --> B4["输出答案"]
-    end
-</pre>
-<p>这种范式转变带来了关键突破：</p>
+<h3 id="2-prm-过程奖励模型-取代-orm">2. PRM (过程奖励模型) 取代 ORM</h3>
+<p>为什么模型会“思考”？底层的工程突破在于由 ORM 向 PRM 的范式转移：</p>
 <ul>
-<li><strong>GPT-5</strong> 是首个在 SimpleBench 上超越人类平均分的模型（90% vs 83%）</li>
-<li><strong>GPT-5.4</strong> 事实错误比 GPT-5.2 减少 33%，是 OpenAI「最准确的模型」</li>
-<li><strong>Gemini 3.1 Pro</strong> Deep Think 在 MATH 数学基准上达到 89.7%</li>
-<li><strong>Thinking 模式的代价</strong>：更高的 token 消耗和延迟，开发者需在推理深度与响应速度间权衡</li>
+<li><strong>ORM (Outcome Reward Model)</strong>：只看最终结果对不对。导致大模型在解长数学题时，如果步骤繁琐，ORM 给出的反馈极其稀疏。</li>
+<li><strong>PRM (Process Reward Model)</strong>：为思考链（Chain-of-Thought）的**每一步（Step-by-step）**打分。当 GPT-5.4 生成候选树 (Candidate Tree) 时，PRM 会实时砍掉走不通的死胡同分支 (Pruning)，进行蒙特卡洛树搜索 (MCTS)。</li>
 </ul>
+<p><strong>代价与权衡 (Trade-offs)</strong>：
+在工程落地中，开发者必须控制 <code>max_reasoning_tokens</code>。过度的思考不仅会消耗上万的隐藏 Tokens 烧光 API 配额，同时会拉长 TTFT（首字延迟）至惊人的 10-30 秒，这对任何面向 C 端用户的实时对话产品都是灾难性的。</p>
 <h2 id="趋势二-上下文窗口突破百万级">趋势二：上下文窗口突破百万级</h2>
-<p>2026 年最令人兴奋的进展之一是上下文窗口的急剧扩大：</p>
+<p>2026 年百万级上下文已是标配，但这背后是极客级别的 <strong>KV Cache 显存工程突破</strong>：</p>
 <table>
 <thead>
 <tr>
 <th>模型</th>
 <th>上下文窗口</th>
 <th>最大输出</th>
-<th>发布时间</th>
+<th>注意力切分方案</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>GPT-5.4</td>
-<td>1.05M（922K 入 / 128K 出）</td>
-<td>128K tokens</td>
-<td>2026.03.05</td>
+<td>1.05M</td>
+<td>128K</td>
+<td>Ring Attention + Sequence Parallelism</td>
 </tr>
 <tr>
 <td>Claude Sonnet 4.6</td>
-<td>200K（标准）/ 1M（Beta）</td>
-<td>8K tokens</td>
-<td>2026.02.17</td>
+<td>1M (Beta)</td>
+<td>8K</td>
+<td>YaRN RoPE Scaling</td>
 </tr>
 <tr>
 <td>Gemini 3.1 Pro</td>
 <td>1M 入 / 64K 出</td>
-<td>64K tokens</td>
-<td>2026.02.19</td>
+<td>64K</td>
+<td>Blockwise Compute + 稀疏化</td>
 </tr>
 </tbody></table>
-<p>百万级上下文意味着：</p>
+<h3 id="1-ring-attention-环形注意力-的暴力美学">1. Ring Attention (环形注意力) 的暴力美学</h3>
+<p>传统的 Self-Attention 复杂度是 $O(N^2)$。当 Token 涨到 100 万时，单张 80GB 的 GPU 直接爆显存（OOM）。
+100 万上下文在集群上的工程解法是 <strong>Ring Attention</strong>：它将这百万 Token 在序列维度（Sequence Dimension）切割成无数小块，分布在多台机器的多个 GPU 上。</p>
 <ul>
-<li>可一次读入约 <strong>75 万字</strong>中文文本（一整本长篇小说）</li>
-<li>可处理 <strong>1 小时视频</strong>或数千页 PDF</li>
-<li>可加载整个中型代码库进行分析和重构</li>
+<li>GPU 之间组成一个环状网络（Ring Topology）。</li>
+<li>计算时，每个 GPU 像丢击鼓传花一样，只把自己的 Key 和 Value 的一部分矩阵通过高速网络 (NVLink/InfiniBand) 传给下个 GPU。借此计算出全局注意力，把 $O(N^2)$ 的单卡显存灾难均摊到了整个集群。</li>
 </ul>
-<blockquote>
-<p><strong>注意</strong>：GPT-5.4 拥有最大的 128K 输出能力，适合生成超长内容。Gemini 3.1 Pro 虽然上下文大，但超过 200K tokens 后价格翻倍（$4/$18 vs $2/$12）。</p>
-</blockquote>
-<h2 id="趋势三-原生计算机操控能力">趋势三：原生计算机操控能力</h2>
-<p>2026 年的一个重大突破是 <strong>AI 模型首次获得原生计算机操控能力</strong>：</p>
+<h3 id="2-radixattention-前缀树缓存-省钱大法">2. RadixAttention (前缀树缓存) 省钱大法</h3>
+<p>对于开发者，加载“整个中型代码库”或“数百页文档”不能每次请求都重新计算。2026 年工业界标配了 vLLM 中基于前缀树（Radix Tree）的 Prompt Caching 机制。</p>
 <ul>
-<li><strong>GPT-5.4</strong>（2026 年 3 月）首次支持原生计算机使用——可解读屏幕截图、发送键鼠命令、通过 Playwright 等工具控制软件。在 OSWorld-Verified 基准上得分 75.0%，<strong>超越人类表现</strong></li>
-<li><strong>Claude Opus 4.6</strong>（2026 年 2 月）延续 Computer Use 能力，在 Agent 自动化场景中成熟度最高</li>
+<li>当你输入了 <code>/src</code> 目录下的 50 万代码 Token，它在 GPU 内存中会以树状拓扑保持活跃（Active）。</li>
+<li>如果第二个请求的问题前半段 Token 序列完全一致，系统会在底层<strong>直接复用该分支的 KV Cache 指针映射</strong>。</li>
+<li>这不仅将调用的 API 费用抹掉了 90%，还将长文档推理速度提升了数量级。</li>
 </ul>
-<p>这意味着 AI 可以直接操作电子表格、演示文稿、浏览器等桌面应用，真正成为「数字员工」。</p>
+<h2 id="趋势三-极客视角的原生计算机操控-computer-use">趋势三：极客视角的原生计算机操控 (Computer Use)</h2>
+<p>2026 年的一个重大突破是 AI 模型获得了原生计算机操控能力。但这绝非简单的“识别截图”，其底层是复杂的 <strong>GUI Grounding (图形界面锚定)</strong> 技术碰撞。</p>
+<p>目前工业界分为两大技术流派：</p>
+<ol>
+<li><strong>DOM/Accessibility Tree 流派 (操作系统级拦截)</strong><ul>
+<li><strong>原理</strong>：不看图，而是直接读取操作系统的无障碍树（Accessibility Tree）或浏览器的 DOM 结构，获取按钮的绝对坐标和名称。</li>
+<li><strong>优势</strong>：极度精确，几乎 100% 命中，且 Token 消耗极少。</li>
+<li><strong>缺陷</strong>：对带有 Canvas 渲染、自研 UI 框架（如某些老旧银行系统或游戏界面）的应用彻底抓瞎。</li>
+</ul>
+</li>
+<li><strong>纯像素视觉回归 (Pixel-based Coordinate Regression)</strong><ul>
+<li><strong>原理</strong>：像人类一样只看截图。模型被训练输出一个 <code>[y, x]</code> 的归一化浮点坐标串（例如 <code>[0.452, 0.811]</code>），代表屏幕上的相对位置，执行 <code>pyautogui.click()</code>。</li>
+<li><em>(Anthropic 的 Claude Opus 4.6 和 GPT-5.4 均采用此流派的混合变体)</em></li>
+<li><strong>坑点与工程处理</strong>：纯像素回归存在固有的坐标偏移率（Off-by-a-few-pixels）。在 2026 年的健壮系统中，架构师必须在模型点击前额外做一步 <strong>Region Object Detection (局部目标检测)</strong> 来吸附 (Snap) 坐标到最近的按钮中心。</li>
+</ul>
+</li>
+</ol>
 <h2 id="趋势四-agent-化成为核心方向">趋势四：Agent 化成为核心方向</h2>
 <p>从对话 AI 到 Agent AI 的转变是 2026 年最重要的趋势：</p>
 <table>
@@ -262,7 +281,43 @@ graph LR
 <li><strong>GPT-5.4</strong> 引入 Tool Search 功能，可减少近 50% 的 token 消耗</li>
 <li>所有厂商均提供 <strong>Batch API</strong>（50% 折扣），Claude 还支持 <strong>Prompt Caching</strong>（最高省 90%）</li>
 </ul>
-<h2 id="趋势六-开源模型缩小差距">趋势六：开源模型缩小差距</h2>
+<h2 id="趋势六-非-transformer-架构的逆袭-alternative-architectures">趋势六：非 Transformer 架构的逆袭 (Alternative Architectures)</h2>
+<p>Transformer 统治了业界 8 年，但其 $O(N^2)$ 的注意力机制在百万上下文面前依然力不从心。2026 年，非 Transformer 架构终于在特定领域撕开了裂口：</p>
+<ul>
+<li><strong>SSMs (状态空间模型, 如 Mamba / Jamba)</strong>：<ul>
+<li><strong>优势</strong>：具有 $O(1)$ 的恒定推理显存消耗。无论你的 Prompt 是一千字还是一百万字，它的 KV Cache（严格来说是隐状态 Hidden State）大小是固定的！这在极长文档对话和无限状态机的代码生成中具有可怕的成本优势。</li>
+</ul>
+</li>
+<li><strong>Linear Attention (如 RWKV-6 / 7)</strong>：<ul>
+<li>将 RNN 的高效与 Transformer 的并行训练结合，在 7B-14B 规模的开源端侧模型中展现出压倒性的推理速度。</li>
+</ul>
+</li>
+</ul>
+<h2 id="趋势七-端侧-ai-与-npu-算力爆发-on-device-edge-ai">趋势七：端侧 AI 与 NPU 算力爆发 (On-Device & Edge AI)</h2>
+<p>“云端全包”的思路被高昂的带宽和隐私红线打破。2026 年的口号是：“能在手机上跑的，绝不上云”。</p>
+<ul>
+<li><strong>SLMs (小语言模型) 的极限压缩</strong>：1B 到 8B 参数的模型（如 Llama-4-8B, Qwen-2.5-3B）成为终端主角。</li>
+<li><strong>异构计算与 4-bit 量化</strong>：<ul>
+<li>在 iOS 和 Android 端，开发者通过 <code>MLX</code> 或 <code>ExecuTorch</code> 将模型完全离线化。</li>
+<li>采用 <strong>GGUF</strong> 或 <strong>EXL2</strong> 格式进行 4-bit 或 3-bit 的极端量化压缩，使得 7B 模型能塞进不到 4GB 的手机运行内存中。</li>
+<li><strong>NPU 加速</strong>：苹果 A19 芯片和高通骁龙 8 Gen 5 的自研 NPU (神经处理单元) 专门为矩阵乘法提供硬件级加速，让端侧模型的生成速度突破了 30 Tokens/s，达到人类速读极限。</li>
+</ul>
+</li>
+</ul>
+<h2 id="趋势八-合成数据与后训练范式-synthetic-data-post-training">趋势八：合成数据与后训练范式 (Synthetic Data & Post-Training)</h2>
+<p>预训练阶段的“人类高质量数据墙”在 2025 年底已被耗尽。2026 年大模型的智力飞跃，全靠 <strong>后训练 (Post-Training)</strong>。</p>
+<ul>
+<li><strong>拒绝采样 (Rejection Sampling)</strong>：用最强的模型（如 GPT-5.4）生成一百万道数学题的解答，然后用评分模型筛选出最好的部分，拿去微调小模型。</li>
+<li><strong>RLAIF (从 AI 反馈中强化学习)</strong>：人类标注员由于知识储备有限，已经无法为 o3 这种极高智商的模型提供准确的纠错反馈。RLAIF 引入“更强的 AI”来监督“训练中的 AI”。</li>
+<li>如果一家 AI 创业公司在 2026 年还在靠人力外包数据团队做大范围 SFT，它离倒闭就不远了。</li>
+</ul>
+<h2 id="趋势九-具身智能与连续动作空间-embodied-ai">趋势九：具身智能与连续动作空间 (Embodied AI)</h2>
+<p>多模态大模型从“看图说话”正式跨入“看图干活”的物理世界。</p>
+<ul>
+<li><strong>VLA (视觉-语言-动作) 模型</strong>：不再仅仅输出文本。机器人搭载的 VLM 接收摄像头的每一帧 3D 深度像素，直接预测并输出一个针对机器狗十二个关节的<strong>连续动作向量 (Action Vectors)</strong>。</li>
+<li>难点在于环境的不可逆性：在文本中生成错了 Token 可以退格，而在现实世界打翻了杯子无法 <code>Ctrl+Z</code>。因此，具身智能模型强依赖于前文提到的 <strong>Thinking 验证机制 (闭环控制)</strong>。</li>
+</ul>
+<h2 id="趋势十-开源模型缩小差距">趋势十：开源模型缩小差距</h2>
 <p>2025-2026 年，开源模型与闭源模型的差距在快速缩小：</p>
 <table>
 <thead>
@@ -299,6 +354,39 @@ graph LR
 <li><strong>定制化</strong>：可微调适配特定业务</li>
 <li><strong>合规要求</strong>：满足特定地区的数据驻留法规</li>
 <li><strong>批量推理</strong>：大规模推理成本远低于 API</li>
+</ul>
+<h2 id="趋势七-大模型基建的底层革命">趋势七：大模型基建的底层革命</h2>
+<p>随着模型参数量的爆炸式增长，2026 年的企业级架构师已经不再纠结于“选哪个模型”，而是死磕 **推理加速（Inference Acceleration）**与 <strong>GPU 算力统筹</strong>。</p>
+<h3 id="1-speculative-decoding-推测解码-投机采样">1. Speculative Decoding (推测解码/投机采样)</h3>
+<p>这是 2026 年最具统治力的推理加速技术，彻底打破了 LLM 生成过程中的 <strong>Memory-Bandwidth Bound (内存带宽瓶颈)</strong>。</p>
+<p>传统的自回归生成中，由于每次只能从显存读取巨大的模型权重来生成 1 个 Token，GPU 的算力其实有 80% 都是在发呆等数据。
+<strong>推测解码的原理</strong>：</p>
+<ol>
+<li><strong>草拟 (Drafting)</strong>：让一个极小、极快的模型（如 Llama-3-8B）迅速“猜”出接下来的 $K$ 个 Tokens（比如一次性先写出 5 个词）。</li>
+<li><strong>验证 (Verifying)</strong>：让巨大的主模型（如 Llama-4-70B）把这 $K$ 个 Tokens 一并当作输入，<strong>并行地</strong>进行一次前向传播来验证。</li>
+<li><strong>收益</strong>：只要小模型猜对了一半，大模型一次性读取权重就能直接接受好几个 Token，从而在不损失一丁点数学精度的情况下，将生成速度（Tokens/s）提升 <strong>2 倍到 2.5 倍</strong>。</li>
+</ol>
+<h3 id="2-极致的语义路由-semantic-complexity-routing">2. 极致的语义路由 (Semantic Complexity Routing)</h3>
+<p>企业落地不再是全量访问 GPT-5.4，那会让你在一夜之间破产。2026 年的标配是构建一个<strong>前置评估器（Evaluator）</strong>，通过计算请求的复杂度来进行分流：</p>
+<ul>
+<li><strong>Tier 1 (极简任务，占比 60%)</strong>：JSON 格式化、文本标点纠错、多语言翻译。<ul>
+<li><strong>路由目的地</strong>：本地自建的 vLLM 集群运行 <strong>Qwen-2.5-7B</strong>。成本趋近于零，延迟低至 10ms。</li>
+</ul>
+</li>
+<li><strong>Tier 2 (标准应用，占比 30%)</strong>：RAG 摘要总结、客户邮件回复。<ul>
+<li><strong>路由目的地</strong>：调用 Claude Sonnet 4.6 或闭源轻量级模型。</li>
+</ul>
+</li>
+<li><strong>Tier 3 (复杂推理，占比 10%)</strong>：多步骤逻辑运算、千行级别代码重构追踪。<ul>
+<li><strong>路由目的地</strong>：调用最高昂的 GPT-5.4 Thinking 模式，并预留足够的超时控制。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-latency-vs-throughput-延迟与吞吐的生死抉择">3. Latency vs Throughput (延迟与吞吐的生死抉择)</h3>
+<p>在部署开源模型时，你需要在 Continuous Batching 的调度策略上做出抉择：</p>
+<ul>
+<li><strong>如果你在做 C 端聊天产品</strong>：必须优化 <strong>TTFT (Time-To-First-Token, 首字延迟)</strong>。你得拉低 <code>max_num_batched_tokens</code>，宁可牺牲总体吞吐量，也要保证用户输入后立刻能看到字符蹦出来。</li>
+<li><strong>如果你在做后台批处理（如洗数据、自动化提取发票）</strong>：首字延迟毫无意义。此时必须极端优化 <strong>Throughput (吞吐量)</strong>，将 Batch Size 拉到显存爆炸的极限，让 GPU 的计算单元 (CUDA Cores) 运转率达到 95% 以上。</li>
 </ul>
 <h2 id="总结">总结</h2>
 <p>2026 年 3 月的 AI 大模型格局呈现三足鼎立：</p>
