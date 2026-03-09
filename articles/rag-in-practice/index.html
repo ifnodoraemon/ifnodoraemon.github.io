@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAG 检索增强生成实战 — AI 大模型观察</title>
+  <meta name="description" content="从向量数据库选型到 Embedding 策略，完整构建一套企业级 RAG 系统。含 Pinecone、Weaviate 对比实测。">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ifnodoraemon.github.io/articles/rag-in-practice/">
+  <meta name="theme-color" content="#06060b">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-brand"><span class="brand-icon">◆</span><span class="brand-text">AI 大模型观察</span></a>
+      <div class="nav-links" id="nav-links">
+        <a href="/">首页</a><a href="/models/">模型</a><a href="/about/">关于</a>
+        <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <main class="page-main">
+    <article class="article-detail">
+      <div class="container">
+        <div class="article-detail-header fade-in">
+          <a href="/" class="back-link">← 返回首页</a>
+          <div class="card-meta"><span class="tag tag-cyan">RAG</span><time datetime="2026-03-03">2026.03.03</time></div>
+          <h1>RAG 检索增强生成实战</h1>
+          <p class="article-detail-desc">从向量数据库选型到 Embedding 策略，完整构建一套企业级 RAG 系统。含 Pinecone、Weaviate 对比实测。</p>
+        </div>
+        <div class="article-detail-content fade-in">
+          <h2>为什么需要 RAG？</h2>
+          <p>即使 Gemini 3.1 Pro 拥有 2M 的超长上下文，大模型仍然存在知识截止日期和幻觉问题。RAG（Retrieval-Augmented Generation）通过检索外部知识库来增强模型的回答准确性。</p>
+          <h2>核心架构</h2>
+          <h3>1. 文档处理</h3>
+          <p>Chunking 策略是 RAG 系统性能的关键。推荐使用语义分块（Semantic Chunking）而非固定长度分块，保持语义完整性。</p>
+          <h3>2. 向量数据库选型</h3>
+          <ul>
+            <li><strong>Pinecone</strong>：全托管，开箱即用，适合快速原型</li>
+            <li><strong>Weaviate</strong>：开源可自部署，支持混合搜索</li>
+            <li><strong>ChromaDB</strong>：轻量级，适合本地开发和小规模应用</li>
+            <li><strong>Qdrant</strong>：高性能，Rust 编写，适合大规模生产环境</li>
+          </ul>
+          <h3>3. Embedding 模型</h3>
+          <p>OpenAI text-embedding-3-large 和 Cohere embed-v4 是目前最优的通用 Embedding 模型。中文场景推荐使用 BGE 或 M3E 系列。</p>
+          <h2>优化技巧</h2>
+          <ul>
+            <li>Hybrid Search：结合关键词和语义检索</li>
+            <li>Re-ranking：使用 Cross-Encoder 对检索结果二次排序</li>
+            <li>Query Expansion：自动扩展用户查询以提升召回率</li>
+          </ul>
+        </div>
+        <div class="article-nav fade-in">
+          <a href="/" class="btn-ghost">← 返回首页</a>
+        </div>
+      </div>
+    </article>
+  </main>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><span class="footer-copy">© 2026 ifnodoraemon · Built with ❤️ and AI</span></div></div></footer>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大模型微调全流程详解 — AI 大模型观察</title>
+  <meta name="description" content="LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ifnodoraemon.github.io/articles/fine-tuning-guide/">
+  <meta name="theme-color" content="#06060b">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-brand"><span class="brand-icon">◆</span><span class="brand-text">AI 大模型观察</span></a>
+      <div class="nav-links" id="nav-links">
+        <a href="/">首页</a><a href="/models/">模型</a><a href="/about/">关于</a>
+        <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <main class="page-main">
+    <article class="article-detail">
+      <div class="container">
+        <div class="article-detail-header fade-in">
+          <a href="/" class="back-link">← 返回首页</a>
+          <div class="card-meta"><span class="tag tag-purple">微调</span><time datetime="2026-02-25">2026.02.25</time></div>
+          <h1>大模型微调全流程详解</h1>
+          <p class="article-detail-desc">LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。</p>
+        </div>
+        <div class="article-detail-content fade-in">
+          <h2>何时需要微调？</h2>
+          <p>虽然现代大模型的通用能力已经非常强大，但在特定领域（医疗、法律、金融）或特定任务（特殊格式输出、领域术语理解）中，微调仍然是提升模型表现的最有效手段。</p>
+          <h2>三种微调方案对比</h2>
+          <h3>1. LoRA（低秩自适应）</h3>
+          <p>在原始权重旁添加低秩矩阵，仅训练新增参数。显存需求低、训练速度快，是最推荐的微调方案。</p>
+          <h3>2. QLoRA（量化 LoRA）</h3>
+          <p>在 LoRA 基础上对基础模型进行 4-bit 量化，进一步降低显存需求。一张消费级 GPU（24GB）即可微调 70B 参数模型。</p>
+          <h3>3. Full Fine-tuning</h3>
+          <p>更新模型所有参数。需要大量计算资源，但在效果上可能略优于 LoRA。适合有充足预算的大规模应用。</p>
+          <h2>完整工作流</h2>
+          <ol>
+            <li>数据收集与清洗</li>
+            <li>数据格式转换（Alpaca / ShareGPT 格式）</li>
+            <li>超参数选择与训练配置</li>
+            <li>训练监控与评估</li>
+            <li>模型合并与导出</li>
+            <li>部署上线（vLLM / TGI）</li>
+          </ol>
+        </div>
+        <div class="article-nav fade-in">
+          <a href="/" class="btn-ghost">← 返回首页</a>
+        </div>
+      </div>
+    </article>
+  </main>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><span class="footer-copy">© 2026 ifnodoraemon · Built with ❤️ and AI</span></div></div></footer>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

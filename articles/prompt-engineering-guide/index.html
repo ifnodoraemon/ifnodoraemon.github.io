@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大模型提示工程实践指南 — AI 大模型观察</title>
+  <meta name="description" content="深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought 等核心技巧。">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ifnodoraemon.github.io/articles/prompt-engineering-guide/">
+  <meta name="theme-color" content="#06060b">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-brand"><span class="brand-icon">◆</span><span class="brand-text">AI 大模型观察</span></a>
+      <div class="nav-links" id="nav-links">
+        <a href="/">首页</a><a href="/models/">模型</a><a href="/about/">关于</a>
+        <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="打开菜单"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <main class="page-main">
+    <article class="article-detail">
+      <div class="container">
+        <div class="article-detail-header fade-in">
+          <a href="/" class="back-link">← 返回首页</a>
+          <div class="card-meta"><span class="tag ">提示工程</span><time datetime="2026-03-09">2026.03.09</time></div>
+          <h1>大模型提示工程实践指南</h1>
+          <p class="article-detail-desc">深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought 等核心技巧。</p>
+        </div>
+        <div class="article-detail-content fade-in">
+          <h2>什么是提示工程？</h2>
+          <p>提示工程（Prompt Engineering）是设计和优化输入提示以引导大语言模型产生期望输出的技术。随着 GPT-5.4、Claude Sonnet 4.6 等模型的推理能力日益增强，提示工程已从简单的指令构造演变为一门系统化的技术学科。</p>
+          <h2>核心策略</h2>
+          <h3>1. Few-Shot 学习</h3>
+          <p>通过在提示中提供少量示例，引导模型理解任务模式。研究表明，精心选择的 3-5 个示例通常能显著提升输出质量。</p>
+          <h3>2. Chain-of-Thought (CoT)</h3>
+          <p>鼓励模型逐步推理，而非直接给出答案。GPT-5.4 Thinking 模式本质上就是将 CoT 内化为模型的原生能力，能够在回答前自动展示思考过程。</p>
+          <h3>3. ReAct 框架</h3>
+          <p>结合推理（Reasoning）与行动（Acting），让模型在思考的同时调用外部工具。这是构建 AI Agent 的核心提示策略。</p>
+          <h2>实战建议</h2>
+          <ul>
+            <li>明确角色定义：为模型设定具体的专家角色</li>
+            <li>结构化输出：使用 JSON、Markdown 等格式约束输出</li>
+            <li>迭代优化：基于模型反馈不断调整提示</li>
+            <li>温度控制：根据创意性 vs 确定性需求调整 temperature</li>
+          </ul>
+        </div>
+        <div class="article-nav fade-in">
+          <a href="/" class="btn-ghost">← 返回首页</a>
+        </div>
+      </div>
+    </article>
+  </main>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><span class="footer-copy">© 2026 ifnodoraemon · Built with ❤️ and AI</span></div></div></footer>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>
