@@ -14,6 +14,7 @@ export function renderNav(activePage = '') {
       </a>
       <div class="nav-links" id="nav-links">
         <a href="/"${activePage === 'home' ? ' class="active"' : ''}>首页</a>
+        <a href="/articles/"${activePage === 'articles' ? ' class="active"' : ''}>文章</a>
         <a href="/models/"${activePage === 'models' ? ' class="active"' : ''}>模型</a>
         <a href="/about/"${activePage === 'about' ? ' class="active"' : ''}>关于</a>
         <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener">GitHub</a>

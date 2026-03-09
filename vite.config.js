@@ -11,6 +11,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         about: resolve(__dirname, 'about/index.html'),
         models: resolve(__dirname, 'models/index.html'),
+        articles: resolve(__dirname, 'articles/index.html'),
         // Article pages
         'prompt-engineering-guide': resolve(__dirname, 'articles/prompt-engineering-guide/index.html'),
         'ai-trends-2026': resolve(__dirname, 'articles/ai-trends-2026/index.html'),
