@@ -19,6 +19,9 @@
     }
   },
   "models": {
+    "pageTag": "MODEL COMPARISON",
+    "pageTitle": "AI 模型全景对比",
+    "pageDesc": "深入了解 2026 年三大主流 AI 模型的能力边界与适用场景",
     "heroTag": "MODEL DATABASE",
     "heroTitle": "全景模型库",
     "heroDesc": "追踪最先进 AI 系统的参数、能力边界与应用场景，提供中立的横向评测数据。",
@@ -256,7 +259,36 @@
       }
     ],
     "relatedTitle": "相关文章",
-    "readMore": "阅读全文"
+    "readMore": "阅读全文",
+    "relatedArticles": [
+      {
+        "tag": "深度解析",
+        "tagClass": "tag",
+        "datetime": "2026-03-08",
+        "date": "2026.03.08",
+        "title": "GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro：终极横评",
+        "desc": "四大维度全面评测三大顶级模型的真实表现。",
+        "link": "/articles/model-comparison-2026/"
+      },
+      {
+        "tag": "行业观察",
+        "tagClass": "tag tag-amber",
+        "datetime": "2026-03-08",
+        "date": "2026.03.08",
+        "title": "2026 年 AI 大模型发展趋势",
+        "desc": "从推理飞跃到 Agent 成熟的全景分析。",
+        "link": "/articles/ai-trends-2026/"
+      },
+      {
+        "tag": "多模态",
+        "tagClass": "tag tag-rose",
+        "datetime": "2026-02-28",
+        "date": "2026.02.28",
+        "title": "多模态大模型入门指南",
+        "desc": "探索多模态模型的图文理解与应用案例。",
+        "link": "/articles/multimodal-guide/"
+      }
+    ]
   },
   "projects": {
     "heroTag": "EXPERIMENTS & LAB",
@@ -321,6 +353,36 @@
     "newsletterNote": "🔒 我们尊重你的隐私，随时退订",
     "aboutTag": "// ABOUT",
     "aboutTitle": "关于本站",
-    "aboutDesc": "专注于 AI 大模型领域的技术研究与实践分享。<br>记录前沿技术的发展脉络，探索人工智能的应用边界。"
+    "aboutDesc": "专注于 AI 大模型领域的技术研究与实践分享。<br>记录前沿技术的发展脉络，探索人工智能的应用边界。",
+    "terminalCmdInit": "init --mode AI_AGENT",
+    "terminalSysInit": "[系统] 初始化序列完成，神经链已建立。",
+    "terminalSysLoad": "[系统] 正在加载核心上下文模块...",
+    "terminalCmdTitle": "cat /agent/core_directives.md",
+    "terminalCmdMetrics": "sys.getMetrics()",
+    "terminalCmdAction": "await user.action()",
+    "modelSpecContext": "上下文窗口",
+    "modelSpecMultimodal": "多模态",
+    "modelSpecNative": "原生",
+    "modelSpecVisual": "视觉推理",
+    "modelSpecOmni": "全模态",
+    "modelSpecCode": "代码能力",
+    "modelSpecReasoning": "推理深度",
+    "modelSpecAgent": "Agent 能力",
+    "modelSpecSpeed": "推理速度",
+    "modelTagCodex": "Codex 集成",
+    "modelTag1M": "1M 上下文",
+    "modelTagAudio": "视频/音频",
+    "modelTagSearch": "搜索整合",
+    "topic1Name": "提示工程",
+    "topic2Name": "模型微调",
+    "topic3Name": "AI Agent",
+    "topic4Name": "RAG 应用",
+    "topic5Name": "多模态",
+    "topic6Name": "行业应用",
+    "topicUnit": "篇",
+    "stat1Name": "技术文章",
+    "stat2Name": "覆盖模型",
+    "stat3Name": "核心专题",
+    "stat4Name": "月读者"
   }
 }

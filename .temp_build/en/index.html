@@ -117,64 +117,133 @@
       <div class="hero-grid-overlay"></div>
     </div>
     <div class="hero-scanline"></div>
-    <div class="hero-container fade-in">
-      <div class="hero-hud-top">
-        <div class="hud-line"></div>
-        <div class="hero-badge">
-          <span class="badge-pulse"></span>
-          <span class="badge-text" data-en="SYSTEM ONLINE">SYSTEM ONLINE</span>
+    
+    <div class="hero-container hero-terminal-wrapper fade-in" id="hero-container">
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="terminal-dots">
+            <span class="dot close"></span>
+            <span class="dot minimize"></span>
+            <span class="dot expand"></span>
+          </div>
+          <div class="terminal-title">admin@ai-node: ~</div>
         </div>
-        <div class="hud-line"></div>
-      </div>
-      
-      <div class="hero-content-wrapper">
-        <h1 class="hero-title">
-          Exploring the <span class="gradient-text glow">LLM</span> Frontier<span class="caret-blink"></span>
-        </h1>
         
-        <p class="hero-description typewriter">
-          Frontier tech insights and engineering notes on GPT-5.4, Claude 4.6, and Gemini 3.1
-        </p>
-        
-        <div class="hero-actions">
-          <a href="/en/#articles" class="btn-primary btn-glitch">
-            <span class="btn-glow"></span>
-            <span>Read Articles</span>
-            <div class="btn-cyber-corners"></div>
-          </a>
-          <a href="/en/about/" class="btn-ghost btn-cyber">
-            <span>More Nodes</span>
-            <div class="btn-cyber-corners"></div>
-          </a>
-        </div>
-      </div>
+        <div class="terminal-body" id="hero-terminal">
+          <!-- Fallback content if JS is disabled -->
+          <div class="terminal-fallback">
+            <div class="hero-hud-top">
+              <div class="hud-line"></div>
+              <div class="hero-badge">
+                <span class="badge-pulse"></span>
+                <span class="badge-text" data-en="SYSTEM ONLINE">SYSTEM ONLINE</span>
+              </div>
+              <div class="hud-line"></div>
+            </div>
+            
+            <h1 class="hero-title">
+              Exploring the <span class="gradient-text glow">LLM</span> Frontier<span class="caret-blink"></span>
+            </h1>
+            <p class="hero-description typewriter">
+              Frontier tech insights and engineering notes on GPT-5.4, Claude 4.6, and Gemini 3.1
+            </p>
+            
+            <div class="hero-metrics-panel">
+              <div class="hud-bracket left"></div>
+              <div class="hero-metrics">
+                <div class="metric">
+                  <span class="metric-value blur-reveal" data-val="6">6</span>
+                  <span class="metric-label"><span>CORE TOPICS</span></span>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <span class="metric-value blur-reveal">LLM</span>
+                  <span class="metric-label"><span>TECH DOMAIN</span></span>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <span class="metric-value blur-reveal">V. 26</span>
+                  <span class="metric-label"><span>ITERATION</span></span>
+                </div>
+              </div>
+              <div class="hud-bracket right"></div>
+            </div>
+            
+            <div class="hero-actions">
+              <a href="/en/#articles" class="btn-primary btn-glitch">
+                <span class="btn-glow"></span>
+                <span>Read Articles</span>
+                <div class="btn-cyber-corners"></div>
+              </a>
+              <a href="/en/about/" class="btn-ghost btn-cyber">
+                <span>More Nodes</span>
+                <div class="btn-cyber-corners"></div>
+              </a>
+            </div>
+          </div>
 
-      <!-- Tech metrics with bilingual support -->
-      <div class="hero-metrics-panel">
-        <div class="hud-bracket left"></div>
-        <div class="hero-metrics">
-          <div class="metric">
-            <span class="metric-value blur-reveal" data-val="6">6</span>
-            <span class="metric-label">
-              <span>CORE TOPICS</span>
-            </span>
-          </div>
-          <div class="metric-divider"></div>
-          <div class="metric">
-            <span class="metric-value blur-reveal">LLM</span>
-            <span class="metric-label">
-              <span>TECH DOMAIN</span>
-            </span>
-          </div>
-          <div class="metric-divider"></div>
-          <div class="metric">
-            <span class="metric-value blur-reveal">V. 26</span>
-            <span class="metric-label">
-              <span>ITERATION</span>
-            </span>
+          <!-- JavaScript Animated Terminal Content -->
+          <div class="term-seq-container">
+            <div class="term-line term-seq-1 hidden"><span class="term-prompt">❯</span> <span class="term-cmd type-text" data-text="init --mode AI_AGENT"></span></div>
+            <div class="term-line term-dim term-seq-2 hidden">[System] Initialization sequence complete. Neural link established.</div>
+            <div class="term-line term-dim term-seq-3 hidden">[System] Loading core context modules...</div>
+            
+            <div class="term-spacer hidden term-seq-3"></div>
+            
+            <div class="term-line term-seq-4 hidden"><span class="term-prompt">❯</span> <span class="term-cmd type-text" data-text="cat /agent/core_directives.md"></span></div>
+            <div class="term-line content-reveal term-seq-5 hidden">
+              <h1 class="hero-title">Exploring the <span class="gradient-text glow">LLM</span> Frontier<span class="caret-blink"></span></h1>
+              <p class="hero-description">Frontier tech insights and engineering notes on GPT-5.4, Claude 4.6, and Gemini 3.1</p>
+            </div>
+            
+            <div class="term-spacer hidden term-seq-5"></div>
+            
+            <div class="term-line term-seq-6 hidden"><span class="term-prompt">❯</span> <span class="term-cmd type-text" data-text="sys.getMetrics()"></span></div>
+            <div class="term-line content-reveal term-seq-7 hidden">
+              <div class="hero-metrics-panel">
+                <div class="hud-bracket left"></div>
+                <div class="hero-metrics">
+                  <div class="metric">
+                    <span class="metric-value blur-reveal" data-val="6">6</span>
+                    <span class="metric-label"><span>CORE TOPICS</span></span>
+                  </div>
+                  <div class="metric-divider"></div>
+                  <div class="metric">
+                    <span class="metric-value blur-reveal">LLM</span>
+                    <span class="metric-label"><span>TECH DOMAIN</span></span>
+                  </div>
+                  <div class="metric-divider"></div>
+                  <div class="metric">
+                    <span class="metric-value blur-reveal">V. 26</span>
+                    <span class="metric-label"><span>ITERATION</span></span>
+                  </div>
+                </div>
+                <div class="hud-bracket right"></div>
+              </div>
+            </div>
+            
+            <div class="term-spacer hidden term-seq-7"></div>
+            
+            <div class="term-line term-seq-8 hidden"><span class="term-prompt">❯</span> <span class="term-cmd type-text" data-text="await user.action()"></span></div>
+            <div class="term-line content-reveal term-seq-9 hidden">
+              <div class="hero-actions">
+                <a href="/en/#articles" class="btn-primary btn-glitch">
+                  <span class="btn-glow"></span>
+                  <span>Read Articles</span>
+                  <div class="btn-cyber-corners"></div>
+                </a>
+                <a href="/en/about/" class="btn-ghost btn-cyber">
+                  <span>More Nodes</span>
+                  <div class="btn-cyber-corners"></div>
+                </a>
+              </div>
+            </div>
+            
+            <div class="term-spacer hidden term-seq-9"></div>
+            
+            <div class="term-line term-seq-10 hidden active-prompt"><span class="term-prompt">❯</span><span class="cursor-blink">▍</span></div>
           </div>
         </div>
-        <div class="hud-bracket right"></div>
       </div>
     </div>
   </header>
@@ -354,26 +423,26 @@
             <span class="model-maker">OpenAI · 2026.03.05</span>
             <div class="model-specs">
               <div class="spec-row">
-                <span class="spec-label">上下文窗口</span>
+                <span class="spec-label">Context Window</span>
                 <span class="spec-value">256K</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">多模态</span>
-                <span class="spec-value spec-yes">✓ 原生</span>
+                <span class="spec-label">Multimodal</span>
+                <span class="spec-value spec-yes">✓ Native</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">代码能力</span>
+                <span class="spec-label">Coding Ability</span>
                 <span class="spec-value">★★★★★</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">推理深度</span>
+                <span class="spec-label">Reasoning Depth</span>
                 <span class="spec-value">★★★★★</span>
               </div>
             </div>
             <div class="model-tags">
               <span class="mini-tag">Thinking</span>
               <span class="mini-tag">Computer Use</span>
-              <span class="mini-tag">Codex 集成</span>
+              <span class="mini-tag">Codex Integration</span>
             </div>
           </div>
 
@@ -384,25 +453,25 @@
             <span class="model-maker">Anthropic · 2026.02.17</span>
             <div class="model-specs">
               <div class="spec-row">
-                <span class="spec-label">上下文窗口</span>
+                <span class="spec-label">Context Window</span>
                 <span class="spec-value">1M (Beta)</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">多模态</span>
-                <span class="spec-value spec-yes">✓ 视觉推理</span>
+                <span class="spec-label">Multimodal</span>
+                <span class="spec-value spec-yes">✓ Visual Reasoning</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">代码能力</span>
+                <span class="spec-label">Coding Ability</span>
                 <span class="spec-value">★★★★★</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">Agent 能力</span>
+                <span class="spec-label">Agentic</span>
                 <span class="spec-value">★★★★★</span>
               </div>
             </div>
             <div class="model-tags">
               <span class="mini-tag">Computer Use</span>
-              <span class="mini-tag">1M 上下文</span>
+              <span class="mini-tag">1M Context</span>
               <span class="mini-tag">Agentic</span>
             </div>
           </div>
@@ -413,26 +482,26 @@
             <span class="model-maker">Google DeepMind · 2026.02.19</span>
             <div class="model-specs">
               <div class="spec-row">
-                <span class="spec-label">上下文窗口</span>
+                <span class="spec-label">Context Window</span>
                 <span class="spec-value">2M</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">多模态</span>
-                <span class="spec-value spec-yes">✓ 全模态</span>
+                <span class="spec-label">Multimodal</span>
+                <span class="spec-value spec-yes">✓ Omnimodal</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">代码能力</span>
+                <span class="spec-label">Coding Ability</span>
                 <span class="spec-value">★★★★★</span>
               </div>
               <div class="spec-row">
-                <span class="spec-label">推理速度</span>
+                <span class="spec-label">Reasoning Speed</span>
                 <span class="spec-value">★★★★★</span>
               </div>
             </div>
             <div class="model-tags">
               <span class="mini-tag">Thinking Levels</span>
-              <span class="mini-tag">视频/音频</span>
-              <span class="mini-tag">搜索整合</span>
+              <span class="mini-tag">Video/Audio</span>
+              <span class="mini-tag">Search Integration</span>
             </div>
           </div>
 
@@ -464,33 +533,33 @@
         <div class="topic-grid fade-in">
           <a href="#" class="topic-card">
             <span class="topic-icon">💡</span>
-            <span class="topic-name">提示工程</span>
-            <span class="topic-count">12 篇</span>
+            <span class="topic-name">Prompt Engineering</span>
+            <span class="topic-count">12 Posts</span>
           </a>
           <a href="#" class="topic-card">
             <span class="topic-icon">⚙️</span>
-            <span class="topic-name">模型微调</span>
-            <span class="topic-count">8 篇</span>
+            <span class="topic-name">Model Fine-tuning</span>
+            <span class="topic-count">8 Posts</span>
           </a>
           <a href="#" class="topic-card">
             <span class="topic-icon">🤖</span>
             <span class="topic-name">AI Agent</span>
-            <span class="topic-count">10 篇</span>
+            <span class="topic-count">10 Posts</span>
           </a>
           <a href="#" class="topic-card">
             <span class="topic-icon">📚</span>
-            <span class="topic-name">RAG 应用</span>
-            <span class="topic-count">7 篇</span>
+            <span class="topic-name">RAG Applications</span>
+            <span class="topic-count">7 Posts</span>
           </a>
           <a href="#" class="topic-card">
             <span class="topic-icon">🎨</span>
-            <span class="topic-name">多模态</span>
-            <span class="topic-count">6 篇</span>
+            <span class="topic-name">Multimodal</span>
+            <span class="topic-count">6 Posts</span>
           </a>
           <a href="#" class="topic-card">
             <span class="topic-icon">🏢</span>
-            <span class="topic-name">行业应用</span>
-            <span class="topic-count">9 篇</span>
+            <span class="topic-name">Industry Uses</span>
+            <span class="topic-count">9 Posts</span>
           </a>
         </div>
       </div>
@@ -565,22 +634,22 @@
           <div class="about-stats">
             <div class="about-stat-item">
               <span class="about-stat-number">50+</span>
-              <span class="about-stat-text">技术文章</span>
+              <span class="about-stat-text">Tech Articles</span>
             </div>
             <div class="about-stat-divider"></div>
             <div class="about-stat-item">
               <span class="about-stat-number">10+</span>
-              <span class="about-stat-text">覆盖模型</span>
+              <span class="about-stat-text">Models Covered</span>
             </div>
             <div class="about-stat-divider"></div>
             <div class="about-stat-item">
               <span class="about-stat-number">6</span>
-              <span class="about-stat-text">核心专题</span>
+              <span class="about-stat-text">Core Topics</span>
             </div>
             <div class="about-stat-divider"></div>
             <div class="about-stat-item">
               <span class="about-stat-number">2K+</span>
-              <span class="about-stat-text">月读者</span>
+              <span class="about-stat-text">Monthly Readers</span>
             </div>
           </div>
 

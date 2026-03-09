@@ -19,6 +19,9 @@
     }
   },
   "models": {
+    "pageTag": "MODEL COMPARISON",
+    "pageTitle": "AI Models Comprehensive Comparison",
+    "pageDesc": "Deep dive into the capability boundaries and use cases of the three mainstream AI models of 2026",
     "heroTag": "MODEL DATABASE",
     "heroTitle": "Model Database",
     "heroDesc": "Tracking the parameters, capability boundaries, and use cases of cutting-edge AI systems, providing neutral benchmark data.",
@@ -256,7 +259,36 @@
       }
     ],
     "relatedTitle": "Related Articles",
-    "readMore": "Read More"
+    "readMore": "Read More",
+    "relatedArticles": [
+      {
+        "tag": "Deep Dive",
+        "tagClass": "tag",
+        "datetime": "2026-03-08",
+        "date": "2026.03.08",
+        "title": "GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro: Ultimate Benchmark",
+        "desc": "A comprehensive four-dimensional evaluation of the top three foundation models.",
+        "link": "/en/articles/model-comparison-2026/"
+      },
+      {
+        "tag": "Industry Trends",
+        "tagClass": "tag tag-amber",
+        "datetime": "2026-03-08",
+        "date": "2026.03.08",
+        "title": "2026 AI Foundation Model Development Trends",
+        "desc": "A panoramic analysis from the leap in reasoning to mature Agents.",
+        "link": "/en/articles/ai-trends-2026/"
+      },
+      {
+        "tag": "Multimodal",
+        "tagClass": "tag tag-rose",
+        "datetime": "2026-02-28",
+        "date": "2026.02.28",
+        "title": "Multimodal Large Models Starter Guide",
+        "desc": "Exploring image-text understanding and application cases of multimodal models.",
+        "link": "/en/articles/multimodal-guide/"
+      }
+    ]
   },
   "projects": {
     "heroTag": "EXPERIMENTS & LAB",
@@ -321,6 +353,36 @@
     "newsletterNote": "🔒 We respect your privacy, unsubscribe at any time",
     "aboutTag": "// ABOUT",
     "aboutTitle": "About Us",
-    "aboutDesc": "Dedicated to technical research and practical sharing in the field of AI large models.<br>Recording the development context of frontier technologies and exploring the application boundaries of artificial intelligence."
+    "aboutDesc": "Dedicated to technical research and practical sharing in the field of AI large models.<br>Recording the development context of frontier technologies and exploring the application boundaries of artificial intelligence.",
+    "terminalCmdInit": "init --mode AI_AGENT",
+    "terminalSysInit": "[System] Initialization sequence complete. Neural link established.",
+    "terminalSysLoad": "[System] Loading core context modules...",
+    "terminalCmdTitle": "cat /agent/core_directives.md",
+    "terminalCmdMetrics": "sys.getMetrics()",
+    "terminalCmdAction": "await user.action()",
+    "modelSpecContext": "Context Window",
+    "modelSpecMultimodal": "Multimodal",
+    "modelSpecNative": "Native",
+    "modelSpecVisual": "Visual Reasoning",
+    "modelSpecOmni": "Omnimodal",
+    "modelSpecCode": "Coding Ability",
+    "modelSpecReasoning": "Reasoning Depth",
+    "modelSpecAgent": "Agentic",
+    "modelSpecSpeed": "Reasoning Speed",
+    "modelTagCodex": "Codex Integration",
+    "modelTag1M": "1M Context",
+    "modelTagAudio": "Video/Audio",
+    "modelTagSearch": "Search Integration",
+    "topic1Name": "Prompt Engineering",
+    "topic2Name": "Model Fine-tuning",
+    "topic3Name": "AI Agent",
+    "topic4Name": "RAG Applications",
+    "topic5Name": "Multimodal",
+    "topic6Name": "Industry Uses",
+    "topicUnit": "Posts",
+    "stat1Name": "Tech Articles",
+    "stat2Name": "Models Covered",
+    "stat3Name": "Core Topics",
+    "stat4Name": "Monthly Readers"
   }
 }

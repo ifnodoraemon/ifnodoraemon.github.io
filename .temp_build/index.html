@@ -117,64 +117,133 @@
       <div class="hero-grid-overlay"></div>
     </div>
     <div class="hero-scanline"></div>
-    <div class="hero-container fade-in">
-      <div class="hero-hud-top">
-        <div class="hud-line"></div>
-        <div class="hero-badge">
-          <span class="badge-pulse"></span>
-          <span class="badge-text" data-en="系统在线">系统在线</span>
+    
+    <div class="hero-container hero-terminal-wrapper fade-in" id="hero-container">
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="terminal-dots">
+            <span class="dot close"></span>
+            <span class="dot minimize"></span>
+            <span class="dot expand"></span>
+          </div>
+          <div class="terminal-title">admin@ai-node: ~</div>
         </div>
-        <div class="hud-line"></div>
-      </div>
-      
-      <div class="hero-content-wrapper">
-        <h1 class="hero-title">
-          深入<span class="gradient-text glow">大模型</span>世界<span class="caret-blink"></span>
-        </h1>
         
-        <p class="hero-description typewriter">
-          关于 GPT-5.4、Claude 4.6、Gemini 3.1 的前沿技术洞察与实战工程笔记
-        </p>
-        
-        <div class="hero-actions">
-          <a href="/#articles" class="btn-primary btn-glitch">
-            <span class="btn-glow"></span>
-            <span>浏览深度文章</span>
-            <div class="btn-cyber-corners"></div>
-          </a>
-          <a href="/about/" class="btn-ghost btn-cyber">
-            <span>了解更多节点</span>
-            <div class="btn-cyber-corners"></div>
-          </a>
-        </div>
-      </div>
+        <div class="terminal-body" id="hero-terminal">
+          <!-- Fallback content if JS is disabled -->
+          <div class="terminal-fallback">
+            <div class="hero-hud-top">
+              <div class="hud-line"></div>
+              <div class="hero-badge">
+                <span class="badge-pulse"></span>
+                <span class="badge-text" data-en="系统在线">系统在线</span>
+              </div>
+              <div class="hud-line"></div>
+            </div>
+            
+            <h1 class="hero-title">
+              深入<span class="gradient-text glow">大模型</span>世界<span class="caret-blink"></span>
+            </h1>
+            <p class="hero-description typewriter">
+              关于 GPT-5.4、Claude 4.6、Gemini 3.1 的前沿技术洞察与实战工程笔记
+            </p>
+            
+            <div class="hero-metrics-panel">
+              <div class="hud-bracket left"></div>
+              <div class="hero-metrics">
+                <div class="metric">
+                  <span class="metric-value blur-reveal" data-val="6">6</span>
+                  <span class="metric-label"><span>核心主题</span></span>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <span class="metric-value blur-reveal">LLM</span>
+                  <span class="metric-label"><span>技术领域</span></span>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <span class="metric-value blur-reveal">V. 26</span>
+                  <span class="metric-label"><span>架构迭代</span></span>
+                </div>
+              </div>
+              <div class="hud-bracket right"></div>
+            </div>
+            
+            <div class="hero-actions">
+              <a href="/#articles" class="btn-primary btn-glitch">
+                <span class="btn-glow"></span>
+                <span>浏览深度文章</span>
+                <div class="btn-cyber-corners"></div>
+              </a>
+              <a href="/about/" class="btn-ghost btn-cyber">
+                <span>了解更多节点</span>
+                <div class="btn-cyber-corners"></div>
+              </a>
+            </div>
+          </div>
 
-      <!-- Tech metrics with bilingual support -->
-      <div class="hero-metrics-panel">
-        <div class="hud-bracket left"></div>
-        <div class="hero-metrics">
-          <div class="metric">
-            <span class="metric-value blur-reveal" data-val="6">6</span>
-            <span class="metric-label">
-              <span>核心主题</span>
-            </span>
-          </div>
-          <div class="metric-divider"></div>
-          <div class="metric">
-            <span class="metric-value blur-reveal">LLM</span>
-            <span class="metric-label">
-              <span>技术领域</span>
-            </span>
-          </div>
-          <div class="metric-divider"></div>
-          <div class="metric">
-            <span class="metric-value blur-reveal">V. 26</span>
-            <span class="metric-label">
-              <span>架构迭代</span>
-            </span>
+          <!-- JavaScript Animated Terminal Content -->
+          <div class="term-seq-container">
+            <div class="term-line term-seq-1 hidden"><span class="term-prompt">❯</span> <span class="term-cmd type-text" data-text="init --mode AI_AGENT"></span></div>
+            <div class="term-line term-dim term-seq-2 hidden">[系统] 初始化序列完成，神经链已建立。</div>
+            <div class="term-line term-dim term-seq-3 hidden">[系统] 正在加载核心上下文模块...</div>
+            
+            <div class="term-spacer hidden term-seq-3"></div>
+            
+            <div class="term-line term-seq-4 hidden"><span class="term-prompt">❯</span> <span class="term-cmd type-text" data-text="cat /agent/core_directives.md"></span></div>
+            <div class="term-line content-reveal term-seq-5 hidden">
+              <h1 class="hero-title">深入<span class="gradient-text glow">大模型</span>世界<span class="caret-blink"></span></h1>
+              <p class="hero-description">关于 GPT-5.4、Claude 4.6、Gemini 3.1 的前沿技术洞察与实战工程笔记</p>
+            </div>
+            
+            <div class="term-spacer hidden term-seq-5"></div>
+            
+            <div class="term-line term-seq-6 hidden"><span class="term-prompt">❯</span> <span class="term-cmd type-text" data-text="sys.getMetrics()"></span></div>
+            <div class="term-line content-reveal term-seq-7 hidden">
+              <div class="hero-metrics-panel">
+                <div class="hud-bracket left"></div>
+                <div class="hero-metrics">
+                  <div class="metric">
+                    <span class="metric-value blur-reveal" data-val="6">6</span>
+                    <span class="metric-label"><span>核心主题</span></span>
+                  </div>
+                  <div class="metric-divider"></div>
+                  <div class="metric">
+                    <span class="metric-value blur-reveal">LLM</span>
+                    <span class="metric-label"><span>技术领域</span></span>
+                  </div>
+                  <div class="metric-divider"></div>
+                  <div class="metric">
+                    <span class="metric-value blur-reveal">V. 26</span>
+                    <span class="metric-label"><span>架构迭代</span></span>
+                  </div>
+                </div>
+                <div class="hud-bracket right"></div>
+              </div>
+            </div>
+            
+            <div class="term-spacer hidden term-seq-7"></div>
+            
+            <div class="term-line term-seq-8 hidden"><span class="term-prompt">❯</span> <span class="term-cmd type-text" data-text="await user.action()"></span></div>
+            <div class="term-line content-reveal term-seq-9 hidden">
+              <div class="hero-actions">
+                <a href="/#articles" class="btn-primary btn-glitch">
+                  <span class="btn-glow"></span>
+                  <span>浏览深度文章</span>
+                  <div class="btn-cyber-corners"></div>
+                </a>
+                <a href="/about/" class="btn-ghost btn-cyber">
+                  <span>了解更多节点</span>
+                  <div class="btn-cyber-corners"></div>
+                </a>
+              </div>
+            </div>
+            
+            <div class="term-spacer hidden term-seq-9"></div>
+            
+            <div class="term-line term-seq-10 hidden active-prompt"><span class="term-prompt">❯</span><span class="cursor-blink">▍</span></div>
           </div>
         </div>
-        <div class="hud-bracket right"></div>
       </div>
     </div>
   </header>

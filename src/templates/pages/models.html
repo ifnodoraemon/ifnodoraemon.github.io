@@ -22,9 +22,9 @@
     <section class="page-hero">
       <div class="container">
         <div class="page-hero-content fade-in">
-          <div class="section-tag">MODEL COMPARISON</div>
-          <h1>AI 模型全景对比</h1>
-          <p class="page-hero-desc">深入了解 2026 年三大主流 AI 模型的能力边界与适用场景</p>
+          <div class="section-tag">{{models.pageTag}}</div>
+          <h1>{{models.pageTitle}}</h1>
+          <p class="page-hero-desc">{{models.pageDesc}}</p>
         </div>
       </div>
     </section>
@@ -140,34 +140,18 @@
           <h2>{{models.relatedTitle}}</h2>
         </div>
         <div class="article-grid fade-in">
-          <!-- TODO: The articles block itself should optionally be isolated to loc.articles depending on structure. Keeping hardcoded for now, replacing readMore button. -->
+          {{#each models.relatedArticles}}
           <article class="article-card">
             <div class="card-meta">
-              <span class="tag">深度解析</span>
-              <time datetime="2026-03-08">2026.03.08</time>
+              <span class="{{this.tagClass}}">{{this.tag}}</span>
+              <time datetime="{{this.datetime}}">{{this.date}}</time>
             </div>
-            <h3>GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro：终极横评</h3>
-            <p>四大维度全面评测三大顶级模型的真实表现。</p>
-            <a href="/articles/model-comparison-2026/" class="card-link">{{models.readMore}} <span class="arrow">→</span></a>
+            <h3>{{this.title}}</h3>
+            <p>{{this.desc}}</p>
+            <!-- When generating static HTML, making sure links point appropriately. The href from translation gives the link directly. -->
+            <a href="{{this.link}}" class="card-link">{{../models.readMore}} <span class="arrow">→</span></a>
           </article>
-          <article class="article-card">
-            <div class="card-meta">
-              <span class="tag tag-amber">行业观察</span>
-              <time datetime="2026-03-08">2026.03-08</time>
-            </div>
-            <h3>2026 年 AI 大模型发展趋势</h3>
-            <p>从推理飞跃到 Agent 成熟的全景分析。</p>
-            <a href="/articles/ai-trends-2026/" class="card-link">{{models.readMore}} <span class="arrow">→</span></a>
-          </article>
-          <article class="article-card">
-            <div class="card-meta">
-              <span class="tag tag-rose">多模态</span>
-              <time datetime="2026-02-28">2026.02.28</time>
-            </div>
-            <h3>多模态大模型入门指南</h3>
-            <p>探索多模态模型的图文理解与应用案例。</p>
-            <a href="/articles/multimodal-guide/" class="card-link">{{models.readMore}} <span class="arrow">→</span></a>
-          </article>
+          {{/each}}
         </div>
       </div>
     </section>

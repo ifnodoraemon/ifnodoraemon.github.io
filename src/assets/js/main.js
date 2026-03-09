@@ -69,6 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // — Ambient Particles —
   initParticles();
 
+  // — Terminal Hero Animation —
+  initTerminalAnimation();
+
 });
 
 
@@ -171,4 +174,81 @@ function initParticles() {
   window.addEventListener('resize', resize, { passive: true });
   init();
   animate();
+}
+
+// ============================================
+// Terminal Hero Animation System
+// ============================================
+function initTerminalAnimation() {
+  const terminalObj = document.getElementById('hero-terminal');
+  if (!terminalObj) return;
+
+  // Add class to show we have JS running
+  terminalObj.classList.add('js-enabled');
+  
+  const seqContainer = terminalObj.querySelector('.term-seq-container');
+  if (!seqContainer) return;
+
+  // Configuration timeline
+  const sequenceTiming = [
+    { target: '.term-seq-1', type: 'typing', delayBefore: 800 },
+    { target: '.term-seq-2', type: 'reveal', delayBefore: 400 },
+    { target: '.term-seq-3', type: 'reveal', delayBefore: 800 },
+    { target: '.term-seq-4', type: 'typing', delayBefore: 600 },
+    { target: '.term-seq-5', type: 'reveal', delayBefore: 400 },
+    { target: '.term-seq-6', type: 'typing', delayBefore: 800 },
+    { target: '.term-seq-7', type: 'reveal', delayBefore: 400 },
+    { target: '.term-seq-8', type: 'typing', delayBefore: 800 },
+    { target: '.term-seq-9', type: 'reveal', delayBefore: 400 },
+    { target: '.term-seq-10', type: 'reveal', delayBefore: 400 } // active prompt
+  ];
+
+  let currentStep = 0;
+
+  function typeText(element, text, speed, callback) {
+    element.textContent = '';
+    let i = 0;
+    const interval = setInterval(() => {
+      element.textContent += text.charAt(i);
+      i++;
+      if (i >= text.length) {
+        clearInterval(interval);
+        setTimeout(callback, 200);
+      }
+    }, speed);
+  }
+
+  function advanceSequence() {
+    if (currentStep >= sequenceTiming.length) return;
+    
+    const stepObj = sequenceTiming[currentStep];
+    const elements = seqContainer.querySelectorAll(stepObj.target);
+    
+    setTimeout(() => {
+      elements.forEach(el => el.classList.remove('hidden'));
+      
+      if (stepObj.type === 'typing') {
+        const typeEl = elements[0].querySelector('.type-text');
+        if (typeEl && typeEl.dataset.text) {
+          typeText(typeEl, typeEl.dataset.text, 35, () => {
+            currentStep++;
+            advanceSequence();
+          });
+        } else {
+          currentStep++;
+          advanceSequence();
+        }
+      } else {
+        currentStep++;
+        advanceSequence();
+      }
+    }, stepObj.delayBefore);
+  }
+
+  // Hide the terminal fallback elements which are shown by default for non-JS
+  const fallback = terminalObj.querySelector('.terminal-fallback');
+  if (fallback) fallback.classList.add('hidden');
+
+  // Start sequence
+  advanceSequence();
 }

@@ -58,11 +58,33 @@ const zhData = {
   featuredArticle: zhFeatured,
   latestArticles: zhArticles.filter(a => a !== zhFeatured).slice(0, 6)
 };
+
+// Inject dynamic relatedArticles for models page
+zhData.models.relatedArticles = zhArticles.slice(0, 3).map(a => ({
+  tag: a.tag || '深度解析',
+  tagClass: a.tagClass || 'tag',
+  datetime: a.isoDate,
+  date: a.dateFormatted,
+  title: a.title,
+  desc: a.description,
+  link: `/articles/${a.slug}/`
+}));
+
 const enData = {
   ...readLocale('en'),
   featuredArticle: enFeatured,
   latestArticles: enArticles.filter(a => a !== enFeatured).slice(0, 6)
 };
+
+enData.models.relatedArticles = enArticles.slice(0, 3).map(a => ({
+  tag: a.tag || 'Deep Dive',
+  tagClass: a.tagClass || 'tag',
+  datetime: a.isoDate,
+  date: a.dateFormatted,
+  title: a.title,
+  desc: a.description,
+  link: `/en/articles/${a.slug}/`
+}));
 
 // 2. Process template
 function processTemplate(templateStr, data, isEn) {
