@@ -61,38 +61,46 @@
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <!-- Terminal-style Header -->
-  <header class="terminal-header">
-    <div class="terminal-window">
-      <div class="terminal-bar">
-        <div class="terminal-buttons">
-          <span class="btn-close"></span>
-          <span class="btn-minimize"></span>
-          <span class="btn-maximize"></span>
-        </div>
-        <div class="terminal-title">ifnodoraemon@ai-observer ~ %</div>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <span class="brand-icon">🤖</span>
+        <span class="brand-text">AI 大模型观察</span>
       </div>
-      <div class="terminal-content">
-        <div class="terminal-line">
-          <span class="prompt">$</span>
-          <span class="command">whoami</span>
-        </div>
-        <div class="terminal-output">AI 大模型观察者 | 技术博主 | 实践者</div>
+      <div class="nav-links">
+        <a href="#articles">文章</a>
+        <a href="#topics">主题</a>
+        <a href="#about">关于</a>
+      </div>
+    </div>
+  </nav>
 
-        <div class="terminal-line">
-          <span class="prompt">$</span>
-          <span class="command">cat mission.txt</span>
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-container">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        探索 AI 前沿技术
+      </div>
+      <h1 class="hero-title">
+        深入 <span class="highlight">AI 大模型</span> 世界
+      </h1>
+      <p class="hero-description">
+        分享 GPT、Claude、Gemini 等前沿大模型的技术洞察、实践经验与应用案例
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">技术文章</div>
         </div>
-        <div class="terminal-output">
-          探索 GPT、Claude、Gemini 等前沿大模型<br>
-          分享提示工程、AI Agent、RAG 等实践经验<br>
-          记录人工智能技术的发展与应用
+        <div class="stat-item">
+          <div class="stat-number">10K+</div>
+          <div class="stat-label">月度阅读</div>
         </div>
-
-        <div class="terminal-line">
-          <span class="prompt">$</span>
-          <span class="command typing">explore_articles</span>
-          <span class="cursor">_</span>
+        <div class="stat-item">
+          <div class="stat-number">6</div>
+          <div class="stat-label">核心主题</div>
         </div>
       </div>
     </div>
@@ -101,8 +109,11 @@
   <div class="container">
     <main>
 
-      <section class="articles">
-        <h2><span class="section-icon">//</span> 最新文章</h2>
+      <section id="articles" class="articles">
+        <div class="section-header">
+          <h2>最新文章</h2>
+          <p class="section-subtitle">探索 AI 技术的最新动态与深度解析</p>
+        </div>
         <div class="article-list">
           <article class="article-card">
             <div class="article-meta">
@@ -136,8 +147,11 @@
         </div>
       </section>
 
-      <section class="topics">
-        <h2><span class="section-icon">#</span> 主题分类</h2>
+      <section id="topics" class="topics">
+        <div class="section-header">
+          <h2>主题分类</h2>
+          <p class="section-subtitle">按技术领域浏览内容</p>
+        </div>
         <div class="topic-tags">
           <span class="topic-tag">提示工程</span>
           <span class="topic-tag">模型微调</span>
@@ -147,11 +161,44 @@
           <span class="topic-tag">行业应用</span>
         </div>
       </section>
+
+      <section id="about" class="about">
+        <div class="about-card">
+          <h2>关于本站</h2>
+          <p>专注于 AI 大模型领域的技术研究与实践分享，记录前沿技术的发展脉络，探索人工智能的应用边界。</p>
+          <div class="about-features">
+            <div class="feature-item">
+              <span class="feature-icon">📚</span>
+              <span>深度技术文章</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">💡</span>
+              <span>实战经验分享</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">🚀</span>
+              <span>前沿趋势洞察</span>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer>
-      <p>© 2026 ifnodoraemon · <span class="footer-link">GitHub</span> · <span class="footer-link">Twitter</span></p>
-      <p class="footer-note">Built with ❤️ and AI</p>
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="brand-icon">🤖</span>
+          <span>AI 大模型观察</span>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/ifnodoraemon" target="_blank">GitHub</a>
+          <a href="#" target="_blank">Twitter</a>
+          <a href="#" target="_blank">RSS</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 ifnodoraemon · Built with ❤️ and AI</p>
+      </div>
     </footer>
   </div>
 
