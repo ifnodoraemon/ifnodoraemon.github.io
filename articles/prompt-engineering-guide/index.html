@@ -4,52 +4,179 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>大模型提示工程实践指南 — AI 大模型观察</title>
-  <meta name="description" content="深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought 等核心技巧。">
+  <meta name="description" content="深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。">
+  <meta name="keywords" content="提示工程,AI大模型,GPT-5.4,Claude 4.6,Gemini 3.1,prompt engineering guide">
+  <meta name="author" content="ifnodoraemon">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://ifnodoraemon.github.io/articles/prompt-engineering-guide/">
   <meta name="theme-color" content="#06060b">
+
+  <!-- Open Graph / Article -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ifnodoraemon.github.io/articles/prompt-engineering-guide/">
+  <meta property="og:title" content="大模型提示工程实践指南 — AI 大模型观察">
+  <meta property="og:description" content="深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。">
+  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="AI 大模型观察">
+  <meta property="article:published_time" content="2026-03-09">
+  <meta property="article:author" content="ifnodoraemon">
+  <meta property="article:section" content="提示工程">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="大模型提示工程实践指南 — AI 大模型观察">
+  <meta name="twitter:description" content="深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。">
+  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-5078775507335151">
+
+  <!-- Assets -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "大模型提示工程实践指南",
+    "description": "深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。",
+    "datePublished": "2026-03-09",
+    "dateModified": "2026-03-09",
+    "author": {
+      "@type": "Person",
+      "name": "ifnodoraemon",
+      "url": "https://github.com/ifnodoraemon"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "AI 大模型观察",
+      "url": "https://ifnodoraemon.github.io"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ifnodoraemon.github.io/articles/prompt-engineering-guide/"
+    },
+    "articleSection": "提示工程"
+  }
+  </script>
 </head>
 <body>
   <div class="bg-grid" aria-hidden="true"></div>
   <canvas id="particles" aria-hidden="true"></canvas>
-<main class="page-main">
+
+  <main class="page-main">
     <article class="article-detail">
       <div class="container">
         <div class="article-detail-header fade-in">
-          <a href="/" class="back-link">← 返回首页</a>
-          <div class="card-meta"><span class="tag ">提示工程</span><time datetime="2026-03-09">2026.03.09</time></div>
+          <a href="/articles/" class="back-link">← 返回文章列表</a>
+          <div class="card-meta">
+            <span class="tag ">提示工程</span>
+            <time datetime="2026-03-09">2026.03.09</time>
+          </div>
           <h1>大模型提示工程实践指南</h1>
-          <p class="article-detail-desc">深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought 等核心技巧。</p>
+          <p class="article-detail-desc">深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。</p>
         </div>
         <div class="article-detail-content fade-in">
           <h2>什么是提示工程？</h2>
-          <p>提示工程（Prompt Engineering）是设计和优化输入提示以引导大语言模型产生期望输出的技术。随着 GPT-5.4、Claude Sonnet 4.6 等模型的推理能力日益增强，提示工程已从简单的指令构造演变为一门系统化的技术学科。</p>
-          <h2>核心策略</h2>
-          <h3>1. Few-Shot 学习</h3>
-          <p>通过在提示中提供少量示例，引导模型理解任务模式。研究表明，精心选择的 3-5 个示例通常能显著提升输出质量。</p>
-          <h3>2. Chain-of-Thought (CoT)</h3>
-          <p>鼓励模型逐步推理，而非直接给出答案。GPT-5.4 Thinking 模式本质上就是将 CoT 内化为模型的原生能力，能够在回答前自动展示思考过程。</p>
-          <h3>3. ReAct 框架</h3>
-          <p>结合推理（Reasoning）与行动（Acting），让模型在思考的同时调用外部工具。这是构建 AI Agent 的核心提示策略。</p>
-          <h2>实战建议</h2>
-          <ul>
-            <li>明确角色定义：为模型设定具体的专家角色</li>
-            <li>结构化输出：使用 JSON、Markdown 等格式约束输出</li>
-            <li>迭代优化：基于模型反馈不断调整提示</li>
-            <li>温度控制：根据创意性 vs 确定性需求调整 temperature</li>
-          </ul>
+<p>提示工程（Prompt Engineering）是设计和优化输入提示以引导大语言模型产生期望输出的技术。随着 GPT-5.4、Claude Sonnet 4.6 等模型的推理能力日益增强，提示工程已从简单的指令构造演变为一门系统化的技术学科。</p>
+<p>一个好的提示需要在<strong>明确性</strong>、<strong>上下文丰富度</strong>和<strong>约束精确度</strong>之间取得平衡。本文将从核心策略到实战技巧，系统讲解提示工程的最佳实践。</p>
+<h2>核心策略</h2>
+<h3>1. Zero-Shot vs Few-Shot</h3>
+<p><strong>Zero-Shot</strong> 直接给出指令，依赖模型的内在知识：</p>
+<pre><code class="language-text">请将以下英文翻译为中文：
+&quot;The quick brown fox jumps over the lazy dog.&quot;</code></pre>
+<p><strong>Few-Shot</strong> 通过提供示例教会模型任务模式：</p>
+<pre><code class="language-text">将英文翻译为中文，保持原文风格：
+
+例1：Input: &quot;Hello World&quot; → Output: &quot;你好，世界&quot;
+例2：Input: &quot;Machine Learning&quot; → Output: &quot;机器学习&quot;
+
+Input: &quot;Large Language Model&quot; → Output:</code></pre>
+<blockquote>
+<p><strong>经验法则</strong>：精心选择的 3-5 个示例通常能显著提升输出质量。示例的多样性比数量更重要。</p>
+</blockquote>
+<h3>2. Chain-of-Thought (CoT)</h3>
+<p>鼓励模型逐步推理，而非直接给出答案。GPT-5.4 Thinking 模式本质上就是将 CoT 内化为模型的原生能力。</p>
+<pre><code class="language-text">问题：一个商店打 8 折促销，原价 250 元的商品，
+      用了一张 30 元优惠券后，最终价格是多少？
+
+请一步步思考：
+1. 先计算 8 折后的价格：250 × 0.8 = 200 元
+2. 再减去优惠券：200 - 30 = 170 元
+答案：最终价格是 170 元。</code></pre>
+<h3>3. ReAct 框架</h3>
+<p>结合推理（Reasoning）与行动（Acting），让模型在思考的同时调用外部工具。这是构建 AI Agent 的核心提示策略：</p>
+<pre><code class="language-text">Thought: 用户想知道今天北京的天气，我需要调用天气 API。
+Action: search_weather(location=&quot;北京&quot;)
+Observation: 晴，12°C~22°C，北风3级
+Thought: 已获取天气数据，可以回答用户。
+Answer: 今天北京晴天，温度 12°C 到 22°C，北风 3 级。</code></pre>
+<h3>4. 角色扮演提示</h3>
+<p>为模型设定具体的专家角色，可以显著提升特定领域的输出质量：</p>
+<pre><code class="language-text">你是一位拥有 15 年经验的高级 Python 后端工程师。
+你擅长设计高性能 API、编写干净可维护的代码，
+并遵循 PEP 8 和 SOLID 原则。
+
+请审查以下代码并提出改进建议：</code></pre>
+<h2>模型差异化策略</h2>
+<p>不同模型对提示的响应方式有所不同，以下是 2026 年三大模型的提示技巧：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>最佳适用</th>
+<th>提示技巧</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPT-5.4</td>
+<td>复杂推理、代码生成</td>
+<td>使用 Thinking 模式，明确要求展示推理步骤</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td>长文档分析、Agent 任务</td>
+<td>利用 1M 上下文，可以提供大量背景资料</td>
+</tr>
+<tr>
+<td>Gemini 3.1 Pro</td>
+<td>多模态、超长上下文</td>
+<td>搭配图片/视频/音频输入，利用 2M 窗口</td>
+</tr>
+</tbody></table>
+<h2>实战建议</h2>
+<ol>
+<li><strong>明确角色定义</strong>：为模型设定具体的专家角色，提供领域知识边界</li>
+<li><strong>结构化输出</strong>：使用 JSON Schema、Markdown 表格等格式约束输出</li>
+<li><strong>迭代优化</strong>：基于模型反馈不断调整提示，记录每次修改的效果</li>
+<li><strong>温度控制</strong>：创意场景用 <code>temperature=0.7~1.0</code>，精确场景用 <code>temperature=0~0.3</code></li>
+<li><strong>提供反例</strong>：告诉模型「不要做什么」和「要做什么」同样重要</li>
+<li><strong>分步拆分</strong>：复杂任务拆成多个简单子任务，逐一处理</li>
+</ol>
+<h2>常见陷阱</h2>
+<ul>
+<li>❌ <strong>提示过于模糊</strong>：「帮我写点代码」→ ✅ 「用 Python FastAPI 写一个用户注册接口，包含邮箱验证」</li>
+<li>❌ <strong>示例质量差</strong>：Few-Shot 的示例本身有错误，模型会学习错误模式</li>
+<li>❌ <strong>忽视系统提示</strong>：系统级提示（System Prompt）对输出风格的影响远大于用户提示</li>
+<li>❌ <strong>一次性输入过多</strong>：超长提示反而降低关键信息的注意力权重</li>
+</ul>
+<p>提示工程不是一次性的工作，而是需要持续迭代优化的过程。建议建立团队的<strong>提示词模板库</strong>，在实践中不断积累和改进。</p>
+
         </div>
         <div class="article-nav fade-in">
-          <a href="/" class="btn-ghost">← 返回首页</a>
+          <a href="/articles/" class="btn-ghost">← 返回文章列表</a>
         </div>
       </div>
     </article>
   </main>
-<script type="module" src="/main.js"></script>
+
+  <script type="module" src="/main.js"></script>
 </body>
 </html>

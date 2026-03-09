@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "articles": "node scripts/build-articles.js",
+    "dev": "node scripts/build-articles.js && vite",
+    "build": "node scripts/build-articles.js && vite build",
     "preview": "vite preview"
   },
   "keywords": [],
@@ -13,6 +14,8 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "gray-matter": "^4.0.3",
+    "marked": "^17.0.4",
     "vite": "^7.3.1"
   }
 }

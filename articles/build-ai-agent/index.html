@@ -5,55 +5,230 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>从零搭建 AI Agent 应用 — AI 大模型观察</title>
   <meta name="description" content="手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。">
+  <meta name="keywords" content="AI Agent,AI大模型,GPT-5.4,Claude 4.6,Gemini 3.1,build ai agent">
+  <meta name="author" content="ifnodoraemon">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://ifnodoraemon.github.io/articles/build-ai-agent/">
   <meta name="theme-color" content="#06060b">
+
+  <!-- Open Graph / Article -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ifnodoraemon.github.io/articles/build-ai-agent/">
+  <meta property="og:title" content="从零搭建 AI Agent 应用 — AI 大模型观察">
+  <meta property="og:description" content="手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。">
+  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="AI 大模型观察">
+  <meta property="article:published_time" content="2026-03-05">
+  <meta property="article:author" content="ifnodoraemon">
+  <meta property="article:section" content="AI Agent">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="从零搭建 AI Agent 应用 — AI 大模型观察">
+  <meta name="twitter:description" content="手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。">
+  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-5078775507335151">
+
+  <!-- Assets -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "从零搭建 AI Agent 应用",
+    "description": "手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。",
+    "datePublished": "2026-03-05",
+    "dateModified": "2026-03-05",
+    "author": {
+      "@type": "Person",
+      "name": "ifnodoraemon",
+      "url": "https://github.com/ifnodoraemon"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "AI 大模型观察",
+      "url": "https://ifnodoraemon.github.io"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ifnodoraemon.github.io/articles/build-ai-agent/"
+    },
+    "articleSection": "AI Agent"
+  }
+  </script>
 </head>
 <body>
   <div class="bg-grid" aria-hidden="true"></div>
   <canvas id="particles" aria-hidden="true"></canvas>
-<main class="page-main">
+
+  <main class="page-main">
     <article class="article-detail">
       <div class="container">
         <div class="article-detail-header fade-in">
-          <a href="/" class="back-link">← 返回首页</a>
-          <div class="card-meta"><span class="tag tag-emerald">AI Agent</span><time datetime="2026-03-05">2026.03.05</time></div>
+          <a href="/articles/" class="back-link">← 返回文章列表</a>
+          <div class="card-meta">
+            <span class="tag tag-emerald">AI Agent</span>
+            <time datetime="2026-03-05">2026.03.05</time>
+          </div>
           <h1>从零搭建 AI Agent 应用</h1>
           <p class="article-detail-desc">手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。</p>
         </div>
         <div class="article-detail-content fade-in">
           <h2>什么是 AI Agent？</h2>
-          <p>AI Agent（智能代理）是能够自主感知环境、做出决策并采取行动的 AI 系统。与传统的对话式 AI 不同，Agent 可以使用工具、调用 API、操控电脑，真正地"做事"而非只是"说话"。</p>
-          <h2>技术架构</h2>
-          <h3>核心组件</h3>
-          <ul>
-            <li><strong>LLM 大脑</strong>：Claude Sonnet 4.6 是构建 Agent 的理想选择，其 Agentic 能力业界领先</li>
-            <li><strong>工具集</strong>：定义 Agent 可以调用的外部工具（搜索、计算、文件操作等）</li>
-            <li><strong>记忆系统</strong>：短期（对话上下文）+ 长期（向量数据库）记忆</li>
-            <li><strong>规划模块</strong>：任务分解、子目标设定、执行策略</li>
-          </ul>
-          <h3>推荐框架</h3>
-          <p>LangChain 和 LlamaIndex 是目前最主流的 Agent 构建框架。LangChain 更适合灵活的工具链组合，LlamaIndex 在 RAG 场景中表现更优。</p>
-          <h2>实战步骤</h2>
-          <ol>
-            <li>定义 Agent 角色和能力边界</li>
-            <li>设计工具集和 API 接口</li>
-            <li>实现 ReAct 提示模板</li>
-            <li>搭建记忆存储（Redis / ChromaDB）</li>
-            <li>部署和监控</li>
-          </ol>
+<p>AI Agent（智能代理）是能够<strong>感知环境、自主决策、执行行动</strong>的 AI 系统。与传统的单次 API 调用不同，Agent 可以：</p>
+<ul>
+<li>🔄 <strong>循环执行</strong>：根据反馈不断调整行动</li>
+<li>🛠️ <strong>调用工具</strong>：搜索网页、执行代码、操作数据库</li>
+<li>📋 <strong>规划任务</strong>：将复杂目标分解为可执行的步骤</li>
+<li>🧠 <strong>记忆管理</strong>：在长对话中维护上下文和状态</li>
+</ul>
+<h2>架构设计</h2>
+<p>一个完整的 AI Agent 系统通常包含以下核心组件：</p>
+<pre><code class="language-text">┌─────────────────────────────────────┐
+│              AI Agent               │
+│                                     │
+│  ┌──────────┐    ┌──────────────┐   │
+│  │ 大模型    │◄──►│ 提示管理器   │   │
+│  │ (LLM)    │    │ (Prompt Mgr) │   │
+│  └──────────┘    └──────────────┘   │
+│       │                             │
+│  ┌────▼─────┐    ┌──────────────┐   │
+│  │ 决策引擎  │◄──►│ 记忆系统     │   │
+│  │ (Router) │    │ (Memory)     │   │
+│  └────┬─────┘    └──────────────┘   │
+│       │                             │
+│  ┌────▼──────────────────────────┐  │
+│  │        工具集 (Tools)          │  │
+│  │  搜索 | 代码 | 数据库 | API   │  │
+│  └───────────────────────────────┘  │
+└─────────────────────────────────────┘</code></pre>
+<h2>实现步骤</h2>
+<h3>Step 1：安装依赖</h3>
+<pre><code class="language-bash">pip install langchain langchain-anthropic tavily-python</code></pre>
+<h3>Step 2：定义工具</h3>
+<pre><code class="language-python">from langchain.tools import tool
+from datetime import datetime
+
+@tool
+def get_current_time() -&gt; str:
+    &quot;&quot;&quot;获取当前时间&quot;&quot;&quot;
+    return datetime.now().strftime(&quot;%Y-%m-%d %H:%M:%S&quot;)
+
+@tool
+def search_web(query: str) -&gt; str:
+    &quot;&quot;&quot;搜索网页获取实时信息&quot;&quot;&quot;
+    from tavily import TavilyClient
+    client = TavilyClient()
+    results = client.search(query, max_results=3)
+    return &quot;\n&quot;.join([r[&quot;content&quot;] for r in results[&quot;results&quot;]])
+
+@tool
+def execute_python(code: str) -&gt; str:
+    &quot;&quot;&quot;执行 Python 代码并返回结果&quot;&quot;&quot;
+    import subprocess
+    result = subprocess.run(
+        [&quot;python&quot;, &quot;-c&quot;, code],
+        capture_output=True, text=True, timeout=10
+    )
+    return result.stdout or result.stderr</code></pre>
+<h3>Step 3：创建 Agent</h3>
+<pre><code class="language-python">from langchain_anthropic import ChatAnthropic
+from langchain.agents import create_tool_calling_agent, AgentExecutor
+from langchain_core.prompts import ChatPromptTemplate
+
+# 使用 Claude Sonnet 4.6 作为推理引擎
+llm = ChatAnthropic(model=&quot;claude-sonnet-4-6-20260217&quot;)
+
+# 定义系统提示
+prompt = ChatPromptTemplate.from_messages([
+    (&quot;system&quot;, &quot;&quot;&quot;你是一个智能助手，擅长使用工具解决问题。
+    在回答用户问题前，先思考是否需要使用工具获取信息。
+    如果需要多步操作，请逐步执行。&quot;&quot;&quot;),
+    (&quot;human&quot;, &quot;{input}&quot;),
+    (&quot;placeholder&quot;, &quot;{agent_scratchpad}&quot;),
+])
+
+# 组装 Agent
+tools = [get_current_time, search_web, execute_python]
+agent = create_tool_calling_agent(llm, tools, prompt)
+executor = AgentExecutor(agent=agent, tools=tools, verbose=True)</code></pre>
+<h3>Step 4：运行 Agent</h3>
+<pre><code class="language-python"># 简单查询
+result = executor.invoke({
+    &quot;input&quot;: &quot;帮我查一下今天 NVIDIA 的股价，然后计算过去一年的涨幅&quot;
+})
+print(result[&quot;output&quot;])</code></pre>
+<p>Agent 的执行流程大致如下：</p>
+<ol>
+<li><strong>理解任务</strong>：解析用户意图，判断需要搜索股价信息</li>
+<li><strong>搜索数据</strong>：调用 <code>search_web</code> 获取实时股价</li>
+<li><strong>计算分析</strong>：调用 <code>execute_python</code> 计算涨幅</li>
+<li><strong>整理输出</strong>：生成结构化的分析报告</li>
+</ol>
+<h2>模型选择建议</h2>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>推荐模型</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>复杂 Agent 任务</td>
+<td>Claude Opus 4.6</td>
+<td>最强的 Agentic 能力和 Computer Use</td>
+</tr>
+<tr>
+<td>日常 Agent 开发</td>
+<td>Claude Sonnet 4.6</td>
+<td>速度与智能的最佳平衡</td>
+</tr>
+<tr>
+<td>需要深度推理的 Agent</td>
+<td>GPT-5.4 Thinking</td>
+<td>推理链透明，便于调试</td>
+</tr>
+<tr>
+<td>高调用量生产环境</td>
+<td>Gemini 3.1 Flash-Lite</td>
+<td>性价比最优</td>
+</tr>
+</tbody></table>
+<h2>最佳实践</h2>
+<ol>
+<li><strong>工具描述要精确</strong>：LLM 通过工具的 docstring 决定何时调用，描述越清晰越好</li>
+<li><strong>限制工具数量</strong>：单个 Agent 不超过 10 个工具，太多会降低选择准确率</li>
+<li><strong>添加安全护栏</strong>：对代码执行、数据库操作等敏感工具设置权限控制</li>
+<li><strong>实现优雅降级</strong>：工具调用失败时，Agent 应能识别并切换策略</li>
+<li><strong>监控与日志</strong>：记录每次工具调用的输入输出，便于调试和优化</li>
+</ol>
+<h2>进阶方向</h2>
+<ul>
+<li><strong>Multi-Agent 协作</strong>：多个 Agent 分工协作完成复杂任务</li>
+<li><strong>RAG 增强 Agent</strong>：结合检索增强生成，让 Agent 访问企业知识库</li>
+<li><strong>Human-in-the-Loop</strong>：关键决策点引入人工审核</li>
+<li><strong>持久化记忆</strong>：跨会话的长期记忆管理</li>
+</ul>
+
         </div>
         <div class="article-nav fade-in">
-          <a href="/" class="btn-ghost">← 返回首页</a>
+          <a href="/articles/" class="btn-ghost">← 返回文章列表</a>
         </div>
       </div>
     </article>
   </main>
-<script type="module" src="/main.js"></script>
+
+  <script type="module" src="/main.js"></script>
 </body>
 </html>

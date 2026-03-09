@@ -8,137 +8,151 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://ifnodoraemon.github.io/articles/">
   <meta name="theme-color" content="#06060b">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ifnodoraemon.github.io/articles/">
+  <meta property="og:title" content="全部文章 — AI 大模型观察">
+  <meta property="og:description" content="AI 大模型观察全部技术文章列表。涵盖提示工程、AI Agent、RAG、模型微调、多模态等前沿 AI 主题。">
+  <meta name="google-adsense-account" content="ca-pub-5078775507335151">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "全部文章",
+    "description": "AI 大模型观察全部技术文章列表",
+    "url": "https://ifnodoraemon.github.io/articles/",
+    "numberOfItems": 7
+  }
+  </script>
 </head>
 <body>
   <div class="bg-grid" aria-hidden="true"></div>
   <canvas id="particles" aria-hidden="true"></canvas>
-
   <main class="page-main">
     <section class="page-hero">
       <div class="container">
         <div class="page-hero-content fade-in">
           <div class="section-tag">ALL ARTICLES</div>
           <h1>全部文章</h1>
-          <p class="page-hero-desc">探索 AI 大模型领域的技术文章与深度解析</p>
+          <p class="page-hero-desc">探索 AI 大模型领域的 7 篇技术文章与深度解析</p>
         </div>
       </div>
     </section>
-
-    <!-- Filter Tags -->
     <section class="section section-tight">
       <div class="container">
         <div class="articles-filter fade-in">
-          <button class="filter-btn active" data-filter="all">全部</button>
-          <button class="filter-btn" data-filter="深度解析">深度解析</button>
+          <button class="filter-btn active" data-filter="all">全部 (7)</button>
           <button class="filter-btn" data-filter="提示工程">提示工程</button>
+          <button class="filter-btn" data-filter="行业观察">行业观察</button>
+          <button class="filter-btn" data-filter="深度解析">深度解析</button>
           <button class="filter-btn" data-filter="AI Agent">AI Agent</button>
           <button class="filter-btn" data-filter="RAG">RAG</button>
           <button class="filter-btn" data-filter="多模态">多模态</button>
           <button class="filter-btn" data-filter="微调">微调</button>
-          <button class="filter-btn" data-filter="行业观察">行业观察</button>
         </div>
-
         <div class="articles-list fade-in">
 
-          <!-- Featured/Pinned -->
-          <a href="/articles/model-comparison-2026/" class="article-list-item article-list-featured" data-tag="深度解析">
+          <a href="/articles/prompt-engineering-guide/" class="article-list-item article-list-featured" data-tag="提示工程">
             <div class="article-list-meta">
-              <span class="tag">深度解析</span>
+              <span class="tag ">提示工程</span>
               <span class="article-list-pin">📌 置顶</span>
-              <time datetime="2026-03-08">2026.03.08</time>
-            </div>
-            <h2>GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro：2026 三大模型终极横评</h2>
-            <p>从推理能力、代码生成、多模态理解、长上下文处理四大维度，全面对比三大顶级 AI 模型的真实表现。</p>
-            <div class="article-list-tags">
-              <span class="mini-tag">GPT-5.4</span>
-              <span class="mini-tag">Claude Opus 4.6</span>
-              <span class="mini-tag">Gemini 3.1 Pro</span>
-            </div>
-          </a>
-
-          <a href="/articles/prompt-engineering-guide/" class="article-list-item" data-tag="提示工程">
-            <div class="article-list-meta">
-              <span class="tag">提示工程</span>
               <time datetime="2026-03-09">2026.03.09</time>
             </div>
             <h2>大模型提示工程实践指南</h2>
-            <p>深入探讨如何设计高效的提示词，涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心策略。</p>
+            <p>深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。</p>
+            <div class="article-list-tags"><span class="mini-tag">GPT-5.4</span>
+              <span class="mini-tag">Claude 4.6</span>
+              <span class="mini-tag">Prompt</span></div>
           </a>
 
           <a href="/articles/ai-trends-2026/" class="article-list-item" data-tag="行业观察">
             <div class="article-list-meta">
               <span class="tag tag-amber">行业观察</span>
+              
               <time datetime="2026-03-08">2026.03.08</time>
             </div>
             <h2>2026 年 AI 大模型发展趋势</h2>
             <p>分析当前 AI 大模型的技术演进方向和商业化应用前景。从 GPT-5.4 到 Gemini 3.1 Pro 的全景扫描。</p>
+            
+          </a>
+
+          <a href="/articles/model-comparison-2026/" class="article-list-item" data-tag="深度解析">
+            <div class="article-list-meta">
+              <span class="tag ">深度解析</span>
+              
+              <time datetime="2026-03-08">2026.03.08</time>
+            </div>
+            <h2>GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro：2026 三大模型终极横评</h2>
+            <p>从推理能力、代码生成、多模态理解、长上下文处理四大维度，全面对比 2026 年三大顶级 AI 模型的真实表现。</p>
+            <div class="article-list-tags"><span class="mini-tag">GPT-5.4</span>
+              <span class="mini-tag">Claude Opus 4.6</span>
+              <span class="mini-tag">Gemini 3.1 Pro</span>
+              <span class="mini-tag">评测</span></div>
           </a>
 
           <a href="/articles/build-ai-agent/" class="article-list-item" data-tag="AI Agent">
             <div class="article-list-meta">
               <span class="tag tag-emerald">AI Agent</span>
+              
               <time datetime="2026-03-05">2026.03.05</time>
             </div>
             <h2>从零搭建 AI Agent 应用</h2>
             <p>手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。</p>
+            
           </a>
 
           <a href="/articles/rag-in-practice/" class="article-list-item" data-tag="RAG">
             <div class="article-list-meta">
               <span class="tag tag-cyan">RAG</span>
+              
               <time datetime="2026-03-03">2026.03.03</time>
             </div>
             <h2>RAG 检索增强生成实战</h2>
             <p>从向量数据库选型到 Embedding 策略，完整构建一套企业级 RAG 系统。含 Pinecone、Weaviate 对比实测。</p>
+            
           </a>
 
           <a href="/articles/multimodal-guide/" class="article-list-item" data-tag="多模态">
             <div class="article-list-meta">
               <span class="tag tag-rose">多模态</span>
+              
               <time datetime="2026-02-28">2026.02.28</time>
             </div>
             <h2>多模态大模型入门指南</h2>
-            <p>探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带应用案例。</p>
+            <p>探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。</p>
+            
           </a>
 
           <a href="/articles/fine-tuning-guide/" class="article-list-item" data-tag="微调">
             <div class="article-list-meta">
               <span class="tag tag-purple">微调</span>
+              
               <time datetime="2026-02-25">2026.02.25</time>
             </div>
             <h2>大模型微调全流程详解</h2>
-            <p>LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流。</p>
+            <p>LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。</p>
+            
           </a>
-
         </div>
       </div>
     </section>
   </main>
-
   <script type="module" src="/main.js"></script>
   <script>
-    // Simple tag filter
     document.addEventListener('DOMContentLoaded', () => {
       const btns = document.querySelectorAll('.filter-btn');
       const items = document.querySelectorAll('.article-list-item');
-
       btns.forEach(btn => {
         btn.addEventListener('click', () => {
           btns.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           const filter = btn.dataset.filter;
-
           items.forEach(item => {
-            if (filter === 'all' || item.dataset.tag === filter) {
-              item.style.display = '';
-            } else {
-              item.style.display = 'none';
-            }
+            item.style.display = (filter === 'all' || item.dataset.tag === filter) ? '' : 'none';
           });
         });
       });

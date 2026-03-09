@@ -4,52 +4,259 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>多模态大模型入门指南 — AI 大模型观察</title>
-  <meta name="description" content="探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、文档解读等应用案例。">
+  <meta name="description" content="探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。">
+  <meta name="keywords" content="多模态,AI大模型,GPT-5.4,Claude 4.6,Gemini 3.1,multimodal guide">
+  <meta name="author" content="ifnodoraemon">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://ifnodoraemon.github.io/articles/multimodal-guide/">
   <meta name="theme-color" content="#06060b">
+
+  <!-- Open Graph / Article -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ifnodoraemon.github.io/articles/multimodal-guide/">
+  <meta property="og:title" content="多模态大模型入门指南 — AI 大模型观察">
+  <meta property="og:description" content="探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。">
+  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="AI 大模型观察">
+  <meta property="article:published_time" content="2026-02-28">
+  <meta property="article:author" content="ifnodoraemon">
+  <meta property="article:section" content="多模态">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="多模态大模型入门指南 — AI 大模型观察">
+  <meta name="twitter:description" content="探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。">
+  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-5078775507335151">
+
+  <!-- Assets -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "多模态大模型入门指南",
+    "description": "探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。",
+    "datePublished": "2026-02-28",
+    "dateModified": "2026-02-28",
+    "author": {
+      "@type": "Person",
+      "name": "ifnodoraemon",
+      "url": "https://github.com/ifnodoraemon"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "AI 大模型观察",
+      "url": "https://ifnodoraemon.github.io"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ifnodoraemon.github.io/articles/multimodal-guide/"
+    },
+    "articleSection": "多模态"
+  }
+  </script>
 </head>
 <body>
   <div class="bg-grid" aria-hidden="true"></div>
   <canvas id="particles" aria-hidden="true"></canvas>
-<main class="page-main">
+
+  <main class="page-main">
     <article class="article-detail">
       <div class="container">
         <div class="article-detail-header fade-in">
-          <a href="/" class="back-link">← 返回首页</a>
-          <div class="card-meta"><span class="tag tag-rose">多模态</span><time datetime="2026-02-28">2026.02.28</time></div>
+          <a href="/articles/" class="back-link">← 返回文章列表</a>
+          <div class="card-meta">
+            <span class="tag tag-rose">多模态</span>
+            <time datetime="2026-02-28">2026.02.28</time>
+          </div>
           <h1>多模态大模型入门指南</h1>
-          <p class="article-detail-desc">探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、文档解读等应用案例。</p>
+          <p class="article-detail-desc">探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。</p>
         </div>
         <div class="article-detail-content fade-in">
-          <h2>多模态 AI 的崛起</h2>
-          <p>2026 年的大模型已全面进入多模态时代。Gemini 3.1 Pro 原生支持文本、图像、音频、视频和代码五种模态的统一理解，GPT-5.4 在图像和音频理解方面同样表现出色。</p>
-          <h2>核心能力</h2>
-          <h3>1. 图像理解</h3>
-          <p>现代多模态模型可以精确识别图像中的文字、物体、场景和关系。在文档 OCR、UI 分析、医疗影像等场景中表现优异。</p>
-          <h3>2. 视频分析</h3>
-          <p>Gemini 3.1 Pro 的视频理解能力尤为突出，可以分析长视频内容、提取关键信息、生成时间线摘要。</p>
-          <h3>3. 音频处理</h3>
-          <p>语音转文本、音频内容理解、多语言翻译等应用已非常成熟。GPT-5.4 支持实时语音对话。</p>
-          <h2>应用场景</h2>
-          <ul>
-            <li>智能文档处理：发票、合同、报告自动解读</li>
-            <li>视觉问答：基于图像或视频的交互式问答</li>
-            <li>内容创作：图文结合的创意内容生成</li>
-            <li>无障碍辅助：为视障用户描述图像和视频内容</li>
-          </ul>
+          <h2>什么是多模态 AI？</h2>
+<p>多模态 AI 是指能够同时理解和处理<strong>多种数据类型</strong>（文本、图像、音频、视频）的人工智能系统。2026 年，多模态能力已成为顶级大模型的标配：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th align="center">文本</th>
+<th align="center">图像</th>
+<th align="center">音频</th>
+<th align="center">视频</th>
+<th align="center">代码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPT-5.4</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td>Gemini 3.1 Pro</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Gemini 3.1 Pro 是目前唯一原生支持<strong>全五种模态</strong>的模型，在视频理解上有显著优势。</p>
+</blockquote>
+<h2>核心能力</h2>
+<h3>1. 图像理解</h3>
+<p>现代多模态模型在图像理解方面已经非常成熟，支持：</p>
+<ul>
+<li><strong>场景描述</strong>：详细描述图片中的内容、布局和氛围</li>
+<li><strong>OCR 文字识别</strong>：精确提取图片中的文本和表格</li>
+<li><strong>图表分析</strong>：理解数据可视化图表并提取关键数据</li>
+<li><strong>UI/UX 分析</strong>：识别界面元素、布局问题和设计改进点</li>
+</ul>
+<p><strong>实际应用示例：代码截图分析</strong></p>
+<pre><code class="language-python">import anthropic
+
+client = anthropic.Anthropic()
+
+# 发送代码截图让 Claude 分析
+message = client.messages.create(
+    model=&quot;claude-sonnet-4-6-20260217&quot;,
+    max_tokens=1024,
+    messages=[{
+        &quot;role&quot;: &quot;user&quot;,
+        &quot;content&quot;: [
+            {
+                &quot;type&quot;: &quot;image&quot;,
+                &quot;source&quot;: {&quot;type&quot;: &quot;url&quot;, &quot;url&quot;: &quot;https://example.com/code.png&quot;}
+            },
+            {
+                &quot;type&quot;: &quot;text&quot;,
+                &quot;text&quot;: &quot;分析这段代码的问题，指出 bug 并提供修复方案&quot;
+            }
+        ]
+    }]
+)</code></pre>
+<h3>2. 视频理解（Gemini 独占优势）</h3>
+<p>Gemini 3.1 Pro 的视频理解能力是当前最领先的：</p>
+<pre><code class="language-python">import google.generativeai as genai
+
+model = genai.GenerativeModel(&quot;gemini-3.1-pro&quot;)
+
+# 上传视频文件
+video = genai.upload_file(&quot;product_demo.mp4&quot;)
+
+# 分析视频内容
+response = model.generate_content([
+    video,
+    &quot;请详细分析这个产品演示视频：\n&quot;
+    &quot;1. 产品有哪些核心功能？\n&quot;
+    &quot;2. 演示中有哪些交互亮点？\n&quot;
+    &quot;3. 从 UX 角度有什么改进建议？&quot;
+])</code></pre>
+<p>视频理解的典型应用场景：</p>
+<ul>
+<li><strong>会议记录</strong>：自动总结视频会议的关键决策和待办事项</li>
+<li><strong>教育内容</strong>：从教学视频中提取知识点和笔记</li>
+<li><strong>质检监控</strong>：分析工厂产线的视频流，检测异常</li>
+<li><strong>内容审核</strong>：自动识别视频中的违规内容</li>
+</ul>
+<h3>3. 音频处理</h3>
+<p>GPT-5.4 和 Gemini 3.1 Pro 支持原生音频输入：</p>
+<ul>
+<li><strong>语音转录</strong>：高精度 ASR（自动语音识别）</li>
+<li><strong>情感分析</strong>：识别说话者的语气和情绪</li>
+<li><strong>多语言翻译</strong>：实时语音翻译</li>
+<li><strong>声音事件检测</strong>：识别环境中的特定声音</li>
+</ul>
+<h2>多模态提示技巧</h2>
+<h3>图文混合提示</h3>
+<pre><code class="language-text">[图片1: 产品原型截图]
+[图片2: 竞品对比截图]
+
+请从以下维度对比分析两个产品的 UI 设计：
+1. 信息层级
+2. 色彩运用
+3. 交互设计
+4. 用户体验评分（1-10）
+
+以表格形式输出对比结果。</code></pre>
+<h3>多轮对话中的多模态</h3>
+<pre><code class="language-text">第1轮: [上传架构图] &quot;请解读这个系统架构&quot;
+第2轮: &quot;这个设计在高并发下有什么问题？&quot;
+第3轮: [上传性能监控截图] &quot;结合这个监控数据，瓶颈在哪里？&quot;</code></pre>
+<h2>模型选择建议</h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐模型</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>图像 OCR / 文档分析</td>
+<td>GPT-5.4 或 Claude Sonnet 4.6</td>
+<td>文本提取精度高</td>
+</tr>
+<tr>
+<td>视频内容理解</td>
+<td>Gemini 3.1 Pro</td>
+<td>唯一原生视频支持</td>
+</tr>
+<tr>
+<td>UI/UX 审查</td>
+<td>Claude Sonnet 4.6</td>
+<td>设计理解和建议质量优</td>
+</tr>
+<tr>
+<td>音频转录 + 分析</td>
+<td>GPT-5.4</td>
+<td>原生音频支持，识别准确</td>
+</tr>
+<tr>
+<td>图文混合推理</td>
+<td>Gemini 3.1 Pro</td>
+<td>多模态融合推理最强</td>
+</tr>
+</tbody></table>
+<h2>注意事项</h2>
+<ol>
+<li><strong>图片分辨率</strong>：过高分辨率会增加 token 消耗，建议压缩到 1024px 以内</li>
+<li><strong>视频长度</strong>：Gemini 支持最长约 1 小时的视频，但建议分段处理</li>
+<li><strong>隐私安全</strong>：上传图片/视频前确保不包含敏感信息</li>
+<li><strong>幻觉风险</strong>：多模态模型在图像细节描述上仍可能产生幻觉</li>
+<li><strong>成本控制</strong>：图像 token 消耗远高于文本，大量图片分析时注意成本</li>
+</ol>
+
         </div>
         <div class="article-nav fade-in">
-          <a href="/" class="btn-ghost">← 返回首页</a>
+          <a href="/articles/" class="btn-ghost">← 返回文章列表</a>
         </div>
       </div>
     </article>
   </main>
-<script type="module" src="/main.js"></script>
+
+  <script type="module" src="/main.js"></script>
 </body>
 </html>
