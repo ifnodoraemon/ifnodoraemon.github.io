@@ -80,7 +80,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # 加载基础模型
 model = AutoModelForCausalLM.from_pretrained(
-    "meta-llama/Llama-3.2-8B-Instruct",
+    "meta-llama/Llama-4-Scout-17B-16E-Instruct",
     torch_dtype=torch.bfloat16,
     device_map="auto",
 )
@@ -166,6 +166,6 @@ merged_model.save_pretrained("./merged_model")
 
 | 服务 | 支持模型 | 最低数据量 | 特点 |
 |------|----------|-----------|------|
-| OpenAI Fine-tuning | GPT-4o-mini, GPT-4o | 10 条 | 最简单，按 token 计费 |
-| Anthropic Fine-tuning | Claude 3.5 系列 | 32 条 | 安全对齐保持好 |
-| Google Vertex AI | Gemini 系列 | 100 条 | 与 Google Cloud 深度集成 |
+| OpenAI Fine-tuning | GPT-5-mini, GPT-5, GPT-5.4 | 10 条 | 最简单，支持监督微调和 DPO |
+| Anthropic Fine-tuning | Claude 3 Haiku（via Bedrock） | 32 条 | 通过 Amazon Bedrock 托管 |
+| Google Vertex AI | Gemini 3.x 系列 | 100 条 | 与 Google Cloud 深度集成 |
