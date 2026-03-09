@@ -12,17 +12,32 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://ifnodoraemon.github.io/">
 
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#06060b">
+
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ifnodoraemon.github.io/">
-  <meta property="og:title" content="AI 大模型观察 — 技术博客">
-  <meta property="og:description" content="探索 GPT、Claude、Gemini 等前沿大模型技术，分享 AI 实践经验">
+  <meta property="og:title" content="AI 大模型观察 — GPT · Claude · Gemini 技术博客">
+  <meta property="og:description" content="专注 AI 大模型技术研究与实践，分享提示工程、AI Agent、RAG 应用等实战经验。">
+  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="AI 大模型观察">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI 大模型观察 — GPT · Claude · Gemini 技术博客">
+  <meta name="twitter:description" content="专注 AI 大模型技术研究与实践，分享提示工程、AI Agent、RAG 应用等实战经验。">
+  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
 
   <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-5078775507335151">
 
-  <!-- Favicon -->
+  <!-- Favicon & Icons -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,6 +45,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Structured Data -->
+  <!-- Structured Data (JSON-LD) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -37,8 +53,37 @@
     "name": "AI 大模型观察",
     "description": "专注 AI 大模型技术研究与实践的技术博客",
     "url": "https://ifnodoraemon.github.io/",
-    "author": { "@type": "Person", "name": "ifnodoraemon" },
-    "inLanguage": "zh-CN"
+    "image": "https://ifnodoraemon.github.io/og-image.png",
+    "author": {
+      "@type": "Person",
+      "name": "ifnodoraemon",
+      "url": "https://github.com/ifnodoraemon"
+    },
+    "inLanguage": "zh-CN",
+    "dateCreated": "2026-03-05",
+    "blogPost": [
+      {
+        "@type": "BlogPosting",
+        "headline": "大模型提示工程实践指南",
+        "datePublished": "2026-03-09",
+        "description": "深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。",
+        "author": { "@type": "Person", "name": "ifnodoraemon" }
+      },
+      {
+        "@type": "BlogPosting",
+        "headline": "2026 年 AI 大模型发展趋势",
+        "datePublished": "2026-03-08",
+        "description": "分析当前 AI 大模型的技术演进方向和商业化应用前景。",
+        "author": { "@type": "Person", "name": "ifnodoraemon" }
+      },
+      {
+        "@type": "BlogPosting",
+        "headline": "从零搭建 AI Agent 应用",
+        "datePublished": "2026-03-05",
+        "description": "手把手教你使用 LangChain 和 Claude API 构建智能代理系统。",
+        "author": { "@type": "Person", "name": "ifnodoraemon" }
+      }
+    ]
   }
   </script>
 
@@ -53,7 +98,7 @@
   <canvas id="particles" aria-hidden="true"></canvas>
 
   <!-- Navigation -->
-  <nav class="navbar" id="navbar">
+  <nav class="navbar" id="navbar" aria-label="主导航">
     <div class="nav-container">
       <a href="/" class="nav-brand">
         <span class="brand-icon">◆</span>
