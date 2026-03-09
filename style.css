@@ -1805,11 +1805,103 @@ img { max-width: 100%; display: block; }
 
 .article-detail-content code {
   font-family: var(--font-mono);
-  font-size: 0.88em;
+  font-size: 0.85em;
   background: rgba(99, 102, 241, 0.08);
   color: var(--accent-light);
   padding: 0.15em 0.4em;
   border-radius: 4px;
+}
+
+/* Code blocks */
+.article-detail-content pre {
+  background: #0d0d1a;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.article-detail-content pre code {
+  background: none;
+  color: #c9d1d9;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  white-space: pre;
+}
+
+/* Tables */
+.article-detail-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.88rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.article-detail-content thead {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.article-detail-content th {
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--border);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+
+.article-detail-content td {
+  padding: 0.65rem 1rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: top;
+}
+
+.article-detail-content tbody tr:hover {
+  background: rgba(99, 102, 241, 0.03);
+}
+
+.article-detail-content tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Blockquotes (tips/notes) */
+.article-detail-content blockquote {
+  border-left: 3px solid var(--accent);
+  background: rgba(99, 102, 241, 0.04);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.article-detail-content blockquote p {
+  color: var(--text-faint);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.article-detail-content blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.article-detail-content blockquote strong {
+  color: var(--accent-light);
+}
+
+/* Horizontal rules */
+.article-detail-content hr {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: 2.5rem 0;
 }
 
 .article-nav {
