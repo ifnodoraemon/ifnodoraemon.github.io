@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- SEO -->
-  <title>AI Tech Observer — GPT-5.4 · Claude 4.6 · Gemini 3.1 Tech Blog</title>
-  <meta name="description" content="Focusing on AI foundation models and tech insights, covering GPT-5.4, Claude 4.6, and Gemini 3.1 Pro.">
-  <meta name="keywords" content="LLM, AI, GPT, Claude, Gemini, Prompt Engineering, AI Agent, RAG">
+  <title>AI 大模型观察 — GPT-5.4 · Claude 4.6 · Gemini 3.1 技术博客</title>
+  <meta name="description" content="专注 AI 大模型技术研究与实践，覆盖 GPT-5.4、Claude 4.6、Gemini 3.1 Pro，分享提示工程、AI Agent、RAG 应用等实战经验。">
+  <meta name="keywords" content="AI大模型,GPT,Claude,Gemini,提示工程,AI Agent,RAG,LLM">
   <meta name="author" content="ifnodoraemon">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://ifnodoraemon.github.io/">
@@ -19,8 +19,8 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ifnodoraemon.github.io/">
-  <meta property="og:title" content="AI Tech Observer — GPT-5.4 · Claude 4.6 · Gemini 3.1 Tech Blog">
-  <meta property="og:description" content="Focusing on AI foundation models and tech insights, covering GPT-5.4, Claude 4.6, and Gemini 3.1 Pro.">
+  <meta property="og:title" content="AI 大模型观察 — GPT-5.4 · Claude 4.6 · Gemini 3.1 技术博客">
+  <meta property="og:description" content="专注 AI 大模型技术研究与实践，覆盖 GPT-5.4、Claude 4.6、Gemini 3.1 Pro，分享提示工程、AI Agent、RAG 应用等实战经验。">
   <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
   <meta property="og:image:width" content="1024">
   <meta property="og:image:height" content="1024">
@@ -29,8 +29,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI Tech Observer — GPT-5.4 · Claude 4.6 · Gemini 3.1 Tech Blog">
-  <meta name="twitter:description" content="Focusing on AI foundation models and tech insights, covering GPT-5.4, Claude 4.6, and Gemini 3.1 Pro.">
+  <meta name="twitter:title" content="AI 大模型观察 — GPT-5.4 · Claude 4.6 · Gemini 3.1 技术博客">
+  <meta name="twitter:description" content="专注 AI 大模型技术研究与实践，覆盖 GPT-5.4、Claude 4.6、Gemini 3.1 Pro，分享提示工程、AI Agent、RAG 应用等实战经验。">
   <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
 
   <!-- Google AdSense -->
@@ -60,8 +60,8 @@
   {
     "@context": "https://schema.org",
     "@type": "Blog",
-    "name": "AI Tech Observer",
-    "description": "Tech blog focusing on AI foundation models research and practice",
+    "name": "AI 大模型观察",
+    "description": "专注 AI 大模型技术研究与实践的技术博客",
     "url": "https://ifnodoraemon.github.io/",
     "image": "https://ifnodoraemon.github.io/og-image.png",
     "author": {
@@ -69,7 +69,7 @@
       "name": "ifnodoraemon",
       "url": "https://github.com/ifnodoraemon"
     },
-    "inLanguage": "en",
+    "inLanguage": "zh-CN",
     "dateCreated": "2026-03-05",
     "blogPost": [
       {
@@ -95,6 +95,7 @@
       }
     ]
   }
+  </script>
   <link rel="preload" href="/style.css" as="style">
   <link rel="stylesheet" href="/style.css">
 </head>
@@ -109,42 +110,78 @@
   <!-- Navigation -->
 <!-- Hero -->
   <header class="hero">
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-bg-elements">
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+      <div class="hero-orb hero-orb-3"></div>
+      <div class="hero-grid-overlay"></div>
+    </div>
     <div class="hero-scanline"></div>
     <div class="hero-container fade-in">
-      <div class="hero-badge">
-        <span class="badge-pulse"></span>
-        <span class="badge-text">EXPLORING AI FRONTIER</span>
+      <div class="hero-hud-top">
+        <div class="hud-line"></div>
+        <div class="hero-badge">
+          <span class="badge-pulse"></span>
+          <span class="badge-text" data-en="SYSTEM ONLINE">系统在线</span>
+        </div>
+        <div class="hud-line"></div>
       </div>
-      <h1 class="hero-title">Dive into the <span class="gradient-text">LLM</span> World</h1>
-      <p class="hero-description">
-        Tech insights and practice notes on GPT-5.4, Claude 4.6, Gemini 3.1
-      </p>
-      <div class="hero-actions">
-        <a href="/#articles" class="btn-primary">
-          <span class="btn-glow"></span>
-          Browse Articles
-        </a>
-        <a href="/about/" class="btn-ghost">Learn More</a>
+      
+      <div class="hero-content-wrapper">
+        <h1 class="hero-title">
+          <span class="title-zh">深入<span class="gradient-text glow">大模型</span>世界</span>
+          <span class="title-en">Exploring the <span class="gradient-text glow">LLM</span> Frontier</span>
+        </h1>
+        
+        <p class="hero-description">
+          <span class="desc-zh">关于 GPT-5.4、Claude 4.6、Gemini 3.1 的前沿技术洞察与实战工程笔记</span>
+          <span class="desc-en">Frontier tech insights and engineering notes on GPT-5.4, Claude 4.6, and Gemini 3.1</span>
+        </p>
+        
+        <div class="hero-actions">
+          <a href="/#articles" class="btn-primary btn-glitch">
+            <span class="btn-glow"></span>
+            <span class="btn-text-zh">浏览深度文章</span>
+            <span class="btn-text-en">Read Articles</span>
+            <div class="btn-cyber-corners"></div>
+          </a>
+          <a href="/about/" class="btn-ghost btn-cyber">
+            <span class="btn-text-zh">了解更多节点</span>
+            <span class="btn-text-en">More Nodes</span>
+            <div class="btn-cyber-corners"></div>
+          </a>
+        </div>
       </div>
 
-      <!-- Tech metrics -->
-      <div class="hero-metrics">
-        <div class="metric">
-          <span class="metric-value" data-val="6">6</span>
-          <span class="metric-label">Core Topics</span>
+      <!-- Tech metrics with bilingual support -->
+      <div class="hero-metrics-panel">
+        <div class="hud-bracket left"></div>
+        <div class="hero-metrics">
+          <div class="metric">
+            <span class="metric-value blur-reveal" data-val="6">6</span>
+            <span class="metric-label">
+              <span class="label-zh">核心主题</span>
+              <span class="label-en">CORE TOPICS</span>
+            </span>
+          </div>
+          <div class="metric-divider"></div>
+          <div class="metric">
+            <span class="metric-value blur-reveal">LLM</span>
+            <span class="metric-label">
+              <span class="label-zh">技术领域</span>
+              <span class="label-en">TECH DOMAIN</span>
+            </span>
+          </div>
+          <div class="metric-divider"></div>
+          <div class="metric">
+            <span class="metric-value blur-reveal">V. 26</span>
+            <span class="metric-label">
+              <span class="label-zh">架构迭代</span>
+              <span class="label-en">ITERATION</span>
+            </span>
+          </div>
         </div>
-        <div class="metric-divider"></div>
-        <div class="metric">
-          <span class="metric-value">LLM</span>
-          <span class="metric-label">Tech Focus</span>
-        </div>
-        <div class="metric-divider"></div>
-        <div class="metric">
-          <span class="metric-value">2026</span>
-          <span class="metric-label">Frontier Tracking</span>
-        </div>
+        <div class="hud-bracket right"></div>
       </div>
     </div>
   </header>
@@ -171,7 +208,7 @@
               <time datetime="2026-03-08">2026.03.08</time>
             </div>
             <h3>GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro：2026 三大模型终极横评</h3>
-            <p>从推理能力、代码生成、多模态理解、长Context处理四大维度，全面对比 2026 年三大顶级 AI 模型的真实表现。GPT-5.4 Thinking 的规划能力、Claude Opus 4.6 的复杂 Agent 任务、Gemini 3.1 Pro 的百万级Context——谁才是真正的王者？</p>
+            <p>从推理能力、代码生成、多模态理解、长上下文处理四大维度，全面对比 2026 年三大顶级 AI 模型的真实表现。GPT-5.4 Thinking 的规划能力、Claude Opus 4.6 的复杂 Agent 任务、Gemini 3.1 Pro 的百万级上下文——谁才是真正的王者？</p>
             <div class="featured-tags">
               <span class="mini-tag">GPT-5.4</span>
               <span class="mini-tag">Claude Opus 4.6</span>
@@ -208,7 +245,7 @@
       <div class="container">
         <div class="section-header fade-in">
           <div class="section-tag">LATEST POSTS</div>
-          <h2>Latest Articles</h2>
+          <h2>最新文章</h2>
           <p class="section-sub">探索 AI 技术的最新动态与深度解析</p>
         </div>
         <div class="article-grid">
@@ -313,7 +350,7 @@
             <span class="model-maker">OpenAI · 2026.03.05</span>
             <div class="model-specs">
               <div class="spec-row">
-                <span class="spec-label">Context窗口</span>
+                <span class="spec-label">上下文窗口</span>
                 <span class="spec-value">256K</span>
               </div>
               <div class="spec-row">
@@ -343,7 +380,7 @@
             <span class="model-maker">Anthropic · 2026.02.17</span>
             <div class="model-specs">
               <div class="spec-row">
-                <span class="spec-label">Context窗口</span>
+                <span class="spec-label">上下文窗口</span>
                 <span class="spec-value">1M (Beta)</span>
               </div>
               <div class="spec-row">
@@ -361,7 +398,7 @@
             </div>
             <div class="model-tags">
               <span class="mini-tag">Computer Use</span>
-              <span class="mini-tag">1M Context</span>
+              <span class="mini-tag">1M 上下文</span>
               <span class="mini-tag">Agentic</span>
             </div>
           </div>
@@ -372,7 +409,7 @@
             <span class="model-maker">Google DeepMind · 2026.02.19</span>
             <div class="model-specs">
               <div class="spec-row">
-                <span class="spec-label">Context窗口</span>
+                <span class="spec-label">上下文窗口</span>
                 <span class="spec-value">2M</span>
               </div>
               <div class="spec-row">
@@ -484,7 +521,7 @@
           <h2>订阅 AI 前沿速递</h2>
           <p>每周精选大模型领域的技术突破、实践案例与行业洞察，直达你的邮箱。</p>
           <form class="newsletter-form" onsubmit="event.preventDefault();">
-            <input type="email" placeholder="Enter your email address" required>
+            <input type="email" placeholder="输入你的邮箱地址" required>
             <button type="submit" class="btn-primary">
               <span class="btn-glow"></span>
               订阅

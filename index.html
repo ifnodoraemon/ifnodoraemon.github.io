@@ -95,6 +95,7 @@
       }
     ]
   }
+  </script>
   <link rel="preload" href="/style.css" as="style">
   <link rel="stylesheet" href="/style.css">
 </head>
@@ -109,42 +110,78 @@
   <!-- Navigation -->
 <!-- Hero -->
   <header class="hero">
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-bg-elements">
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+      <div class="hero-orb hero-orb-3"></div>
+      <div class="hero-grid-overlay"></div>
+    </div>
     <div class="hero-scanline"></div>
     <div class="hero-container fade-in">
-      <div class="hero-badge">
-        <span class="badge-pulse"></span>
-        <span class="badge-text">EXPLORING AI FRONTIER</span>
+      <div class="hero-hud-top">
+        <div class="hud-line"></div>
+        <div class="hero-badge">
+          <span class="badge-pulse"></span>
+          <span class="badge-text" data-en="SYSTEM ONLINE">系统在线</span>
+        </div>
+        <div class="hud-line"></div>
       </div>
-      <h1 class="hero-title">深入<span class="gradient-text">大模型</span>世界</h1>
-      <p class="hero-description">
-        关于 GPT-5.4、Claude 4.6、Gemini 3.1 的技术洞察与实践笔记
-      </p>
-      <div class="hero-actions">
-        <a href="/#articles" class="btn-primary">
-          <span class="btn-glow"></span>
-          浏览文章
-        </a>
-        <a href="/about/" class="btn-ghost">了解更多</a>
+      
+      <div class="hero-content-wrapper">
+        <h1 class="hero-title">
+          <span class="title-zh">深入<span class="gradient-text glow">大模型</span>世界</span>
+          <span class="title-en">Exploring the <span class="gradient-text glow">LLM</span> Frontier</span>
+        </h1>
+        
+        <p class="hero-description">
+          <span class="desc-zh">关于 GPT-5.4、Claude 4.6、Gemini 3.1 的前沿技术洞察与实战工程笔记</span>
+          <span class="desc-en">Frontier tech insights and engineering notes on GPT-5.4, Claude 4.6, and Gemini 3.1</span>
+        </p>
+        
+        <div class="hero-actions">
+          <a href="/#articles" class="btn-primary btn-glitch">
+            <span class="btn-glow"></span>
+            <span class="btn-text-zh">浏览深度文章</span>
+            <span class="btn-text-en">Read Articles</span>
+            <div class="btn-cyber-corners"></div>
+          </a>
+          <a href="/about/" class="btn-ghost btn-cyber">
+            <span class="btn-text-zh">了解更多节点</span>
+            <span class="btn-text-en">More Nodes</span>
+            <div class="btn-cyber-corners"></div>
+          </a>
+        </div>
       </div>
 
-      <!-- Tech metrics -->
-      <div class="hero-metrics">
-        <div class="metric">
-          <span class="metric-value" data-val="6">6</span>
-          <span class="metric-label">核心主题</span>
+      <!-- Tech metrics with bilingual support -->
+      <div class="hero-metrics-panel">
+        <div class="hud-bracket left"></div>
+        <div class="hero-metrics">
+          <div class="metric">
+            <span class="metric-value blur-reveal" data-val="6">6</span>
+            <span class="metric-label">
+              <span class="label-zh">核心主题</span>
+              <span class="label-en">CORE TOPICS</span>
+            </span>
+          </div>
+          <div class="metric-divider"></div>
+          <div class="metric">
+            <span class="metric-value blur-reveal">LLM</span>
+            <span class="metric-label">
+              <span class="label-zh">技术领域</span>
+              <span class="label-en">TECH DOMAIN</span>
+            </span>
+          </div>
+          <div class="metric-divider"></div>
+          <div class="metric">
+            <span class="metric-value blur-reveal">V. 26</span>
+            <span class="metric-label">
+              <span class="label-zh">架构迭代</span>
+              <span class="label-en">ITERATION</span>
+            </span>
+          </div>
         </div>
-        <div class="metric-divider"></div>
-        <div class="metric">
-          <span class="metric-value">LLM</span>
-          <span class="metric-label">技术领域</span>
-        </div>
-        <div class="metric-divider"></div>
-        <div class="metric">
-          <span class="metric-value">2026</span>
-          <span class="metric-label">前沿追踪</span>
-        </div>
+        <div class="hud-bracket right"></div>
       </div>
     </div>
   </header>
@@ -155,9 +192,19 @@
     <section id="featured" class="section section-tight">
       <div class="container">
         <div class="section-header fade-in">
-          <div class="section-tag">FEATURED</div>
-          <h2>精选推荐</h2>
-          <p class="section-sub">编辑精选的深度好文</p>
+          <div class="section-tag">
+            <span class="tag-bracket">[</span>
+            <span class="tag-text">FEATURED / 精选推荐</span>
+            <span class="tag-bracket">]</span>
+          </div>
+          <h2 class="section-title">
+            <span class="title-zh">编辑精选</span>
+            <span class="title-en">Editor's Picks</span>
+          </h2>
+          <p class="section-sub">
+            <span class="desc-zh">编辑精选的深度好文</span>
+            <span class="desc-en">Curated in-depth articles</span>
+          </p>
         </div>
         <div class="featured-card fade-in">
           <div class="featured-glow"></div>
@@ -207,9 +254,19 @@
     <section id="articles" class="section section-tight">
       <div class="container">
         <div class="section-header fade-in">
-          <div class="section-tag">LATEST POSTS</div>
-          <h2>最新文章</h2>
-          <p class="section-sub">探索 AI 技术的最新动态与深度解析</p>
+          <div class="section-tag">
+            <span class="tag-bracket">[</span>
+            <span class="tag-text">LATEST POSTS / 最新文章</span>
+            <span class="tag-bracket">]</span>
+          </div>
+          <h2 class="section-title">
+            <span class="title-zh">最新文章</span>
+            <span class="title-en">Latest Posts</span>
+          </h2>
+          <p class="section-sub">
+            <span class="desc-zh">探索 AI 技术的最新动态与深度解析</span>
+            <span class="desc-en">Explore the latest trends and deep analysis in AI tech</span>
+          </p>
         </div>
         <div class="article-grid">
 
@@ -301,9 +358,19 @@
     <section id="models" class="section section-tight">
       <div class="container">
         <div class="section-header fade-in">
-          <div class="section-tag">MODEL COMPARISON</div>
-          <h2>模型对比</h2>
-          <p class="section-sub">三大主流 AI 模型能力全景一览</p>
+          <div class="section-tag">
+            <span class="tag-bracket">[</span>
+            <span class="tag-text">MODEL COMPARISON / 模型对比</span>
+            <span class="tag-bracket">]</span>
+          </div>
+          <h2 class="section-title">
+            <span class="title-zh">模型对比</span>
+            <span class="title-en">Model Comparison</span>
+          </h2>
+          <p class="section-sub">
+            <span class="desc-zh">三大主流 AI 模型能力全景一览</span>
+            <span class="desc-en">A panoramic view of the capabilities of the top 3 AI models</span>
+          </p>
         </div>
         <div class="model-grid fade-in">
 
@@ -408,9 +475,19 @@
     <section id="topics" class="section section-tight">
       <div class="container">
         <div class="section-header fade-in">
-          <div class="section-tag">TECH DOMAINS</div>
-          <h2>主题</h2>
-          <p class="section-sub">按技术领域浏览</p>
+          <div class="section-tag">
+            <span class="tag-bracket">[</span>
+            <span class="tag-text">TECH DOMAINS / 技术领域</span>
+            <span class="tag-bracket">]</span>
+          </div>
+          <h2 class="section-title">
+            <span class="title-zh">主题探索</span>
+            <span class="title-en">Explore Topics</span>
+          </h2>
+          <p class="section-sub">
+            <span class="desc-zh">按技术领域分类浏览文章</span>
+            <span class="desc-en">Browse articles by technical domains</span>
+          </p>
         </div>
         <div class="topic-grid fade-in">
           <a href="#" class="topic-card">

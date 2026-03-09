@@ -33,17 +33,24 @@ export function renderNav(activePage = '') {
   nav.innerHTML = `
     <div class="nav-container">
       <a href="${langPrefix}/" class="nav-brand">
-        <span class="brand-icon">◆</span>
-        <span class="brand-text">${siteTitle}</span>
-        <span class="brand-status">
+        <span class="brand-icon glow">◆</span>
+        <div class="brand-text-wrapper">
+          <span class="brand-text-zh">AI 大模型观察</span>
+          <span class="brand-text-en">// AI TECH OBSERVER</span>
+        </div>
+        <div class="brand-status">
           <span class="status-dot"></span>
-          ONLINE
-        </span>
+          <span>ONLINE</span>
+        </div>
       </a>
       <div class="nav-links" id="nav-links">
         ${linksHtml}
-        <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener">GitHub</a>
-        <a href="${togglePath}" class="lang-toggle" title="Toggle Language" style="font-weight: 600; color: var(--accent-light); margin-left: 0.5rem; text-decoration: none;">${isEn ? '中' : 'EN'}</a>
+        <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="github-link">GitHub</a>
+        <a href="${togglePath}" class="lang-toggle" title="Toggle Language">
+          <span class="lang-bracket">[</span>
+          <span class="lang-text">${isEn ? '中文' : 'ENG'}</span>
+          <span class="lang-bracket">]</span>
+        </a>
       </div>
       <button class="menu-toggle" id="menu-toggle" aria-label="打开菜单">
         <span></span>
