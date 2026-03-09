@@ -6,8 +6,8 @@ import fs from 'fs'
 function getArticleInputs() {
   const inputs = {}
   const dirsToScan = [
-    { path: resolve(__dirname, 'articles'), prefix: 'zh' },
-    { path: resolve(__dirname, 'en/articles'), prefix: 'en' }
+    { path: resolve(__dirname, '.temp_build/articles'), prefix: 'zh' },
+    { path: resolve(__dirname, '.temp_build/en/articles'), prefix: 'en' }
   ];
 
   for (const { path: dirPath, prefix } of dirsToScan) {
@@ -35,20 +35,27 @@ function getArticleInputs() {
 }
 
 export default defineConfig({
+  root: resolve(__dirname, '.temp_build'),
+  resolve: {
+    alias: {
+      '/src': resolve(__dirname, 'src')
+    }
+  },
   base: '/',
-  publicDir: 'public',
+  publicDir: resolve(__dirname, '.temp_build/public'),
   build: {
-    outDir: 'dist',
+    outDir: resolve(__dirname, 'dist'),
+    emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
-        about: resolve(__dirname, 'about/index.html'),
-        models: resolve(__dirname, 'models/index.html'),
-        projects: resolve(__dirname, 'projects/index.html'),
-        mainEn: resolve(__dirname, 'en/index.html'),
-        aboutEn: resolve(__dirname, 'en/about/index.html'),
-        modelsEn: resolve(__dirname, 'en/models/index.html'),
-        projectsEn: resolve(__dirname, 'en/projects/index.html'),
+        main: resolve(__dirname, '.temp_build/index.html'),
+        about: resolve(__dirname, '.temp_build/about/index.html'),
+        models: resolve(__dirname, '.temp_build/models/index.html'),
+        projects: resolve(__dirname, '.temp_build/projects/index.html'),
+        mainEn: resolve(__dirname, '.temp_build/en/index.html'),
+        aboutEn: resolve(__dirname, '.temp_build/en/about/index.html'),
+        modelsEn: resolve(__dirname, '.temp_build/en/models/index.html'),
+        projectsEn: resolve(__dirname, '.temp_build/en/projects/index.html'),
         ...getArticleInputs(),
       }
     }

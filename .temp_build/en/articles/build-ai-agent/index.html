@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building AI Agent Applications from Scratch — {{meta.siteName}}</title>
+  <meta name="description" content="A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.">
+  <meta name="keywords" content="AI Agent,AI大模型,GPT-5.4,Claude 4.6,Gemini 3.1,build ai agent">
+  <meta name="author" content="ifnodoraemon">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ifnodoraemon.github.io/articles/build-ai-agent/">
+  <meta name="theme-color" content="#06060b">
+
+  <!-- Open Graph / Article -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ifnodoraemon.github.io/articles/build-ai-agent/">
+  <meta property="og:title" content="Building AI Agent Applications from Scratch — {{meta.siteName}}">
+  <meta property="og:description" content="A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.">
+  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:locale" content="{{#if isEn}}en_US{{else}}zh_CN{{/if}}">
+  <meta property="og:site_name" content="{{meta.siteName}}">
+  <meta property="article:published_time" content="2026-03-05">
+  <meta property="article:author" content="ifnodoraemon">
+  <meta property="article:section" content="AI Agent">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Building AI Agent Applications from Scratch — {{meta.siteName}}">
+  <meta name="twitter:description" content="A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.">
+  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-5078775507335151">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-4WZN5Q7VS6');
+  </script>
+
+  <!-- Assets -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="/src/assets/css/style.css" as="style">
+  <link rel="stylesheet" href="/src/assets/css/style.css">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Building AI Agent Applications from Scratch",
+    "description": "A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.",
+    "datePublished": "2026-03-05",
+    "dateModified": "2026-03-05",
+    "image": "https://ifnodoraemon.github.io/og-image.png",
+    "author": {
+      "@type": "Person",
+      "name": "ifnodoraemon",
+      "url": "https://github.com/ifnodoraemon"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "大雄话AI",
+      "url": "https://ifnodoraemon.github.io"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ifnodoraemon.github.io/articles/build-ai-agent/"
+    },
+    "articleSection": "AI Agent"
+  }
+  </script>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <main class="page-main">
+    <article class="article-detail">
+      <div class="container">
+        <div class="article-detail-header fade-in">
+          <a href="/en/articles/" class="back-link">← Back to Articles</a>
+          <div class="card-meta">
+            <span class="tag tag-emerald">AI Agent</span>
+            <time datetime="2026-03-05">2026.03.05</time>
+          </div>
+          <h1>Building AI Agent Applications from Scratch</h1>
+          <p class="article-detail-desc">A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.</p>
+        </div>
+        <div class="article-layout">
+          <!-- TOC Sidebar -->
+          <aside class="article-sidebar fade-in">
+            <div class="toc-container"><h4>Table of Contents</h4><ul class="article-toc-list">
+  <li class="toc-level-2"><a href="#what-is-an-ai-agent">What is an AI Agent?</a></li>
+  <li class="toc-level-2"><a href="#architecture-design">Architecture Design</a></li>
+  <li class="toc-level-2"><a href="#implementation-steps">Implementation Steps</a></li>
+  <li class="toc-level-3"><a href="#step-1-install-dependencies">Step 1: Install Dependencies</a></li>
+  <li class="toc-level-3"><a href="#step-2-define-tools">Step 2: Define Tools</a></li>
+  <li class="toc-level-3"><a href="#step-3-create-the-agent">Step 3: Create the Agent</a></li>
+  <li class="toc-level-3"><a href="#step-4-run-the-agent">Step 4: Run the Agent</a></li>
+  <li class="toc-level-2"><a href="#model-selection-recommendations">Model Selection Recommendations</a></li>
+  <li class="toc-level-2"><a href="#best-practices">Best Practices</a></li>
+  <li class="toc-level-2"><a href="#advanced-directions">Advanced Directions</a></li>
+</ul></div>
+          </aside>
+          
+          <!-- Main Content -->
+          <div class="article-detail-content fade-in">
+            <h2 id="what-is-an-ai-agent">What is an AI Agent?</h2>
+<p>An AI Agent is an AI system capable of <strong>perceiving its environment, making autonomous decisions, and executing actions</strong>. Unlike traditional single API calls, an Agent can:</p>
+<ul>
+<li>🔄 <strong>Loop execution</strong>: Continuously adjust actions based on feedback</li>
+<li>🛠️ <strong>Tool calling</strong>: Search the web, execute code, operate databases</li>
+<li>📋 <strong>Task planning</strong>: Break down complex goals into actionable steps</li>
+<li>🧠 <strong>Memory management</strong>: Maintain context and state over long conversations</li>
+</ul>
+<h2 id="architecture-design">Architecture Design</h2>
+<p>A complete AI Agent system typically includes the following core components:</p>
+<pre class="mermaid">
+graph LR
+    subgraph Core["Core Layer"]
+        LLM["Large Language Model"] --- PM["Prompt Manager"]
+    end
+    subgraph Decision["Decision Layer"]
+        Router["Decision Engine"] --- Memory["Memory System"]
+    end
+    subgraph Tools["Tool Layer"]
+        T1["Search"] & T2["Code Execution"] & T3["Database"] & T4["API"]
+    end
+    Core --> Decision --> Tools
+</pre>
+<h2 id="implementation-steps">Implementation Steps</h2>
+<h3 id="step-1-install-dependencies">Step 1: Install Dependencies</h3>
+<pre><code class="language-bash">pip install langchain langchain-anthropic tavily-python</code></pre>
+<h3 id="step-2-define-tools">Step 2: Define Tools</h3>
+<pre><code class="language-python">from langchain.tools import tool
+from datetime import datetime
+
+@tool
+def get_current_time() -&gt; str:
+    &quot;&quot;&quot;Get the current time&quot;&quot;&quot;
+    return datetime.now().strftime(&quot;%Y-%m-%d %H:%M:%S&quot;)
+
+@tool
+def search_web(query: str) -&gt; str:
+    &quot;&quot;&quot;Search the web to get real-time information&quot;&quot;&quot;
+    from tavily import TavilyClient
+    client = TavilyClient()
+    results = client.search(query, max_results=3)
+    return &quot;\n&quot;.join([r[&quot;content&quot;] for r in results[&quot;results&quot;]])
+
+@tool
+def execute_python(code: str) -&gt; str:
+    &quot;&quot;&quot;Execute Python code and return the result&quot;&quot;&quot;
+    import subprocess
+    result = subprocess.run(
+        [&quot;python&quot;, &quot;-c&quot;, code],
+        capture_output=True, text=True, timeout=10
+    )
+    return result.stdout or result.stderr</code></pre>
+<h3 id="step-3-create-the-agent">Step 3: Create the Agent</h3>
+<pre><code class="language-python">from langchain_anthropic import ChatAnthropic
+from langchain.agents import create_tool_calling_agent, AgentExecutor
+from langchain_core.prompts import ChatPromptTemplate
+
+# Use Claude Sonnet 4.6 as the reasoning engine
+llm = ChatAnthropic(model=&quot;claude-sonnet-4-6-20260217&quot;)
+
+# Define the system prompt
+prompt = ChatPromptTemplate.from_messages([
+    (&quot;system&quot;, &quot;&quot;&quot;You are an intelligent assistant skilled in using tools to solve problems.
+    Before answering a user's question, always consider if you need to use tools to gather information.
+    If multiple steps are required, execute them sequentially.&quot;&quot;&quot;),
+    (&quot;human&quot;, &quot;{input}&quot;),
+    (&quot;placeholder&quot;, &quot;{agent_scratchpad}&quot;),
+])
+
+# Assemble the Agent
+tools = [get_current_time, search_web, execute_python]
+agent = create_tool_calling_agent(llm, tools, prompt)
+executor = AgentExecutor(agent=agent, tools=tools, verbose=True)</code></pre>
+<h3 id="step-4-run-the-agent">Step 4: Run the Agent</h3>
+<pre><code class="language-python"># Simple query
+result = executor.invoke({
+    &quot;input&quot;: &quot;Help me check NVIDIA's stock price today, and then calculate its growth over the past year.&quot;
+})
+print(result[&quot;output&quot;])</code></pre>
+<p>The Agent&#39;s execution flow is roughly as follows:</p>
+<ol>
+<li><strong>Understand objective</strong>: Parse user intent, determine the need to search for stock information</li>
+<li><strong>Search data</strong>: Call <code>search_web</code> to get real-time stock prices</li>
+<li><strong>Calculate and analyze</strong>: Call <code>execute_python</code> to calculate the growth rate</li>
+<li><strong>Organize output</strong>: Generate a structured analytical report</li>
+</ol>
+<h2 id="model-selection-recommendations">Model Selection Recommendations</h2>
+<table>
+<thead>
+<tr>
+<th>Requirements</th>
+<th>Recommended Model</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Complex Agent tasks</td>
+<td>Claude Opus 4.6</td>
+<td>The strongest Agentic capabilities and Computer Use</td>
+</tr>
+<tr>
+<td>Daily Agent development</td>
+<td>Claude Sonnet 4.6</td>
+<td>The best balance between speed and intelligence</td>
+</tr>
+<tr>
+<td>Agents requiring deep reasoning</td>
+<td>GPT-5.4 Thinking</td>
+<td>Transparent thought chains, easier to debug</td>
+</tr>
+<tr>
+<td>High-volume production environments</td>
+<td>Gemini 3.1 Flash-Lite</td>
+<td>Best cost-effectiveness</td>
+</tr>
+</tbody></table>
+<h2 id="best-practices">Best Practices</h2>
+<ol>
+<li><strong>Make tool descriptions precise</strong>: LLMs decide when to call tools via their docstrings, the clearer the better.</li>
+<li><strong>Limit the number of tools</strong>: Keep it under 10 tools per Agent; too many will decrease selection accuracy.</li>
+<li><strong>Add safety guardrails</strong>: Set explicit permissions and controls for sensitive tools like code execution or database operations.</li>
+<li><strong>Implement graceful degradation</strong>: When tool calls fail, the Agent should be able to identify the failure and switch strategies.</li>
+<li><strong>Monitoring and logging</strong>: Record the input and output of every tool call to facilitate debugging and optimization.</li>
+</ol>
+<h2 id="advanced-directions">Advanced Directions</h2>
+<ul>
+<li><strong>Multi-Agent Collaboration</strong>: Multiple Agents working together to complete complex tasks.</li>
+<li><strong>RAG-Enhanced Agents</strong>: Combining retrieval-augmented generation to let Agents securely access enterprise data.</li>
+<li><strong>Human-in-the-Loop</strong>: Introducing manual review at critical decision points.</li>
+<li><strong>Persistent Memory</strong>: Long-term, cross-session memory management capabilities.</li>
+</ul>
+
+            
+            <!-- Giscus Comments -->
+            <div class="giscus-container">
+              <script src="https://giscus.app/client.js"
+                data-repo="ifnodoraemon/ifnodoraemon.github.io"
+                data-repo-id="R_kgDON7u7iA"
+                data-category="Announcements"
+                data-category-id="DIC_kwDON7u7iM4CnKDE"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+              </script>
+            </div>
+          </div>
+        </div>
+        <div class="article-nav fade-in">
+          <a href="/en/articles/" class="btn-ghost">← Back to Articles</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/assets/js/main.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#0a0a1a',
+        mainBkg: '#1a1a2e',
+        nodeBorder: '#6366f1',
+        clusterBkg: 'rgba(99,102,241,0.06)',
+        clusterBorder: 'rgba(99,102,241,0.2)',
+        titleColor: '#a5b4fc',
+        nodeTextColor: '#e2e8f0',
+        primaryColor: '#1e1e3a',
+        primaryTextColor: '#e2e8f0',
+        primaryBorderColor: '#6366f1',
+        lineColor: '#818cf8',
+        secondaryColor: '#1a1a2e',
+        tertiaryColor: '#1a1a2e',
+        fontFamily: 'Inter, Noto Sans SC, sans-serif',
+        fontSize: '14px',
+      }
+    });
+  </script>
+</body>
+</html>

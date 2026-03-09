@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="{{langAttr}}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{meta.models.title}}</title>
+  <meta name="description" content="{{meta.models.desc}}">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ifnodoraemon.github.io/models/">
+  <meta name="theme-color" content="#06060b">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="/src/assets/css/style.css" as="style">
+  <link rel="stylesheet" href="/src/assets/css/style.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+<main class="page-main">
+    <section class="page-hero">
+      <div class="container">
+        <div class="page-hero-content fade-in">
+          <div class="section-tag">MODEL COMPARISON</div>
+          <h1>AI 模型全景对比</h1>
+          <p class="page-hero-desc">深入了解 2026 年三大主流 AI 模型的能力边界与适用场景</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detailed Model Cards -->
+    <section class="section section-tight">
+      <div class="container">
+        {{#each models.details}}
+        <div class="model-detail-card fade-in" id="{{this.id}}">
+          <div class="model-detail-header">
+            <div class="model-detail-icon">{{this.icon}}</div>
+            <div>
+              <h2>{{this.name}}</h2>
+              <span class="model-maker">{{this.meta}}</span>
+            </div>
+          </div>
+          <div class="model-detail-body">
+            <p>{{{this.desc}}}</p>
+            <div class="model-detail-specs">
+              {{#each this.specs}}
+              <div class="detail-spec">
+                <span class="detail-spec-label">{{this.label}}</span>
+                <span class="detail-spec-value">{{this.value}}</span>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <!-- Quick Comparison Table -->
+    <section class="section section-tight">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>{{models.tableTitle}}</h2>
+          <p class="section-subtitle">{{models.tableSubtitle}}</p>
+        </div>
+        <div class="comparison-table-wrap fade-in">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                {{#each models.tableHeaders}}
+                <th>{{this}}</th>
+                {{/each}}
+              </tr>
+            </thead>
+            <tbody>
+              {{#each models.tableRows}}
+              <tr>
+                {{#each this}}
+                <td>{{this}}</td>
+                {{/each}}
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Case Guide -->
+    <section class="section section-tight">
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="section-tag">{{models.heroTag}}</div>
+          <h2>{{models.sceneTitle}}</h2>
+          <p class="section-subtitle">{{models.sceneSubtitle}}</p>
+        </div>
+        <div class="usecase-grid fade-in">
+          {{#each models.scenes}}
+          <div class="usecase-card">
+            <div class="usecase-icon">⚡</div>
+            <h3>{{this.title}}</h3>
+            <p>{{this.desc}}</p>
+            <div class="usecase-pick">
+              <span class="usecase-best">{{this.badge}}</span>
+            </div>
+            <p class="usecase-reason">{{this.reason}}</p>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+
+    <!-- Model Timeline -->
+    <section class="section section-tight">
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="section-tag">{{models.timelineTag}}</div>
+          <h2>{{models.timelineTitle}}</h2>
+        </div>
+        <div class="timeline fade-in">
+          {{#each models.timeline}}
+          <div class="timeline-item">
+            <div class="timeline-dot{{#if this.latest}} timeline-dot-latest{{/if}}"></div>
+            <div class="timeline-date">{{this.date}}</div>
+            <div class="timeline-content">
+              <strong>{{this.name}}</strong>
+              <span>{{this.desc}}</span>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Articles -->
+    <section class="section section-tight">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>{{models.relatedTitle}}</h2>
+        </div>
+        <div class="article-grid fade-in">
+          <!-- TODO: The articles block itself should optionally be isolated to loc.articles depending on structure. Keeping hardcoded for now, replacing readMore button. -->
+          <article class="article-card">
+            <div class="card-meta">
+              <span class="tag">深度解析</span>
+              <time datetime="2026-03-08">2026.03.08</time>
+            </div>
+            <h3>GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro：终极横评</h3>
+            <p>四大维度全面评测三大顶级模型的真实表现。</p>
+            <a href="/articles/model-comparison-2026/" class="card-link">{{models.readMore}} <span class="arrow">→</span></a>
+          </article>
+          <article class="article-card">
+            <div class="card-meta">
+              <span class="tag tag-amber">行业观察</span>
+              <time datetime="2026-03-08">2026.03-08</time>
+            </div>
+            <h3>2026 年 AI 大模型发展趋势</h3>
+            <p>从推理飞跃到 Agent 成熟的全景分析。</p>
+            <a href="/articles/ai-trends-2026/" class="card-link">{{models.readMore}} <span class="arrow">→</span></a>
+          </article>
+          <article class="article-card">
+            <div class="card-meta">
+              <span class="tag tag-rose">多模态</span>
+              <time datetime="2026-02-28">2026.02.28</time>
+            </div>
+            <h3>多模态大模型入门指南</h3>
+            <p>探索多模态模型的图文理解与应用案例。</p>
+            <a href="/articles/multimodal-guide/" class="card-link">{{models.readMore}} <span class="arrow">→</span></a>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+<script type="module" src="/src/assets/js/main.js"></script>
+</body>
+</html>

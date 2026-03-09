@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>关于节点 — 大雄话AI</title>
+  <meta name="description" content="关于此站点的缘起、目标以及背后运行的技术细节。">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ifnodoraemon.github.io/about/">
+  <meta name="theme-color" content="#06060b">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="/src/assets/css/style.css" as="style">
+  <link rel="stylesheet" href="/src/assets/css/style.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+<main class="page-main">
+    <!-- Page Hero -->
+    <section class="page-hero">
+      <div class="container">
+        <div class="page-hero-content fade-in">
+          <div class="section-tag">// ABOUT THE NODE</div>
+          <h1>关于</h1>
+          <p class="page-hero-desc">一个观察 AI 演进的技术实验节点</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Content -->
+    <section class="section section-tight">
+      <div class="container">
+        <div class="about-page-grid fade-in">
+          <div class="about-page-main">
+            <h2>关于节点 — 大雄话AI</h2> <!-- Or just a generic title inside if I added it, let's use hardcoded for some generic titles if omitted, but I should probably just replace the ones in locale. actually "创建初衷" isn't in locale as a title. Let's just use what we have or add generic ones later. Wait, my locale has p1, p2, li1. I will just replace the paragraphs. -->
+            <p>这里是我跟踪 AI 前沿技术、沉淀工程实践和分享学习心得的个人自留地。在通用人工智能（AGI）加速到来的前沿，保持技术敏感度比以往任何时候都更加重要。</p>
+            
+            <h2>内容方向</h2> <!-- Let's leave these minor headings hardcoded as Chinese for now if they aren't in locale, OR I will update locale later. I'll just put the localized content. Wait, my script replaces keys. Let's add them to locale json too if needed, but for now I'll just replace what's in the JSON. -->
+            
+            <!-- Actually, looking at the previous view_file of en/about/index.html, it had "Our Mission", "Content Focus", "About the Author". I should add these to the locale files. Let's just do a big replace and assume I will update the locale file next. -->
+            <h2></h2>
+            <p>这里是我跟踪 AI 前沿技术、沉淀工程实践和分享学习心得的个人自留地。在通用人工智能（AGI）加速到来的前沿，保持技术敏感度比以往任何时候都更加重要。</p>
+
+            <h2></h2>
+            <p>本站内容主要涵盖：</p>
+            <ul>
+              <li>主流 Foundation Models 的能力评测与对比</li>
+              <li>AI Agent 和自动化工作流的架构探讨</li>
+              <li>RAG、Vector DB 与长上下文优化的最佳实践</li>
+              <li>提示工程（Prompt Engineering）的高阶应用</li>
+            </ul>
+
+            <h2></h2>
+            <p>目前所有的内容和项目都在持续迭代中。你可以通过以下方式找到我或者关注项目的更新进度。</p>
+            <div class="about-links" style="justify-content: flex-start; margin-top: 1rem;">
+              <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="social-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                GitHub
+              </a>
+              <a href="mailto:ifnodoraemon@gmail.com" class="social-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                Email
+              </a>
+              <a href="https://x.com/ifnodoraemon" target="_blank" rel="noopener" class="social-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                X (Twitter)
+              </a>
+            </div>
+          </div>
+          <aside class="about-page-sidebar">
+            <div class="sidebar-card">
+              <h4></h4>
+              <div class="sidebar-stats">
+                <div class="sidebar-stat"><span class="sidebar-stat-num">50+</span><span></span></div>
+                <div class="sidebar-stat"><span class="sidebar-stat-num">10+</span><span></span></div>
+                <div class="sidebar-stat"><span class="sidebar-stat-num">6</span><span></span></div>
+                <div class="sidebar-stat"><span class="sidebar-stat-num">2K+</span><span></span></div>
+              </div>
+            </div>
+            <div class="sidebar-card">
+              <h4></h4>
+              <a href="https://openai.com" target="_blank" rel="noopener" class="footer-link">OpenAI</a>
+              <a href="https://anthropic.com" target="_blank" rel="noopener" class="footer-link">Anthropic</a>
+              <a href="https://deepmind.google" target="_blank" rel="noopener" class="footer-link">Google DeepMind</a>
+              <a href="https://huggingface.co" target="_blank" rel="noopener" class="footer-link">Hugging Face</a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+<script type="module" src="/src/assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model Database — Nobita Talks AI</title>
+  <meta name="description" content="A comprehensive comparison of state-of-the-art AI foundation models, including benchmark evaluations and use-case analysis for GPT-5.4, Claude 4.6, and Gemini 3.1.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ifnodoraemon.github.io/models/">
+  <meta name="theme-color" content="#06060b">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="/src/assets/css/style.css" as="style">
+  <link rel="stylesheet" href="/src/assets/css/style.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+<main class="page-main">
+    <section class="page-hero">
+      <div class="container">
+        <div class="page-hero-content fade-in">
+          <div class="section-tag">MODEL COMPARISON</div>
+          <h1>AI 模型全景对比</h1>
+          <p class="page-hero-desc">深入了解 2026 年三大主流 AI 模型的能力边界与适用场景</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detailed Model Cards -->
+    <section class="section section-tight">
+      <div class="container">
+        <div class="model-detail-card fade-in" id="gpt">
+          <div class="model-detail-header">
+            <div class="model-detail-icon">🧠</div>
+            <div>
+              <h2>GPT-5.4</h2>
+              <span class="model-maker">OpenAI · Released 2026.03.05</span>
+            </div>
+          </div>
+          <div class="model-detail-body">
+            <p>GPT-5.4 is OpenAI's latest flagship model, featuring standard, <strong>GPT-5.4 Thinking</strong> (deep reasoning), and <strong>GPT-5.4 Pro</strong> (highest performance API) variants. It integrates the Codex programming edge and supports Computer Use, excelling in coding, reasoning, and professional workflows.</p>
+            <div class="model-detail-specs">
+              <div class="detail-spec">
+                <span class="detail-spec-label">Context Window</span>
+                <span class="detail-spec-value">256K tokens</span>
+              </div>
+              <div class="detail-spec">
+                <span class="detail-spec-label">Multimodal Support</span>
+                <span class="detail-spec-value">Text / Image / Audio</span>
+              </div>
+              <div class="detail-spec">
+                <span class="detail-spec-label">Core Strengths</span>
+                <span class="detail-spec-value">Thinking Reasoning · Computer Use · Codex Integration</span>
+              </div>
+              <div class="detail-spec">
+                <span class="detail-spec-label">API Pricing</span>
+                <span class="detail-spec-value">$2.50 / 1M input · $10.00 / 1M output</span>
+              </div>
+              <div class="detail-spec">
+                <span class="detail-spec-label">Use Cases</span>
+                <span class="detail-spec-value">Complex Reasoning · Code Gen · Planning Tasks · Pro Workflows</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="model-detail-card fade-in" id="claude">
+          <div class="model-detail-header">
+            <div class="model-detail-icon">🎭</div>
+            <div>
+              <h2>Claude Sonnet 4.6</h2>
+              <span class="model-maker">Anthropic · Released 2026.02.17</span>
+            </div>
+          </div>
+          <div class="model-detail-body">
+            <p>Claude Sonnet 4.6 strikes a perfect balance between speed and intelligence, making it the best choice for daily tasks. Its enhanced coding capabilities and Computer Use make it a developer favorite. The sibling <strong>Claude Opus 4.6</strong> (2026.02.05) is Anthropic's most powerful model, specializing in complex Agent tasks and long-term planning.</p>
+            <div class="model-detail-specs">
+              <div class="detail-spec">
+                <span class="detail-spec-label">Context Window</span>
+                <span class="detail-spec-value">1M tokens (Beta)</span>
+              </div>
+              <div class="detail-spec">
+                <span class="detail-spec-label">Multimodal Support</span>
+                <span class="detail-spec-value">Text / Image / Visual Reasoning</span>
+              </div>
+              <div class="detail-spec">
+                <span class="detail-spec-label">Core Strengths</span>
+                <span class="detail-spec-value">Computer Use · Agentic Logic · Code Precision · Safety Alignment</span>
+              </div>
+              <div class="detail-spec">
+                <span class="detail-spec-label">API Pricing</span>
+                <span class="detail-spec-value">$3.00 / 1M input · $15.00 / 1M output</span>
+              </div>
+              <div class="detail-spec">
+                <span class="detail-spec-label">Use Cases</span>
+                <span class="detail-spec-value">Agentic Workflows · Large Codebases · Long Document Analysis · Safety-Sensitive Scenarios</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="model-detail-card fade-in" id="gemini">
+          <div class="model-detail-header">
+            <div class="model-detail-icon">✨</div>
+            <div>
+              <h2>Gemini 3.1 Pro</h2>
+              <span class="model-maker">Google DeepMind · Released 2026.02.19</span>
+            </div>
+          </div>
+          <div class="model-detail-body">
+            <p>Gemini 3.1 Pro is Google's latest complex-problem-solving model, natively supporting text, image, audio, video, and code multimodal reasoning. It boasts the industry's largest 2M context window. Its sibling <strong>Gemini 3.1 Flash-Lite</strong> (2026.03.03) introduces the innovative Thinking Levels mechanism, allowing developers to adjust reasoning depth.</p>
+            <div class="model-detail-specs">
+              <div class="detail-spec">
+                <span class="detail-spec-label">Context Window</span>
+                <span class="detail-spec-value">2M tokens</span>
+              </div>
+              <div class="detail-spec">
+                <span class="detail-spec-label">Multimodal Support</span>
+                <span class="detail-spec-value">Text / Image / Audio / Video / Code (Omnimodal)</span>
+              </div>
+              <div class="detail-spec">
+                <span class="detail-spec-label">Core Strengths</span>
+                <span class="detail-spec-value">Ultra-Long Context · Thinking Levels · Native Omnimodal · Search Integration</span>
+              </div>
+              <div class="detail-spec">
+                <span class="detail-spec-label">API Pricing</span>
+                <span class="detail-spec-value">$1.25 / 1M input · $5.00 / 1M output</span>
+              </div>
+              <div class="detail-spec">
+                <span class="detail-spec-label">Use Cases</span>
+                <span class="detail-spec-value">Ultra-Long Document Parsing · Video Analysis · Multimodal Chat · Enterprise Search Enhancement</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Comparison Table -->
+    <section class="section section-tight">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>Top-Tier LLM Capability Matrix</h2>
+          <p class="section-subtitle">Benchmarks based on the latest 2026 architectures</p>
+        </div>
+        <div class="comparison-table-wrap fade-in">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Dimension</th>
+                <th>GPT-5.4</th>
+                <th>Claude Sonnet 4.6</th>
+                <th>Gemini 3.1 Pro</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Vendor</td>
+                <td>OpenAI</td>
+                <td>Anthropic</td>
+                <td>Google DeepMind</td>
+              </tr>
+              <tr>
+                <td>Release Date</td>
+                <td>2026.03.05</td>
+                <td>2026.02.17</td>
+                <td>2026.02.19</td>
+              </tr>
+              <tr>
+                <td>Context</td>
+                <td>256K</td>
+                <td>1M (Beta)</td>
+                <td>2M</td>
+              </tr>
+              <tr>
+                <td>Native Multimodal</td>
+                <td>Text/Image/Audio</td>
+                <td>Text/Image</td>
+                <td>Omnimodal</td>
+              </tr>
+              <tr>
+                <td>Coding</td>
+                <td>★★★★★</td>
+                <td>★★★★★</td>
+                <td>★★★★★</td>
+              </tr>
+              <tr>
+                <td>Reasoning Depth</td>
+                <td>★★★★★</td>
+                <td>★★★★★</td>
+                <td>★★★★★</td>
+              </tr>
+              <tr>
+                <td>Agentic Logic</td>
+                <td>★★★★☆</td>
+                <td>★★★★★</td>
+                <td>★★★★☆</td>
+              </tr>
+              <tr>
+                <td>Speed</td>
+                <td>★★★★☆</td>
+                <td>★★★★★</td>
+                <td>★★★★★</td>
+              </tr>
+              <tr>
+                <td>Cost-Effectiveness</td>
+                <td>★★★★☆</td>
+                <td>★★★☆☆</td>
+                <td>★★★★★</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Case Guide -->
+    <section class="section section-tight">
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="section-tag">MODEL DATABASE</div>
+          <h2>Recommendations</h2>
+          <p class="section-subtitle">Pick the right model according to your specific needs</p>
+        </div>
+        <div class="usecase-grid fade-in">
+          <div class="usecase-card">
+            <div class="usecase-icon">⚡</div>
+            <h3>Coding &amp; Dev</h3>
+            <p>Require code generation, refactoring, debugging, or dev assistance</p>
+            <div class="usecase-pick">
+              <span class="usecase-best">Top Pick</span>
+            </div>
+            <p class="usecase-reason">GPT-5.4 integrates Codex engine, whilst Claude offers top coding accuracy</p>
+          </div>
+          <div class="usecase-card">
+            <div class="usecase-icon">⚡</div>
+            <h3>Agent Workflows</h3>
+            <p>Build autonomous, multi-step intelligent agent systems</p>
+            <div class="usecase-pick">
+              <span class="usecase-best">Strongest</span>
+            </div>
+            <p class="usecase-reason">Industry-leading Agentic capabilities and Computer Use</p>
+          </div>
+          <div class="usecase-card">
+            <div class="usecase-icon">⚡</div>
+            <h3>Long Document Analysis</h3>
+            <p>Need to process ultra-long texts, full codebases, or massive data</p>
+            <div class="usecase-pick">
+              <span class="usecase-best">Recommended</span>
+            </div>
+            <p class="usecase-reason">2M Context Window, the longest in the industry</p>
+          </div>
+          <div class="usecase-card">
+            <div class="usecase-icon">⚡</div>
+            <h3>Multimodal Tasks</h3>
+            <p>Need image understanding, video analysis, or audio processing</p>
+            <div class="usecase-pick">
+              <span class="usecase-best">All-Rounder</span>
+            </div>
+            <p class="usecase-reason">Native support for text/image/audio/video/code</p>
+          </div>
+          <div class="usecase-card">
+            <div class="usecase-icon">⚡</div>
+            <h3>Complex Reasoning</h3>
+            <p>Math proofs, logic analysis, complex planning tasks</p>
+            <div class="usecase-pick">
+              <span class="usecase-best">Extreme</span>
+            </div>
+            <p class="usecase-reason">Thinking mode reveals complete reasoning steps, 94.7% accuracy</p>
+          </div>
+          <div class="usecase-card">
+            <div class="usecase-icon">⚡</div>
+            <h3>Cost-Sensitive</h3>
+            <p>High-volume API usage, budget-limited production environments</p>
+            <div class="usecase-pick">
+              <span class="usecase-best">Economic</span>
+            </div>
+            <p class="usecase-reason">Highest cost-effectiveness + flexible Thinking Levels control</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Model Timeline -->
+    <section class="section section-tight">
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="section-tag">TIMELINE</div>
+          <h2>2026 Model Release Timeline</h2>
+        </div>
+        <div class="timeline fade-in">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.02.05</div>
+            <div class="timeline-content">
+              <strong>Claude Opus 4.6</strong>
+              <span>Anthropic&#x27;s most powerful reasoning model, tailored for complex Agent tasks</span>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.02.17</div>
+            <div class="timeline-content">
+              <strong>Claude Sonnet 4.6</strong>
+              <span>Balance of speed and intelligence, 1M context window Beta</span>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.02.19</div>
+            <div class="timeline-content">
+              <strong>Gemini 3.1 Pro</strong>
+              <span>2M context, native omnimodal support</span>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.02.26</div>
+            <div class="timeline-content">
+              <strong>Nano Banana 2</strong>
+              <span>Gemini 3.1 series AI image generator update</span>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026.03.03</div>
+            <div class="timeline-content">
+              <strong>Gemini 3.1 Flash-Lite</strong>
+              <span>Most cost-effective reasoning model, Thinking Levels mechanism</span>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot timeline-dot-latest"></div>
+            <div class="timeline-date">2026.03.05</div>
+            <div class="timeline-content">
+              <strong>GPT-5.4</strong>
+              <span>Three variants released: Standard/Thinking/Pro, Computer Use</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Articles -->
+    <section class="section section-tight">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>Related Articles</h2>
+        </div>
+        <div class="article-grid fade-in">
+          <!-- TODO: The articles block itself should optionally be isolated to loc.articles depending on structure. Keeping hardcoded for now, replacing readMore button. -->
+          <article class="article-card">
+            <div class="card-meta">
+              <span class="tag">深度解析</span>
+              <time datetime="2026-03-08">2026.03.08</time>
+            </div>
+            <h3>GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro：终极横评</h3>
+            <p>四大维度全面评测三大顶级模型的真实表现。</p>
+            <a href="/articles/model-comparison-2026/" class="card-link">Read More <span class="arrow">→</span></a>
+          </article>
+          <article class="article-card">
+            <div class="card-meta">
+              <span class="tag tag-amber">行业观察</span>
+              <time datetime="2026-03-08">2026.03-08</time>
+            </div>
+            <h3>2026 年 AI 大模型发展趋势</h3>
+            <p>从推理飞跃到 Agent 成熟的全景分析。</p>
+            <a href="/articles/ai-trends-2026/" class="card-link">Read More <span class="arrow">→</span></a>
+          </article>
+          <article class="article-card">
+            <div class="card-meta">
+              <span class="tag tag-rose">多模态</span>
+              <time datetime="2026-02-28">2026.02.28</time>
+            </div>
+            <h3>多模态大模型入门指南</h3>
+            <p>探索多模态模型的图文理解与应用案例。</p>
+            <a href="/articles/multimodal-guide/" class="card-link">Read More <span class="arrow">→</span></a>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+<script type="module" src="/src/assets/js/main.js"></script>
+</body>
+</html>

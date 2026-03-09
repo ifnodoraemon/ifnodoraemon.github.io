@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro — {{meta.siteName}}</title>
+  <meta name="description" content="A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.">
+  <meta name="keywords" content="Model Review,AI大模型,GPT-5.4,Claude 4.6,Gemini 3.1,model comparison 2026">
+  <meta name="author" content="ifnodoraemon">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ifnodoraemon.github.io/articles/model-comparison-2026/">
+  <meta name="theme-color" content="#06060b">
+
+  <!-- Open Graph / Article -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ifnodoraemon.github.io/articles/model-comparison-2026/">
+  <meta property="og:title" content="2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro — {{meta.siteName}}">
+  <meta property="og:description" content="A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.">
+  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:locale" content="{{#if isEn}}en_US{{else}}zh_CN{{/if}}">
+  <meta property="og:site_name" content="{{meta.siteName}}">
+  <meta property="article:published_time" content="2026-03-01">
+  <meta property="article:author" content="ifnodoraemon">
+  <meta property="article:section" content="Model Review">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro — {{meta.siteName}}">
+  <meta name="twitter:description" content="A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.">
+  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-5078775507335151">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-4WZN5Q7VS6');
+  </script>
+
+  <!-- Assets -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="/src/assets/css/style.css" as="style">
+  <link rel="stylesheet" href="/src/assets/css/style.css">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro",
+    "description": "A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.",
+    "datePublished": "2026-03-01",
+    "dateModified": "2026-03-01",
+    "image": "https://ifnodoraemon.github.io/og-image.png",
+    "author": {
+      "@type": "Person",
+      "name": "ifnodoraemon",
+      "url": "https://github.com/ifnodoraemon"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "大雄话AI",
+      "url": "https://ifnodoraemon.github.io"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ifnodoraemon.github.io/articles/model-comparison-2026/"
+    },
+    "articleSection": "Model Review"
+  }
+  </script>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <main class="page-main">
+    <article class="article-detail">
+      <div class="container">
+        <div class="article-detail-header fade-in">
+          <a href="/en/articles/" class="back-link">← Back to Articles</a>
+          <div class="card-meta">
+            <span class="tag tag-purple">Model Review</span>
+            <time datetime="2026-03-01">2026.03.01</time>
+          </div>
+          <h1>2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</h1>
+          <p class="article-detail-desc">A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.</p>
+        </div>
+        <div class="article-layout">
+          <!-- TOC Sidebar -->
+          <aside class="article-sidebar fade-in">
+            <div class="toc-container"><h4>Table of Contents</h4><ul class="article-toc-list">
+  <li class="toc-level-2"><a href="#model-version-timeline">Model Version Timeline</a></li>
+  <li class="toc-level-2"><a href="#core-metrics-comparison">Core Metrics Comparison</a></li>
+  <li class="toc-level-3"><a href="#basic-specifications">Basic Specifications</a></li>
+  <li class="toc-level-3"><a href="#api-pricing-per-1-million-tokens">API Pricing (per 1 Million tokens)</a></li>
+  <li class="toc-level-3"><a href="#reasoning-and-coding-benchmarks">Reasoning and Coding Benchmarks</a></li>
+  <li class="toc-level-2"><a href="#practical-usage-comparison">Practical Usage Comparison</a></li>
+  <li class="toc-level-3"><a href="#coding-capabilities">Coding Capabilities</a></li>
+  <li class="toc-level-3"><a href="#long-context-processing">Long Context Processing</a></li>
+  <li class="toc-level-3"><a href="#api-usage-examples">API Usage Examples</a></li>
+  <li class="toc-level-2"><a href="#selection-advice">Selection Advice</a></li>
+  <li class="toc-level-3"><a href="#recommended-by-scenario">Recommended by Scenario</a></li>
+  <li class="toc-level-3"><a href="#cost-optimization-strategies">Cost Optimization Strategies</a></li>
+  <li class="toc-level-2"><a href="#summary">Summary</a></li>
+</ul></div>
+          </aside>
+          
+          <!-- Main Content -->
+          <div class="article-detail-content fade-in">
+            <h2 id="model-version-timeline">Model Version Timeline</h2>
+<p>Before comparing, let&#39;s review the model release cadence of the top three vendors in 2025-2026:</p>
+<table>
+<thead>
+<tr>
+<th>Vendor</th>
+<th>Model</th>
+<th>Release Date</th>
+<th>Positioning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenAI</td>
+<td>GPT-5.0</td>
+<td>Aug 7, 2025</td>
+<td>First unified multimodal model</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT-5.1</td>
+<td>Nov 2025</td>
+<td>Stability and efficiency optimization</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT-5.3-Codex</td>
+<td>Feb 2026</td>
+<td>Dedicated coding model</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT-5.4 / 5.4 Thinking</td>
+<td>Mar 5, 2026</td>
+<td>Strongest frontier model + native computer use</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Claude Opus 4.0</td>
+<td>May 22, 2025</td>
+<td>Claude 4 series debut</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Claude Opus 4.5</td>
+<td>Nov 24, 2025</td>
+<td>Strongest in coding and Agents</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Claude Opus 4.6</td>
+<td>Feb 5, 2026</td>
+<td>Agent Teams + PPT capabilities</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Claude Sonnet 4.6</td>
+<td>Feb 17, 2026</td>
+<td>Opus-level performance at mid-range price</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>Gemini 3.0 Pro</td>
+<td>Nov 18, 2025</td>
+<td>Deep Think reasoning</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>Gemini 3.1 Pro</td>
+<td>Feb 19, 2026</td>
+<td>Million-token context enhancement</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Comparison Baseline</strong>: GPT-5.4 Thinking, Claude Sonnet 4.6 / Opus 4.6, Gemini 3.1 Pro (Latest versions as of March 2026)</p>
+</blockquote>
+<h2 id="core-metrics-comparison">Core Metrics Comparison</h2>
+<h3 id="basic-specifications">Basic Specifications</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>GPT-5.4</th>
+<th>Claude 4.6 Series</th>
+<th>Gemini 3.1 Pro</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Context</td>
+<td>1.05M tokens (922K in / 128K out)</td>
+<td>200K (Standard) / 1M (Beta)</td>
+<td>1M in / 64K out</td>
+</tr>
+<tr>
+<td>Thinking Mode</td>
+<td>Built-in + Extreme mode</td>
+<td>Extended / Adaptive Thinking</td>
+<td>Deep Think</td>
+</tr>
+<tr>
+<td>Multimodal</td>
+<td>Text / Image / Audio</td>
+<td>Text / Image / PDF</td>
+<td>Text / Image / Video / Audio</td>
+</tr>
+<tr>
+<td>Computer Control</td>
+<td>Native support (OSWorld 75%)</td>
+<td>Computer Use</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Knowledge Cutoff</td>
+<td>Aug 2025</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h3 id="api-pricing-per-1-million-tokens">API Pricing (per 1 Million tokens)</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Input Price</th>
+<th>Output Price</th>
+<th>Cached Input</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPT-5.4</td>
+<td>$2.50</td>
+<td>$15.00</td>
+<td>—</td>
+<td>Latest frontier model</td>
+</tr>
+<tr>
+<td>GPT-5</td>
+<td>$1.25</td>
+<td>$10.00</td>
+<td>$0.13</td>
+<td>Default ChatGPT model</td>
+</tr>
+<tr>
+<td>GPT-5-mini</td>
+<td>$0.25</td>
+<td>$2.00</td>
+<td>—</td>
+<td>Lightweight</td>
+</tr>
+<tr>
+<td>Claude Opus 4.6</td>
+<td>$15.00</td>
+<td>$75.00</td>
+<td>$1.50</td>
+<td>Flagship reasoning</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td>$3.00</td>
+<td>$15.00</td>
+<td>$0.30</td>
+<td>King of cost-effectiveness</td>
+</tr>
+<tr>
+<td>Gemini 3.1 Pro (≤200K)</td>
+<td>$2.00</td>
+<td>$12.00</td>
+<td>—</td>
+<td>Standard pricing</td>
+</tr>
+<tr>
+<td>Gemini 3.1 Pro (&gt;200K)</td>
+<td>$4.00</td>
+<td>$18.00</td>
+<td>—</td>
+<td>Long context</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Cost Tip</strong>: Claude supports Prompt Caching (up to 90% off) and Batch API (50% discount); Gemini Batch API also offers a 50% discount. GPT-5.4&#39;s Tool Search feature can cut token consumption by almost half.</p>
+</blockquote>
+<h3 id="reasoning-and-coding-benchmarks">Reasoning and Coding Benchmarks</h3>
+<p>Based on public benchmarks (March 2026 data):</p>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>GPT-5.4</th>
+<th>Claude Sonnet 4.6</th>
+<th>Gemini 3.1 Pro</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SimpleBench (Reasoning)</td>
+<td>90% (Beats human 83%)</td>
+<td>85.2%</td>
+<td>87.4%</td>
+</tr>
+<tr>
+<td>OSWorld-Verified (Computer Control)</td>
+<td>75.0% (Beats human)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>HumanEval (Code)</td>
+<td>93.8%</td>
+<td>95.2%</td>
+<td>91.6%</td>
+</tr>
+<tr>
+<td>SWE-bench Pro (Engineering)</td>
+<td>✅ Improved</td>
+<td>72.7% (Opus 4.6)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>MATH</td>
+<td>88.5%</td>
+<td>86.3%</td>
+<td>89.7%</td>
+</tr>
+</tbody></table>
+<p><strong>Key Findings</strong>:</p>
+<ul>
+<li><strong>GPT-5.4</strong> highlights: Native computer control + huge context + 33% fewer hallucinations.</li>
+<li><strong>Claude Series</strong>: Continues to lead in HumanEval coding and actual SWE-bench engineering tasks.</li>
+<li><strong>Gemini 3.1 Pro</strong>: Best performance in Deep Think math reasoning, native million-token context.</li>
+</ul>
+<h2 id="practical-usage-comparison">Practical Usage Comparison</h2>
+<h3 id="coding-capabilities">Coding Capabilities</h3>
+<pre><code class="language-python"># GPT-5.4: Built-in GPT-5.3-Codex coding capabilities + computer control
+# Can directly interpret screenshots, send keystrokes/mouse clicks, combined with Playwright for automation
+
+# Claude Sonnet 4.6: Widely recognized as #1 in code quality
+# Extended Thinking mode plans before coding, resulting in cleaner code
+# Opus 4.6 scores an industry-high 72.7% on SWE-bench real-world tasks
+
+# Gemini 3.1 Pro: Strongest grasp of massive codebases
+# Native 1M token context can ingest entire projects at once</code></pre>
+<h3 id="long-context-processing">Long Context Processing</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Best Choice</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Full books / Ultra-long docs</td>
+<td>GPT-5.4 / Gemini 3.1 Pro</td>
+<td>Both support million-level contexts</td>
+</tr>
+<tr>
+<td>Large codebase refactoring</td>
+<td>GPT-5.4 / Claude</td>
+<td>GPT has computer control, Claude has high code quality</td>
+</tr>
+<tr>
+<td>Mass PDF analysis</td>
+<td>Claude Sonnet 4.6</td>
+<td>Extended Thinking produces highly structured outputs</td>
+</tr>
+<tr>
+<td>Video understanding</td>
+<td>Gemini 3.1 Pro</td>
+<td>Native 1M context + video processing</td>
+</tr>
+</tbody></table>
+<h3 id="api-usage-examples">API Usage Examples</h3>
+<pre><code class="language-python"># OpenAI GPT-5.4
+from openai import OpenAI
+
+client = OpenAI()
+response = client.chat.completions.create(
+    model=&quot;gpt-5.4&quot;,  # or &quot;gpt-5.4-thinking&quot;
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain the fundamental principles of quantum computing.&quot;}],
+    max_tokens=4096,
+)</code></pre>
+<pre><code class="language-python"># Anthropic Claude Sonnet 4.6
+import anthropic
+
+client = anthropic.Anthropic()
+response = client.messages.create(
+    model=&quot;claude-sonnet-4-6-20260217&quot;,
+    max_tokens=4096,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain the fundamental principles of quantum computing.&quot;}],
+)</code></pre>
+<pre><code class="language-python"># Google Gemini 3.1 Pro
+import google.generativeai as genai
+
+model = genai.GenerativeModel(&quot;gemini-3.1-pro&quot;)
+response = model.generate_content(&quot;Explain the fundamental principles of quantum computing.&quot;)</code></pre>
+<h2 id="selection-advice">Selection Advice</h2>
+<h3 id="recommended-by-scenario">Recommended by Scenario</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Recommended Model</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Daily coding assistant</td>
+<td>Claude Sonnet 4.6</td>
+<td>Leading code quality + highly cost-effective ($3/$15)</td>
+</tr>
+<tr>
+<td>Computer automation</td>
+<td>GPT-5.4 Thinking</td>
+<td>Only model with native computer control</td>
+</tr>
+<tr>
+<td>Long docs / Knowledge base</td>
+<td>Gemini 3.1 Pro</td>
+<td>Native 1M context + lowest price</td>
+</tr>
+<tr>
+<td>Complex reasoning / Math</td>
+<td>Gemini 3.1 Pro (Deep Think)</td>
+<td>Best math benchmarks</td>
+</tr>
+<tr>
+<td>Agents / Automation</td>
+<td>Claude Opus 4.6</td>
+<td>Agent Teams + strongest tool calling</td>
+</tr>
+<tr>
+<td>Budget sensitive</td>
+<td>GPT-5-mini</td>
+<td>Extremely low cost ($0.25/$2.00)</td>
+</tr>
+<tr>
+<td>Factual accuracy</td>
+<td>GPT-5.4</td>
+<td>33% fewer hallucinations than GPT-5.2</td>
+</tr>
+</tbody></table>
+<h3 id="cost-optimization-strategies">Cost Optimization Strategies</h3>
+<ol>
+<li><strong>Tiered Routing</strong>: Route simple tasks to GPT-5-mini ($0.25/M), and complex ones to Claude / GPT-5.4.</li>
+<li><strong>Prompt Caching</strong>: Enable caching for Claude; repeating prefixes saves up to 90%.</li>
+<li><strong>Batch API</strong>: Use batch processing for non-real-time tasks; both Claude and Gemini offer a 50% discount.</li>
+<li><strong>Tool Search</strong>: The Tool Search feature in the GPT-5.4 API reduces token consumption by nearly 50%.</li>
+<li><strong>Long Context Optimization</strong>: For tasks &gt;200K tokens, prefer Gemini (no tiered pricing bumps) or GPT-5.4 (native 1M).</li>
+</ol>
+<h2 id="summary">Summary</h2>
+<p>The foundation model landscape in March 2026:</p>
+<ul>
+<li><strong>GPT-5.4</strong>: The All-Rounder — Million context + computer control + low hallucinations, but priciest.</li>
+<li><strong>Claude 4.6</strong>: The Code God — Unrivaled in code quality &amp; Agent capabilities; Sonnet offers incredible value.</li>
+<li><strong>Gemini 3.1 Pro</strong>: The Context King — Native million context + Deep Think math reasoning, most budget-friendly.</li>
+</ul>
+<p>Best Practice: <strong>Combine them based on task characteristics</strong> — GPT-5-mini for simple tasks, Claude Sonnet 4.6 for coding/reasoning, Gemini 3.1 Pro for long documents, and GPT-5.4 for complex automation requiring computer control.</p>
+
+            
+            <!-- Giscus Comments -->
+            <div class="giscus-container">
+              <script src="https://giscus.app/client.js"
+                data-repo="ifnodoraemon/ifnodoraemon.github.io"
+                data-repo-id="R_kgDON7u7iA"
+                data-category="Announcements"
+                data-category-id="DIC_kwDON7u7iM4CnKDE"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+              </script>
+            </div>
+          </div>
+        </div>
+        <div class="article-nav fade-in">
+          <a href="/en/articles/" class="btn-ghost">← Back to Articles</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/assets/js/main.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#0a0a1a',
+        mainBkg: '#1a1a2e',
+        nodeBorder: '#6366f1',
+        clusterBkg: 'rgba(99,102,241,0.06)',
+        clusterBorder: 'rgba(99,102,241,0.2)',
+        titleColor: '#a5b4fc',
+        nodeTextColor: '#e2e8f0',
+        primaryColor: '#1e1e3a',
+        primaryTextColor: '#e2e8f0',
+        primaryBorderColor: '#6366f1',
+        lineColor: '#818cf8',
+        secondaryColor: '#1a1a2e',
+        tertiaryColor: '#1a1a2e',
+        fontFamily: 'Inter, Noto Sans SC, sans-serif',
+        fontSize: '14px',
+      }
+    });
+  </script>
+</body>
+</html>

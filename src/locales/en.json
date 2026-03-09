@@ -1,0 +1,326 @@
+{
+  "meta": {
+    "siteName": "Nobita Talks AI",
+    "home": {
+      "title": "Nobita Talks AI — Frontier Tech Insights & Engineering Practices",
+      "desc": "Focusing on AI foundation models research and practice, providing frontier tech insights and exclusive engineering notes on GPT-5.4, Claude 4.6, and Gemini 3.1."
+    },
+    "models": {
+      "title": "Model Database — Nobita Talks AI",
+      "desc": "A comprehensive comparison of state-of-the-art AI foundation models, including benchmark evaluations and use-case analysis for GPT-5.4, Claude 4.6, and Gemini 3.1."
+    },
+    "projects": {
+      "title": "Experiments & Lab — Nobita Talks AI",
+      "desc": "Innovative experimental projects and open-source tool demonstrations built on top-tier LLMs."
+    },
+    "about": {
+      "title": "About This Node — Nobita Talks AI",
+      "desc": "The origin, goals, and technical details behind this site."
+    }
+  },
+  "models": {
+    "heroTag": "MODEL DATABASE",
+    "heroTitle": "Model Database",
+    "heroDesc": "Tracking the parameters, capability boundaries, and use cases of cutting-edge AI systems, providing neutral benchmark data.",
+    "tableTitle": "Top-Tier LLM Capability Matrix",
+    "tableSubtitle": "Benchmarks based on the latest 2026 architectures",
+    "tableHeaders": [
+      "Dimension",
+      "GPT-5.4",
+      "Claude Sonnet 4.6",
+      "Gemini 3.1 Pro"
+    ],
+    "tableRows": [
+      [
+        "Vendor",
+        "OpenAI",
+        "Anthropic",
+        "Google DeepMind"
+      ],
+      [
+        "Release Date",
+        "2026.03.05",
+        "2026.02.17",
+        "2026.02.19"
+      ],
+      [
+        "Context",
+        "256K",
+        "1M (Beta)",
+        "2M"
+      ],
+      [
+        "Native Multimodal",
+        "Text/Image/Audio",
+        "Text/Image",
+        "Omnimodal"
+      ],
+      [
+        "Coding",
+        "★★★★★",
+        "★★★★★",
+        "★★★★★"
+      ],
+      [
+        "Reasoning Depth",
+        "★★★★★",
+        "★★★★★",
+        "★★★★★"
+      ],
+      [
+        "Agentic Logic",
+        "★★★★☆",
+        "★★★★★",
+        "★★★★☆"
+      ],
+      [
+        "Speed",
+        "★★★★☆",
+        "★★★★★",
+        "★★★★★"
+      ],
+      [
+        "Cost-Effectiveness",
+        "★★★★☆",
+        "★★★☆☆",
+        "★★★★★"
+      ]
+    ],
+    "sceneTitle": "Recommendations",
+    "sceneSubtitle": "Pick the right model according to your specific needs",
+    "scenes": [
+      {
+        "title": "Coding & Dev",
+        "desc": "Require code generation, refactoring, debugging, or dev assistance",
+        "badge": "Top Pick",
+        "reason": "GPT-5.4 integrates Codex engine, whilst Claude offers top coding accuracy"
+      },
+      {
+        "title": "Agent Workflows",
+        "desc": "Build autonomous, multi-step intelligent agent systems",
+        "badge": "Strongest",
+        "reason": "Industry-leading Agentic capabilities and Computer Use"
+      },
+      {
+        "title": "Long Document Analysis",
+        "desc": "Need to process ultra-long texts, full codebases, or massive data",
+        "badge": "Recommended",
+        "reason": "2M Context Window, the longest in the industry"
+      },
+      {
+        "title": "Multimodal Tasks",
+        "desc": "Need image understanding, video analysis, or audio processing",
+        "badge": "All-Rounder",
+        "reason": "Native support for text/image/audio/video/code"
+      },
+      {
+        "title": "Complex Reasoning",
+        "desc": "Math proofs, logic analysis, complex planning tasks",
+        "badge": "Extreme",
+        "reason": "Thinking mode reveals complete reasoning steps, 94.7% accuracy"
+      },
+      {
+        "title": "Cost-Sensitive",
+        "desc": "High-volume API usage, budget-limited production environments",
+        "badge": "Economic",
+        "reason": "Highest cost-effectiveness + flexible Thinking Levels control"
+      }
+    ],
+    "details": [
+      {
+        "id": "gpt",
+        "icon": "🧠",
+        "name": "GPT-5.4",
+        "meta": "OpenAI · Released 2026.03.05",
+        "desc": "GPT-5.4 is OpenAI's latest flagship model, featuring standard, <strong>GPT-5.4 Thinking</strong> (deep reasoning), and <strong>GPT-5.4 Pro</strong> (highest performance API) variants. It integrates the Codex programming edge and supports Computer Use, excelling in coding, reasoning, and professional workflows.",
+        "specs": [
+          {
+            "label": "Context Window",
+            "value": "256K tokens"
+          },
+          {
+            "label": "Multimodal Support",
+            "value": "Text / Image / Audio"
+          },
+          {
+            "label": "Core Strengths",
+            "value": "Thinking Reasoning · Computer Use · Codex Integration"
+          },
+          {
+            "label": "API Pricing",
+            "value": "$2.50 / 1M input · $10.00 / 1M output"
+          },
+          {
+            "label": "Use Cases",
+            "value": "Complex Reasoning · Code Gen · Planning Tasks · Pro Workflows"
+          }
+        ]
+      },
+      {
+        "id": "claude",
+        "icon": "🎭",
+        "name": "Claude Sonnet 4.6",
+        "meta": "Anthropic · Released 2026.02.17",
+        "desc": "Claude Sonnet 4.6 strikes a perfect balance between speed and intelligence, making it the best choice for daily tasks. Its enhanced coding capabilities and Computer Use make it a developer favorite. The sibling <strong>Claude Opus 4.6</strong> (2026.02.05) is Anthropic's most powerful model, specializing in complex Agent tasks and long-term planning.",
+        "specs": [
+          {
+            "label": "Context Window",
+            "value": "1M tokens (Beta)"
+          },
+          {
+            "label": "Multimodal Support",
+            "value": "Text / Image / Visual Reasoning"
+          },
+          {
+            "label": "Core Strengths",
+            "value": "Computer Use · Agentic Logic · Code Precision · Safety Alignment"
+          },
+          {
+            "label": "API Pricing",
+            "value": "$3.00 / 1M input · $15.00 / 1M output"
+          },
+          {
+            "label": "Use Cases",
+            "value": "Agentic Workflows · Large Codebases · Long Document Analysis · Safety-Sensitive Scenarios"
+          }
+        ]
+      },
+      {
+        "id": "gemini",
+        "icon": "✨",
+        "name": "Gemini 3.1 Pro",
+        "meta": "Google DeepMind · Released 2026.02.19",
+        "desc": "Gemini 3.1 Pro is Google's latest complex-problem-solving model, natively supporting text, image, audio, video, and code multimodal reasoning. It boasts the industry's largest 2M context window. Its sibling <strong>Gemini 3.1 Flash-Lite</strong> (2026.03.03) introduces the innovative Thinking Levels mechanism, allowing developers to adjust reasoning depth.",
+        "specs": [
+          {
+            "label": "Context Window",
+            "value": "2M tokens"
+          },
+          {
+            "label": "Multimodal Support",
+            "value": "Text / Image / Audio / Video / Code (Omnimodal)"
+          },
+          {
+            "label": "Core Strengths",
+            "value": "Ultra-Long Context · Thinking Levels · Native Omnimodal · Search Integration"
+          },
+          {
+            "label": "API Pricing",
+            "value": "$1.25 / 1M input · $5.00 / 1M output"
+          },
+          {
+            "label": "Use Cases",
+            "value": "Ultra-Long Document Parsing · Video Analysis · Multimodal Chat · Enterprise Search Enhancement"
+          }
+        ]
+      }
+    ],
+    "timelineTag": "TIMELINE",
+    "timelineTitle": "2026 Model Release Timeline",
+    "timeline": [
+      {
+        "date": "2026.02.05",
+        "name": "Claude Opus 4.6",
+        "desc": "Anthropic's most powerful reasoning model, tailored for complex Agent tasks",
+        "latest": false
+      },
+      {
+        "date": "2026.02.17",
+        "name": "Claude Sonnet 4.6",
+        "desc": "Balance of speed and intelligence, 1M context window Beta",
+        "latest": false
+      },
+      {
+        "date": "2026.02.19",
+        "name": "Gemini 3.1 Pro",
+        "desc": "2M context, native omnimodal support",
+        "latest": false
+      },
+      {
+        "date": "2026.02.26",
+        "name": "Nano Banana 2",
+        "desc": "Gemini 3.1 series AI image generator update",
+        "latest": false
+      },
+      {
+        "date": "2026.03.03",
+        "name": "Gemini 3.1 Flash-Lite",
+        "desc": "Most cost-effective reasoning model, Thinking Levels mechanism",
+        "latest": false
+      },
+      {
+        "date": "2026.03.05",
+        "name": "GPT-5.4",
+        "desc": "Three variants released: Standard/Thinking/Pro, Computer Use",
+        "latest": true
+      }
+    ],
+    "relatedTitle": "Related Articles",
+    "readMore": "Read More"
+  },
+  "projects": {
+    "heroTag": "EXPERIMENTS & LAB",
+    "heroTitle": "Experiments",
+    "heroDesc": "Exploring the capability boundaries of large language models, building experimental tools and Agent application demos.",
+    "comingSoon": "New projects are brewing",
+    "comingDesc": "Currently developing a multi-agent orchestrated workflow automation platform. Stay tuned for open-source releases and online demos.",
+    "btnGithub": "Follow my GitHub",
+    "p1_title": "Nobita Talks AI",
+    "p1_desc": "The open-source code for this site, based on a minimalist SSG approach, supporting Markdown rendering, bilingual interface, and responsive sci-fi UI.",
+    "btn_source": "Source Code",
+    "p2_title": "Awesome-Agent-Prompts",
+    "p2_desc": "A repository of carefully collected and tested LLM Agent system prompts, covering reflection, planning, tool usage, and other chains of thought.",
+    "btn_demo": "[Demo] View Repo",
+    "p3_title": "RAG-Lite",
+    "p3_desc": "A minimalist Retrieval-Augmented Generation (RAG) local testing tool, supporting instant vectorization and chat with local PDF files."
+  },
+  "about": {
+    "heroTag": "ABOUT THE NODE",
+    "heroTitle": "About",
+    "heroDesc": "A technical experimental node observing AI evolution",
+    "p1": "This is my personal space for tracking frontier AI tech, summarizing engineering practices, and sharing learnings. On the eve of AGI, maintaining technical sensitivity is more important than ever.",
+    "p2": "This site primarily covers:",
+    "li1": "Capability benchmarks and comparisons of mainstream Foundation Models",
+    "li2": "Architectural discussions on AI Agents and automated workflows",
+    "li3": "Best practices for RAG, Vector DBs, and long-context optimization",
+    "li4": "Advanced applications of Prompt Engineering",
+    "p3": "All content and projects are continuously iterating. You can find me or follow the project updates via the links below.",
+    "contactBtn": "View GitHub",
+    "emailBtn": "Send Email"
+  },
+  "home": {
+    "heroSystem": "SYSTEM ONLINE",
+    "heroTitle": "Exploring the <span class=\"gradient-text glow\">LLM</span> Frontier<span class=\"caret-blink\"></span>",
+    "heroDesc": "Frontier tech insights and engineering notes on GPT-5.4, Claude 4.6, and Gemini 3.1",
+    "btnArticles": "Read Articles",
+    "btnAbout": "More Nodes",
+    "metric1Val": "6",
+    "metric1Label": "CORE TOPICS",
+    "metric2Val": "LLM",
+    "metric2Label": "TECH DOMAIN",
+    "metric3Val": "V. 26",
+    "metric3Label": "ITERATION",
+    "featuredTag": "FEATURED",
+    "featuredTitle": "Editor's Picks",
+    "featuredDesc": "Curated in-depth articles",
+    "latestTag": "LATEST POSTS",
+    "latestTitle": "Latest Posts",
+    "latestDesc": "Explore the latest trends and deep analysis in AI tech",
+    "readMore": "Read Full Article",
+    "viewAll": "View All Articles →",
+    "modelsTag": "MODEL COMPARISON",
+    "modelsTitle": "Model Comparison",
+    "modelsDesc": "A panoramic view of the capabilities of the top 3 AI models",
+    "topicsTag": "TECH DOMAINS",
+    "topicsTitle": "Explore Topics",
+    "topicsDesc": "Browse articles by technical domains",
+    "newsletterTitle": "Subscribe for AI Frontiers",
+    "newsletterDesc": "Curated technological breakthroughs, practical cases, and industry insights in the field of large models every week, straight to your inbox.",
+    "newsletterPlaceholder": "Enter your email address",
+    "newsletterBtn": "Subscribe",
+    "newsletterNote": "🔒 We respect your privacy, unsubscribe at any time",
+    "aboutTag": "// ABOUT",
+    "aboutTitle": "About Us",
+    "aboutDesc": "Dedicated to technical research and practical sharing in the field of AI large models.<br>Recording the development context of frontier technologies and exploring the application boundaries of artificial intelligence."
+  }
+}

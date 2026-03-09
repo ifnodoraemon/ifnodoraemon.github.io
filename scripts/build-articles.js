@@ -17,6 +17,9 @@ import matter from 'gray-matter';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
+const zhLocales = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'locales', 'zh.json'), 'utf-8'));
+const enLocales = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'locales', 'en.json'), 'utf-8'));
+
 // ── Configure marked ──
 marked.setOptions({
   gfm: true,
@@ -62,23 +65,25 @@ function escapeHtml(str) {
 }
 
 // ── Read template ──
-const templatePath = path.join(ROOT, 'templates', 'article.html');
+const templatePath = path.join(ROOT, 'src', 'templates', 'article.html');
 const template = fs.readFileSync(templatePath, 'utf-8');
 
 // ── Read all markdown files ──
-const contentDir = path.join(ROOT, 'content', 'articles');
-const mdFiles = fs.readdirSync(contentDir).filter(f => f.endsWith('.md'));
+const contentDirZh = path.join(ROOT, 'content', 'zh', 'articles');
+const contentDirEn = path.join(ROOT, 'content', 'en', 'articles');
+
+const mdFilesZh = fs.existsSync(contentDirZh) ? fs.readdirSync(contentDirZh).filter(f => f.endsWith('.md')) : [];
+const mdFilesEn = fs.existsSync(contentDirEn) ? fs.readdirSync(contentDirEn).filter(f => f.endsWith('.md')) : [];
+const mdFiles = [...mdFilesZh.map(f => ({file: f, isEn: false, dir: contentDirZh})), ...mdFilesEn.map(f => ({file: f, isEn: true, dir: contentDirEn}))];
 
 console.log(`📝 Found ${mdFiles.length} articles\n`);
 
 const articles = [];
 const articlesEn = [];
 
-for (const file of mdFiles) {
-  const raw = fs.readFileSync(path.join(contentDir, file), 'utf-8');
+for (const {file, isEn, dir} of mdFiles) {
+  const raw = fs.readFileSync(path.join(dir, file), 'utf-8');
   const { data: fm, content: mdContent } = matter(raw);
-
-  const isEn = file.endsWith('.en.md');
 
   // Validate frontmatter
   if (!fm.title || !fm.slug || !fm.date || !fm.tag || !fm.description) {
@@ -134,7 +139,8 @@ for (const file of mdFiles) {
     .replace(/\{\{return_text\}\}/g, isEn ? '← Back to Articles' : '← 返回文章列表');
 
   // Write output
-  const outDirBase = isEn ? path.join(ROOT, 'en', 'articles', fm.slug) : path.join(ROOT, 'articles', fm.slug);
+  const BUILD_OUT_DIR = path.join(ROOT, '.temp_build');
+  const outDirBase = isEn ? path.join(BUILD_OUT_DIR, 'en', 'articles', fm.slug) : path.join(BUILD_OUT_DIR, 'articles', fm.slug);
   fs.mkdirSync(outDirBase, { recursive: true });
   fs.writeFileSync(path.join(outDirBase, 'index.html'), html, 'utf-8');
   
@@ -142,7 +148,8 @@ for (const file of mdFiles) {
     ...fm,
     isoDate,
     dateFormatted,
-    isEn
+    isEn,
+    meta: isEn ? enLocales.meta : zhLocales.meta
   };
   
   if (isEn) {
@@ -239,7 +246,7 @@ function generateListingPage(articles, isEn = false) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/src/assets/css/style.css">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -276,7 +283,7 @@ ${listItems}
       </div>
     </section>
   </main>
-  <script type="module" src="/main.js"></script>
+  <script type="module" src="/src/assets/js/main.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const btns = document.querySelectorAll('.filter-btn');
@@ -296,7 +303,8 @@ ${listItems}
 </body>
 </html>`;
 
-  const outDir = isEn ? path.join(ROOT, 'en', 'articles') : path.join(ROOT, 'articles');
+  const BUILD_OUT_DIR = path.join(ROOT, '.temp_build');
+  const outDir = isEn ? path.join(BUILD_OUT_DIR, 'en', 'articles') : path.join(BUILD_OUT_DIR, 'articles');
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(path.join(outDir, 'index.html'), html, 'utf-8');
   console.log(`  ✓ ${isEn ? 'en/' : ''}articles/index.html (listing page)`);
@@ -343,7 +351,9 @@ function generateSitemap(articles) {
 
   xml += `</urlset>\n`;
 
-  fs.writeFileSync(path.join(ROOT, 'public', 'sitemap.xml'), xml, 'utf-8');
+  const BUILD_OUT_DIR = path.join(ROOT, '.temp_build');
+  fs.mkdirSync(path.join(BUILD_OUT_DIR, 'public'), { recursive: true });
+  fs.writeFileSync(path.join(BUILD_OUT_DIR, 'public', 'sitemap.xml'), xml, 'utf-8');
   console.log(`  ✓ public/sitemap.xml (${staticPages.length + articles.length} URLs)`);
 }
 
@@ -353,13 +363,14 @@ function generateSitemap(articles) {
 function generateRssFeed(articles, isEn = false) {
   if (articles.length === 0 && isEn) return;
   const feedPath = isEn ? '/en/feed.xml' : '/feed.xml';
-  const outPath = isEn ? path.join(ROOT, 'public', 'en', 'feed.xml') : path.join(ROOT, 'public', 'feed.xml');
+  const BUILD_OUT_DIR = path.join(ROOT, '.temp_build');
+  const outPath = isEn ? path.join(BUILD_OUT_DIR, 'public', 'en', 'feed.xml') : path.join(BUILD_OUT_DIR, 'public', 'feed.xml');
   const title = isEn ? 'AI Tech Observer' : 'AI 大模型观察';
   const desc = isEn ? 'Focusing on AI foundation models and tech insights' : '专注 AI 大模型技术研究与实践的技术博客';
   const lang = isEn ? 'en' : 'zh-CN';
   const pubDate = new Date().toUTCString();
   
-  if (isEn) fs.mkdirSync(path.join(ROOT, 'public', 'en'), { recursive: true });
+  fs.mkdirSync(path.join(BUILD_OUT_DIR, 'public', isEn ? 'en' : ''), { recursive: true });
 
   let xml = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">

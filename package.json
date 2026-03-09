@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "articles": "node scripts/build-articles.js",
-    "dev": "node scripts/build-articles.js && vite",
-    "build": "node scripts/build-articles.js && vite build",
+    "pages": "node scripts/build-pages.js",
+    "dev": "npm run pages && npm run articles && vite",
+    "build": "npm run pages && npm run articles && vite build",
     "preview": "vite preview"
   },
   "keywords": [],
@@ -17,5 +18,8 @@
     "gray-matter": "^4.0.3",
     "marked": "^17.0.4",
     "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.8"
   }
 }

@@ -1,0 +1,326 @@
+{
+  "meta": {
+    "siteName": "大雄话AI",
+    "home": {
+      "title": "大雄话AI — GPT-5.4 · Claude 4.6 · Gemini 3.1 技术博客",
+      "desc": "专注 AI 大模型技术研究与实践，覆盖 GPT-5.4、Claude 4.6、Gemini 3.1 Pro，分享提示工程、AI Agent、RAG 应用等实战经验。"
+    },
+    "models": {
+      "title": "全景模型库 — 大雄话AI",
+      "desc": "全面对比当前最先进的 AI 大模型，包括 GPT-5.4、Claude 4.6 和 Gemini 3.1 的横向评测与适用场景分析。"
+    },
+    "projects": {
+      "title": "实验项目 — 大雄话AI",
+      "desc": "基于各大顶级模型开发的创新实验项目与开源工具演示。"
+    },
+    "about": {
+      "title": "关于节点 — 大雄话AI",
+      "desc": "关于此站点的缘起、目标以及背后运行的技术细节。"
+    }
+  },
+  "models": {
+    "heroTag": "MODEL DATABASE",
+    "heroTitle": "全景模型库",
+    "heroDesc": "追踪最先进 AI 系统的参数、能力边界与应用场景，提供中立的横向评测数据。",
+    "tableTitle": "顶级大模型能力矩阵表",
+    "tableSubtitle": "基于 2026 年最新架构的标杆模型横评",
+    "tableHeaders": [
+      "维度",
+      "GPT-5.4",
+      "Claude Sonnet 4.6",
+      "Gemini 3.1 Pro"
+    ],
+    "tableRows": [
+      [
+        "厂商",
+        "OpenAI",
+        "Anthropic",
+        "Google DeepMind"
+      ],
+      [
+        "发布日期",
+        "2026.03.05",
+        "2026.02.17",
+        "2026.02.19"
+      ],
+      [
+        "上下文",
+        "256K",
+        "1M (Beta)",
+        "2M"
+      ],
+      [
+        "原生多模态",
+        "文本/图像/音频",
+        "文本/图像",
+        "全模态"
+      ],
+      [
+        "代码能力",
+        "★★★★★",
+        "★★★★★",
+        "★★★★★"
+      ],
+      [
+        "推理深度",
+        "★★★★★",
+        "★★★★★",
+        "★★★★★"
+      ],
+      [
+        "Agent 能力",
+        "★★★★☆",
+        "★★★★★",
+        "★★★★☆"
+      ],
+      [
+        "速度",
+        "★★★★☆",
+        "★★★★★",
+        "★★★★★"
+      ],
+      [
+        "性价比",
+        "★★★★☆",
+        "★★★☆☆",
+        "★★★★★"
+      ]
+    ],
+    "sceneTitle": "场景推荐",
+    "sceneSubtitle": "根据你的具体需求选择最合适的模型",
+    "scenes": [
+      {
+        "title": "代码开发",
+        "desc": "需要代码生成、重构、调试或开发辅助",
+        "badge": "首选",
+        "reason": "GPT-5.4 集成 Codex 编程引擎，Claude 在代码精度上顶尖"
+      },
+      {
+        "title": "Agent 工作流",
+        "desc": "构建自主决策、多步执行的智能代理系统",
+        "badge": "最强",
+        "reason": "业界最强的 Agentic 能力和 Computer Use"
+      },
+      {
+        "title": "长文档分析",
+        "desc": "需要处理超长文本、完整代码库或大量数据",
+        "badge": "推荐",
+        "reason": "2M 上下文窗口，业界最长"
+      },
+      {
+        "title": "多模态任务",
+        "desc": "需要图像理解、视频分析或音频处理",
+        "badge": "全能",
+        "reason": "原生支持文本/图像/音频/视频/代码五模态"
+      },
+      {
+        "title": "复杂推理",
+        "desc": "数学证明、逻辑分析、复杂规划任务",
+        "badge": "极限",
+        "reason": "Thinking 模式展示完整推理链，准确率 94.7%"
+      },
+      {
+        "title": "成本敏感",
+        "desc": "高调用量、预算有限的生产环境",
+        "badge": "经济",
+        "reason": "最优性价比 + Thinking Levels 灵活控制"
+      }
+    ],
+    "details": [
+      {
+        "id": "gpt",
+        "icon": "🧠",
+        "name": "GPT-5.4",
+        "meta": "OpenAI · 发布于 2026.03.05",
+        "desc": "GPT-5.4 是 OpenAI 最新旗舰模型，包含标准版、<strong>GPT-5.4 Thinking</strong>（侧重深度推理）和 <strong>GPT-5.4 Pro</strong>（API 最高性能版）三个变体。整合了 GPT-5.3-Codex 的编程优势，支持 Computer Use 操作，在编程、推理和专业工作流方面表现卓越。",
+        "specs": [
+          {
+            "label": "上下文窗口",
+            "value": "256K tokens"
+          },
+          {
+            "label": "多模态支持",
+            "value": "文本 / 图像 / 音频"
+          },
+          {
+            "label": "核心优势",
+            "value": "Thinking 推理 · Computer Use · Codex 集成"
+          },
+          {
+            "label": "API 定价",
+            "value": "$2.50 / 1M input · $10.00 / 1M output"
+          },
+          {
+            "label": "适用场景",
+            "value": "复杂推理 · 代码生成 · 规划任务 · 专业工作流"
+          }
+        ]
+      },
+      {
+        "id": "claude",
+        "icon": "🎭",
+        "name": "Claude Sonnet 4.6",
+        "meta": "Anthropic · 发布于 2026.02.17",
+        "desc": "Claude Sonnet 4.6 在速度与智能之间取得了绝佳平衡，是日常任务的最优选择。增强的编程能力和 Computer Use 功能使其成为开发者首选。同系列的 <strong>Claude Opus 4.6</strong>（2026.02.05）则是 Anthropic 最强大的模型，专攻复杂 Agent 任务和长期规划。",
+        "specs": [
+          {
+            "label": "上下文窗口",
+            "value": "1M tokens (Beta)"
+          },
+          {
+            "label": "多模态支持",
+            "value": "文本 / 图像 / 视觉推理"
+          },
+          {
+            "label": "核心优势",
+            "value": "Computer Use · Agentic 能力 · 代码精度 · 安全对齐"
+          },
+          {
+            "label": "API 定价",
+            "value": "$3.00 / 1M input · $15.00 / 1M output"
+          },
+          {
+            "label": "适用场景",
+            "value": "Agentic 工作流 · 大规模代码库 · 长文档分析 · 安全敏感场景"
+          }
+        ]
+      },
+      {
+        "id": "gemini",
+        "icon": "✨",
+        "name": "Gemini 3.1 Pro",
+        "meta": "Google DeepMind · 发布于 2026.02.19",
+        "desc": "Gemini 3.1 Pro 是 Google 最新的复杂问题解决模型，原生支持文本、图像、音频、视频和代码等多模态推理。拥有业界最大的 2M 上下文窗口，同系列的 <strong>Gemini 3.1 Flash-Lite</strong>（2026.03.03）引入了创新的 Thinking Levels 机制，允许开发者调节推理深度。",
+        "specs": [
+          {
+            "label": "上下文窗口",
+            "value": "2M tokens"
+          },
+          {
+            "label": "多模态支持",
+            "value": "文本 / 图像 / 音频 / 视频 / 代码（全模态）"
+          },
+          {
+            "label": "核心优势",
+            "value": "超长上下文 · Thinking Levels · 全模态原生 · 搜索整合"
+          },
+          {
+            "label": "API 定价",
+            "value": "$1.25 / 1M input · $5.00 / 1M output"
+          },
+          {
+            "label": "适用场景",
+            "value": "超长文档处理 · 视频分析 · 多模态对话 · 企业搜索增强"
+          }
+        ]
+      }
+    ],
+    "timelineTag": "TIMELINE",
+    "timelineTitle": "2026 模型发布时间线",
+    "timeline": [
+      {
+        "date": "2026.02.05",
+        "name": "Claude Opus 4.6",
+        "desc": "Anthropic 最强大的推理模型，专攻复杂 Agent 任务",
+        "latest": false
+      },
+      {
+        "date": "2026.02.17",
+        "name": "Claude Sonnet 4.6",
+        "desc": "速度与智能的平衡，1M 上下文窗口 Beta",
+        "latest": false
+      },
+      {
+        "date": "2026.02.19",
+        "name": "Gemini 3.1 Pro",
+        "desc": "2M 上下文，全模态原生支持",
+        "latest": false
+      },
+      {
+        "date": "2026.02.26",
+        "name": "Nano Banana 2",
+        "desc": "Gemini 3.1 系列AI 图像生成器更新",
+        "latest": false
+      },
+      {
+        "date": "2026.03.03",
+        "name": "Gemini 3.1 Flash-Lite",
+        "desc": "最具性价比的推理模型，Thinking Levels 机制",
+        "latest": false
+      },
+      {
+        "date": "2026.03.05",
+        "name": "GPT-5.4",
+        "desc": "三变体发布：标准/Thinking/Pro，Computer Use",
+        "latest": true
+      }
+    ],
+    "relatedTitle": "相关文章",
+    "readMore": "阅读全文"
+  },
+  "projects": {
+    "heroTag": "EXPERIMENTS & LAB",
+    "heroTitle": "实验项目",
+    "heroDesc": "探索大型语言模型的边界能力，构建实验性工具与 Agent 应用演示。",
+    "comingSoon": "新项目正在构建中",
+    "comingDesc": "正在开发基于多 Agent 协同的工作流自动化平台。敬请期待后续开源发布与在线 Demo。",
+    "btnGithub": "关注我的 GitHub",
+    "p1_title": "Nobita Talks AI",
+    "p1_desc": "本站的开源源码，基于极简静态站点生成方案，支持 Markdown 渲染、中英双语和响应式科幻 UI。",
+    "btn_source": "Source Code",
+    "p2_title": "Awesome-Agent-Prompts",
+    "p2_desc": "精心收集并测试的大模型 Agent 系统提示词仓库，涵盖反思、规划、工具调用等多种思维链路。",
+    "btn_demo": "[Demo] View Repo",
+    "p3_title": "RAG-Lite",
+    "p3_desc": "一个极简的检索增强生成(RAG)本地测试工具，支持将本地 PDF 即时向量化并对话。"
+  },
+  "about": {
+    "heroTag": "ABOUT THE NODE",
+    "heroTitle": "关于",
+    "heroDesc": "一个观察 AI 演进的技术实验节点",
+    "p1": "这里是我跟踪 AI 前沿技术、沉淀工程实践和分享学习心得的个人自留地。在通用人工智能（AGI）加速到来的前沿，保持技术敏感度比以往任何时候都更加重要。",
+    "p2": "本站内容主要涵盖：",
+    "li1": "主流 Foundation Models 的能力评测与对比",
+    "li2": "AI Agent 和自动化工作流的架构探讨",
+    "li3": "RAG、Vector DB 与长上下文优化的最佳实践",
+    "li4": "提示工程（Prompt Engineering）的高阶应用",
+    "p3": "目前所有的内容和项目都在持续迭代中。你可以通过以下方式找到我或者关注项目的更新进度。",
+    "contactBtn": "查看 GitHub",
+    "emailBtn": "发送邮件"
+  },
+  "home": {
+    "heroSystem": "系统在线",
+    "heroTitle": "深入<span class=\"gradient-text glow\">大模型</span>世界<span class=\"caret-blink\"></span>",
+    "heroDesc": "关于 GPT-5.4、Claude 4.6、Gemini 3.1 的前沿技术洞察与实战工程笔记",
+    "btnArticles": "浏览深度文章",
+    "btnAbout": "了解更多节点",
+    "metric1Val": "6",
+    "metric1Label": "核心主题",
+    "metric2Val": "LLM",
+    "metric2Label": "技术领域",
+    "metric3Val": "V. 26",
+    "metric3Label": "架构迭代",
+    "featuredTag": "FEATURED / 精选推荐",
+    "featuredTitle": "编辑精选",
+    "featuredDesc": "编辑精选的深度好文",
+    "latestTag": "LATEST POSTS / 最新文章",
+    "latestTitle": "最新文章",
+    "latestDesc": "探索 AI 技术的最新动态与深度解析",
+    "readMore": "阅读全文",
+    "viewAll": "查看全部文章 →",
+    "modelsTag": "MODEL COMPARISON / 模型对比",
+    "modelsTitle": "模型对比",
+    "modelsDesc": "三大主流 AI 模型能力全景一览",
+    "topicsTag": "TECH DOMAINS / 技术领域",
+    "topicsTitle": "主题探索",
+    "topicsDesc": "按技术领域分类浏览文章",
+    "newsletterTitle": "订阅 AI 前沿速递",
+    "newsletterDesc": "每周精选大模型领域的技术突破、实践案例与行业洞察，直达你的邮箱。",
+    "newsletterPlaceholder": "输入你的邮箱地址",
+    "newsletterBtn": "订阅",
+    "newsletterNote": "🔒 我们尊重你的隐私，随时退订",
+    "aboutTag": "// ABOUT",
+    "aboutTitle": "关于本站",
+    "aboutDesc": "专注于 AI 大模型领域的技术研究与实践分享。<br>记录前沿技术的发展脉络，探索人工智能的应用边界。"
+  }
+}

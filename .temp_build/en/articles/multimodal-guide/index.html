@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multimodal AI Models Starter Guide — {{meta.siteName}}</title>
+  <meta name="description" content="Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.">
+  <meta name="keywords" content="Multimodal,AI大模型,GPT-5.4,Claude 4.6,Gemini 3.1,multimodal guide">
+  <meta name="author" content="ifnodoraemon">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ifnodoraemon.github.io/articles/multimodal-guide/">
+  <meta name="theme-color" content="#06060b">
+
+  <!-- Open Graph / Article -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ifnodoraemon.github.io/articles/multimodal-guide/">
+  <meta property="og:title" content="Multimodal AI Models Starter Guide — {{meta.siteName}}">
+  <meta property="og:description" content="Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.">
+  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:locale" content="{{#if isEn}}en_US{{else}}zh_CN{{/if}}">
+  <meta property="og:site_name" content="{{meta.siteName}}">
+  <meta property="article:published_time" content="2026-02-28">
+  <meta property="article:author" content="ifnodoraemon">
+  <meta property="article:section" content="Multimodal">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Multimodal AI Models Starter Guide — {{meta.siteName}}">
+  <meta name="twitter:description" content="Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.">
+  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-5078775507335151">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-4WZN5Q7VS6');
+  </script>
+
+  <!-- Assets -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="/src/assets/css/style.css" as="style">
+  <link rel="stylesheet" href="/src/assets/css/style.css">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Multimodal AI Models Starter Guide",
+    "description": "Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.",
+    "datePublished": "2026-02-28",
+    "dateModified": "2026-02-28",
+    "image": "https://ifnodoraemon.github.io/og-image.png",
+    "author": {
+      "@type": "Person",
+      "name": "ifnodoraemon",
+      "url": "https://github.com/ifnodoraemon"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "大雄话AI",
+      "url": "https://ifnodoraemon.github.io"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ifnodoraemon.github.io/articles/multimodal-guide/"
+    },
+    "articleSection": "Multimodal"
+  }
+  </script>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <main class="page-main">
+    <article class="article-detail">
+      <div class="container">
+        <div class="article-detail-header fade-in">
+          <a href="/en/articles/" class="back-link">← Back to Articles</a>
+          <div class="card-meta">
+            <span class="tag tag-rose">Multimodal</span>
+            <time datetime="2026-02-28">2026.02.28</time>
+          </div>
+          <h1>Multimodal AI Models Starter Guide</h1>
+          <p class="article-detail-desc">Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.</p>
+        </div>
+        <div class="article-layout">
+          <!-- TOC Sidebar -->
+          <aside class="article-sidebar fade-in">
+            <div class="toc-container"><h4>Table of Contents</h4><ul class="article-toc-list">
+  <li class="toc-level-2"><a href="#what-is-multimodal-ai">What is Multimodal AI?</a></li>
+  <li class="toc-level-2"><a href="#core-capabilities">Core Capabilities</a></li>
+  <li class="toc-level-3"><a href="#1-image-understanding">1. Image Understanding</a></li>
+  <li class="toc-level-3"><a href="#2-video-understanding-gemini-s-exclusive-advantage">2. Video Understanding (Gemini's Exclusive Advantage)</a></li>
+  <li class="toc-level-3"><a href="#3-audio-processing">3. Audio Processing</a></li>
+  <li class="toc-level-2"><a href="#multimodal-prompting-tips">Multimodal Prompting Tips</a></li>
+  <li class="toc-level-3"><a href="#mixed-image-text-prompts">Mixed Image & Text Prompts</a></li>
+  <li class="toc-level-3"><a href="#multimodal-in-multi-turn-conversations">Multimodal in Multi-turn Conversations</a></li>
+  <li class="toc-level-2"><a href="#model-selection-guide">Model Selection Guide</a></li>
+  <li class="toc-level-2"><a href="#best-practices-caveats">Best Practices & Caveats</a></li>
+</ul></div>
+          </aside>
+          
+          <!-- Main Content -->
+          <div class="article-detail-content fade-in">
+            <h2 id="what-is-multimodal-ai">What is Multimodal AI?</h2>
+<p>Multimodal AI refers to artificial intelligence systems capable of simultaneously understanding and processing <strong>multiple data types</strong> (text, images, audio, video). In 2026, multimodal capabilities have become standard for top-tier foundation models:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th align="center">Text</th>
+<th align="center">Image</th>
+<th align="center">Audio</th>
+<th align="center">Video</th>
+<th align="center">Code</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPT-5.4</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td>Gemini 3.1 Pro</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Gemini 3.1 Pro is currently the only model with native support for <strong>all five modalities</strong>, with a significant advantage in video understanding.</p>
+</blockquote>
+<h2 id="core-capabilities">Core Capabilities</h2>
+<h3 id="1-image-understanding">1. Image Understanding</h3>
+<p>Modern multimodal models are highly mature in image understanding, supporting:</p>
+<ul>
+<li><strong>Scene Description</strong>: Detailed descriptions of content, layout, and atmosphere in images</li>
+<li><strong>OCR text recognition</strong>: Accurately extracting text and tables from images</li>
+<li><strong>Chart Analysis</strong>: Understanding data visualization charts and extracting key data</li>
+<li><strong>UI/UX Analysis</strong>: Identifying UI elements, layout issues, and design improvement points</li>
+</ul>
+<p><strong>Practical Example: Code Screenshot Analysis</strong></p>
+<pre><code class="language-python">import anthropic
+
+client = anthropic.Anthropic()
+
+# Send a code screenshot for Claude to analyze
+message = client.messages.create(
+    model=&quot;claude-sonnet-4-6-20260217&quot;,
+    max_tokens=1024,
+    messages=[{
+        &quot;role&quot;: &quot;user&quot;,
+        &quot;content&quot;: [
+            {
+                &quot;type&quot;: &quot;image&quot;,
+                &quot;source&quot;: {&quot;type&quot;: &quot;url&quot;, &quot;url&quot;: &quot;https://example.com/code.png&quot;}
+            },
+            {
+                &quot;type&quot;: &quot;text&quot;,
+                &quot;text&quot;: &quot;Analyze the issues in this code, point out the bugs, and provide a fix.&quot;
+            }
+        ]
+    }]
+)</code></pre>
+<h3 id="2-video-understanding-gemini-s-exclusive-advantage">2. Video Understanding (Gemini's Exclusive Advantage)</h3>
+<p>Gemini 3.1 Pro&#39;s video understanding capability is currently the most advanced:</p>
+<pre><code class="language-python">import google.generativeai as genai
+
+model = genai.GenerativeModel(&quot;gemini-3.1-pro&quot;)
+
+# Upload video file
+video = genai.upload_file(&quot;product_demo.mp4&quot;)
+
+# Analyze video content
+response = model.generate_content([
+    video,
+    &quot;Please analyze this product demo video in detail:\n&quot;
+    &quot;1. What are the core features of the product?\n&quot;
+    &quot;2. What are the interaction highlights in the demo?\n&quot;
+    &quot;3. Any suggestions for improvement from a UX perspective?&quot;
+])</code></pre>
+<p>Typical use cases for video understanding:</p>
+<ul>
+<li><strong>Meeting Minutes</strong>: Automatically summarizing key decisions and to-dos from video meetings</li>
+<li><strong>Educational Content</strong>: Extracting knowledge points and notes from tutorial videos</li>
+<li><strong>Quality Control</strong>: Analyzing video streams from factory production lines to detect anomalies</li>
+<li><strong>Content Moderation</strong>: Automatically identifying inappropriate content in videos</li>
+</ul>
+<h3 id="3-audio-processing">3. Audio Processing</h3>
+<p>GPT-5.4 and Gemini 3.1 Pro support native audio input:</p>
+<ul>
+<li><strong>Speech Transcription</strong>: High-accuracy ASR (Automatic Speech Recognition)</li>
+<li><strong>Sentiment Analysis</strong>: Identifying the speaker&#39;s tone and emotions</li>
+<li><strong>Multilingual Translation</strong>: Real-time voice translation</li>
+<li><strong>Sound Event Detection</strong>: Recognizing specific sounds in the environment</li>
+</ul>
+<h2 id="multimodal-prompting-tips">Multimodal Prompting Tips</h2>
+<h3 id="mixed-image-text-prompts">Mixed Image & Text Prompts</h3>
+<pre><code class="language-text">[Image 1: Product prototype screenshot]
+[Image 2: Competitor comparison screenshot]
+
+Please compare and analyze the UI design of the two products from the following dimensions:
+1. Information Hierarchy
+2. Color Usage
+3. Interaction Design
+4. UX Score (1-10)
+
+Output the comparison results in a table format.</code></pre>
+<h3 id="multimodal-in-multi-turn-conversations">Multimodal in Multi-turn Conversations</h3>
+<pre><code class="language-text">Turn 1: [Upload Architecture Diagram] &quot;Please interpret this system architecture.&quot;
+Turn 2: &quot;What are the issues with this design under high concurrency?&quot;
+Turn 3: [Upload Performance Monitoring Screenshot] &quot;Based on this monitoring data, where is the bottleneck?&quot;</code></pre>
+<h2 id="model-selection-guide">Model Selection Guide</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Recommended Model</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Image OCR / Document Analysis</td>
+<td>GPT-5.4 or Claude Sonnet 4.6</td>
+<td>High accuracy in text extraction</td>
+</tr>
+<tr>
+<td>Video Content Understanding</td>
+<td>Gemini 3.1 Pro</td>
+<td>Only one with native video support</td>
+</tr>
+<tr>
+<td>UI/UX Review</td>
+<td>Claude Sonnet 4.6</td>
+<td>Superior in design understanding and suggestions</td>
+</tr>
+<tr>
+<td>Audio Transcription &amp; Analysis</td>
+<td>GPT-5.4</td>
+<td>Native audio support with accurate recognition</td>
+</tr>
+<tr>
+<td>Mixed Modality Reasoning</td>
+<td>Gemini 3.1 Pro</td>
+<td>Strongest in multimodal reasoning</td>
+</tr>
+</tbody></table>
+<h2 id="best-practices-caveats">Best Practices & Caveats</h2>
+<ol>
+<li><strong>Image Resolution</strong>: Very high resolutions increase token consumption; compressing to under 1024px is recommended.</li>
+<li><strong>Video Length</strong>: Gemini supports videos up to ~1 hour, but chunking them is recommended for better reliability.</li>
+<li><strong>Privacy and Security</strong>: Ensure no sensitive information is included before uploading images/videos.</li>
+<li><strong>Hallucination Risks</strong>: Multimodal models can still hallucinate when describing fine image details.</li>
+<li><strong>Cost Control</strong>: Image token consumption is much higher than text; be mindful of costs during bulk image analysis.</li>
+</ol>
+
+            
+            <!-- Giscus Comments -->
+            <div class="giscus-container">
+              <script src="https://giscus.app/client.js"
+                data-repo="ifnodoraemon/ifnodoraemon.github.io"
+                data-repo-id="R_kgDON7u7iA"
+                data-category="Announcements"
+                data-category-id="DIC_kwDON7u7iM4CnKDE"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+              </script>
+            </div>
+          </div>
+        </div>
+        <div class="article-nav fade-in">
+          <a href="/en/articles/" class="btn-ghost">← Back to Articles</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/assets/js/main.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#0a0a1a',
+        mainBkg: '#1a1a2e',
+        nodeBorder: '#6366f1',
+        clusterBkg: 'rgba(99,102,241,0.06)',
+        clusterBorder: 'rgba(99,102,241,0.2)',
+        titleColor: '#a5b4fc',
+        nodeTextColor: '#e2e8f0',
+        primaryColor: '#1e1e3a',
+        primaryTextColor: '#e2e8f0',
+        primaryBorderColor: '#6366f1',
+        lineColor: '#818cf8',
+        secondaryColor: '#1a1a2e',
+        tertiaryColor: '#1a1a2e',
+        fontFamily: 'Inter, Noto Sans SC, sans-serif',
+        fontSize: '14px',
+      }
+    });
+  </script>
+</body>
+</html>

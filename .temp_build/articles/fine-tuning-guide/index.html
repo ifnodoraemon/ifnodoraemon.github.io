@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大模型微调全流程详解 — {{meta.siteName}}</title>
+  <meta name="description" content="LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。">
+  <meta name="keywords" content="微调,AI大模型,GPT-5.4,Claude 4.6,Gemini 3.1,fine tuning guide">
+  <meta name="author" content="ifnodoraemon">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ifnodoraemon.github.io/articles/fine-tuning-guide/">
+  <meta name="theme-color" content="#06060b">
+
+  <!-- Open Graph / Article -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ifnodoraemon.github.io/articles/fine-tuning-guide/">
+  <meta property="og:title" content="大模型微调全流程详解 — {{meta.siteName}}">
+  <meta property="og:description" content="LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。">
+  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:locale" content="{{#if isEn}}en_US{{else}}zh_CN{{/if}}">
+  <meta property="og:site_name" content="{{meta.siteName}}">
+  <meta property="article:published_time" content="2026-02-25">
+  <meta property="article:author" content="ifnodoraemon">
+  <meta property="article:section" content="微调">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="大模型微调全流程详解 — {{meta.siteName}}">
+  <meta name="twitter:description" content="LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。">
+  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-5078775507335151">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-4WZN5Q7VS6');
+  </script>
+
+  <!-- Assets -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="/src/assets/css/style.css" as="style">
+  <link rel="stylesheet" href="/src/assets/css/style.css">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "大模型微调全流程详解",
+    "description": "LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。",
+    "datePublished": "2026-02-25",
+    "dateModified": "2026-02-25",
+    "image": "https://ifnodoraemon.github.io/og-image.png",
+    "author": {
+      "@type": "Person",
+      "name": "ifnodoraemon",
+      "url": "https://github.com/ifnodoraemon"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "大雄话AI",
+      "url": "https://ifnodoraemon.github.io"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ifnodoraemon.github.io/articles/fine-tuning-guide/"
+    },
+    "articleSection": "微调"
+  }
+  </script>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <main class="page-main">
+    <article class="article-detail">
+      <div class="container">
+        <div class="article-detail-header fade-in">
+          <a href="/articles/" class="back-link">← 返回文章列表</a>
+          <div class="card-meta">
+            <span class="tag tag-purple">微调</span>
+            <time datetime="2026-02-25">2026.02.25</time>
+          </div>
+          <h1>大模型微调全流程详解</h1>
+          <p class="article-detail-desc">LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。</p>
+        </div>
+        <div class="article-layout">
+          <!-- TOC Sidebar -->
+          <aside class="article-sidebar fade-in">
+            <div class="toc-container"><h4>文章目录</h4><ul class="article-toc-list">
+  <li class="toc-level-2"><a href="#为什么需要微调">为什么需要微调？</a></li>
+  <li class="toc-level-2"><a href="#三种微调方案对比">三种微调方案对比</a></li>
+  <li class="toc-level-3"><a href="#lora-原理">LoRA 原理</a></li>
+  <li class="toc-level-3"><a href="#qlora-增强">QLoRA 增强</a></li>
+  <li class="toc-level-2"><a href="#完整微调流程">完整微调流程</a></li>
+  <li class="toc-level-3"><a href="#step-1-准备数据集">Step 1：准备数据集</a></li>
+  <li class="toc-level-3"><a href="#step-2-配置-lora-训练">Step 2：配置 LoRA 训练</a></li>
+  <li class="toc-level-3"><a href="#step-3-训练">Step 3：训练</a></li>
+  <li class="toc-level-3"><a href="#step-4-评估与部署">Step 4：评估与部署</a></li>
+  <li class="toc-level-2"><a href="#关键参数调优">关键参数调优</a></li>
+  <li class="toc-level-2"><a href="#常见陷阱">常见陷阱</a></li>
+  <li class="toc-level-2"><a href="#商业-api-微调">商业 API 微调</a></li>
+</ul></div>
+          </aside>
+          
+          <!-- Main Content -->
+          <div class="article-detail-content fade-in">
+            <h2 id="为什么需要微调">为什么需要微调？</h2>
+<p>尽管 GPT-5.4、Claude 4.6 等通用大模型能力强大，但在特定场景下仍存在局限：</p>
+<ul>
+<li><strong>领域知识不足</strong>：医疗、法律、金融等专业领域的术语和逻辑</li>
+<li><strong>输出风格不匹配</strong>：需要特定的语言风格、格式或行业规范</li>
+<li><strong>性能成本权衡</strong>：用小模型 + 微调替代大模型调用，降低 80%+ 成本</li>
+</ul>
+<blockquote>
+<p><strong>何时微调 vs 何时用提示工程？</strong></p>
+<p>如果你的需求可以通过调整提示词和 Few-Shot 示例解决，优先使用提示工程。
+当提示工程无法达到要求的精度/一致性时，再考虑微调。</p>
+</blockquote>
+<h2 id="三种微调方案对比">三种微调方案对比</h2>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>可训练参数</th>
+<th>显存需求</th>
+<th>训练速度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Full Fine-tuning</td>
+<td>100%</td>
+<td>极高 (80GB+)</td>
+<td>慢</td>
+<td>资源充足、需极致性能</td>
+</tr>
+<tr>
+<td>LoRA</td>
+<td>0.1%~1%</td>
+<td>中等 (16GB)</td>
+<td>快</td>
+<td>通用推荐方案</td>
+</tr>
+<tr>
+<td>QLoRA</td>
+<td>0.1%~1%</td>
+<td>低 (8GB)</td>
+<td>较快</td>
+<td>消费级 GPU</td>
+</tr>
+</tbody></table>
+<h3 id="lora-原理">LoRA 原理</h3>
+<p>LoRA（Low-Rank Adaptation）的核心思想是将权重更新分解为两个低秩矩阵：</p>
+<pre><code class="language-text">原始权重 W ∈ R^(d×d)
+
+LoRA 分解：
+ΔW = A × B
+A ∈ R^(d×r)   ← r &lt;&lt; d（rank 通常为 8~64）
+B ∈ R^(r×d)
+
+更新后：W' = W + α · (A × B)</code></pre>
+<p>这样只需训练 <code>A</code> 和 <code>B</code> 两个小矩阵，参数量从 <code>d²</code> 降低到 <code>2dr</code>。</p>
+<h3 id="qlora-增强">QLoRA 增强</h3>
+<p>QLoRA 在 LoRA 基础上增加了 4-bit 量化：</p>
+<ul>
+<li>模型权重用 NF4（4 位 NormalFloat）存储</li>
+<li>计算时反量化为 BF16</li>
+<li>显存节省约 60%，几乎不损失精度</li>
+</ul>
+<h2 id="完整微调流程">完整微调流程</h2>
+<h3 id="step-1-准备数据集">Step 1：准备数据集</h3>
+<p>数据格式示例（JSONL）：</p>
+<pre><code class="language-json">{&quot;messages&quot;: [
+  {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;你是一个专业的医学问答助手&quot;},
+  {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;什么是高血压？&quot;},
+  {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;高血压是指动脉血压持续升高的慢性疾病...&quot;}
+]}</code></pre>
+<p>数据质量指南：</p>
+<ul>
+<li><strong>数量</strong>：高质量 1000-5000 条通常足够</li>
+<li><strong>多样性</strong>：覆盖目标场景的各种情况</li>
+<li><strong>一致性</strong>：标注风格和格式保持统一</li>
+<li><strong>清洗</strong>：去除重复、矛盾和低质量样本</li>
+</ul>
+<h3 id="step-2-配置-lora-训练">Step 2：配置 LoRA 训练</h3>
+<pre><code class="language-python">from peft import LoraConfig, get_peft_model
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# 加载基础模型
+model = AutoModelForCausalLM.from_pretrained(
+    &quot;meta-llama/Llama-4-Scout-17B-16E-Instruct&quot;,
+    torch_dtype=torch.bfloat16,
+    device_map=&quot;auto&quot;,
+)
+
+# LoRA 配置
+lora_config = LoraConfig(
+    r=16,                    # rank：8~64，越大能力越强但越慢
+    lora_alpha=32,           # 缩放系数，通常设为 2 * r
+    target_modules=[         # 要注入 LoRA 的层
+        &quot;q_proj&quot;, &quot;k_proj&quot;, &quot;v_proj&quot;, &quot;o_proj&quot;,
+        &quot;gate_proj&quot;, &quot;up_proj&quot;, &quot;down_proj&quot;,
+    ],
+    lora_dropout=0.05,
+    bias=&quot;none&quot;,
+    task_type=&quot;CAUSAL_LM&quot;,
+)
+
+# 应用 LoRA
+model = get_peft_model(model, lora_config)
+model.print_trainable_parameters()
+# → trainable params: 13.6M || all params: 8.03B || 0.17%</code></pre>
+<h3 id="step-3-训练">Step 3：训练</h3>
+<pre><code class="language-python">from transformers import TrainingArguments, Trainer
+
+training_args = TrainingArguments(
+    output_dir=&quot;./output&quot;,
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,
+    learning_rate=2e-4,
+    warmup_ratio=0.1,
+    lr_scheduler_type=&quot;cosine&quot;,
+    bf16=True,
+    logging_steps=10,
+    save_strategy=&quot;epoch&quot;,
+    evaluation_strategy=&quot;epoch&quot;,
+)
+
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset,
+)
+trainer.train()</code></pre>
+<h3 id="step-4-评估与部署">Step 4：评估与部署</h3>
+<pre><code class="language-python"># 合并 LoRA 权重到基础模型
+merged_model = model.merge_and_unload()
+merged_model.save_pretrained(&quot;./merged_model&quot;)
+
+# 使用 vLLM 部署推理服务
+# vllm serve ./merged_model --port 8000</code></pre>
+<h2 id="关键参数调优">关键参数调优</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>建议范围</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rank (r)</td>
+<td>8~64</td>
+<td>越大适应能力越强，16 是常用起始值</td>
+</tr>
+<tr>
+<td>lora_alpha</td>
+<td>2r</td>
+<td>控制 LoRA 更新的缩放</td>
+</tr>
+<tr>
+<td>learning_rate</td>
+<td>1e-4 ~ 5e-4</td>
+<td>太高易过拟合，太低收敛慢</td>
+</tr>
+<tr>
+<td>epochs</td>
+<td>2~5</td>
+<td>数据量小时 3 epoch，大时 1-2 epoch</td>
+</tr>
+<tr>
+<td>batch_size</td>
+<td>4~16</td>
+<td>受显存限制，用梯度累积等效增大</td>
+</tr>
+</tbody></table>
+<h2 id="常见陷阱">常见陷阱</h2>
+<ol>
+<li><strong>过拟合</strong>：数据量少于 500 条时极易过拟合。解决方案：增加 dropout、减少 epoch、加入正则化</li>
+<li><strong>灾难性遗忘</strong>：微调后模型丧失通用能力。解决方案：混入 5-10% 的通用数据</li>
+<li><strong>数据泄漏</strong>：评估集与训练集有重叠。解决方案：严格划分数据集</li>
+<li><strong>格式不一致</strong>：训练数据的 chat template 与推理时不一致。解决方案：使用 tokenizer 的 <code>apply_chat_template</code></li>
+</ol>
+<h2 id="商业-api-微调">商业 API 微调</h2>
+<p>如果不想管理 GPU 基础设施，可以使用商业 API 的微调服务：</p>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>支持模型</th>
+<th>最低数据量</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenAI Fine-tuning</td>
+<td>GPT-5-mini, GPT-5, GPT-5.4</td>
+<td>10 条</td>
+<td>最简单，支持监督微调和 DPO</td>
+</tr>
+<tr>
+<td>Anthropic Fine-tuning</td>
+<td>Claude 3 Haiku（via Bedrock）</td>
+<td>32 条</td>
+<td>通过 Amazon Bedrock 托管</td>
+</tr>
+<tr>
+<td>Google Vertex AI</td>
+<td>Gemini 3.x 系列</td>
+<td>100 条</td>
+<td>与 Google Cloud 深度集成</td>
+</tr>
+</tbody></table>
+
+            
+            <!-- Giscus Comments -->
+            <div class="giscus-container">
+              <script src="https://giscus.app/client.js"
+                data-repo="ifnodoraemon/ifnodoraemon.github.io"
+                data-repo-id="R_kgDON7u7iA"
+                data-category="Announcements"
+                data-category-id="DIC_kwDON7u7iM4CnKDE"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="dark"
+                data-lang="zh-CN"
+                crossorigin="anonymous"
+                async>
+              </script>
+            </div>
+          </div>
+        </div>
+        <div class="article-nav fade-in">
+          <a href="/articles/" class="btn-ghost">← 返回文章列表</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="/src/assets/js/main.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#0a0a1a',
+        mainBkg: '#1a1a2e',
+        nodeBorder: '#6366f1',
+        clusterBkg: 'rgba(99,102,241,0.06)',
+        clusterBorder: 'rgba(99,102,241,0.2)',
+        titleColor: '#a5b4fc',
+        nodeTextColor: '#e2e8f0',
+        primaryColor: '#1e1e3a',
+        primaryTextColor: '#e2e8f0',
+        primaryBorderColor: '#6366f1',
+        lineColor: '#818cf8',
+        secondaryColor: '#1a1a2e',
+        tertiaryColor: '#1a1a2e',
+        fontFamily: 'Inter, Noto Sans SC, sans-serif',
+        fontSize: '14px',
+      }
+    });
+  </script>
+</body>
+</html>
