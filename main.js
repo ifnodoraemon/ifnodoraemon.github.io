@@ -1,26 +1,30 @@
 // ============================================
-// AI 大模型观察 — Sci-Fi Interactions
+// AI 大模型观察 — Main Entry Point
 // ============================================
+import { renderNav } from './components/nav.js';
+import { renderFooter } from './components/footer.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // — Mobile menu toggle —
-  const toggle = document.getElementById('menu-toggle');
-  const navLinks = document.getElementById('nav-links');
+  // — Detect current page —
+  const path = window.location.pathname;
+  let activePage = 'home';
+  let footerStyle = 'full';
 
-  if (toggle && navLinks) {
-    toggle.addEventListener('click', () => {
-      toggle.classList.toggle('active');
-      navLinks.classList.toggle('open');
-    });
-
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        toggle.classList.remove('active');
-        navLinks.classList.remove('open');
-      });
-    });
+  if (path.startsWith('/about')) {
+    activePage = 'about';
+    footerStyle = 'simple';
+  } else if (path.startsWith('/models')) {
+    activePage = 'models';
+    footerStyle = 'simple';
+  } else if (path.startsWith('/articles')) {
+    activePage = '';
+    footerStyle = 'simple';
   }
+
+  // — Render shared components —
+  renderNav(activePage);
+  renderFooter(footerStyle);
 
   // — Navbar scroll effect —
   const navbar = document.getElementById('navbar');
@@ -48,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     faders.forEach(el => observer.observe(el));
   }
 
-  // — Smooth scroll for anchor links —
+  // — Smooth scroll for same-page anchor links —
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
       const target = document.querySelector(anchor.getAttribute('href'));
