@@ -35,16 +35,10 @@
       <div class="container">
         <div class="about-page-grid fade-in">
           <div class="about-page-main">
-            <h2>{{meta.about.title}}</h2> <!-- Or just a generic title inside if I added it, let's use hardcoded for some generic titles if omitted, but I should probably just replace the ones in locale. actually "创建初衷" isn't in locale as a title. Let's just use what we have or add generic ones later. Wait, my locale has p1, p2, li1. I will just replace the paragraphs. -->
+            <h2>{{meta.about.title}}</h2>
             <p>{{about.p1}}</p>
             
-            <h2>内容方向</h2> <!-- Let's leave these minor headings hardcoded as Chinese for now if they aren't in locale, OR I will update locale later. I'll just put the localized content. Wait, my script replaces keys. Let's add them to locale json too if needed, but for now I'll just replace what's in the JSON. -->
-            
-            <!-- Actually, looking at the previous view_file of en/about/index.html, it had "Our Mission", "Content Focus", "About the Author". I should add these to the locale files. Let's just do a big replace and assume I will update the locale file next. -->
-            <h2>{{about.missionTitle}}</h2>
-            <p>{{about.p1}}</p>
-
-            <h2>{{about.contentTitle}}</h2>
+            <h2>{{about.contentFocus}}</h2>
             <p>{{about.p2}}</p>
             <ul>
               <li>{{about.li1}}</li>
@@ -53,7 +47,6 @@
               <li>{{about.li4}}</li>
             </ul>
 
-            <h2>{{about.authorTitle}}</h2>
             <p>{{about.p3}}</p>
             <div class="about-links" style="justify-content: flex-start; margin-top: 1rem;">
               <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="social-link">

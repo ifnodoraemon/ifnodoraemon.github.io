@@ -311,6 +311,7 @@
     "heroTitle": "关于",
     "heroDesc": "一个观察 AI 演进的技术实验节点",
     "p1": "这里是我跟踪 AI 前沿技术、沉淀工程实践和分享学习心得的个人自留地。在通用人工智能（AGI）加速到来的前沿，保持技术敏感度比以往任何时候都更加重要。",
+    "contentFocus": "内容方向",
     "p2": "本站内容主要涵盖：",
     "li1": "主流 Foundation Models 的能力评测与对比",
     "li2": "AI Agent 和自动化工作流的架构探讨",
@@ -318,7 +319,13 @@
     "li4": "提示工程（Prompt Engineering）的高阶应用",
     "p3": "目前所有的内容和项目都在持续迭代中。你可以通过以下方式找到我或者关注项目的更新进度。",
     "contactBtn": "查看 GitHub",
-    "emailBtn": "发送邮件"
+    "emailBtn": "发送邮件",
+    "statsTitle": "节点数据",
+    "linksTitle": "外部链接",
+    "stat1": "技术文章",
+    "stat2": "覆盖模型",
+    "stat3": "核心方向",
+    "stat4": "月度读者"
   },
   "home": {
     "heroSystem": "系统在线",

@@ -311,6 +311,7 @@
     "heroTitle": "About",
     "heroDesc": "A technical experimental node observing AI evolution",
     "p1": "This is my personal space for tracking frontier AI tech, summarizing engineering practices, and sharing learnings. On the eve of AGI, maintaining technical sensitivity is more important than ever.",
+    "contentFocus": "Content Focus",
     "p2": "This site primarily covers:",
     "li1": "Capability benchmarks and comparisons of mainstream Foundation Models",
     "li2": "Architectural discussions on AI Agents and automated workflows",
@@ -318,7 +319,13 @@
     "li4": "Advanced applications of Prompt Engineering",
     "p3": "All content and projects are continuously iterating. You can find me or follow the project updates via the links below.",
     "contactBtn": "View GitHub",
-    "emailBtn": "Send Email"
+    "emailBtn": "Send Email",
+    "statsTitle": "Node Stats",
+    "linksTitle": "External Links",
+    "stat1": "Tech Articles",
+    "stat2": "Models Covered",
+    "stat3": "Core Focus",
+    "stat4": "Monthly Readers"
   },
   "home": {
     "heroSystem": "SYSTEM ONLINE",
