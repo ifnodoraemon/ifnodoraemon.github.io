@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>AI Tech Observer</title>
+  <link>https://ifnodoraemon.github.io/</link>
+  <description>Focusing on AI foundation models and tech insights</description>
+  <language>en</language>
+  <pubDate>Mon, 09 Mar 2026 07:32:22 GMT</pubDate>
+  <atom:link href="https://ifnodoraemon.github.io/en/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Deep Dive into 6 AI Foundation Model Trends in 2026</title>
+    <link>https://ifnodoraemon.github.io/en/articles/ai-trends-2026/</link>
+    <guid>https://ifnodoraemon.github.io/en/articles/ai-trends-2026/</guid>
+    <pubDate>Sat, 07 Mar 2026 00:00:00 GMT</pubDate>
+    <description>From Thinking reasoning modes to Agentic applications, a deep dive into the top 6 trends in AI foundation models for 2026.</description>
+  </item>
+</channel>
+</rss>

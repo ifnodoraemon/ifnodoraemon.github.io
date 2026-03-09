@@ -79,6 +79,9 @@ function initParticles() {
   const canvas = document.getElementById('particles');
   if (!canvas) return;
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) return;
+
   const ctx = canvas.getContext('2d');
   let width, height;
   let particles = [];

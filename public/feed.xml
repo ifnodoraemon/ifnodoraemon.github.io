@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>AI 大模型观察</title>
+  <link>https://ifnodoraemon.github.io/</link>
+  <description>专注 AI 大模型技术研究与实践的技术博客</description>
+  <language>zh-CN</language>
+  <pubDate>Mon, 09 Mar 2026 07:32:22 GMT</pubDate>
+  <atom:link href="https://ifnodoraemon.github.io/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>大模型提示工程实践指南</title>
+    <link>https://ifnodoraemon.github.io/articles/prompt-engineering-guide/</link>
+    <guid>https://ifnodoraemon.github.io/articles/prompt-engineering-guide/</guid>
+    <pubDate>Mon, 09 Mar 2026 00:00:00 GMT</pubDate>
+    <description>深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。</description>
+  </item>
+  <item>
+    <title>2026 年 AI 大模型六大趋势深度解析</title>
+    <link>https://ifnodoraemon.github.io/articles/ai-trends-2026/</link>
+    <guid>https://ifnodoraemon.github.io/articles/ai-trends-2026/</guid>
+    <pubDate>Sat, 07 Mar 2026 00:00:00 GMT</pubDate>
+    <description>从 Thinking 推理模式到 Agent 化应用，深度剖析 2026 年 AI 大模型领域最值得关注的六大发展趋势。</description>
+  </item>
+  <item>
+    <title>从零搭建 AI Agent 应用</title>
+    <link>https://ifnodoraemon.github.io/articles/build-ai-agent/</link>
+    <guid>https://ifnodoraemon.github.io/articles/build-ai-agent/</guid>
+    <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
+    <description>手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。</description>
+  </item>
+  <item>
+    <title>RAG 检索增强生成实战</title>
+    <link>https://ifnodoraemon.github.io/articles/rag-in-practice/</link>
+    <guid>https://ifnodoraemon.github.io/articles/rag-in-practice/</guid>
+    <pubDate>Tue, 03 Mar 2026 00:00:00 GMT</pubDate>
+    <description>从向量数据库选型到 Embedding 策略，完整构建一套企业级 RAG 系统。含 Pinecone、Weaviate 对比实测。</description>
+  </item>
+  <item>
+    <title>2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</title>
+    <link>https://ifnodoraemon.github.io/articles/model-comparison-2026/</link>
+    <guid>https://ifnodoraemon.github.io/articles/model-comparison-2026/</guid>
+    <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
+    <description>从推理能力、编码水平、上下文窗口到 API 定价，全方位对比 2026 年三大主流大模型的实际表现与选型策略。</description>
+  </item>
+  <item>
+    <title>多模态大模型入门指南</title>
+    <link>https://ifnodoraemon.github.io/articles/multimodal-guide/</link>
+    <guid>https://ifnodoraemon.github.io/articles/multimodal-guide/</guid>
+    <pubDate>Sat, 28 Feb 2026 00:00:00 GMT</pubDate>
+    <description>探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。</description>
+  </item>
+  <item>
+    <title>大模型微调全流程详解</title>
+    <link>https://ifnodoraemon.github.io/articles/fine-tuning-guide/</link>
+    <guid>https://ifnodoraemon.github.io/articles/fine-tuning-guide/</guid>
+    <pubDate>Wed, 25 Feb 2026 00:00:00 GMT</pubDate>
+    <description>LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。</description>
+  </item>
+</channel>
+</rss>

@@ -2,22 +2,48 @@
 export function renderNav(activePage = '') {
   const nav = document.getElementById('navbar') || createNavElement();
 
+  const isEn = window.location.pathname.startsWith('/en/');
+  const langPrefix = isEn ? '/en' : '';
+
+  const siteTitle = isEn ? 'AI Tech Observer' : 'AI 大模型观察';
+  
+  const navItems = isEn ? [
+    { id: 'home', title: 'Home', href: '/en/' },
+    { id: 'articles', title: 'Articles', href: '/en/articles/' },
+    { id: 'models', title: 'Models', href: '/en/models/' },
+    { id: 'projects', title: 'Projects', href: '/en/projects/' },
+    { id: 'about', title: 'About', href: '/en/about/' }
+  ] : [
+    { id: 'home', title: '首页', href: '/' },
+    { id: 'articles', title: '文章', href: '/articles/' },
+    { id: 'models', title: '模型', href: '/models/' },
+    { id: 'projects', title: '作品', href: '/projects/' },
+    { id: 'about', title: '关于', href: '/about/' }
+  ];
+
+  let togglePath = isEn 
+    ? window.location.pathname.replace(/^\/en/, '') 
+    : '/en' + window.location.pathname;
+  if (!togglePath || togglePath === '') togglePath = '/';
+
+  let linksHtml = navItems.map(item => 
+    `<a href="${item.href}"${activePage === item.id ? ' class="active" aria-current="page"' : ''}>${item.title}</a>`
+  ).join('\n        ');
+
   nav.innerHTML = `
     <div class="nav-container">
-      <a href="/" class="nav-brand">
+      <a href="${langPrefix}/" class="nav-brand">
         <span class="brand-icon">◆</span>
-        <span class="brand-text">AI 大模型观察</span>
+        <span class="brand-text">${siteTitle}</span>
         <span class="brand-status">
           <span class="status-dot"></span>
           ONLINE
         </span>
       </a>
       <div class="nav-links" id="nav-links">
-        <a href="/"${activePage === 'home' ? ' class="active"' : ''}>首页</a>
-        <a href="/articles/"${activePage === 'articles' ? ' class="active"' : ''}>文章</a>
-        <a href="/models/"${activePage === 'models' ? ' class="active"' : ''}>模型</a>
-        <a href="/about/"${activePage === 'about' ? ' class="active"' : ''}>关于</a>
+        ${linksHtml}
         <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener">GitHub</a>
+        <a href="${togglePath}" class="lang-toggle" title="Toggle Language" style="font-weight: 600; color: var(--accent-light); margin-left: 0.5rem; text-decoration: none;">${isEn ? '中' : 'EN'}</a>
       </div>
       <button class="menu-toggle" id="menu-toggle" aria-label="打开菜单">
         <span></span>
