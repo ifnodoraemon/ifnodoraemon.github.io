@@ -50,9 +50,30 @@
         </div>
       </div>
     </section>
+    
+    <!-- Added top search box area -->
+    <section class="section section-tight" style="padding-bottom: 0;">
+      <div class="container">
+
+        <div class="listing-search-container fade-in">
+          <div class="search-input-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="article-search-input" class="article-search-input" placeholder="搜索文章..." data-lang="zh-CN" autocomplete="off">
+            <button class="search-clear-btn" id="search-clear-btn" style="display: none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+          <div class="search-results-dropdown" id="search-results-dropdown" style="display: none;"></div>
+        </div>
+  
+      </div>
+    </section>
+
     <section class="section section-tight">
       <div class="container">
-        <div class="articles-filter fade-in">
+        
+        <!-- UNIFIED TIMELINE + LIST LAYOUT -->
+        <div class="articles-filter fade-in" id="articles-filter">
           <button class="filter-btn active" data-filter="all">全部 (7)</button>
           <button class="filter-btn" data-filter="提示工程">提示工程</button>
           <button class="filter-btn" data-filter="行业趋势">行业趋势</button>
@@ -62,106 +83,147 @@
           <button class="filter-btn" data-filter="多模态">多模态</button>
           <button class="filter-btn" data-filter="微调">微调</button>
         </div>
-        <div class="articles-list fade-in">
+        <div class="unified-articles-list fade-in" id="articles-list">
 
-          <a href="/articles/prompt-engineering-guide/" class="article-list-item article-list-featured" data-tag="提示工程">
-            <div class="article-list-meta">
-              <span class="tag ">提示工程</span>
-              <span class="article-list-pin">📌 置顶</span>
-              <time datetime="2026-03-09">2026.03.09</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="提示工程">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.03.09</div>
             </div>
-            <h2>大模型提示工程实践指南</h2>
-            <p>深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。</p>
-            <div class="article-list-tags"><span class="mini-tag">GPT-5.4</span>
+            <div class="unified-article-right">
+              <a href="/articles/prompt-engineering-guide/" class="article-list-item article-list-featured">
+                <div class="article-list-meta">
+                  <span class="tag ">提示工程</span>
+                  <span class="article-list-pin">📌 置顶</span>
+                  <time datetime="2026-03-09" class="mobile-only-date" style="display:none;">2026.03.09</time>
+                </div>
+                <h2>大模型提示工程实践指南</h2>
+                <p>深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。</p>
+                <div class="article-list-tags"><span class="mini-tag">GPT-5.4</span>
               <span class="mini-tag">Claude 4.6</span>
               <span class="mini-tag">Prompt</span></div>
-          </a>
-
-          <a href="/articles/ai-trends-2026/" class="article-list-item" data-tag="行业趋势">
-            <div class="article-list-meta">
-              <span class="tag tag-green">行业趋势</span>
-              
-              <time datetime="2026-03-07">2026.03.07</time>
+              </a>
             </div>
-            <h2>2026 年 AI 大模型六大趋势深度解析</h2>
-            <p>从 Thinking 推理模式到 Agent 化应用，深度剖析 2026 年 AI 大模型领域最值得关注的六大发展趋势。</p>
-            
-          </a>
+          </div>
 
-          <a href="/articles/build-ai-agent/" class="article-list-item" data-tag="AI Agent">
-            <div class="article-list-meta">
-              <span class="tag tag-emerald">AI Agent</span>
-              
-              <time datetime="2026-03-05">2026.03.05</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="行业趋势">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.03.07</div>
             </div>
-            <h2>从零搭建 AI Agent 应用</h2>
-            <p>手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。</p>
-            
-          </a>
+            <div class="unified-article-right">
+              <a href="/articles/ai-trends-2026/" class="article-list-item">
+                <div class="article-list-meta">
+                  <span class="tag tag-green">行业趋势</span>
+                  
+                  <time datetime="2026-03-07" class="mobile-only-date" style="display:none;">2026.03.07</time>
+                </div>
+                <h2>2026 年 AI 大模型六大趋势深度解析</h2>
+                <p>从 Thinking 推理模式到 Agent 化应用，深度剖析 2026 年 AI 大模型领域最值得关注的六大发展趋势。</p>
+                
+              </a>
+            </div>
+          </div>
 
-          <a href="/articles/rag-in-practice/" class="article-list-item" data-tag="RAG">
-            <div class="article-list-meta">
-              <span class="tag tag-cyan">RAG</span>
-              
-              <time datetime="2026-03-03">2026.03.03</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="AI Agent">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.03.05</div>
             </div>
-            <h2>RAG 检索增强生成实战</h2>
-            <p>从向量数据库选型到 Embedding 策略，完整构建一套企业级 RAG 系统。含 Pinecone、Weaviate 对比实测。</p>
-            
-          </a>
+            <div class="unified-article-right">
+              <a href="/articles/build-ai-agent/" class="article-list-item">
+                <div class="article-list-meta">
+                  <span class="tag tag-emerald">AI Agent</span>
+                  
+                  <time datetime="2026-03-05" class="mobile-only-date" style="display:none;">2026.03.05</time>
+                </div>
+                <h2>从零搭建 AI Agent 应用</h2>
+                <p>手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。</p>
+                
+              </a>
+            </div>
+          </div>
 
-          <a href="/articles/model-comparison-2026/" class="article-list-item" data-tag="模型评测">
-            <div class="article-list-meta">
-              <span class="tag tag-purple">模型评测</span>
-              
-              <time datetime="2026-03-01">2026.03.01</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="RAG">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.03.03</div>
             </div>
-            <h2>2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</h2>
-            <p>从推理能力、编码水平、上下文窗口到 API 定价，全方位对比 2026 年三大主流大模型的实际表现与选型策略。</p>
-            
-          </a>
+            <div class="unified-article-right">
+              <a href="/articles/rag-in-practice/" class="article-list-item">
+                <div class="article-list-meta">
+                  <span class="tag tag-cyan">RAG</span>
+                  
+                  <time datetime="2026-03-03" class="mobile-only-date" style="display:none;">2026.03.03</time>
+                </div>
+                <h2>RAG 检索增强生成实战</h2>
+                <p>从向量数据库选型到 Embedding 策略，完整构建一套企业级 RAG 系统。含 Pinecone、Weaviate 对比实测。</p>
+                
+              </a>
+            </div>
+          </div>
 
-          <a href="/articles/multimodal-guide/" class="article-list-item" data-tag="多模态">
-            <div class="article-list-meta">
-              <span class="tag tag-rose">多模态</span>
-              
-              <time datetime="2026-02-28">2026.02.28</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="模型评测">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.03.01</div>
             </div>
-            <h2>多模态大模型入门指南</h2>
-            <p>探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。</p>
-            
-          </a>
+            <div class="unified-article-right">
+              <a href="/articles/model-comparison-2026/" class="article-list-item">
+                <div class="article-list-meta">
+                  <span class="tag tag-purple">模型评测</span>
+                  
+                  <time datetime="2026-03-01" class="mobile-only-date" style="display:none;">2026.03.01</time>
+                </div>
+                <h2>2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</h2>
+                <p>从推理能力、编码水平、上下文窗口到 API 定价，全方位对比 2026 年三大主流大模型的实际表现与选型策略。</p>
+                
+              </a>
+            </div>
+          </div>
 
-          <a href="/articles/fine-tuning-guide/" class="article-list-item" data-tag="微调">
-            <div class="article-list-meta">
-              <span class="tag tag-purple">微调</span>
-              
-              <time datetime="2026-02-25">2026.02.25</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="多模态">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.02.28</div>
             </div>
-            <h2>大模型微调全流程详解</h2>
-            <p>LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。</p>
-            
-          </a>
+            <div class="unified-article-right">
+              <a href="/articles/multimodal-guide/" class="article-list-item">
+                <div class="article-list-meta">
+                  <span class="tag tag-rose">多模态</span>
+                  
+                  <time datetime="2026-02-28" class="mobile-only-date" style="display:none;">2026.02.28</time>
+                </div>
+                <h2>多模态大模型入门指南</h2>
+                <p>探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。</p>
+                
+              </a>
+            </div>
+          </div>
+
+          <div class="unified-article-row article-list-item-wrapper" data-tag="微调">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.02.25</div>
+            </div>
+            <div class="unified-article-right">
+              <a href="/articles/fine-tuning-guide/" class="article-list-item">
+                <div class="article-list-meta">
+                  <span class="tag tag-purple">微调</span>
+                  
+                  <time datetime="2026-02-25" class="mobile-only-date" style="display:none;">2026.02.25</time>
+                </div>
+                <h2>大模型微调全流程详解</h2>
+                <p>LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。</p>
+                
+              </a>
+            </div>
+          </div>
         </div>
+
+        <div class="articles-pagination fade-in" style="display: none;">
+          <button class="pagination-btn prev-btn" disabled>上一页</button>
+          <div class="pagination-numbers"></div>
+          <button class="pagination-btn next-btn">下一页</button>
+        </div>
+  
+
       </div>
     </section>
   </main>
   <script type="module" src="/src/assets/js/main.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const btns = document.querySelectorAll('.filter-btn');
-      const items = document.querySelectorAll('.article-list-item');
-      btns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          btns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const filter = btn.dataset.filter;
-          items.forEach(item => {
-            item.style.display = (filter === 'all' || item.dataset.tag === filter) ? '' : 'none';
-          });
-        });
-      });
-    });
-  </script>
 </body>
 </html>

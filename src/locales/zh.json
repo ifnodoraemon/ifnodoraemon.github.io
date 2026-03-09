@@ -220,6 +220,8 @@
     ],
     "timelineTag": "TIMELINE",
     "timelineTitle": "2026 模型发布时间线",
+    "listingTimelineTitle": "发布时间轴",
+    "listingSearchPlaceholder": "搜索文章...",
     "timeline": [
       {
         "date": "2026.02.05",
@@ -288,7 +290,9 @@
         "desc": "探索多模态模型的图文理解与应用案例。",
         "link": "/articles/multimodal-guide/"
       }
-    ]
+    ],
+    "paginationPrev": "上一页",
+    "paginationNext": "下一页"
   },
   "projects": {
     "heroTag": "EXPERIMENTS & LAB",

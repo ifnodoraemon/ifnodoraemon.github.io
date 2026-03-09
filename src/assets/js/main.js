@@ -252,3 +252,236 @@ function initTerminalAnimation() {
   // Start sequence
   advanceSequence();
 }
+// ============================================
+// Articles Listing: Pagination & Search
+// ============================================
+function initArticlesListing() {
+  const articlesList = document.getElementById('articles-list');
+  if (!articlesList) return;
+
+  const items = Array.from(articlesList.querySelectorAll('.article-list-item'));
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const pagination = document.querySelector('.articles-pagination');
+  const numbersContainer = document.querySelector('.pagination-numbers');
+  const prevBtn = document.querySelector('.prev-btn');
+  const nextBtn = document.querySelector('.next-btn');
+  
+  const searchInput = document.getElementById('article-search-input');
+  const clearBtn = document.getElementById('search-clear-btn');
+  const searchDropdown = document.getElementById('search-results-dropdown');
+  const currentLang = searchInput ? searchInput.dataset.lang : 'en';
+
+  const ITEMS_PER_PAGE = 8;
+  let currentPage = 1;
+  let filteredItems = [...items];
+  
+  // -- Pagination Logic --
+  function renderPagination() {
+    const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+    
+    // Hide pagination if only 1 page
+    if (totalPages <= 1) {
+      if (pagination) pagination.style.display = 'none';
+      return;
+    }
+    
+    if (pagination) pagination.style.display = 'flex';
+    numbersContainer.innerHTML = '';
+    
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.className = `page-num ${i === currentPage ? 'active' : ''}`;
+      btn.textContent = i;
+      btn.addEventListener('click', () => goToPage(i));
+      numbersContainer.appendChild(btn);
+    }
+    
+    if (prevBtn) prevBtn.disabled = currentPage === 1;
+    if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+  }
+  
+  function showPage(page) {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+    
+    items.forEach(item => item.style.display = 'none');
+    
+    filteredItems.forEach((item, index) => {
+      if (index >= start && index < end) {
+        item.style.display = '';
+      }
+    });
+    
+    renderPagination();
+  }
+  
+  function goToPage(page) {
+    currentPage = page;
+    showPage(currentPage);
+    // Optional scroll to top of list
+    const filterSection = document.getElementById('articles-filter');
+    if (filterSection) {
+      const offset = filterSection.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+  }
+  
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) goToPage(currentPage - 1);
+    });
+  }
+  
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+      if (currentPage < totalPages) goToPage(currentPage + 1);
+    });
+  }
+  
+  // -- Filter Logic Override --
+  // We need to override the existing filter logic to work with pagination
+  filterBtns.forEach(btn => {
+    // Remove the old listener attached in HTML template via inline script if possible.
+    // Since it's inline, we'll just handle ours and ensure ours runs.
+    btn.addEventListener('click', (e) => {
+      // Prevent the inline script from breaking pagination
+      e.stopPropagation(); 
+      
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      const filter = btn.dataset.filter;
+      
+      if (filter === 'all') {
+        filteredItems = [...items];
+      } else {
+        filteredItems = items.filter(item => item.dataset.tag === filter);
+      }
+      
+      currentPage = 1;
+      showPage(1);
+    }, true); // Use capture to intercept before the inline script
+  });
+  
+  // -- Initial Render --
+  showPage(1);
+
+  // -- Search Logic --
+  let searchIndex = null;
+  let isFetching = false;
+  
+  async function fetchSearchIndex() {
+    if (searchIndex || isFetching) return;
+    isFetching = true;
+    try {
+      const res = await fetch('/public/search-index.json');
+      if (res.ok) {
+        const data = await fetch('/public/search-index.json').then(res => res.json());
+        // Filter by current language
+        const langPref = currentLang.startsWith('zh') ? 'zh' : 'en';
+        searchIndex = data.filter(item => item.lang === langPref);
+      }
+    } catch (e) {
+      console.error('Failed to load search index', e);
+    }
+    isFetching = false;
+  }
+  
+  if (searchInput) {
+    searchInput.addEventListener('focus', fetchSearchIndex);
+    
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.trim().toLowerCase();
+      
+      if (query.length > 0) {
+        clearBtn.style.display = 'flex';
+        executeSearch(query);
+      } else {
+        clearBtn.style.display = 'none';
+        closeSearch();
+      }
+    });
+    
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      clearBtn.style.display = 'none';
+      closeSearch();
+      searchInput.focus();
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target) && !clearBtn.contains(e.target)) {
+        closeSearch();
+      }
+    });
+  }
+  
+  function executeSearch(query) {
+    if (!searchIndex) return;
+    
+    const terms = query.split(/\s+/).filter(Boolean);
+    if (terms.length === 0) return;
+    
+    const results = searchIndex.map(item => {
+      let score = 0;
+      const titleLower = item.title.toLowerCase();
+      const descLower = item.description.toLowerCase();
+      const tagLower = item.tag.toLowerCase();
+      
+      terms.forEach(term => {
+        if (titleLower.includes(term)) score += 10;
+        if (tagLower.includes(term)) score += 5;
+        if (descLower.includes(term)) score += 2;
+      });
+      
+      return { item, score };
+    })
+    .filter(res => res.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5); // Limit to top 5 results
+    
+    renderSearchResults(results, query);
+  }
+  
+  function renderSearchResults(results, query) {
+    searchDropdown.innerHTML = '';
+    
+    if (results.length === 0) {
+      const noResultsText = currentLang.startsWith('zh') ? '未找到相关文章' : 'No related articles found';
+      searchDropdown.innerHTML = `<div class="search-empty">${noResultsText}</div>`;
+    } else {
+      results.forEach(({ item }) => {
+        const a = document.createElement('a');
+        a.href = item.url;
+        a.className = 'search-result-item';
+        
+        // Basic highlight function
+        const highlight = (text) => {
+          if (!query) return text;
+          const regex = new RegExp(`(${query.split(/\s+/).join('|')})`, 'gi');
+          return text.replace(regex, '<mark>$1</mark>');
+        };
+        
+        a.innerHTML = `
+          <div class="search-result-meta">
+            <span class="tag">${item.tag}</span>
+            <time>${item.date}</time>
+          </div>
+          <div class="search-result-title">${highlight(item.title)}</div>
+          <div class="search-result-desc">${highlight(item.description)}</div>
+        `;
+        
+        searchDropdown.appendChild(a);
+      });
+    }
+    
+    searchDropdown.classList.add('active');
+  }
+  
+  function closeSearch() {
+    if(searchDropdown) searchDropdown.classList.remove('active');
+  }
+}
+initArticlesListing();

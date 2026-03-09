@@ -185,7 +185,11 @@ console.log(`\n✅ Done! Generated ${articles.length} zh articles, ${articlesEn.
 function generateListingPage(articles, isEn = false) {
   if (articles.length === 0 && isEn) return; // Note missing EN articles
 
+  const locales = isEn ? enLocales : zhLocales;
   const articlesLinkPrefix = isEn ? '/en/articles/' : '/articles/';
+  
+  // 1. (Removed separate Timeline HTML)
+  // 2. Generate Article List Items
   const listItems = articles.map((a, i) => {
     const isFeatured = i === 0;
     const pinText = isEn ? '📌 Pinned' : '📌 置顶';
@@ -194,16 +198,23 @@ function generateListingPage(articles, isEn = false) {
       : '';
 
     return `
-          <a href="${articlesLinkPrefix}${a.slug}/" class="article-list-item${isFeatured ? ' article-list-featured' : ''}" data-tag="${a.tag}">
-            <div class="article-list-meta">
-              <span class="tag ${a.tagClass || ''}">${a.tag}</span>
-              ${isFeatured ? `<span class="article-list-pin">${pinText}</span>` : ''}
-              <time datetime="${a.isoDate}">${a.dateFormatted}</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="${a.tag}">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">${a.dateFormatted}</div>
             </div>
-            <h2>${a.title}</h2>
-            <p>${a.description}</p>
-            ${tagsHtml ? `<div class="article-list-tags">${tagsHtml}</div>` : ''}
-          </a>`;
+            <div class="unified-article-right">
+              <a href="${articlesLinkPrefix}${a.slug}/" class="article-list-item${isFeatured ? ' article-list-featured' : ''}">
+                <div class="article-list-meta">
+                  <span class="tag ${a.tagClass || ''}">${a.tag}</span>
+                  ${isFeatured ? `<span class="article-list-pin">${pinText}</span>` : ''}
+                  <time datetime="${a.isoDate}" class="mobile-only-date" style="display:none;">${a.dateFormatted}</time>
+                </div>
+                <h2>${a.title}</h2>
+                <p>${a.description}</p>
+                ${tagsHtml ? `<div class="article-list-tags">${tagsHtml}</div>` : ''}
+              </a>
+            </div>
+          </div>`;
   }).join('\n');
 
   // Collect unique tags
@@ -218,6 +229,30 @@ function generateListingPage(articles, isEn = false) {
   const heroTitle = isEn ? 'All Articles' : '全部文章';
   const heroDesc = isEn ? `Discover ${articles.length} in-depth articles on AI` : `探索 AI 大模型领域的 ${articles.length} 篇技术文章与深度解析`;
   const filterAllBtn = isEn ? `All (${articles.length})` : `全部 (${articles.length})`;
+
+  // Add Pagination structure (we will use JS for client side)
+  const paginationHtml = `
+        <div class="articles-pagination fade-in" style="display: none;">
+          <button class="pagination-btn prev-btn" disabled>${locales.models.paginationPrev || 'Prev'}</button>
+          <div class="pagination-numbers"></div>
+          <button class="pagination-btn next-btn">${locales.models.paginationNext || 'Next'}</button>
+        </div>
+  `;
+
+  // Search input HTML
+  const searchPlaceholder = locales.models.listingSearchPlaceholder || (isEn ? 'Search articles...' : '搜索文章...');
+  const searchHtml = `
+        <div class="listing-search-container fade-in">
+          <div class="search-input-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="article-search-input" class="article-search-input" placeholder="${searchPlaceholder}" data-lang="${lang}" autocomplete="off">
+            <button class="search-clear-btn" id="search-clear-btn" style="display: none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+          <div class="search-results-dropdown" id="search-results-dropdown" style="display: none;"></div>
+        </div>
+  `;
 
   const html = `<!DOCTYPE html>
 <html lang="${lang}">
@@ -271,35 +306,31 @@ function generateListingPage(articles, isEn = false) {
         </div>
       </div>
     </section>
+    
+    <!-- Added top search box area -->
+    <section class="section section-tight" style="padding-bottom: 0;">
+      <div class="container">
+${searchHtml}
+      </div>
+    </section>
+
     <section class="section section-tight">
       <div class="container">
-        <div class="articles-filter fade-in">
+        
+        <!-- UNIFIED TIMELINE + LIST LAYOUT -->
+        <div class="articles-filter fade-in" id="articles-filter">
           <button class="filter-btn active" data-filter="all">${filterAllBtn}</button>
 ${filterBtns}
         </div>
-        <div class="articles-list fade-in">
+        <div class="unified-articles-list fade-in" id="articles-list">
 ${listItems}
         </div>
+${paginationHtml}
+
       </div>
     </section>
   </main>
   <script type="module" src="/src/assets/js/main.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const btns = document.querySelectorAll('.filter-btn');
-      const items = document.querySelectorAll('.article-list-item');
-      btns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          btns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const filter = btn.dataset.filter;
-          items.forEach(item => {
-            item.style.display = (filter === 'all' || item.dataset.tag === filter) ? '' : 'none';
-          });
-        });
-      });
-    });
-  </script>
 </body>
 </html>`;
 
@@ -309,6 +340,38 @@ ${listItems}
   fs.writeFileSync(path.join(outDir, 'index.html'), html, 'utf-8');
   console.log(`  ✓ ${isEn ? 'en/' : ''}articles/index.html (listing page)`);
 }
+
+// =============================================================================
+// Search index generator
+// =============================================================================
+function generateSearchIndex(articlesZh, articlesEn) {
+  const BUILD_OUT_DIR = path.join(ROOT, '.temp_build');
+  const outPath = path.join(BUILD_OUT_DIR, 'public', 'search-index.json');
+  
+  const searchData = [];
+  
+  const processArticles = (arts, lang) => {
+    arts.forEach(a => {
+      searchData.push({
+        title: a.title,
+        description: a.description,
+        url: lang === 'en' ? `/en/articles/${a.slug}/` : `/articles/${a.slug}/`,
+        tag: a.tag,
+        date: a.dateFormatted,
+        lang: lang
+      });
+    });
+  };
+  
+  processArticles(articlesZh, 'zh');
+  processArticles(articlesEn, 'en');
+  
+  fs.mkdirSync(path.join(BUILD_OUT_DIR, 'public'), { recursive: true });
+  fs.writeFileSync(outPath, JSON.stringify(searchData), 'utf-8');
+  console.log(`  ✓ public/search-index.json (${searchData.length} items)`);
+}
+
+generateSearchIndex(articles, articlesEn);
 
 
 // =============================================================================

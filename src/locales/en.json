@@ -220,6 +220,8 @@
     ],
     "timelineTag": "TIMELINE",
     "timelineTitle": "2026 Model Release Timeline",
+    "listingTimelineTitle": "Publish Timeline",
+    "listingSearchPlaceholder": "Search articles...",
     "timeline": [
       {
         "date": "2026.02.05",
@@ -288,7 +290,9 @@
         "desc": "Exploring image-text understanding and application cases of multimodal models.",
         "link": "/en/articles/multimodal-guide/"
       }
-    ]
+    ],
+    "paginationPrev": "Prev",
+    "paginationNext": "Next"
   },
   "projects": {
     "heroTag": "EXPERIMENTS & LAB",

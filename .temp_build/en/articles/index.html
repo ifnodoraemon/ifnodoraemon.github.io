@@ -50,9 +50,30 @@
         </div>
       </div>
     </section>
+    
+    <!-- Added top search box area -->
+    <section class="section section-tight" style="padding-bottom: 0;">
+      <div class="container">
+
+        <div class="listing-search-container fade-in">
+          <div class="search-input-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="article-search-input" class="article-search-input" placeholder="Search articles..." data-lang="en" autocomplete="off">
+            <button class="search-clear-btn" id="search-clear-btn" style="display: none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+          <div class="search-results-dropdown" id="search-results-dropdown" style="display: none;"></div>
+        </div>
+  
+      </div>
+    </section>
+
     <section class="section section-tight">
       <div class="container">
-        <div class="articles-filter fade-in">
+        
+        <!-- UNIFIED TIMELINE + LIST LAYOUT -->
+        <div class="articles-filter fade-in" id="articles-filter">
           <button class="filter-btn active" data-filter="all">All (7)</button>
           <button class="filter-btn" data-filter="Prompt Engineering">Prompt Engineering</button>
           <button class="filter-btn" data-filter="Industry Trends">Industry Trends</button>
@@ -62,106 +83,147 @@
           <button class="filter-btn" data-filter="Multimodal">Multimodal</button>
           <button class="filter-btn" data-filter="Fine-Tuning">Fine-Tuning</button>
         </div>
-        <div class="articles-list fade-in">
+        <div class="unified-articles-list fade-in" id="articles-list">
 
-          <a href="/en/articles/prompt-engineering-guide/" class="article-list-item article-list-featured" data-tag="Prompt Engineering">
-            <div class="article-list-meta">
-              <span class="tag ">Prompt Engineering</span>
-              <span class="article-list-pin">📌 Pinned</span>
-              <time datetime="2026-03-09">2026.03.09</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="Prompt Engineering">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.03.09</div>
             </div>
-            <h2>Prompt Engineering Practice Guide</h2>
-            <p>An in-depth exploration of designing effective prompts to improve model output quality. Covers core techniques like Few-Shot, Chain-of-Thought, and ReAct with practical examples.</p>
-            <div class="article-list-tags"><span class="mini-tag">GPT-5.4</span>
+            <div class="unified-article-right">
+              <a href="/en/articles/prompt-engineering-guide/" class="article-list-item article-list-featured">
+                <div class="article-list-meta">
+                  <span class="tag ">Prompt Engineering</span>
+                  <span class="article-list-pin">📌 Pinned</span>
+                  <time datetime="2026-03-09" class="mobile-only-date" style="display:none;">2026.03.09</time>
+                </div>
+                <h2>Prompt Engineering Practice Guide</h2>
+                <p>An in-depth exploration of designing effective prompts to improve model output quality. Covers core techniques like Few-Shot, Chain-of-Thought, and ReAct with practical examples.</p>
+                <div class="article-list-tags"><span class="mini-tag">GPT-5.4</span>
               <span class="mini-tag">Claude 4.6</span>
               <span class="mini-tag">Prompt</span></div>
-          </a>
-
-          <a href="/en/articles/ai-trends-2026/" class="article-list-item" data-tag="Industry Trends">
-            <div class="article-list-meta">
-              <span class="tag tag-green">Industry Trends</span>
-              
-              <time datetime="2026-03-07">2026.03.07</time>
+              </a>
             </div>
-            <h2>Deep Dive into 6 AI Foundation Model Trends in 2026</h2>
-            <p>From Thinking reasoning modes to Agentic applications, a deep dive into the top 6 trends in AI foundation models for 2026.</p>
-            
-          </a>
+          </div>
 
-          <a href="/en/articles/build-ai-agent/" class="article-list-item" data-tag="AI Agent">
-            <div class="article-list-meta">
-              <span class="tag tag-emerald">AI Agent</span>
-              
-              <time datetime="2026-03-05">2026.03.05</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="Industry Trends">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.03.07</div>
             </div>
-            <h2>Building AI Agent Applications from Scratch</h2>
-            <p>A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.</p>
-            
-          </a>
+            <div class="unified-article-right">
+              <a href="/en/articles/ai-trends-2026/" class="article-list-item">
+                <div class="article-list-meta">
+                  <span class="tag tag-green">Industry Trends</span>
+                  
+                  <time datetime="2026-03-07" class="mobile-only-date" style="display:none;">2026.03.07</time>
+                </div>
+                <h2>Deep Dive into 6 AI Foundation Model Trends in 2026</h2>
+                <p>From Thinking reasoning modes to Agentic applications, a deep dive into the top 6 trends in AI foundation models for 2026.</p>
+                
+              </a>
+            </div>
+          </div>
 
-          <a href="/en/articles/rag-in-practice/" class="article-list-item" data-tag="RAG">
-            <div class="article-list-meta">
-              <span class="tag tag-cyan">RAG</span>
-              
-              <time datetime="2026-03-03">2026.03.03</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="AI Agent">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.03.05</div>
             </div>
-            <h2>Retrieval-Augmented Generation (RAG) in Practice</h2>
-            <p>From vector database selection to Embedding strategies, a complete guide to building an enterprise-grade RAG system. Includes a practical comparison between Pinecone and Weaviate.</p>
-            
-          </a>
+            <div class="unified-article-right">
+              <a href="/en/articles/build-ai-agent/" class="article-list-item">
+                <div class="article-list-meta">
+                  <span class="tag tag-emerald">AI Agent</span>
+                  
+                  <time datetime="2026-03-05" class="mobile-only-date" style="display:none;">2026.03.05</time>
+                </div>
+                <h2>Building AI Agent Applications from Scratch</h2>
+                <p>A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.</p>
+                
+              </a>
+            </div>
+          </div>
 
-          <a href="/en/articles/model-comparison-2026/" class="article-list-item" data-tag="Model Review">
-            <div class="article-list-meta">
-              <span class="tag tag-purple">Model Review</span>
-              
-              <time datetime="2026-03-01">2026.03.01</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="RAG">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.03.03</div>
             </div>
-            <h2>2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</h2>
-            <p>A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.</p>
-            
-          </a>
+            <div class="unified-article-right">
+              <a href="/en/articles/rag-in-practice/" class="article-list-item">
+                <div class="article-list-meta">
+                  <span class="tag tag-cyan">RAG</span>
+                  
+                  <time datetime="2026-03-03" class="mobile-only-date" style="display:none;">2026.03.03</time>
+                </div>
+                <h2>Retrieval-Augmented Generation (RAG) in Practice</h2>
+                <p>From vector database selection to Embedding strategies, a complete guide to building an enterprise-grade RAG system. Includes a practical comparison between Pinecone and Weaviate.</p>
+                
+              </a>
+            </div>
+          </div>
 
-          <a href="/en/articles/multimodal-guide/" class="article-list-item" data-tag="Multimodal">
-            <div class="article-list-meta">
-              <span class="tag tag-rose">Multimodal</span>
-              
-              <time datetime="2026-02-28">2026.02.28</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="Model Review">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.03.01</div>
             </div>
-            <h2>Multimodal AI Models Starter Guide</h2>
-            <p>Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.</p>
-            
-          </a>
+            <div class="unified-article-right">
+              <a href="/en/articles/model-comparison-2026/" class="article-list-item">
+                <div class="article-list-meta">
+                  <span class="tag tag-purple">Model Review</span>
+                  
+                  <time datetime="2026-03-01" class="mobile-only-date" style="display:none;">2026.03.01</time>
+                </div>
+                <h2>2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</h2>
+                <p>A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.</p>
+                
+              </a>
+            </div>
+          </div>
 
-          <a href="/en/articles/fine-tuning-guide/" class="article-list-item" data-tag="Fine-Tuning">
-            <div class="article-list-meta">
-              <span class="tag tag-purple">Fine-Tuning</span>
-              
-              <time datetime="2026-02-25">2026.02.25</time>
+          <div class="unified-article-row article-list-item-wrapper" data-tag="Multimodal">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.02.28</div>
             </div>
-            <h2>A Comprehensive Guide to LLM Fine-Tuning Workflows</h2>
-            <p>A comparison of LoRA, QLoRA, and Full Fine-tuning. A complete workflow and best practices from data preparation to model deployment.</p>
-            
-          </a>
+            <div class="unified-article-right">
+              <a href="/en/articles/multimodal-guide/" class="article-list-item">
+                <div class="article-list-meta">
+                  <span class="tag tag-rose">Multimodal</span>
+                  
+                  <time datetime="2026-02-28" class="mobile-only-date" style="display:none;">2026.02.28</time>
+                </div>
+                <h2>Multimodal AI Models Starter Guide</h2>
+                <p>Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.</p>
+                
+              </a>
+            </div>
+          </div>
+
+          <div class="unified-article-row article-list-item-wrapper" data-tag="Fine-Tuning">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.02.25</div>
+            </div>
+            <div class="unified-article-right">
+              <a href="/en/articles/fine-tuning-guide/" class="article-list-item">
+                <div class="article-list-meta">
+                  <span class="tag tag-purple">Fine-Tuning</span>
+                  
+                  <time datetime="2026-02-25" class="mobile-only-date" style="display:none;">2026.02.25</time>
+                </div>
+                <h2>A Comprehensive Guide to LLM Fine-Tuning Workflows</h2>
+                <p>A comparison of LoRA, QLoRA, and Full Fine-tuning. A complete workflow and best practices from data preparation to model deployment.</p>
+                
+              </a>
+            </div>
+          </div>
         </div>
+
+        <div class="articles-pagination fade-in" style="display: none;">
+          <button class="pagination-btn prev-btn" disabled>Prev</button>
+          <div class="pagination-numbers"></div>
+          <button class="pagination-btn next-btn">Next</button>
+        </div>
+  
+
       </div>
     </section>
   </main>
   <script type="module" src="/src/assets/js/main.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const btns = document.querySelectorAll('.filter-btn');
-      const items = document.querySelectorAll('.article-list-item');
-      btns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          btns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const filter = btn.dataset.filter;
-          items.forEach(item => {
-            item.style.display = (filter === 'all' || item.dataset.tag === filter) ? '' : 'none';
-          });
-        });
-      });
-    });
-  </script>
 </body>
 </html>
