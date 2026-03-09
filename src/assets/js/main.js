@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
   } else if (path.startsWith('/models')) {
     activePage = 'models';
     footerStyle = 'simple';
+  } else if (path.startsWith('/projects')) {
+    activePage = 'projects';
+    footerStyle = 'simple';
   } else if (path === '/articles/' || path === '/articles') {
     activePage = 'articles';
     footerStyle = 'simple';

@@ -33,56 +33,80 @@
 
     <section class="section section-tight">
       <div class="container">
-        <div class="projects-grid fade-in" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-top: 2rem;">
+        <div class="projects-grid fade-in">
           
           <!-- Project 1 -->
-          <div class="project-card" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden;">
-            <div class="project-glow" style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at center, rgba(144, 202, 249, 0.05) 0%, transparent 50%); opacity: 0; transition: opacity 0.5s ease; pointer-events: none;"></div>
-            <h3 style="margin-bottom: 0.75rem; font-size: 1.25rem;">Nobita Talks AI</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; min-height: 3rem;">
-              The open-source code for this site, based on a minimalist SSG approach, supporting Markdown rendering, bilingual interface, and responsive sci-fi UI.
-            </p>
-            <div class="project-tags" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
-              <span class="mini-tag">HTML</span>
-              <span class="mini-tag">JavaScript</span>
-              <span class="mini-tag">SSG</span>
+          <div class="agent-project-card">
+            <div class="project-glow"></div>
+            <h3>🤖 Doraemon Code</h3>
+            <p>An open-source AI coding assistant designed for fully local execution, offering a Claude Code-like experience. Features single-process direct calls, seamless multi-model support (Google/OpenAI/Anthropic/Ollama), and 39 built-in tools.</p>
+            <div class="project-tags">
+              <span class="mini-tag">Python</span>
+              <span class="mini-tag">Agent</span>
+              <span class="mini-tag">Terminal</span>
             </div>
-            <div class="project-links" style="display: flex; gap: 1rem;">
-              <a href="https://github.com/ifnodoraemon/ifnodoraemon.github.io" target="_blank" rel="noopener" class="btn-ghost" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Source Code</a>
+            <div class="project-links">
+              <a href="https://github.com/ifnodoraemon/doraemon-code" target="_blank" rel="noopener" class="btn-ghost">Source Code</a>
             </div>
           </div>
 
           <!-- Project 2 -->
-          <div class="project-card" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden;">
-            <div class="project-glow" style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at center, rgba(144, 202, 249, 0.05) 0%, transparent 50%); opacity: 0; transition: opacity 0.5s ease; pointer-events: none;"></div>
-            <h3 style="margin-bottom: 0.75rem; font-size: 1.25rem;">Awesome-Agent-Prompts</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; min-height: 3rem;">
-              A repository of carefully collected and tested LLM Agent system prompts, covering reflection, planning, tool usage, and other chains of thought.
-            </p>
-            <div class="project-tags" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
-              <span class="mini-tag">Prompt</span>
-              <span class="mini-tag">Agent</span>
-              <span class="mini-tag">LLM</span>
+          <div class="agent-project-card">
+            <div class="project-glow"></div>
+            <h3>Joyarti 3D Customizer</h3>
+            <p>Full-cycle commercial project: An e-commerce platform for personalized 3D printed figurines and art custom gifts. Primarily responsible for building the AI image generation pipeline, orchestrating the overall AI workflow, and conducting in-depth effect tuning to deliver a highly customizable, commercial-grade image generation engine.</p>
+            <div class="project-tags">
+              <span class="mini-tag">AI Workflow</span>
+              <span class="mini-tag">ComfyUI</span>
+              <span class="mini-tag">Fine-Tuning</span>
             </div>
-            <div class="project-links" style="display: flex; gap: 1rem;">
-              <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="btn-ghost" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">[Demo] View Repo</a>
+            <div class="project-links">
+              <a href="https://joyarti.com" target="_blank" rel="noopener" class="btn-ghost">Visit Site</a>
             </div>
           </div>
 
           <!-- Project 3 -->
-          <div class="project-card" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden;">
-            <div class="project-glow" style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at center, rgba(144, 202, 249, 0.05) 0%, transparent 50%); opacity: 0; transition: opacity 0.5s ease; pointer-events: none;"></div>
-            <h3 style="margin-bottom: 0.75rem; font-size: 1.25rem;">RAG-Lite</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; min-height: 3rem;">
-              A minimalist Retrieval-Augmented Generation (RAG) local testing tool, supporting instant vectorization and chat with local PDF files.
-            </p>
-            <div class="project-tags" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+          <div class="agent-project-card">
+            <div class="project-glow"></div>
+            <h3>Nobita Talks AI</h3>
+            <p>The open-source code for this site, based on a minimalist SSG approach, supporting Markdown rendering, bilingual interface, and responsive sci-fi UI.</p>
+            <div class="project-tags">
+              <span class="mini-tag">Prompt</span>
+              <span class="mini-tag">Agent</span>
+              <span class="mini-tag">LLM</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="btn-ghost">[Demo] View Repo</a>
+            </div>
+          </div>
+
+          <!-- Project 4 -->
+          <div class="agent-project-card">
+            <div class="project-glow"></div>
+            <h3>Awesome-Agent-Prompts</h3>
+            <p>A repository of carefully collected and tested LLM Agent system prompts, covering reflection, planning, tool usage, and other chains of thought.</p>
+            <div class="project-tags">
+              <span class="mini-tag">Prompt</span>
+              <span class="mini-tag">Agent</span>
+              <span class="mini-tag">LLM</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="btn-ghost">[Demo] View Repo</a>
+            </div>
+          </div>
+
+          <!-- Project 5 -->
+          <div class="agent-project-card">
+            <div class="project-glow"></div>
+            <h3>RAG-Lite</h3>
+            <p>A minimalist Retrieval-Augmented Generation (RAG) local testing tool, supporting instant vectorization and chat with local PDF files.</p>
+            <div class="project-tags">
               <span class="mini-tag">Python</span>
               <span class="mini-tag">LangChain</span>
               <span class="mini-tag">ChromaDB</span>
             </div>
-            <div class="project-links" style="display: flex; gap: 1rem;">
-              <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="btn-ghost" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">[Demo] View Repo</a>
+            <div class="project-links">
+              <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="btn-ghost">[Demo] View Repo</a>
             </div>
           </div>
 
@@ -90,17 +114,6 @@
       </div>
     </section>
   </main>
-
-  <style>
-    .project-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-      border-color: var(--accent-dark);
-    }
-    .project-card:hover .project-glow {
-      opacity: 1;
-    }
-  </style>
 
   <script type="module" src="/src/assets/js/main.js"></script>
 </body>
