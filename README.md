@@ -1,75 +1,39 @@
-# ifnodoraemon.github.io
+# 大雄话AI (Nobita Talks AI)
 
-我的 GitHub Pages 个人主页
+Welcome to **Nobita Talks AI**, a technical experimental node observing the rapid evolution of Artificial Intelligence.
 
-## 快速开始
+🔗 **[Visit the Live Site](https://ifnodoraemon.github.io)**
 
-### 在任何机器上运行
+---
 
-1. **克隆项目**
-   ```bash
-   git clone https://github.com/ifnodoraemon/ifnodoraemon.github.io.git
-   cd ifnodoraemon.github.io
-   ```
+## 🌌 About The Node
 
-2. **安装依赖**
-   ```bash
-   npm install
-   ```
+This repository contains the source code for my personal space dedicated to tracking frontier AI tech, summarizing engineering practices, and sharing learnings. On the eve of AGI, maintaining technical sensitivity is more important than ever.
 
-3. **启动开发服务器**
-   ```bash
-   npm run dev
-   ```
+The site primarily focuses on:
+- **Model Comparisons**: Benchmark data and architecture analysis of mainstream Foundation Models (e.g., GPT-5.4, Claude 4.6, Gemini 3.1 Pro).
+- **AI Agents**: Best practices and complex architectural discussions around autonomous multi-agent workflows.
+- **RAG & Context**: Deep dives into Retrieval-Augmented Generation, Vector Databases, and ultra-long context window optimizations.
+- **Prompt Engineering**: Advanced strategies to guide Large Language Models effectively.
 
-   然后在浏览器打开 `http://localhost:5173`
+## 👨‍💻 About The Author
 
-### 其他命令
+I am **ifnodoraemon**, a developer and AI researcher passionate about exploring the capabilities and boundaries of modern LLMs.
 
-- `npm run build` - 构建生产版本
-- `npm run preview` - 预览生产版本
+- 🐙 **GitHub:** [@ifnodoraemon](https://github.com/ifnodoraemon)
+- 𝕏 **X (Twitter):** [@ifnodoraemon](https://x.com/ifnodoraemon)
+- ✉️ **Email:** ifnodoraemon@gmail.com
 
-## 部署
+---
 
-项目已配置 GitHub Actions 自动部署：
+## 🛠️ Tech Stack
 
-1. 推送代码到 `main` 分支
-2. GitHub Actions 自动构建并部署
-3. 访问 https://ifnodoraemon.github.io
+This site is built with a focus on speed, minimalism, and a sci-fi cyber aesthetic:
+- **Vite** for ultra-fast generation and bundling.
+- **Handlebars** for templating.
+- **Markdown-it** for processing content.
+- Native CSS variables for consistent, scalable theming without heavy frameworks.
 
-### 首次部署设置
+## 📄 License
 
-1. 在 GitHub 仓库中，进入 Settings > Pages
-2. Source 选择 "GitHub Actions"
-3. 推送代码后会自动部署
-
-## 技术栈
-
-- Vite - 快速的开发构建工具
-- 原生 HTML/CSS/JavaScript
-- GitHub Actions - 自动部署
-
-## 项目结构
-
-```
-ifnodoraemon.github.io/
-├── .github/
-│   └── workflows/
-│       └── deploy.yml      # GitHub Actions 部署配置
-├── index.html              # 主页面
-├── style.css               # 样式文件
-├── main.js                 # JavaScript 逻辑
-├── vite.config.js          # Vite 配置
-├── package.json            # 项目配置
-└── README.md               # 说明文档
-```
-
-## 自定义
-
-- 修改 `index.html` 更新页面内容
-- 修改 `style.css` 调整样式
-- 修改 `main.js` 添加交互功能
-
-## License
-
-MIT
+This repository is licensed under the MIT License. Feel free to use the code as a starting point for your own static site, but please modify the personal content and branding to reflect your own.
