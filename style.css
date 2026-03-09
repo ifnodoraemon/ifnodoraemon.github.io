@@ -1904,6 +1904,17 @@ img { max-width: 100%; display: block; }
   margin: 2.5rem 0;
 }
 
+/* Mermaid diagrams */
+.article-detail-content pre.mermaid {
+  background: #0a0a1a;
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  overflow-x: auto;
+}
+
 .article-nav {
   display: flex;
   gap: 1rem;

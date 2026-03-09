@@ -21,18 +21,17 @@ AI Agent（智能代理）是能够**感知环境、自主决策、执行行动*
 一个完整的 AI Agent 系统通常包含以下核心组件：
 
 ```mermaid
-graph TD
-    A["AI Agent"] --> B["大模型 LLM"]
-    A --> C["提示管理器"]
-    B --> D["决策引擎 Router"]
-    C --> D
-    D --> E["记忆系统 Memory"]
-    E --> D
-    D --> F["工具集 Tools"]
-    F --> G["搜索"]
-    F --> H["代码执行"]
-    F --> I["数据库"]
-    F --> J["外部 API"]
+graph LR
+    subgraph Core["核心层"]
+        LLM["大模型 LLM"] --- PM["提示管理器"]
+    end
+    subgraph Decision["决策层"]
+        Router["决策引擎"] --- Memory["记忆系统"]
+    end
+    subgraph Tools["工具层"]
+        T1["搜索"] & T2["代码执行"] & T3["数据库"] & T4["API"]
+    end
+    Core --> Decision --> Tools
 ```
 
 ## 实现步骤
