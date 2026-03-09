@@ -23,9 +23,13 @@ marked.setOptions({
   breaks: false,
 });
 
-// Custom renderer for code blocks (add language class)
+// Custom renderer for code blocks
 const renderer = new marked.Renderer();
 renderer.code = function ({ text, lang }) {
+  // Mermaid diagrams → rendered by Mermaid.js on the client
+  if (lang === 'mermaid') {
+    return `<pre class="mermaid">\n${text}\n</pre>\n`;
+  }
   const langClass = lang ? ` class="language-${lang}"` : '';
   return `<pre><code${langClass}>${escapeHtml(text)}</code></pre>\n`;
 };

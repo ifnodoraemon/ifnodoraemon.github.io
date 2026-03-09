@@ -19,12 +19,14 @@ description: 分析当前 AI 大模型的技术演进方向和商业化应用前
 
 GPT-5.4 的 Thinking 变体和 Gemini 3.1 的 Thinking Levels 机制代表了一个重要趋势：**模型不再直接输出答案，而是先展示思考链**。
 
-```text
-                 传统模型
-用户提问 ──────────────────→ 直接输出答案
-
-                Thinking 模型
-用户提问 ──→ 内部推理链 ──→ 验证推理 ──→ 输出答案
+```mermaid
+graph LR
+    subgraph 传统模型
+        A1["\ud83d\udcac \u7528\u6237\u63d0\u95ee"] --> A2["\u76f4\u63a5\u8f93\u51fa\u7b54\u6848"]
+    end
+    subgraph Thinking \u6a21\u578b
+        B1["\ud83d\udcac \u7528\u6237\u63d0\u95ee"] --> B2["\ud83e\udde0 \u5185\u90e8\u63a8\u7406\u94fe"] --> B3["\u2705 \u9a8c\u8bc1\u63a8\u7406"] --> B4["\u2728 \u8f93\u51fa\u7b54\u6848"]
+    end
 ```
 
 这种范式转变带来了几个关键变化：
