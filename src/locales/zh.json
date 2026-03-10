@@ -10,7 +10,7 @@
       "desc": "全面对比当前最先进的 AI 大模型，包括 GPT-5.4、Claude 4.6 和 Gemini 3.1 的横向评测与适用场景分析。"
     },
     "projects": {
-      "title": "实验项目 — 大雄话AI",
+      "title": "个人作品 — 大雄话AI",
       "desc": "基于各大顶级模型开发的创新实验项目与开源工具演示。"
     },
     "about": {
@@ -295,8 +295,8 @@
     "paginationNext": "下一页"
   },
   "projects": {
-    "heroTag": "EXPERIMENTS & LAB",
-    "heroTitle": "实验项目",
+    "heroTag": "PORTFOLIO & PROJECTS",
+    "heroTitle": "个人作品",
     "heroDesc": "探索大型语言模型的边界能力，构建实验性工具与 Agent 应用演示。",
     "comingSoon": "新项目正在构建中",
     "comingDesc": "正在开发基于多 Agent 协同的工作流自动化平台。敬请期待后续开源发布与在线 Demo。",

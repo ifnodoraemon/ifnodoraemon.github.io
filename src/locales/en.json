@@ -10,7 +10,7 @@
       "desc": "A comprehensive comparison of state-of-the-art AI foundation models, including benchmark evaluations and use-case analysis for GPT-5.4, Claude 4.6, and Gemini 3.1."
     },
     "projects": {
-      "title": "Experiments & Lab — Nobita Talks AI",
+      "title": "Personal Projects — Nobita Talks AI",
       "desc": "Innovative experimental projects and open-source tool demonstrations built on top-tier LLMs."
     },
     "about": {
@@ -295,8 +295,8 @@
     "paginationNext": "Next"
   },
   "projects": {
-    "heroTag": "EXPERIMENTS & LAB",
-    "heroTitle": "Experiments",
+    "heroTag": "PORTFOLIO & PROJECTS",
+    "heroTitle": "Personal Projects",
     "heroDesc": "Exploring the capability boundaries of large language models, building experimental tools and Agent application demos.",
     "comingSoon": "New projects are brewing",
     "comingDesc": "Currently developing a multi-agent orchestrated workflow automation platform. Stay tuned for open-source releases and online demos.",
