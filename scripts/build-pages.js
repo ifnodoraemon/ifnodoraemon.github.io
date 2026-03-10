@@ -11,6 +11,21 @@ const ROOT = path.resolve(__dirname, '..');
 const TEMPLATES_DIR = path.join(ROOT, 'src', 'templates', 'pages');
 const LOCALES_DIR = path.join(ROOT, 'src', 'locales');
 const BUILD_OUT_DIR = path.join(ROOT, '.temp_build');
+const PUBLIC_DIR = path.join(ROOT, 'public');
+
+// Ensure output dirs exist
+if (!fs.existsSync(BUILD_OUT_DIR)) {
+  fs.mkdirSync(BUILD_OUT_DIR, { recursive: true });
+}
+
+// Copy static public assets (like favicon) to temp_build/public
+const tempPublicDir = path.join(BUILD_OUT_DIR, 'public');
+if (!fs.existsSync(tempPublicDir)) {
+  fs.mkdirSync(tempPublicDir, { recursive: true });
+}
+if (fs.existsSync(PUBLIC_DIR)) {
+  fs.cpSync(PUBLIC_DIR, tempPublicDir, { recursive: true });
+}
 
 // Ensure locales exist
 if (!fs.existsSync(LOCALES_DIR)) {
