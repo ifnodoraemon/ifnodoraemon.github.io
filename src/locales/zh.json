@@ -310,10 +310,10 @@
     "p3_title": "Nobita Talks AI",
     "p3_desc": "本站的开源源码，基于极简静态站点生成方案，支持 Markdown 渲染、中英双语和响应式科幻 UI。",
     "btn_demo": "[Demo] View Repo",
-    "p4_title": "Awesome-Agent-Prompts",
-    "p4_desc": "精心收集并测试的大模型 Agent 系统提示词仓库，涵盖反思、规划、工具调用等多种思维链路。",
-    "p5_title": "RAG-Lite",
-    "p5_desc": "一个极简的检索增强生成(RAG)本地测试工具，支持将本地 PDF 即时向量化并对话。"
+    "p4_title": "Edge-AI Vision System",
+    "p4_desc": "基于 PyTorch 和 YOLO 构建的轻量级目标检测与追踪系统，专为边缘计算设备优化，实现毫秒级高精度实时推理。",
+    "p5_title": "Smart Campus AI",
+    "p5_desc": "公司内部全栈项目：基于 Python 开发的全流程智慧园区系统，涵盖从前端摄像头视频流接入、AI 算法推理、到后端的自动告警触发与多渠道告警通知。"
   },
   "about": {
     "heroTag": "AGENT PROFILE // INIT",

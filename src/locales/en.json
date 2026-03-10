@@ -310,10 +310,10 @@
     "p3_title": "Nobita Talks AI",
     "p3_desc": "The open-source code for this site, based on a minimalist SSG approach, supporting Markdown rendering, bilingual interface, and responsive sci-fi UI.",
     "btn_demo": "[Demo] View Repo",
-    "p4_title": "Awesome-Agent-Prompts",
-    "p4_desc": "A repository of carefully collected and tested LLM Agent system prompts, covering reflection, planning, tool usage, and other chains of thought.",
-    "p5_title": "RAG-Lite",
-    "p5_desc": "A minimalist Retrieval-Augmented Generation (RAG) local testing tool, supporting instant vectorization and chat with local PDF files."
+    "p4_title": "Edge-AI Vision System",
+    "p4_desc": "A lightweight object detection and tracking system built with PyTorch and YOLO, optimized for edge computing devices to achieve millisecond-level high-precision real-time inference.",
+    "p5_title": "Smart Campus AI",
+    "p5_desc": "Internal full-stack project: A Python-based end-to-end smart campus system covering everything from front-end camera video stream ingestion, AI algorithm inference, to back-end automated alert triggering and multi-channel notifications."
   },
   "about": {
     "heroTag": "AGENT PROFILE // INIT",

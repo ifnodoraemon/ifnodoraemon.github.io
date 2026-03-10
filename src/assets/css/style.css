@@ -869,12 +869,15 @@ mark {
 .dot.expand { background: #27c93f; }
 
 .terminal-title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  flex: 1;
+  text-align: center;
   font-family: var(--font-mono);
   font-size: 0.8rem;
   color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 44px; /* offset for the dots on the left (12*3 + 8) roughly to keep center alignment */
 }
 
 .terminal-body {
@@ -3181,7 +3184,7 @@ mark {
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 2rem;
+  padding: 0;
   transition: all 0.4s var(--ease);
   position: relative;
   overflow: hidden;
@@ -3189,6 +3192,12 @@ mark {
   flex-direction: column;
   min-height: 280px;
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.agent-project-card .terminal-body {
+  padding: 2rem;
+  min-height: unset;
+  flex: 1;
 }
 
 .agent-project-card::before {
