@@ -156,20 +156,17 @@ Prompts are **predefined interaction templates** that accept dynamic parameters 
 @mcp.prompt()
 async def code_review(language: str, code: str) -> str:
     """Generate a code review prompt"""
-    return f"""You are a senior {language} engineer. Please perform a thorough review of the following code.
-
-Review dimensions:
-1. Security vulnerabilities (SQL injection, XSS, SSRF, etc.)
-2. Performance bottlenecks (N+1 queries, memory leaks, blocking operations)
-3. Code style (naming conventions, single responsibility principle)
-4. Edge cases (null handling, exception handling, concurrency safety)
-
-Code:
-```{language}
-{code}
-```
-
-Please output review findings sorted by severity."""
+    return (
+        f"You are a senior {language} engineer. "
+        f"Please perform a thorough review of the following code.\n\n"
+        f"Review dimensions:\n"
+        f"1. Security vulnerabilities (SQL injection, XSS, SSRF, etc.)\n"
+        f"2. Performance bottlenecks (N+1 queries, memory leaks, blocking operations)\n"
+        f"3. Code style (naming conventions, single responsibility principle)\n"
+        f"4. Edge cases (null handling, exception handling, concurrency safety)\n\n"
+        f"Code:\n{code}\n\n"
+        f"Please output review findings sorted by severity."
+    )
 ```
 
 The core value of Prompts lies in **encapsulating domain expert best practices**. Teams can standardize their code review checklists, data analysis templates, and report formats as MCP Prompts, ensuring AI consistently follows organizational standards.
