@@ -13,20 +13,28 @@ Imagine you have a laptop that needs to connect to a monitor, keyboard, hard dri
 
 ```mermaid
 graph LR
-    subgraph Without MCP
+    subgraph WithoutMCP["Without MCP"]
         A1["Claude"] --- X1["Custom Connector A"]
         A2["GPT"] --- X2["Custom Connector B"]
         A3["Gemini"] --- X3["Custom Connector C"]
-        X1 & X2 & X3 --- D1["Database"]
-        X1 & X2 & X3 --- D2["Filesystem"]
-        X1 & X2 & X3 --- D3["External API"]
+        X1 --- D1["Database"]
+        X2 --- D1
+        X3 --- D1
+        X1 --- D2["Filesystem"]
+        X2 --- D2
+        X3 --- D2
+        X1 --- D3["External API"]
+        X2 --- D3
+        X3 --- D3
     end
 ```
 
 ```mermaid
 graph LR
-    subgraph With MCP
-        B1["Claude"] & B2["GPT"] & B3["Gemini"] --- M["MCP Unified Protocol"]
+    subgraph WithMCP["With MCP"]
+        B1["Claude"] --- M["MCP Unified Protocol"]
+        B2["GPT"] --- M
+        B3["Gemini"] --- M
         M --- S1["Database Server"]
         M --- S2["Filesystem Server"]
         M --- S3["API Server"]
@@ -43,12 +51,14 @@ MCP follows a classic **Host - Client - Server** three-tier architecture:
 
 ```mermaid
 graph TB
-    subgraph Host["MCP Host (e.g. Claude Desktop / VS Code)"]
+    subgraph Host["MCP Host"]
         LLM["Large Language Model"]
         C1["MCP Client 1"]
         C2["MCP Client 2"]
         C3["MCP Client 3"]
-        LLM --- C1 & C2 & C3
+        LLM --- C1
+        LLM --- C2
+        LLM --- C3
     end
     C1 -- "JSON-RPC 2.0" --> S1["MCP Server: GitHub"]
     C2 -- "JSON-RPC 2.0" --> S2["MCP Server: Database"]

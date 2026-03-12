@@ -13,20 +13,28 @@ description: 从架构原理到实战开发，完整解析 Model Context Protoco
 
 ```mermaid
 graph LR
-    subgraph 没有 MCP
+    subgraph 没有MCP
         A1["Claude"] --- X1["自定义连接器 A"]
         A2["GPT"] --- X2["自定义连接器 B"]
         A3["Gemini"] --- X3["自定义连接器 C"]
-        X1 & X2 & X3 --- D1["数据库"]
-        X1 & X2 & X3 --- D2["文件系统"]
-        X1 & X2 & X3 --- D3["外部 API"]
+        X1 --- D1["数据库"]
+        X2 --- D1
+        X3 --- D1
+        X1 --- D2["文件系统"]
+        X2 --- D2
+        X3 --- D2
+        X1 --- D3["外部 API"]
+        X2 --- D3
+        X3 --- D3
     end
 ```
 
 ```mermaid
 graph LR
-    subgraph 有了 MCP
-        B1["Claude"] & B2["GPT"] & B3["Gemini"] --- M["MCP 统一协议"]
+    subgraph 有了MCP
+        B1["Claude"] --- M["MCP 统一协议"]
+        B2["GPT"] --- M
+        B3["Gemini"] --- M
         M --- S1["数据库 Server"]
         M --- S2["文件系统 Server"]
         M --- S3["API Server"]
@@ -43,12 +51,14 @@ MCP 采用经典的 **Host - Client - Server** 三层架构：
 
 ```mermaid
 graph TB
-    subgraph Host["MCP Host（如 Claude Desktop / VS Code）"]
+    subgraph Host["MCP Host"]
         LLM["大语言模型"]
         C1["MCP Client 1"]
         C2["MCP Client 2"]
         C3["MCP Client 3"]
-        LLM --- C1 & C2 & C3
+        LLM --- C1
+        LLM --- C2
+        LLM --- C3
     end
     C1 -- "JSON-RPC 2.0" --> S1["MCP Server: GitHub"]
     C2 -- "JSON-RPC 2.0" --> S2["MCP Server: 数据库"]
