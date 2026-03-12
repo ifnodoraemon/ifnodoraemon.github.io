@@ -33,7 +33,7 @@
     "name": "All Articles",
     "description": "All AI technology articles and deep dives.",
     "url": "https://ifnodoraemon.github.io/en/articles/",
-    "numberOfItems": 7
+    "numberOfItems": 8
   }
   </script>
 </head>
@@ -46,7 +46,7 @@
         <div class="page-hero-content fade-in">
           <div class="section-tag">ALL ARTICLES</div>
           <h1>All Articles</h1>
-          <p class="page-hero-desc">Discover 7 in-depth articles on AI</p>
+          <p class="page-hero-desc">Discover 8 in-depth articles on AI</p>
         </div>
       </div>
     </section>
@@ -74,7 +74,8 @@
         
         <!-- UNIFIED TIMELINE + LIST LAYOUT -->
         <div class="articles-filter fade-in" id="articles-filter">
-          <button class="filter-btn active" data-filter="all">All (7)</button>
+          <button class="filter-btn active" data-filter="all">All (8)</button>
+          <button class="filter-btn" data-filter="MCP">MCP</button>
           <button class="filter-btn" data-filter="Prompt Engineering">Prompt Engineering</button>
           <button class="filter-btn" data-filter="Industry Trends">Industry Trends</button>
           <button class="filter-btn" data-filter="AI Agent">AI Agent</button>
@@ -85,15 +86,33 @@
         </div>
         <div class="unified-articles-list fade-in" id="articles-list">
 
+          <div class="unified-article-row article-list-item-wrapper" data-tag="MCP">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.03.12</div>
+            </div>
+            <div class="unified-article-right">
+              <a href="/en/articles/mcp-guide/" class="article-list-item article-list-featured">
+                <div class="article-list-meta">
+                  <span class="tag tag-violet">MCP</span>
+                  <span class="article-list-pin">📌 Pinned</span>
+                  <time datetime="2026-03-12" class="mobile-only-date" style="display:none;">2026.03.12</time>
+                </div>
+                <h2>MCP Deep Dive: The USB-C Port for AI</h2>
+                <p>From architecture to hands-on development, a complete guide to the Model Context Protocol. Includes Python SDK tutorial, security mechanisms, and ecosystem comparison.</p>
+                
+              </a>
+            </div>
+          </div>
+
           <div class="unified-article-row article-list-item-wrapper" data-tag="Prompt Engineering">
             <div class="unified-timeline-left">
               <div class="unified-timeline-date">2026.03.09</div>
             </div>
             <div class="unified-article-right">
-              <a href="/en/articles/prompt-engineering-guide/" class="article-list-item article-list-featured">
+              <a href="/en/articles/prompt-engineering-guide/" class="article-list-item">
                 <div class="article-list-meta">
                   <span class="tag ">Prompt Engineering</span>
-                  <span class="article-list-pin">📌 Pinned</span>
+                  
                   <time datetime="2026-03-09" class="mobile-only-date" style="display:none;">2026.03.09</time>
                 </div>
                 <h2>Prompt Engineering Practice Guide</h2>

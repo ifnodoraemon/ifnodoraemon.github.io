@@ -5,8 +5,15 @@
   <link>https://ifnodoraemon.github.io/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Tue, 10 Mar 2026 03:03:31 GMT</pubDate>
+  <pubDate>Thu, 12 Mar 2026 06:30:12 GMT</pubDate>
   <atom:link href="https://ifnodoraemon.github.io/en/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>MCP Deep Dive: The USB-C Port for AI</title>
+    <link>https://ifnodoraemon.github.io/en/articles/mcp-guide/</link>
+    <guid>https://ifnodoraemon.github.io/en/articles/mcp-guide/</guid>
+    <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
+    <description>From architecture to hands-on development, a complete guide to the Model Context Protocol. Includes Python SDK tutorial, security mechanisms, and ecosystem comparison.</description>
+  </item>
   <item>
     <title>Prompt Engineering Practice Guide</title>
     <link>https://ifnodoraemon.github.io/en/articles/prompt-engineering-guide/</link>
