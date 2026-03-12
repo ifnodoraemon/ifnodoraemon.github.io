@@ -3,29 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro — {{meta.siteName}}</title>
+  <title>2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro — 大雄话AI</title>
   <meta name="description" content="从推理能力、编码水平、上下文窗口到 API 定价，全方位对比 2026 年三大主流大模型的实际表现与选型策略。">
   <meta name="keywords" content="模型评测,AI大模型,GPT-5.4,Claude 4.6,Gemini 3.1,model comparison 2026">
   <meta name="author" content="ifnodoraemon">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://ifnodoraemon.github.io/articles/model-comparison-2026/">
+  <link rel="alternate" hreflang="zh" href="https://ifnodoraemon.github.io/articles/model-comparison-2026/" />
+  <link rel="alternate" hreflang="en" href="https://ifnodoraemon.github.io/en/articles/model-comparison-2026/" />
+  <link rel="alternate" hreflang="x-default" href="https://ifnodoraemon.github.io/articles/model-comparison-2026/" />
   <meta name="theme-color" content="#06060b">
 
   <!-- Open Graph / Article -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://ifnodoraemon.github.io/articles/model-comparison-2026/">
-  <meta property="og:title" content="2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro — {{meta.siteName}}">
+  <meta property="og:title" content="2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro — 大雄话AI">
   <meta property="og:description" content="从推理能力、编码水平、上下文窗口到 API 定价，全方位对比 2026 年三大主流大模型的实际表现与选型策略。">
   <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
   <meta property="og:locale" content="{{#if isEn}}en_US{{else}}zh_CN{{/if}}">
-  <meta property="og:site_name" content="{{meta.siteName}}">
+  <meta property="og:site_name" content="大雄话AI">
   <meta property="article:published_time" content="2026-03-01">
   <meta property="article:author" content="ifnodoraemon">
   <meta property="article:section" content="模型评测">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro — {{meta.siteName}}">
+  <meta name="twitter:title" content="2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro — 大雄话AI">
   <meta name="twitter:description" content="从推理能力、编码水平、上下文窗口到 API 定价，全方位对比 2026 年三大主流大模型的实际表现与选型策略。">
   <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
 
@@ -47,8 +50,7 @@
   <link rel="apple-touch-icon" href="/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="preload" href="/src/assets/css/style.css" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/src/assets/css/style.css">
 
   <!-- JSON-LD Structured Data -->
@@ -78,10 +80,23 @@
     "articleSection": "模型评测"
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "大雄话AI", "item": "https://ifnodoraemon.github.io/" },
+      { "@type": "ListItem", "position": 2, "name": "文章", "item": "https://ifnodoraemon.github.io/articles/" },
+      { "@type": "ListItem", "position": 3, "name": "2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro" }
+    ]
+  }
+  </script>
 </head>
 <body>
   <div class="bg-grid" aria-hidden="true"></div>
   <canvas id="particles" aria-hidden="true"></canvas>
+
+  <nav id="navbar" class="navbar" aria-label="主导航"></nav>
 
   <main class="page-main">
     <article class="article-detail">
@@ -524,6 +539,7 @@ response = model.generate_content(&quot;解释量子计算的基本原理&quot;)
       </div>
     </article>
   </main>
+  <footer id="site-footer" class="footer"></footer>
 
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">

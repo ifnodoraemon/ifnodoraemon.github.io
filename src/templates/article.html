@@ -8,12 +8,15 @@
   <meta name="keywords" content="{{keywords}}">
   <meta name="author" content="ifnodoraemon">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://ifnodoraemon.github.io/articles/{{slug}}/">
+  <link rel="canonical" href="https://ifnodoraemon.github.io{{articles_prefix}}/articles/{{slug}}/">
+  <link rel="alternate" hreflang="zh" href="https://ifnodoraemon.github.io/articles/{{slug}}/" />
+  <link rel="alternate" hreflang="en" href="https://ifnodoraemon.github.io/en/articles/{{slug}}/" />
+  <link rel="alternate" hreflang="x-default" href="https://ifnodoraemon.github.io/articles/{{slug}}/" />
   <meta name="theme-color" content="#06060b">
 
   <!-- Open Graph / Article -->
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://ifnodoraemon.github.io/articles/{{slug}}/">
+  <meta property="og:url" content="https://ifnodoraemon.github.io{{articles_prefix}}/articles/{{slug}}/">
   <meta property="og:title" content="{{title}} — {{meta.siteName}}">
   <meta property="og:description" content="{{description}}">
   <meta property="og:image" content="{{image}}">
@@ -47,8 +50,7 @@
   <link rel="apple-touch-icon" href="/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="preload" href="/src/assets/css/style.css" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/src/assets/css/style.css">
 
   <!-- JSON-LD Structured Data -->
@@ -73,15 +75,28 @@
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://ifnodoraemon.github.io/articles/{{slug}}/"
+      "@id": "https://ifnodoraemon.github.io{{articles_prefix}}/articles/{{slug}}/"
     },
     "articleSection": "{{tag}}"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "{{meta.siteName}}", "item": "https://ifnodoraemon.github.io{{articles_prefix}}/" },
+      { "@type": "ListItem", "position": 2, "name": "{{breadcrumb_articles}}", "item": "https://ifnodoraemon.github.io{{articles_prefix}}/articles/" },
+      { "@type": "ListItem", "position": 3, "name": "{{title}}" }
+    ]
   }
   </script>
 </head>
 <body>
   <div class="bg-grid" aria-hidden="true"></div>
   <canvas id="particles" aria-hidden="true"></canvas>
+
+  <nav id="navbar" class="navbar" aria-label="主导航"></nav>
 
   <main class="page-main">
     <article class="article-detail">
@@ -131,6 +146,7 @@
       </div>
     </article>
   </main>
+  <footer id="site-footer" class="footer"></footer>
 
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">

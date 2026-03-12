@@ -10,15 +10,18 @@
   <meta name="keywords" content="AI大模型,GPT,Claude,Gemini,提示工程,AI Agent,RAG,LLM">
   <meta name="author" content="ifnodoraemon">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://ifnodoraemon.github.io/">
-  <link rel="alternate" type="application/rss+xml" title="{{meta.siteName}} RSS Feed" href="/feed.xml" />
+  <link rel="canonical" href="https://ifnodoraemon.github.io{{linkPrefix}}/">
+  <link rel="alternate" hreflang="zh" href="https://ifnodoraemon.github.io/" />
+  <link rel="alternate" hreflang="en" href="https://ifnodoraemon.github.io/en/" />
+  <link rel="alternate" hreflang="x-default" href="https://ifnodoraemon.github.io/" />
+  <link rel="alternate" type="application/rss+xml" title="{{meta.siteName}} RSS Feed" href="{{#if isEn}}/en/feed.xml{{else}}/feed.xml{{/if}}" />
 
   <!-- Theme Color -->
   <meta name="theme-color" content="#06060b">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://ifnodoraemon.github.io/">
+  <meta property="og:url" content="https://ifnodoraemon.github.io{{linkPrefix}}/">
   <meta property="og:title" content="{{meta.home.title}}">
   <meta property="og:description" content="{{meta.home.desc}}">
   <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
@@ -53,50 +56,12 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
   <!-- Structured Data (JSON-LD) -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Blog",
-    "name": "大雄话AI",
-    "description": "专注 AI 大模型技术研究与实践的技术博客",
-    "url": "https://ifnodoraemon.github.io/",
-    "image": "https://ifnodoraemon.github.io/og-image.png",
-    "author": {
-      "@type": "Person",
-      "name": "ifnodoraemon",
-      "url": "https://github.com/ifnodoraemon"
-    },
-    "inLanguage": "zh-CN",
-    "dateCreated": "2026-03-05",
-    "blogPost": [
-      {
-        "@type": "BlogPosting",
-        "headline": "大模型提示工程实践指南",
-        "datePublished": "2026-03-09",
-        "description": "深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。",
-        "author": { "@type": "Person", "name": "ifnodoraemon" }
-      },
-      {
-        "@type": "BlogPosting",
-        "headline": "2026 年 AI 大模型发展趋势",
-        "datePublished": "2026-03-08",
-        "description": "分析当前 AI 大模型的技术演进方向和商业化应用前景。",
-        "author": { "@type": "Person", "name": "ifnodoraemon" }
-      },
-      {
-        "@type": "BlogPosting",
-        "headline": "从零搭建 AI Agent 应用",
-        "datePublished": "2026-03-05",
-        "description": "手把手教你使用 LangChain 和 Claude API 构建智能代理系统。",
-        "author": { "@type": "Person", "name": "ifnodoraemon" }
-      }
-    ]
-  }
+  {{{jsonLd}}}
   </script>
-  <link rel="preload" href="/src/assets/css/style.css" as="style">
   <link rel="stylesheet" href="/src/assets/css/style.css">
 </head>
 <body>
@@ -108,7 +73,9 @@
   <canvas id="particles" aria-hidden="true"></canvas>
 
   <!-- Navigation -->
-<!-- Hero -->
+  <nav id="navbar" class="navbar" aria-label="主导航"></nav>
+
+  <!-- Hero -->
   <header class="hero">
     <div class="hero-bg-elements">
       <div class="hero-orb hero-orb-1"></div>
@@ -483,32 +450,32 @@
           </p>
         </div>
         <div class="topic-grid fade-in">
-          <a href="#" class="topic-card">
+          <a href="{{linkPrefix}}/articles/?tag={{home.topic1Name}}" class="topic-card">
             <span class="topic-icon">💡</span>
             <span class="topic-name">{{home.topic1Name}}</span>
             <span class="topic-count">12 {{home.topicUnit}}</span>
           </a>
-          <a href="#" class="topic-card">
+          <a href="{{linkPrefix}}/articles/?tag={{home.topic2Name}}" class="topic-card">
             <span class="topic-icon">⚙️</span>
             <span class="topic-name">{{home.topic2Name}}</span>
             <span class="topic-count">8 {{home.topicUnit}}</span>
           </a>
-          <a href="#" class="topic-card">
+          <a href="{{linkPrefix}}/articles/?tag={{home.topic3Name}}" class="topic-card">
             <span class="topic-icon">🤖</span>
             <span class="topic-name">{{home.topic3Name}}</span>
             <span class="topic-count">10 {{home.topicUnit}}</span>
           </a>
-          <a href="#" class="topic-card">
+          <a href="{{linkPrefix}}/articles/?tag={{home.topic4Name}}" class="topic-card">
             <span class="topic-icon">📚</span>
             <span class="topic-name">{{home.topic4Name}}</span>
             <span class="topic-count">7 {{home.topicUnit}}</span>
           </a>
-          <a href="#" class="topic-card">
+          <a href="{{linkPrefix}}/articles/?tag={{home.topic5Name}}" class="topic-card">
             <span class="topic-icon">🎨</span>
             <span class="topic-name">{{home.topic5Name}}</span>
             <span class="topic-count">6 {{home.topicUnit}}</span>
           </a>
-          <a href="#" class="topic-card">
+          <a href="{{linkPrefix}}/articles/?tag={{home.topic6Name}}" class="topic-card">
             <span class="topic-icon">🏢</span>
             <span class="topic-name">{{home.topic6Name}}</span>
             <span class="topic-count">9 {{home.topicUnit}}</span>
@@ -608,19 +575,19 @@
           <div class="about-features">
             <div class="feature-chip">
               <span class="feature-dot"></span>
-              深度技术文章
+              {{home.feature1}}
             </div>
             <div class="feature-chip">
               <span class="feature-dot"></span>
-              实战经验分享
+              {{home.feature2}}
             </div>
             <div class="feature-chip">
               <span class="feature-dot"></span>
-              前沿趋势洞察
+              {{home.feature3}}
             </div>
             <div class="feature-chip">
               <span class="feature-dot"></span>
-              开源项目实践
+              {{home.feature4}}
             </div>
           </div>
           <div class="about-links">
@@ -643,6 +610,7 @@
   </main>
 
   <!-- Footer -->
+  <footer id="site-footer" class="footer"></footer>
 <script type="module" src="/src/assets/js/main.js"></script>
 </body>
 </html>

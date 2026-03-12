@@ -7,17 +7,60 @@
   <meta name="description" content="全面对比当前最先进的 AI 大模型，包括 GPT-5.4、Claude 4.6 和 Gemini 3.1 的横向评测与适用场景分析。">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://ifnodoraemon.github.io/models/">
+  <link rel="alternate" hreflang="zh" href="https://ifnodoraemon.github.io/models/" />
+  <link rel="alternate" hreflang="en" href="https://ifnodoraemon.github.io/en/models/" />
+  <link rel="alternate" hreflang="x-default" href="https://ifnodoraemon.github.io/models/" />
   <meta name="theme-color" content="#06060b">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ifnodoraemon.github.io/models/">
+  <meta property="og:title" content="全景模型库 — 大雄话AI">
+  <meta property="og:description" content="全面对比当前最先进的 AI 大模型，包括 GPT-5.4、Claude 4.6 和 Gemini 3.1 的横向评测与适用场景分析。">
+  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="大雄话AI">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="全景模型库 — 大雄话AI">
+  <meta name="twitter:description" content="全面对比当前最先进的 AI 大模型，包括 GPT-5.4、Claude 4.6 和 Gemini 3.1 的横向评测与适用场景分析。">
+  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-5078775507335151">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4WZN5Q7VS6');
+  </script>
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "全景模型库 — 大雄话AI",
+    "description": "全面对比当前最先进的 AI 大模型，包括 GPT-5.4、Claude 4.6 和 Gemini 3.1 的横向评测与适用场景分析。",
+    "url": "https://ifnodoraemon.github.io/models/"
+  }
+  </script>
+
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="preload" href="/src/assets/css/style.css" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/src/assets/css/style.css">
 </head>
 <body>
   <div class="bg-grid" aria-hidden="true"></div>
   <canvas id="particles" aria-hidden="true"></canvas>
+  <nav id="navbar" class="navbar" aria-label="主导航"></nav>
 <main class="page-main">
     <section class="page-hero">
       <div class="container">
@@ -361,6 +404,16 @@
           </article>
           <article class="article-card">
             <div class="card-meta">
+              <span class="tag-cyan">Skills</span>
+              <time datetime="2026-03-12">2026.03.12</time>
+            </div>
+            <h3>Skills 深度解析：给 AI 编程助手装上「专业大脑」</h3>
+            <p>从核心原理到跨平台实战，完整解析 AI 编程助手的 Skills 系统。涵盖 SKILL.md 机制、六大平台对比、实战编写指南与最佳实践。</p>
+            <!-- When generating static HTML, making sure links point appropriately. The href from translation gives the link directly. -->
+            <a href="/articles/skills-guide/" class="card-link">阅读全文 <span class="arrow">→</span></a>
+          </article>
+          <article class="article-card">
+            <div class="card-meta">
               <span class="tag">提示工程</span>
               <time datetime="2026-03-09">2026.03.09</time>
             </div>
@@ -369,20 +422,11 @@
             <!-- When generating static HTML, making sure links point appropriately. The href from translation gives the link directly. -->
             <a href="/articles/prompt-engineering-guide/" class="card-link">阅读全文 <span class="arrow">→</span></a>
           </article>
-          <article class="article-card">
-            <div class="card-meta">
-              <span class="tag-green">行业趋势</span>
-              <time datetime="2026-03-07">2026.03.07</time>
-            </div>
-            <h3>2026 年 AI 大模型六大趋势深度解析</h3>
-            <p>从 Thinking 推理模式到 Agent 化应用，深度剖析 2026 年 AI 大模型领域最值得关注的六大发展趋势。</p>
-            <!-- When generating static HTML, making sure links point appropriately. The href from translation gives the link directly. -->
-            <a href="/articles/ai-trends-2026/" class="card-link">阅读全文 <span class="arrow">→</span></a>
-          </article>
         </div>
       </div>
     </section>
   </main>
+  <footer id="site-footer" class="footer"></footer>
 <script type="module" src="/src/assets/js/main.js"></script>
 </body>
 </html>

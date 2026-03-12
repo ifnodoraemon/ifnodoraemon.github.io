@@ -2792,8 +2792,24 @@ mark {
 
 .article-nav {
   display: flex;
-  gap: 1rem;
-  padding-bottom: 3rem;
+  padding: 2rem 0 3rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--border);
+  margin-left: calc(260px + 3rem);
+}
+
+.article-nav .btn-ghost {
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  transition: color 0.25s var(--ease), background 0.25s var(--ease);
+}
+
+.article-nav .btn-ghost:hover {
+  color: var(--accent-light);
+  background: rgba(99, 102, 241, 0.08);
 }
 
 /* === RESPONSIVE: MULTI-PAGE === */

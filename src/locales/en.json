@@ -414,6 +414,10 @@
     "stat1Name": "Tech Articles",
     "stat2Name": "Models Covered",
     "stat3Name": "Core Topics",
-    "stat4Name": "Monthly Readers"
+    "stat4Name": "Monthly Readers",
+    "feature1": "In-Depth Tech Articles",
+    "feature2": "Hands-On Experience",
+    "feature3": "Frontier Trends Insights",
+    "feature4": "Open Source Projects"
   }
 }

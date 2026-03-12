@@ -70,9 +70,45 @@ const enFeatured = enArticles.find(a => a.featured) || enArticles[0];
 
 const zhData = {
   ...readLocale('zh'),
+  isEn: false,
   featuredArticle: zhFeatured,
   latestArticles: zhArticles.filter(a => a !== zhFeatured).slice(0, 6)
 };
+
+// Generate dynamic JSON-LD for index page
+function generateBlogJsonLd(articles, isEn) {
+  const siteName = isEn ? 'Nobita Talks AI' : '大雄话AI';
+  const siteDesc = isEn ? 'AI foundation models tech blog' : '专注 AI 大模型技术研究与实践的技术博客';
+  const siteUrl = isEn ? 'https://ifnodoraemon.github.io/en/' : 'https://ifnodoraemon.github.io/';
+  const lang = isEn ? 'en' : 'zh-CN';
+
+  const blogPosts = articles.slice(0, 10).map(a => ({
+    '@type': 'BlogPosting',
+    headline: a.title,
+    datePublished: a.isoDate,
+    description: a.description,
+    author: { '@type': 'Person', name: 'ifnodoraemon' }
+  }));
+
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: siteName,
+    description: siteDesc,
+    url: siteUrl,
+    image: 'https://ifnodoraemon.github.io/og-image.png',
+    author: {
+      '@type': 'Person',
+      name: 'ifnodoraemon',
+      url: 'https://github.com/ifnodoraemon'
+    },
+    inLanguage: lang,
+    dateCreated: '2026-03-05',
+    blogPost: blogPosts
+  }, null, 4);
+}
+
+zhData.jsonLd = generateBlogJsonLd(zhArticles, false);
 
 // Inject dynamic relatedArticles for models page
 zhData.models.relatedArticles = zhArticles.slice(0, 3).map(a => ({
@@ -87,9 +123,12 @@ zhData.models.relatedArticles = zhArticles.slice(0, 3).map(a => ({
 
 const enData = {
   ...readLocale('en'),
+  isEn: true,
   featuredArticle: enFeatured,
   latestArticles: enArticles.filter(a => a !== enFeatured).slice(0, 6)
 };
+
+enData.jsonLd = generateBlogJsonLd(enArticles, true);
 
 enData.models.relatedArticles = enArticles.slice(0, 3).map(a => ({
   tag: a.tag || 'Deep Dive',

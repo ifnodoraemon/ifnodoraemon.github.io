@@ -414,6 +414,10 @@
     "stat1Name": "技术文章",
     "stat2Name": "覆盖模型",
     "stat3Name": "核心专题",
-    "stat4Name": "月读者"
+    "stat4Name": "月读者",
+    "feature1": "深度技术文章",
+    "feature2": "实战经验分享",
+    "feature3": "前沿趋势洞察",
+    "feature4": "开源项目实践"
   }
 }

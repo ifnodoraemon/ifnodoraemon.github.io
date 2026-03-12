@@ -5,7 +5,7 @@
   <link>https://ifnodoraemon.github.io/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Thu, 12 Mar 2026 06:30:12 GMT</pubDate>
+  <pubDate>Thu, 12 Mar 2026 09:42:11 GMT</pubDate>
   <atom:link href="https://ifnodoraemon.github.io/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>MCP 协议深度解析：AI 的「USB-C 接口」</title>
@@ -13,6 +13,13 @@
     <guid>https://ifnodoraemon.github.io/articles/mcp-guide/</guid>
     <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
     <description>从架构原理到实战开发，完整解析 Model Context Protocol。含 Python SDK 实战、安全机制、生态对比。</description>
+  </item>
+  <item>
+    <title>Skills 深度解析：给 AI 编程助手装上「专业大脑」</title>
+    <link>https://ifnodoraemon.github.io/articles/skills-guide/</link>
+    <guid>https://ifnodoraemon.github.io/articles/skills-guide/</guid>
+    <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
+    <description>从核心原理到跨平台实战，完整解析 AI 编程助手的 Skills 系统。涵盖 SKILL.md 机制、六大平台对比、实战编写指南与最佳实践。</description>
   </item>
   <item>
     <title>大模型提示工程实践指南</title>

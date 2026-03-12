@@ -136,7 +136,10 @@ for (const {file, isEn, dir} of mdFiles) {
     .replace(/\{\{content\}\}/g, htmlContent)
     .replace(/\{\{lang\}\}/g, isEn ? 'en' : 'zh-CN')
     .replace(/\{\{articles_link\}\}/g, isEn ? '/en/articles/' : '/articles/')
-    .replace(/\{\{return_text\}\}/g, isEn ? '← Back to Articles' : '← 返回文章列表');
+    .replace(/\{\{articles_prefix\}\}/g, isEn ? '/en' : '')
+    .replace(/\{\{breadcrumb_articles\}\}/g, isEn ? 'Articles' : '文章')
+    .replace(/\{\{return_text\}\}/g, isEn ? '← Back to Articles' : '← 返回文章列表')
+    .replace(/\{\{meta\.siteName\}\}/g, isEn ? enLocales.meta.siteName : zhLocales.meta.siteName);
 
   // Write output
   const BUILD_OUT_DIR = path.join(ROOT, '.temp_build');
@@ -263,11 +266,21 @@ function generateListingPage(articles, isEn = false) {
   <meta name="description" content="${pageDesc}">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="zh" href="https://ifnodoraemon.github.io/articles/" />
+  <link rel="alternate" hreflang="en" href="https://ifnodoraemon.github.io/en/articles/" />
+  <link rel="alternate" hreflang="x-default" href="https://ifnodoraemon.github.io/articles/" />
   <meta name="theme-color" content="#06060b">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:title" content="${pageTitle}">
   <meta property="og:description" content="${pageDesc}">
+  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:locale" content="${isEn ? 'en_US' : 'zh_CN'}">
+  <meta property="og:site_name" content="${isEn ? 'Nobita Talks AI' : '大雄话AI'}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${pageTitle}">
+  <meta name="twitter:description" content="${pageDesc}">
+  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
   <meta name="google-adsense-account" content="ca-pub-5078775507335151">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6"></script>
@@ -278,6 +291,7 @@ function generateListingPage(articles, isEn = false) {
     gtag('config', 'G-4WZN5Q7VS6');
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -384,7 +398,13 @@ function generateSitemap(articles) {
     { loc: '/', priority: '1.0', changefreq: 'weekly' },
     { loc: '/articles/', priority: '0.9', changefreq: 'weekly' },
     { loc: '/models/', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/projects/', priority: '0.7', changefreq: 'monthly' },
     { loc: '/about/', priority: '0.6', changefreq: 'monthly' },
+    { loc: '/en/', priority: '1.0', changefreq: 'weekly' },
+    { loc: '/en/articles/', priority: '0.9', changefreq: 'weekly' },
+    { loc: '/en/models/', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/en/projects/', priority: '0.7', changefreq: 'monthly' },
+    { loc: '/en/about/', priority: '0.6', changefreq: 'monthly' },
   ];
 
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
