@@ -3105,7 +3105,10 @@ mark {
     height: auto;
     max-height: calc(100vh - 120px);
     overflow-y: auto;
-    scrollbar-width: thin;
+    scrollbar-width: none;
+  }
+  .article-sidebar::-webkit-scrollbar {
+    display: none;
   }
 }
 
