@@ -674,8 +674,8 @@
           <div class="newsletter-icon">📬</div>
           <h2>订阅 AI 前沿速递</h2>
           <p>每周精选大模型领域的技术突破、实践案例与行业洞察，直达你的邮箱。</p>
-          <form class="newsletter-form" onsubmit="event.preventDefault();">
-            <input type="email" placeholder="输入你的邮箱地址" required>
+          <form action="https://buttondown.com/api/emails/embed-subscribe/ifnodoraemon" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/ifnodoraemon', 'popupwindow')" class="newsletter-form">
+            <input type="email" name="email" id="bd-email" placeholder="输入你的邮箱地址" required>
             <button type="submit" class="btn-primary">
               <span class="btn-glow"></span>
               订阅

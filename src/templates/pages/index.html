@@ -520,8 +520,8 @@
           <div class="newsletter-icon">📬</div>
           <h2>{{home.newsletterTitle}}</h2>
           <p>{{home.newsletterDesc}}</p>
-          <form class="newsletter-form" onsubmit="event.preventDefault();">
-            <input type="email" placeholder="{{home.newsletterPlaceholder}}" required>
+          <form action="https://buttondown.com/api/emails/embed-subscribe/ifnodoraemon" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/ifnodoraemon', 'popupwindow')" class="newsletter-form">
+            <input type="email" name="email" id="bd-email" placeholder="{{home.newsletterPlaceholder}}" required>
             <button type="submit" class="btn-primary">
               <span class="btn-glow"></span>
               {{home.newsletterBtn}}
