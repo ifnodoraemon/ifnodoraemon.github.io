@@ -313,7 +313,9 @@
     "p4_title": "Edge-AI Vision System",
     "p4_desc": "A lightweight object detection and tracking system built with PyTorch and YOLO, optimized for edge computing devices to achieve millisecond-level high-precision real-time inference.",
     "p5_title": "Smart Campus AI",
-    "p5_desc": "Internal full-stack project: A Python-based end-to-end smart campus system covering everything from front-end camera video stream ingestion, AI algorithm inference, to back-end automated alert triggering and multi-channel notifications."
+    "p5_desc": "Internal full-stack project: A Python-based end-to-end smart campus system covering everything from front-end camera video stream ingestion, AI algorithm inference, to back-end automated alert triggering and multi-channel notifications.",
+    "p6_title": "openDataAnalysis",
+    "p6_desc": "An interactive tabular data analysis tool. Supports uploading CSV or Excel files, with an Agent automatically inspecting and querying data to generate analysis reports with interactive charts. Built with Vue3, ECharts, and Go."
   },
   "about": {
     "heroTag": "AGENT PROFILE // INIT",

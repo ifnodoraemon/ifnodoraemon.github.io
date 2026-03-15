@@ -313,7 +313,9 @@
     "p4_title": "Edge-AI Vision System",
     "p4_desc": "基于 PyTorch 和 YOLO 构建的轻量级目标检测与追踪系统，专为边缘计算设备优化，实现毫秒级高精度实时推理。",
     "p5_title": "Smart Campus AI",
-    "p5_desc": "公司内部全栈项目：基于 Python 开发的全流程智慧园区系统，涵盖从前端摄像头视频流接入、AI 算法推理、到后端的自动告警触发与多渠道告警通知。"
+    "p5_desc": "公司内部全栈项目：基于 Python 开发的全流程智慧园区系统，涵盖从前端摄像头视频流接入、AI 算法推理、到后端的自动告警触发与多渠道告警通知。",
+    "p6_title": "openDataAnalysis",
+    "p6_desc": "一个交互式的表格数据分析工具。支持上传 CSV 或 Excel 文件，由智能体自动进行数据检查和查询，并生成带有交互式图表的研报。前端采用 Vue3 + ECharts，后端采用 Go。"
   },
   "about": {
     "heroTag": "AGENT PROFILE // INIT",
