@@ -2822,14 +2822,33 @@ mark {
   transform: translateY(-2px);
 }
 
-.article-nav .share-btn {
-  color: var(--text-muted);
+.article-nav .share-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.article-nav .share-btn:hover {
+.article-nav .share-btn {
+  color: var(--text-muted);
+  padding: 0.6rem;
+}
+
+.article-nav .share-x:hover {
   color: #1DA1F2;
   border-color: rgba(29, 161, 242, 0.4);
   background: rgba(29, 161, 242, 0.05);
+}
+
+.article-nav .share-linkedin:hover {
+  color: #0077b5;
+  border-color: rgba(0, 119, 181, 0.4);
+  background: rgba(0, 119, 181, 0.05);
+}
+
+.article-nav .share-hn:hover {
+  color: #ff6600;
+  border-color: rgba(255, 102, 0, 0.4);
+  background: rgba(255, 102, 0, 0.05);
 }
 
 @media (max-width: 1023px) {
