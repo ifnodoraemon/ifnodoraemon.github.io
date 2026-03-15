@@ -44,7 +44,7 @@
     "name": "全部文章",
     "description": "AI 大模型观察全部技术文章列表。涵盖提示工程、AI Agent、RAG、模型微调、多模态等前沿 AI 主题。",
     "url": "https://ifnodoraemon.github.io/articles/",
-    "numberOfItems": 9
+    "numberOfItems": 10
   }
   </script>
 </head>
@@ -57,7 +57,7 @@
         <div class="page-hero-content fade-in">
           <div class="section-tag">ALL ARTICLES</div>
           <h1>全部文章</h1>
-          <p class="page-hero-desc">探索 AI 大模型领域的 9 篇技术文章与深度解析</p>
+          <p class="page-hero-desc">探索 AI 大模型领域的 10 篇技术文章与深度解析</p>
         </div>
       </div>
     </section>
@@ -88,12 +88,12 @@
         
         <!-- UNIFIED TIMELINE + LIST LAYOUT -->
         <div class="articles-filter fade-in" id="articles-filter">
-          <button class="filter-btn active" data-filter="all">全部 (9)</button>
+          <button class="filter-btn active" data-filter="all">全部 (10)</button>
+          <button class="filter-btn" data-filter="AI Agent">AI Agent</button>
           <button class="filter-btn" data-filter="MCP">MCP</button>
           <button class="filter-btn" data-filter="Skills">Skills</button>
           <button class="filter-btn" data-filter="提示工程">提示工程</button>
           <button class="filter-btn" data-filter="行业趋势">行业趋势</button>
-          <button class="filter-btn" data-filter="AI Agent">AI Agent</button>
           <button class="filter-btn" data-filter="RAG">RAG</button>
           <button class="filter-btn" data-filter="模型评测">模型评测</button>
           <button class="filter-btn" data-filter="多模态">多模态</button>
@@ -101,15 +101,36 @@
         </div>
         <div class="unified-articles-list fade-in" id="articles-list">
 
+          <div class="unified-article-row article-list-item-wrapper" data-tag="AI Agent">
+            <div class="unified-timeline-left">
+              <div class="unified-timeline-date">2026.03.15</div>
+            </div>
+            <div class="unified-article-right">
+              <a href="/articles/agent-runtime-practices/" class="article-list-item article-list-featured">
+                <div class="article-list-meta">
+                  <span class="tag tag-emerald">AI Agent</span>
+                  <span class="article-list-pin">📌 置顶</span>
+                  <time datetime="2026-03-15" class="mobile-only-date" style="display:none;">2026.03.15</time>
+                </div>
+                <h2>做 AI Agent 的 7 条运行时实践</h2>
+                <p>基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。</p>
+                <div class="article-list-tags"><span class="mini-tag">Agent Runtime</span>
+              <span class="mini-tag">Tool Calling</span>
+              <span class="mini-tag">Guardrail</span>
+              <span class="mini-tag">Trace</span></div>
+              </a>
+            </div>
+          </div>
+
           <div class="unified-article-row article-list-item-wrapper" data-tag="MCP">
             <div class="unified-timeline-left">
               <div class="unified-timeline-date">2026.03.12</div>
             </div>
             <div class="unified-article-right">
-              <a href="/articles/mcp-guide/" class="article-list-item article-list-featured">
+              <a href="/articles/mcp-guide/" class="article-list-item">
                 <div class="article-list-meta">
                   <span class="tag tag-violet">MCP</span>
-                  <span class="article-list-pin">📌 置顶</span>
+                  
                   <time datetime="2026-03-12" class="mobile-only-date" style="display:none;">2026.03.12</time>
                 </div>
                 <h2>MCP 协议深度解析：AI 的「USB-C 接口」</h2>

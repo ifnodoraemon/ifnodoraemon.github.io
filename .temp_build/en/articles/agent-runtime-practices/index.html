@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7 Runtime Practices for Building AI Agents — Nobita Talks AI</title>
+  <meta name="description" content="Based on a real data analysis agent project, this article distills 7 reusable Agent Runtime practices covering state exposure, tool design, context control, guardrails, delegation, and trace-driven iteration.">
+  <meta name="keywords" content="AI Agent,AI大模型,GPT-5.4,Claude 4.6,Gemini 3.1,agent runtime practices">
+  <meta name="author" content="ifnodoraemon">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ifnodoraemon.github.io/en/articles/agent-runtime-practices/">
+  <link rel="alternate" hreflang="zh" href="https://ifnodoraemon.github.io/articles/agent-runtime-practices/" />
+  <link rel="alternate" hreflang="en" href="https://ifnodoraemon.github.io/en/articles/agent-runtime-practices/" />
+  <link rel="alternate" hreflang="x-default" href="https://ifnodoraemon.github.io/articles/agent-runtime-practices/" />
+  <meta name="theme-color" content="#06060b">
+
+  <!-- Open Graph / Article -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ifnodoraemon.github.io/en/articles/agent-runtime-practices/">
+  <meta property="og:title" content="7 Runtime Practices for Building AI Agents — Nobita Talks AI">
+  <meta property="og:description" content="Based on a real data analysis agent project, this article distills 7 reusable Agent Runtime practices covering state exposure, tool design, context control, guardrails, delegation, and trace-driven iteration.">
+  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:locale" content="{{#if isEn}}en_US{{else}}zh_CN{{/if}}">
+  <meta property="og:site_name" content="Nobita Talks AI">
+  <meta property="article:published_time" content="2026-03-15">
+  <meta property="article:author" content="ifnodoraemon">
+  <meta property="article:section" content="AI Agent">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="7 Runtime Practices for Building AI Agents — Nobita Talks AI">
+  <meta name="twitter:description" content="Based on a real data analysis agent project, this article distills 7 reusable Agent Runtime practices covering state exposure, tool design, context control, guardrails, delegation, and trace-driven iteration.">
+  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-5078775507335151">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-4WZN5Q7VS6');
+  </script>
+
+  <!-- Assets -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <link rel="stylesheet" href="/src/assets/css/style.css">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "7 Runtime Practices for Building AI Agents",
+    "description": "Based on a real data analysis agent project, this article distills 7 reusable Agent Runtime practices covering state exposure, tool design, context control, guardrails, delegation, and trace-driven iteration.",
+    "datePublished": "2026-03-15",
+    "dateModified": "2026-03-15",
+    "image": "https://ifnodoraemon.github.io/og-image.png",
+    "author": {
+      "@type": "Person",
+      "name": "ifnodoraemon",
+      "url": "https://github.com/ifnodoraemon"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "大雄话AI",
+      "url": "https://ifnodoraemon.github.io"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ifnodoraemon.github.io/en/articles/agent-runtime-practices/"
+    },
+    "articleSection": "AI Agent"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Nobita Talks AI", "item": "https://ifnodoraemon.github.io/en/" },
+      { "@type": "ListItem", "position": 2, "name": "Articles", "item": "https://ifnodoraemon.github.io/en/articles/" },
+      { "@type": "ListItem", "position": 3, "name": "7 Runtime Practices for Building AI Agents" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <nav id="navbar" class="navbar" aria-label="主导航"></nav>
+
+  <main class="page-main">
+    <article class="article-detail">
+      <div class="container">
+        <div class="article-detail-header fade-in">
+          <a href="/en/articles/" class="back-link">← Back to Articles</a>
+          <div class="card-meta">
+            <span class="tag tag-emerald">AI Agent</span>
+            <time datetime="2026-03-15">2026.03.15</time>
+            <span class="meta-divider">•</span>
+            <span>1591 words</span>
+            <span class="meta-divider">•</span>
+            <span>7 min read</span>
+          </div>
+          <h1>7 Runtime Practices for Building AI Agents</h1>
+          <p class="article-detail-desc">Based on a real data analysis agent project, this article distills 7 reusable Agent Runtime practices covering state exposure, tool design, context control, guardrails, delegation, and trace-driven iteration.</p>
+        </div>
+        <div class="article-layout">
+          <!-- TOC Sidebar -->
+          <aside class="article-sidebar fade-in">
+            <div class="toc-container"><h4>Table of Contents</h4><ul class="article-toc-list">
+  <li class="toc-level-2"><a href="#1-do-not-turn-an-agent-into-a-workflow-that-can-call-tools">1. Do Not Turn an Agent into "A Workflow That Can Call Tools"</a></li>
+  <li class="toc-level-2"><a href="#2-the-system-should-expose-state-not-make-decisions-for-the-model">2. The System Should Expose State, Not Make Decisions for the Model</a></li>
+  <li class="toc-level-2"><a href="#3-observation-tools-are-often-more-important-than-action-tools">3. Observation Tools Are Often More Important Than Action Tools</a></li>
+  <li class="toc-level-2"><a href="#4-structured-state-is-useful-but-it-must-not-become-a-phase-machine">4. Structured State Is Useful, But It Must Not Become a Phase Machine</a></li>
+  <li class="toc-level-2"><a href="#5-guardrails-must-stay-thin-but-they-must-be-hard">5. Guardrails Must Stay Thin, But They Must Be Hard</a></li>
+  <li class="toc-level-2"><a href="#6-in-long-tasks-fix-context-first-before-blaming-the-model">6. In Long Tasks, Fix Context First Before Blaming the Model</a></li>
+  <li class="toc-level-2"><a href="#7-delegation-is-a-boundary-tool-not-a-performance-feature">7. Delegation Is a Boundary Tool, Not a Performance Feature</a></li>
+  <li class="toc-level-2"><a href="#conclusion">Conclusion</a></li>
+</ul></div>
+          </aside>
+          
+          <!-- Main Content -->
+          <div class="article-detail-content fade-in">
+            <p>Many AI Agent projects eventually drift into a familiar shape: they appear autonomous on the surface, but internally they have already become hidden workflows. The model seems to be &quot;thinking,&quot; yet the real decisions about order, phases, and when to finish are still encoded in backend logic.</p>
+<p>We felt this very clearly while building a data analysis agent. The agent could load CSV / Excel files, inspect schema, execute SQL, generate charts, organize report blocks, maintain working memory, track goals, inspect report state, and run constrained delegation. After the project reached a certain level of complexity, we realized the most valuable thing to extract was not any single tool, but a set of practices around <strong>how an Agent Runtime should be designed</strong>.</p>
+<p>These 7 lessons are the ones that survived repeated implementation mistakes and refactors.</p>
+<h2 id="1-do-not-turn-an-agent-into-a-workflow-that-can-call-tools">1. Do Not Turn an Agent into "A Workflow That Can Call Tools"</h2>
+<p>Many systems start with a seemingly reasonable sequence:</p>
+<ol>
+<li>Read the user request</li>
+<li>Load the data</li>
+<li>Inspect the schema</li>
+<li>Write SQL</li>
+<li>Generate charts</li>
+<li>Finalize the report</li>
+</ol>
+<p>That sequence is fine for a demo, but once tasks become more complex, a fixed path becomes a constraint. In real work, the model may need to explore relationships across tables before deciding the analytical framing. It may need to persist a few confirmed facts before diving deeper. Some problems should be delegated early rather than forcing the main agent to keep carrying more context.</p>
+<p>Our eventual conclusion was this: <strong>the system should provide goals, tools, state, and boundaries, but it should not predefine the path.</strong></p>
+<p>In other words, the backend should behave like a runtime, not a workflow engine. It should tell the model what it can see, what it can do, and which outputs are not allowed to land, but it should not secretly encode what the next step ought to be.</p>
+<pre class="mermaid">
+graph LR
+    U["User Goal"] --> R["Agent Runtime"]
+    R --> T["Tool Set"]
+    R --> S["State Observation"]
+    R --> G["Thin Guardrails"]
+    T --> M["Model Judgment"]
+    S --> M
+    G --> M
+    M --> A["Next Action"]
+</pre>
+<p>This sounds like a subtle wording difference, but in practice it changes the entire direction of the system.</p>
+<h2 id="2-the-system-should-expose-state-not-make-decisions-for-the-model">2. The System Should Expose State, Not Make Decisions for the Model</h2>
+<p>One of the easiest ways an agent system becomes too heavy is when the runtime starts taking over judgment. As soon as the model performs poorly in one area, engineers are tempted to patch in suggestions like:</p>
+<ul>
+<li>&quot;The evidence is insufficient, continue analysis&quot;</li>
+<li>&quot;You should delegate now&quot;</li>
+<li>&quot;Do not write the report yet, add charts first&quot;</li>
+</ul>
+<p>Those rules do help in the short term, but over time they push the system back toward conventional orchestration.</p>
+<p>We intentionally converted this kind of logic into <strong>state exposure</strong> instead. For example:</p>
+<ul>
+<li><code>state_memory_inspect</code> only returns the current working memory facts</li>
+<li><code>state_goal_inspect</code> only returns the goal tree, status distribution, and active branches</li>
+<li><code>state_report_inspect</code> only returns blocks, charts, and reference integrity</li>
+</ul>
+<p>All of these tools do the same thing: they expose facts. Whether those facts imply &quot;keep investigating&quot; or &quot;you can now finish&quot; is still left to the model.</p>
+<p>This separation matters a lot. <strong>Judgment belongs to the model; state belongs to the runtime.</strong> Once those two are blended together, the system slowly becomes &quot;code thinks, model executes.&quot;</p>
+<h2 id="3-observation-tools-are-often-more-important-than-action-tools">3. Observation Tools Are Often More Important Than Action Tools</h2>
+<p>When people design agents, they usually start with action tools:</p>
+<ul>
+<li>query a database</li>
+<li>execute SQL</li>
+<li>run Python</li>
+<li>create a chart</li>
+<li>write report content</li>
+</ul>
+<p>Those are important, but in our experience the tools that define the upper bound of an agent are often the observation tools.</p>
+<p>Because in long-running tasks, the most common problem is not &quot;the model cannot act.&quot; It is &quot;the model no longer knows what state it is in.&quot; It may forget that a column meaning was already confirmed earlier, forget that a goal has already been resolved, or fail to notice that a chart has not actually been referenced from the report body.</p>
+<p>We gradually started prioritizing a class of tools that do not perform work, but only return state. Their value is that they let the model actively observe the world when needed, instead of forcing the runtime to inject a large block of state into every turn.</p>
+<p>The impact was immediate:</p>
+<ul>
+<li>cleaner context, because state becomes pull-based</li>
+<li>more autonomy, because observation itself becomes an action</li>
+<li>a more disciplined runtime, because it no longer nudges the reasoning path implicitly</li>
+</ul>
+<p>If you are building agents, it is often better to add observation tools before adding more prompt rules.</p>
+<h2 id="4-structured-state-is-useful-but-it-must-not-become-a-phase-machine">4. Structured State Is Useful, But It Must Not Become a Phase Machine</h2>
+<p>We implemented several kinds of structured runtime state:</p>
+<ul>
+<li>Working Memory</li>
+<li>Subgoal Tree</li>
+<li>Report Block Tree</li>
+</ul>
+<p>These structures are genuinely useful. They make intermediate state observable and make later validation easier. But they also introduce a subtle risk: once structured state becomes too central, it starts dictating the model&#39;s reasoning order.</p>
+<p>For example:</p>
+<ul>
+<li><code>goal_manage</code> can easily become &quot;the model must plan before acting&quot;</li>
+<li>a report block tree can quietly turn into &quot;outline first, fill section by section, finalize at the end&quot;</li>
+</ul>
+<p>That is just a phase machine in disguise.</p>
+<p>We ended up setting a very explicit rule for ourselves: <strong>structured state is optional scaffolding, not a mandatory thinking path.</strong> The model may use subgoals to externalize decomposition, may store stable facts in working memory, or may continue exploring directly. The runtime should never assume that because a structure exists, the model must follow a fixed sequence around it.</p>
+<p>Structure can stabilize a system, but it must not take over the system&#39;s cognition.</p>
+<h2 id="5-guardrails-must-stay-thin-but-they-must-be-hard">5. Guardrails Must Stay Thin, But They Must Be Hard</h2>
+<p>&quot;Do not make decisions for the model&quot; does not mean &quot;do not enforce anything.&quot; A production-worthy agent absolutely needs guardrails. The key is that the role of guardrails must remain very clear: <strong>block invalid outcomes, do not orchestrate the normal path.</strong></p>
+<p>In our data analysis agent, <code>report_finalize</code> is a good example. We did not let the runtime decide when the model should write conclusions or add charts, but we did enforce hard checks before finalization:</p>
+<ul>
+<li>whether the goal tree still contains unresolved active branches</li>
+<li>whether report blocks contain duplicated headings</li>
+<li>whether chart blocks are missing captions</li>
+<li>whether referenced chart IDs actually exist</li>
+</ul>
+<p>If those conditions are not satisfied, finalization is rejected.</p>
+<p>The important distinction is this: the runtime says &quot;this output cannot land yet,&quot; but it does not say &quot;you must do A and then B.&quot; Many agent systems do not fail because they have too many guardrails. They fail because guardrails quietly evolve into process orchestration.</p>
+<h2 id="6-in-long-tasks-fix-context-first-before-blaming-the-model">6. In Long Tasks, Fix Context First Before Blaming the Model</h2>
+<p>Short tasks hide many agent problems. Long tasks expose them quickly. And once they do, the main bottleneck is often not model capability, but context management.</p>
+<p>Our traces showed a very recognizable pattern:</p>
+<ul>
+<li>chart tools feeding entire ECharts options back into history</li>
+<li>report tools appending large blocks of prose into the prompt repeatedly</li>
+<li>query results being preserved too literally, reducing the ratio of useful information late in the run</li>
+</ul>
+<p>The end result is not that &quot;the model suddenly became less intelligent.&quot; It is that the prompt is gradually filled with low-value history.</p>
+<p>So our later work shifted away from adding more system-prompt rules and toward context control:</p>
+<ul>
+<li>compact tool-call history so only future-relevant summaries remain</li>
+<li>let the model persist key conclusions into working memory</li>
+<li>compress older history into digests once token pressure rises</li>
+<li>move runtime state to pull-based observation tools</li>
+</ul>
+<p>These changes are not as flashy as switching models, but they often have a larger impact on stability. A surprising number of &quot;reasoning problems&quot; are actually context engineering problems.</p>
+<h2 id="7-delegation-is-a-boundary-tool-not-a-performance-feature">7. Delegation Is a Boundary Tool, Not a Performance Feature</h2>
+<p>Multi-agent systems are easy to turn into theater. As soon as the task looks hard, people spawn more agents so the system appears more sophisticated. But without strict boundaries, delegation amplifies complexity more than capability.</p>
+<p>Our core rule for <code>task_delegate</code> was simple: <strong>delegation is only worth using when the subtask boundary is clear and the allowed tool set can be sharply restricted.</strong></p>
+<p>That means a child agent is not &quot;a second main agent with more freedom.&quot; It is a constrained execution unit. You should know:</p>
+<ul>
+<li>the exact problem it is supposed to solve</li>
+<li>which tools it is allowed to use</li>
+<li>how its result flows back into the parent</li>
+</ul>
+<p>If those boundaries are vague, delegation does not create parallelism benefits. It creates state sprawl, tool misuse, and a much harder debugging story.</p>
+<p>In practice, we came to see delegation less as a concurrency feature and more as a capability-boundary mechanism.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>If these 7 lessons had to be compressed into one sentence, it would be this:</p>
+<p><strong>The most important job of an Agent Runtime is not to design the path for the model, but to get state, tools, boundaries, and context management right.</strong></p>
+<p>A good agent system should:</p>
+<ul>
+<li>give the model a clear goal</li>
+<li>provide tools with explicit boundaries</li>
+<li>expose state on demand</li>
+<li>use thin guardrails to block invalid outcomes</li>
+<li>continuously manage long-task context growth</li>
+<li>rely on traces to debug reality instead of tuning prompts by instinct</li>
+</ul>
+<p>Once those foundations are solid, model autonomy starts turning into genuine capability. Without them, even a sophisticated prompt is usually just another form of workflow.</p>
+
+            
+            <!-- Giscus Comments -->
+            <div class="giscus-container">
+              <script src="https://giscus.app/client.js"
+                data-repo="ifnodoraemon/ifnodoraemon.github.io"
+                data-repo-id="R_kgDON7u7iA"
+                data-category="Announcements"
+                data-category-id="DIC_kwDON7u7iM4CnKDE"
+                data-mapping="specific"
+                data-term="agent-runtime-practices"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+              </script>
+            </div>
+          </div>
+        </div>
+        <div class="article-prev-next">
+        <a href="/en/articles/mcp-guide/" class="prev-next-link prev-link">
+          <span class="pn-label">← Prev</span>
+          <span class="pn-title">MCP Deep Dive: The USB-C Port for AI</span>
+        </a><div class="prev-next-link empty"></div></div>
+        <div class="article-nav fade-in">
+          <a href="/en/articles/" class="btn-ghost">← Back to Articles</a>
+          <div class="share-buttons">
+            <span class="share-label" style="font-size: 0.85rem; color: var(--text-muted); margin-right: 0.5rem; font-family: var(--font-mono);">Share:</span>
+            <a href="https://twitter.com/intent/tweet?text=7%20Runtime%20Practices%20for%20Building%20AI%20Agents&url=https%3A%2F%2Fifnodoraemon.github.io%2Fen%2Farticles%2Fagent-runtime-practices%2F" target="_blank" rel="noopener noreferrer" class="btn-ghost share-btn share-x" title="Share to X" aria-label="Share to X">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fifnodoraemon.github.io%2Fen%2Farticles%2Fagent-runtime-practices%2F" target="_blank" rel="noopener noreferrer" class="btn-ghost share-btn share-linkedin" title="Share to LinkedIn" aria-label="Share to LinkedIn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+            <a href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fifnodoraemon.github.io%2Fen%2Farticles%2Fagent-runtime-practices%2F&t=7%20Runtime%20Practices%20for%20Building%20AI%20Agents" target="_blank" rel="noopener noreferrer" class="btn-ghost share-btn share-hn" title="Share to Hacker News" aria-label="Share to Hacker News">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M2 2v20h20V2H2zm10.2 11v5h-2.1v-5l-3.3-6.5h2.4l2 4.4 2-4.4h2.3l-3.3 6.5z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <footer id="site-footer" class="footer"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <script type="module" src="/src/assets/js/main.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#0a0a1a',
+        mainBkg: '#1a1a2e',
+        nodeBorder: '#6366f1',
+        clusterBkg: 'rgba(99,102,241,0.06)',
+        clusterBorder: 'rgba(99,102,241,0.2)',
+        titleColor: '#a5b4fc',
+        nodeTextColor: '#e2e8f0',
+        primaryColor: '#1e1e3a',
+        primaryTextColor: '#e2e8f0',
+        primaryBorderColor: '#6366f1',
+        lineColor: '#818cf8',
+        secondaryColor: '#1a1a2e',
+        tertiaryColor: '#1a1a2e',
+        fontFamily: 'Inter, Noto Sans SC, sans-serif',
+        fontSize: '14px',
+      }
+    });
+  </script>
+</body>
+</html>

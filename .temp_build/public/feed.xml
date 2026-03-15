@@ -5,8 +5,15 @@
   <link>https://ifnodoraemon.github.io/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Sun, 15 Mar 2026 07:54:39 GMT</pubDate>
+  <pubDate>Sun, 15 Mar 2026 08:06:19 GMT</pubDate>
   <atom:link href="https://ifnodoraemon.github.io/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>做 AI Agent 的 7 条运行时实践</title>
+    <link>https://ifnodoraemon.github.io/articles/agent-runtime-practices/</link>
+    <guid>https://ifnodoraemon.github.io/articles/agent-runtime-practices/</guid>
+    <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
+    <description>基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。</description>
+  </item>
   <item>
     <title>MCP 协议深度解析：AI 的「USB-C 接口」</title>
     <link>https://ifnodoraemon.github.io/articles/mcp-guide/</link>

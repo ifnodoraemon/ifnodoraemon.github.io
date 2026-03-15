@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>做 AI Agent 的 7 条运行时实践 — 大雄话AI</title>
+  <meta name="description" content="基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。">
+  <meta name="keywords" content="AI Agent,AI大模型,GPT-5.4,Claude 4.6,Gemini 3.1,agent runtime practices">
+  <meta name="author" content="ifnodoraemon">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ifnodoraemon.github.io/articles/agent-runtime-practices/">
+  <link rel="alternate" hreflang="zh" href="https://ifnodoraemon.github.io/articles/agent-runtime-practices/" />
+  <link rel="alternate" hreflang="en" href="https://ifnodoraemon.github.io/en/articles/agent-runtime-practices/" />
+  <link rel="alternate" hreflang="x-default" href="https://ifnodoraemon.github.io/articles/agent-runtime-practices/" />
+  <meta name="theme-color" content="#06060b">
+
+  <!-- Open Graph / Article -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ifnodoraemon.github.io/articles/agent-runtime-practices/">
+  <meta property="og:title" content="做 AI Agent 的 7 条运行时实践 — 大雄话AI">
+  <meta property="og:description" content="基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。">
+  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:locale" content="{{#if isEn}}en_US{{else}}zh_CN{{/if}}">
+  <meta property="og:site_name" content="大雄话AI">
+  <meta property="article:published_time" content="2026-03-15">
+  <meta property="article:author" content="ifnodoraemon">
+  <meta property="article:section" content="AI Agent">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="做 AI Agent 的 7 条运行时实践 — 大雄话AI">
+  <meta name="twitter:description" content="基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。">
+  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-5078775507335151">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-4WZN5Q7VS6');
+  </script>
+
+  <!-- Assets -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <link rel="stylesheet" href="/src/assets/css/style.css">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "做 AI Agent 的 7 条运行时实践",
+    "description": "基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。",
+    "datePublished": "2026-03-15",
+    "dateModified": "2026-03-15",
+    "image": "https://ifnodoraemon.github.io/og-image.png",
+    "author": {
+      "@type": "Person",
+      "name": "ifnodoraemon",
+      "url": "https://github.com/ifnodoraemon"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "大雄话AI",
+      "url": "https://ifnodoraemon.github.io"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ifnodoraemon.github.io/articles/agent-runtime-practices/"
+    },
+    "articleSection": "AI Agent"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "大雄话AI", "item": "https://ifnodoraemon.github.io/" },
+      { "@type": "ListItem", "position": 2, "name": "文章", "item": "https://ifnodoraemon.github.io/articles/" },
+      { "@type": "ListItem", "position": 3, "name": "做 AI Agent 的 7 条运行时实践" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <nav id="navbar" class="navbar" aria-label="主导航"></nav>
+
+  <main class="page-main">
+    <article class="article-detail">
+      <div class="container">
+        <div class="article-detail-header fade-in">
+          <a href="/articles/" class="back-link">← 返回文章列表</a>
+          <div class="card-meta">
+            <span class="tag tag-emerald">AI Agent</span>
+            <time datetime="2026-03-15">2026.03.15</time>
+            <span class="meta-divider">•</span>
+            <span>约 2525 字</span>
+            <span class="meta-divider">•</span>
+            <span>预计阅读 11 分钟</span>
+          </div>
+          <h1>做 AI Agent 的 7 条运行时实践</h1>
+          <p class="article-detail-desc">基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。</p>
+        </div>
+        <div class="article-layout">
+          <!-- TOC Sidebar -->
+          <aside class="article-sidebar fade-in">
+            <div class="toc-container"><h4>文章目录</h4><ul class="article-toc-list">
+  <li class="toc-level-2"><a href="#1-不要把-agent-做成-会调用工具的-workflow">1. 不要把 Agent 做成“会调用工具的 Workflow”</a></li>
+  <li class="toc-level-2"><a href="#2-系统提供状态-不替模型下判断">2. 系统提供状态，不替模型下判断</a></li>
+  <li class="toc-level-2"><a href="#3-observation-tool-往往比-action-tool-更重要">3. Observation Tool 往往比 Action Tool 更重要</a></li>
+  <li class="toc-level-2"><a href="#4-结构化状态可以有-但不要把它们做成阶段机">4. 结构化状态可以有，但不要把它们做成阶段机</a></li>
+  <li class="toc-level-2"><a href="#5-guardrail-要薄-但必须足够硬">5. Guardrail 要薄，但必须足够硬</a></li>
+  <li class="toc-level-2"><a href="#6-长任务里-先治理上下文-再责怪模型">6. 长任务里，先治理上下文，再责怪模型</a></li>
+  <li class="toc-level-2"><a href="#7-delegate-是边界工具-不是炫技功能">7. Delegate 是边界工具，不是炫技功能</a></li>
+  <li class="toc-level-2"><a href="#结语">结语</a></li>
+</ul></div>
+          </aside>
+          
+          <!-- Main Content -->
+          <div class="article-detail-content fade-in">
+            <p>很多 AI Agent 项目做着做着，最后都会变成一种熟悉的形态：表面上支持自主决策，实际内部已经被写成了一条隐藏工作流。模型看起来在“思考”，但真正决定顺序、阶段和收尾时机的，往往还是后端代码。</p>
+<p>我们在做一个数据分析智能体时，对这个问题体会很深。这个 Agent 能加载 CSV / Excel、查看 schema、执行 SQL、生成图表、组织报告，还支持工作记忆、目标树、报告状态和受限委派。项目推进到中段之后，我们逐渐意识到，最值得沉淀的并不是某个具体工具，而是几条关于 <strong>Agent Runtime 应该怎么设计</strong> 的实践。</p>
+<p>下面这 7 条，是我们反复踩坑之后留下来的真正经验。</p>
+<h2 id="1-不要把-agent-做成-会调用工具的-workflow">1. 不要把 Agent 做成“会调用工具的 Workflow”</h2>
+<p>很多系统一开始就会预设一个合理流程：</p>
+<ol>
+<li>读取用户需求</li>
+<li>导入文件</li>
+<li>查看表结构</li>
+<li>写 SQL</li>
+<li>画图</li>
+<li>生成报告</li>
+</ol>
+<p>这个顺序在 demo 阶段没有问题，但一旦任务变复杂，固定路径就会变成限制。真实任务里，模型可能需要先探索多个表的关系，再决定分析口径；也可能先记录几个已经确认的事实，再继续下钻；有些问题甚至应该先委派出去，而不是继续在主线程里堆上下文。</p>
+<p>我们后来的收敛是：<strong>系统只提供目标、工具、状态和边界，不替模型预设路径。</strong></p>
+<p>换句话说，后端更像 runtime，而不是 workflow engine。它负责告诉模型“你现在能看到什么、能做什么、哪些结果不能落地”，但不负责把“下一步应该做什么”偷偷编码进去。</p>
+<pre class="mermaid">
+graph LR
+    U["用户目标"] --> R["Agent Runtime"]
+    R --> T["工具集合"]
+    R --> S["状态观察"]
+    R --> G["薄 Guardrail"]
+    T --> M["模型判断"]
+    S --> M
+    G --> M
+    M --> A["下一步行动"]
+</pre>
+<p>这个变化听上去像表述差异，实际上是整个系统演化方向的分水岭。</p>
+<h2 id="2-系统提供状态-不替模型下判断">2. 系统提供状态，不替模型下判断</h2>
+<p>Agent 最容易“越做越重”的地方，是 runtime 开始承担判断责任。模型一旦某个地方做得不好，工程师就会忍不住补一段提示：</p>
+<ul>
+<li>“这里证据不够，建议继续分析”</li>
+<li>“你应该先 delegate”</li>
+<li>“现在不要写报告，先补图表”</li>
+</ul>
+<p>短期看，这些规则确实能止血；长期看，它们会把系统一点点推回传统流程编排。</p>
+<p>我们后来刻意把这类逻辑改成 <strong>状态暴露</strong>。例如：</p>
+<ul>
+<li><code>state_memory_inspect</code> 只返回当前工作记忆里的事实</li>
+<li><code>state_goal_inspect</code> 只返回目标树、状态分布和 active branch</li>
+<li><code>state_report_inspect</code> 只返回 block、chart 和引用关系</li>
+</ul>
+<p>这几个工具都只做一件事：把事实说清楚。至于这些事实意味着“继续查证”还是“可以收尾”，由模型自己判断。</p>
+<p>这是一个很重要的分工。<strong>Judge 属于模型，State 属于 runtime。</strong> 一旦混起来，系统就会越来越像“代码在思考，模型在执行”。</p>
+<h2 id="3-observation-tool-往往比-action-tool-更重要">3. Observation Tool 往往比 Action Tool 更重要</h2>
+<p>大多数人在设计 agent 时，首先想到的是 action tool：</p>
+<ul>
+<li>查数据库</li>
+<li>跑 SQL</li>
+<li>执行 Python</li>
+<li>生成图表</li>
+<li>写报告</li>
+</ul>
+<p>这些当然重要，但真正决定 agent 上限的，往往是 observation tool。</p>
+<p>因为长任务里最常见的问题不是“模型不能行动”，而是“模型不知道自己当前处于什么状态”。它可能忘了之前已经确认过某个字段含义，忘了某个目标已经完成，或者不知道报告里某张图实际上还没有被正文引用。</p>
+<p>我们后来越来越重视一类工具：不执行任务，只返回状态。这类工具的价值在于，它们让模型能在需要的时候主动观察世界，而不是被 runtime 每轮强行灌输一大段状态文本。</p>
+<p>实际效果非常明显：</p>
+<ul>
+<li>上下文更干净，因为状态变成按需拉取</li>
+<li>模型更自主，因为“观察”本身也是行动</li>
+<li>runtime 更克制，因为它不再暗中引导推理方向</li>
+</ul>
+<p>如果你正在做 Agent，建议优先补 observation tool，而不是继续堆 prompt。</p>
+<h2 id="4-结构化状态可以有-但不要把它们做成阶段机">4. 结构化状态可以有，但不要把它们做成阶段机</h2>
+<p>我们在运行时里实现了几类结构化状态：</p>
+<ul>
+<li>Working Memory</li>
+<li>Subgoal Tree</li>
+<li>Report Block Tree</li>
+</ul>
+<p>这些结构非常有用。它们能让中间状态更可观察，也能支持后续校验和持久化。但我们很快也遇到了一个风险：一旦结构化状态被过度依赖，它们就会反过来规定模型的推理顺序。</p>
+<p>例如：</p>
+<ul>
+<li><code>goal_manage</code> 很容易被误用成“必须先规划再行动”</li>
+<li>报告 block tree 很容易变成“先列大纲、再分段填充、最后统一收尾”</li>
+</ul>
+<p>这其实是在把 Agent 重新做成阶段机。</p>
+<p>我们后来给自己的约束很明确：<strong>结构化状态是可选脚手架，不是默认思维路径。</strong> 模型可以使用 subgoal 来记录问题拆解，可以写 working memory 来沉淀口径，也可以直接继续探索。runtime 不应该因为这些结构存在，就要求模型必须遵循某种固定顺序。</p>
+<p>结构能帮助系统稳定，但不能接管系统的思考方式。</p>
+<h2 id="5-guardrail-要薄-但必须足够硬">5. Guardrail 要薄，但必须足够硬</h2>
+<p>“不要替模型做判断”不代表“不要任何约束”。真正可用的 Agent，一定需要 guardrail，只是 guardrail 的职责必须非常清楚：<strong>阻止坏结果落地，而不是规划正常过程。</strong></p>
+<p>在我们的数据分析 Agent 里，<code>report_finalize</code> 是一个典型例子。我们没有让 runtime 决定什么时候应该写结论、什么时候应该补图，但我们会在最终收尾前做硬校验：</p>
+<ul>
+<li>目标树里是否仍有未闭环的 active branch</li>
+<li>报告 block 是否存在重复标题</li>
+<li>图表是否缺 caption</li>
+<li>文中引用的图表 ID 是否真实存在</li>
+</ul>
+<p>如果这些条件不满足，收尾会被拒绝。</p>
+<p>这里的关键是：runtime 只说“现在还不能落地这个结果”，但不说“你必须先执行 A，再执行 B”。这个边界非常重要。很多系统的问题并不是 guardrail 太多，而是 guardrail 不知不觉开始扮演流程编排器。</p>
+<h2 id="6-长任务里-先治理上下文-再责怪模型">6. 长任务里，先治理上下文，再责怪模型</h2>
+<p>Agent 跑短任务时，很多问题不明显；一旦进入长任务，真正的瓶颈往往不是模型能力，而是上下文管理。</p>
+<p>我们在 trace 里看到过很典型的问题：</p>
+<ul>
+<li>图表工具把完整 ECharts option 回灌进历史</li>
+<li>报告工具把大段正文一轮轮叠加进 prompt</li>
+<li>查询结果保留太完整，导致后半程有效信息占比越来越低</li>
+</ul>
+<p>最后的结果不是“模型突然变笨了”，而是 prompt 里低价值历史越来越多。</p>
+<p>所以我们后来的重点，不是继续往 system prompt 里加规则，而是做上下文治理：</p>
+<ul>
+<li>对历史工具调用做压缩，只保留后续推理真正需要的摘要</li>
+<li>让模型主动把关键结论写进 working memory</li>
+<li>超过阈值后，把更早历史折叠成 digest</li>
+<li>把状态改成 observation tool 按需拉取</li>
+</ul>
+<p>这类优化没有换模型那么显眼，但它们对 agent 稳定性的影响通常更大。很多“推理问题”，最后本质上都是上下文工程问题。</p>
+<h2 id="7-delegate-是边界工具-不是炫技功能">7. Delegate 是边界工具，不是炫技功能</h2>
+<p>多智能体很容易被做成表演系统：任务一复杂，就拆出很多子 agent，让系统看起来“很聪明”。但如果没有严格边界，delegate 很快就会放大复杂度，而不是放大能力。</p>
+<p>我们对 <code>task_delegate</code> 的一个核心约束是：<strong>只有当子任务边界清晰，而且允许工具列表可以被明确裁剪时，delegate 才值得使用。</strong></p>
+<p>这意味着子代理不是“第二个更自由的主代理”，而是一个受限执行单元。你必须清楚：</p>
+<ul>
+<li>它要解决的具体问题是什么</li>
+<li>它允许使用哪些工具</li>
+<li>它的产出会如何回流到主代理</li>
+</ul>
+<p>如果这些边界不清楚，delegate 带来的不是并行收益，而是状态扩散、工具误用和调试难度激增。</p>
+<p>所以在我们的实践里，delegate 更像权限边界工具，而不是炫技式的多线程展示。</p>
+<h2 id="结语">结语</h2>
+<p>如果要把这 7 条经验压缩成一句话，那就是：</p>
+<p><strong>Agent Runtime 最重要的，不是替模型设计路径，而是把状态、工具、边界和上下文管理做对。</strong></p>
+<p>好的 agent 系统应该做到这些事：</p>
+<ul>
+<li>给模型足够清晰的目标</li>
+<li>提供边界明确的工具</li>
+<li>暴露按需可观察的状态</li>
+<li>用薄 guardrail 拦住非法结果</li>
+<li>持续治理长任务上下文</li>
+<li>用 trace 审计真实问题，而不是凭感觉调 prompt</li>
+</ul>
+<p>一旦这些基础打稳，模型的自主性才会真正变成能力；否则，再复杂的 prompt，也只是另一种形态的 workflow。</p>
+
+            
+            <!-- Giscus Comments -->
+            <div class="giscus-container">
+              <script src="https://giscus.app/client.js"
+                data-repo="ifnodoraemon/ifnodoraemon.github.io"
+                data-repo-id="R_kgDON7u7iA"
+                data-category="Announcements"
+                data-category-id="DIC_kwDON7u7iM4CnKDE"
+                data-mapping="specific"
+                data-term="agent-runtime-practices"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="dark"
+                data-lang="zh-CN"
+                crossorigin="anonymous"
+                async>
+              </script>
+            </div>
+          </div>
+        </div>
+        <div class="article-prev-next">
+        <a href="/articles/mcp-guide/" class="prev-next-link prev-link">
+          <span class="pn-label">← 上一篇</span>
+          <span class="pn-title">MCP 协议深度解析：AI 的「USB-C 接口」</span>
+        </a><div class="prev-next-link empty"></div></div>
+        <div class="article-nav fade-in">
+          <a href="/articles/" class="btn-ghost">← 返回文章列表</a>
+          <div class="share-buttons">
+            <span class="share-label" style="font-size: 0.85rem; color: var(--text-muted); margin-right: 0.5rem; font-family: var(--font-mono);">Share:</span>
+            <a href="https://twitter.com/intent/tweet?text=%E5%81%9A%20AI%20Agent%20%E7%9A%84%207%20%E6%9D%A1%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AE%9E%E8%B7%B5&url=https%3A%2F%2Fifnodoraemon.github.io%2Farticles%2Fagent-runtime-practices%2F" target="_blank" rel="noopener noreferrer" class="btn-ghost share-btn share-x" title="Share to X" aria-label="Share to X">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fifnodoraemon.github.io%2Farticles%2Fagent-runtime-practices%2F" target="_blank" rel="noopener noreferrer" class="btn-ghost share-btn share-linkedin" title="Share to LinkedIn" aria-label="Share to LinkedIn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+            <a href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fifnodoraemon.github.io%2Farticles%2Fagent-runtime-practices%2F&t=%E5%81%9A%20AI%20Agent%20%E7%9A%84%207%20%E6%9D%A1%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AE%9E%E8%B7%B5" target="_blank" rel="noopener noreferrer" class="btn-ghost share-btn share-hn" title="Share to Hacker News" aria-label="Share to Hacker News">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M2 2v20h20V2H2zm10.2 11v5h-2.1v-5l-3.3-6.5h2.4l2 4.4 2-4.4h2.3l-3.3 6.5z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <footer id="site-footer" class="footer"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <script type="module" src="/src/assets/js/main.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#0a0a1a',
+        mainBkg: '#1a1a2e',
+        nodeBorder: '#6366f1',
+        clusterBkg: 'rgba(99,102,241,0.06)',
+        clusterBorder: 'rgba(99,102,241,0.2)',
+        titleColor: '#a5b4fc',
+        nodeTextColor: '#e2e8f0',
+        primaryColor: '#1e1e3a',
+        primaryTextColor: '#e2e8f0',
+        primaryBorderColor: '#6366f1',
+        lineColor: '#818cf8',
+        secondaryColor: '#1a1a2e',
+        tertiaryColor: '#1a1a2e',
+        fontFamily: 'Inter, Noto Sans SC, sans-serif',
+        fontSize: '14px',
+      }
+    });
+  </script>
+</body>
+</html>

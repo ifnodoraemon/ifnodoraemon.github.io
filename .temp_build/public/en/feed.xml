@@ -5,8 +5,15 @@
   <link>https://ifnodoraemon.github.io/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Sun, 15 Mar 2026 07:54:39 GMT</pubDate>
+  <pubDate>Sun, 15 Mar 2026 08:06:19 GMT</pubDate>
   <atom:link href="https://ifnodoraemon.github.io/en/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>7 Runtime Practices for Building AI Agents</title>
+    <link>https://ifnodoraemon.github.io/en/articles/agent-runtime-practices/</link>
+    <guid>https://ifnodoraemon.github.io/en/articles/agent-runtime-practices/</guid>
+    <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
+    <description>Based on a real data analysis agent project, this article distills 7 reusable Agent Runtime practices covering state exposure, tool design, context control, guardrails, delegation, and trace-driven iteration.</description>
+  </item>
   <item>
     <title>MCP Deep Dive: The USB-C Port for AI</title>
     <link>https://ifnodoraemon.github.io/en/articles/mcp-guide/</link>
