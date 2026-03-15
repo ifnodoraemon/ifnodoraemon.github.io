@@ -589,13 +589,13 @@ function generateListingPage(articlesList, isEn = false) {
       </div>
     </section>
 
-    <section class="section section-tight" style="padding-bottom: 0;">
+    <section class="section section-tight articles-search-section" style="padding-bottom: 0;">
       <div class="container">
 ${searchHtml}
       </div>
     </section>
 
-    <section class="section section-tight">
+    <section class="section section-tight articles-list-section">
       <div class="container">
         <div class="articles-filter fade-in" id="articles-filter">
           <button class="filter-btn active" data-filter="all">${filterAllBtn}</button>

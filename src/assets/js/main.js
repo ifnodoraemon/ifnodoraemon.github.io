@@ -331,6 +331,7 @@ function initArticlesListing() {
   const searchInput = document.getElementById('article-search-input');
   const clearBtn = document.getElementById('search-clear-btn');
   const searchDropdown = document.getElementById('search-results-dropdown');
+  const searchInputWrapper = searchInput?.closest('.search-input-wrapper') || null;
   const emptyState = document.getElementById('articles-empty-state') || (() => {
     const state = document.createElement('div');
     state.id = 'articles-empty-state';
@@ -359,6 +360,11 @@ function initArticlesListing() {
   let isFetching = false;
   let activeSearchResultIndex = -1;
   let searchResultItems = [];
+
+  if (searchDropdown && searchInputWrapper) {
+    searchDropdown.classList.add('search-results-floating');
+    document.body.appendChild(searchDropdown);
+  }
 
   if (!availableTags.has(selectedTag)) selectedTag = 'all';
   if (searchInput) searchInput.value = searchQuery;
@@ -527,8 +533,18 @@ function initArticlesListing() {
     });
   }
 
+  function updateSearchDropdownPosition() {
+    if (!searchDropdown || !searchInputWrapper) return;
+
+    const rect = searchInputWrapper.getBoundingClientRect();
+    searchDropdown.style.left = `${rect.left}px`;
+    searchDropdown.style.top = `${rect.bottom + 8}px`;
+    searchDropdown.style.width = `${rect.width}px`;
+  }
+
   if (searchInput) {
     searchInput.addEventListener('focus', () => {
+      updateSearchDropdownPosition();
       void fetchSearchIndex().then(() => {
         if (searchQuery) executeSearch(searchQuery.toLowerCase());
       });
@@ -539,6 +555,7 @@ function initArticlesListing() {
       const query = searchQuery.toLowerCase();
 
       applyFilters({ resetPage: true });
+      updateSearchDropdownPosition();
 
       if (query.length > 0) {
         clearBtn.style.display = 'flex';
@@ -595,6 +612,13 @@ function initArticlesListing() {
       }
     });
   }
+
+  window.addEventListener('resize', updateSearchDropdownPosition, { passive: true });
+  window.addEventListener('scroll', () => {
+    if (searchDropdown?.classList.contains('active')) {
+      updateSearchDropdownPosition();
+    }
+  }, { passive: true });
 
   function executeSearch(query) {
     if (!searchIndex || !searchDropdown) return;
@@ -663,6 +687,7 @@ function initArticlesListing() {
     }
 
     searchResultItems = Array.from(searchDropdown.querySelectorAll('.search-result-item'));
+    updateSearchDropdownPosition();
     searchDropdown.classList.add('active');
   }
 
