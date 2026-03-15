@@ -334,7 +334,7 @@ function initArticlesListing() {
   const articlesList = document.getElementById('articles-list');
   if (!articlesList) return;
 
-  const items = Array.from(articlesList.querySelectorAll('.article-list-item'));
+  const rows = Array.from(articlesList.querySelectorAll('.article-list-item-wrapper'));
   const filterBtns = document.querySelectorAll('.filter-btn');
   const pagination = document.querySelector('.articles-pagination');
   const numbersContainer = document.querySelector('.pagination-numbers');
@@ -348,11 +348,11 @@ function initArticlesListing() {
 
   const ITEMS_PER_PAGE = 8;
   let currentPage = 1;
-  let filteredItems = [...items];
+  let filteredRows = [...rows];
   
   // -- Pagination Logic --
   function renderPagination() {
-    const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(filteredRows.length / ITEMS_PER_PAGE);
     
     // Hide pagination if only 1 page
     if (totalPages <= 1) {
@@ -379,11 +379,11 @@ function initArticlesListing() {
     const start = (page - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
     
-    items.forEach(item => item.style.display = 'none');
+    rows.forEach(row => row.style.display = 'none');
     
-    filteredItems.forEach((item, index) => {
+    filteredRows.forEach((row, index) => {
       if (index >= start && index < end) {
-        item.style.display = '';
+        row.style.display = '';
       }
     });
     
@@ -409,7 +409,7 @@ function initArticlesListing() {
   
   if (nextBtn) {
     nextBtn.addEventListener('click', () => {
-      const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+      const totalPages = Math.ceil(filteredRows.length / ITEMS_PER_PAGE);
       if (currentPage < totalPages) goToPage(currentPage + 1);
     });
   }
@@ -429,9 +429,9 @@ function initArticlesListing() {
       const filter = btn.dataset.filter;
       
       if (filter === 'all') {
-        filteredItems = [...items];
+        filteredRows = [...rows];
       } else {
-        filteredItems = items.filter(item => item.dataset.tag === filter);
+        filteredRows = rows.filter(row => row.dataset.tag === filter);
       }
       
       currentPage = 1;
