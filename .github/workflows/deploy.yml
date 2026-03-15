@@ -33,11 +33,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build articles (MD → HTML)
-        run: npm run articles
+      - name: Build site
+        run: npm run build
 
-      - name: Build site (Vite)
-        run: npx vite build
+      - name: Run smoke checks
+        run: npm run test:smoke
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

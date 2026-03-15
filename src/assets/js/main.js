@@ -3,30 +3,17 @@
 // ============================================
 import { renderNav } from './components/nav.js';
 import { renderFooter } from './components/footer.js';
+import {
+  getPageState,
+  getSearchIndexPath,
+  highlightSearchMatches,
+} from './utils/site.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
   // — Detect current page —
   const path = window.location.pathname;
-  let activePage = 'home';
-  let footerStyle = 'full';
-
-  if (path.startsWith('/about')) {
-    activePage = 'about';
-    footerStyle = 'simple';
-  } else if (path.startsWith('/models')) {
-    activePage = 'models';
-    footerStyle = 'simple';
-  } else if (path.startsWith('/projects')) {
-    activePage = 'projects';
-    footerStyle = 'simple';
-  } else if (path === '/articles/' || path === '/articles') {
-    activePage = 'articles';
-    footerStyle = 'simple';
-  } else if (path.startsWith('/articles')) {
-    activePage = '';
-    footerStyle = 'simple';
-  }
+  const { activePage, footerStyle } = getPageState(path);
 
   // — Render shared components —
   renderNav(activePage);
@@ -340,29 +327,96 @@ function initArticlesListing() {
   const numbersContainer = document.querySelector('.pagination-numbers');
   const prevBtn = document.querySelector('.prev-btn');
   const nextBtn = document.querySelector('.next-btn');
-  
+
   const searchInput = document.getElementById('article-search-input');
   const clearBtn = document.getElementById('search-clear-btn');
   const searchDropdown = document.getElementById('search-results-dropdown');
+  const emptyState = document.getElementById('articles-empty-state') || (() => {
+    const state = document.createElement('div');
+    state.id = 'articles-empty-state';
+    state.className = 'articles-empty-state';
+    state.hidden = true;
+    state.setAttribute('aria-live', 'polite');
+    articlesList.insertAdjacentElement('afterend', state);
+    return state;
+  })();
   const currentLang = searchInput ? searchInput.dataset.lang : 'en';
+  const url = new URL(window.location.href);
+  const params = url.searchParams;
+  const availableTags = new Set(Array.from(filterBtns, btn => btn.dataset.filter));
+  const rowRecords = rows.map(row => ({
+    row,
+    tag: row.dataset.tag || 'all',
+    searchText: row.textContent.toLowerCase(),
+  }));
 
   const ITEMS_PER_PAGE = 8;
-  let currentPage = 1;
+  let currentPage = Math.max(1, Number.parseInt(params.get('page') || '1', 10) || 1);
+  let selectedTag = params.get('tag') || 'all';
+  let searchQuery = params.get('q')?.trim() || '';
   let filteredRows = [...rows];
-  
-  // -- Pagination Logic --
+  let searchIndex = null;
+  let isFetching = false;
+  let activeSearchResultIndex = -1;
+  let searchResultItems = [];
+
+  if (!availableTags.has(selectedTag)) selectedTag = 'all';
+  if (searchInput) searchInput.value = searchQuery;
+  if (clearBtn) clearBtn.style.display = searchQuery ? 'flex' : 'none';
+
+  function getTotalPages() {
+    return Math.max(1, Math.ceil(filteredRows.length / ITEMS_PER_PAGE));
+  }
+
+  function updateUrlState() {
+    const nextUrl = new URL(window.location.href);
+
+    if (selectedTag !== 'all') nextUrl.searchParams.set('tag', selectedTag);
+    else nextUrl.searchParams.delete('tag');
+
+    if (searchQuery) nextUrl.searchParams.set('q', searchQuery);
+    else nextUrl.searchParams.delete('q');
+
+    if (currentPage > 1) nextUrl.searchParams.set('page', String(currentPage));
+    else nextUrl.searchParams.delete('page');
+
+    const nextPath = `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`;
+    const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+    if (nextPath !== currentPath) {
+      window.history.replaceState({}, '', nextPath);
+    }
+  }
+
+  function updateFilterButtons() {
+    filterBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === selectedTag);
+    });
+  }
+
+  function renderEmptyState() {
+    const emptyText = currentLang.startsWith('zh')
+      ? '没有匹配当前筛选条件的文章。'
+      : 'No articles matched the current filters.';
+
+    emptyState.textContent = emptyText;
+    emptyState.hidden = filteredRows.length > 0;
+  }
+
   function renderPagination() {
-    const totalPages = Math.ceil(filteredRows.length / ITEMS_PER_PAGE);
-    
-    // Hide pagination if only 1 page
-    if (totalPages <= 1) {
+    const totalPages = getTotalPages();
+
+    if (!pagination || !numbersContainer) return;
+
+    if (filteredRows.length === 0 || totalPages <= 1) {
+      numbersContainer.innerHTML = '';
       if (pagination) pagination.style.display = 'none';
       return;
     }
-    
-    if (pagination) pagination.style.display = 'flex';
+
+    pagination.style.display = 'flex';
     numbersContainer.innerHTML = '';
-    
+
     for (let i = 1; i <= totalPages; i++) {
       const btn = document.createElement('button');
       btn.className = `page-num ${i === currentPage ? 'active' : ''}`;
@@ -370,89 +424,90 @@ function initArticlesListing() {
       btn.addEventListener('click', () => goToPage(i));
       numbersContainer.appendChild(btn);
     }
-    
+
     if (prevBtn) prevBtn.disabled = currentPage === 1;
     if (nextBtn) nextBtn.disabled = currentPage === totalPages;
   }
-  
+
   function showPage(page) {
     const start = (page - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
-    
+
     rows.forEach(row => row.style.display = 'none');
-    
+
     filteredRows.forEach((row, index) => {
       if (index >= start && index < end) {
         row.style.display = '';
       }
     });
-    
+
+    renderEmptyState();
     renderPagination();
   }
-  
-  function goToPage(page) {
+
+  function scrollListingIntoView() {
+    const filterSection = document.getElementById('articles-filter');
+    if (!filterSection) return;
+
+    const offset = filterSection.getBoundingClientRect().top + window.scrollY - 100;
+    window.scrollTo({ top: offset, behavior: 'smooth' });
+  }
+
+  function goToPage(page, options = {}) {
+    const { shouldScroll = true } = options;
     currentPage = page;
     showPage(currentPage);
-    // Optional scroll to top of list
-    const filterSection = document.getElementById('articles-filter');
-    if (filterSection) {
-      const offset = filterSection.getBoundingClientRect().top + window.scrollY - 100;
-      window.scrollTo({ top: offset, behavior: 'smooth' });
-    }
+    updateUrlState();
+
+    if (shouldScroll) scrollListingIntoView();
   }
-  
+
+  function applyFilters(options = {}) {
+    const { resetPage = false, shouldScroll = false } = options;
+    const terms = searchQuery.toLowerCase().split(/\s+/).filter(Boolean);
+
+    filteredRows = rowRecords
+      .filter(record => {
+        const matchesTag = selectedTag === 'all' || record.tag === selectedTag;
+        const matchesQuery = terms.length === 0 || terms.every(term => record.searchText.includes(term));
+        return matchesTag && matchesQuery;
+      })
+      .map(record => record.row);
+
+    if (resetPage) currentPage = 1;
+    currentPage = Math.min(currentPage, getTotalPages());
+
+    updateFilterButtons();
+    goToPage(currentPage, { shouldScroll });
+  }
+
   if (prevBtn) {
     prevBtn.addEventListener('click', () => {
       if (currentPage > 1) goToPage(currentPage - 1);
     });
   }
-  
+
   if (nextBtn) {
     nextBtn.addEventListener('click', () => {
-      const totalPages = Math.ceil(filteredRows.length / ITEMS_PER_PAGE);
+      const totalPages = getTotalPages();
       if (currentPage < totalPages) goToPage(currentPage + 1);
     });
   }
-  
-  // -- Filter Logic Override --
-  // We need to override the existing filter logic to work with pagination
-  filterBtns.forEach(btn => {
-    // Remove the old listener attached in HTML template via inline script if possible.
-    // Since it's inline, we'll just handle ours and ensure ours runs.
-    btn.addEventListener('click', (e) => {
-      // Prevent the inline script from breaking pagination
-      e.stopPropagation(); 
-      
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      
-      const filter = btn.dataset.filter;
-      
-      if (filter === 'all') {
-        filteredRows = [...rows];
-      } else {
-        filteredRows = rows.filter(row => row.dataset.tag === filter);
-      }
-      
-      currentPage = 1;
-      showPage(1);
-    }, true); // Use capture to intercept before the inline script
-  });
-  
-  // -- Initial Render --
-  showPage(1);
 
-  // -- Search Logic --
-  let searchIndex = null;
-  let isFetching = false;
-  
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedTag = btn.dataset.filter || 'all';
+      applyFilters({ resetPage: true, shouldScroll: true });
+    });
+  });
+
   async function fetchSearchIndex() {
     if (searchIndex || isFetching) return;
     isFetching = true;
     try {
-      const res = await fetch('/public/search-index.json');
+      const res = await fetch(getSearchIndexPath());
       if (res.ok) {
-        const data = await fetch('/public/search-index.json').then(res => res.json());
+        const data = await res.json();
         // Filter by current language
         const langPref = currentLang.startsWith('zh') ? 'zh' : 'en';
         searchIndex = data.filter(item => item.lang === langPref);
@@ -462,104 +517,163 @@ function initArticlesListing() {
     }
     isFetching = false;
   }
-  
+
+  function syncSearchDropdownFocus() {
+    searchResultItems.forEach((item, index) => {
+      const isActive = index === activeSearchResultIndex;
+      item.classList.toggle('active', isActive);
+      item.classList.toggle('focused', isActive);
+      item.setAttribute('aria-selected', String(isActive));
+    });
+  }
+
   if (searchInput) {
-    searchInput.addEventListener('focus', fetchSearchIndex);
-    
+    searchInput.addEventListener('focus', () => {
+      void fetchSearchIndex().then(() => {
+        if (searchQuery) executeSearch(searchQuery.toLowerCase());
+      });
+    });
+
     searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.trim().toLowerCase();
-      
+      searchQuery = e.target.value.trim();
+      const query = searchQuery.toLowerCase();
+
+      applyFilters({ resetPage: true });
+
       if (query.length > 0) {
         clearBtn.style.display = 'flex';
+        void fetchSearchIndex().then(() => {
+          if (searchInput.value.trim().toLowerCase() === query) executeSearch(query);
+        });
         executeSearch(query);
       } else {
         clearBtn.style.display = 'none';
         closeSearch();
       }
     });
-    
+
     clearBtn.addEventListener('click', () => {
       searchInput.value = '';
+      searchQuery = '';
       clearBtn.style.display = 'none';
+      applyFilters({ resetPage: true });
       closeSearch();
       searchInput.focus();
     });
-    
-    // Close dropdown when clicking outside
+
     document.addEventListener('click', (e) => {
       if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target) && !clearBtn.contains(e.target)) {
         closeSearch();
       }
     });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (!searchDropdown.classList.contains('active') || searchResultItems.length === 0) {
+        if (e.key === 'Escape') closeSearch();
+        return;
+      }
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeSearchResultIndex = (activeSearchResultIndex + 1) % searchResultItems.length;
+        syncSearchDropdownFocus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeSearchResultIndex = activeSearchResultIndex <= 0
+          ? searchResultItems.length - 1
+          : activeSearchResultIndex - 1;
+        syncSearchDropdownFocus();
+      } else if (e.key === 'Enter') {
+        const targetIndex = activeSearchResultIndex >= 0 ? activeSearchResultIndex : 0;
+        const target = searchResultItems[targetIndex];
+        if (target) {
+          e.preventDefault();
+          window.location.href = target.href;
+        }
+      } else if (e.key === 'Escape') {
+        closeSearch();
+      }
+    });
   }
-  
+
   function executeSearch(query) {
-    if (!searchIndex) return;
-    
+    if (!searchIndex || !searchDropdown) return;
+
     const terms = query.split(/\s+/).filter(Boolean);
-    if (terms.length === 0) return;
-    
+    if (terms.length === 0) {
+      closeSearch();
+      return;
+    }
+
     const results = searchIndex.map(item => {
       let score = 0;
       const titleLower = item.title.toLowerCase();
       const descLower = item.description.toLowerCase();
       const tagLower = item.tag.toLowerCase();
-      
+
       terms.forEach(term => {
         if (titleLower.includes(term)) score += 10;
         if (tagLower.includes(term)) score += 5;
         if (descLower.includes(term)) score += 2;
       });
-      
+
       return { item, score };
     })
     .filter(res => res.score > 0)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 5); // Limit to top 5 results
-    
+    .slice(0, 5);
+
     renderSearchResults(results, query);
   }
-  
+
   function renderSearchResults(results, query) {
+    if (!searchDropdown) return;
+
     searchDropdown.innerHTML = '';
-    
+    activeSearchResultIndex = -1;
+
     if (results.length === 0) {
       const noResultsText = currentLang.startsWith('zh') ? '未找到相关文章' : 'No related articles found';
       searchDropdown.innerHTML = `<div class="search-empty">${noResultsText}</div>`;
     } else {
-      results.forEach(({ item }) => {
+      results.forEach(({ item }, index) => {
         const a = document.createElement('a');
         a.href = item.url;
         a.className = 'search-result-item';
-        
-        // Basic highlight function
-        const highlight = (text) => {
-          if (!query) return text;
-          const regex = new RegExp(`(${query.split(/\s+/).join('|')})`, 'gi');
-          return text.replace(regex, '<mark>$1</mark>');
-        };
-        
+        a.dataset.index = String(index);
+        a.setAttribute('role', 'option');
+        a.setAttribute('aria-selected', 'false');
+
         a.innerHTML = `
           <div class="search-result-meta">
             <span class="tag">${item.tag}</span>
             <time>${item.date}</time>
           </div>
-          <div class="search-result-title">${highlight(item.title)}</div>
-          <div class="search-result-desc">${highlight(item.description)}</div>
+          <div class="search-result-title">${highlightSearchMatches(item.title, query)}</div>
+          <div class="search-result-desc">${highlightSearchMatches(item.description, query)}</div>
         `;
-        
+
+        a.addEventListener('mouseenter', () => {
+          activeSearchResultIndex = index;
+          syncSearchDropdownFocus();
+        });
+
         searchDropdown.appendChild(a);
       });
     }
-    
+
+    searchResultItems = Array.from(searchDropdown.querySelectorAll('.search-result-item'));
     searchDropdown.classList.add('active');
   }
-  
+
   function closeSearch() {
-    if(searchDropdown) searchDropdown.classList.remove('active');
+    activeSearchResultIndex = -1;
+    searchResultItems = [];
+    if (searchDropdown) searchDropdown.classList.remove('active');
   }
 
-  // --- Keyboard Shortcut (Cmd/Ctrl + K) ---
+  applyFilters({ shouldScroll: false });
+
   document.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       if (searchInput) {

@@ -8,6 +8,7 @@
     "pages": "node scripts/build-pages.js",
     "dev": "npm run pages && npm run articles && vite",
     "build": "npm run pages && npm run articles && vite build",
+    "test:smoke": "node --test tests/site.test.js",
     "preview": "vite preview"
   },
   "keywords": [],

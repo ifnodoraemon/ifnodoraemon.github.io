@@ -1,8 +1,10 @@
+import { isEnglishPath } from '../utils/site.js';
+
 // Shared Footer Component
 export function renderFooter(style = 'full') {
   const footer = document.getElementById('site-footer') || createFooterElement();
 
-  const isEn = window.location.pathname.startsWith('/en/');
+  const isEn = isEnglishPath(window.location.pathname);
   const langPrefix = isEn ? '/en' : '';
   const siteTitle = isEn ? 'Nobita Talks AI' : '大雄话AI';
   const desc = isEn ? 'Focusing on AI foundation models and tech insights.' : '专注 AI 大模型技术研究与实践分享。记录前沿技术的发展脉络。';

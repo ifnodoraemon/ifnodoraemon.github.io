@@ -1,8 +1,11 @@
+import { isEnglishPath } from '../utils/site.js';
+
 // Shared Navigation Component
 export function renderNav(activePage = '') {
   const nav = document.getElementById('navbar') || createNavElement();
 
-  const isEn = window.location.pathname.startsWith('/en/');
+  const currentPath = window.location.pathname;
+  const isEn = isEnglishPath(currentPath);
   const langPrefix = isEn ? '/en' : '';
 
   const siteTitle = isEn ? 'Nobita Talks AI' : '大雄话AI';
@@ -22,9 +25,10 @@ export function renderNav(activePage = '') {
   ];
 
   let togglePath = isEn 
-    ? window.location.pathname.replace(/^\/en/, '') 
-    : '/en' + window.location.pathname;
+    ? currentPath.replace(/^\/en(?=\/|$)/, '') 
+    : '/en' + currentPath;
   if (!togglePath || togglePath === '') togglePath = '/';
+  togglePath += window.location.search + window.location.hash;
 
   let linksHtml = navItems.map(item => 
     `<a href="${item.href}"${activePage === item.id ? ' class="active" aria-current="page"' : ''}>${item.title}</a>`
