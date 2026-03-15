@@ -137,6 +137,8 @@ for (const {file, isEn, dir} of mdFiles) {
     .replace(/\{\{lang\}\}/g, isEn ? 'en' : 'zh-CN')
     .replace(/\{\{articles_link\}\}/g, isEn ? '/en/articles/' : '/articles/')
     .replace(/\{\{articles_prefix\}\}/g, isEn ? '/en' : '')
+    .replace(/\{\{encodedTitle\}\}/g, encodeURIComponent(fm.title))
+    .replace(/\{\{encodedUrl\}\}/g, encodeURIComponent('https://ifnodoraemon.github.io' + (isEn ? '/en' : '') + '/articles/' + fm.slug + '/'))
     .replace(/\{\{breadcrumb_articles\}\}/g, isEn ? 'Articles' : '文章')
     .replace(/\{\{return_text\}\}/g, isEn ? '← Back to Articles' : '← 返回文章列表')
     .replace(/\{\{meta\.siteName\}\}/g, isEn ? enLocales.meta.siteName : zhLocales.meta.siteName);
