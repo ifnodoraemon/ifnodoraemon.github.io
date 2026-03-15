@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 Not Found — Nobita Talks AI</title>
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#06060b">
+  
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/assets/css/style.css">
+  
+  <style>
+    .page-404 {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+    
+    .glitch-wrapper {
+      position: relative;
+    }
+    
+    .glitch-title {
+      font-size: 8rem;
+      font-weight: 700;
+      line-height: 1;
+      margin: 0;
+      color: var(--text);
+      position: relative;
+      font-family: var(--font-mono);
+      text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+    }
+    
+    .glitch-title::before,
+    .glitch-title::after {
+      content: '404';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+    }
+    
+    .glitch-title::before {
+      left: 2px;
+      text-shadow: -2px 0 #ff00c1;
+      clip: rect(44px, 450px, 56px, 0);
+      animation: glitch-anim 5s infinite linear alternate-reverse;
+    }
+    
+    .glitch-title::after {
+      left: -2px;
+      text-shadow: -2px 0 #00fff9;
+      clip: rect(44px, 450px, 56px, 0);
+      animation: glitch-anim2 5s infinite linear alternate-reverse;
+    }
+    
+    .page-404 h2 {
+      font-size: 2rem;
+      margin: 1rem 0;
+      color: var(--text);
+    }
+    
+    .page-404 p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .actions-404 {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+    
+    @keyframes glitch-anim {
+      0% { clip: rect(78px, 9999px, 86px, 0); }
+      5% { clip: rect(100px, 9999px, 20px, 0); }
+      10% { clip: rect(14px, 9999px, 83px, 0); }
+      15% { clip: rect(69px, 9999px, 73px, 0); }
+      20% { clip: rect(74px, 9999px, 86px, 0); }
+      25% { clip: rect(40px, 9999px, 76px, 0); }
+      30% { clip: rect(32px, 9999px, 55px, 0); }
+      35% { clip: rect(80px, 9999px, 21px, 0); }
+      40% { clip: rect(18px, 9999px, 63px, 0); }
+      45% { clip: rect(52px, 9999px, 21px, 0); }
+      50% { clip: rect(47px, 9999px, 14px, 0); }
+      55% { clip: rect(52px, 9999px, 51px, 0); }
+      60% { clip: rect(63px, 9999px, 69px, 0); }
+      65% { clip: rect(45px, 9999px, 7px, 0); }
+      70% { clip: rect(88px, 9999px, 68px, 0); }
+      75% { clip: rect(6px, 9999px, 22px, 0); }
+      80% { clip: rect(14px, 9999px, 87px, 0); }
+      85% { clip: rect(4px, 9999px, 53px, 0); }
+      90% { clip: rect(36px, 9999px, 61px, 0); }
+      95% { clip: rect(16px, 9999px, 13px, 0); }
+      100% { clip: rect(72px, 9999px, 7px, 0); }
+    }
+    @keyframes glitch-anim2 {
+      0% { clip: rect(65px, 9999px, 100px, 0); }
+      5% { clip: rect(52px, 9999px, 74px, 0); }
+      10% { clip: rect(79px, 9999px, 85px, 0); }
+      15% { clip: rect(75px, 9999px, 5px, 0); }
+      20% { clip: rect(67px, 9999px, 61px, 0); }
+      25% { clip: rect(14px, 9999px, 79px, 0); }
+      30% { clip: rect(1px, 9999px, 66px, 0); }
+      35% { clip: rect(86px, 9999px, 30px, 0); }
+      40% { clip: rect(23px, 9999px, 98px, 0); }
+      45% { clip: rect(85px, 9999px, 72px, 0); }
+      50% { clip: rect(71px, 9999px, 75px, 0); }
+      55% { clip: rect(2px, 9999px, 48px, 0); }
+      60% { clip: rect(30px, 9999px, 16px, 0); }
+      65% { clip: rect(59px, 9999px, 50px, 0); }
+      70% { clip: rect(41px, 9999px, 62px, 0); }
+      75% { clip: rect(2px, 9999px, 82px, 0); }
+      80% { clip: rect(47px, 9999px, 73px, 0); }
+      85% { clip: rect(3px, 9999px, 27px, 0); }
+      90% { clip: rect(26px, 9999px, 55px, 0); }
+      95% { clip: rect(42px, 9999px, 97px, 0); }
+      100% { clip: rect(38px, 9999px, 49px, 0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <nav id="navbar" class="navbar" aria-label="Main Navigation"></nav>
+
+  <main class="page-main">
+    <section class="page-404">
+      <div class="container fade-in">
+        <div class="glitch-wrapper">
+          <h1 class="glitch-title">404</h1>
+        </div>
+        <h2>Node Disconnected</h2>
+        <p>The requested signal was lost in the void. Let's return to known space.</p>
+        <div class="actions-404">
+          <a href="/en/" class="btn-primary">
+            <span class="btn-glow"></span>
+            Back to Home
+          </a>
+          <a href="/en/articles/" class="btn-ghost">
+            Read Articles
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer" class="footer"></footer>
+
+  <script type="module" src="/src/assets/js/main.js"></script>
+</body>
+</html>

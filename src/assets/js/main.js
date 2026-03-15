@@ -525,5 +525,21 @@ function initArticlesListing() {
   function closeSearch() {
     if(searchDropdown) searchDropdown.classList.remove('active');
   }
+
+  // --- Keyboard Shortcut (Cmd/Ctrl + K) ---
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if (searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    }
+    if (e.key === 'Escape') {
+      if (searchInput && document.activeElement === searchInput) {
+        searchInput.blur();
+        closeSearch();
+      }
+    }
+  });
 }
 initArticlesListing();
