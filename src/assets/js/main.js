@@ -75,12 +75,45 @@ document.addEventListener('DOMContentLoaded', () => {
   // — Terminal Hero Animation —
   initTerminalAnimation();
 
-  // — Copy Code Button —
+  // — Reading Progress Bar (Articles only) —
+  const articleContent = document.querySelector('.article-detail-content');
+  if (articleContent) {
+    const progressBar = document.createElement('div');
+    progressBar.className = 'reading-progress-bar';
+    document.body.appendChild(progressBar);
+
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      progressBar.style.width = scrolled + '%';
+    }, { passive: true });
+  }
+
+  // — External Links Handler (Articles only) —
+  if (articleContent) {
+    const links = articleContent.querySelectorAll('a[href^="http"]');
+    links.forEach(link => {
+      if (!link.href.includes(window.location.hostname)) {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+        link.classList.add('external-link');
+      }
+    });
+  }
+
+  // — Copy Code Button with $ Stripping —
   document.querySelectorAll('.copy-code-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const codeBlock = btn.nextElementSibling;
       if (!codeBlock) return;
-      const code = codeBlock.innerText;
+      
+      let code = codeBlock.innerText;
+      // Strip starting '$ ' from bash commands before copying
+      const lines = code.split('\n');
+      const cleanLines = lines.map(line => line.trim().startsWith('$ ') ? line.trim().substring(2) : line);
+      code = cleanLines.join('\n');
+
       navigator.clipboard.writeText(code).then(() => {
         const originalHtml = btn.innerHTML;
         btn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;

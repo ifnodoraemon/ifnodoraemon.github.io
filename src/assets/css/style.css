@@ -3558,3 +3558,28 @@ mark {
 .medium-zoom-image--opened {
   z-index: 1000;
 }
+
+/* Reading Progress Bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--accent-light);
+  box-shadow: 0 0 8px var(--accent-light);
+  width: 0%;
+  z-index: 9999;
+  transition: width 0.1s ease-out;
+  pointer-events: none;
+}
+
+/* External Link Indicator */
+.article-detail-content a.external-link::after {
+  content: " ↗";
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  opacity: 0.7;
+  display: inline-block;
+  transform: translateY(-2px);
+  margin-left: 2px;
+}
