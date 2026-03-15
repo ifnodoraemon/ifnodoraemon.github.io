@@ -46,6 +46,7 @@ export function renderFooter(style = 'full') {
             <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="footer-link">GitHub</a>
             <a href="https://x.com/ifnodoraemon" target="_blank" rel="noopener" class="footer-link">X (Twitter)</a>
             <a href="mailto:ifnodoraemon@gmail.com" class="footer-link">Email</a>
+            <a href="${langPrefix}/feed.xml" target="_blank" class="footer-link">RSS Feed</a>
           </div>
         </div>
         <div class="footer-bottom">

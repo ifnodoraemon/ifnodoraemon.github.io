@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag tag-cyan">Skills</span>
             <time datetime="2026-03-12">2026.03.12</time>
+            <span class="meta-divider">•</span>
+            <span>约 5992 字</span>
+            <span class="meta-divider">•</span>
+            <span>预计阅读 24 分钟</span>
           </div>
           <h1>Skills 深度解析：给 AI 编程助手装上「专业大脑」</h1>
           <p class="article-detail-desc">从核心原理到跨平台实战，完整解析 AI 编程助手的 Skills 系统。涵盖 SKILL.md 机制、六大平台对比、实战编写指南与最佳实践。</p>
@@ -220,15 +224,24 @@ graph TB
 </pre>
 <h3 id="level-1-yaml-frontmatter-始终驻留">Level 1：YAML Frontmatter（始终驻留）</h3>
 <p>AI 启动时读取所有 Skills 的 <code>name</code> 和 <code>description</code>，仅消耗极少 Token。这层的作用是<strong>快速判断&quot;这个 Skill 跟当前任务有关吗&quot;</strong>。</p>
-<pre><code class="language-yaml">---
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-yaml">---
 name: code-review-assistant
 description: 代码审查助手，从安全性、性能、类型安全、测试覆盖等维度审查代码
 ---</code></pre>
+</div>
 <h3 id="level-2-skill-md-正文-按需加载">Level 2：SKILL.md 正文（按需加载）</h3>
 <p>当用户的请求与某个 Skill 的 <code>description</code> 匹配时，AI 才加载该 Skill 的完整指令。例如用户说&quot;帮我审查这段代码&quot;，就会触发 <code>code-review-assistant</code> 的完整规则加载。</p>
 <h3 id="level-3-关联文件-深度按需">Level 3：关联文件（深度按需）</h3>
 <p>Skills 可以包含脚本、参考文档、模板等附属文件，<strong>只有在 SKILL.md 中被引用且确实需要时才会被读取</strong>。</p>
-<pre><code>skills/
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code>skills/
 └── code-review/
     ├── SKILL.md           # 必需：核心指令
     ├── scripts/           # 可选：可执行脚本
@@ -237,12 +250,17 @@ description: 代码审查助手，从安全性、性能、类型安全、测试�
     │   └── security-checklist.md
     └── assets/            # 可选：模板和资源
         └── report-template.md</code></pre>
+</div>
 <blockquote>
 <p><strong>与全量加载的区别</strong>：传统的自定义指令（如 <code>.cursorrules</code>）会在每次对话中全量注入所有内容。而 Skills 的三层机制让 AI 只在需要时才加载相关知识，就像图书馆里你只取走需要的那本书，而不是把整个图书馆搬回家。</p>
 </blockquote>
 <h2 id="skill-md-编写实战">SKILL.md 编写实战</h2>
 <h3 id="标准结构">标准结构</h3>
-<pre><code class="language-markdown">---
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-markdown">---
 name: skill-name
 description: 一句话描述这个 Skill 的用途和触发场景
 ---
@@ -266,9 +284,14 @@ description: 一句话描述这个 Skill 的用途和触发场景
 ## 示例
 
 提供至少一个高质量的输入→输出示例。</code></pre>
+</div>
 <h3 id="实战案例一-代码审查助手">实战案例一：代码审查助手</h3>
 <p>这是一个&quot;检查清单型&quot;Skill，将团队的 Code Review 标准系统化：</p>
-<pre><code class="language-markdown">---
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-markdown">---
 name: code-review-assistant
 description: 代码审查助手，从安全性、性能、类型安全、测试覆盖等维度审查代码
 ---
@@ -317,10 +340,15 @@ description: 代码审查助手，从安全性、性能、类型安全、测试�
 ### 📊 Overall
 - 评分: X/10
 - 建议: 通过 / 需修改后通过 / 需重新设计</code></pre>
+</div>
 <p>这个 Skill 的设计精妙之处在于：<strong>优先级排序</strong>（安全 &gt; 性能 &gt; 类型 &gt; 质量 &gt; 测试）确保 AI 先关注最致命的问题；<strong>强制输出格式</strong>让每次 Code Review 的结果都可比较和追踪。</p>
 <h3 id="实战案例二-git-commit-格式化器">实战案例二：Git Commit 格式化器</h3>
 <p>这是一个&quot;格式规范型&quot;Skill，强制执行 Conventional Commits 规范：</p>
-<pre><code class="language-markdown">---
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-markdown">---
 name: git-commit-formatter
 description: 按照 Conventional Commits 规范格式化 Git 提交信息，支持中英文
 ---
@@ -354,9 +382,14 @@ description: 按照 Conventional Commits 规范格式化 Git 提交信息，支�
 1. subject 不超过 50 字符，使用祈使句
 2. body 说明**为什么**做这个变更，而不是**做了什么**
 3. 一次提交只做一件事</code></pre>
+</div>
 <h3 id="实战案例三-docker-部署助手">实战案例三：Docker 部署助手</h3>
 <p>这是一个&quot;知识沉淀型&quot;Skill，将项目容器化架构知识固化：</p>
-<pre><code class="language-markdown">---
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-markdown">---
 name: docker-deploy-assistant
 description: Docker 部署助手，指导 Dockerfile 编写、docker-compose 编排和部署流程
 ---
@@ -381,6 +414,7 @@ docker-compose.yml
 3. **健康检查** — 添加 HEALTHCHECK 指令监控容器状态
 4. **环境变量** — 敏感信息通过 .env 或 Docker secrets 注入
 5. **网络隔离** — 数据库和 Redis 只暴露给内部网络</code></pre>
+</div>
 <p>这个 Skill 的价值在于：新人加入团队时，AI 自动获得项目的<strong>完整部署知识</strong>，不需要任何人手动传授。</p>
 <h2 id="六大平台-skills-对比">六大平台 Skills 对比</h2>
 <p>2026 年初，所有主流 AI 编程助手都推出了各自的&quot;Skills&quot;实现。虽然叫法不同，核心思想一致——<strong>通过配置文件让 AI 更懂你的项目</strong>。</p>
@@ -488,7 +522,11 @@ graph TB
 <p><strong>独特优势</strong>：Skills 可以包含可执行脚本（<code>scripts/</code> 目录），让 AI 不仅能&quot;指导&quot;，更能&quot;执行&quot;。2026 年初的更新还支持了子代理（Subagent）、动态上下文注入和生命周期钩子。</p>
 <h4 id="cursor-project-rules-mdc">Cursor：Project Rules (.mdc)</h4>
 <p>Cursor 从早期的单一 <code>.cursorrules</code> 文件，演进为 <code>.cursor/rules/</code> 目录下的多规则系统：</p>
-<pre><code class="language-yaml"># .cursor/rules/python-style.mdc
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-yaml"># .cursor/rules/python-style.mdc
 ---
 description: Python 代码风格规则
 globs: [&quot;**/*.py&quot;]
@@ -496,6 +534,7 @@ globs: [&quot;**/*.py&quot;]
 - 使用 4 空格缩进
 - 函数必须包含类型注解
 - 使用 f-string 而非 .format()</code></pre>
+</div>
 <p><strong>独特优势</strong>：通过 <code>globs</code> 字段实现精细的文件类型匹配——Python 文件自动应用 Python 规则，TypeScript 文件应用 TS 规则。还可通过 <code>/create-rule</code> 命令快速创建。</p>
 <h4 id="github-copilot-copilot-instructions-md-agents-md">GitHub Copilot：copilot-instructions.md + AGENTS.md</h4>
 <p>Copilot 提供了多层级的指令体系：</p>
@@ -539,7 +578,11 @@ globs: [&quot;**/*.py&quot;]
 </ul>
 <h4 id="agents-md-新兴的跨平台开放标准">AGENTS.md：新兴的跨平台开放标准</h4>
 <p><code>AGENTS.md</code> 值得特别关注——它是一个<strong>不绑定任何厂商的开放标准</strong>：</p>
-<pre><code class="language-markdown"># AGENTS.md
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-markdown"># AGENTS.md
 
 ## 项目概述
 这是一个基于 FastAPI + React 的全栈 Web 应用。
@@ -556,6 +599,7 @@ globs: [&quot;**/*.py&quot;]
 ## 注意事项
 - 永远不要修改 alembic/versions/ 下的迁移文件
 - 敏感配置通过环境变量注入</code></pre>
+</div>
 <p>已被 GitHub Copilot、OpenAI Codex、Google Gemini、Claude Code 等多个平台同时支持。OpenAI 和 GitHub 是该标准的核心推动者。它的定位是 <strong>&quot;README for AI Agents&quot;</strong>——就像 README.md 是给人类读的项目说明，AGENTS.md 是给 AI 读的项目说明。</p>
 <h2 id="skills-在-ai-定制体系中的位置">Skills 在 AI 定制体系中的位置</h2>
 <p>理解 Skills 的定位，需要看到 AI 编程助手的<strong>完整定制层级</strong>：</p>
@@ -647,7 +691,12 @@ graph TB
 <p>一个 Skill 只解决一个领域的问题。不要把 Code Review、Git Commit、部署流程塞进同一个文件。</p>
 <p><strong>2. 清晰的触发条件</strong></p>
 <p>在 SKILL.md 开头明确说明&quot;什么时候用这个 Skill&quot;：</p>
-<pre><code class="language-markdown">当用户要求审查代码、review PR、或检查代码质量时使用此技能。</code></pre>
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-markdown">当用户要求审查代码、review PR、或检查代码质量时使用此技能。</code></pre>
+</div>
 <p><strong>3. 具体而非抽象</strong></p>
 <p>❌ &quot;写出高质量的代码&quot;</p>
 <p>✅ &quot;函数不超过 50 行，使用 4 空格缩进，所有公共方法必须有 docstring&quot;</p>
@@ -705,7 +754,11 @@ graph LR
 <h2 id="企业级-skills-架构">企业级 Skills 架构</h2>
 <p>当团队规模扩大，Skills 的管理需要上升到架构层面：</p>
 <h3 id="1-分层组织策略">1. 分层组织策略</h3>
-<pre><code>项目根目录/
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code>项目根目录/
 ├── AGENTS.md              # 跨平台通用的项目上下文
 ├── CLAUDE.md              # Claude Code 全局配置
 ├── .github/
@@ -724,6 +777,7 @@ graph LR
             ├── SKILL.md
             └── scripts/
                 └── deploy.sh</code></pre>
+</div>
 <h3 id="2-多平台兼容策略">2. 多平台兼容策略</h3>
 <p>如果团队成员使用不同的 AI 工具，可以采用 <strong>AGENTS.md 为公共层 + 各平台专有配置</strong> 的策略：</p>
 <ul>
@@ -803,6 +857,15 @@ graph LR
             </div>
           </div>
         </div>
+        <div class="article-prev-next">
+        <a href="/articles/prompt-engineering-guide/" class="prev-next-link prev-link">
+          <span class="pn-label">← 上一篇</span>
+          <span class="pn-title">大模型提示工程实践指南</span>
+        </a>
+        <a href="/articles/mcp-guide/" class="prev-next-link next-link">
+          <span class="pn-label">下一篇 →</span>
+          <span class="pn-title">MCP 协议深度解析：AI 的「USB-C 接口」</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/articles/" class="btn-ghost">← 返回文章列表</a>
           <div class="share-buttons">
@@ -827,8 +890,16 @@ graph LR
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

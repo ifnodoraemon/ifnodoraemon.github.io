@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag ">Prompt Engineering</span>
             <time datetime="2026-03-09">2026.03.09</time>
+            <span class="meta-divider">•</span>
+            <span>1570 words</span>
+            <span class="meta-divider">•</span>
+            <span>7 min read</span>
           </div>
           <h1>Prompt Engineering Practice Guide</h1>
           <p class="article-detail-desc">An in-depth exploration of designing effective prompts to improve model output quality. Covers core techniques like Few-Shot, Chain-of-Thought, and ReAct with practical examples.</p>
@@ -141,46 +145,75 @@
 <h2 id="core-strategies">Core Strategies</h2>
 <h3 id="1-zero-shot-vs-few-shot">1. Zero-Shot vs. Few-Shot</h3>
 <p><strong>Zero-Shot</strong> gives the instruction directly, relying on the model&#39;s intrinsic knowledge:</p>
-<pre><code class="language-text">Please translate the following from English to Chinese:
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">Please translate the following from English to Chinese:
 &quot;The quick brown fox jumps over the lazy dog.&quot;</code></pre>
+</div>
 <p><strong>Few-Shot</strong> teaches the model the task pattern by providing examples:</p>
-<pre><code class="language-text">Translate English to Chinese, maintaining the original style:
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">Translate English to Chinese, maintaining the original style:
 
 Example 1: Input: &quot;Hello World&quot; → Output: &quot;你好，世界&quot;
 Example 2: Input: &quot;Machine Learning&quot; → Output: &quot;机器学习&quot;
 
 Input: &quot;Large Language Model&quot; → Output:</code></pre>
+</div>
 <blockquote>
 <p><strong>Rule of Thumb</strong>: 3 to 5 carefully selected examples often result in a significant improvement in output quality. The diversity of examples is more important than the quantity.</p>
 </blockquote>
 <h3 id="2-chain-of-thought-cot">2. Chain-of-Thought (CoT)</h3>
 <p>Encourages the model to reason step-by-step rather than jumping straight to the answer. The GPT-5.4 Thinking mode essentially internalizes CoT as a native capability of the model.</p>
-<pre><code class="language-text">Question: A store offers a 20% discount. For an item originally priced at $250,
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">Question: A store offers a 20% discount. For an item originally priced at $250,
           if you use a $30 coupon, what is the final price?
 
 Please think step-by-step:
 1. First calculate the 20% off price: 250 × 0.8 = $200
 2. Then subtract the coupon: 200 - 30 = $170
 Answer: The final price is $170.</code></pre>
+</div>
 <h3 id="3-react-framework">3. ReAct Framework</h3>
 <p>Combining Reasoning and Acting allows the model to think while calling external tools. This is the core prompting strategy for building AI Agents:</p>
-<pre><code class="language-text">Thought: The user wants to know the weather in New York today, I need to call the weather API.
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">Thought: The user wants to know the weather in New York today, I need to call the weather API.
 Action: search_weather(location=&quot;New York&quot;)
 Observation: Sunny, 15°C~25°C, North wind 3mph
 Thought: Now that I have the weather data, I can answer the user.
 Answer: Today in New York it is sunny, with temperatures ranging from 15°C to 25°C and a north wind at 3mph.</code></pre>
+</div>
 <h3 id="4-role-playing-prompts">4. Role-Playing Prompts</h3>
 <p>Assigning a specific expert persona to the model can significantly improve output quality in specialized domains:</p>
-<pre><code class="language-text">You are a Senior Python Backend Engineer with 15 years of experience.
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">You are a Senior Python Backend Engineer with 15 years of experience.
 You excel at designing high-performance APIs, writing clean and maintainable code,
 and following PEP 8 and SOLID principles.
 
 Please review the following code and suggest improvements:</code></pre>
+</div>
 <h2 id="5-programmatic-prompt-optimization-dspy-bayesian-search">5. Programmatic Prompt Optimization (DSPy & Bayesian Search)</h2>
 <p>By 2026, the cutting-edge practice has completely shifted from &quot;handcrafting prompts&quot; to <strong>programmatic compilation</strong>. <a href="https://github.com/stanfordnlp/dspy">DSPy</a> from Stanford University is the absolute standard-bearer of this trend.</p>
 <p><strong>Core Idea</strong>: Instead of writing prompts, you write code logic and declare input/output signatures. DSPy&#39;s compiler uses mathematically aggressive optimization techniques under the hood to automatically discover the best prompt parameters for you.</p>
 <p>Earlier <code>BootstrapFewShot</code> algorithms merely utilized a teacher model to generate and filter examples. The 2026 enterprise standard is employing the <strong>MIPROv2 (Multiprompt Instruction Proposal Optimizer)</strong> algorithm:</p>
-<pre><code class="language-python">import dspy
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">import dspy
 from dspy.teleprompt import MIPROv2
 
 # 1. Signature: Define what goes in and what comes out
@@ -203,12 +236,17 @@ compiled_qa = teleprompter.compile(generate_answer, trainset=my_dataset, max_boo
 # 4. Execute
 response = compiled_qa(question=&quot;In what year did the Apollo 11 moon landing occur?&quot;)
 print(response.answer)</code></pre>
+</div>
 <p><strong>Engineering Value</strong>: It transforms Prompt Engineers into LLM algorithm-tuning engineers. When fine-tuning is too expensive, DSPy&#39;s MIPROv2 optimization intelligently navigates massive production datasets using Bayesian surrogate models, reliably improving accuracy by 15%-30%.</p>
 <h2 id="6-enterprise-landing-dynamic-few-shot-prompt-ci-cd-pipelines">6. Enterprise Landing: Dynamic Few-Shot & Prompt CI/CD Pipelines</h2>
 <p>In real production environments, static prompts become obsolete as business requirements change, and manual tweaking is risky and unscientific. The enterprise standard in 2026 mandates <strong>dynamic retrieval</strong> and <strong>automated evaluation</strong>.</p>
 <h3 id="6-1-dynamic-few-shot-architecture">6.1 Dynamic Few-Shot Architecture</h3>
 <p>When a business has thousands of high-quality historical tickets or Q&amp;A pairs, stuffing all of them into a prompt exceeds token limits and dilutes the model&#39;s attention. The best engineering practice is: <strong>use a vector database to dynamically retrieve only the top 3 most relevant examples for the current User Query to inject into the prompt.</strong></p>
-<pre><code class="language-python">import weaviate
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">import weaviate
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptTemplate
 
@@ -243,10 +281,15 @@ final_prompt = ChatPromptTemplate.from_messages([
 
 llm = ChatOpenAI(model=&quot;gpt-5.4&quot;)
 response = llm.invoke(final_prompt.format_messages(user_query=&quot;How to resolve a database deadlock?&quot;))</code></pre>
+</div>
 <h3 id="6-2-automated-prompt-regression-testing-ci-cd">6.2 Automated Prompt Regression Testing (CI/CD)</h3>
 <p>In an enterprise, prompt modifications must undergo rigorous testing. By adopting evaluation frameworks like <strong><a href="https://promptfoo.dev/">Promptfoo</a></strong>, prompts are version-controlled in Git and evaluated during the CI phase using LLM-as-a-Judge.</p>
 <p><strong>Example <code>promptfooconfig.yaml</code></strong>:</p>
-<pre><code class="language-yaml">prompts:
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-yaml">prompts:
   - file://prompts/system_v1.txt
   - file://prompts/system_v2_dspy_optimized.txt
 providers:
@@ -260,12 +303,17 @@ tests:
         value: &quot;refund&quot;
       - type: llm-rubric
         value: &quot;The tone must be extremely apologetic and professional, with no language dodging responsibility.&quot;</code></pre>
+</div>
 <p><em>Running <code>promptfoo eval</code> in Jenkins/GitHub Actions ensures that only prompts with a &gt;95% pass rate are merged into the main branch and deployed.</em></p>
 <h2 id="7-enterprise-security-defending-against-prompt-injection">7. Enterprise Security: Defending Against Prompt Injection</h2>
 <p>The fundamental architectural flaw of LLMs is their <strong>inability to distinguish between &quot;control instructions&quot; and &quot;data payloads&quot;</strong> (analogous to SQL injection vulnerabilities). Once Agents gain tool execution privileges, injection attacks can directly lead to data exfiltration or remote code execution. In 2026, enterprise defense mandates a <strong>Defense-in-Depth</strong> architecture:</p>
 <h3 id="defense-line-1-unguessable-guid-isolation">Defense Line 1: Unguessable GUID Isolation</h3>
 <p>Traditional delimiters like <code>&lt;user_input&gt;</code> have long been bypassed by hackers (attackers simply type <code>&lt;/user_input&gt;</code> to close the tag and begin issuing commands). Modern specifications dictate dynamically generating robust, single-use <code>UUIDs/GUIDs</code> at runtime.</p>
-<pre><code class="language-python">import uuid
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">import uuid
 
 # Generate a uniquely random isolation token for every single API call
 isolation_guid = str(uuid.uuid4())
@@ -279,9 +327,14 @@ Text Content:
 {untrusted_user_input}
 {isolation_guid}
 &quot;&quot;&quot;</code></pre>
+</div>
 <h3 id="defense-line-2-llama-prompt-guard-2-semantic-firewall">Defense Line 2: Llama Prompt Guard 2 Semantic Firewall</h3>
 <p>Do not expect to stop hackers purely by &quot;begging&quot; the model in the system prompt. Major enterprises deploy an interception classification layer (e.g., Meta&#39;s <strong>Llama Prompt Guard 2</strong>) immediately before the main LLM. It&#39;s an ultra-small 86M or 22M parameter model specially trained purely on Jailbreak and Injection datasets:</p>
-<pre><code class="language-python">from transformers import AutoTokenizer, AutoModelForSequenceClassification
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # Before ever hitting the core GPT-5.4, pass the input through the extremely fast, cheap Guard model for binary classification
 tokenizer = AutoTokenizer.from_pretrained(&quot;meta-llama/Prompt-Guard-86M&quot;)
@@ -294,6 +347,7 @@ logits = model(**inputs).logits
 predicted_class = logits.argmax().item()
 if predicted_class != 0:
     raise SecurityException(&quot;Critical injection payload detected. Request intercepted and dropped.&quot;)</code></pre>
+</div>
 <p><em>Introducing this firewall layer adds less than 5 milliseconds of latency, drastically shrinking the blast radius of prompt injection attacks.</em></p>
 <h2 id="8-model-specific-strategies">8. Model-Specific Strategies</h2>
 <p>Different models respond to prompts in varying ways. Here are the prompting tips for the top three models in 2026:</p>
@@ -360,6 +414,15 @@ if predicted_class != 0:
             </div>
           </div>
         </div>
+        <div class="article-prev-next">
+        <a href="/en/articles/ai-trends-2026/" class="prev-next-link prev-link">
+          <span class="pn-label">← Prev</span>
+          <span class="pn-title">Deep Dive into 6 AI Foundation Model Trends in 2026</span>
+        </a>
+        <a href="/en/articles/skills-guide/" class="prev-next-link next-link">
+          <span class="pn-label">Next →</span>
+          <span class="pn-title">Skills Deep Dive: Give Your AI Coding Assistant a Professional Brain</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/en/articles/" class="btn-ghost">← Back to Articles</a>
           <div class="share-buttons">
@@ -384,8 +447,16 @@ if predicted_class != 0:
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

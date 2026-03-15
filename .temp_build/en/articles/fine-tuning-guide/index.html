@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag tag-purple">Fine-Tuning</span>
             <time datetime="2026-02-25">2026.02.25</time>
+            <span class="meta-divider">•</span>
+            <span>1272 words</span>
+            <span class="meta-divider">•</span>
+            <span>6 min read</span>
           </div>
           <h1>A Comprehensive Guide to LLM Fine-Tuning Workflows</h1>
           <p class="article-detail-desc">A comparison of LoRA, QLoRA, and Full Fine-tuning. A complete workflow and best practices from data preparation to model deployment.</p>
@@ -189,11 +193,16 @@ Only consider fine-tuning when prompt engineering fails to achieve the required 
 <h2 id="complete-fine-tuning-workflow">Complete Fine-Tuning Workflow</h2>
 <h3 id="step-1-prepare-the-dataset">Step 1: Prepare the Dataset</h3>
 <p>Example data format (JSONL):</p>
-<pre><code class="language-json">{&quot;messages&quot;: [
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-json">{&quot;messages&quot;: [
   {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a professional medical Q&amp;A assistant.&quot;},
   {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is hypertension?&quot;},
   {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Hypertension is a chronic medical condition in which the blood pressure in the arteries is persistently elevated...&quot;}
 ]}</code></pre>
+</div>
 <p>Data Quality Guidelines:</p>
 <ul>
 <li><strong>Quantity</strong>: 1000-5000 high-quality examples are usually sufficient.</li>
@@ -202,7 +211,11 @@ Only consider fine-tuning when prompt engineering fails to achieve the required 
 <li><strong>Cleaning</strong>: Remove duplicates, contradictions, and low-quality samples.</li>
 </ul>
 <h3 id="step-2-configure-lora-training">Step 2: Configure LoRA Training</h3>
-<pre><code class="language-python">from peft import LoraConfig, get_peft_model
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from peft import LoraConfig, get_peft_model
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Load the base model
@@ -229,6 +242,7 @@ lora_config = LoraConfig(
 model = get_peft_model(model, lora_config)
 model.print_trainable_parameters()
 # → trainable params: 13.6M || all params: 8.03B || 0.17%</code></pre>
+</div>
 <h3 id="step-3-large-scale-multi-gpu-training-deepspeed-zero">Step 3: Large-Scale Multi-GPU Training (DeepSpeed ZeRO)</h3>
 <p>Single-GPU QLoRA is only suitable for small-scale validation. Once you move to production Full Fine-Tuning or SFT over 10 billion tokens, you must leverage multi-node GPU clusters, making <strong>DeepSpeed ZeRO (Zero Redundancy Optimizer)</strong> your only viable option:</p>
 <ul>
@@ -236,7 +250,11 @@ model.print_trainable_parameters()
 <li><strong>ZeRO-2</strong>: Partitions both optimizer states + gradients. Ideal for 8x A100 single-node training with virtually no speed degradation.</li>
 <li><strong>ZeRO-3</strong>: Partitions optimizer states, gradients, <strong>and the model parameters themselves</strong>. Necessary for extreme cross-node training of models with billions/trillions of parameters, but will result in catastrophic slowdowns if the RDMA network is subpar due to hyper-frequent communication overhead.</li>
 </ul>
-<pre><code class="language-javascript">// deepspeed_config.json (Enterprise ZeRO-2 Configuration Example)
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-javascript">// deepspeed_config.json (Enterprise ZeRO-2 Configuration Example)
 {
     &quot;fp16&quot;: { &quot;enabled&quot;: &quot;auto&quot;, &quot;loss_scale&quot;: 0 },
     &quot;bf16&quot;: { &quot;enabled&quot;: &quot;auto&quot; },
@@ -251,19 +269,34 @@ model.print_trainable_parameters()
     &quot;gradient_accumulation_steps&quot;: &quot;auto&quot;,
     &quot;gradient_clipping&quot;: &quot;auto&quot; // Crucial to prevent Loss explosion
 }</code></pre>
+</div>
 <p>Training Launch Command:</p>
-<pre><code class="language-bash">accelerate launch \
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-bash">accelerate launch \
     --config_file accelerate_deepspeed_config.yaml \
     train.py \
     --gradient_checkpointing True \ # Mandatory in production
     --learning_rate 2e-5</code></pre>
+</div>
 <h3 id="step-4-evaluation-and-deployment">Step 4: Evaluation and Deployment</h3>
-<pre><code class="language-python"># Merge LoRA weights into the base model
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python"># Merge LoRA weights into the base model
 merged_model = model.merge_and_unload()
 merged_model.save_pretrained(&quot;./merged_model&quot;)</code></pre>
+</div>
 <h3 id="step-5-model-alignment-dpo-phase">Step 5: Model Alignment (DPO Phase)</h3>
 <p>After traditional Supervised Fine-Tuning (SFT), enterprise workflows typically add <strong>Direct Preference Optimization (DPO)</strong> to improve model safety or adjust tone preferences:</p>
-<pre><code class="language-python">from trl import DPOTrainer
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from trl import DPOTrainer
 
 dpo_trainer = DPOTrainer(
     model,
@@ -274,14 +307,20 @@ dpo_trainer = DPOTrainer(
     tokenizer=tokenizer,
 )
 dpo_trainer.train()</code></pre>
+</div>
 <h3 id="step-6-production-grade-deployment-vllm-tgi">Step 6: Production-Grade Deployment (vLLM / TGI)</h3>
 <p>In enterprise environments, we avoid HuggingFace <code>pipeline</code> and instead use high-performance inference engines that support <strong>Continuous Batching</strong> and <strong>PagedAttention</strong> to deploy the merged model:</p>
-<pre><code class="language-bash"># Deploy with vLLM, enabling an OpenAI-compatible API
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-bash"># Deploy with vLLM, enabling an OpenAI-compatible API
 python -m vllm.entrypoints.openai.api_server \
     --model /path/to/merged_model \
     --tensor-parallel-size 2 \
     --max-model-len 8192 \
     --port 8000</code></pre>
+</div>
 <h2 id="the-engineering-philosophy-of-core-hyperparameters">The Engineering Philosophy of Core Hyperparameters</h2>
 <p>In 2026, ML alchemy has transitioned from &quot;voodoo parameter tweaking&quot; to quantifiable formulas. Please remember the following enterprise-grade baselines:</p>
 <table>
@@ -378,6 +417,11 @@ python -m vllm.entrypoints.openai.api_server \
             </div>
           </div>
         </div>
+        <div class="article-prev-next"><div class="prev-next-link empty"></div>
+        <a href="/en/articles/multimodal-guide/" class="prev-next-link next-link">
+          <span class="pn-label">Next →</span>
+          <span class="pn-title">Multimodal AI Models Starter Guide</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/en/articles/" class="btn-ghost">← Back to Articles</a>
           <div class="share-buttons">
@@ -402,8 +446,16 @@ python -m vllm.entrypoints.openai.api_server \
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

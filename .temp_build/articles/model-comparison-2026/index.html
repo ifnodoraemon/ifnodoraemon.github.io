@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag tag-purple">模型评测</span>
             <time datetime="2026-03-01">2026.03.01</time>
+            <span class="meta-divider">•</span>
+            <span>约 2278 字</span>
+            <span class="meta-divider">•</span>
+            <span>预计阅读 10 分钟</span>
           </div>
           <h1>2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</h1>
           <p class="article-detail-desc">从推理能力、编码水平、上下文窗口到 API 定价，全方位对比 2026 年三大主流大模型的实际表现与选型策略。</p>
@@ -364,7 +368,11 @@
 </ul>
 <h2 id="实际使用对比">实际使用对比</h2>
 <h3 id="编码能力">编码能力</h3>
-<pre><code class="language-python"># GPT-5.4：内置 GPT-5.3-Codex 编码能力 + 计算机操控
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python"># GPT-5.4：内置 GPT-5.3-Codex 编码能力 + 计算机操控
 # 可直接解读截屏、发送键鼠命令，配合 Playwright 自动化
 
 # Claude Sonnet 4.6：代码质量公认第一
@@ -373,6 +381,7 @@
 
 # Gemini 3.1 Pro：大型代码库理解最强
 # 原生 1M token 上下文可一次读入整个项目</code></pre>
+</div>
 <h3 id="长上下文处理">长上下文处理</h3>
 <table>
 <thead>
@@ -404,7 +413,11 @@
 </tr>
 </tbody></table>
 <h3 id="api-调用示例">API 调用示例</h3>
-<pre><code class="language-python"># OpenAI GPT-5.4
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python"># OpenAI GPT-5.4
 from openai import OpenAI
 
 client = OpenAI()
@@ -413,7 +426,12 @@ response = client.chat.completions.create(
     messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;解释量子计算的基本原理&quot;}],
     max_tokens=4096,
 )</code></pre>
-<pre><code class="language-python"># Anthropic Claude Sonnet 4.6
+</div>
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python"># Anthropic Claude Sonnet 4.6
 import anthropic
 
 client = anthropic.Anthropic()
@@ -422,11 +440,17 @@ response = client.messages.create(
     max_tokens=4096,
     messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;解释量子计算的基本原理&quot;}],
 )</code></pre>
-<pre><code class="language-python"># Google Gemini 3.1 Pro
+</div>
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python"># Google Gemini 3.1 Pro
 import google.generativeai as genai
 
 model = genai.GenerativeModel(&quot;gemini-3.1-pro&quot;)
 response = model.generate_content(&quot;解释量子计算的基本原理&quot;)</code></pre>
+</div>
 <h2 id="选型建议">选型建议</h2>
 <h3 id="按场景推荐">按场景推荐</h3>
 <table>
@@ -489,11 +513,16 @@ response = model.generate_content(&quot;解释量子计算的基本原理&quot;)
 <h3 id="显存暴漏-kv-cache-的物理极客公式">显存暴漏：KV Cache 的物理极客公式</h3>
 <p>支撑长上下文的核心痛点是 <strong>KV Cache 显存暴漏</strong>。模型参数占据的显存是固定的，但随着上下文变长，KV Cache 的体积会失控。</p>
 <p>在 2026 年，作为 AI 架构师，你必须会心算这段公式：</p>
-<pre><code class="language-text">KV_Cache_Size_Per_Token = 2 * 2 * n_layers * d_model
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">KV_Cache_Size_Per_Token = 2 * 2 * n_layers * d_model
 // 2 代表 Key 和 Value 两个矩阵
 // 第二个 2 代表 FP16/BF16 占用的字节数 (2 bytes)
 // n_layers：模型层数（70B 模型一般是 80）
 // d_model：隐藏层维度（70B 模型一般是 8192）</code></pre>
+</div>
 <p>以 70B 模型为例，每一个 Token 消耗约 <strong>2.6MB</strong> 显存。
 如果你想支持 <strong>1M（一百万）Tokens</strong> 的超长上下文单次对话，它的 KV Cache 就需要吃掉：
 <code>1,000,000 * 2.6 MB ≈ 2,600,000 MB ≈ 2.6 TB</code></p>
@@ -533,6 +562,15 @@ response = model.generate_content(&quot;解释量子计算的基本原理&quot;)
             </div>
           </div>
         </div>
+        <div class="article-prev-next">
+        <a href="/articles/multimodal-guide/" class="prev-next-link prev-link">
+          <span class="pn-label">← 上一篇</span>
+          <span class="pn-title">多模态大模型入门指南</span>
+        </a>
+        <a href="/articles/rag-in-practice/" class="prev-next-link next-link">
+          <span class="pn-label">下一篇 →</span>
+          <span class="pn-title">RAG 检索增强生成实战</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/articles/" class="btn-ghost">← 返回文章列表</a>
           <div class="share-buttons">
@@ -557,8 +595,16 @@ response = model.generate_content(&quot;解释量子计算的基本原理&quot;)
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

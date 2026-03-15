@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag ">提示工程</span>
             <time datetime="2026-03-09">2026.03.09</time>
+            <span class="meta-divider">•</span>
+            <span>约 2488 字</span>
+            <span class="meta-divider">•</span>
+            <span>预计阅读 10 分钟</span>
           </div>
           <h1>大模型提示工程实践指南</h1>
           <p class="article-detail-desc">深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。</p>
@@ -141,46 +145,75 @@
 <h2 id="核心策略">核心策略</h2>
 <h3 id="1-zero-shot-vs-few-shot">1. Zero-Shot vs Few-Shot</h3>
 <p><strong>Zero-Shot</strong> 直接给出指令，依赖模型的内在知识：</p>
-<pre><code class="language-text">请将以下英文翻译为中文：
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">请将以下英文翻译为中文：
 &quot;The quick brown fox jumps over the lazy dog.&quot;</code></pre>
+</div>
 <p><strong>Few-Shot</strong> 通过提供示例教会模型任务模式：</p>
-<pre><code class="language-text">将英文翻译为中文，保持原文风格：
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">将英文翻译为中文，保持原文风格：
 
 例1：Input: &quot;Hello World&quot; → Output: &quot;你好，世界&quot;
 例2：Input: &quot;Machine Learning&quot; → Output: &quot;机器学习&quot;
 
 Input: &quot;Large Language Model&quot; → Output:</code></pre>
+</div>
 <blockquote>
 <p><strong>经验法则</strong>：精心选择的 3-5 个示例通常能显著提升输出质量。示例的多样性比数量更重要。</p>
 </blockquote>
 <h3 id="2-chain-of-thought-cot">2. Chain-of-Thought (CoT)</h3>
 <p>鼓励模型逐步推理，而非直接给出答案。GPT-5.4 Thinking 模式本质上就是将 CoT 内化为模型的原生能力。</p>
-<pre><code class="language-text">问题：一个商店打 8 折促销，原价 250 元的商品，
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">问题：一个商店打 8 折促销，原价 250 元的商品，
       用了一张 30 元优惠券后，最终价格是多少？
 
 请一步步思考：
 1. 先计算 8 折后的价格：250 × 0.8 = 200 元
 2. 再减去优惠券：200 - 30 = 170 元
 答案：最终价格是 170 元。</code></pre>
+</div>
 <h3 id="3-react-框架">3. ReAct 框架</h3>
 <p>结合推理（Reasoning）与行动（Acting），让模型在思考的同时调用外部工具。这是构建 AI Agent 的核心提示策略：</p>
-<pre><code class="language-text">Thought: 用户想知道今天北京的天气，我需要调用天气 API。
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">Thought: 用户想知道今天北京的天气，我需要调用天气 API。
 Action: search_weather(location=&quot;北京&quot;)
 Observation: 晴，12°C~22°C，北风3级
 Thought: 已获取天气数据，可以回答用户。
 Answer: 今天北京晴天，温度 12°C 到 22°C，北风 3 级。</code></pre>
+</div>
 <h3 id="4-角色扮演提示">4. 角色扮演提示</h3>
 <p>为模型设定具体的专家角色，可以显著提升特定领域的输出质量：</p>
-<pre><code class="language-text">你是一位拥有 15 年经验的高级 Python 后端工程师。
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">你是一位拥有 15 年经验的高级 Python 后端工程师。
 你擅长设计高性能 API、编写干净可维护的代码，
 并遵循 PEP 8 和 SOLID 原则。
 
 请审查以下代码并提出改进建议：</code></pre>
+</div>
 <h2 id="5-程序化与自动化提示优化-dspy-与贝叶斯寻优">5. 程序化与自动化提示优化 (DSPy 与贝叶斯寻优)</h2>
 <p>到了 2026 年，最前沿的实践已经从“手工调整提示词”彻底转向<strong>程序化编译</strong>。斯坦福大学推出的 <a href="https://github.com/stanfordnlp/dspy">DSPy</a> 是这一趋势的绝对代表。</p>
 <p><strong>核心思想</strong>：你不写提示词，而是写代码逻辑和声明输入输出格式（Signatures）。DSPy 编译器会在底层通过极其暴力的数学优化手段，为你自动寻找最佳的 Prompt 参数。</p>
 <p>以往的 <code>BootstrapFewShot</code> 只是简单地让教师模型生成并筛选样本。2026 年企业级标配是采用 <strong>MIPROv2 (Multiprompt Instruction Proposal Optimizer)</strong> 算法：</p>
-<pre><code class="language-python">import dspy
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">import dspy
 from dspy.teleprompt import MIPROv2
 
 # 1. 声明：输入问题，输出包含推理过程和最终答案
@@ -203,12 +236,17 @@ compiled_qa = teleprompter.compile(generate_answer, trainset=my_dataset, max_boo
 # 4. 执行
 response = compiled_qa(question=&quot;阿波罗11号登月是在哪一年？&quot;)
 print(response.answer)</code></pre>
+</div>
 <p><strong>工程价值</strong>：将 Prompt 工程师转化为 LLM 算法调参工程师。在微调成本太高时，DSPy 的 MIPROv2 优化能在海量生产数据下，利用贝叶斯代理模型稳定提升 15%-30% 的准确率。</p>
 <h2 id="6-企业级落地-动态-few-shot-与-prompt-ci-cd-体系">6. 企业级落地：动态 Few-Shot 与 Prompt CI/CD 体系</h2>
 <p>在真实的生产环境中，静态的 Prompt 会随着业务变化而失效，且每次修改都充满“玄学”和风险。2026 年的企业级落地方案，必须包含<strong>动态检索</strong>与<strong>自动化评估</strong>。</p>
 <h3 id="6-1-动态-few-shot-dynamic-few-shot-架构">6.1 动态 Few-Shot (Dynamic Few-Shot) 架构</h3>
 <p>当业务拥有成千上万个历史优质工单/问答对时，将它们全部塞进 Prompt 会导致超出 Token 限制且分散模型注意力。最佳工程实践是：<strong>结合向量数据库，每次只召回与当前用户 Query 最相关的 3 个示例注入 Prompt。</strong></p>
-<pre><code class="language-python">import weaviate
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">import weaviate
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptTemplate
 
@@ -243,10 +281,15 @@ final_prompt = ChatPromptTemplate.from_messages([
 
 llm = ChatOpenAI(model=&quot;gpt-5.4&quot;)
 response = llm.invoke(final_prompt.format_messages(user_query=&quot;如何处理数据库死锁？&quot;))</code></pre>
+</div>
 <h3 id="6-2-prompt-自动化回归测试-ci-cd">6.2 Prompt 自动化回归测试 (CI/CD)</h3>
 <p>在企业里，Prompt 的修改必须经过严谨的测试。我们通过引入 <strong><a href="https://promptfoo.dev/">Promptfoo</a></strong> 等评估框架，将 Prompt 纳管到 Git 仓库，并在 CI 阶段通过 LLM-as-a-Judge 评估。</p>
 <p><strong><code>promptfooconfig.yaml</code> 示例</strong>：</p>
-<pre><code class="language-yaml">prompts:
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-yaml">prompts:
   - file://prompts/system_v1.txt
   - file://prompts/system_v2_dspy_optimized.txt
 providers:
@@ -260,12 +303,17 @@ tests:
         value: &quot;退款&quot;
       - type: llm-rubric
         value: &quot;语气必须极其抱歉且专业，不能包含推诿责任的词汇&quot;</code></pre>
+</div>
 <p><em>在 Jenkins/GitHub Actions 中运行 <code>promptfoo eval</code>，只有通过率 &gt; 95% 的 Prompt 才能被合并到主分支发布。</em></p>
 <h2 id="7-企业级安全-对抗-prompt-injection-提示注入">7. 企业级安全：对抗 Prompt Injection (提示注入)</h2>
 <p>LLM 的核心架构缺陷在于它<strong>无法区分“控制指令”与“数据载荷”</strong>（类似于针对 SQL 的注入攻击）。Agent 获得调用工具权限后，注入攻击可直接导致数据泄露甚至远程代码执行。2026 年，企业防御必须采用<strong>深度防御 (Defense-in-Depth)</strong> 架构：</p>
 <h3 id="防线一-无法被猜测的-guid-隔离词-input-isolation">防线一：无法被猜测的 GUID 隔离词 (Input Isolation)</h3>
 <p>传统的 <code>&lt;user_input&gt;</code> 分隔符早已被黑客绕过（攻击者只要在文本里输入 <code>&lt;/user_input&gt;</code> 就能闭合标签）。现代规范要求在运行时动态生成一次性的 <code>UUID/GUID</code>。</p>
-<pre><code class="language-python">import uuid
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">import uuid
 
 # 每次调用生成独一无二的随机隔离标示
 isolation_guid = str(uuid.uuid4())
@@ -279,9 +327,14 @@ system_prompt = f&quot;&quot;&quot;
 {untrusted_user_input}
 {isolation_guid}
 &quot;&quot;&quot;</code></pre>
+</div>
 <h3 id="防线二-llama-prompt-guard-2-语义防火墙">防线二：Llama Prompt Guard 2 语义防火墙</h3>
 <p>不要指望仅靠“系统提示词”来防住黑客。大厂在主模型之前，会部署拦截层（如 Meta 发布的 <strong>Llama Prompt Guard 2</strong>）。它是一个仅有 86M 或 22M 参数的极小模型，专门针对 Jailbreak（越狱）和 Injection（注入）数据集训练：</p>
-<pre><code class="language-python">from transformers import AutoTokenizer, AutoModelForSequenceClassification
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # 在到达核心 GPT-5.4 之前，先让廉价极速的 Guard 模型做二分类
 tokenizer = AutoTokenizer.from_pretrained(&quot;meta-llama/Prompt-Guard-86M&quot;)
@@ -294,6 +347,7 @@ logits = model(**inputs).logits
 predicted_class = logits.argmax().item()
 if predicted_class != 0:
     raise SecurityException(&quot;检测到高危注入载荷，请求已拦截。&quot;)</code></pre>
+</div>
 <p><em>引入这层防火墙只需不到 5 毫秒延迟，极大地压缩了注入攻击的爆炸半径。</em></p>
 <h2 id="8-模型差异化策略">8. 模型差异化策略</h2>
 <p>不同模型对提示的响应方式有所不同，以下是 2026 年三大模型的提示技巧：</p>
@@ -360,6 +414,15 @@ if predicted_class != 0:
             </div>
           </div>
         </div>
+        <div class="article-prev-next">
+        <a href="/articles/ai-trends-2026/" class="prev-next-link prev-link">
+          <span class="pn-label">← 上一篇</span>
+          <span class="pn-title">2026 年 AI 大模型六大趋势深度解析</span>
+        </a>
+        <a href="/articles/skills-guide/" class="prev-next-link next-link">
+          <span class="pn-label">下一篇 →</span>
+          <span class="pn-title">Skills 深度解析：给 AI 编程助手装上「专业大脑」</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/articles/" class="btn-ghost">← 返回文章列表</a>
           <div class="share-buttons">
@@ -384,8 +447,16 @@ if predicted_class != 0:
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

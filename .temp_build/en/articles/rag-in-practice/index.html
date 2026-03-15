@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag tag-cyan">RAG</span>
             <time datetime="2026-03-03">2026.03.03</time>
+            <span class="meta-divider">•</span>
+            <span>1527 words</span>
+            <span class="meta-divider">•</span>
+            <span>7 min read</span>
           </div>
           <h1>Retrieval-Augmented Generation (RAG) in Practice</h1>
           <p class="article-detail-desc">From vector database selection to Embedding strategies, a complete guide to building an enterprise-grade RAG system. Includes a practical comparison between Pinecone and Weaviate.</p>
@@ -164,7 +168,11 @@ graph LR
 <h3 id="core-components-explained">Core Components Explained</h3>
 <p><strong>1. Document Loaders</strong></p>
 <p>Supports data ingestion across various formats:</p>
-<pre><code class="language-python">from langchain_community.document_loaders import (
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from langchain_community.document_loaders import (
     PyPDFLoader,
     UnstructuredMarkdownLoader,
     CSVLoader,
@@ -178,6 +186,7 @@ docs = loader.load()
 # Load Webpage
 web_loader = WebBaseLoader(&quot;https://docs.example.com&quot;)
 web_docs = web_loader.load()</code></pre>
+</div>
 <p><strong>2. Text Splitting Strategies (Semantic Chunking)</strong></p>
 <p>The chunking strategy dictates the upper ceiling of RAG recall. In 2026, enterprise RAG has abandoned brute-force length splitting, which easily severs context, completely pivoting to <strong>Semantic Chunking</strong>.</p>
 <p>The underlying algorithm logic is:</p>
@@ -186,7 +195,11 @@ web_docs = web_loader.load()</code></pre>
 <li>Calculate the Embedding cosine similarity between adjacent sentences.</li>
 <li>If the similarity is higher than a set threshold (or lower than a percentile breakpoint), the semantic flow is considered continuous, and they are merged into a larger chunk. Otherwise, a &quot;split&quot; is asserted there.</li>
 </ol>
-<pre><code class="language-python">from langchain_experimental.text_splitter import SemanticChunker
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai import OpenAIEmbeddings
 
 # Using a semantic similarity sliding window splitter
@@ -196,6 +209,7 @@ semantic_splitter = SemanticChunker(
     breakpoint_threshold_amount=95
 )
 chunks = semantic_splitter.create_documents([raw_text])</code></pre>
+</div>
 <p><em>This chunking methodology ensures that every Chunk is a complete semantic cluster internally, completely eliminating the disaster of &quot;half a sentence being cut into the next chunk.&quot;</em></p>
 <p><strong>3. Choosing an Embedding Model</strong></p>
 <p>Comparison of mainstream Embedding models in 2026:</p>
@@ -261,7 +275,11 @@ chunks = semantic_splitter.create_documents([raw_text])</code></pre>
 <p><strong>Enterprise Best Practice</strong>:
 If budget constraints prevent keeping all vectors in memory, you must enable <strong>IVF-PQ (Inverted File + Product Quantization)</strong>. It compresses 3072-dimensional floats into 8-bit cluster centroid IDs, reducing memory footprint by ~90%, at the cost of roughly a 3-5% recall drop (which can be compensated by a precise post-retrieval Rerank).</p>
 <h3 id="retrieval-strategy">Retrieval Strategy</h3>
-<pre><code class="language-python">from langchain_community.vectorstores import Weaviate
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from langchain_community.vectorstores import Weaviate
 import weaviate
 
 # Connect to the vector database
@@ -276,16 +294,22 @@ retriever = vectorstore.as_retriever(
         &quot;lambda_mult&quot;: 0.7,  # Relevance vs. Diversity weight
     }
 )</code></pre>
+</div>
 <h2 id="optimization-techniques">Optimization Techniques</h2>
 <h3 id="1-query-rewriting">1. Query Rewriting</h3>
 <p>User queries are often not precise enough. Rewriting them via LLMs can improve the retrieval hit rate:</p>
-<pre><code class="language-python"># Multi-query rewriting: Expand one question into multiple angles
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python"># Multi-query rewriting: Expand one question into multiple angles
 query = &quot;How to optimize a RAG system?&quot;
 rewritten = [
     &quot;Methods for optimizing RAG retrieval quality&quot;,
     &quot;Techniques to improve vector search accuracy&quot;,
     &quot;Best practices for RAG system chunking strategies&quot;,
 ]</code></pre>
+</div>
 <h3 id="2-millisecond-high-concurrency-reranking-colbert-v2-late-interaction">2. Millisecond High-Concurrency Reranking (ColBERT v2 Late Interaction)</h3>
 <p>Traditional Rerankers (like BGE-Reranker or Cohere) utilize a <strong>Cross-Encoder</strong>. It concatenates the user&#39;s Query and the candidate Document into a single sequence and feeds it into the Transformer. This is the most accurate method, but its computational complexity is O(N). If you retrieve 100 Chunks for reranking, it adds hundreds of milliseconds or even a full second of extreme latency, causing direct timeouts in production APIs.</p>
 <p>The standard architecture for 2026 is the <strong>Late Interaction Architecture</strong> utilized by <strong>ColBERT v2 (e.g., Flash-Reranker)</strong>:</p>
@@ -296,7 +320,11 @@ rewritten = [
 </ul>
 <h3 id="3-context-assembly">3. Context Assembly</h3>
 <p>Inject the retrieved document snippets structurally into the prompt:</p>
-<pre><code class="language-text">Answer the user's question based on the following reference documents. If the information is not in the documents, state clearly that you do not know.
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">Answer the user's question based on the following reference documents. If the information is not in the documents, state clearly that you do not know.
 
 --- Reference Documents ---
 [1] {chunk_1_content} (Source: report.pdf, Page 3)
@@ -305,6 +333,7 @@ rewritten = [
 --- End of Documents ---
 
 User Question: {user_query}</code></pre>
+</div>
 <h3 id="4-advanced-rag-architectures">4. Advanced RAG Architectures</h3>
 <p>Enterprise RAG in 2026 has moved far beyond simple &quot;text chunking + vector search.&quot; To handle complex, long documents and cross-document reasoning, the following advanced architectures are standards:</p>
 <ul>
@@ -325,7 +354,11 @@ User Question: {user_query}</code></pre>
 <li><strong>Faithfulness (Anti-Hallucination Index)</strong>: Is the final answer generated by the LLM 100% deducible from the retrieved context? (Evaluates the generator&#39;s resistance to hallucinations).</li>
 </ol>
 <p><strong>Evaluation Code Example</strong>:</p>
-<pre><code class="language-python">from ragas import evaluate
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from ragas import evaluate
 from ragas.metrics import faithfulness, answer_relevancy, context_precision, context_recall
 from datasets import Dataset
 
@@ -343,6 +376,7 @@ result = evaluate(
     metrics=[context_precision, context_recall, faithfulness, answer_relevancy]
 )
 print(result) # Outputs specific scores between 0 and 1 for each metric</code></pre>
+</div>
 <p><em>Run this evaluation script every time you modify chunking strategies or swap Embedding models. Deploy changes only if the scores (especially Faithfulness) strictly improve or remain perfectly stable.</em></p>
 <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
 <ul>
@@ -373,6 +407,15 @@ print(result) # Outputs specific scores between 0 and 1 for each metric</code></
             </div>
           </div>
         </div>
+        <div class="article-prev-next">
+        <a href="/en/articles/model-comparison-2026/" class="prev-next-link prev-link">
+          <span class="pn-label">← Prev</span>
+          <span class="pn-title">2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</span>
+        </a>
+        <a href="/en/articles/build-ai-agent/" class="prev-next-link next-link">
+          <span class="pn-label">Next →</span>
+          <span class="pn-title">Building AI Agent Applications from Scratch</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/en/articles/" class="btn-ghost">← Back to Articles</a>
           <div class="share-buttons">
@@ -397,8 +440,16 @@ print(result) # Outputs specific scores between 0 and 1 for each metric</code></
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

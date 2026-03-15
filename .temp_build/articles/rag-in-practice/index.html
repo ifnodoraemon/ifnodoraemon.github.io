@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag tag-cyan">RAG</span>
             <time datetime="2026-03-03">2026.03.03</time>
+            <span class="meta-divider">•</span>
+            <span>约 2567 字</span>
+            <span class="meta-divider">•</span>
+            <span>预计阅读 11 分钟</span>
           </div>
           <h1>RAG 检索增强生成实战</h1>
           <p class="article-detail-desc">从向量数据库选型到 Embedding 策略，完整构建一套企业级 RAG 系统。含 Pinecone、Weaviate 对比实测。</p>
@@ -164,7 +168,11 @@ graph LR
 <h3 id="核心组件详解">核心组件详解</h3>
 <p><strong>1. 文档加载器</strong></p>
 <p>支持多种格式的数据摄入：</p>
-<pre><code class="language-python">from langchain_community.document_loaders import (
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from langchain_community.document_loaders import (
     PyPDFLoader,
     UnstructuredMarkdownLoader,
     CSVLoader,
@@ -178,6 +186,7 @@ docs = loader.load()
 # 加载网页
 web_loader = WebBaseLoader(&quot;https://docs.example.com&quot;)
 web_docs = web_loader.load()</code></pre>
+</div>
 <p><strong>2. 文本切分策略 (Chunking)</strong></p>
 <p>切分策略决定了 RAG 的召回上限。2026 年，企业级 RAG 已经放弃了容易切断语境的暴力长度切分，全面转向<strong>语义切分 (Semantic Chunking)</strong>。</p>
 <p>其底层算法逻辑是：</p>
@@ -186,7 +195,11 @@ web_docs = web_loader.load()</code></pre>
 <li>计算相邻句子的 Embedding 余弦相似度。</li>
 <li>如果相似度高于设定的阈值（或低于百分位数断点），则认为语义连贯，合并为一个大 Chunk；否则在此处“断言”切开。</li>
 </ol>
-<pre><code class="language-python">from langchain_experimental.text_splitter import SemanticChunker
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai import OpenAIEmbeddings
 
 # 使用基于语义相似度滑窗的切分器
@@ -196,6 +209,7 @@ semantic_splitter = SemanticChunker(
     breakpoint_threshold_amount=95
 )
 chunks = semantic_splitter.create_documents([raw_text])</code></pre>
+</div>
 <p><em>这种切分方式确保了每个 Chunk 内部都是一个完整的语义簇，彻底告别了“半句话被切到下一个 Chunk”的灾难。</em></p>
 <p><strong>3. Embedding 模型选择</strong></p>
 <p>2026 年主流 Embedding 模型对比：</p>
@@ -261,7 +275,11 @@ chunks = semantic_splitter.create_documents([raw_text])</code></pre>
 <p><strong>企业级最佳实践</strong>：
 如果预算受限无法将所有向量放入内存，务必开启 <strong>IVF-PQ (倒排文件 + 乘积量化)</strong>。它将 3072 维的浮点数压缩为 8 bit 的聚类中心 ID，可将内存占用缩减 90%，代价是大约 3-5% 的召回率折损（可通过粗排后的精确 Rerank 弥补）。</p>
 <h3 id="检索策略">检索策略</h3>
-<pre><code class="language-python">from langchain_community.vectorstores import Weaviate
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from langchain_community.vectorstores import Weaviate
 import weaviate
 
 # 连接向量数据库
@@ -276,16 +294,22 @@ retriever = vectorstore.as_retriever(
         &quot;lambda_mult&quot;: 0.7,  # 相关性 vs 多样性权重
     }
 )</code></pre>
+</div>
 <h2 id="优化技巧">优化技巧</h2>
 <h3 id="1-query-改写">1. Query 改写</h3>
 <p>用户的原始查询往往不够精确，通过 LLM 改写可以提升检索命中率：</p>
-<pre><code class="language-python"># 多查询改写：将一个问题扩展为多个角度
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python"># 多查询改写：将一个问题扩展为多个角度
 query = &quot;如何优化 RAG 系统？&quot;
 rewritten = [
     &quot;RAG 检索质量优化方法&quot;,
     &quot;提升向量搜索准确率的技术&quot;,
     &quot;RAG 系统 chunking 策略最佳实践&quot;,
 ]</code></pre>
+</div>
 <h3 id="2-毫秒级高并发重排-colbert-v2-晚期交互架构">2. 毫秒级高并发重排 (ColBERT v2 晚期交互架构)</h3>
 <p>传统的 Reranker（如 BGE-Reranker 或 Cohere）采用的是 <strong>Cross-Encoder（交叉编码器）</strong>。它将用户的 Query 和候选 Document 拼接成一句话塞进 Transformer 计算。这种方式最准，但计算复杂度是 O(N)，如果召回 100 个 Chunk 进行重排，会增加几百毫秒甚至一秒的极端延迟，在生产环境直接超时。</p>
 <p>2026 年的标配架构是 <strong>ColBERT v2（如 Flash-Reranker）</strong> 所采用的<strong>晚期交互 (Late Interaction) 架构</strong>：</p>
@@ -296,7 +320,11 @@ rewritten = [
 </ul>
 <h3 id="3-上下文组装">3. 上下文组装</h3>
 <p>将检索到的文档片段结构化地注入提示：</p>
-<pre><code class="language-text">基于以下参考文档回答用户问题。如果文档中没有相关信息，请明确说明。
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">基于以下参考文档回答用户问题。如果文档中没有相关信息，请明确说明。
 
 --- 参考文档 ---
 [1] {chunk_1_content} (来源: report.pdf, 第3页)
@@ -305,6 +333,7 @@ rewritten = [
 --- 文档结束 ---
 
 用户问题：{user_query}</code></pre>
+</div>
 <h3 id="4-高阶检索架构-advanced-rag">4. 高阶检索架构 (Advanced RAG)</h3>
 <p>2026 年的企业级 RAG 早已超越了简单的“文本切块+向量检索”。为了应对复杂长文档和跨文档推理，以下高阶架构成为标配：</p>
 <ul>
@@ -325,7 +354,11 @@ rewritten = [
 <li><strong>Faithfulness (忠实度/反幻觉指数)</strong>：LLM 最终生成的回答，是否 100% 能够从检索到的上下文中推导出来？（评测生成组件防幻觉能力）</li>
 </ol>
 <p><strong>评估代码示例</strong>：</p>
-<pre><code class="language-python">from ragas import evaluate
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from ragas import evaluate
 from ragas.metrics import faithfulness, answer_relevancy, context_precision, context_recall
 from datasets import Dataset
 
@@ -343,6 +376,7 @@ result = evaluate(
     metrics=[context_precision, context_recall, faithfulness, answer_relevancy]
 )
 print(result) # 输出各项指标的具体得分 (0-1 分之间)</code></pre>
+</div>
 <p><em>在每次修改切分策略或更换 Embedding 模型后，运行该评估脚本。只有各项分数（尤其是 Faithfulness）不降反升，才允许上线。</em></p>
 <h2 id="常见问题">常见问题</h2>
 <ul>
@@ -373,6 +407,15 @@ print(result) # 输出各项指标的具体得分 (0-1 分之间)</code></pre>
             </div>
           </div>
         </div>
+        <div class="article-prev-next">
+        <a href="/articles/model-comparison-2026/" class="prev-next-link prev-link">
+          <span class="pn-label">← 上一篇</span>
+          <span class="pn-title">2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</span>
+        </a>
+        <a href="/articles/build-ai-agent/" class="prev-next-link next-link">
+          <span class="pn-label">下一篇 →</span>
+          <span class="pn-title">从零搭建 AI Agent 应用</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/articles/" class="btn-ghost">← 返回文章列表</a>
           <div class="share-buttons">
@@ -397,8 +440,16 @@ print(result) # 输出各项指标的具体得分 (0-1 分之间)</code></pre>
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

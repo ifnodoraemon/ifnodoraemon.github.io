@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag tag-purple">微调</span>
             <time datetime="2026-02-25">2026.02.25</time>
+            <span class="meta-divider">•</span>
+            <span>约 2018 字</span>
+            <span class="meta-divider">•</span>
+            <span>预计阅读 9 分钟</span>
           </div>
           <h1>大模型微调全流程详解</h1>
           <p class="article-detail-desc">LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。</p>
@@ -189,11 +193,16 @@
 <h2 id="完整微调流程">完整微调流程</h2>
 <h3 id="step-1-准备数据集">Step 1：准备数据集</h3>
 <p>数据格式示例（JSONL）：</p>
-<pre><code class="language-json">{&quot;messages&quot;: [
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-json">{&quot;messages&quot;: [
   {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;你是一个专业的医学问答助手&quot;},
   {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;什么是高血压？&quot;},
   {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;高血压是指动脉血压持续升高的慢性疾病...&quot;}
 ]}</code></pre>
+</div>
 <p>数据质量指南：</p>
 <ul>
 <li><strong>数量</strong>：高质量 1000-5000 条通常足够</li>
@@ -202,7 +211,11 @@
 <li><strong>清洗</strong>：去除重复、矛盾和低质量样本</li>
 </ul>
 <h3 id="step-2-配置-lora-训练">Step 2：配置 LoRA 训练</h3>
-<pre><code class="language-python">from peft import LoraConfig, get_peft_model
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from peft import LoraConfig, get_peft_model
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # 加载基础模型
@@ -229,6 +242,7 @@ lora_config = LoraConfig(
 model = get_peft_model(model, lora_config)
 model.print_trainable_parameters()
 # → trainable params: 13.6M || all params: 8.03B || 0.17%</code></pre>
+</div>
 <h3 id="step-3-大规模多卡训练-deepspeed-zero">Step 3：大规模多卡训练 (DeepSpeed ZeRO)</h3>
 <p>单卡 QLoRA 仅适合小规模验证。一旦进入生产环境的 Full Fine-Tuning 或 100 亿 Token 以上的全量 SFT，必须动用多机多卡集群，此时 <strong>DeepSpeed ZeRO (Zero Redundancy Optimizer)</strong> 是唯一选择：</p>
 <ul>
@@ -236,7 +250,11 @@ model.print_trainable_parameters()
 <li><strong>ZeRO-2</strong>：同时分片优化器状态 + 梯度。适合 8x A100 单机训练，基本不掉速。</li>
 <li><strong>ZeRO-3</strong>：将优化器、梯度、<strong>以及模型权重本身</strong>全部分片。适合百亿/千亿参数极限跨机训练，但由于通信极其频繁，如果 RDMA 网络不行，速度会灾难性下降。</li>
 </ul>
-<pre><code class="language-javascript">// deepspeed_config.json (企业级 ZeRO-2 配置示例)
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-javascript">// deepspeed_config.json (企业级 ZeRO-2 配置示例)
 {
     &quot;fp16&quot;: { &quot;enabled&quot;: &quot;auto&quot;, &quot;loss_scale&quot;: 0 },
     &quot;bf16&quot;: { &quot;enabled&quot;: &quot;auto&quot; },
@@ -251,19 +269,34 @@ model.print_trainable_parameters()
     &quot;gradient_accumulation_steps&quot;: &quot;auto&quot;,
     &quot;gradient_clipping&quot;: &quot;auto&quot; // 必须开启梯度裁剪，防止 Loss 爆炸
 }</code></pre>
+</div>
 <p>训练启动命令：</p>
-<pre><code class="language-bash">accelerate launch \
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-bash">accelerate launch \
     --config_file accelerate_deepspeed_config.yaml \
     train.py \
     --gradient_checkpointing True \ # 生产环境必开
     --learning_rate 2e-5</code></pre>
+</div>
 <h3 id="step-4-评估与部署">Step 4：评估与部署</h3>
-<pre><code class="language-python"># 合并 LoRA 权重到基础模型
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python"># 合并 LoRA 权重到基础模型
 merged_model = model.merge_and_unload()
 merged_model.save_pretrained(&quot;./merged_model&quot;)</code></pre>
+</div>
 <h3 id="step-5-模型对齐-dpo-阶段">Step 5：模型对齐 (DPO 阶段)</h3>
 <p>在传统的监督微调(SFT)之后，企业级流程通常会加入<strong>直接偏好优化 (DPO)</strong> 来提升模型的安全性或调整语气偏好：</p>
-<pre><code class="language-python">from trl import DPOTrainer
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from trl import DPOTrainer
 
 dpo_trainer = DPOTrainer(
     model,
@@ -274,14 +307,20 @@ dpo_trainer = DPOTrainer(
     tokenizer=tokenizer,
 )
 dpo_trainer.train()</code></pre>
+</div>
 <h3 id="step-6-生产级部署部署-vllm-tgi">Step 6：生产级部署部署 (vLLM / TGI)</h3>
 <p>在企业环境，我们不使用 HuggingFace <code>pipeline</code>，而是使用支持<strong>连续批处理 (Continuous Batching)</strong> 和 <strong>PagedAttention</strong> 的高性能推理引擎部署合并后的模型：</p>
-<pre><code class="language-bash"># 使用 vLLM 部署，并开启 OpenAI 兼容 API
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-bash"># 使用 vLLM 部署，并开启 OpenAI 兼容 API
 python -m vllm.entrypoints.openai.api_server \
     --model /path/to/merged_model \
     --tensor-parallel-size 2 \
     --max-model-len 8192 \
     --port 8000</code></pre>
+</div>
 <h2 id="核心超参的工程哲学">核心超参的工程哲学</h2>
 <p>在 2026 年，炼丹已经从“玄学调参”变成可量化的公式。请牢记以下企业级经验底线：</p>
 <table>
@@ -378,6 +417,11 @@ python -m vllm.entrypoints.openai.api_server \
             </div>
           </div>
         </div>
+        <div class="article-prev-next"><div class="prev-next-link empty"></div>
+        <a href="/articles/multimodal-guide/" class="prev-next-link next-link">
+          <span class="pn-label">下一篇 →</span>
+          <span class="pn-title">多模态大模型入门指南</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/articles/" class="btn-ghost">← 返回文章列表</a>
           <div class="share-buttons">
@@ -402,8 +446,16 @@ python -m vllm.entrypoints.openai.api_server \
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

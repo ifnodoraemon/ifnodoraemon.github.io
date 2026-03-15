@@ -75,6 +75,45 @@ document.addEventListener('DOMContentLoaded', () => {
   // — Terminal Hero Animation —
   initTerminalAnimation();
 
+  // — Copy Code Button —
+  document.querySelectorAll('.copy-code-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const codeBlock = btn.nextElementSibling;
+      if (!codeBlock) return;
+      const code = codeBlock.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        setTimeout(() => {
+          btn.innerHTML = originalHtml;
+        }, 2000);
+      });
+    });
+  });
+
+  // — Back to Top —
+  const backToTop = document.getElementById('back-to-top');
+  if (backToTop) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    }, { passive: true });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // — Medium Zoom —
+  if (typeof mediumZoom !== 'undefined') {
+    mediumZoom('.article-detail-content img', {
+      margin: 24,
+      background: '#0a0a1a'
+    });
+  }
+
 });
 
 

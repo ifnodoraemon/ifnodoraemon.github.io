@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag tag-purple">Model Review</span>
             <time datetime="2026-03-01">2026.03.01</time>
+            <span class="meta-divider">•</span>
+            <span>1449 words</span>
+            <span class="meta-divider">•</span>
+            <span>6 min read</span>
           </div>
           <h1>2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</h1>
           <p class="article-detail-desc">A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.</p>
@@ -364,7 +368,11 @@
 </ul>
 <h2 id="practical-usage-comparison">Practical Usage Comparison</h2>
 <h3 id="coding-capabilities">Coding Capabilities</h3>
-<pre><code class="language-python"># GPT-5.4: Built-in GPT-5.3-Codex coding capabilities + computer control
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python"># GPT-5.4: Built-in GPT-5.3-Codex coding capabilities + computer control
 # Can directly interpret screenshots, send keystrokes/mouse clicks, combined with Playwright for automation
 
 # Claude Sonnet 4.6: Widely recognized as #1 in code quality
@@ -373,6 +381,7 @@
 
 # Gemini 3.1 Pro: Strongest grasp of massive codebases
 # Native 1M token context can ingest entire projects at once</code></pre>
+</div>
 <h3 id="long-context-processing">Long Context Processing</h3>
 <table>
 <thead>
@@ -404,7 +413,11 @@
 </tr>
 </tbody></table>
 <h3 id="api-usage-examples">API Usage Examples</h3>
-<pre><code class="language-python"># OpenAI GPT-5.4
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python"># OpenAI GPT-5.4
 from openai import OpenAI
 
 client = OpenAI()
@@ -413,7 +426,12 @@ response = client.chat.completions.create(
     messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain the fundamental principles of quantum computing.&quot;}],
     max_tokens=4096,
 )</code></pre>
-<pre><code class="language-python"># Anthropic Claude Sonnet 4.6
+</div>
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python"># Anthropic Claude Sonnet 4.6
 import anthropic
 
 client = anthropic.Anthropic()
@@ -422,11 +440,17 @@ response = client.messages.create(
     max_tokens=4096,
     messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain the fundamental principles of quantum computing.&quot;}],
 )</code></pre>
-<pre><code class="language-python"># Google Gemini 3.1 Pro
+</div>
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python"># Google Gemini 3.1 Pro
 import google.generativeai as genai
 
 model = genai.GenerativeModel(&quot;gemini-3.1-pro&quot;)
 response = model.generate_content(&quot;Explain the fundamental principles of quantum computing.&quot;)</code></pre>
+</div>
 <h2 id="selection-advice">Selection Advice</h2>
 <h3 id="recommended-by-scenario">Recommended by Scenario</h3>
 <table>
@@ -489,11 +513,16 @@ When your sustained business traffic exceeds roughly <strong>1,600 Tokens per se
 <h3 id="vram-explosion-the-physical-geek-formula-for-kv-cache">VRAM Explosion: The Physical Geek Formula for KV Cache</h3>
 <p>The core pain point supporting long context windows is the <strong>KV Cache VRAM Explosion</strong>. While the VRAM required to hold model parameters is static, the KV Cache grows uncontrollably as context lengthens.</p>
 <p>In 2026, as an AI Architect, you must be able to mentally calculate this formula:</p>
-<pre><code class="language-text">KV_Cache_Size_Per_Token = 2 * 2 * n_layers * d_model
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">KV_Cache_Size_Per_Token = 2 * 2 * n_layers * d_model
 // First 2: Key and Value matrices
 // Second 2: Bytes per element in FP16/BF16 (2 bytes)
 // n_layers: Number of transformer layers (usually 80 for a 70B model)
 // d_model: Hidden layer dimension (usually 8192 for a 70B model)</code></pre>
+</div>
 <p>For a 70B model, every single Token consumes approximately <strong>2.6MB</strong> of VRAM.
 If you want to support an ultra-long context of <strong>1 Million Tokens</strong> for a single conversation, its KV Cache alone will devour:
 <code>1,000,000 * 2.6 MB ≈ 2,600,000 MB ≈ 2.6 TB</code></p>
@@ -533,6 +562,15 @@ If you want to support an ultra-long context of <strong>1 Million Tokens</strong
             </div>
           </div>
         </div>
+        <div class="article-prev-next">
+        <a href="/en/articles/multimodal-guide/" class="prev-next-link prev-link">
+          <span class="pn-label">← Prev</span>
+          <span class="pn-title">Multimodal AI Models Starter Guide</span>
+        </a>
+        <a href="/en/articles/rag-in-practice/" class="prev-next-link next-link">
+          <span class="pn-label">Next →</span>
+          <span class="pn-title">Retrieval-Augmented Generation (RAG) in Practice</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/en/articles/" class="btn-ghost">← Back to Articles</a>
           <div class="share-buttons">
@@ -557,8 +595,16 @@ If you want to support an ultra-long context of <strong>1 Million Tokens</strong
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

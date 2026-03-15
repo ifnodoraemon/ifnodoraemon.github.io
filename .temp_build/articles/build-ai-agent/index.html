@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag tag-emerald">AI Agent</span>
             <time datetime="2026-03-05">2026.03.05</time>
+            <span class="meta-divider">•</span>
+            <span>约 1787 字</span>
+            <span class="meta-divider">•</span>
+            <span>预计阅读 8 分钟</span>
           </div>
           <h1>从零搭建 AI Agent 应用</h1>
           <p class="article-detail-desc">手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。</p>
@@ -158,9 +162,18 @@ graph LR
 </pre>
 <h2 id="实现步骤">实现步骤</h2>
 <h3 id="step-1-安装依赖">Step 1：安装依赖</h3>
-<pre><code class="language-bash">pip install langchain langchain-anthropic tavily-python</code></pre>
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-bash">pip install langchain langchain-anthropic tavily-python</code></pre>
+</div>
 <h3 id="step-2-定义工具">Step 2：定义工具</h3>
-<pre><code class="language-python">from langchain.tools import tool
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from langchain.tools import tool
 from datetime import datetime
 
 @tool
@@ -185,9 +198,14 @@ def execute_python(code: str) -&gt; str:
         capture_output=True, text=True, timeout=10
     )
     return result.stdout or result.stderr</code></pre>
+</div>
 <h3 id="step-3-基于-langgraph-构建状态机-stategraph">Step 3：基于 LangGraph 构建状态机 (StateGraph)</h3>
 <p>2026 年的生产级 Agent 早已摒弃了黑盒式的 <code>AgentExecutor</code>，全面转向以<strong>状态机 (State Machine)</strong> 为核心的有向图架构。这种架构不仅可控性极高，还能严格定义数据流（State Schema）。</p>
-<pre><code class="language-python">from typing import TypedDict, Annotated
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, END
 from langgraph.prebuilt import ToolNode
 from langchain_core.messages import AnyMessage, add_messages
@@ -218,12 +236,18 @@ workflow.add_edge(&quot;tools&quot;, &quot;agent&quot;)
 
 # 5. 编译成可执行应用
 app = workflow.compile()</code></pre>
+</div>
 <h3 id="step-4-运行与追踪">Step 4：运行与追踪</h3>
 <p>通过图架构，我们可以精确地追踪每一步状态流转：</p>
-<pre><code class="language-python">inputs = {&quot;messages&quot;: [(&quot;user&quot;, &quot;帮我查一下大模型的最新发布时间。&quot;)]}
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">inputs = {&quot;messages&quot;: [(&quot;user&quot;, &quot;帮我查一下大模型的最新发布时间。&quot;)]}
 for event in app.stream(inputs, stream_mode=&quot;values&quot;):
     message = event[&quot;messages&quot;][-1]
     message.pretty_print() # 能够清晰看到 Thought -&gt; Action -&gt; Observation 的每一步断点</code></pre>
+</div>
 <h2 id="模型选择建议">模型选择建议</h2>
 <table>
 <thead>
@@ -266,7 +290,11 @@ for event in app.stream(inputs, stream_mode=&quot;values&quot;):
 <p>在真实的生产环境中，Agent 在运行过程中可能会遭遇 API 熔断、数据库锁、或者是长达几小时的异步任务。常规的单体架构会瞬间崩溃，以下是业内最 hardcore 的落地实践：</p>
 <h3 id="1-跨会话的持久化与中断恢复-redis-checkpointer">1. 跨会话的持久化与中断恢复 (Redis Checkpointer)</h3>
 <p>为了让 Agent 在服务器重启后依然能记住用户的上下文，或者在执行高危操作（如转账）前暂停等待人类审批（Human-in-the-loop），必须严格配置 Checkpointer。2026 年的高并发标准方案是使用 <strong>RedisSaver</strong>，实现毫秒级状态序列化。</p>
-<pre><code class="language-python">from langgraph.checkpoint.redis import RedisSaver
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from langgraph.checkpoint.redis import RedisSaver
 import redis
 
 # 建立底层 Redis 连接池
@@ -285,6 +313,7 @@ with RedisSaver(redis_conn) as checkpointer:
     # Agent 执行到 tools 节点前会自动挂起，状态安全保存在 Redis 中
     for event in app.stream(inputs, config=config):
         print(event)</code></pre>
+</div>
 <h3 id="2-长耗时任务的异步事件驱动架构-temporal-orchestration">2. 长耗时任务的异步事件驱动架构 (Temporal Orchestration)</h3>
 <p>由于后端 HTTP 请求在 60 秒后大概率会 Timeout，如果你的 Agent 需要在后台爬取 100 个网页并生成财报，传统的同步阻塞架构注定会崩溃。业界（如 OpenAI 的 Codex 架构实现）已经完全转向使用 <strong>Temporal</strong> 作为底层持久化工作流编排引擎。</p>
 <p><strong>高并发容灾架构方案：</strong></p>
@@ -320,6 +349,15 @@ with RedisSaver(redis_conn) as checkpointer:
             </div>
           </div>
         </div>
+        <div class="article-prev-next">
+        <a href="/articles/rag-in-practice/" class="prev-next-link prev-link">
+          <span class="pn-label">← 上一篇</span>
+          <span class="pn-title">RAG 检索增强生成实战</span>
+        </a>
+        <a href="/articles/ai-trends-2026/" class="prev-next-link next-link">
+          <span class="pn-label">下一篇 →</span>
+          <span class="pn-title">2026 年 AI 大模型六大趋势深度解析</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/articles/" class="btn-ghost">← 返回文章列表</a>
           <div class="share-buttons">
@@ -344,8 +382,16 @@ with RedisSaver(redis_conn) as checkpointer:
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

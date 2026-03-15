@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag tag-cyan">Skills</span>
             <time datetime="2026-03-12">2026.03.12</time>
+            <span class="meta-divider">•</span>
+            <span>3449 words</span>
+            <span class="meta-divider">•</span>
+            <span>14 min read</span>
           </div>
           <h1>Skills Deep Dive: Give Your AI Coding Assistant a Professional Brain</h1>
           <p class="article-detail-desc">From core principles to cross-platform practice, a complete guide to the AI coding assistant Skills system. Covers SKILL.md mechanics, six-platform comparison, hands-on writing guide, and best practices.</p>
@@ -220,15 +224,24 @@ graph TB
 </pre>
 <h3 id="level-1-yaml-frontmatter-always-resident">Level 1: YAML Frontmatter (Always Resident)</h3>
 <p>On startup, the AI reads the <code>name</code> and <code>description</code> from all Skills, consuming minimal tokens. This layer&#39;s purpose is to <strong>quickly determine &quot;is this Skill relevant to the current task?&quot;</strong></p>
-<pre><code class="language-yaml">---
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-yaml">---
 name: code-review-assistant
 description: Code review assistant that reviews code across security, performance, type safety, and test coverage dimensions
 ---</code></pre>
+</div>
 <h3 id="level-2-skill-md-body-loaded-on-demand">Level 2: SKILL.md Body (Loaded On-Demand)</h3>
 <p>When a user&#39;s request matches a Skill&#39;s <code>description</code>, the AI loads that Skill&#39;s full instructions. For example, when a user says &quot;review this code,&quot; it triggers the full <code>code-review-assistant</code> rules.</p>
 <h3 id="level-3-associated-files-deep-on-demand">Level 3: Associated Files (Deep On-Demand)</h3>
 <p>Skills can include scripts, reference docs, and templates as supporting files — <strong>only read when referenced in SKILL.md and actually needed</strong>.</p>
-<pre><code>skills/
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code>skills/
 └── code-review/
     ├── SKILL.md           # Required: core instructions
     ├── scripts/           # Optional: executable scripts
@@ -237,12 +250,17 @@ description: Code review assistant that reviews code across security, performanc
     │   └── security-checklist.md
     └── assets/            # Optional: templates and resources
         └── report-template.md</code></pre>
+</div>
 <blockquote>
 <p><strong>Difference from full loading</strong>: Traditional custom instructions (like <code>.cursorrules</code>) inject all content into every conversation. The Skills three-layer mechanism lets the AI load only relevant knowledge when needed — like borrowing just the book you need from the library, instead of hauling the entire library home.</p>
 </blockquote>
 <h2 id="skill-md-hands-on">SKILL.md Hands-On</h2>
 <h3 id="standard-structure">Standard Structure</h3>
-<pre><code class="language-markdown">---
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-markdown">---
 name: skill-name
 description: One-line description of what this Skill does and when it triggers
 ---
@@ -266,9 +284,14 @@ Define the AI's standardized output template.
 ## Examples
 
 Provide at least one high-quality input → output example.</code></pre>
+</div>
 <h3 id="example-1-code-review-assistant">Example 1: Code Review Assistant</h3>
 <p>A &quot;checklist-style&quot; Skill that systematizes team Code Review standards:</p>
-<pre><code class="language-markdown">---
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-markdown">---
 name: code-review-assistant
 description: Code review assistant that reviews code across security, performance, type safety, and test coverage dimensions
 ---
@@ -317,10 +340,15 @@ Check in the following order, output structured review feedback:
 ### 📊 Overall
 - Score: X/10
 - Recommendation: Approve / Approve with changes / Needs redesign</code></pre>
+</div>
 <p>The brilliance of this Skill lies in: <strong>priority ordering</strong> (Security &gt; Performance &gt; Types &gt; Quality &gt; Tests) ensures the AI focuses on the most critical issues first; <strong>enforced output format</strong> makes every Code Review result comparable and trackable.</p>
 <h3 id="example-2-git-commit-formatter">Example 2: Git Commit Formatter</h3>
 <p>A &quot;format-standard&quot; Skill that enforces Conventional Commits:</p>
-<pre><code class="language-markdown">---
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-markdown">---
 name: git-commit-formatter
 description: Format Git commit messages following the Conventional Commits specification
 ---
@@ -354,9 +382,14 @@ Use this skill when the user asks to commit code or generate a commit message.
 1. Subject must not exceed 50 characters, use imperative mood
 2. Body explains **why** the change was made, not **what** was changed
 3. Each commit does one thing only</code></pre>
+</div>
 <h3 id="example-3-docker-deploy-assistant">Example 3: Docker Deploy Assistant</h3>
 <p>A &quot;knowledge-capture&quot; Skill that codifies project containerization architecture:</p>
-<pre><code class="language-markdown">---
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-markdown">---
 name: docker-deploy-assistant
 description: Docker deployment assistant for Dockerfile writing, docker-compose orchestration, and deployment workflows
 ---
@@ -381,6 +414,7 @@ docker-compose.yml
 3. **Health checks** — Add HEALTHCHECK instructions to monitor container status
 4. **Environment variables** — Inject sensitive info via .env or Docker secrets
 5. **Network isolation** — Database and Redis only exposed to internal network</code></pre>
+</div>
 <p>The value of this Skill: when a new team member joins, the AI automatically gains <strong>complete deployment knowledge</strong> for the project — no manual onboarding needed.</p>
 <h2 id="six-platform-skills-comparison">Six-Platform Skills Comparison</h2>
 <p>By early 2026, all major AI coding assistants have launched their own &quot;Skills&quot; implementations. While the names differ, the core idea is the same — <strong>configure files to make AI understand your project better</strong>.</p>
@@ -488,7 +522,11 @@ graph TB
 <p><strong>Unique advantage</strong>: Skills can include executable scripts (<code>scripts/</code> directory), enabling AI to not just &quot;guide&quot; but actually &quot;execute.&quot; Early 2026 updates added subagent support, dynamic context injection, and lifecycle hooks.</p>
 <h4 id="cursor-project-rules-mdc">Cursor: Project Rules (.mdc)</h4>
 <p>Cursor evolved from a single <code>.cursorrules</code> file to a multi-rule system under <code>.cursor/rules/</code>:</p>
-<pre><code class="language-yaml"># .cursor/rules/python-style.mdc
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-yaml"># .cursor/rules/python-style.mdc
 ---
 description: Python code style rules
 globs: [&quot;**/*.py&quot;]
@@ -496,6 +534,7 @@ globs: [&quot;**/*.py&quot;]
 - Use 4-space indentation
 - Functions must include type annotations
 - Use f-strings instead of .format()</code></pre>
+</div>
 <p><strong>Unique advantage</strong>: Fine-grained file type matching via the <code>globs</code> field — Python rules auto-apply to Python files, TypeScript rules to TS files. Rules can also be quickly created via the <code>/create-rule</code> command.</p>
 <h4 id="github-copilot-copilot-instructions-md-agents-md">GitHub Copilot: copilot-instructions.md + AGENTS.md</h4>
 <p>Copilot offers a multi-tier instruction system:</p>
@@ -539,7 +578,11 @@ globs: [&quot;**/*.py&quot;]
 </ul>
 <h4 id="agents-md-the-emerging-cross-platform-open-standard">AGENTS.md: The Emerging Cross-Platform Open Standard</h4>
 <p><code>AGENTS.md</code> deserves special attention — it&#39;s an <strong>open standard not tied to any vendor</strong>:</p>
-<pre><code class="language-markdown"># AGENTS.md
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-markdown"># AGENTS.md
 
 ## Project Overview
 This is a full-stack web application built with FastAPI + React.
@@ -556,6 +599,7 @@ This is a full-stack web application built with FastAPI + React.
 ## Important Notes
 - Never modify migration files under alembic/versions/
 - Inject sensitive configuration through environment variables</code></pre>
+</div>
 <p>Already supported by GitHub Copilot, OpenAI Codex, Google Gemini, Claude Code, and more. OpenAI and GitHub are core drivers of this standard. It&#39;s positioned as a <strong>&quot;README for AI Agents&quot;</strong> — just as README.md is a project description for humans, AGENTS.md is a project description for AI.</p>
 <h2 id="where-skills-fit-in-the-ai-customization-stack">Where Skills Fit in the AI Customization Stack</h2>
 <p>To understand Skills&#39; positioning, you need to see the <strong>complete customization hierarchy</strong> of AI coding assistants:</p>
@@ -647,7 +691,12 @@ graph TB
 <p>Each Skill solves one domain&#39;s problems. Don&#39;t combine Code Review, Git Commit, and deployment workflows in a single file.</p>
 <p><strong>2. Clear Trigger Conditions</strong></p>
 <p>State explicitly at the top of your SKILL.md when to use the Skill:</p>
-<pre><code class="language-markdown">Use this skill when the user asks for code review, PR review, or code quality checks.</code></pre>
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-markdown">Use this skill when the user asks for code review, PR review, or code quality checks.</code></pre>
+</div>
 <p><strong>3. Specific, Not Abstract</strong></p>
 <p>❌ &quot;Write high-quality code&quot;</p>
 <p>✅ &quot;Functions must not exceed 50 lines, use 4-space indentation, all public methods must have docstrings&quot;</p>
@@ -705,7 +754,11 @@ graph LR
 <h2 id="enterprise-skills-architecture">Enterprise Skills Architecture</h2>
 <p>As team size grows, Skills management needs to be elevated to an architectural concern:</p>
 <h3 id="1-layered-organization-strategy">1. Layered Organization Strategy</h3>
-<pre><code>project-root/
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code>project-root/
 ├── AGENTS.md              # Cross-platform universal project context
 ├── CLAUDE.md              # Claude Code global config
 ├── .github/
@@ -724,6 +777,7 @@ graph LR
             ├── SKILL.md
             └── scripts/
                 └── deploy.sh</code></pre>
+</div>
 <h3 id="2-multi-platform-compatibility-strategy">2. Multi-Platform Compatibility Strategy</h3>
 <p>If team members use different AI tools, adopt an <strong>AGENTS.md as common layer + platform-specific configs</strong> strategy:</p>
 <ul>
@@ -803,6 +857,15 @@ graph LR
             </div>
           </div>
         </div>
+        <div class="article-prev-next">
+        <a href="/en/articles/prompt-engineering-guide/" class="prev-next-link prev-link">
+          <span class="pn-label">← Prev</span>
+          <span class="pn-title">Prompt Engineering Practice Guide</span>
+        </a>
+        <a href="/en/articles/mcp-guide/" class="prev-next-link next-link">
+          <span class="pn-label">Next →</span>
+          <span class="pn-title">MCP Deep Dive: The USB-C Port for AI</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/en/articles/" class="btn-ghost">← Back to Articles</a>
           <div class="share-buttons">
@@ -827,8 +890,16 @@ graph LR
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

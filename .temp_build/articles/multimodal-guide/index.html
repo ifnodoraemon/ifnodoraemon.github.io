@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag tag-rose">多模态</span>
             <time datetime="2026-02-28">2026.02.28</time>
+            <span class="meta-divider">•</span>
+            <span>约 2052 字</span>
+            <span class="meta-divider">•</span>
+            <span>预计阅读 9 分钟</span>
           </div>
           <h1>多模态大模型入门指南</h1>
           <p class="article-detail-desc">探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。</p>
@@ -187,7 +191,11 @@
 在生产环境，<strong>绝对禁止前端直接向原生 API 直传用户的高清原图</strong>。
 必须在后端中间层执行智能 Downscaling（缩放降采样）：对于发票 OCR、表单识别拉到 1024px 足矣，而对于简单的物体分类或 UI 色彩判断，压缩到 512px（170 tokens）就能省下 90% 的成本。</p>
 <p><strong>实际应用示例：降采样图片处理架构</strong></p>
-<pre><code class="language-python">from PIL import Image
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from PIL import Image
 import anthropic
 import io
 
@@ -202,9 +210,14 @@ def resize_for_llm(img_path, max_edge=1024):
     buf = io.BytesIO()
     img.save(buf, format=&quot;JPEG&quot;, quality=85)
     return buf.getvalue() # 这里产生的二进制流再去调 API，成本立减 80%</code></pre>
+</div>
 <h3 id="2-视频理解-gemini-独占优势">2. 视频理解（Gemini 独占优势）</h3>
 <p>Gemini 3.1 Pro 的视频理解能力是当前最领先的：</p>
-<pre><code class="language-python">import google.generativeai as genai
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">import google.generativeai as genai
 
 model = genai.GenerativeModel(&quot;gemini-3.1-pro&quot;)
 
@@ -219,6 +232,7 @@ response = model.generate_content([
     &quot;2. 演示中有哪些交互亮点？\n&quot;
     &quot;3. 从 UX 角度有什么改进建议？&quot;
 ])</code></pre>
+</div>
 <p>视频理解的典型应用场景：</p>
 <ul>
 <li><strong>会议记录</strong>：自动总结视频会议的关键决策和待办事项</li>
@@ -246,7 +260,11 @@ response = model.generate_content([
 </ul>
 <h2 id="多模态提示技巧">多模态提示技巧</h2>
 <h3 id="图文混合提示">图文混合提示</h3>
-<pre><code class="language-text">[图片1: 产品原型截图]
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">[图片1: 产品原型截图]
 [图片2: 竞品对比截图]
 
 请从以下维度对比分析两个产品的 UI 设计：
@@ -256,15 +274,25 @@ response = model.generate_content([
 4. 用户体验评分（1-10）
 
 以表格形式输出对比结果。</code></pre>
+</div>
 <h3 id="多轮对话中的多模态">多轮对话中的多模态</h3>
-<pre><code class="language-text">第1轮: [上传架构图] &quot;请解读这个系统架构&quot;
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">第1轮: [上传架构图] &quot;请解读这个系统架构&quot;
 第2轮: &quot;这个设计在高并发下有什么问题？&quot;
 第3轮: [上传性能监控截图] &quot;结合这个监控数据，瓶颈在哪里？&quot;</code></pre>
+</div>
 <h2 id="企业级落地-多模态结构化提取引擎">企业级落地：多模态结构化提取引擎</h2>
 <p>在真实应用中，企业需要的是稳定、可解析的结构化数据，而不是大段的散文描述。2026 年的最佳实践是结合 <strong>Structured Outputs (结构化输出)</strong> 功能来搭建自动化流水线。</p>
 <h3 id="案例-自动化发票与报销审查系统">案例：自动化发票与报销审查系统</h3>
 <p>传统 OCR 只能提取文字，而多模态大模型可以直接理解发票的语义结构，甚至识别照片中的实物凭证（如餐饮小票）。</p>
-<pre><code class="language-python">import instructor
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">import instructor
 from openai import OpenAI
 from pydantic import BaseModel, Field
 
@@ -294,6 +322,7 @@ invoice_info = client.chat.completions.create(
 )
 
 print(invoice_info.model_dump_json(indent=2))</code></pre>
+</div>
 <h3 id="多模态流水线的关键挑战">多模态流水线的关键挑战</h3>
 <ul>
 <li><strong>并发与重试机制</strong>：由于图片处理耗时较长，生产环境需使用消息队列（如 RabbitMQ / Kafka）异步处理。遇到 <code>json_decode_error</code> 时应实现自动重试。</li>
@@ -364,6 +393,15 @@ print(invoice_info.model_dump_json(indent=2))</code></pre>
             </div>
           </div>
         </div>
+        <div class="article-prev-next">
+        <a href="/articles/fine-tuning-guide/" class="prev-next-link prev-link">
+          <span class="pn-label">← 上一篇</span>
+          <span class="pn-title">大模型微调全流程详解</span>
+        </a>
+        <a href="/articles/model-comparison-2026/" class="prev-next-link next-link">
+          <span class="pn-label">下一篇 →</span>
+          <span class="pn-title">2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/articles/" class="btn-ghost">← 返回文章列表</a>
           <div class="share-buttons">
@@ -388,8 +426,16 @@ print(invoice_info.model_dump_json(indent=2))</code></pre>
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

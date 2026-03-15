@@ -34,7 +34,13 @@ renderer.code = function ({ text, lang }) {
     return `<pre class="mermaid">\n${text}\n</pre>\n`;
   }
   const langClass = lang ? ` class="language-${lang}"` : '';
-  return `<pre><code${langClass}>${escapeHtml(text)}</code></pre>\n`;
+  const escapedText = escapeHtml(text);
+  return `<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code${langClass}>${escapedText}</code></pre>
+</div>\n`;
 };
 renderer.image = function ({ href, title, text }) {
   let out = `<img src="${href}" alt="${escapeHtml(text || '')}" loading="lazy"`;
@@ -78,8 +84,7 @@ const mdFiles = [...mdFilesZh.map(f => ({file: f, isEn: false, dir: contentDirZh
 
 console.log(`📝 Found ${mdFiles.length} articles\n`);
 
-const articles = [];
-const articlesEn = [];
+const allRawArticles = [];
 
 for (const {file, isEn, dir} of mdFiles) {
   const raw = fs.readFileSync(path.join(dir, file), 'utf-8');
@@ -90,85 +95,136 @@ for (const {file, isEn, dir} of mdFiles) {
     console.warn(`⚠️  Skipping ${file}: missing required frontmatter`);
     continue;
   }
-
-  // Render markdown to HTML
-  currentToc = [];
-  const htmlContent = marked.parse(mdContent);
-
-  // Generate TOC HTML
-  let tocHtml = '';
-  if (currentToc.length > 0) {
-    const tocTitle = isEn ? 'Table of Contents' : '文章目录';
-    tocHtml = `<div class="toc-container"><h4>${tocTitle}</h4><ul class="article-toc-list">\n`;
-    currentToc.forEach(item => {
-      tocHtml += `  <li class="toc-level-${item.depth}"><a href="#${item.id}">${item.text}</a></li>\n`;
-    });
-    tocHtml += '</ul></div>';
-  }
-
-  // Format date
-  const dateObj = new Date(fm.date);
-  const isoDate = dateObj.toISOString().split('T')[0];
-  const dateFormatted = isoDate.replace(/-/g, '.');
-
-  // Build image url
-  let imageUrl = 'https://ifnodoraemon.github.io/og-image.png';
-  if (fm.image) {
-    imageUrl = fm.image.startsWith('http') ? fm.image : `https://ifnodoraemon.github.io${fm.image.startsWith('/') ? fm.image : '/' + fm.image}`;
-  }
-
-  // Build keywords
-  const keywords = [fm.tag, 'AI大模型', 'GPT-5.4', 'Claude 4.6', 'Gemini 3.1', fm.slug.replace(/-/g, ' ')].join(',');
-
-  // Apply template
-  let html = template
-    .replace(/\{\{title\}\}/g, fm.title)
-    .replace(/\{\{slug\}\}/g, fm.slug)
-    .replace(/\{\{description\}\}/g, fm.description)
-    .replace(/\{\{date\}\}/g, isoDate)
-    .replace(/\{\{isoDate\}\}/g, isoDate)
-    .replace(/\{\{dateFormatted\}\}/g, dateFormatted)
-    .replace(/\{\{tag\}\}/g, fm.tag)
-    .replace(/\{\{tagClass\}\}/g, fm.tagClass || '')
-    .replace(/\{\{keywords\}\}/g, keywords)
-    .replace(/\{\{image\}\}/g, imageUrl)
-    .replace(/\{\{toc\}\}/g, tocHtml)
-    .replace(/\{\{content\}\}/g, htmlContent)
-    .replace(/\{\{lang\}\}/g, isEn ? 'en' : 'zh-CN')
-    .replace(/\{\{articles_link\}\}/g, isEn ? '/en/articles/' : '/articles/')
-    .replace(/\{\{articles_prefix\}\}/g, isEn ? '/en' : '')
-    .replace(/\{\{encodedTitle\}\}/g, encodeURIComponent(fm.title))
-    .replace(/\{\{encodedUrl\}\}/g, encodeURIComponent('https://ifnodoraemon.github.io' + (isEn ? '/en' : '') + '/articles/' + fm.slug + '/'))
-    .replace(/\{\{breadcrumb_articles\}\}/g, isEn ? 'Articles' : '文章')
-    .replace(/\{\{return_text\}\}/g, isEn ? '← Back to Articles' : '← 返回文章列表')
-    .replace(/\{\{meta\.siteName\}\}/g, isEn ? enLocales.meta.siteName : zhLocales.meta.siteName);
-
-  // Write output
-  const BUILD_OUT_DIR = path.join(ROOT, '.temp_build');
-  const outDirBase = isEn ? path.join(BUILD_OUT_DIR, 'en', 'articles', fm.slug) : path.join(BUILD_OUT_DIR, 'articles', fm.slug);
-  fs.mkdirSync(outDirBase, { recursive: true });
-  fs.writeFileSync(path.join(outDirBase, 'index.html'), html, 'utf-8');
   
-  const articleData = {
-    ...fm,
-    isoDate,
-    dateFormatted,
-    isEn,
-    meta: isEn ? enLocales.meta : zhLocales.meta
-  };
-  
-  if (isEn) {
-    articlesEn.push(articleData);
-  } else {
-    articles.push(articleData);
-  }
-
-  console.log(`  ✓ ${file} → ${isEn ? 'en/' : ''}articles/${fm.slug}/index.html`);
+  allRawArticles.push({ file, isEn, dir, fm, mdContent });
 }
 
-// ── Sort articles by date (newest first) ──
-articles.sort((a, b) => new Date(b.date) - new Date(a.date));
-articlesEn.sort((a, b) => new Date(b.date) - new Date(a.date));
+// Separate and sort by date
+const zhArticlesList = allRawArticles.filter(a => !a.isEn).sort((a, b) => new Date(b.fm.date) - new Date(a.fm.date));
+const enArticlesList = allRawArticles.filter(a => a.isEn).sort((a, b) => new Date(b.fm.date) - new Date(a.fm.date));
+
+function processArticles(list, isEn) {
+  const processed = [];
+  
+  for (let i = 0; i < list.length; i++) {
+    const { file, fm, mdContent } = list[i];
+    
+    // Render markdown to HTML
+    currentToc = [];
+    const htmlContent = marked.parse(mdContent);
+
+    // Generate TOC HTML
+    let tocHtml = '';
+    if (currentToc.length > 0) {
+      const tocTitle = isEn ? 'Table of Contents' : '文章目录';
+      tocHtml = `<div class="toc-container"><h4>${tocTitle}</h4><ul class="article-toc-list">\n`;
+      currentToc.forEach(item => {
+        tocHtml += `  <li class="toc-level-${item.depth}"><a href="#${item.id}">${item.text}</a></li>\n`;
+      });
+      tocHtml += '</ul></div>';
+    }
+
+    // Format date
+    const dateObj = new Date(fm.date);
+    const isoDate = dateObj.toISOString().split('T')[0];
+    const dateFormatted = isoDate.replace(/-/g, '.');
+
+    // Build image url
+    let imageUrl = 'https://ifnodoraemon.github.io/og-image.png';
+    if (fm.image) {
+      imageUrl = fm.image.startsWith('http') ? fm.image : `https://ifnodoraemon.github.io${fm.image.startsWith('/') ? fm.image : '/' + fm.image}`;
+    }
+
+    // Build keywords
+    const keywords = [fm.tag, 'AI大模型', 'GPT-5.4', 'Claude 4.6', 'Gemini 3.1', fm.slug.replace(/-/g, ' ')].join(',');
+
+    // Calculate reading time and word count
+    const plainText = mdContent.replace(/[#*`_\[\]()]/g, '').replace(/\n/g, ' ');
+    const wordCount = plainText.trim().split(/\s+/).length + (plainText.match(/[\u4e00-\u9fa5]/g) || []).length;
+    const readingTime = Math.max(1, Math.ceil(wordCount / 250));
+    
+    const wordCountText = isEn ? `${wordCount} words` : `约 ${wordCount} 字`;
+    const readingTimeText = isEn ? `${readingTime} min read` : `预计阅读 ${readingTime} 分钟`;
+
+    // Prev / Next Navigation HTML
+    // Note: Since array is sorted newest first, list[i-1] is NEWER (Next), list[i+1] is OLDER (Prev)
+    const nextItem = i > 0 ? list[i - 1] : null; 
+    const prevItem = i < list.length - 1 ? list[i + 1] : null;
+    
+    let prevNextHtml = '<div class="article-prev-next">';
+    if (prevItem) {
+      const prefix = isEn ? '/en/articles/' : '/articles/';
+      const prevLabel = isEn ? 'Prev' : '上一篇';
+      prevNextHtml += `
+        <a href="${prefix}${prevItem.fm.slug}/" class="prev-next-link prev-link">
+          <span class="pn-label">← ${prevLabel}</span>
+          <span class="pn-title">${prevItem.fm.title}</span>
+        </a>`;
+    } else {
+      prevNextHtml += `<div class="prev-next-link empty"></div>`;
+    }
+    
+    if (nextItem) {
+      const prefix = isEn ? '/en/articles/' : '/articles/';
+      const nextLabel = isEn ? 'Next' : '下一篇';
+      prevNextHtml += `
+        <a href="${prefix}${nextItem.fm.slug}/" class="prev-next-link next-link">
+          <span class="pn-label">${nextLabel} →</span>
+          <span class="pn-title">${nextItem.fm.title}</span>
+        </a>`;
+    } else {
+      prevNextHtml += `<div class="prev-next-link empty"></div>`;
+    }
+    prevNextHtml += '</div>';
+
+    // Apply template
+    let html = template
+      .replace(/\{\{title\}\}/g, fm.title)
+      .replace(/\{\{slug\}\}/g, fm.slug)
+      .replace(/\{\{description\}\}/g, fm.description)
+      .replace(/\{\{date\}\}/g, isoDate)
+      .replace(/\{\{isoDate\}\}/g, isoDate)
+      .replace(/\{\{dateFormatted\}\}/g, dateFormatted)
+      .replace(/\{\{tag\}\}/g, fm.tag)
+      .replace(/\{\{tagClass\}\}/g, fm.tagClass || '')
+      .replace(/\{\{keywords\}\}/g, keywords)
+      .replace(/\{\{image\}\}/g, imageUrl)
+      .replace(/\{\{toc\}\}/g, tocHtml)
+      .replace(/\{\{content\}\}/g, htmlContent)
+      .replace(/\{\{wordCountText\}\}/g, wordCountText)
+      .replace(/\{\{readingTimeText\}\}/g, readingTimeText)
+      .replace(/\{\{prevNextHtml\}\}/g, prevNextHtml)
+      .replace(/\{\{lang\}\}/g, isEn ? 'en' : 'zh-CN')
+      .replace(/\{\{articles_link\}\}/g, isEn ? '/en/articles/' : '/articles/')
+      .replace(/\{\{articles_prefix\}\}/g, isEn ? '/en' : '')
+      .replace(/\{\{encodedTitle\}\}/g, encodeURIComponent(fm.title))
+      .replace(/\{\{encodedUrl\}\}/g, encodeURIComponent('https://ifnodoraemon.github.io' + (isEn ? '/en' : '') + '/articles/' + fm.slug + '/'))
+      .replace(/\{\{breadcrumb_articles\}\}/g, isEn ? 'Articles' : '文章')
+      .replace(/\{\{return_text\}\}/g, isEn ? '← Back to Articles' : '← 返回文章列表')
+      .replace(/\{\{meta\.siteName\}\}/g, isEn ? enLocales.meta.siteName : zhLocales.meta.siteName);
+
+    // Write output
+    const BUILD_OUT_DIR = path.join(ROOT, '.temp_build');
+    const outDirBase = isEn ? path.join(BUILD_OUT_DIR, 'en', 'articles', fm.slug) : path.join(BUILD_OUT_DIR, 'articles', fm.slug);
+    fs.mkdirSync(outDirBase, { recursive: true });
+    fs.writeFileSync(path.join(outDirBase, 'index.html'), html, 'utf-8');
+    
+    const articleData = {
+      ...fm,
+      isoDate,
+      dateFormatted,
+      isEn,
+      meta: isEn ? enLocales.meta : zhLocales.meta
+    };
+    
+    processed.push(articleData);
+    console.log(`  ✓ ${file} → ${isEn ? 'en/' : ''}articles/${fm.slug}/index.html`);
+  }
+  return processed;
+}
+
+const articles = processArticles(zhArticlesList, false);
+const articlesEn = processArticles(enArticlesList, true);
 
 // ── Generate articles listing page ──
 generateListingPage(articles, false);

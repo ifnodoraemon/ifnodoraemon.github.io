@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag tag-emerald">AI Agent</span>
             <time datetime="2026-03-05">2026.03.05</time>
+            <span class="meta-divider">•</span>
+            <span>1117 words</span>
+            <span class="meta-divider">•</span>
+            <span>5 min read</span>
           </div>
           <h1>Building AI Agent Applications from Scratch</h1>
           <p class="article-detail-desc">A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.</p>
@@ -158,9 +162,18 @@ graph LR
 </pre>
 <h2 id="implementation-steps">Implementation Steps</h2>
 <h3 id="step-1-install-dependencies">Step 1: Install Dependencies</h3>
-<pre><code class="language-bash">pip install langchain langchain-anthropic tavily-python</code></pre>
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-bash">pip install langchain langchain-anthropic tavily-python</code></pre>
+</div>
 <h3 id="step-2-define-tools">Step 2: Define Tools</h3>
-<pre><code class="language-python">from langchain.tools import tool
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from langchain.tools import tool
 from datetime import datetime
 
 @tool
@@ -185,9 +198,14 @@ def execute_python(code: str) -&gt; str:
         capture_output=True, text=True, timeout=10
     )
     return result.stdout or result.stderr</code></pre>
+</div>
 <h3 id="step-3-building-a-state-machine-with-langgraph-stategraph">Step 3: Building a State Machine with LangGraph (StateGraph)</h3>
 <p>Production-grade Agents in 2026 have completely abandoned black-box <code>AgentExecutor</code> abstractions. Instead, the paradigm has shifted to directed graphs centered around <strong>State Machines</strong>. This architecture provides extreme controllability and enforces strict data flow (State Schema).</p>
-<pre><code class="language-python">from typing import TypedDict, Annotated
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, END
 from langgraph.prebuilt import ToolNode
 from langchain_core.messages import AnyMessage, add_messages
@@ -218,12 +236,18 @@ workflow.add_edge(&quot;tools&quot;, &quot;agent&quot;)
 
 # 5. Compile into an Executable Application
 app = workflow.compile()</code></pre>
+</div>
 <h3 id="step-4-execution-and-tracing">Step 4: Execution and Tracing</h3>
 <p>With the graph architecture, we can precisely trace every state transition step:</p>
-<pre><code class="language-python">inputs = {&quot;messages&quot;: [(&quot;user&quot;, &quot;Help me find the latest release date for foundation models.&quot;)]}
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">inputs = {&quot;messages&quot;: [(&quot;user&quot;, &quot;Help me find the latest release date for foundation models.&quot;)]}
 for event in app.stream(inputs, stream_mode=&quot;values&quot;):
     message = event[&quot;messages&quot;][-1]
     message.pretty_print() # Clearly inspect every step of Thought -&gt; Action -&gt; Observation</code></pre>
+</div>
 <h2 id="model-selection-recommendations">Model Selection Recommendations</h2>
 <table>
 <thead>
@@ -266,7 +290,11 @@ for event in app.stream(inputs, stream_mode=&quot;values&quot;):
 <p>In real-world production environments, an Agent might encounter API limits, database locks, or asynchronous jobs that take hours to complete. A naive synchronous architecture will instantly collapse. Here are the most hardcore industry practices:</p>
 <h3 id="1-cross-session-persistence-interruption-recovery-redis-checkpointer">1. Cross-Session Persistence & Interruption Recovery (Redis Checkpointer)</h3>
 <p>To ensure an Agent remembers a user&#39;s context even after server restarts, or to pause execution pending human approval (Human-in-the-loop) before high-risk operations (like transferring funds), a Checkpointer is strictly mandatory. The high-concurrency standard for 2026 is using <strong>RedisSaver</strong>, achieving sub-millisecond state serialization.</p>
-<pre><code class="language-python">from langgraph.checkpoint.redis import RedisSaver
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from langgraph.checkpoint.redis import RedisSaver
 import redis
 
 # Establish the underlying Redis connection pool
@@ -285,6 +313,7 @@ with RedisSaver(redis_conn) as checkpointer:
     # The Agent will automatically suspend before the 'tools' node; state is safely stored in Redis
     for event in app.stream(inputs, config=config):
         print(event)</code></pre>
+</div>
 <h3 id="2-async-event-driven-orchestration-for-long-running-tasks-temporal">2. Async Event-Driven Orchestration for Long-Running Tasks (Temporal)</h3>
 <p>Because standard HTTP requests usually timeout after 60 seconds, a synchronous blocking architecture will inevitably crash if your Agent needs to run in the background to scrape 100 webpages and generate a comprehensive financial report. The industry (e.g., OpenAI&#39;s Codex architecture) has shifted heavily towards using <strong>Temporal</strong> as the underlying durable workflow orchestration engine.</p>
 <p><strong>High-Concurrency Disaster Recovery Architecture:</strong></p>
@@ -320,6 +349,15 @@ with RedisSaver(redis_conn) as checkpointer:
             </div>
           </div>
         </div>
+        <div class="article-prev-next">
+        <a href="/en/articles/rag-in-practice/" class="prev-next-link prev-link">
+          <span class="pn-label">← Prev</span>
+          <span class="pn-title">Retrieval-Augmented Generation (RAG) in Practice</span>
+        </a>
+        <a href="/en/articles/ai-trends-2026/" class="prev-next-link next-link">
+          <span class="pn-label">Next →</span>
+          <span class="pn-title">Deep Dive into 6 AI Foundation Model Trends in 2026</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/en/articles/" class="btn-ghost">← Back to Articles</a>
           <div class="share-buttons">
@@ -344,8 +382,16 @@ with RedisSaver(redis_conn) as checkpointer:
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

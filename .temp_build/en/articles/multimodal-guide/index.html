@@ -106,6 +106,10 @@
           <div class="card-meta">
             <span class="tag tag-rose">Multimodal</span>
             <time datetime="2026-02-28">2026.02.28</time>
+            <span class="meta-divider">•</span>
+            <span>1264 words</span>
+            <span class="meta-divider">•</span>
+            <span>6 min read</span>
           </div>
           <h1>Multimodal AI Models Starter Guide</h1>
           <p class="article-detail-desc">Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.</p>
@@ -187,7 +191,11 @@
 In production environments, <strong>it is absolutely forbidden for the frontend to upload high-definition raw images directly to the native API</strong>.
 You must execute intelligent Downscaling at the backend middleware layer: For invoice OCR or form recognition, capping at 1024px is ample. For simple object classification or UI color detection, compressing it down to 512px (170 tokens) instantly slashes 90% off your cost grid.</p>
 <p><strong>Practical Application: Downsampling Image Processing Architecture</strong></p>
-<pre><code class="language-python">from PIL import Image
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">from PIL import Image
 import anthropic
 import io
 
@@ -202,9 +210,14 @@ def resize_for_llm(img_path, max_edge=1024):
     buf = io.BytesIO()
     img.save(buf, format=&quot;JPEG&quot;, quality=85)
     return buf.getvalue() # Passing THIS binary stream to the API drastically drops costs</code></pre>
+</div>
 <h3 id="2-video-understanding-gemini-s-exclusive-advantage">2. Video Understanding (Gemini's Exclusive Advantage)</h3>
 <p>Gemini 3.1 Pro&#39;s video understanding capability is currently the most advanced:</p>
-<pre><code class="language-python">import google.generativeai as genai
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">import google.generativeai as genai
 
 model = genai.GenerativeModel(&quot;gemini-3.1-pro&quot;)
 
@@ -219,6 +232,7 @@ response = model.generate_content([
     &quot;2. What are the interaction highlights in the demo?\n&quot;
     &quot;3. Any suggestions for improvement from a UX perspective?&quot;
 ])</code></pre>
+</div>
 <p>Typical use cases for video understanding:</p>
 <ul>
 <li><strong>Meeting Minutes</strong>: Automatically summarizing key decisions and to-dos from video meetings</li>
@@ -246,7 +260,11 @@ Native multimodal models entirely skip the intermediate text-translation middlem
 </ul>
 <h2 id="multimodal-prompting-tips">Multimodal Prompting Tips</h2>
 <h3 id="mixed-image-text-prompts">Mixed Image & Text Prompts</h3>
-<pre><code class="language-text">[Image 1: Product prototype screenshot]
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">[Image 1: Product prototype screenshot]
 [Image 2: Competitor comparison screenshot]
 
 Please compare and analyze the UI design of the two products from the following dimensions:
@@ -256,15 +274,25 @@ Please compare and analyze the UI design of the two products from the following 
 4. UX Score (1-10)
 
 Output the comparison results in a table format.</code></pre>
+</div>
 <h3 id="multimodal-in-multi-turn-conversations">Multimodal in Multi-turn Conversations</h3>
-<pre><code class="language-text">Turn 1: [Upload Architecture Diagram] &quot;Please interpret this system architecture.&quot;
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-text">Turn 1: [Upload Architecture Diagram] &quot;Please interpret this system architecture.&quot;
 Turn 2: &quot;What are the issues with this design under high concurrency?&quot;
 Turn 3: [Upload Performance Monitoring Screenshot] &quot;Based on this monitoring data, where is the bottleneck?&quot;</code></pre>
+</div>
 <h2 id="enterprise-landing-multimodal-structured-extraction-engine">Enterprise Landing: Multimodal Structured Extraction Engine</h2>
 <p>In real-world applications, companies need stable, parsable structured data, not paragraphs of prose descriptions. The best practice in 2026 combines <strong>Structured Outputs</strong> to build automated pipelines.</p>
 <h3 id="case-study-automated-invoice-expense-review-system">Case Study: Automated Invoice & Expense Review System</h3>
 <p>Traditional OCR only extracts text, whereas multimodal LLMs can directly understand the semantic structure of invoices and even recognize physical receipts in photographs (e.g., a restaurant receipt).</p>
-<pre><code class="language-python">import instructor
+<div class="code-block-wrapper">
+  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  </button>
+  <pre><code class="language-python">import instructor
 from openai import OpenAI
 from pydantic import BaseModel, Field
 
@@ -294,6 +322,7 @@ invoice_info = client.chat.completions.create(
 )
 
 print(invoice_info.model_dump_json(indent=2))</code></pre>
+</div>
 <h3 id="key-challenges-in-multimodal-pipelines">Key Challenges in Multimodal Pipelines</h3>
 <ul>
 <li><strong>Concurrency &amp; Retry Mechanisms</strong>: Because image processing is time-consuming, production environments must process requests asynchronously using message queues (like RabbitMQ / Kafka) and implement automatic retries on <code>json_decode_error</code>.</li>
@@ -364,6 +393,15 @@ print(invoice_info.model_dump_json(indent=2))</code></pre>
             </div>
           </div>
         </div>
+        <div class="article-prev-next">
+        <a href="/en/articles/fine-tuning-guide/" class="prev-next-link prev-link">
+          <span class="pn-label">← Prev</span>
+          <span class="pn-title">A Comprehensive Guide to LLM Fine-Tuning Workflows</span>
+        </a>
+        <a href="/en/articles/model-comparison-2026/" class="prev-next-link next-link">
+          <span class="pn-label">Next →</span>
+          <span class="pn-title">2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</span>
+        </a></div>
         <div class="article-nav fade-in">
           <a href="/en/articles/" class="btn-ghost">← Back to Articles</a>
           <div class="share-buttons">
@@ -388,8 +426,16 @@ print(invoice_info.model_dump_json(indent=2))</code></pre>
       </div>
     </article>
   </main>
+  
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
   <footer id="site-footer" class="footer"></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
