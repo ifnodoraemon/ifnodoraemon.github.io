@@ -180,6 +180,7 @@ function buildPages() {
     let outEnDir = path.join(BUILD_OUT_DIR, 'en');
 
     if (pageName === '404') {
+      fs.mkdirSync(outEnDir, { recursive: true });
       fs.writeFileSync(path.join(BUILD_OUT_DIR, '404.html'), zhHtml, 'utf-8');
       fs.writeFileSync(path.join(outEnDir, '404.html'), enHtml, 'utf-8');
       console.log(`  ✓ Built /404.html and /en/404.html`);
