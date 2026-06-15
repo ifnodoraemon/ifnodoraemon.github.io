@@ -127,9 +127,9 @@
       },
       {
         "title": "无限上下文",
-        "desc": "本地分析海量日志库或超大规模视频集",
+        "desc": "通过 API 分析海量日志库或超大规模视频集",
         "badge": "无界",
-        "reason": "Llama 4 Scout 为开源生态带来了史无前例的 1000 万 Token 上下文。"
+        "reason": "Llama 4 Scout 带来了史无前例的 1000 万 Token 上下文，但转为了闭源 API 模式。"
       }
     ],
     "details": [
@@ -223,7 +223,7 @@
         "icon": "🦙",
         "name": "Llama 4 Scout",
         "meta": "Meta · 2025.04.05 发布",
-        "desc": "Meta 的 Llama 4 Scout 为开源生态带来了史无前例的 1000 万 Token 超长上下文能力。",
+        "desc": "Meta 的 Llama 4 Scout 带来了史无前例的 1000 万 Token 超长上下文能力，全面转向闭源 API 模式。",
         "specs": [
           {
             "label": "上下文",
@@ -231,7 +231,7 @@
           },
           {
             "label": "优势",
-            "value": "无限上下文 · 本地部署友好"
+            "value": "无限上下文 · 闭源 API"
           }
         ]
       }
