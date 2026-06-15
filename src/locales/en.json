@@ -127,9 +127,9 @@
       },
       {
         "title": "Infinite Context",
-        "desc": "Processing entire massive libraries or video datasets via API",
+        "desc": "Processing entire massive libraries or video datasets locally",
         "badge": "Limitless",
-        "reason": "Llama 4 Scout introduces an unprecedented 10M context window via its closed-source API."
+        "reason": "Llama 4 Scout introduces an unprecedented 10M context window to the open ecosystem."
       }
     ],
     "details": [
@@ -223,7 +223,7 @@
         "icon": "🦙",
         "name": "Llama 4 Scout",
         "meta": "Meta · Released 2025.04.05",
-        "desc": "Meta's Llama 4 Scout introduces an unprecedented 10M token context window as a closed-source API.",
+        "desc": "Meta's Llama 4 Scout introduces an unprecedented 10M token context window to the open-weight ecosystem.",
         "specs": [
           {
             "label": "Context",
@@ -231,7 +231,7 @@
           },
           {
             "label": "Strengths",
-            "value": "Infinite Context · API Access"
+            "value": "Infinite Context · Local Deploy"
           }
         ]
       }
@@ -292,7 +292,7 @@
       {
         "date": "2025.04.05",
         "name": "Llama 4 Scout",
-        "desc": "Meta introduces an unprecedented 10M context window via its closed-source API",
+        "desc": "Meta releases 10M context window open model",
         "latest": false
       },
       {
