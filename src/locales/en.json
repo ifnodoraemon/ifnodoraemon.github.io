@@ -31,65 +31,65 @@
       "Dimension",
       "GPT-5.5",
       "Claude Fable 5",
-      "Qwen 3 235B",
-      "Gemini 3.5 Pro"
+      "Gemini 3.5 Flash",
+      "DeepSeek V4 Pro",
+      "Qwen 3.7 Max",
+      "Llama 4 Scout"
     ],
     "tableRows": [
       [
         "Vendor",
         "OpenAI",
         "Anthropic",
-        "Qwen Team",
-        "Google"
+        "Google",
+        "DeepSeek",
+        "Alibaba",
+        "Meta"
       ],
       [
         "Release Date",
         "2026.06.02",
         "2026.06.09",
+        "2026.05.20",
+        "2026.05.10",
         "2026.06.10",
-        "2026.06.05"
+        "2026.04.15"
       ],
       [
         "Context",
         "512K",
         "2M",
+        "1M",
         "128K",
-        "2M"
+        "256K",
+        "10M"
       ],
       [
-        "Native Multimodal",
+        "Multimodal",
         "Omnimodal",
-        "Text/Image/Visual",
         "Text/Image",
-        "Omnimodal"
+        "Omnimodal",
+        "Text/Image",
+        "Text/Image",
+        "Text/Image"
       ],
       [
         "Coding",
         "★★★★★",
         "★★★★★",
         "★★★★☆",
-        "★★★★★"
-      ],
-      [
-        "Reasoning Depth",
-        "★★★★★",
         "★★★★★",
         "★★★★★",
         "★★★★☆"
       ],
       [
-        "Agentic Logic",
+        "Reasoning",
         "★★★★★",
         "★★★★★",
         "★★★★☆",
+        "★★★★★",
+        "★★★★★",
         "★★★★☆"
-      ],
-      [
-        "Speed",
-        "★★★★☆",
-        "★★★★☆",
-        "★★★★★",
-        "★★★★★"
       ]
     ],
     "sceneTitle": "Recommendations",
@@ -141,20 +141,12 @@
         "desc": "GPT-5.5 is OpenAI's latest flagship, integrating state-of-the-art reasoning and full native omnimodality.",
         "specs": [
           {
-            "label": "Context Window",
+            "label": "Context",
             "value": "512K tokens"
           },
           {
-            "label": "Multimodal Support",
-            "value": "Text / Image / Audio / Video"
-          },
-          {
-            "label": "Core Strengths",
+            "label": "Strengths",
             "value": "Reasoning · Agentic Workflows · Omni"
-          },
-          {
-            "label": "Use Cases",
-            "value": "Complex Reasoning · Code Gen · Planning Tasks"
           }
         ]
       },
@@ -166,45 +158,80 @@
         "desc": "Claude Fable 5 leads in software engineering and safety, featuring a massive 2M context window.",
         "specs": [
           {
-            "label": "Context Window",
+            "label": "Context",
             "value": "2M tokens"
           },
           {
-            "label": "Multimodal Support",
-            "value": "Text / Image / Visual Reasoning"
+            "label": "Strengths",
+            "value": "Computer Use · Agentic Logic"
+          }
+        ]
+      },
+      {
+        "id": "gemini",
+        "icon": "✨",
+        "name": "Gemini 3.5 Flash",
+        "meta": "Google · Released 2026.05.20",
+        "desc": "Google's 2026 speed champion, offering a 1M context window and unmatched efficiency for large-scale operations.",
+        "specs": [
+          {
+            "label": "Context",
+            "value": "1M tokens"
           },
           {
-            "label": "Core Strengths",
-            "value": "Computer Use · Agentic Logic · Code Precision"
+            "label": "Strengths",
+            "value": "High Speed · Cost-Effective · Omnimodal"
+          }
+        ]
+      },
+      {
+        "id": "deepseek",
+        "icon": "🐳",
+        "name": "DeepSeek V4 Pro",
+        "meta": "DeepSeek · Released 2026.05.10",
+        "desc": "DeepSeek V4 Pro is the new 2026 standard for open-weight reasoning and coding, completely outperforming its predecessors.",
+        "specs": [
+          {
+            "label": "Context",
+            "value": "128K tokens"
           },
           {
-            "label": "Use Cases",
-            "value": "Agentic Workflows · Large Codebases"
+            "label": "Strengths",
+            "value": "Deep Reasoning · Coding Expert"
           }
         ]
       },
       {
         "id": "qwen",
         "icon": "🌐",
-        "name": "Qwen 3 235B",
-        "meta": "Qwen Team · Released 2026.06.10",
-        "desc": "Qwen 3 235B is the reigning champion of open-source models, offering incredible reasoning and coding performance under the Apache 2.0 license.",
+        "name": "Qwen 3.7 Max",
+        "meta": "Alibaba · Released 2026.06.10",
+        "desc": "Qwen 3.7 Max stands at the absolute frontier of open-source models in 2026, delivering top-tier performance.",
         "specs": [
           {
-            "label": "Context Window",
-            "value": "128K tokens"
+            "label": "Context",
+            "value": "256K tokens"
           },
           {
-            "label": "Multimodal Support",
-            "value": "Text / Image"
+            "label": "Strengths",
+            "value": "All-Around Performance · Multi-Lingual"
+          }
+        ]
+      },
+      {
+        "id": "llama",
+        "icon": "🦙",
+        "name": "Llama 4 Scout",
+        "meta": "Meta · Released 2026.04.15",
+        "desc": "Meta's Llama 4 Scout introduces an unprecedented 10M token context window to the open-weight ecosystem.",
+        "specs": [
+          {
+            "label": "Context",
+            "value": "10M tokens"
           },
           {
-            "label": "Core Strengths",
-            "value": "Open Weights · Top Reasoning · Cost-Effective"
-          },
-          {
-            "label": "Use Cases",
-            "value": "Enterprise Deployment · Advanced Reasoning"
+            "label": "Strengths",
+            "value": "Infinite Context · Local Deploy"
           }
         ]
       }
@@ -271,19 +298,19 @@
       {
         "date": "2026.04.15",
         "name": "Llama 4 Scout",
-        "desc": "Meta's 10M context window open model",
+        "desc": "Meta releases 10M context window open model",
         "latest": false
       },
       {
         "date": "2026.05.10",
-        "name": "DeepSeek R1",
-        "desc": "MIT licensed model dominating complex reasoning benchmarks",
+        "name": "DeepSeek V4 Pro",
+        "desc": "Next generation reasoning model released",
         "latest": false
       },
       {
         "date": "2026.05.20",
-        "name": "Gemini 3.5 Pro",
-        "desc": "Google's 2M context native omnimodal upgrade",
+        "name": "Gemini 3.5 Flash",
+        "desc": "Google's 1M context native omnimodal efficiency upgrade",
         "latest": false
       },
       {
@@ -300,7 +327,7 @@
       },
       {
         "date": "2026.06.10",
-        "name": "Qwen 3 235B",
+        "name": "Qwen 3.7 Max",
         "desc": "The most powerful open-source foundation model released",
         "latest": true
       }

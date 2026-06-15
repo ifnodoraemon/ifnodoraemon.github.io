@@ -31,65 +31,65 @@
       "维度",
       "GPT-5.5",
       "Claude Fable 5",
-      "Qwen 3 235B",
-      "Gemini 3.5 Pro"
+      "Gemini 3.5 Flash",
+      "DeepSeek V4 Pro",
+      "Qwen 3.7 Max",
+      "Llama 4 Scout"
     ],
     "tableRows": [
       [
         "厂商",
         "OpenAI",
         "Anthropic",
-        "Qwen Team",
-        "Google"
+        "Google",
+        "DeepSeek",
+        "阿里巴巴",
+        "Meta"
       ],
       [
         "发布日期",
         "2026.06.02",
         "2026.06.09",
+        "2026.05.20",
+        "2026.05.10",
         "2026.06.10",
-        "2026.06.05"
+        "2026.04.15"
       ],
       [
         "上下文",
         "512K",
         "2M",
+        "1M",
         "128K",
-        "2M"
+        "256K",
+        "10M"
       ],
       [
-        "原生多模态",
+        "多模态",
         "全模态",
-        "文本/图像/视觉推理",
         "文本/图像",
-        "全模态"
+        "全模态",
+        "文本/图像",
+        "文本/图像",
+        "文本/图像"
       ],
       [
         "代码能力",
         "★★★★★",
         "★★★★★",
         "★★★★☆",
-        "★★★★★"
+        "★★★★★",
+        "★★★★★",
+        "★★★★☆"
       ],
       [
         "推理深度",
         "★★★★★",
         "★★★★★",
+        "★★★★☆",
+        "★★★★★",
         "★★★★★",
         "★★★★☆"
-      ],
-      [
-        "Agentic",
-        "★★★★★",
-        "★★★★★",
-        "★★★★☆",
-        "★★★★☆"
-      ],
-      [
-        "响应速度",
-        "★★★★☆",
-        "★★★★☆",
-        "★★★★★",
-        "★★★★★"
       ]
     ],
     "sceneTitle": "场景推荐",
@@ -138,23 +138,15 @@
         "icon": "🧠",
         "name": "GPT-5.5",
         "meta": "OpenAI · 2026.06.02 发布",
-        "desc": "GPT-5.5 是 OpenAI 最新旗舰模型，融合了顶尖的深度推理能力与全原生多模态支持。",
+        "desc": "GPT-5.5 是 OpenAI 的 2026 旗舰，融合了顶尖的深度推理能力与全原生多模态支持。",
         "specs": [
           {
-            "label": "上下文窗口",
+            "label": "上下文",
             "value": "512K tokens"
           },
           {
-            "label": "多模态支持",
-            "value": "文本 / 图像 / 音频 / 视频"
-          },
-          {
-            "label": "核心优势",
-            "value": "深度推理 · Agent 工作流 · 全模态融合"
-          },
-          {
-            "label": "适用场景",
-            "value": "复杂推理 · 代码生成 · 规划任务"
+            "label": "优势",
+            "value": "深度推理 · Agent 工作流"
           }
         ]
       },
@@ -163,48 +155,83 @@
         "icon": "🎭",
         "name": "Claude Fable 5",
         "meta": "Anthropic · 2026.06.09 发布",
-        "desc": "Claude Fable 5 在软件工程和安全性方面遥遥领先，并配备了高达 2M 的超长上下文窗口。",
+        "desc": "Claude Fable 5 在软件工程和安全性方面遥遥领先，并配备了高达 2M 的超长上下文。",
         "specs": [
           {
-            "label": "上下文窗口",
+            "label": "上下文",
             "value": "2M tokens"
           },
           {
-            "label": "多模态支持",
-            "value": "文本 / 图像 / 视觉推理"
+            "label": "优势",
+            "value": "Computer Use · 代码精度"
+          }
+        ]
+      },
+      {
+        "id": "gemini",
+        "icon": "✨",
+        "name": "Gemini 3.5 Flash",
+        "meta": "Google · 2026.05.20 发布",
+        "desc": "Google 最新的速度王者，提供 1M 上下文，在大规模高频任务中效率无敌。",
+        "specs": [
+          {
+            "label": "上下文",
+            "value": "1M tokens"
           },
           {
-            "label": "核心优势",
-            "value": "Computer Use · Agent 逻辑 · 代码精度"
+            "label": "优势",
+            "value": "极速响应 · 高性价比 · 全模态"
+          }
+        ]
+      },
+      {
+        "id": "deepseek",
+        "icon": "🐳",
+        "name": "DeepSeek V4 Pro",
+        "meta": "DeepSeek · 2026.05.10 发布",
+        "desc": "DeepSeek V4 Pro 奠定了 2026 年开源代码与推理模型的新标准，彻底超越了此前的 R1 等老旧版本。",
+        "specs": [
+          {
+            "label": "上下文",
+            "value": "128K tokens"
           },
           {
-            "label": "适用场景",
-            "value": "Agentic 工作流 · 超大代码库重构"
+            "label": "优势",
+            "value": "深度推理 · 代码生成专家"
           }
         ]
       },
       {
         "id": "qwen",
         "icon": "🌐",
-        "name": "Qwen 3 235B",
-        "meta": "Qwen Team · 2026.06.10 发布",
-        "desc": "Qwen 3 235B 是目前开源领域的绝对霸主，基于 Apache 2.0 协议提供极具竞争力的推理和代码性能。",
+        "name": "Qwen 3.7 Max",
+        "meta": "阿里巴巴 · 2026.06.10 发布",
+        "desc": "Qwen 3.7 Max 稳居 2026 年开源生态最前沿，提供全面且顶尖的各领域能力。",
         "specs": [
           {
-            "label": "上下文窗口",
-            "value": "128K tokens"
+            "label": "上下文",
+            "value": "256K tokens"
           },
           {
-            "label": "多模态支持",
-            "value": "文本 / 图像"
+            "label": "优势",
+            "value": "全能表现 · 多语言支持"
+          }
+        ]
+      },
+      {
+        "id": "llama",
+        "icon": "🦙",
+        "name": "Llama 4 Scout",
+        "meta": "Meta · 2026.04.15 发布",
+        "desc": "Meta 的 Llama 4 Scout 为开源生态带来了史无前例的 1000 万 Token 超长上下文能力。",
+        "specs": [
+          {
+            "label": "上下文",
+            "value": "10M tokens"
           },
           {
-            "label": "核心优势",
-            "value": "开源权重 · 顶级推理 · 高性价比"
-          },
-          {
-            "label": "适用场景",
-            "value": "企业私有化部署 · 高阶推理场景"
+            "label": "优势",
+            "value": "无限上下文 · 本地部署友好"
           }
         ]
       }
@@ -276,14 +303,14 @@
       },
       {
         "date": "2026.05.10",
-        "name": "DeepSeek R1",
-        "desc": "MIT 协议开源，横扫复杂推理榜单",
+        "name": "DeepSeek V4 Pro",
+        "desc": "DeepSeek 发布新一代代码与推理之王",
         "latest": false
       },
       {
         "date": "2026.05.20",
-        "name": "Gemini 3.5 Pro",
-        "desc": "Google 2M 上下文原生全模态升级版",
+        "name": "Gemini 3.5 Flash",
+        "desc": "Google 1M 上下文效率之王发布",
         "latest": false
       },
       {
@@ -295,13 +322,13 @@
       {
         "date": "2026.06.09",
         "name": "Claude Fable 5",
-        "desc": "Anthropic 最新神话级受限模型",
+        "desc": "Anthropic 最新神话级模型发布",
         "latest": false
       },
       {
         "date": "2026.06.10",
-        "name": "Qwen 3 235B",
-        "desc": "史上最强开源基座模型发布",
+        "name": "Qwen 3.7 Max",
+        "desc": "目前最强开源基座模型发布",
         "latest": true
       }
     ],
