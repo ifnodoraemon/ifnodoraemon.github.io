@@ -21,7 +21,7 @@
   "models": {
     "pageTag": "MODEL COMPARISON",
     "pageTitle": "AI Models Comprehensive Comparison",
-    "pageDesc": "Deep dive into the capability boundaries and use cases of the three mainstream AI models of 2026",
+    "pageDesc": "Deep dive into the capability boundaries of the cutting-edge 2026 models",
     "heroTag": "MODEL DATABASE",
     "heroTitle": "Model Database",
     "heroDesc": "Tracking the parameters, capability boundaries, and use cases of cutting-edge AI systems, providing neutral benchmark data.",
@@ -29,32 +29,37 @@
     "tableSubtitle": "Benchmarks based on the latest 2026 architectures",
     "tableHeaders": [
       "Dimension",
-      "GPT-5.4",
-      "Claude Sonnet 4.6",
-      "Gemini 3.1 Pro"
+      "GPT-5.5",
+      "Claude Fable 5",
+      "Qwen 3 235B",
+      "Gemini 3.5 Pro"
     ],
     "tableRows": [
       [
         "Vendor",
         "OpenAI",
         "Anthropic",
-        "Google DeepMind"
+        "Qwen Team",
+        "Google"
       ],
       [
         "Release Date",
-        "2026.03.05",
-        "2026.02.17",
-        "2026.02.19"
+        "2026.06.02",
+        "2026.06.09",
+        "2026.06.10",
+        "2026.06.05"
       ],
       [
         "Context",
-        "256K",
-        "1M (Beta)",
+        "512K",
+        "2M",
+        "128K",
         "2M"
       ],
       [
         "Native Multimodal",
-        "Text/Image/Audio",
+        "Omnimodal",
+        "Text/Image/Visual",
         "Text/Image",
         "Omnimodal"
       ],
@@ -62,30 +67,28 @@
         "Coding",
         "★★★★★",
         "★★★★★",
+        "★★★★☆",
         "★★★★★"
       ],
       [
         "Reasoning Depth",
         "★★★★★",
         "★★★★★",
-        "★★★★★"
+        "★★★★★",
+        "★★★★☆"
       ],
       [
         "Agentic Logic",
-        "★★★★☆",
         "★★★★★",
+        "★★★★★",
+        "★★★★☆",
         "★★★★☆"
       ],
       [
         "Speed",
         "★★★★☆",
-        "★★★★★",
-        "★★★★★"
-      ],
-      [
-        "Cost-Effectiveness",
         "★★★★☆",
-        "★★★☆☆",
+        "★★★★★",
         "★★★★★"
       ]
     ],
@@ -133,67 +136,34 @@
       {
         "id": "gpt",
         "icon": "🧠",
-        "name": "GPT-5.4",
-        "meta": "OpenAI · Released 2026.03.05",
-        "desc": "GPT-5.4 is OpenAI's latest flagship model, featuring standard, <strong>GPT-5.4 Thinking</strong> (deep reasoning), and <strong>GPT-5.4 Pro</strong> (highest performance API) variants. It integrates the Codex programming edge and supports Computer Use, excelling in coding, reasoning, and professional workflows.",
+        "name": "GPT-5.5",
+        "meta": "OpenAI · Released 2026.06.02",
+        "desc": "GPT-5.5 is OpenAI's latest flagship, integrating state-of-the-art reasoning and full native omnimodality.",
         "specs": [
           {
             "label": "Context Window",
-            "value": "256K tokens"
+            "value": "512K tokens"
           },
           {
             "label": "Multimodal Support",
-            "value": "Text / Image / Audio"
+            "value": "Text / Image / Audio / Video"
           },
           {
             "label": "Core Strengths",
-            "value": "Thinking Reasoning · Computer Use · Codex Integration"
-          },
-          {
-            "label": "API Pricing",
-            "value": "$2.50 / 1M input · $10.00 / 1M output"
+            "value": "Reasoning · Agentic Workflows · Omni"
           },
           {
             "label": "Use Cases",
-            "value": "Complex Reasoning · Code Gen · Planning Tasks · Pro Workflows"
+            "value": "Complex Reasoning · Code Gen · Planning Tasks"
           }
         ]
       },
       {
         "id": "claude",
         "icon": "🎭",
-        "name": "Claude Sonnet 4.6",
-        "meta": "Anthropic · Released 2026.02.17",
-        "desc": "Claude Sonnet 4.6 strikes a perfect balance between speed and intelligence, making it the best choice for daily tasks. Its enhanced coding capabilities and Computer Use make it a developer favorite. The sibling <strong>Claude Opus 4.6</strong> (2026.02.05) is Anthropic's most powerful model, specializing in complex Agent tasks and long-term planning.",
-        "specs": [
-          {
-            "label": "Context Window",
-            "value": "1M tokens (Beta)"
-          },
-          {
-            "label": "Multimodal Support",
-            "value": "Text / Image / Visual Reasoning"
-          },
-          {
-            "label": "Core Strengths",
-            "value": "Computer Use · Agentic Logic · Code Precision · Safety Alignment"
-          },
-          {
-            "label": "API Pricing",
-            "value": "$3.00 / 1M input · $15.00 / 1M output"
-          },
-          {
-            "label": "Use Cases",
-            "value": "Agentic Workflows · Large Codebases · Long Document Analysis · Safety-Sensitive Scenarios"
-          }
-        ]
-      },
-      {
-        "id": "gemini",
-        "icon": "✨",
-        "name": "Gemini 3.1 Pro",
-        "meta": "Google DeepMind · Released 2026.02.19",
-        "desc": "Gemini 3.1 Pro is Google's latest complex-problem-solving model, natively supporting text, image, audio, video, and code multimodal reasoning. It boasts the industry's largest 2M context window. Its sibling <strong>Gemini 3.1 Flash-Lite</strong> (2026.03.03) introduces the innovative Thinking Levels mechanism, allowing developers to adjust reasoning depth.",
+        "name": "Claude Fable 5",
+        "meta": "Anthropic · Released 2026.06.09",
+        "desc": "Claude Fable 5 leads in software engineering and safety, featuring a massive 2M context window.",
         "specs": [
           {
             "label": "Context Window",
@@ -201,19 +171,40 @@
           },
           {
             "label": "Multimodal Support",
-            "value": "Text / Image / Audio / Video / Code (Omnimodal)"
+            "value": "Text / Image / Visual Reasoning"
           },
           {
             "label": "Core Strengths",
-            "value": "Ultra-Long Context · Thinking Levels · Native Omnimodal · Search Integration"
-          },
-          {
-            "label": "API Pricing",
-            "value": "$1.25 / 1M input · $5.00 / 1M output"
+            "value": "Computer Use · Agentic Logic · Code Precision"
           },
           {
             "label": "Use Cases",
-            "value": "Ultra-Long Document Parsing · Video Analysis · Multimodal Chat · Enterprise Search Enhancement"
+            "value": "Agentic Workflows · Large Codebases"
+          }
+        ]
+      },
+      {
+        "id": "qwen",
+        "icon": "🌐",
+        "name": "Qwen 3 235B",
+        "meta": "Qwen Team · Released 2026.06.10",
+        "desc": "Qwen 3 235B is the reigning champion of open-source models, offering incredible reasoning and coding performance under the Apache 2.0 license.",
+        "specs": [
+          {
+            "label": "Context Window",
+            "value": "128K tokens"
+          },
+          {
+            "label": "Multimodal Support",
+            "value": "Text / Image"
+          },
+          {
+            "label": "Core Strengths",
+            "value": "Open Weights · Top Reasoning · Cost-Effective"
+          },
+          {
+            "label": "Use Cases",
+            "value": "Enterprise Deployment · Advanced Reasoning"
           }
         ]
       }
@@ -224,39 +215,39 @@
     "listingSearchPlaceholder": "Search articles...",
     "timeline": [
       {
-        "date": "2026.02.05",
-        "name": "Claude Opus 4.6",
-        "desc": "Anthropic's most powerful reasoning model, tailored for complex Agent tasks",
+        "date": "2026.04.15",
+        "name": "Llama 4 Scout",
+        "desc": "Meta's 10M context window open model",
         "latest": false
       },
       {
-        "date": "2026.02.17",
-        "name": "Claude Sonnet 4.6",
-        "desc": "Balance of speed and intelligence, 1M context window Beta",
+        "date": "2026.05.10",
+        "name": "DeepSeek R1",
+        "desc": "MIT licensed model dominating complex reasoning benchmarks",
         "latest": false
       },
       {
-        "date": "2026.02.19",
-        "name": "Gemini 3.1 Pro",
-        "desc": "2M context, native omnimodal support",
+        "date": "2026.05.20",
+        "name": "Gemini 3.5 Pro",
+        "desc": "Google's 2M context native omnimodal upgrade",
         "latest": false
       },
       {
-        "date": "2026.02.26",
-        "name": "Nano Banana 2",
-        "desc": "Gemini 3.1 series AI image generator update",
+        "date": "2026.06.02",
+        "name": "GPT-5.5",
+        "desc": "OpenAI flagship with built-in advanced agentic features",
         "latest": false
       },
       {
-        "date": "2026.03.03",
-        "name": "Gemini 3.1 Flash-Lite",
-        "desc": "Most cost-effective reasoning model, Thinking Levels mechanism",
+        "date": "2026.06.09",
+        "name": "Claude Fable 5",
+        "desc": "Anthropic's latest restricted tier model",
         "latest": false
       },
       {
-        "date": "2026.03.05",
-        "name": "GPT-5.4",
-        "desc": "Three variants released: Standard/Thinking/Pro, Computer Use",
+        "date": "2026.06.10",
+        "name": "Qwen 3 235B",
+        "desc": "The most powerful open-source foundation model released",
         "latest": true
       }
     ],
