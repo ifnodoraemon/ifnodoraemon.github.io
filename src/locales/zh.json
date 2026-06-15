@@ -99,37 +99,37 @@
         "title": "代码开发",
         "desc": "需要代码生成、重构、调试或开发辅助",
         "badge": "首选",
-        "reason": "GPT-5.4 集成 Codex 编程引擎，Claude 在代码精度上顶尖"
+        "reason": "DeepSeek V4 Pro 和 Claude Fable 5 在复杂代码精度和重构上领先。"
       },
       {
         "title": "Agent 工作流",
         "desc": "构建自主决策、多步执行的智能代理系统",
         "badge": "最强",
-        "reason": "业界最强的 Agentic 能力和 Computer Use"
+        "reason": "GPT-5.5 和 Claude Fable 5 提供业界最强的 Agentic 能力与 Computer Use。"
       },
       {
-        "title": "长文档分析",
+        "title": "超长上下文",
         "desc": "需要处理超长文本、完整代码库或大量数据",
         "badge": "推荐",
-        "reason": "2M 上下文窗口，业界最长"
+        "reason": "Claude Fable 5 提供 2M 窗口，Gemini 3.5 Flash 拥有极速的 1M 处理效率。"
       },
       {
-        "title": "多模态任务",
-        "desc": "需要图像理解、视频分析或音频处理",
+        "title": "开源主力",
+        "desc": "企业私有化部署，需要顶尖的开源基座能力",
         "badge": "全能",
-        "reason": "原生支持文本/图像/音频/视频/代码五模态"
+        "reason": "Qwen 3.7 Max 是目前最全面、最顶尖的开源全能选手。"
       },
       {
         "title": "复杂推理",
         "desc": "数学证明、逻辑分析、复杂规划任务",
         "badge": "极限",
-        "reason": "Thinking 模式展示完整推理链，准确率 94.7%"
+        "reason": "DeepSeek V4 Pro 与 GPT-5.5 提供了当前最强的深度推理逻辑。"
       },
       {
-        "title": "成本敏感",
-        "desc": "高调用量、预算有限的生产环境",
-        "badge": "经济",
-        "reason": "最优性价比 + Thinking Levels 灵活控制"
+        "title": "无限上下文",
+        "desc": "本地分析海量日志库或超大规模视频集",
+        "badge": "无界",
+        "reason": "Llama 4 Scout 为开源生态带来了史无前例的 1000 万 Token 上下文。"
       }
     ],
     "details": [

@@ -99,37 +99,37 @@
         "title": "Coding & Dev",
         "desc": "Require code generation, refactoring, debugging, or dev assistance",
         "badge": "Top Pick",
-        "reason": "GPT-5.4 integrates Codex engine, whilst Claude offers top coding accuracy"
+        "reason": "DeepSeek V4 Pro and Claude Fable 5 lead in complex coding accuracy and refactoring."
       },
       {
         "title": "Agent Workflows",
         "desc": "Build autonomous, multi-step intelligent agent systems",
         "badge": "Strongest",
-        "reason": "Industry-leading Agentic capabilities and Computer Use"
+        "reason": "GPT-5.5 and Claude Fable 5 offer industry-leading agentic capabilities and robust Computer Use."
       },
       {
-        "title": "Long Document Analysis",
+        "title": "Long Context",
         "desc": "Need to process ultra-long texts, full codebases, or massive data",
         "badge": "Recommended",
-        "reason": "2M Context Window, the longest in the industry"
+        "reason": "Claude Fable 5 offers a 2M window; Gemini 3.5 Flash brings unmatched 1M efficiency."
       },
       {
-        "title": "Multimodal Tasks",
-        "desc": "Need image understanding, video analysis, or audio processing",
+        "title": "Open Source Leader",
+        "desc": "Enterprise deployment needing high-end open-weight capability",
         "badge": "All-Rounder",
-        "reason": "Native support for text/image/audio/video/code"
+        "reason": "Qwen 3.7 Max is the absolute top-tier open-weight model for versatile tasks."
       },
       {
         "title": "Complex Reasoning",
         "desc": "Math proofs, logic analysis, complex planning tasks",
         "badge": "Extreme",
-        "reason": "Thinking mode reveals complete reasoning steps, 94.7% accuracy"
+        "reason": "DeepSeek V4 Pro and GPT-5.5 provide state-of-the-art deep reasoning logic."
       },
       {
-        "title": "Cost-Sensitive",
-        "desc": "High-volume API usage, budget-limited production environments",
-        "badge": "Economic",
-        "reason": "Highest cost-effectiveness + flexible Thinking Levels control"
+        "title": "Infinite Context",
+        "desc": "Processing entire massive libraries or video datasets locally",
+        "badge": "Limitless",
+        "reason": "Llama 4 Scout introduces an unprecedented 10M context window to the open ecosystem."
       }
     ],
     "details": [
