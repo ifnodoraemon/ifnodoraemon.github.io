@@ -29,12 +29,12 @@
     "tableSubtitle": "Benchmarks based on the latest 2026 architectures",
     "tableHeaders": [
       "Dimension",
-      "GPT-5.5",
-      "Claude Fable 5",
-      "Gemini 3.5 Flash",
-      "DeepSeek V4 Pro",
-      "Qwen 3.7 Max",
-      "Llama 4 Scout"
+      "GPT-4o",
+      "Claude 3.5 Sonnet",
+      "Gemini 1.5 Pro",
+      "DeepSeek R1",
+      "Qwen 2.5",
+      "Llama 3.1 405B"
     ],
     "tableRows": [
       [
@@ -48,30 +48,30 @@
       ],
       [
         "Release Date",
-        "2026.06.02",
-        "2026.06.09",
-        "2026.05.20",
-        "2026.05.10",
-        "2026.06.10",
-        "2026.04.15"
+        "2024.05.13",
+        "2024.06.20",
+        "2024.02.15",
+        "2025.01.20",
+        "2024.09.19",
+        "2024.07.23"
       ],
       [
         "Context",
-        "512K",
-        "2M",
-        "1M",
         "128K",
-        "256K",
-        "10M"
+        "200K",
+        "2M",
+        "128K",
+        "128K",
+        "128K"
       ],
       [
         "Multimodal",
         "Omnimodal",
         "Text/Image",
         "Omnimodal",
-        "Text/Image",
-        "Text/Image",
-        "Text/Image"
+        "Text",
+        "Text",
+        "Text"
       ],
       [
         "Coding",
@@ -79,16 +79,16 @@
         "★★★★★",
         "★★★★☆",
         "★★★★★",
-        "★★★★★",
+        "★★★★☆",
         "★★★★☆"
       ],
       [
         "Reasoning",
-        "★★★★★",
-        "★★★★★",
+        "★★★★☆",
+        "★★★★☆",
         "★★★★☆",
         "★★★★★",
-        "★★★★★",
+        "★★★★☆",
         "★★★★☆"
       ]
     ],
@@ -99,97 +99,46 @@
         "title": "Coding & Dev",
         "desc": "Require code generation, refactoring, debugging, or dev assistance",
         "badge": "Top Pick",
-        "reason": "DeepSeek V4 Pro and Claude Fable 5 lead in complex coding accuracy and refactoring."
+        "reason": "Claude 3.5 Sonnet and DeepSeek R1 are currently the top choices for complex coding."
       },
       {
         "title": "Agent Workflows",
         "desc": "Build autonomous, multi-step intelligent agent systems",
         "badge": "Strongest",
-        "reason": "GPT-5.5 and Claude Fable 5 offer industry-leading agentic capabilities and robust Computer Use."
+        "reason": "GPT-4o and Claude 3.5 Sonnet excel in precise tool-calling and API interactions."
       },
       {
         "title": "Long Context",
         "desc": "Need to process ultra-long texts, full codebases, or massive data",
         "badge": "Recommended",
-        "reason": "Claude Fable 5 offers a 2M window; Gemini 3.5 Flash brings unmatched 1M efficiency."
+        "reason": "Gemini 1.5 Pro is the undisputed leader here with up to 2 million tokens."
       },
       {
         "title": "Open Source Leader",
         "desc": "Enterprise deployment needing high-end open-weight capability",
         "badge": "All-Rounder",
-        "reason": "Qwen 3.7 Max is the absolute top-tier open-weight model for versatile tasks."
+        "reason": "Llama 3.1 405B and Qwen 2.5 72B offer flagship-level open-source performance."
       },
       {
         "title": "Complex Reasoning",
         "desc": "Math proofs, logic analysis, complex planning tasks",
         "badge": "Extreme",
-        "reason": "DeepSeek V4 Pro and GPT-5.5 provide state-of-the-art deep reasoning logic."
+        "reason": "DeepSeek R1 provides state-of-the-art open reasoning via Chain-of-Thought."
       },
       {
-        "title": "Infinite Context",
-        "desc": "Processing entire massive libraries or video datasets locally",
-        "badge": "Limitless",
-        "reason": "Llama 4 Scout introduces an unprecedented 10M context window to the open ecosystem."
+        "title": "Multimodal & Voice",
+        "desc": "Processing images, or requiring real-time low-latency voice",
+        "badge": "Omni",
+        "reason": "GPT-4o natively processes audio and video streams with incredible speed."
       }
     ],
     "details": [
       {
         "id": "gpt",
         "icon": "🧠",
-        "name": "GPT-5.5",
-        "meta": "OpenAI · Released 2026.06.02",
-        "desc": "GPT-5.5 is OpenAI's latest flagship, integrating state-of-the-art reasoning and full native omnimodality.",
-        "specs": [
-          {
-            "label": "Context",
-            "value": "512K tokens"
-          },
-          {
-            "label": "Strengths",
-            "value": "Reasoning · Agentic Workflows · Omni"
-          }
-        ]
-      },
-      {
-        "id": "claude",
-        "icon": "🎭",
-        "name": "Claude Fable 5",
-        "meta": "Anthropic · Released 2026.06.09",
-        "desc": "Claude Fable 5 leads in software engineering and safety, featuring a massive 2M context window.",
-        "specs": [
-          {
-            "label": "Context",
-            "value": "2M tokens"
-          },
-          {
-            "label": "Strengths",
-            "value": "Computer Use · Agentic Logic"
-          }
-        ]
-      },
-      {
-        "id": "gemini",
-        "icon": "✨",
-        "name": "Gemini 3.5 Flash",
-        "meta": "Google · Released 2026.05.20",
-        "desc": "Google's 2026 speed champion, offering a 1M context window and unmatched efficiency for large-scale operations.",
-        "specs": [
-          {
-            "label": "Context",
-            "value": "1M tokens"
-          },
-          {
-            "label": "Strengths",
-            "value": "High Speed · Cost-Effective · Omnimodal"
-          }
-        ]
-      },
-      {
-        "id": "deepseek",
-        "icon": "🐳",
-        "name": "DeepSeek V4 Pro",
-        "meta": "DeepSeek · Released 2026.05.10",
-        "desc": "DeepSeek V4 Pro is the new 2026 standard for open-weight reasoning and coding, completely outperforming its predecessors.",
+        "name": "GPT-4o",
+        "meta": "OpenAI · Released 2024.05.13",
+        "desc": "GPT-4o ('o' for 'omni') is a step towards much more natural human-computer interaction, accepting any combination of text, audio, image, and video.",
         "specs": [
           {
             "label": "Context",
@@ -197,41 +146,92 @@
           },
           {
             "label": "Strengths",
-            "value": "Deep Reasoning · Coding Expert"
+            "value": "Real-time Voice · Vision · Speed"
+          }
+        ]
+      },
+      {
+        "id": "claude",
+        "icon": "🎭",
+        "name": "Claude 3.5 Sonnet",
+        "meta": "Anthropic · Released 2024.06.20",
+        "desc": "Claude 3.5 Sonnet sets the industry benchmark for graduate-level reasoning and coding proficiency.",
+        "specs": [
+          {
+            "label": "Context",
+            "value": "200K tokens"
+          },
+          {
+            "label": "Strengths",
+            "value": "Coding · Artifacts · Nuanced Writing"
+          }
+        ]
+      },
+      {
+        "id": "gemini",
+        "icon": "✨",
+        "name": "Gemini 1.5 Pro",
+        "meta": "Google · Released 2024.02.15",
+        "desc": "Gemini 1.5 Pro delivers dramatically enhanced performance, with a breakthrough experimental 2 million token context window.",
+        "specs": [
+          {
+            "label": "Context",
+            "value": "2M tokens"
+          },
+          {
+            "label": "Strengths",
+            "value": "Massive Context · Deep Research"
+          }
+        ]
+      },
+      {
+        "id": "deepseek",
+        "icon": "🐳",
+        "name": "DeepSeek R1",
+        "meta": "DeepSeek · Released 2025.01.20",
+        "desc": "DeepSeek-R1 is a first-generation reasoning model that achieves performance comparable to OpenAI-o1 across math, code, and reasoning tasks.",
+        "specs": [
+          {
+            "label": "Context",
+            "value": "128K tokens"
+          },
+          {
+            "label": "Strengths",
+            "value": "Chain of Thought · Complex Math"
           }
         ]
       },
       {
         "id": "qwen",
         "icon": "🌐",
-        "name": "Qwen 3.7 Max",
-        "meta": "Alibaba · Released 2026.06.10",
-        "desc": "Qwen 3.7 Max stands at the absolute frontier of open-source models in 2026, delivering top-tier performance.",
+        "name": "Qwen 2.5",
+        "meta": "Alibaba · Released 2024.09.19",
+        "desc": "Qwen 2.5 represents a major upgrade, offering excellent capabilities in coding, mathematics, and multilingual instruction following.",
         "specs": [
           {
             "label": "Context",
-            "value": "256K tokens"
+            "value": "128K tokens"
           },
           {
             "label": "Strengths",
-            "value": "All-Around Performance · Multi-Lingual"
+            "value": "Open Weights · Multilingual"
           }
         ]
       },
       {
         "id": "llama",
         "icon": "🦙",
-        "name": "Llama 4 Scout",
-        "meta": "Meta · Released 2026.04.15",
-        "desc": "Meta's Llama 4 Scout introduces an unprecedented 10M token context window to the open-weight ecosystem.",
+        "name": "Llama 3.1 405B",
+        "meta": "Meta · Released 2024.07.23",
+        "desc": "Llama 3.1 405B is the first frontier-level open-source AI model, pushing the limits of what open weights can achieve.",
         "specs": [
           {
             "label": "Context",
-            "value": "10M tokens"
+            "value": "128K tokens"
           },
           {
             "label": "Strengths",
-            "value": "Infinite Context · Local Deploy"
+            "value": "Open Source Ecosystem Leader"
           }
         ]
       }
@@ -242,57 +242,45 @@
     "listingSearchPlaceholder": "Search articles...",
     "timeline": [
       {
-        "date": "2026.06.10",
-        "name": "Qwen 3.7 Max",
-        "desc": "The most powerful open-source foundation model released",
+        "date": "2025.01.20",
+        "name": "DeepSeek R1",
+        "desc": "DeepSeek releases their groundbreaking open reasoning model",
         "latest": true
       },
       {
-        "date": "2026.06.09",
-        "name": "Claude Fable 5",
-        "desc": "Anthropic's latest restricted tier model",
+        "date": "2024.10.22",
+        "name": "Claude 3.5 Sonnet (Upd)",
+        "desc": "Anthropic updates Sonnet with Computer Use capabilities",
         "latest": false
       },
       {
-        "date": "2026.06.02",
-        "name": "GPT-5.5",
-        "desc": "OpenAI flagship with built-in advanced agentic features",
+        "date": "2024.09.19",
+        "name": "Qwen 2.5",
+        "desc": "Alibaba releases major open source foundation model update",
         "latest": false
       },
       {
-        "date": "2026.05.20",
-        "name": "Gemini 3.5 Flash",
-        "desc": "Google's 1M context native omnimodal efficiency upgrade",
+        "date": "2024.07.23",
+        "name": "Llama 3.1",
+        "desc": "Meta releases Llama 3.1 including the massive 405B parameter model",
         "latest": false
       },
       {
-        "date": "2026.05.10",
-        "name": "DeepSeek V4 Pro",
-        "desc": "Next generation reasoning model released",
-        "latest": false
-      },
-      {
-        "date": "2026.04.15",
-        "name": "Llama 4 Scout",
-        "desc": "Meta releases 10M context window open model",
-        "latest": false
-      },
-      {
-        "date": "2025.10.15",
-        "name": "GPT-5 & Claude 4",
-        "desc": "The transition to agentic workflows and computer use becomes mainstream",
+        "date": "2024.06.20",
+        "name": "Claude 3.5 Sonnet",
+        "desc": "Anthropic sets a new bar for coding and intelligence",
         "latest": false
       },
       {
         "date": "2024.05.13",
         "name": "GPT-4o",
-        "desc": "OpenAI's natively omnimodal model enabling real-time voice and vision",
+        "desc": "OpenAI announces their fast, natively omnimodal flagship model",
         "latest": false
       },
       {
-        "date": "2024.03.04",
-        "name": "Claude 3 Family",
-        "desc": "Anthropic's Opus briefly surpasses GPT-4 in benchmarks",
+        "date": "2024.02.15",
+        "name": "Gemini 1.5 Pro",
+        "desc": "Google announces breakthrough 1M (later 2M) context window",
         "latest": false
       },
       {
