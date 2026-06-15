@@ -242,75 +242,15 @@
     "listingSearchPlaceholder": "Search articles...",
     "timeline": [
       {
-        "date": "2017.06.12",
-        "name": "Transformer",
-        "desc": "Google publishes 'Attention Is All You Need', defining the modern AI era",
-        "latest": false
+        "date": "2026.06.10",
+        "name": "Qwen 3.7 Max",
+        "desc": "The most powerful open-source foundation model released",
+        "latest": true
       },
       {
-        "date": "2018.10.11",
-        "name": "BERT",
-        "desc": "Google's breakthrough in bidirectional encoder representations",
-        "latest": false
-      },
-      {
-        "date": "2020.05.28",
-        "name": "GPT-3",
-        "desc": "OpenAI introduces few-shot learning with 175B parameters",
-        "latest": false
-      },
-      {
-        "date": "2022.11.30",
-        "name": "ChatGPT",
-        "desc": "OpenAI releases ChatGPT based on GPT-3.5, igniting the generative AI boom",
-        "latest": false
-      },
-      {
-        "date": "2023.03.14",
-        "name": "GPT-4",
-        "desc": "A major leap in reasoning and multimodal capabilities",
-        "latest": false
-      },
-      {
-        "date": "2023.07.18",
-        "name": "Llama 2",
-        "desc": "Meta releases open-source weights, accelerating the open AI ecosystem",
-        "latest": false
-      },
-      {
-        "date": "2024.03.04",
-        "name": "Claude 3 Family",
-        "desc": "Anthropic's Opus briefly surpasses GPT-4 in benchmarks",
-        "latest": false
-      },
-      {
-        "date": "2024.05.13",
-        "name": "GPT-4o",
-        "desc": "OpenAI's natively omnimodal model enabling real-time voice and vision",
-        "latest": false
-      },
-      {
-        "date": "2025.10.15",
-        "name": "GPT-5 & Claude 4",
-        "desc": "The transition to agentic workflows and computer use becomes mainstream",
-        "latest": false
-      },
-      {
-        "date": "2026.04.15",
-        "name": "Llama 4 Scout",
-        "desc": "Meta releases 10M context window open model",
-        "latest": false
-      },
-      {
-        "date": "2026.05.10",
-        "name": "DeepSeek V4 Pro",
-        "desc": "Next generation reasoning model released",
-        "latest": false
-      },
-      {
-        "date": "2026.05.20",
-        "name": "Gemini 3.5 Flash",
-        "desc": "Google's 1M context native omnimodal efficiency upgrade",
+        "date": "2026.06.09",
+        "name": "Claude Fable 5",
+        "desc": "Anthropic's latest restricted tier model",
         "latest": false
       },
       {
@@ -320,16 +260,76 @@
         "latest": false
       },
       {
-        "date": "2026.06.09",
-        "name": "Claude Fable 5",
-        "desc": "Anthropic's latest restricted tier model",
+        "date": "2026.05.20",
+        "name": "Gemini 3.5 Flash",
+        "desc": "Google's 1M context native omnimodal efficiency upgrade",
         "latest": false
       },
       {
-        "date": "2026.06.10",
-        "name": "Qwen 3.7 Max",
-        "desc": "The most powerful open-source foundation model released",
-        "latest": true
+        "date": "2026.05.10",
+        "name": "DeepSeek V4 Pro",
+        "desc": "Next generation reasoning model released",
+        "latest": false
+      },
+      {
+        "date": "2026.04.15",
+        "name": "Llama 4 Scout",
+        "desc": "Meta releases 10M context window open model",
+        "latest": false
+      },
+      {
+        "date": "2025.10.15",
+        "name": "GPT-5 & Claude 4",
+        "desc": "The transition to agentic workflows and computer use becomes mainstream",
+        "latest": false
+      },
+      {
+        "date": "2024.05.13",
+        "name": "GPT-4o",
+        "desc": "OpenAI's natively omnimodal model enabling real-time voice and vision",
+        "latest": false
+      },
+      {
+        "date": "2024.03.04",
+        "name": "Claude 3 Family",
+        "desc": "Anthropic's Opus briefly surpasses GPT-4 in benchmarks",
+        "latest": false
+      },
+      {
+        "date": "2023.07.18",
+        "name": "Llama 2",
+        "desc": "Meta releases open-source weights, accelerating the open AI ecosystem",
+        "latest": false
+      },
+      {
+        "date": "2023.03.14",
+        "name": "GPT-4",
+        "desc": "A major leap in reasoning and multimodal capabilities",
+        "latest": false
+      },
+      {
+        "date": "2022.11.30",
+        "name": "ChatGPT",
+        "desc": "OpenAI releases ChatGPT based on GPT-3.5, igniting the generative AI boom",
+        "latest": false
+      },
+      {
+        "date": "2020.05.28",
+        "name": "GPT-3",
+        "desc": "OpenAI introduces few-shot learning with 175B parameters",
+        "latest": false
+      },
+      {
+        "date": "2018.10.11",
+        "name": "BERT",
+        "desc": "Google's breakthrough in bidirectional encoder representations",
+        "latest": false
+      },
+      {
+        "date": "2017.06.12",
+        "name": "Transformer",
+        "desc": "Google publishes 'Attention Is All You Need', defining the modern AI era",
+        "latest": false
       }
     ],
     "relatedTitle": "Related Articles",
