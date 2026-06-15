@@ -29,12 +29,12 @@
     "tableSubtitle": "基于 2026 年最新架构的标杆模型横评",
     "tableHeaders": [
       "维度",
-      "GPT-4o",
-      "Claude 3.5 Sonnet",
-      "Gemini 1.5 Pro",
-      "DeepSeek R1",
-      "Qwen 2.5",
-      "Llama 3.1 405B"
+      "GPT-5.5",
+      "Claude Fable 5",
+      "Gemini 3.5 Flash",
+      "DeepSeek V4 Pro",
+      "Qwen 3.7 Max",
+      "Llama 4 Scout"
     ],
     "tableRows": [
       [
@@ -48,30 +48,30 @@
       ],
       [
         "发布日期",
-        "2024.05.13",
-        "2024.06.20",
-        "2024.02.15",
-        "2025.01.20",
-        "2024.09.19",
-        "2024.07.23"
+        "2026.04.23",
+        "2026.06.09",
+        "2026.05.19",
+        "2026.04.24",
+        "2026.05.20",
+        "2025.04.05"
       ],
       [
         "上下文",
-        "128K",
-        "200K",
+        "512K",
         "2M",
+        "1M",
         "128K",
-        "128K",
-        "128K"
+        "256K",
+        "10M"
       ],
       [
         "多模态",
         "全模态",
         "文本/图像",
         "全模态",
-        "文本",
-        "文本",
-        "文本"
+        "文本/图像",
+        "文本/图像",
+        "文本/图像"
       ],
       [
         "代码能力",
@@ -79,16 +79,16 @@
         "★★★★★",
         "★★★★☆",
         "★★★★★",
-        "★★★★☆",
+        "★★★★★",
         "★★★★☆"
       ],
       [
         "推理深度",
-        "★★★★☆",
-        "★★★★☆",
-        "★★★★☆",
+        "★★★★★",
         "★★★★★",
         "★★★★☆",
+        "★★★★★",
+        "★★★★★",
         "★★★★☆"
       ]
     ],
@@ -99,80 +99,63 @@
         "title": "代码开发",
         "desc": "需要代码生成、重构、调试或开发辅助",
         "badge": "首选",
-        "reason": "Claude 3.5 Sonnet 与 DeepSeek R1 目前在写代码和重构方面体验最佳。"
+        "reason": "DeepSeek V4 Pro 和 Claude Fable 5 在复杂代码精度和重构上领先。"
       },
       {
         "title": "Agent 工作流",
         "desc": "构建自主决策、多步执行的智能代理系统",
         "badge": "最强",
-        "reason": "GPT-4o 与 Claude 3.5 Sonnet 在 Tool-Calling 和指令遵循上最为精准。"
+        "reason": "GPT-5.5 和 Claude Fable 5 提供业界最强的 Agentic 能力与 Computer Use。"
       },
       {
         "title": "超长上下文",
         "desc": "需要处理超长文本、完整代码库或大量数据",
         "badge": "推荐",
-        "reason": "Gemini 1.5 Pro 支持高达 200 万 Token 的上下文，处理大文件无敌。"
+        "reason": "Claude Fable 5 提供 2M 窗口，Gemini 3.5 Flash 拥有极速的 1M 处理效率。"
       },
       {
         "title": "开源主力",
         "desc": "企业私有化部署，需要顶尖的开源基座能力",
         "badge": "全能",
-        "reason": "Llama 3.1 405B 与 Qwen 2.5 72B 是目前综合能力最强的开源选择。"
+        "reason": "Qwen 3.7 Max 是目前最全面、最顶尖的开源全能选手。"
       },
       {
         "title": "复杂推理",
         "desc": "数学证明、逻辑分析、复杂规划任务",
         "badge": "极限",
-        "reason": "DeepSeek R1 采用强化学习实现了极强的思维链 (CoT) 推理能力。"
+        "reason": "DeepSeek V4 Pro 与 GPT-5.5 提供了当前最强的深度推理逻辑。"
       },
       {
-        "title": "语音与全模态",
-        "desc": "处理视觉任务，或需要极低延迟的实时语音交互",
-        "badge": "全模态",
-        "reason": "GPT-4o 原生支持音视频流的实时输入输出，响应速度极快。"
+        "title": "无限上下文",
+        "desc": "本地分析海量日志库或超大规模视频集",
+        "badge": "无界",
+        "reason": "Llama 4 Scout 为开源生态带来了史无前例的 1000 万 Token 上下文。"
       }
     ],
     "details": [
       {
         "id": "gpt",
         "icon": "🧠",
-        "name": "GPT-4o",
-        "meta": "OpenAI · 2024.05.13 发布",
-        "desc": "GPT-4o 是能够实时处理音频、视觉和文本的真正全模态模型，交互速度极快。",
+        "name": "GPT-5.5",
+        "meta": "OpenAI · 2026.04.23 发布",
+        "desc": "GPT-5.5 是 OpenAI 的旗舰模型，专为复杂 Agent 工作流设计，提供最前沿的推理和全模态能力。",
         "specs": [
           {
             "label": "上下文",
-            "value": "128K tokens"
+            "value": "512K tokens"
           },
           {
             "label": "优势",
-            "value": "极速语音 · 全模态融合"
+            "value": "深度推理 · Agent 工作流"
           }
         ]
       },
       {
         "id": "claude",
         "icon": "🎭",
-        "name": "Claude 3.5 Sonnet",
-        "meta": "Anthropic · 2024.06.20 发布",
-        "desc": "Claude 3.5 Sonnet 树立了代码生成和高级推理的行业新标杆，内置 Artifacts 创新交互。",
-        "specs": [
-          {
-            "label": "上下文",
-            "value": "200K tokens"
-          },
-          {
-            "label": "优势",
-            "value": "顶级代码能力 · 细腻文笔"
-          }
-        ]
-      },
-      {
-        "id": "gemini",
-        "icon": "✨",
-        "name": "Gemini 1.5 Pro",
-        "meta": "Google · 2024.02.15 发布",
-        "desc": "Gemini 1.5 Pro 带来了突破性的最高 200 万 Token 超大上下文窗口。",
+        "name": "Claude Fable 5",
+        "meta": "Anthropic · 2026.06.09 发布",
+        "desc": "Claude Fable 5 在软件工程和安全性方面遥遥领先，并配备了高达 2M 的超长上下文。",
         "specs": [
           {
             "label": "上下文",
@@ -180,16 +163,33 @@
           },
           {
             "label": "优势",
-            "value": "超大上下文检索 · 视频理解"
+            "value": "Computer Use · 代码精度"
+          }
+        ]
+      },
+      {
+        "id": "gemini",
+        "icon": "✨",
+        "name": "Gemini 3.5 Flash",
+        "meta": "Google · 2026.05.19 发布",
+        "desc": "Google 最新的速度王者，提供 1M 上下文，在大规模高频任务中效率无敌。",
+        "specs": [
+          {
+            "label": "上下文",
+            "value": "1M tokens"
+          },
+          {
+            "label": "优势",
+            "value": "极速响应 · 高性价比 · 全模态"
           }
         ]
       },
       {
         "id": "deepseek",
         "icon": "🐳",
-        "name": "DeepSeek R1",
-        "meta": "DeepSeek · 2025.01.20 发布",
-        "desc": "DeepSeek-R1 是一款在数学、代码和推理任务上性能媲美 OpenAI-o1 的第一代开源推理模型。",
+        "name": "DeepSeek V4 Pro",
+        "meta": "DeepSeek · 2026.04.24 发布",
+        "desc": "DeepSeek V4 Pro 奠定了开源代码与推理模型的新标准，提供顶级推理逻辑。",
         "specs": [
           {
             "label": "上下文",
@@ -197,41 +197,41 @@
           },
           {
             "label": "优势",
-            "value": "深度思考 (CoT) · 复杂数学"
+            "value": "深度推理 · 代码生成专家"
           }
         ]
       },
       {
         "id": "qwen",
         "icon": "🌐",
-        "name": "Qwen 2.5",
-        "meta": "阿里巴巴 · 2024.09.19 发布",
-        "desc": "Qwen 2.5 系列在代码、数学能力上大幅提升，是当今最具竞争力的开源基座之一。",
+        "name": "Qwen 3.7 Max",
+        "meta": "阿里巴巴 · 2026.05.20 发布",
+        "desc": "Qwen 3.7 Max 稳居开源生态最前沿，提供全面且顶尖的各领域能力。",
         "specs": [
           {
             "label": "上下文",
-            "value": "128K tokens"
+            "value": "256K tokens"
           },
           {
             "label": "优势",
-            "value": "开源权重 · 多语言指令遵循"
+            "value": "全能表现 · 多语言支持"
           }
         ]
       },
       {
         "id": "llama",
         "icon": "🦙",
-        "name": "Llama 3.1 405B",
-        "meta": "Meta · 2024.07.23 发布",
-        "desc": "Llama 3.1 405B 是业界首个达到前沿闭源模型水平的超大规模开源模型。",
+        "name": "Llama 4 Scout",
+        "meta": "Meta · 2025.04.05 发布",
+        "desc": "Meta 的 Llama 4 Scout 为开源生态带来了史无前例的 1000 万 Token 超长上下文能力。",
         "specs": [
           {
             "label": "上下文",
-            "value": "128K tokens"
+            "value": "10M tokens"
           },
           {
             "label": "优势",
-            "value": "最强开源基座 · 社区生态好"
+            "value": "无限上下文 · 本地部署友好"
           }
         ]
       }
@@ -241,6 +241,42 @@
     "listingTimelineTitle": "发布时间轴",
     "listingSearchPlaceholder": "搜索文章...",
     "timeline": [
+      {
+        "date": "2026.06.09",
+        "name": "Claude Fable 5",
+        "desc": "Anthropic 推出顶级 Agent 工作流模型 Fable 5",
+        "latest": true
+      },
+      {
+        "date": "2026.05.20",
+        "name": "Qwen 3.7 Max",
+        "desc": "阿里巴巴树立新的全能开源基座标杆",
+        "latest": false
+      },
+      {
+        "date": "2026.05.19",
+        "name": "Gemini 3.5 Flash",
+        "desc": "Google 发布极速全模态处理模型",
+        "latest": false
+      },
+      {
+        "date": "2026.04.24",
+        "name": "DeepSeek V4 Pro",
+        "desc": "DeepSeek 推出新一代顶尖推理专家模型",
+        "latest": false
+      },
+      {
+        "date": "2026.04.23",
+        "name": "GPT-5.5",
+        "desc": "OpenAI 正式发布针对 Agent 优化的旗舰模型",
+        "latest": false
+      },
+      {
+        "date": "2025.04.05",
+        "name": "Llama 4 Scout",
+        "desc": "Meta 发布支持 10M 超长上下文的开源模型",
+        "latest": false
+      },
       {
         "date": "2025.01.20",
         "name": "DeepSeek R1",
