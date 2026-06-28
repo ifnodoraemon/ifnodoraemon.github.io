@@ -7,25 +7,25 @@ const enPath = path.join(__dirname, 'src/locales/en.json');
 const zh = JSON.parse(fs.readFileSync(zhPath, 'utf8'));
 const en = JSON.parse(fs.readFileSync(enPath, 'utf8'));
 
-const tableHeadersEn = ["Dimension", "GPT-5.6 Sol", "Claude Fable 5", "Gemini 3.5 Flash", "DeepSeek V4 Pro", "Qwen 3.7 Max", "Llama 4 Scout"];
-const tableHeadersZh = ["维度", "GPT-5.6 Sol", "Claude Fable 5", "Gemini 3.5 Flash", "DeepSeek V4 Pro", "Qwen 3.7 Max", "Llama 4 Scout"];
+const tableHeadersEn = ["Dimension", "GPT-5.6 Sol", "Claude Fable 5", "Gemini 3.5 Flash", "DeepSeek V4 Pro", "Qwen 3.7 Max", "GLM-5.2"];
+const tableHeadersZh = ["维度", "GPT-5.6 Sol", "Claude Fable 5", "Gemini 3.5 Flash", "DeepSeek V4 Pro", "Qwen 3.7 Max", "GLM-5.2"];
 
 const tableRowsEn = [
-  ["Vendor", "OpenAI", "Anthropic", "Google", "DeepSeek", "Alibaba", "Meta"],
-  ["Release Date", "2026.06.26", "2026.06.09", "2026.05.19", "2026.04.24", "2026.05.20", "2025.04.05"],
-  ["Context", "512K", "2M", "1M", "128K", "256K", "10M"],
+  ["Vendor", "OpenAI", "Anthropic", "Google", "DeepSeek", "Alibaba", "Zhipu AI"],
+  ["Release Date", "2026.06.26", "2026.06.09", "2026.05.19", "2026.04.24", "2026.05.20", "2026.06.13"],
+  ["Context", "512K", "2M", "1M", "128K", "256K", "1M"],
   ["Multimodal", "Omnimodal", "Text/Image", "Omnimodal", "Text/Image", "Text/Image", "Text/Image"],
-  ["Coding", "★★★★★", "★★★★★", "★★★★☆", "★★★★★", "★★★★★", "★★★★☆"],
-  ["Reasoning", "★★★★★", "★★★★★", "★★★★☆", "★★★★★", "★★★★★", "★★★★☆"]
+  ["Coding", "★★★★★", "★★★★★", "★★★★☆", "★★★★★", "★★★★★", "★★★★★"],
+  ["Reasoning", "★★★★★", "★★★★★", "★★★★☆", "★★★★★", "★★★★★", "★★★★★"]
 ];
 
 const tableRowsZh = [
-  ["厂商", "OpenAI", "Anthropic", "Google", "DeepSeek", "阿里巴巴", "Meta"],
-  ["发布日期", "2026.06.26", "2026.06.09", "2026.05.19", "2026.04.24", "2026.05.20", "2025.04.05"],
-  ["上下文", "512K", "2M", "1M", "128K", "256K", "10M"],
+  ["厂商", "OpenAI", "Anthropic", "Google", "DeepSeek", "阿里巴巴", "智谱AI"],
+  ["发布日期", "2026.06.26", "2026.06.09", "2026.05.19", "2026.04.24", "2026.05.20", "2026.06.13"],
+  ["上下文", "512K", "2M", "1M", "128K", "256K", "1M"],
   ["多模态", "全模态", "文本/图像", "全模态", "文本/图像", "文本/图像", "文本/图像"],
-  ["代码能力", "★★★★★", "★★★★★", "★★★★☆", "★★★★★", "★★★★★", "★★★★☆"],
-  ["推理深度", "★★★★★", "★★★★★", "★★★★☆", "★★★★★", "★★★★★", "★★★★☆"]
+  ["代码能力", "★★★★★", "★★★★★", "★★★★☆", "★★★★★", "★★★★★", "★★★★★"],
+  ["推理深度", "★★★★★", "★★★★★", "★★★★☆", "★★★★★", "★★★★★", "★★★★★"]
 ];
 
 const detailsEn = [
@@ -85,14 +85,14 @@ const detailsEn = [
     ]
   },
   {
-    "id": "llama",
-    "icon": "🦙",
-    "name": "Llama 4 Scout",
-    "meta": "Meta · Released 2025.04.05",
-    "desc": "Meta's Llama 4 Scout introduces an unprecedented 10M token context window to the open-weight ecosystem.",
+    "id": "glm",
+    "icon": "🧠",
+    "name": "GLM-5.2",
+    "meta": "Zhipu AI · Released 2026.06.13",
+    "desc": "Zhipu AI's GLM-5.2 boasts a 1M context window and is specifically designed for long-horizon agentic workflows and coding tasks.",
     "specs": [
-      { "label": "Context", "value": "10M tokens" },
-      { "label": "Strengths", "value": "Infinite Context · Local Deploy" }
+      { "label": "Context", "value": "1M tokens" },
+      { "label": "Strengths", "value": "Long-Horizon Agents · Open Weights" }
     ]
   }
 ];
@@ -154,14 +154,14 @@ const detailsZh = [
     ]
   },
   {
-    "id": "llama",
-    "icon": "🦙",
-    "name": "Llama 4 Scout",
-    "meta": "Meta · 2025.04.05 发布",
-    "desc": "Meta 的 Llama 4 Scout 为开源生态带来了史无前例的 1000 万 Token 超长上下文能力。",
+    "id": "glm",
+    "icon": "🧠",
+    "name": "GLM-5.2",
+    "meta": "智谱AI · 2026.06.13 发布",
+    "desc": "智谱AI 发布的 GLM-5.2，支持 1M 超长上下文，专为超长跨度 Agent 工作流与复杂编程任务打造。",
     "specs": [
-      { "label": "上下文", "value": "10M tokens" },
-      { "label": "优势", "value": "无限上下文 · 本地部署友好" }
+      { "label": "上下文", "value": "1M tokens" },
+      { "label": "优势", "value": "超长序列 Agent · 开源权重" }
     ]
   }
 ];
@@ -198,10 +198,10 @@ const scenesEn = [
     "reason": "DeepSeek V4 Pro and GPT-5.6 Sol provide state-of-the-art deep reasoning logic."
   },
   {
-    "title": "Infinite Context",
-    "desc": "Processing entire massive libraries or video datasets locally",
-    "badge": "Limitless",
-    "reason": "Llama 4 Scout introduces an unprecedented 10M context window to the open ecosystem."
+    "title": "Long-Horizon Agent",
+    "desc": "Complex software engineering and multi-step reasoning",
+    "badge": "Agentic",
+    "reason": "GLM-5.2 introduces powerful open-weight long-horizon capabilities with its 1M window."
   }
 ];
 
@@ -237,10 +237,10 @@ const scenesZh = [
     "reason": "DeepSeek V4 Pro 与 GPT-5.6 Sol 提供了当前最强的深度推理逻辑。"
   },
   {
-    "title": "无限上下文",
-    "desc": "本地分析海量日志库或超大规模视频集",
-    "badge": "无界",
-    "reason": "Llama 4 Scout 为开源生态带来了史无前例的 1000 万 Token 上下文。"
+    "title": "超长跨度 Agent",
+    "desc": "复杂的软件工程开发与多步深度推理",
+    "badge": "长期记忆",
+    "reason": "GLM-5.2 凭借 1M 窗口和专属优化，在开源长跨度 Agent 任务中表现卓越。"
   }
 ];
 
@@ -250,7 +250,7 @@ const timelineEnUpdate = [
   { "date": "2026.05.19", "name": "Gemini 3.5 Flash", "desc": "Google releases incredibly fast omnimodal model", "latest": false },
   { "date": "2026.04.24", "name": "DeepSeek V4 Pro", "desc": "DeepSeek releases their next generation reasoning expert", "latest": false },
   { "date": "2026.06.26", "name": "GPT-5.6 Sol", "desc": "OpenAI releases its agent-focused flagship model", "latest": true },
-  { "date": "2025.04.05", "name": "Llama 4 Scout", "desc": "Meta releases 10M context window open model", "latest": false }
+  { "date": "2026.06.13", "name": "GLM-5.2", "desc": "Zhipu AI open-sources its long-horizon agentic model", "latest": false }
 ];
 
 const timelineZhUpdate = [
@@ -259,7 +259,7 @@ const timelineZhUpdate = [
   { "date": "2026.05.19", "name": "Gemini 3.5 Flash", "desc": "Google 发布极速全模态处理模型", "latest": false },
   { "date": "2026.04.24", "name": "DeepSeek V4 Pro", "desc": "DeepSeek 推出新一代顶尖推理专家模型", "latest": false },
   { "date": "2026.06.26", "name": "GPT-5.6 Sol", "desc": "OpenAI 正式发布针对 Agent 优化的旗舰模型", "latest": true },
-  { "date": "2025.04.05", "name": "Llama 4 Scout", "desc": "Meta 发布支持 10M 超长上下文的开源模型", "latest": false }
+  { "date": "2026.06.13", "name": "GLM-5.2", "desc": "智谱AI开源专为长跨度Agent设计的 GLM-5.2 模型", "latest": false }
 ];
 
 en.models.tableHeaders = tableHeadersEn;

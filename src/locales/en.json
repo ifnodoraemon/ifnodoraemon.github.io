@@ -34,7 +34,7 @@
       "Gemini 3.5 Flash",
       "DeepSeek V4 Pro",
       "Qwen 3.7 Max",
-      "Llama 4 Scout"
+      "GLM-5.2"
     ],
     "tableRows": [
       [
@@ -44,7 +44,7 @@
         "Google",
         "DeepSeek",
         "Alibaba",
-        "Meta"
+        "Zhipu AI"
       ],
       [
         "Release Date",
@@ -53,7 +53,7 @@
         "2026.05.19",
         "2026.04.24",
         "2026.05.20",
-        "2025.04.05"
+        "2026.06.13"
       ],
       [
         "Context",
@@ -62,7 +62,7 @@
         "1M",
         "128K",
         "256K",
-        "10M"
+        "1M"
       ],
       [
         "Multimodal",
@@ -80,7 +80,7 @@
         "★★★★☆",
         "★★★★★",
         "★★★★★",
-        "★★★★☆"
+        "★★★★★"
       ],
       [
         "Reasoning",
@@ -89,7 +89,7 @@
         "★★★★☆",
         "★★★★★",
         "★★★★★",
-        "★★★★☆"
+        "★★★★★"
       ]
     ],
     "sceneTitle": "Recommendations",
@@ -126,10 +126,10 @@
         "reason": "DeepSeek V4 Pro and GPT-5.6 Sol provide state-of-the-art deep reasoning logic."
       },
       {
-        "title": "Infinite Context",
-        "desc": "Processing entire massive libraries or video datasets locally",
-        "badge": "Limitless",
-        "reason": "Llama 4 Scout introduces an unprecedented 10M context window to the open ecosystem."
+        "title": "Long-Horizon Agent",
+        "desc": "Complex software engineering and multi-step reasoning",
+        "badge": "Agentic",
+        "reason": "GLM-5.2 introduces powerful open-weight long-horizon capabilities with its 1M window."
       }
     ],
     "details": [
@@ -219,19 +219,19 @@
         ]
       },
       {
-        "id": "llama",
-        "icon": "🦙",
-        "name": "Llama 4 Scout",
-        "meta": "Meta · Released 2025.04.05",
-        "desc": "Meta's Llama 4 Scout introduces an unprecedented 10M token context window to the open-weight ecosystem.",
+        "id": "glm",
+        "icon": "🧠",
+        "name": "GLM-5.2",
+        "meta": "Zhipu AI · Released 2026.06.13",
+        "desc": "Zhipu AI's GLM-5.2 boasts a 1M context window and is specifically designed for long-horizon agentic workflows and coding tasks.",
         "specs": [
           {
             "label": "Context",
-            "value": "10M tokens"
+            "value": "1M tokens"
           },
           {
             "label": "Strengths",
-            "value": "Infinite Context · Local Deploy"
+            "value": "Long-Horizon Agents · Open Weights"
           }
         ]
       }
@@ -246,6 +246,12 @@
         "name": "GPT-5.6 Sol",
         "desc": "OpenAI releases its agent-focused flagship model",
         "latest": true
+      },
+      {
+        "date": "2026.06.13",
+        "name": "GLM-5.2",
+        "desc": "Zhipu AI open-sources its long-horizon agentic model",
+        "latest": false
       },
       {
         "date": "2026.06.09",
@@ -269,12 +275,6 @@
         "date": "2026.04.24",
         "name": "DeepSeek V4 Pro",
         "desc": "DeepSeek releases their next generation reasoning expert",
-        "latest": false
-      },
-      {
-        "date": "2025.04.05",
-        "name": "Llama 4 Scout",
-        "desc": "Meta releases 10M context window open model",
         "latest": false
       },
       {
