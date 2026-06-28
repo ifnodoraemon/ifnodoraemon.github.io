@@ -7,12 +7,12 @@ const enPath = path.join(__dirname, 'src/locales/en.json');
 const zh = JSON.parse(fs.readFileSync(zhPath, 'utf8'));
 const en = JSON.parse(fs.readFileSync(enPath, 'utf8'));
 
-const tableHeadersEn = ["Dimension", "GPT-5.5", "Claude Fable 5", "Gemini 3.5 Flash", "DeepSeek V4 Pro", "Qwen 3.7 Max", "Llama 4 Scout"];
-const tableHeadersZh = ["维度", "GPT-5.5", "Claude Fable 5", "Gemini 3.5 Flash", "DeepSeek V4 Pro", "Qwen 3.7 Max", "Llama 4 Scout"];
+const tableHeadersEn = ["Dimension", "GPT-5.6 Sol", "Claude Fable 5", "Gemini 3.5 Flash", "DeepSeek V4 Pro", "Qwen 3.7 Max", "Llama 4 Scout"];
+const tableHeadersZh = ["维度", "GPT-5.6 Sol", "Claude Fable 5", "Gemini 3.5 Flash", "DeepSeek V4 Pro", "Qwen 3.7 Max", "Llama 4 Scout"];
 
 const tableRowsEn = [
   ["Vendor", "OpenAI", "Anthropic", "Google", "DeepSeek", "Alibaba", "Meta"],
-  ["Release Date", "2026.04.23", "2026.06.09", "2026.05.19", "2026.04.24", "2026.05.20", "2025.04.05"],
+  ["Release Date", "2026.06.26", "2026.06.09", "2026.05.19", "2026.04.24", "2026.05.20", "2025.04.05"],
   ["Context", "512K", "2M", "1M", "128K", "256K", "10M"],
   ["Multimodal", "Omnimodal", "Text/Image", "Omnimodal", "Text/Image", "Text/Image", "Text/Image"],
   ["Coding", "★★★★★", "★★★★★", "★★★★☆", "★★★★★", "★★★★★", "★★★★☆"],
@@ -21,7 +21,7 @@ const tableRowsEn = [
 
 const tableRowsZh = [
   ["厂商", "OpenAI", "Anthropic", "Google", "DeepSeek", "阿里巴巴", "Meta"],
-  ["发布日期", "2026.04.23", "2026.06.09", "2026.05.19", "2026.04.24", "2026.05.20", "2025.04.05"],
+  ["发布日期", "2026.06.26", "2026.06.09", "2026.05.19", "2026.04.24", "2026.05.20", "2025.04.05"],
   ["上下文", "512K", "2M", "1M", "128K", "256K", "10M"],
   ["多模态", "全模态", "文本/图像", "全模态", "文本/图像", "文本/图像", "文本/图像"],
   ["代码能力", "★★★★★", "★★★★★", "★★★★☆", "★★★★★", "★★★★★", "★★★★☆"],
@@ -32,9 +32,9 @@ const detailsEn = [
   {
     "id": "gpt",
     "icon": "🧠",
-    "name": "GPT-5.5",
-    "meta": "OpenAI · Released 2026.04.23",
-    "desc": "GPT-5.5 ('Spud') is OpenAI's latest flagship, integrating state-of-the-art reasoning and full native omnimodality for complex agentic workflows.",
+    "name": "GPT-5.6 Sol",
+    "meta": "OpenAI · Released 2026.06.26",
+    "desc": "GPT-5.6 Sol is OpenAI's latest flagship preview, featuring 'ultra' modes utilizing subagents for complex tasks.",
     "specs": [
       { "label": "Context", "value": "512K tokens" },
       { "label": "Strengths", "value": "Reasoning · Agentic Workflows · Omni" }
@@ -101,9 +101,9 @@ const detailsZh = [
   {
     "id": "gpt",
     "icon": "🧠",
-    "name": "GPT-5.5",
-    "meta": "OpenAI · 2026.04.23 发布",
-    "desc": "GPT-5.5 是 OpenAI 的旗舰模型，专为复杂 Agent 工作流设计，提供最前沿的推理和全模态能力。",
+    "name": "GPT-5.6 Sol",
+    "meta": "OpenAI · 2026.06.26 发布",
+    "desc": "GPT-5.6 Sol 是 OpenAI 最新预览旗舰模型，提供运用子代理处理复杂任务的 ultra 模式。",
     "specs": [
       { "label": "上下文", "value": "512K tokens" },
       { "label": "优势", "value": "深度推理 · Agent 工作流" }
@@ -177,7 +177,7 @@ const scenesEn = [
     "title": "Agent Workflows",
     "desc": "Build autonomous, multi-step intelligent agent systems",
     "badge": "Strongest",
-    "reason": "GPT-5.5 and Claude Fable 5 offer industry-leading agentic capabilities and robust Computer Use."
+    "reason": "GPT-5.6 Sol and Claude Fable 5 offer industry-leading agentic capabilities and robust Computer Use."
   },
   {
     "title": "Long Context",
@@ -195,7 +195,7 @@ const scenesEn = [
     "title": "Complex Reasoning",
     "desc": "Math proofs, logic analysis, complex planning tasks",
     "badge": "Extreme",
-    "reason": "DeepSeek V4 Pro and GPT-5.5 provide state-of-the-art deep reasoning logic."
+    "reason": "DeepSeek V4 Pro and GPT-5.6 Sol provide state-of-the-art deep reasoning logic."
   },
   {
     "title": "Infinite Context",
@@ -216,7 +216,7 @@ const scenesZh = [
     "title": "Agent 工作流",
     "desc": "构建自主决策、多步执行的智能代理系统",
     "badge": "最强",
-    "reason": "GPT-5.5 和 Claude Fable 5 提供业界最强的 Agentic 能力与 Computer Use。"
+    "reason": "GPT-5.6 Sol 和 Claude Fable 5 提供业界最强的 Agentic 能力与 Computer Use。"
   },
   {
     "title": "超长上下文",
@@ -234,7 +234,7 @@ const scenesZh = [
     "title": "复杂推理",
     "desc": "数学证明、逻辑分析、复杂规划任务",
     "badge": "极限",
-    "reason": "DeepSeek V4 Pro 与 GPT-5.5 提供了当前最强的深度推理逻辑。"
+    "reason": "DeepSeek V4 Pro 与 GPT-5.6 Sol 提供了当前最强的深度推理逻辑。"
   },
   {
     "title": "无限上下文",
@@ -245,20 +245,20 @@ const scenesZh = [
 ];
 
 const timelineEnUpdate = [
-  { "date": "2026.06.09", "name": "Claude Fable 5", "desc": "Anthropic releases Fable 5 with top tier agentic workflows", "latest": true },
+  { "date": "2026.06.09", "name": "Claude Fable 5", "desc": "Anthropic releases Fable 5 with top tier agentic workflows", "latest": false },
   { "date": "2026.05.20", "name": "Qwen 3.7 Max", "desc": "Alibaba sets the new bar for open-weight models", "latest": false },
   { "date": "2026.05.19", "name": "Gemini 3.5 Flash", "desc": "Google releases incredibly fast omnimodal model", "latest": false },
   { "date": "2026.04.24", "name": "DeepSeek V4 Pro", "desc": "DeepSeek releases their next generation reasoning expert", "latest": false },
-  { "date": "2026.04.23", "name": "GPT-5.5", "desc": "OpenAI releases its agent-focused flagship model", "latest": false },
+  { "date": "2026.06.26", "name": "GPT-5.6 Sol", "desc": "OpenAI releases its agent-focused flagship model", "latest": true },
   { "date": "2025.04.05", "name": "Llama 4 Scout", "desc": "Meta releases 10M context window open model", "latest": false }
 ];
 
 const timelineZhUpdate = [
-  { "date": "2026.06.09", "name": "Claude Fable 5", "desc": "Anthropic 推出顶级 Agent 工作流模型 Fable 5", "latest": true },
+  { "date": "2026.06.09", "name": "Claude Fable 5", "desc": "Anthropic 推出顶级 Agent 工作流模型 Fable 5", "latest": false },
   { "date": "2026.05.20", "name": "Qwen 3.7 Max", "desc": "阿里巴巴树立新的全能开源基座标杆", "latest": false },
   { "date": "2026.05.19", "name": "Gemini 3.5 Flash", "desc": "Google 发布极速全模态处理模型", "latest": false },
   { "date": "2026.04.24", "name": "DeepSeek V4 Pro", "desc": "DeepSeek 推出新一代顶尖推理专家模型", "latest": false },
-  { "date": "2026.04.23", "name": "GPT-5.5", "desc": "OpenAI 正式发布针对 Agent 优化的旗舰模型", "latest": false },
+  { "date": "2026.06.26", "name": "GPT-5.6 Sol", "desc": "OpenAI 正式发布针对 Agent 优化的旗舰模型", "latest": true },
   { "date": "2025.04.05", "name": "Llama 4 Scout", "desc": "Meta 发布支持 10M 超长上下文的开源模型", "latest": false }
 ];
 

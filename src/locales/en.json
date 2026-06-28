@@ -29,7 +29,7 @@
     "tableSubtitle": "Benchmarks based on the latest 2026 architectures",
     "tableHeaders": [
       "Dimension",
-      "GPT-5.5",
+      "GPT-5.6 Sol",
       "Claude Fable 5",
       "Gemini 3.5 Flash",
       "DeepSeek V4 Pro",
@@ -48,7 +48,7 @@
       ],
       [
         "Release Date",
-        "2026.04.23",
+        "2026.06.26",
         "2026.06.09",
         "2026.05.19",
         "2026.04.24",
@@ -60,7 +60,7 @@
         "512K",
         "2M",
         "1M",
-        "1M",
+        "128K",
         "256K",
         "10M"
       ],
@@ -105,7 +105,7 @@
         "title": "Agent Workflows",
         "desc": "Build autonomous, multi-step intelligent agent systems",
         "badge": "Strongest",
-        "reason": "GPT-5.5 and Claude Fable 5 offer industry-leading agentic capabilities and robust Computer Use."
+        "reason": "GPT-5.6 Sol and Claude Fable 5 offer industry-leading agentic capabilities and robust Computer Use."
       },
       {
         "title": "Long Context",
@@ -123,7 +123,7 @@
         "title": "Complex Reasoning",
         "desc": "Math proofs, logic analysis, complex planning tasks",
         "badge": "Extreme",
-        "reason": "DeepSeek V4 Pro and GPT-5.5 provide state-of-the-art deep reasoning logic."
+        "reason": "DeepSeek V4 Pro and GPT-5.6 Sol provide state-of-the-art deep reasoning logic."
       },
       {
         "title": "Infinite Context",
@@ -136,9 +136,9 @@
       {
         "id": "gpt",
         "icon": "🧠",
-        "name": "GPT-5.5",
-        "meta": "OpenAI · Released 2026.04.23",
-        "desc": "GPT-5.5 ('Spud') is OpenAI's latest flagship, integrating state-of-the-art reasoning and full native omnimodality for complex agentic workflows.",
+        "name": "GPT-5.6 Sol",
+        "meta": "OpenAI · Released 2026.06.26",
+        "desc": "GPT-5.6 Sol is OpenAI's latest flagship preview, featuring 'ultra' modes utilizing subagents for complex tasks.",
         "specs": [
           {
             "label": "Context",
@@ -193,7 +193,7 @@
         "specs": [
           {
             "label": "Context",
-            "value": "1M tokens"
+            "value": "128K tokens"
           },
           {
             "label": "Strengths",
@@ -242,10 +242,16 @@
     "listingSearchPlaceholder": "Search articles...",
     "timeline": [
       {
+        "date": "2026.06.26",
+        "name": "GPT-5.6 Sol",
+        "desc": "OpenAI releases its agent-focused flagship model",
+        "latest": true
+      },
+      {
         "date": "2026.06.09",
         "name": "Claude Fable 5",
         "desc": "Anthropic releases Fable 5 with top tier agentic workflows",
-        "latest": true
+        "latest": false
       },
       {
         "date": "2026.05.20",
@@ -263,30 +269,6 @@
         "date": "2026.04.24",
         "name": "DeepSeek V4 Pro",
         "desc": "DeepSeek releases their next generation reasoning expert",
-        "latest": false
-      },
-      {
-        "date": "2026.04.23",
-        "name": "GPT-5.5",
-        "desc": "OpenAI releases its agent-focused flagship model",
-        "latest": false
-      },
-      {
-        "date": "2025.12.17",
-        "name": "Gemini 3 Flash",
-        "desc": "Google releases the third generation of its efficient Flash model",
-        "latest": false
-      },
-      {
-        "date": "2025.08.07",
-        "name": "GPT-5",
-        "desc": "OpenAI officially releases the long-awaited GPT-5 foundation model",
-        "latest": false
-      },
-      {
-        "date": "2025.05.22",
-        "name": "Claude 4 Opus & Sonnet",
-        "desc": "Anthropic introduces the powerful Claude 4 model family",
         "latest": false
       },
       {

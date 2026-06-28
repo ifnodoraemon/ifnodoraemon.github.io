@@ -29,7 +29,7 @@
     "tableSubtitle": "基于 2026 年最新架构的标杆模型横评",
     "tableHeaders": [
       "维度",
-      "GPT-5.5",
+      "GPT-5.6 Sol",
       "Claude Fable 5",
       "Gemini 3.5 Flash",
       "DeepSeek V4 Pro",
@@ -48,7 +48,7 @@
       ],
       [
         "发布日期",
-        "2026.04.23",
+        "2026.06.26",
         "2026.06.09",
         "2026.05.19",
         "2026.04.24",
@@ -60,7 +60,7 @@
         "512K",
         "2M",
         "1M",
-        "1M",
+        "128K",
         "256K",
         "10M"
       ],
@@ -105,7 +105,7 @@
         "title": "Agent 工作流",
         "desc": "构建自主决策、多步执行的智能代理系统",
         "badge": "最强",
-        "reason": "GPT-5.5 和 Claude Fable 5 提供业界最强的 Agentic 能力与 Computer Use。"
+        "reason": "GPT-5.6 Sol 和 Claude Fable 5 提供业界最强的 Agentic 能力与 Computer Use。"
       },
       {
         "title": "超长上下文",
@@ -123,7 +123,7 @@
         "title": "复杂推理",
         "desc": "数学证明、逻辑分析、复杂规划任务",
         "badge": "极限",
-        "reason": "DeepSeek V4 Pro 与 GPT-5.5 提供了当前最强的深度推理逻辑。"
+        "reason": "DeepSeek V4 Pro 与 GPT-5.6 Sol 提供了当前最强的深度推理逻辑。"
       },
       {
         "title": "无限上下文",
@@ -136,9 +136,9 @@
       {
         "id": "gpt",
         "icon": "🧠",
-        "name": "GPT-5.5",
-        "meta": "OpenAI · 2026.04.23 发布",
-        "desc": "GPT-5.5 是 OpenAI 的旗舰模型，专为复杂 Agent 工作流设计，提供最前沿的推理和全模态能力。",
+        "name": "GPT-5.6 Sol",
+        "meta": "OpenAI · 2026.06.26 发布",
+        "desc": "GPT-5.6 Sol 是 OpenAI 最新预览旗舰模型，提供运用子代理处理复杂任务的 ultra 模式。",
         "specs": [
           {
             "label": "上下文",
@@ -193,7 +193,7 @@
         "specs": [
           {
             "label": "上下文",
-            "value": "1M tokens"
+            "value": "128K tokens"
           },
           {
             "label": "优势",
@@ -242,10 +242,16 @@
     "listingSearchPlaceholder": "搜索文章...",
     "timeline": [
       {
+        "date": "2026.06.26",
+        "name": "GPT-5.6 Sol",
+        "desc": "OpenAI 正式发布针对 Agent 优化的旗舰模型",
+        "latest": true
+      },
+      {
         "date": "2026.06.09",
         "name": "Claude Fable 5",
         "desc": "Anthropic 推出顶级 Agent 工作流模型 Fable 5",
-        "latest": true
+        "latest": false
       },
       {
         "date": "2026.05.20",
@@ -266,33 +272,9 @@
         "latest": false
       },
       {
-        "date": "2026.04.23",
-        "name": "GPT-5.5",
-        "desc": "OpenAI 正式发布针对 Agent 优化的旗舰模型",
-        "latest": false
-      },
-      {
-        "date": "2025.12.17",
-        "name": "Gemini 3 Flash",
-        "desc": "Google 发布第三代高效全模态模型 Gemini 3 Flash",
-        "latest": false
-      },
-      {
-        "date": "2025.08.07",
-        "name": "GPT-5",
-        "desc": "OpenAI 正式发布备受瞩目的跨时代基座大模型 GPT-5",
-        "latest": false
-      },
-      {
-        "date": "2025.05.22",
-        "name": "Claude 4 Opus & Sonnet",
-        "desc": "Anthropic 推出性能飞跃的 Claude 4 系列大模型",
-        "latest": false
-      },
-      {
         "date": "2025.04.05",
         "name": "Llama 4 Scout",
-        "desc": "Meta 发布支持 1000 万 Token 超长上下文的开源模型",
+        "desc": "Meta 发布支持 10M 超长上下文的开源模型",
         "latest": false
       },
       {
