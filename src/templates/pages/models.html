@@ -72,33 +72,7 @@
       </div>
     </section>
 
-    <!-- Detailed Model Cards -->
-    <section class="section section-tight">
-      <div class="container">
-        {{#each models.details}}
-        <div class="model-detail-card fade-in" id="{{this.id}}">
-          <div class="model-detail-header">
-            <div class="model-detail-icon">{{this.icon}}</div>
-            <div>
-              <h2>{{this.name}}</h2>
-              <span class="model-maker">{{this.meta}}</span>
-            </div>
-          </div>
-          <div class="model-detail-body">
-            <p>{{{this.desc}}}</p>
-            <div class="model-detail-specs">
-              {{#each this.specs}}
-              <div class="detail-spec">
-                <span class="detail-spec-label">{{this.label}}</span>
-                <span class="detail-spec-value">{{this.value}}</span>
-              </div>
-              {{/each}}
-            </div>
-          </div>
-        </div>
-        {{/each}}
-      </div>
-    </section>
+
 
     <!-- Benchmark Radar & Table -->
     <section class="section section-tight">
