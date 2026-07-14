@@ -13,6 +13,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { marked } from 'marked';
 import matter from 'gray-matter';
+import markedKatex from 'marked-katex-extension';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -81,6 +82,7 @@ renderer.heading = function ({ text, depth }) {
 };
 
 marked.use({ renderer });
+marked.use(markedKatex({ throwOnError: false }));
 
 const templatePath = path.join(ROOT, 'src', 'templates', 'article.html');
 const template = fs.readFileSync(templatePath, 'utf-8');
