@@ -19,25 +19,25 @@ const radarDatasets = [
 ];
 
 // Richer Table with LMSYS Elo and GPQA
-const benchmarksTableHeadersZh = ["模型", "LMSYS Elo", "GPQA (专家推理)", "SWE-bench (代码工程)", "MMMU (多模态)", "MATH (数学)", "AgentBench", "有效窗口"];
-const benchmarksTableHeadersEn = ["Model", "LMSYS Elo", "GPQA (Expert)", "SWE-bench (Eng)", "MMMU (Vision)", "MATH (Math)", "AgentBench", "Context"];
+const benchmarksTableHeadersZh = ["模型", "厂商", "LMSYS Elo", "GPQA (专家推理)", "SWE-bench (代码工程)", "MMMU (多模态)", "MATH (数学)", "有效窗口"];
+const benchmarksTableHeadersEn = ["Model", "Vendor", "LMSYS Elo", "GPQA (Expert)", "SWE-bench (Eng)", "MMMU (Vision)", "MATH (Math)", "Context"];
 
 const benchmarksTableRowsZh = [
-  ["GPT-5.6 Sol", "1450", "75.2%", "68.5%", "88.4%", "92.1%", "93.4%", "512K"],
-  ["Claude Fable 5", "1445", "73.8%", "74.2%", "85.0%", "88.5%", "95.2%", "2M"],
-  ["DeepSeek V4 Pro", "1420", "70.5%", "65.1%", "80.2%", "96.8%", "88.1%", "128K"],
-  ["Qwen 3.7 Max", "1390", "68.2%", "60.0%", "86.5%", "89.0%", "85.6%", "256K"],
-  ["Gemini 3.5 Flash", "1350", "62.0%", "52.5%", "82.1%", "82.5%", "80.4%", "1M"],
-  ["GLM-5.2", "1365", "64.5%", "55.0%", "81.0%", "84.0%", "87.5%", "1M"]
+  ["GPT-5.6 Sol", "OpenAI", "1450", "75.2%", "68.5%", "88.4%", "92.1%", "512K"],
+  ["Claude Fable 5", "Anthropic", "1445", "73.8%", "74.2%", "85.0%", "88.5%", "2M"],
+  ["DeepSeek V4 Pro", "DeepSeek", "1420", "70.5%", "65.1%", "80.2%", "96.8%", "128K"],
+  ["Qwen 3.7 Max", "阿里巴巴", "1390", "68.2%", "60.0%", "86.5%", "89.0%", "256K"],
+  ["Gemini 3.5 Flash", "Google", "1350", "62.0%", "52.5%", "82.1%", "82.5%", "1M"],
+  ["GLM-5.2", "智谱AI", "1365", "64.5%", "55.0%", "81.0%", "84.0%", "1M"]
 ];
 
 const benchmarksTableRowsEn = [
-  ["GPT-5.6 Sol", "1450", "75.2%", "68.5%", "88.4%", "92.1%", "93.4%", "512K"],
-  ["Claude Fable 5", "1445", "73.8%", "74.2%", "85.0%", "88.5%", "95.2%", "2M"],
-  ["DeepSeek V4 Pro", "1420", "70.5%", "65.1%", "80.2%", "96.8%", "88.1%", "128K"],
-  ["Qwen 3.7 Max", "1390", "68.2%", "60.0%", "86.5%", "89.0%", "85.6%", "256K"],
-  ["Gemini 3.5 Flash", "1350", "62.0%", "52.5%", "82.1%", "82.5%", "80.4%", "1M"],
-  ["GLM-5.2", "1365", "64.5%", "55.0%", "81.0%", "84.0%", "87.5%", "1M"]
+  ["GPT-5.6 Sol", "OpenAI", "1450", "75.2%", "68.5%", "88.4%", "92.1%", "512K"],
+  ["Claude Fable 5", "Anthropic", "1445", "73.8%", "74.2%", "85.0%", "88.5%", "2M"],
+  ["DeepSeek V4 Pro", "DeepSeek", "1420", "70.5%", "65.1%", "80.2%", "96.8%", "128K"],
+  ["Qwen 3.7 Max", "Alibaba", "1390", "68.2%", "60.0%", "86.5%", "89.0%", "256K"],
+  ["Gemini 3.5 Flash", "Google", "1350", "62.0%", "52.5%", "82.1%", "82.5%", "1M"],
+  ["GLM-5.2", "Zhipu AI", "1365", "64.5%", "55.0%", "81.0%", "84.0%", "1M"]
 ];
 
 zh.models.benchmarksTitle = "全维能力雷达与核心评测榜单";
