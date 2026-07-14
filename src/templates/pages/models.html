@@ -100,32 +100,39 @@
       </div>
     </section>
 
-    <!-- Quick Comparison Table -->
+    <!-- Benchmark Radar & Table -->
     <section class="section section-tight">
       <div class="container">
         <div class="section-header fade-in">
-          <h2>{{models.tableTitle}}</h2>
-          <p class="section-subtitle">{{models.tableSubtitle}}</p>
+          <h2>{{models.benchmarksTitle}}</h2>
+          <p class="section-subtitle">{{models.benchmarksSubtitle}}</p>
         </div>
-        <div class="comparison-table-wrap fade-in">
-          <table class="comparison-table">
-            <thead>
-              <tr>
-                {{#each models.tableHeaders}}
-                <th>{{this}}</th>
+        
+        <div class="benchmarks-container fade-in" style="display: flex; flex-direction: column; align-items: center; gap: 3rem;">
+          <div class="radar-chart-wrapper" style="width: 100%; max-width: 600px;">
+            <canvas id="modelRadarChart"></canvas>
+          </div>
+          
+          <div class="comparison-table-wrap" style="width: 100%;">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  {{#each models.tableHeaders}}
+                  <th>{{this}}</th>
+                  {{/each}}
+                </tr>
+              </thead>
+              <tbody>
+                {{#each models.tableRows}}
+                <tr>
+                  {{#each this}}
+                  <td>{{this}}</td>
+                  {{/each}}
+                </tr>
                 {{/each}}
-              </tr>
-            </thead>
-            <tbody>
-              {{#each models.tableRows}}
-              <tr>
-                {{#each this}}
-                <td>{{this}}</td>
-                {{/each}}
-              </tr>
-              {{/each}}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
@@ -200,6 +207,61 @@
     </section>
   </main>
   <footer id="site-footer" class="footer"></footer>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('modelRadarChart');
+    if (!ctx) return;
+    
+    // Inject dynamic labels and datasets via Handlebars
+    const labels = {{{json models.radarLabels}}};
+    const rawDatasets = {{{json models.radarDatasets}}};
+    
+    // Chart.js styling
+    const colors = [
+      { border: '#22d3ee', bg: 'rgba(34, 211, 238, 0.2)' },
+      { border: '#6366f1', bg: 'rgba(99, 102, 241, 0.2)' },
+      { border: '#ec4899', bg: 'rgba(236, 72, 153, 0.2)' },
+      { border: '#10b981', bg: 'rgba(16, 185, 129, 0.2)' }
+    ];
+    
+    const datasets = rawDatasets.map((ds, i) => ({
+      ...ds,
+      borderColor: colors[i % colors.length].border,
+      backgroundColor: colors[i % colors.length].bg,
+      pointBackgroundColor: colors[i % colors.length].border,
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: colors[i % colors.length].border,
+      borderWidth: 2,
+    }));
+    
+    new Chart(ctx, {
+      type: 'radar',
+      data: { labels, datasets },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: '#a1a1aa', font: { family: 'Inter', size: 14 } }
+          }
+        },
+        scales: {
+          r: {
+            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+            pointLabels: { color: '#e4e4e7', font: { family: 'Inter', size: 13, weight: '600' } },
+            ticks: {
+              color: '#71717a', backdropColor: 'transparent',
+              min: 80, max: 100, stepSize: 5
+            }
+          }
+        }
+      }
+    });
+  });
+</script>
 <script type="module" src="/src/assets/js/main.js"></script>
 </body>
 </html>

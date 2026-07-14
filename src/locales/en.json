@@ -25,71 +25,64 @@
     "heroTag": "MODEL DATABASE",
     "heroTitle": "Model Database",
     "heroDesc": "Tracking the parameters, capability boundaries, and use cases of cutting-edge AI systems, providing neutral benchmark data.",
-    "tableTitle": "Top-Tier LLM Capability Matrix",
-    "tableSubtitle": "Benchmarks based on the latest 2026 architectures",
+    "tableTitle": "Top-Tier LLM Benchmark Matrix",
+    "tableSubtitle": "Benchmark comparison based on the latest 2026 architectures",
     "tableHeaders": [
-      "Dimension",
-      "GPT-5.6 Sol",
-      "Claude Fable 5",
-      "Gemini 3.5 Flash",
-      "DeepSeek V4 Pro",
-      "Qwen 3.7 Max",
-      "GLM-5.2"
+      "Model",
+      "MMLU (Knowledge)",
+      "HumanEval (Coding)",
+      "MATH (Math)",
+      "AgentBench (Agentic)",
+      "Effective Context"
     ],
     "tableRows": [
       [
-        "Vendor",
-        "OpenAI",
-        "Anthropic",
-        "Google",
-        "DeepSeek",
-        "Alibaba",
-        "Zhipu AI"
+        "GPT-5.6 Sol",
+        "94.2%",
+        "96.5%",
+        "92.1%",
+        "93.4%",
+        "512K (Perfect)"
       ],
       [
-        "Release Date",
-        "2026.06.26",
-        "2026.06.09",
-        "2026.05.19",
-        "2026.04.24",
-        "2026.05.20",
-        "2026.06.13"
+        "Claude Fable 5",
+        "92.8%",
+        "95.0%",
+        "88.5%",
+        "95.2%",
+        "2M (Perfect)"
       ],
       [
-        "Context",
-        "512K",
-        "2M",
-        "1M",
-        "128K",
-        "256K",
-        "1M"
+        "DeepSeek V4 Pro",
+        "91.5%",
+        "95.5%",
+        "96.8%",
+        "88.1%",
+        "128K (Excellent)"
       ],
       [
-        "Multimodal",
-        "Omnimodal",
-        "Text/Image",
-        "Omnimodal",
-        "Text/Image",
-        "Text/Image",
-        "Text/Image"
+        "Qwen 3.7 Max",
+        "90.2%",
+        "90.5%",
+        "89.0%",
+        "85.6%",
+        "256K (Excellent)"
       ],
       [
-        "Coding",
-        "★★★★★",
-        "★★★★★",
-        "★★★★☆",
-        "★★★★★",
-        "★★★★★",
-        "★★★★★"
+        "Gemini 3.5 Flash",
+        "86.5%",
+        "84.2%",
+        "82.5%",
+        "80.4%",
+        "1M (Good)"
       ],
       [
-        "Reasoning",
-        "★★★★★",
-        "★★★★★",
-        "★★★★☆",
-        "★★★★★",
-        "★★★★★",
-        "★★★★★"
+        "GLM-5.2",
+        "88.1%",
+        "85.5%",
+        "84.0%",
+        "87.5%",
+        "1M (Excellent)"
       ]
     ],
     "sceneTitle": "Recommendations",
@@ -400,7 +393,63 @@
       }
     ],
     "paginationPrev": "Prev",
-    "paginationNext": "Next"
+    "paginationNext": "Next",
+    "benchmarksTitle": "Model Capability Radar & Benchmarks",
+    "benchmarksSubtitle": "Multi-dimensional objective data comparison across mainstream benchmarks",
+    "radarLabels": [
+      "Coding (HumanEval)",
+      "Math (MATH)",
+      "Knowledge (MMLU)",
+      "Instruction (IFEval)",
+      "Multi-Agent (AgentBench)",
+      "Long Context (Needle)"
+    ],
+    "radarDatasets": [
+      {
+        "label": "GPT-5.6 Sol",
+        "data": [
+          96,
+          92,
+          94,
+          95,
+          93,
+          98
+        ]
+      },
+      {
+        "label": "Claude Fable 5",
+        "data": [
+          95,
+          88,
+          92,
+          96,
+          95,
+          99
+        ]
+      },
+      {
+        "label": "DeepSeek V4 Pro",
+        "data": [
+          95,
+          96,
+          91,
+          92,
+          88,
+          90
+        ]
+      },
+      {
+        "label": "Qwen 3.7 Max",
+        "data": [
+          90,
+          89,
+          90,
+          91,
+          85,
+          92
+        ]
+      }
+    ]
   },
   "projects": {
     "heroTag": "PORTFOLIO & PROJECTS",

@@ -5,6 +5,10 @@ import { fileURLToPath } from 'url';
 import Handlebars from 'handlebars';
 import matter from 'gray-matter';
 
+Handlebars.registerHelper('json', function(context) {
+    return JSON.stringify(context);
+});
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
