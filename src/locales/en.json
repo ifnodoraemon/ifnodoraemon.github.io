@@ -25,64 +25,78 @@
     "heroTag": "MODEL DATABASE",
     "heroTitle": "Model Database",
     "heroDesc": "Tracking the parameters, capability boundaries, and use cases of cutting-edge AI systems, providing neutral benchmark data.",
-    "tableTitle": "Top-Tier LLM Benchmark Matrix",
-    "tableSubtitle": "Benchmark comparison based on the latest 2026 architectures",
+    "tableTitle": "Top-Tier LLM Panoramic Benchmark Matrix",
+    "tableSubtitle": "Latest benchmark scores focusing on 2026's hard reasoning datasets and Arena Elo",
     "tableHeaders": [
       "Model",
-      "MMLU (Knowledge)",
-      "HumanEval (Coding)",
+      "LMSYS Elo",
+      "GPQA (Expert)",
+      "SWE-bench (Eng)",
+      "MMMU (Vision)",
       "MATH (Math)",
-      "AgentBench (Agentic)",
-      "Effective Context"
+      "AgentBench",
+      "Context"
     ],
     "tableRows": [
       [
         "GPT-5.6 Sol",
-        "94.2%",
-        "96.5%",
+        "1450",
+        "75.2%",
+        "68.5%",
+        "88.4%",
         "92.1%",
         "93.4%",
-        "512K (Perfect)"
+        "512K"
       ],
       [
         "Claude Fable 5",
-        "92.8%",
-        "95.0%",
+        "1445",
+        "73.8%",
+        "74.2%",
+        "85.0%",
         "88.5%",
         "95.2%",
-        "2M (Perfect)"
+        "2M"
       ],
       [
         "DeepSeek V4 Pro",
-        "91.5%",
-        "95.5%",
+        "1420",
+        "70.5%",
+        "65.1%",
+        "80.2%",
         "96.8%",
         "88.1%",
-        "128K (Excellent)"
+        "128K"
       ],
       [
         "Qwen 3.7 Max",
-        "90.2%",
-        "90.5%",
+        "1390",
+        "68.2%",
+        "60.0%",
+        "86.5%",
         "89.0%",
         "85.6%",
-        "256K (Excellent)"
+        "256K"
       ],
       [
         "Gemini 3.5 Flash",
-        "86.5%",
-        "84.2%",
+        "1350",
+        "62.0%",
+        "52.5%",
+        "82.1%",
         "82.5%",
         "80.4%",
-        "1M (Good)"
+        "1M"
       ],
       [
         "GLM-5.2",
-        "88.1%",
-        "85.5%",
+        "1365",
+        "64.5%",
+        "55.0%",
+        "81.0%",
         "84.0%",
         "87.5%",
-        "1M (Excellent)"
+        "1M"
       ]
     ],
     "sceneTitle": "Recommendations",
@@ -394,59 +408,69 @@
     ],
     "paginationPrev": "Prev",
     "paginationNext": "Next",
-    "benchmarksTitle": "Model Capability Radar & Benchmarks",
-    "benchmarksSubtitle": "Multi-dimensional objective data comparison across mainstream benchmarks",
+    "benchmarksTitle": "Omni-Capability Radar & Core Benchmarks",
+    "benchmarksSubtitle": "Covering frontier hard-reasoning benchmarks like SWE-bench & GPQA alongside LMSYS Blind Tests",
     "radarLabels": [
       "Coding (HumanEval)",
+      "Engineering (SWE-bench)",
+      "Hard Reasoning (GPQA)",
       "Math (MATH)",
       "Knowledge (MMLU)",
       "Instruction (IFEval)",
-      "Multi-Agent (AgentBench)",
-      "Long Context (Needle)"
+      "Vision (MMMU)",
+      "Agentic (AgentBench)"
     ],
     "radarDatasets": [
       {
         "label": "GPT-5.6 Sol",
         "data": [
           96,
+          68,
+          75,
           92,
           94,
           95,
-          93,
-          98
+          88,
+          93
         ]
       },
       {
         "label": "Claude Fable 5",
         "data": [
           95,
+          74,
+          73,
           88,
           92,
           96,
-          95,
-          99
+          85,
+          95
         ]
       },
       {
         "label": "DeepSeek V4 Pro",
         "data": [
           95,
+          65,
+          70,
           96,
           91,
           92,
-          88,
-          90
+          80,
+          88
         ]
       },
       {
         "label": "Qwen 3.7 Max",
         "data": [
           90,
+          60,
+          68,
           89,
           90,
           91,
-          85,
-          92
+          86,
+          85
         ]
       }
     ]
