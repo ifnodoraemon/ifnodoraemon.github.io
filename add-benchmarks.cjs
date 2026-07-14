@@ -7,39 +7,39 @@ const enPath = path.join(__dirname, 'src/locales/en.json');
 const zh = JSON.parse(fs.readFileSync(zhPath, 'utf8'));
 const en = JSON.parse(fs.readFileSync(enPath, 'utf8'));
 
-// Expanded 12 dimensions for Radar Chart (2026 Pro Versions)
-const radarLabels = ["代码 (HumanEval-Plus)", "工程 (SWE-bench Pro)", "困难推理 (GPQA Diamond)", "实时评测 (LiveBench)", "硬核知识 (MMLU-Pro)", "视觉 (MMMU-Pro)", "视觉数学 (MathVista)", "长文本 (RULER)", "多智能体 (WebArena)", "工具 (BFCL V2)", "纯数学 (MATH 500)", "多语言 (MGSM)"];
-const radarLabelsEn = ["Coding (HE-Plus)", "Eng (SWE-bench Pro)", "Reasoning (GPQA Diamond)", "Real-time (LiveBench)", "Knowledge (MMLU-Pro)", "Vision (MMMU-Pro)", "Visual Math (MathVista)", "Context (RULER)", "Agentic (WebArena)", "Tool Use (BFCL V2)", "Math (MATH 500)", "Multilingual (MGSM)"];
+// 12 User-Centric & Real-World Task Dimensions (2026 Latest)
+const radarLabels = ["真实工程 (SWE Verified)", "结对编程 (Aider)", "指令遵循 (AlpacaEval 2)", "极限推理 (ARC-AGI)", "多轮对话 (MT-Bench)", "无污染评测 (LiveBench)", "文档视觉 (DocVQA)", "长视频理解 (Video-MME)", "API与工具 (BFCL V3)", "网页智能体 (BrowserGym)", "超长文分析 (InfiniteBench)", "高难盲测跑分 (Arena Hard)"];
+const radarLabelsEn = ["Real Eng (SWE Verified)", "Pair Coding (Aider)", "Instructions (AlpacaEval 2)", "Hard Logic (ARC-AGI)", "Chat (MT-Bench)", "Uncontaminated (LiveBench)", "Doc Vision (DocVQA)", "Video (Video-MME)", "Tool Use (BFCL V3)", "Web Agent (BrowserGym)", "Long Context (InfiniteBench)", "Human Pref (Arena Hard)"];
 
 const radarDatasets = [
-  { label: "GPT-5.6 Sol", data: [94, 65, 78, 88, 85, 82, 80, 98, 85, 95, 90, 94] },
-  { label: "Claude Fable 5", data: [92, 70, 75, 85, 84, 80, 75, 99, 90, 92, 86, 91] },
-  { label: "DeepSeek V4 Pro", data: [95, 60, 70, 80, 82, 72, 78, 92, 75, 85, 95, 85] },
-  { label: "Qwen 3.7 Max", data: [88, 55, 65, 78, 80, 78, 70, 95, 70, 90, 85, 96] },
-  { label: "Gemini 3.5 Flash", data: [82, 45, 60, 75, 78, 76, 72, 91, 65, 84, 78, 86] },
-  { label: "GLM-5.2", data: [84, 50, 62, 72, 76, 70, 68, 94, 80, 85, 80, 88] }
+  { label: "GPT-5.6 Sol", data: [92, 95, 96, 68, 95, 90, 95, 88, 96, 85, 98, 95] },
+  { label: "Claude Fable 5", data: [94, 92, 95, 65, 94, 88, 92, 85, 92, 90, 99, 93] },
+  { label: "DeepSeek V4 Pro", data: [88, 90, 92, 72, 90, 85, 85, 78, 88, 75, 92, 91] },
+  { label: "Qwen 3.7 Max", data: [85, 88, 90, 62, 88, 82, 88, 80, 90, 72, 95, 89] },
+  { label: "Gemini 3.5 Flash", data: [75, 80, 85, 55, 85, 80, 88, 92, 85, 68, 90, 82] },
+  { label: "GLM-5.2", data: [80, 82, 86, 58, 86, 78, 84, 75, 86, 70, 94, 85] }
 ];
 
-// Richer Table with Pro Benchmarks
-const benchmarksTableHeadersZh = ["模型", "厂商", "LMSYS Elo", "GPQA Diamond", "SWE-bench Pro", "MMLU-Pro", "LiveBench", "MathVista", "WebArena", "RULER (窗口)"];
-const benchmarksTableHeadersEn = ["Model", "Vendor", "LMSYS Elo", "GPQA Diamond", "SWE-bench Pro", "MMLU-Pro", "LiveBench", "MathVista", "WebArena", "RULER (Context)"];
+// Richer Table with Real-world Benchmarks
+const benchmarksTableHeadersZh = ["模型", "厂商", "LMSYS Elo", "SWE Verified (工程)", "Aider (代码)", "Arena Hard (盲测)", "ARC-AGI (逻辑)", "BrowserGym (智能体)", "InfiniteBench (长文)"];
+const benchmarksTableHeadersEn = ["Model", "Vendor", "LMSYS Elo", "SWE Verified (Eng)", "Aider (Coding)", "Arena Hard (Pref)", "ARC-AGI (Logic)", "BrowserGym (Agent)", "InfiniteBench (Context)"];
 
 const benchmarksTableRowsZh = [
-  ["GPT-5.6 Sol", "OpenAI", "1450", "78.2%", "65.5%", "85.4%", "88.1%", "80.4%", "85.2%", "98.2% (512K)"],
-  ["Claude Fable 5", "Anthropic", "1445", "75.8%", "70.2%", "84.0%", "85.5%", "75.5%", "90.0%", "99.0% (2M)"],
-  ["DeepSeek V4 Pro", "DeepSeek", "1420", "70.5%", "60.1%", "82.2%", "80.8%", "78.1%", "75.4%", "93.5% (1M)"],
-  ["Qwen 3.7 Max", "阿里巴巴", "1390", "65.2%", "55.0%", "80.5%", "78.0%", "70.6%", "70.2%", "95.1% (1M)"],
-  ["Gemini 3.5 Flash", "Google", "1350", "60.0%", "45.5%", "78.1%", "75.5%", "72.4%", "65.5%", "91.0% (1M)"],
-  ["GLM-5.2", "智谱AI", "1365", "62.5%", "50.0%", "76.0%", "72.0%", "68.0%", "80.0%", "94.2% (1M)"]
+  ["GPT-5.6 Sol", "OpenAI", "1450", "85.2%", "88.5%", "92.4%", "52.1%", "85.2%", "98.2% (512K)"],
+  ["Claude Fable 5", "Anthropic", "1445", "88.0%", "85.2%", "90.5%", "48.5%", "90.0%", "99.0% (2M)"],
+  ["DeepSeek V4 Pro", "DeepSeek", "1420", "78.5%", "82.1%", "88.2%", "55.8%", "75.4%", "93.5% (1M)"],
+  ["Qwen 3.7 Max", "阿里巴巴", "1390", "75.2%", "80.0%", "85.6%", "45.0%", "72.2%", "95.1% (1M)"],
+  ["Gemini 3.5 Flash", "Google", "1350", "65.0%", "70.5%", "78.5%", "35.5%", "68.5%", "91.0% (1M)"],
+  ["GLM-5.2", "智谱AI", "1365", "68.5%", "72.0%", "80.0%", "38.0%", "70.0%", "94.2% (1M)"]
 ];
 
 const benchmarksTableRowsEn = [
-  ["GPT-5.6 Sol", "OpenAI", "1450", "78.2%", "65.5%", "85.4%", "88.1%", "80.4%", "85.2%", "98.2% (512K)"],
-  ["Claude Fable 5", "Anthropic", "1445", "75.8%", "70.2%", "84.0%", "85.5%", "75.5%", "90.0%", "99.0% (2M)"],
-  ["DeepSeek V4 Pro", "DeepSeek", "1420", "70.5%", "60.1%", "82.2%", "80.8%", "78.1%", "75.4%", "93.5% (1M)"],
-  ["Qwen 3.7 Max", "Alibaba", "1390", "65.2%", "55.0%", "80.5%", "78.0%", "70.6%", "70.2%", "95.1% (1M)"],
-  ["Gemini 3.5 Flash", "Google", "1350", "60.0%", "45.5%", "78.1%", "75.5%", "72.4%", "65.5%", "91.0% (1M)"],
-  ["GLM-5.2", "Zhipu AI", "1365", "62.5%", "50.0%", "76.0%", "72.0%", "68.0%", "80.0%", "94.2% (1M)"]
+  ["GPT-5.6 Sol", "OpenAI", "1450", "85.2%", "88.5%", "92.4%", "52.1%", "85.2%", "98.2% (512K)"],
+  ["Claude Fable 5", "Anthropic", "1445", "88.0%", "85.2%", "90.5%", "48.5%", "90.0%", "99.0% (2M)"],
+  ["DeepSeek V4 Pro", "DeepSeek", "1420", "78.5%", "82.1%", "88.2%", "55.8%", "75.4%", "93.5% (1M)"],
+  ["Qwen 3.7 Max", "Alibaba", "1390", "75.2%", "80.0%", "85.6%", "45.0%", "72.2%", "95.1% (1M)"],
+  ["Gemini 3.5 Flash", "Google", "1350", "65.0%", "70.5%", "78.5%", "35.5%", "68.5%", "91.0% (1M)"],
+  ["GLM-5.2", "Zhipu AI", "1365", "68.5%", "72.0%", "80.0%", "38.0%", "70.0%", "94.2% (1M)"]
 ];
 
 zh.models.benchmarksTitle = "全维能力雷达与核心评测榜单";
