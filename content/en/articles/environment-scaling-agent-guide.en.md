@@ -113,4 +113,4 @@ class SecureSandboxedAgentRuntime:
 
 1. **Replace Monolithic Prompts with Feedback Loops**: LLM agents thrive on iterative correction. Routing live compiler errors and test failures back into the reasoning loop is infinitely more effective than lengthy prompt constraints.
 2. **Standardize on MCP**: The Model Context Protocol provides universal interoperability for tool discovery, file handling, and database interactions across 2026 frontier models.
-3. **Enforce Sandboxed Security**: Production deployments must mandate isolated ephemeral containers, read-only root filesystems, and strict egress network filtering.\n
+3. **Enforce Sandboxed Security**: Production deployments must mandate isolated ephemeral containers, read-only root filesystems, and strict egress network filtering.

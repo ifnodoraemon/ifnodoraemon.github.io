@@ -147,7 +147,7 @@ Open-source models have irreplaceable advantages in the following scenarios:
 - **Compliance Requirements**: Meets legal requirements for data residency in specific regions.
 - **Batch Inference**: Large-scale inference costs are much lower than API calls.
 
-## Trend 7: The Underlying Infrastructure Revolution
+## Trend 11: The Underlying Infrastructure Revolution
 
 With parameter counts exploding phenomenally, Enterprise Architects in 2026 are no longer agonizing over "which model to pick." Instead, they are deeply entrenched in **Inference Acceleration** and **GPU Compute Orchestration**.
 

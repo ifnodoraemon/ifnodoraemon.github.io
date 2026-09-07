@@ -87,4 +87,4 @@ server {
 
 For an enterprise processing 5 Billion tokens monthly:
 * **Proprietary API Costs**: Exceeds **$33,000 / month (~$400K annually)**;
-* **Self-Hosted 4-Node Cluster**: Reserved GPU node costs remain flat (~$36K - $44K/month) regardless of volume spikes, with 100% data sovereignty and zero telemetry leaks.\n
+* **Self-Hosted 4-Node Cluster**: Reserved GPU node costs remain flat (~$36K - $44K/month) regardless of volume spikes, with 100% data sovereignty and zero telemetry leaks.

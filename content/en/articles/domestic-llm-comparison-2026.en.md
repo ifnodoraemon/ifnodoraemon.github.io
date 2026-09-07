@@ -67,4 +67,4 @@ DeepSeek continues to lead open-weights economics. With 1.6T total MoE parameter
 
 1. **Choose Kimi K3** when your primary workloads demand **deep multimodal reasoning**, **million-token document extraction**, and high-fidelity long-horizon context retention.
 2. **Choose GLM-5.3** when building **autonomous DevOps agents**, **cybersecurity diagnostic pipelines**, and sandboxed terminal automation.
-3. **Choose DeepSeek-V4-Pro** when you require **enterprise on-premise deployment**, **repository-scale code refactoring**, and maximum cost efficiency for high-concurrency production pipelines.\n
+3. **Choose DeepSeek-V4-Pro** when you require **enterprise on-premise deployment**, **repository-scale code refactoring**, and maximum cost efficiency for high-concurrency production pipelines.
