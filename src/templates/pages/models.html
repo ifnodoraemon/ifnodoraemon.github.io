@@ -75,38 +75,117 @@
 
 
     <!-- Benchmark Radar & Table -->
-    <section class="section section-tight">
+    <section class="section section-tight" id="benchmarks">
       <div class="container">
         <div class="section-header fade-in">
           <h2>{{models.benchmarksTitle}}</h2>
           <p class="section-subtitle">{{models.benchmarksSubtitle}}</p>
         </div>
+
+        <!-- Source Banner -->
+        <div class="benchmark-source-banner fade-in">
+          <div class="source-badge-tag">🏆 权威榜单认证</div>
+          <div class="source-text">
+            <strong>{{models.sourceTitle}}</strong>：{{models.sourceDesc}}
+          </div>
+        </div>
         
-        <div class="benchmarks-container fade-in" style="display: flex; flex-direction: column; align-items: center; gap: 3rem;">
-          <div class="radar-chart-wrapper" style="width: 100%; max-width: 600px;">
-            <canvas id="modelRadarChart"></canvas>
+        <div class="benchmarks-container fade-in">
+          <!-- Interactive Model Filter Controls -->
+          <div class="radar-controls">
+            <div class="radar-pills-header">
+              <span class="radar-pills-label">{{models.radarSelectHint}}</span>
+              <div class="radar-presets">
+                <button type="button" class="preset-btn" id="presetTop">{{#if isEn}}Top 3 Frontier{{else}}顶级三强{{/if}}</button>
+                <button type="button" class="preset-btn" id="presetOpen">{{#if isEn}}Open Weights{{else}}开源主力{{/if}}</button>
+                <button type="button" class="preset-btn" id="presetAll">{{#if isEn}}All Models{{else}}全选对比{{/if}}</button>
+              </div>
+            </div>
+            <div class="radar-pills" id="radarPills"></div>
           </div>
-          
-          <div class="comparison-table-wrap" style="width: 100%;">
-            <table class="comparison-table">
-              <thead>
-                <tr>
-                  {{#each models.tableHeaders}}
-                  <th>{{this}}</th>
+
+          <!-- Radar Canvas Card -->
+          <div class="radar-chart-card">
+            <div class="radar-chart-wrapper">
+              <canvas id="modelRadarChart"></canvas>
+            </div>
+          </div>
+
+          <!-- 6 Dimensions Explanatory Grid -->
+          <div class="dimension-guide-grid">
+            {{#each models.dimensionGuides}}
+            <div class="dimension-guide-item">
+              <div class="dim-icon">{{this.icon}}</div>
+              <div class="dim-content">
+                <h4>{{this.name}}</h4>
+                <p>{{this.desc}}</p>
+              </div>
+            </div>
+            {{/each}}
+          </div>
+
+          <!-- Authoritative Leaderboard Comparison Table -->
+          <div class="comparison-table-section">
+            <div class="table-section-title">
+              <h3>{{models.tableTitle}}</h3>
+              <p>{{models.tableSubtitle}}</p>
+            </div>
+            <div class="comparison-table-wrap">
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    {{#each models.tableHeaders}}
+                    <th>{{this}}</th>
+                    {{/each}}
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each models.tableRows}}
+                  <tr>
+                    {{#each this}}
+                    <td>{{this}}</td>
+                    {{/each}}
+                  </tr>
                   {{/each}}
-                </tr>
-              </thead>
-              <tbody>
-                {{#each models.tableRows}}
-                <tr>
-                  {{#each this}}
-                  <td>{{this}}</td>
-                  {{/each}}
-                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Model Profiles (Detailed Cards) -->
+    <section class="section section-tight" id="model-profiles">
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="section-tag">{{models.heroTag}}</div>
+          <h2>{{models.heroTitle}}</h2>
+          <p class="section-subtitle">{{models.heroDesc}}</p>
+        </div>
+        <div class="model-profiles-grid fade-in">
+          {{#each models.details}}
+          <div class="model-detail-card">
+            <div class="model-detail-header">
+              <div class="model-detail-icon">{{this.icon}}</div>
+              <div>
+                <h3 style="font-size: 1.3rem; margin-bottom: 0.2rem;">{{this.name}}</h3>
+                <div class="detail-spec-label">{{this.meta}}</div>
+              </div>
+            </div>
+            <div class="model-detail-body">
+              <p>{{this.desc}}</p>
+              <div class="model-detail-specs">
+                {{#each this.specs}}
+                <div class="detail-spec">
+                  <span class="detail-spec-label">{{this.label}}</span>
+                  <span class="detail-spec-value">{{this.value}}</span>
+                </div>
                 {{/each}}
-              </tbody>
-            </table>
+              </div>
+            </div>
           </div>
+          {{/each}}
         </div>
       </div>
     </section>
@@ -115,7 +194,7 @@
     <section class="section section-tight">
       <div class="container">
         <div class="section-header fade-in">
-          <div class="section-tag">{{models.heroTag}}</div>
+          <div class="section-tag">SCENARIOS</div>
           <h2>{{models.sceneTitle}}</h2>
           <p class="section-subtitle">{{models.sceneSubtitle}}</p>
         </div>
@@ -135,6 +214,27 @@
       </div>
     </section>
 
+    <!-- Timeline Section -->
+    <section class="section section-tight" id="timeline">
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="section-tag">{{models.timelineTag}}</div>
+          <h2>{{models.timelineTitle}}</h2>
+        </div>
+        <div class="timeline fade-in" style="margin: 0 auto;">
+          {{#each models.timeline}}
+          <div class="timeline-item">
+            <div class="timeline-dot {{#if this.latest}}timeline-dot-latest{{/if}}"></div>
+            <div class="timeline-date">{{this.date}}</div>
+            <div class="timeline-content">
+              <strong>{{this.name}}</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">{{this.desc}}</p>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </section>
 
     <!-- Related Articles -->
     <section class="section section-tight">
@@ -151,7 +251,6 @@
             </div>
             <h3>{{this.title}}</h3>
             <p>{{this.desc}}</p>
-            <!-- When generating static HTML, making sure links point appropriately. The href from translation gives the link directly. -->
             <a href="{{this.link}}" class="card-link">{{../models.readMore}} <span class="arrow">→</span></a>
           </article>
           {{/each}}
@@ -170,49 +269,135 @@
     const labels = {{{json models.radarLabels}}};
     const rawDatasets = {{{json models.radarDatasets}}};
     
-    // Chart.js styling
-    const colors = [
-      { border: '#22d3ee', bg: 'rgba(34, 211, 238, 0.2)' },
-      { border: '#6366f1', bg: 'rgba(99, 102, 241, 0.2)' },
-      { border: '#ec4899', bg: 'rgba(236, 72, 153, 0.2)' },
-      { border: '#10b981', bg: 'rgba(16, 185, 129, 0.2)' }
-    ];
+    // Convert hex color to rgba helper
+    function hexToRgba(hex, alpha) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
     
-    const datasets = rawDatasets.map((ds, i) => ({
-      ...ds,
-      borderColor: colors[i % colors.length].border,
-      backgroundColor: colors[i % colors.length].bg,
-      pointBackgroundColor: colors[i % colors.length].border,
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: colors[i % colors.length].border,
-      borderWidth: 2,
+    const datasets = rawDatasets.map((ds) => ({
+      label: ds.label,
+      data: ds.data,
+      borderColor: ds.color,
+      backgroundColor: hexToRgba(ds.color, 0.18),
+      pointBackgroundColor: ds.color,
+      pointBorderColor: '#ffffff',
+      pointHoverBackgroundColor: '#ffffff',
+      pointHoverBorderColor: ds.color,
+      pointRadius: 4,
+      pointHoverRadius: 6,
+      borderWidth: 2.2,
+      hidden: !ds.defaultActive
     }));
     
-    new Chart(ctx, {
+    const chart = new Chart(ctx, {
       type: 'radar',
       data: { labels, datasets },
       options: {
         responsive: true,
+        maintainAspectRatio: true,
         plugins: {
           legend: {
-            position: 'bottom',
-            labels: { color: '#a1a1aa', font: { family: 'Inter', size: 14 } }
+            display: false // We use our custom interactive pills
+          },
+          tooltip: {
+            backgroundColor: 'rgba(10, 10, 12, 0.95)',
+            titleColor: '#ffffff',
+            bodyColor: '#e4e4e7',
+            borderColor: 'rgba(255, 255, 255, 0.15)',
+            borderWidth: 1,
+            padding: 12,
+            boxPadding: 6,
+            usePointStyle: true,
+            callbacks: {
+              label: function(context) {
+                return ` ${context.dataset.label}: ${context.raw} / 100`;
+              }
+            }
           }
         },
         scales: {
           r: {
-            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
-            grid: { color: 'rgba(255, 255, 255, 0.1)' },
-            pointLabels: { color: '#e4e4e7', font: { family: 'Inter', size: 13, weight: '600' } },
+            angleLines: { color: 'rgba(255, 255, 255, 0.08)' },
+            grid: { color: 'rgba(255, 255, 255, 0.08)' },
+            pointLabels: {
+              color: '#d4d4d8',
+              font: { family: 'Inter, sans-serif', size: 12, weight: '600' }
+            },
             ticks: {
-              color: '#71717a', backdropColor: 'transparent',
-              min: 80, max: 100, stepSize: 5
+              color: '#71717a',
+              backdropColor: 'transparent',
+              min: 40,
+              max: 100,
+              stepSize: 10,
+              font: { family: 'monospace', size: 10 }
             }
           }
         }
       }
     });
+
+    // Render interactive model pills
+    const pillsContainer = document.getElementById('radarPills');
+    if (pillsContainer) {
+      rawDatasets.forEach((ds, index) => {
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = `radar-pill ${ds.defaultActive ? 'active' : ''}`;
+        pill.style.setProperty('--pill-color', ds.color);
+        pill.innerHTML = `
+          <span class="pill-dot" style="color: ${ds.color};"></span>
+          <span class="pill-name">${ds.label}</span>
+          <span class="pill-type">${ds.type}</span>
+        `;
+        
+        pill.addEventListener('click', () => {
+          const isCurrentlyHidden = chart.data.datasets[index].hidden;
+          chart.data.datasets[index].hidden = !isCurrentlyHidden;
+          pill.classList.toggle('active', isCurrentlyHidden);
+          chart.update();
+        });
+        
+        pillsContainer.appendChild(pill);
+      });
+    }
+
+    // Preset handlers
+    const pillButtons = pillsContainer ? pillsContainer.querySelectorAll('.radar-pill') : [];
+    
+    function setVisibility(predicate) {
+      rawDatasets.forEach((ds, i) => {
+        const shouldShow = predicate(ds);
+        chart.data.datasets[i].hidden = !shouldShow;
+        if (pillButtons[i]) {
+          pillButtons[i].classList.toggle('active', shouldShow);
+        }
+      });
+      chart.update();
+    }
+
+    const presetTop = document.getElementById('presetTop');
+    if (presetTop) {
+      presetTop.addEventListener('click', () => {
+        setVisibility(ds => ['DeepSeek-R1', 'Claude 3.5 Sonnet', 'OpenAI o1'].includes(ds.label));
+      });
+    }
+
+    const presetOpen = document.getElementById('presetOpen');
+    if (presetOpen) {
+      presetOpen.addEventListener('click', () => {
+        setVisibility(ds => ['DeepSeek-R1', 'DeepSeek-V3', 'Qwen 2.5 (72B/Max)'].includes(ds.label));
+      });
+    }
+
+    const presetAll = document.getElementById('presetAll');
+    if (presetAll) {
+      presetAll.addEventListener('click', () => {
+        setVisibility(() => true);
+      });
+    }
   });
 </script>
 <script type="module" src="/src/assets/js/main.js"></script>

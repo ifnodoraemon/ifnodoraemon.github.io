@@ -19,522 +19,467 @@
     }
   },
   "models": {
-    "pageTag": "MODEL COMPARISON",
-    "pageTitle": "AI Models Comprehensive Comparison",
-    "pageDesc": "Deep dive into the capability boundaries of the cutting-edge 2026 models",
+    "pageTag": "MODEL BENCHMARKS & RADAR",
+    "pageTitle": "AI Models Benchmark & Comprehensive Comparison",
+    "pageDesc": "A panoramic perspective on cutting-edge LLMs based on authoritative benchmarks from Artificial Analysis (AA), LMSYS Arena, and SWE-bench Verified",
     "heroTag": "MODEL DATABASE",
     "heroTitle": "Model Database",
-    "heroDesc": "Tracking the parameters, capability boundaries, and use cases of cutting-edge AI systems, providing neutral benchmark data.",
-    "tableTitle": "Top-Tier LLM Panoramic Benchmark Matrix",
-    "tableSubtitle": "Latest benchmark scores focusing on 2026's hard reasoning datasets and Arena Elo",
+    "heroDesc": "Tracking the parameters, empirical capabilities, and production use cases of state-of-the-art AI systems with neutral, objective benchmark metrics.",
+    "benchmarksTitle": "Frontier LLM Comprehensive Capability Star Chart (Radar)",
+    "benchmarksSubtitle": "Modeled after Artificial Analysis (AA Quality & Speed) 6D framework, normalized on a 0-100 scale incorporating LMSYS Arena Elo and SWE-bench Verified",
+    "radarSelectHint": "Click model pills to toggle/overlay models in the Star Chart in real time:",
+    "sourceTitle": "Authoritative Benchmark Sources",
+    "sourceDesc": "Synthesized from Artificial Analysis (AA) Quality Index & Speed/Price empirical benchmarks, LMSYS Chatbot Arena human blind evaluations, SWE-bench Verified real GitHub engineering tests, and official technical reports.",
+    "radarLabels": [
+      "Reasoning & Math",
+      "Software Engineering",
+      "Agent & Tool Use",
+      "Knowledge & Language",
+      "Context & Instruction",
+      "Speed & Cost Value"
+    ],
+    "radarDatasets": [
+      {
+        "label": "DeepSeek-R1",
+        "provider": "DeepSeek",
+        "type": "Open Weights",
+        "color": "#3b82f6",
+        "data": [
+          96,
+          91,
+          85,
+          93,
+          86,
+          98
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "Claude 3.5 Sonnet",
+        "provider": "Anthropic",
+        "type": "Proprietary",
+        "color": "#f97316",
+        "data": [
+          90,
+          98,
+          97,
+          92,
+          94,
+          84
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "OpenAI o1",
+        "provider": "OpenAI",
+        "type": "Proprietary",
+        "color": "#10b981",
+        "data": [
+          98,
+          93,
+          90,
+          95,
+          88,
+          68
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "DeepSeek-V3",
+        "provider": "DeepSeek",
+        "type": "Open Weights",
+        "color": "#06b6d4",
+        "data": [
+          86,
+          88,
+          86,
+          90,
+          88,
+          99
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "GPT-4o",
+        "provider": "OpenAI",
+        "type": "Proprietary",
+        "color": "#a855f7",
+        "data": [
+          85,
+          86,
+          92,
+          93,
+          91,
+          86
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "Gemini 2.0 Flash",
+        "provider": "Google",
+        "type": "Proprietary",
+        "color": "#eab308",
+        "data": [
+          84,
+          85,
+          88,
+          89,
+          98,
+          96
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "Qwen 2.5 (72B/Max)",
+        "provider": "Alibaba",
+        "type": "Open Weights",
+        "color": "#ec4899",
+        "data": [
+          86,
+          89,
+          85,
+          91,
+          87,
+          92
+        ],
+        "defaultActive": false
+      }
+    ],
+    "dimensionGuides": [
+      {
+        "icon": "🧠",
+        "name": "Reasoning & Math",
+        "desc": "PhD-level GPQA Diamond reasoning, AIME 2024, and MATH-500 multi-step chain-of-thought derivation"
+      },
+      {
+        "icon": "💻",
+        "name": "Software Engineering",
+        "desc": "SWE-bench Verified real GitHub issue resolution, LiveCodeBench, and complex code refactoring"
+      },
+      {
+        "icon": "🤖",
+        "name": "Agent & Tool Use",
+        "desc": "τ²-Bench, BrowserGym web interaction, native Computer Use, and robust Function Calling"
+      },
+      {
+        "icon": "📚",
+        "name": "Knowledge & Language",
+        "desc": "MMLU-Pro interdisciplinary academic knowledge and LMSYS Arena Hard blind win rate"
+      },
+      {
+        "icon": "📜",
+        "name": "Context & Instruction",
+        "desc": "IFEval strict format following, plus high-fidelity retrieval across 128K to 1M+ token windows"
+      },
+      {
+        "icon": "⚡",
+        "name": "Speed & Cost Value",
+        "desc": "Key Artificial Analysis metric: Output Tokens/sec throughput balanced against cost per million tokens"
+      }
+    ],
+    "tableTitle": "Comprehensive Benchmark Evaluation Matrix",
+    "tableSubtitle": "Aggregating latest empirical scores from Artificial Analysis (AA), LMSYS Arena, and SWE-bench Verified",
     "tableHeaders": [
       "Model",
-      "Vendor",
+      "Provider",
+      "License",
+      "AA Quality Index",
       "LMSYS Elo",
-      "SWE Verified (Eng)",
-      "Aider (Coding)",
-      "Arena Hard (Pref)",
-      "ARC-AGI (Logic)",
-      "BrowserGym (Agent)",
-      "InfiniteBench (Context)"
+      "SWE-bench",
+      "Reasoning (GPQA/AIME)",
+      "Speed (TPS)",
+      "Context Window",
+      "API Price ($/1M)",
+      "Core Highlight"
     ],
     "tableRows": [
       [
-        "GPT-5.6 Sol",
-        "OpenAI",
-        "1450",
-        "85.2%",
-        "88.5%",
-        "92.4%",
-        "52.1%",
-        "85.2%",
-        "98.2% (512K)"
-      ],
-      [
-        "Claude Fable 5",
-        "Anthropic",
-        "1445",
-        "88.0%",
-        "85.2%",
-        "90.5%",
-        "48.5%",
-        "90.0%",
-        "99.0% (2M)"
-      ],
-      [
-        "DeepSeek V4 Pro",
+        "DeepSeek-R1",
         "DeepSeek",
-        "1420",
-        "78.5%",
-        "82.1%",
-        "88.2%",
-        "55.8%",
-        "75.4%",
-        "93.5% (1M)"
-      ],
-      [
-        "Qwen 3.7 Max",
-        "Alibaba",
-        "1390",
-        "75.2%",
-        "80.0%",
-        "85.6%",
-        "45.0%",
-        "72.2%",
-        "95.1% (1M)"
-      ],
-      [
-        "Gemini 3.5 Flash",
-        "Google",
-        "1350",
-        "65.0%",
-        "70.5%",
-        "78.5%",
-        "35.5%",
-        "68.5%",
-        "91.0% (1M)"
-      ],
-      [
-        "GLM-5.2",
-        "Zhipu AI",
+        "Open Weights",
+        "90",
         "1365",
-        "68.5%",
-        "72.0%",
-        "80.0%",
-        "38.0%",
-        "70.0%",
-        "94.2% (1M)"
+        "49.2%",
+        "71.5% / 79.8%",
+        "~45 t/s",
+        "128K (64K out)",
+        "$0.55 / $2.19",
+        "Open Reasoning Milestone"
+      ],
+      [
+        "Claude 3.5 Sonnet",
+        "Anthropic",
+        "Proprietary",
+        "89",
+        "1374",
+        "53.7%",
+        "65.0% / 78.3%",
+        "~75 t/s",
+        "200K (Cached)",
+        "$3.00 / $15.00",
+        "Gold Standard in Software Eng"
+      ],
+      [
+        "OpenAI o1",
+        "OpenAI",
+        "Proprietary",
+        "91",
+        "1385",
+        "48.9%",
+        "75.7% / 83.3%",
+        "~50 t/s",
+        "200K",
+        "$15.00 / $60.00",
+        "Peak Chain-of-Thought Reasoning"
+      ],
+      [
+        "DeepSeek-V3",
+        "DeepSeek",
+        "Open Weights",
+        "84",
+        "1335",
+        "42.0%",
+        "59.1% / 89.3%",
+        "~65 t/s",
+        "128K",
+        "$0.14 / $0.28",
+        "Unbeatable Cost-Efficiency MoE"
+      ],
+      [
+        "GPT-4o",
+        "OpenAI",
+        "Proprietary",
+        "86",
+        "1362",
+        "38.8%",
+        "56.1% / 76.6%",
+        "~110 t/s",
+        "128K",
+        "$2.50 / $10.00",
+        "Omni-Multimodal Workhorse"
+      ],
+      [
+        "Gemini 2.0 Flash",
+        "Google",
+        "Proprietary",
+        "85",
+        "1355",
+        "41.5%",
+        "58.5% / 82.0%",
+        "~180 t/s",
+        "1,048,576 (1M)",
+        "$0.10 / $0.40",
+        "Blazing Speed & 1M Context"
+      ],
+      [
+        "Qwen 2.5 (72B/Max)",
+        "Alibaba",
+        "Open Weights",
+        "85",
+        "1338",
+        "44.5%",
+        "57.8% / 85.2%",
+        "~60 t/s",
+        "128K",
+        "$0.40 / $1.20",
+        "Best Enterprise Self-Hosting"
       ]
     ],
-    "sceneTitle": "Recommendations",
-    "sceneSubtitle": "Pick the right model according to your specific needs",
+    "sceneTitle": "Workload Recommendations",
+    "sceneSubtitle": "Recommended model architectures tailored to your specific application requirements",
     "scenes": [
       {
-        "title": "Coding & Dev",
-        "desc": "Require code generation, refactoring, debugging, or dev assistance",
+        "title": "Coding & Software Engineering",
+        "desc": "Complex codebase understanding, full-stack automated refactoring, and real GitHub bug fixing",
         "badge": "Top Pick",
-        "reason": "DeepSeek V4 Pro and Claude Fable 5 lead in complex coding accuracy and refactoring."
+        "reason": "Claude 3.5 Sonnet leads SWE-bench Verified (53.7%); DeepSeek-R1 brings unprecedented algorithmic reasoning to code."
       },
       {
-        "title": "Agent Workflows",
-        "desc": "Build autonomous, multi-step intelligent agent systems",
-        "badge": "Strongest",
-        "reason": "GPT-5.6 Sol and Claude Fable 5 offer industry-leading agentic capabilities and robust Computer Use."
+        "title": "Deep Reasoning & Math Research",
+        "desc": "Mathematical proofs, algorithmic competitions, advanced scientific analysis, and complex planning",
+        "badge": "Peak Reasoning",
+        "reason": "OpenAI o1 and DeepSeek-R1 lead in AIME (80%+) and MATH-500 (97%+) via native reinforcement learning CoT."
       },
       {
-        "title": "Long Context",
-        "desc": "Need to process ultra-long texts, full codebases, or massive data",
-        "badge": "Recommended",
-        "reason": "Claude Fable 5 offers a 2M window; Gemini 3.5 Flash brings unmatched 1M efficiency."
+        "title": "Autonomous Agents & Tool Calling",
+        "desc": "Multi-step tool calling, browser automation, and computer desktop interactions",
+        "badge": "Agent Champion",
+        "reason": "Claude 3.5 Sonnet natively powers Computer Use; GPT-4o provides mature and reliable Function Calling."
       },
       {
-        "title": "Open Source Leader",
-        "desc": "Enterprise deployment needing high-end open-weight capability",
-        "badge": "All-Rounder",
-        "reason": "Qwen 3.7 Max is the absolute top-tier open-weight model for versatile tasks."
+        "title": "Long Context & Low Latency",
+        "desc": "Full-book document analysis, million-token log retrieval, and latency-sensitive real-time conversations",
+        "badge": "1M+ Speed King",
+        "reason": "Gemini 2.0 Flash combines 1,000,000 (1M) context recall with ultra-fast 180+ tokens/s throughput."
       },
       {
-        "title": "Complex Reasoning",
-        "desc": "Math proofs, logic analysis, complex planning tasks",
-        "badge": "Extreme",
-        "reason": "DeepSeek V4 Pro and GPT-5.6 Sol provide state-of-the-art deep reasoning logic."
+        "title": "Enterprise Self-Hosting & Privacy",
+        "desc": "Private on-premises deployment, strict data governance, zero leakage, and vertical fine-tuning",
+        "badge": "Open Source Choice",
+        "reason": "DeepSeek-V3 (671B MoE) and Qwen 2.5 72B represent the pinnacle of open-weights models for enterprise deployment."
       },
       {
-        "title": "Long-Horizon Agent",
-        "desc": "Complex software engineering and multi-step reasoning",
-        "badge": "Agentic",
-        "reason": "GLM-5.2 introduces powerful open-weight long-horizon capabilities with its 1M window."
+        "title": "Scale & Cost Efficiency",
+        "desc": "High-volume production API traffic, background batch workflows, and margin-sensitive commercial apps",
+        "badge": "Value King",
+        "reason": "DeepSeek-V3 ($0.14/$0.28 per million tokens) and Gemini 2.0 Flash ($0.10/$0.40) redefine industry cost curves."
       }
     ],
     "details": [
       {
-        "id": "gpt",
-        "icon": "🧠",
-        "name": "GPT-5.6 Sol",
-        "meta": "OpenAI · Released 2026.06.26",
-        "desc": "GPT-5.6 Sol is OpenAI's latest flagship preview, featuring 'ultra' modes utilizing subagents for complex tasks.",
-        "specs": [
-          {
-            "label": "Context",
-            "value": "512K tokens"
-          },
-          {
-            "label": "Strengths",
-            "value": "Reasoning · Agentic Workflows · Omni"
-          }
-        ]
-      },
-      {
-        "id": "claude",
-        "icon": "🎭",
-        "name": "Claude Fable 5",
-        "meta": "Anthropic · Released 2026.06.09",
-        "desc": "Claude Fable 5 leads in software engineering and safety, featuring a massive 2M context window.",
-        "specs": [
-          {
-            "label": "Context",
-            "value": "2M tokens"
-          },
-          {
-            "label": "Strengths",
-            "value": "Computer Use · Agentic Logic"
-          }
-        ]
-      },
-      {
-        "id": "gemini",
-        "icon": "✨",
-        "name": "Gemini 3.5 Flash",
-        "meta": "Google · Released 2026.05.19",
-        "desc": "Google's 2026 speed champion, offering a 1M context window and unmatched efficiency for large-scale operations.",
-        "specs": [
-          {
-            "label": "Context",
-            "value": "1M tokens"
-          },
-          {
-            "label": "Strengths",
-            "value": "High Speed · Cost-Effective · Omnimodal"
-          }
-        ]
-      },
-      {
-        "id": "deepseek",
+        "id": "deepseek-r1",
         "icon": "🐳",
-        "name": "DeepSeek V4 Pro",
-        "meta": "DeepSeek · Released 2026.04.24",
-        "desc": "DeepSeek V4 Pro is the new standard for open-weight reasoning and coding, completely outperforming its predecessors.",
+        "name": "DeepSeek-R1",
+        "meta": "DeepSeek · Open Weights / RL Reasoning",
+        "desc": "DeepSeek's landmark open reasoning model, pioneering reinforcement learning with long chain-of-thought to rival frontier commercial LLMs in math and code.",
+        "specs": [
+          {
+            "label": "Context",
+            "value": "128K (64K max output)"
+          },
+          {
+            "label": "Key Strength",
+            "value": "AIME 79.8% · MATH-500 97.3% · Open Weights"
+          }
+        ]
+      },
+      {
+        "id": "claude-sonnet",
+        "icon": "🎭",
+        "name": "Claude 3.5 Sonnet",
+        "meta": "Anthropic · Proprietary / Code & Agent King",
+        "desc": "The gold standard for software engineering and real coding workflows, achieving 53.7% on SWE-bench Verified and pioneering Computer Use.",
+        "specs": [
+          {
+            "label": "Context",
+            "value": "200K (Prompt Caching)"
+          },
+          {
+            "label": "Key Strength",
+            "value": "SWE-bench 53.7% · Superior Architecture · Top Agentic Dev"
+          }
+        ]
+      },
+      {
+        "id": "openai-o1",
+        "icon": "🧠",
+        "name": "OpenAI o1",
+        "meta": "OpenAI · Proprietary / Reasoning Flagship",
+        "desc": "OpenAI's flagship reasoning model engineered for scientific tasks, hard mathematics, and competitive programming, scoring 75.7% on GPQA Diamond.",
+        "specs": [
+          {
+            "label": "Context",
+            "value": "200K tokens"
+          },
+          {
+            "label": "Key Strength",
+            "value": "GPQA Diamond 75.7% · Olympiad Math · Autonomous Planning"
+          }
+        ]
+      },
+      {
+        "id": "deepseek-v3",
+        "icon": "⚡",
+        "name": "DeepSeek-V3",
+        "meta": "DeepSeek · Open Weights / 671B MoE",
+        "desc": "One of the world's most capable open-weights MoE models, featuring 671B total parameters (37B active) and unrivaled cost-to-performance efficiency.",
         "specs": [
           {
             "label": "Context",
             "value": "128K tokens"
           },
           {
-            "label": "Strengths",
-            "value": "Deep Reasoning · Coding Expert"
+            "label": "Key Strength",
+            "value": "$0.14 / $0.28 Pricing · Multi-head Latent Attention"
           }
         ]
       },
       {
-        "id": "qwen",
+        "id": "gemini-flash",
+        "icon": "✨",
+        "name": "Gemini 2.0 Flash",
+        "meta": "Google · Proprietary / Speed & 1M Context",
+        "desc": "Google's next-gen multimodal speed champion, offering 180+ tokens/s throughput and a native 1-million-token context window.",
+        "specs": [
+          {
+            "label": "Context",
+            "value": "1,048,576 (1M) tokens"
+          },
+          {
+            "label": "Key Strength",
+            "value": "180+ t/s Speed · Native Search · Sub-second Latency"
+          }
+        ]
+      },
+      {
+        "id": "qwen-max",
         "icon": "🌐",
-        "name": "Qwen 3.7 Max",
-        "meta": "Alibaba · Released 2026.05.20",
-        "desc": "Qwen 3.7 Max stands at the absolute frontier of open-source models, delivering top-tier performance.",
+        "name": "Qwen 2.5 (72B / Max)",
+        "meta": "Alibaba · Open Weights & Cloud / All-Rounder",
+        "desc": "Alibaba's flagship open-weights architecture, offering high-performance 72B dense and specialized Coder versions for robust enterprise deployment.",
         "specs": [
           {
             "label": "Context",
-            "value": "256K tokens"
+            "value": "128K tokens"
           },
           {
-            "label": "Strengths",
-            "value": "All-Around Performance · Multi-Lingual"
-          }
-        ]
-      },
-      {
-        "id": "glm",
-        "icon": "🧠",
-        "name": "GLM-5.2",
-        "meta": "Zhipu AI · Released 2026.06.13",
-        "desc": "Zhipu AI's GLM-5.2 boasts a 1M context window and is specifically designed for long-horizon agentic workflows and coding tasks.",
-        "specs": [
-          {
-            "label": "Context",
-            "value": "1M tokens"
-          },
-          {
-            "label": "Strengths",
-            "value": "Long-Horizon Agents · Open Weights"
+            "label": "Key Strength",
+            "value": "Full Open Ecosystem · Multilingual Prowess · On-Prem Ready"
           }
         ]
       }
     ],
     "timelineTag": "TIMELINE",
-    "timelineTitle": "2026 Model Release Timeline",
-    "listingTimelineTitle": "Publish Timeline",
+    "timelineTitle": "Model Evolution & Breakthrough Timeline",
+    "listingTimelineTitle": "Release Timeline",
     "listingSearchPlaceholder": "Search articles...",
     "timeline": [
       {
-        "date": "2026.06.26",
-        "name": "GPT-5.6 Sol",
-        "desc": "OpenAI releases its agent-focused flagship model",
+        "date": "2025.01",
+        "name": "DeepSeek-R1",
+        "desc": "DeepSeek open-sources its breakthrough reasoning model R1, demonstrating state-of-the-art reasoning at disruptive training economics",
         "latest": true
       },
       {
-        "date": "2026.06.13",
-        "name": "GLM-5.2",
-        "desc": "Zhipu AI open-sources its long-horizon agentic model",
+        "date": "2024.12",
+        "name": "DeepSeek-V3",
+        "desc": "DeepSeek releases 671B MoE model V3, setting new records for open-source base models in coding and reasoning",
         "latest": false
       },
       {
-        "date": "2026.06.09",
-        "name": "Claude Fable 5",
-        "desc": "Anthropic releases Fable 5 with top tier agentic workflows",
+        "date": "2024.12",
+        "name": "OpenAI o1",
+        "desc": "OpenAI officially ships o1 and o3-mini, cementing Test-time Compute as the new frontier of AI scaling",
         "latest": false
       },
       {
-        "date": "2026.05.20",
-        "name": "Qwen 3.7 Max",
-        "desc": "Alibaba sets the new bar for open-weight models",
+        "date": "2024.12",
+        "name": "Gemini 2.0",
+        "desc": "Google announces Gemini 2.0 Flash, raising the bar for multimodal speed and long-context processing",
         "latest": false
       },
       {
-        "date": "2026.05.19",
-        "name": "Gemini 3.5 Flash",
-        "desc": "Google releases incredibly fast omnimodal model",
-        "latest": false
-      },
-      {
-        "date": "2026.04.24",
-        "name": "DeepSeek V4 Pro",
-        "desc": "DeepSeek releases their next generation reasoning expert",
-        "latest": false
-      },
-      {
-        "date": "2025.02.20",
-        "name": "Claude 3.7 & Grok 3",
-        "desc": "Major reasoning models released emphasizing test-time compute",
-        "latest": false
-      },
-      {
-        "date": "2025.02.05",
-        "name": "Gemini 2.0 Flash",
-        "desc": "Google officially releases Gemini 2.0 Flash and Flash-Lite",
-        "latest": false
-      },
-      {
-        "date": "2025.01.20",
-        "name": "DeepSeek R1",
-        "desc": "DeepSeek releases their groundbreaking open reasoning model",
-        "latest": true
-      },
-      {
-        "date": "2024.10.22",
+        "date": "2024.10",
         "name": "Claude 3.5 Sonnet (Upd)",
-        "desc": "Anthropic updates Sonnet with Computer Use capabilities",
+        "desc": "Anthropic upgrades Sonnet and debuts Computer Use, solidifying its lead in software engineering",
         "latest": false
       },
       {
-        "date": "2024.09.19",
-        "name": "Qwen 2.5",
-        "desc": "Alibaba releases major open source foundation model update",
+        "date": "2024.09",
+        "name": "Qwen 2.5 Suite",
+        "desc": "Alibaba open-sources the Qwen 2.5 series including the renowned Qwen 2.5 Coder 32B model",
         "latest": false
       },
       {
-        "date": "2024.07.23",
-        "name": "Llama 3.1",
-        "desc": "Meta releases Llama 3.1 including the massive 405B parameter model",
-        "latest": false
-      },
-      {
-        "date": "2024.06.20",
-        "name": "Claude 3.5 Sonnet",
-        "desc": "Anthropic sets a new bar for coding and intelligence",
-        "latest": false
-      },
-      {
-        "date": "2024.05.13",
+        "date": "2024.05",
         "name": "GPT-4o",
-        "desc": "OpenAI announces their fast, natively omnimodal flagship model",
-        "latest": false
-      },
-      {
-        "date": "2024.02.15",
-        "name": "Gemini 1.5 Pro",
-        "desc": "Google announces breakthrough 1M (later 2M) context window",
-        "latest": false
-      },
-      {
-        "date": "2023.07.18",
-        "name": "Llama 2",
-        "desc": "Meta releases open-source weights, accelerating the open AI ecosystem",
-        "latest": false
-      },
-      {
-        "date": "2023.03.14",
-        "name": "GPT-4",
-        "desc": "A major leap in reasoning and multimodal capabilities",
-        "latest": false
-      },
-      {
-        "date": "2022.11.30",
-        "name": "ChatGPT",
-        "desc": "OpenAI releases ChatGPT based on GPT-3.5, igniting the generative AI boom",
-        "latest": false
-      },
-      {
-        "date": "2020.05.28",
-        "name": "GPT-3",
-        "desc": "OpenAI introduces few-shot learning with 175B parameters",
-        "latest": false
-      },
-      {
-        "date": "2018.10.11",
-        "name": "BERT",
-        "desc": "Google's breakthrough in bidirectional encoder representations",
-        "latest": false
-      },
-      {
-        "date": "2017.06.12",
-        "name": "Transformer",
-        "desc": "Google publishes 'Attention Is All You Need', defining the modern AI era",
+        "desc": "OpenAI introduces omni-multimodal model GPT-4o, unifying text, vision, and real-time audio",
         "latest": false
       }
     ],
-    "relatedTitle": "Related Articles",
-    "readMore": "Read More",
-    "relatedArticles": [
-      {
-        "tag": "Deep Dive",
-        "tagClass": "tag",
-        "datetime": "2026-03-08",
-        "date": "2026.03.08",
-        "title": "GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro: Ultimate Benchmark",
-        "desc": "A comprehensive four-dimensional evaluation of the top three foundation models.",
-        "link": "/en/articles/model-comparison-2026/"
-      },
-      {
-        "tag": "Industry Trends",
-        "tagClass": "tag tag-amber",
-        "datetime": "2026-03-08",
-        "date": "2026.03.08",
-        "title": "2026 AI Foundation Model Development Trends",
-        "desc": "A panoramic analysis from the leap in reasoning to mature Agents.",
-        "link": "/en/articles/ai-trends-2026/"
-      },
-      {
-        "tag": "Multimodal",
-        "tagClass": "tag tag-rose",
-        "datetime": "2026-02-28",
-        "date": "2026.02.28",
-        "title": "Multimodal Large Models Starter Guide",
-        "desc": "Exploring image-text understanding and application cases of multimodal models.",
-        "link": "/en/articles/multimodal-guide/"
-      }
-    ],
-    "paginationPrev": "Prev",
+    "paginationPrev": "Previous",
     "paginationNext": "Next",
-    "benchmarksTitle": "Omni-Capability Radar & Core Benchmarks",
-    "benchmarksSubtitle": "Covering frontier hard-reasoning benchmarks like SWE-bench & GPQA alongside LMSYS Blind Tests",
-    "radarLabels": [
-      "Real Eng (SWE Verified)",
-      "Pair Coding (Aider)",
-      "Instructions (AlpacaEval 2)",
-      "Hard Logic (ARC-AGI)",
-      "Chat (MT-Bench)",
-      "Uncontaminated (LiveBench)",
-      "Doc Vision (DocVQA)",
-      "Video (Video-MME)",
-      "Tool Use (BFCL V3)",
-      "Web Agent (BrowserGym)",
-      "Long Context (InfiniteBench)",
-      "Human Pref (Arena Hard)"
-    ],
-    "radarDatasets": [
-      {
-        "label": "GPT-5.6 Sol",
-        "data": [
-          92,
-          95,
-          96,
-          68,
-          95,
-          90,
-          95,
-          88,
-          96,
-          85,
-          98,
-          95
-        ]
-      },
-      {
-        "label": "Claude Fable 5",
-        "data": [
-          94,
-          92,
-          95,
-          65,
-          94,
-          88,
-          92,
-          85,
-          92,
-          90,
-          99,
-          93
-        ]
-      },
-      {
-        "label": "DeepSeek V4 Pro",
-        "data": [
-          88,
-          90,
-          92,
-          72,
-          90,
-          85,
-          85,
-          78,
-          88,
-          75,
-          92,
-          91
-        ]
-      },
-      {
-        "label": "Qwen 3.7 Max",
-        "data": [
-          85,
-          88,
-          90,
-          62,
-          88,
-          82,
-          88,
-          80,
-          90,
-          72,
-          95,
-          89
-        ]
-      },
-      {
-        "label": "Gemini 3.5 Flash",
-        "data": [
-          75,
-          80,
-          85,
-          55,
-          85,
-          80,
-          88,
-          92,
-          85,
-          68,
-          90,
-          82
-        ]
-      },
-      {
-        "label": "GLM-5.2",
-        "data": [
-          80,
-          82,
-          86,
-          58,
-          86,
-          78,
-          84,
-          75,
-          86,
-          70,
-          94,
-          85
-        ]
-      }
-    ]
+    "readMore": "Read Article"
   },
   "projects": {
     "heroTag": "PORTFOLIO & PROJECTS",

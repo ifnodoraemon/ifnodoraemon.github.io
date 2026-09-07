@@ -19,522 +19,467 @@
     }
   },
   "models": {
-    "pageTag": "MODEL COMPARISON",
-    "pageTitle": "AI 模型全景对比",
-    "pageDesc": "深度解析2026年最新顶尖大模型（GPT-5.5, Claude 5, Qwen 3）的能力边界",
+    "pageTag": "MODEL BENCHMARKS & RADAR",
+    "pageTitle": "AI 模型全景对比与综合评测",
+    "pageDesc": "综合 Artificial Analysis (AA)、LMSYS Chatbot Arena 与 SWE-bench Verified 等全球权威评测榜单，多维度深度透视前沿大模型能力边界",
     "heroTag": "MODEL DATABASE",
     "heroTitle": "全景模型库",
-    "heroDesc": "追踪最先进 AI 系统的参数、能力边界与应用场景，提供中立的横向评测数据。",
-    "tableTitle": "顶级大模型全景评测集矩阵",
-    "tableSubtitle": "基于 2026 年高难度评测基准（Benchmarks）与人工竞技场（Arena）最新跑分",
+    "heroDesc": "追踪最先进 AI 系统的参数、真实能力评测与落地场景，提供中立、客观的横向基准数据。",
+    "benchmarksTitle": "前沿大模型全维能力星状图 (Star Chart)",
+    "benchmarksSubtitle": "参考 Artificial Analysis (AA Quality & Speed) 六维评测框架，综合 LMSYS 盲测与代码工程基准进行 0-100 标准化标定",
+    "radarSelectHint": "点击模型标签可在星状图中实时叠加/取消对比：",
+    "sourceTitle": "权威榜单数据源",
+    "sourceDesc": "综合来自 Artificial Analysis (AA) Quality Index 与生成速度/价格实测、LMSYS Chatbot Arena 人工盲测、SWE-bench Verified 真实工程代码评测，以及各大模型官方最新技术报告。",
+    "radarLabels": [
+      "深度推理 (Reasoning)",
+      "代码工程 (Coding)",
+      "Agent与工具 (Agentic)",
+      "专业知识 (Knowledge)",
+      "长文与指令 (Context & IF)",
+      "速度与性价比 (Speed & Value)"
+    ],
+    "radarDatasets": [
+      {
+        "label": "DeepSeek-R1",
+        "provider": "DeepSeek",
+        "type": "开源权重",
+        "color": "#3b82f6",
+        "data": [
+          96,
+          91,
+          85,
+          93,
+          86,
+          98
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "Claude 3.5 Sonnet",
+        "provider": "Anthropic",
+        "type": "闭源商业",
+        "color": "#f97316",
+        "data": [
+          90,
+          98,
+          97,
+          92,
+          94,
+          84
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "OpenAI o1",
+        "provider": "OpenAI",
+        "type": "闭源商业",
+        "color": "#10b981",
+        "data": [
+          98,
+          93,
+          90,
+          95,
+          88,
+          68
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "DeepSeek-V3",
+        "provider": "DeepSeek",
+        "type": "开源权重",
+        "color": "#06b6d4",
+        "data": [
+          86,
+          88,
+          86,
+          90,
+          88,
+          99
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "GPT-4o",
+        "provider": "OpenAI",
+        "type": "闭源商业",
+        "color": "#a855f7",
+        "data": [
+          85,
+          86,
+          92,
+          93,
+          91,
+          86
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "Gemini 2.0 Flash",
+        "provider": "Google",
+        "type": "闭源商业",
+        "color": "#eab308",
+        "data": [
+          84,
+          85,
+          88,
+          89,
+          98,
+          96
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "Qwen 2.5 (72B/Max)",
+        "provider": "阿里巴巴",
+        "type": "开源权重",
+        "color": "#ec4899",
+        "data": [
+          86,
+          89,
+          85,
+          91,
+          87,
+          92
+        ],
+        "defaultActive": false
+      }
+    ],
+    "dimensionGuides": [
+      {
+        "icon": "🧠",
+        "name": "深度推理 (Reasoning)",
+        "desc": "GPQA Diamond 博士级推理、AIME 2024 与 MATH-500 竞赛级数学思维链推导能力"
+      },
+      {
+        "icon": "💻",
+        "name": "代码工程 (Coding)",
+        "desc": "SWE-bench Verified 真实 GitHub Issue 修复率、LiveCodeBench 与复杂重构"
+      },
+      {
+        "icon": "🤖",
+        "name": "Agent与工具 (Agentic)",
+        "desc": "τ²-Bench、BrowserGym 网页操作，以及原生 Computer Use 与 Function Calling 准确率"
+      },
+      {
+        "icon": "📚",
+        "name": "专业知识 (Knowledge)",
+        "desc": "MMLU-Pro 高难度跨学科综合知识水平与 LMSYS Arena Hard 盲测胜率"
+      },
+      {
+        "icon": "📜",
+        "name": "长文与指令 (Context & IF)",
+        "desc": "IFEval 严苛格式遵循能力，以及 128K 至 100万+ 超长上下文的针大海（Needle）召回"
+      },
+      {
+        "icon": "⚡",
+        "name": "速度与性价比 (Speed & Value)",
+        "desc": "Artificial Analysis 标志性指标：每秒输出 Token 数 (TPS) 与每百万 Token 调用成本的综合质价比"
+      }
+    ],
+    "tableTitle": "各大权威榜单综合实测矩阵",
+    "tableSubtitle": "涵盖 Artificial Analysis (AA)、LMSYS 人工盲测、SWE-bench 与学术级难度评测最新实测数据",
     "tableHeaders": [
-      "模型",
-      "厂商",
+      "模型名称",
+      "机构",
+      "类型",
+      "AA 综合指数",
       "LMSYS Elo",
-      "SWE Verified (工程)",
-      "Aider (代码)",
-      "Arena Hard (盲测)",
-      "ARC-AGI (逻辑)",
-      "BrowserGym (智能体)",
-      "InfiniteBench (长文)"
+      "SWE-bench",
+      "深度推理 (GPQA/AIME)",
+      "输出速度",
+      "上下文窗口",
+      "API 单价 ($/1M)",
+      "核心优势定位"
     ],
     "tableRows": [
       [
-        "GPT-5.6 Sol",
-        "OpenAI",
-        "1450",
-        "85.2%",
-        "88.5%",
-        "92.4%",
-        "52.1%",
-        "85.2%",
-        "98.2% (512K)"
-      ],
-      [
-        "Claude Fable 5",
-        "Anthropic",
-        "1445",
-        "88.0%",
-        "85.2%",
-        "90.5%",
-        "48.5%",
-        "90.0%",
-        "99.0% (2M)"
-      ],
-      [
-        "DeepSeek V4 Pro",
+        "DeepSeek-R1",
         "DeepSeek",
-        "1420",
-        "78.5%",
-        "82.1%",
-        "88.2%",
-        "55.8%",
-        "75.4%",
-        "93.5% (1M)"
-      ],
-      [
-        "Qwen 3.7 Max",
-        "阿里巴巴",
-        "1390",
-        "75.2%",
-        "80.0%",
-        "85.6%",
-        "45.0%",
-        "72.2%",
-        "95.1% (1M)"
-      ],
-      [
-        "Gemini 3.5 Flash",
-        "Google",
-        "1350",
-        "65.0%",
-        "70.5%",
-        "78.5%",
-        "35.5%",
-        "68.5%",
-        "91.0% (1M)"
-      ],
-      [
-        "GLM-5.2",
-        "智谱AI",
+        "开源权重",
+        "90",
         "1365",
-        "68.5%",
-        "72.0%",
-        "80.0%",
-        "38.0%",
-        "70.0%",
-        "94.2% (1M)"
+        "49.2%",
+        "71.5% / 79.8%",
+        "~45 t/s",
+        "128K (64K 输出)",
+        "$0.55 / $2.19",
+        "开源强化推理标杆"
+      ],
+      [
+        "Claude 3.5 Sonnet",
+        "Anthropic",
+        "闭源商业",
+        "89",
+        "1374",
+        "53.7%",
+        "65.0% / 78.3%",
+        "~75 t/s",
+        "200K (带缓存)",
+        "$3.00 / $15.00",
+        "软件工程与代码之王"
+      ],
+      [
+        "OpenAI o1",
+        "OpenAI",
+        "闭源商业",
+        "91",
+        "1385",
+        "48.9%",
+        "75.7% / 83.3%",
+        "~50 t/s",
+        "200K",
+        "$15.00 / $60.00",
+        "深度思维链推理巅峰"
+      ],
+      [
+        "DeepSeek-V3",
+        "DeepSeek",
+        "开源权重",
+        "84",
+        "1335",
+        "42.0%",
+        "59.1% / 89.3%",
+        "~65 t/s",
+        "128K",
+        "$0.14 / $0.28",
+        "极致性价比通用 MoE"
+      ],
+      [
+        "GPT-4o",
+        "OpenAI",
+        "闭源商业",
+        "86",
+        "1362",
+        "38.8%",
+        "56.1% / 76.6%",
+        "~110 t/s",
+        "128K",
+        "$2.50 / $10.00",
+        "全模态成熟生态标杆"
+      ],
+      [
+        "Gemini 2.0 Flash",
+        "Google",
+        "闭源商业",
+        "85",
+        "1355",
+        "41.5%",
+        "58.5% / 82.0%",
+        "~180 t/s",
+        "1,048,576 (1M)",
+        "$0.10 / $0.40",
+        "极速响应与百万长文"
+      ],
+      [
+        "Qwen 2.5 (72B/Max)",
+        "阿里巴巴",
+        "开源权重",
+        "85",
+        "1338",
+        "44.5%",
+        "57.8% / 85.2%",
+        "~60 t/s",
+        "128K",
+        "$0.40 / $1.20",
+        "私有化部署全能主力"
       ]
     ],
-    "sceneTitle": "场景推荐",
-    "sceneSubtitle": "根据你的具体需求选择最合适的模型",
+    "sceneTitle": "业务落地选型推荐",
+    "sceneSubtitle": "基于客观实测表现，为你的具体业务场景推荐综合最优模型方案",
     "scenes": [
       {
-        "title": "代码开发",
-        "desc": "需要代码生成、重构、调试或开发辅助",
-        "badge": "首选",
-        "reason": "DeepSeek V4 Pro 和 Claude Fable 5 在复杂代码精度和重构上领先。"
+        "title": "代码开发与系统重构",
+        "desc": "针对复杂代码库开发、全栈自动化重构、GitHub Issue 修复及日常 Copilot 结对编程",
+        "badge": "首选标杆",
+        "reason": "Claude 3.5 Sonnet 在 SWE-bench Verified (53.7%) 稳居第一；DeepSeek-R1 在算法思维与单元测试生成上极具优势。"
       },
       {
-        "title": "Agent 工作流",
-        "desc": "构建自主决策、多步执行的智能代理系统",
-        "badge": "最强",
-        "reason": "GPT-5.6 Sol 和 Claude Fable 5 提供业界最强的 Agentic 能力与 Computer Use。"
+        "title": "前沿科学与复杂深度推理",
+        "desc": "数学竞赛证明推导、复杂科研文献研判、金融量化逻辑建模与复杂决策规划任务",
+        "badge": "极限推理",
+        "reason": "OpenAI o1 与 DeepSeek-R1 开启原生强化学习思考链，AIME (80%+) 与 MATH-500 (97%+) 处于第一梯队。"
       },
       {
-        "title": "超长上下文",
-        "desc": "需要处理超长文本、完整代码库或大量数据",
-        "badge": "推荐",
-        "reason": "Claude Fable 5 提供 2M 窗口，Gemini 3.5 Flash 拥有极速的 1M 处理效率。"
+        "title": "自主智能体与系统操作",
+        "desc": "构建具备自主决策、浏览器自动化（Browser Agent）与跨应用多步工具调用链的 Agent 系统",
+        "badge": "最强智能体",
+        "reason": "Claude 3.5 Sonnet 原生支持 Computer Use 屏幕交互；GPT-4o 具备业内最完备稳定的 Function Calling 生态。"
       },
       {
-        "title": "开源主力",
-        "desc": "企业私有化部署，需要顶尖的开源基座能力",
-        "badge": "全能",
-        "reason": "Qwen 3.7 Max 是目前最全面、最顶尖的开源全能选手。"
+        "title": "百万长上下文与极速吞吐",
+        "desc": "需要实时阅读数百页财报、分析千万行仓库全貌，或对用户交互延迟有极高要求的实时场景",
+        "badge": "极速长文",
+        "reason": "Gemini 2.0 Flash 拥有原生 100万 (1M) 上下文海量召回能力，同时提供高达 180+ t/s 的极致生成吞吐。"
       },
       {
-        "title": "复杂推理",
-        "desc": "数学证明、逻辑分析、复杂规划任务",
-        "badge": "极限",
-        "reason": "DeepSeek V4 Pro 与 GPT-5.6 Sol 提供了当前最强的深度推理逻辑。"
+        "title": "企业私有化与数据合规",
+        "desc": "金融、政企与垂直行业内网私有部署，要求完全自主可控、零数据外泄与私有领域微调",
+        "badge": "开源主力",
+        "reason": "DeepSeek-V3 (671B MoE) 与 Qwen 2.5 72B 为当前开源社区最顶尖的双子星基座，架构成熟，调优友好。"
       },
       {
-        "title": "超长跨度 Agent",
-        "desc": "复杂的软件工程开发与多步深度推理",
-        "badge": "长期记忆",
-        "reason": "GLM-5.2 凭借 1M 窗口和专属优化，在开源长跨度 Agent 任务中表现卓越。"
+        "title": "大规模调用与极致性价比",
+        "desc": "日均千万级 Token 吞吐的生产级应用、后台批处理任务，对单价成本极其敏感的商业项目",
+        "badge": "质价比之王",
+        "reason": "DeepSeek-V3 ($0.14 / $0.28 每百万Token) 与 Gemini 2.0 Flash ($0.10 / $0.40) 彻底重构了行业调用成本曲线。"
       }
     ],
     "details": [
       {
-        "id": "gpt",
-        "icon": "🧠",
-        "name": "GPT-5.6 Sol",
-        "meta": "OpenAI · 2026.06.26 发布",
-        "desc": "GPT-5.6 Sol 是 OpenAI 最新预览旗舰模型，提供运用子代理处理复杂任务的 ultra 模式。",
-        "specs": [
-          {
-            "label": "上下文",
-            "value": "512K tokens"
-          },
-          {
-            "label": "优势",
-            "value": "深度推理 · Agent 工作流"
-          }
-        ]
-      },
-      {
-        "id": "claude",
-        "icon": "🎭",
-        "name": "Claude Fable 5",
-        "meta": "Anthropic · 2026.06.09 发布",
-        "desc": "Claude Fable 5 在软件工程和安全性方面遥遥领先，并配备了高达 2M 的超长上下文。",
-        "specs": [
-          {
-            "label": "上下文",
-            "value": "2M tokens"
-          },
-          {
-            "label": "优势",
-            "value": "Computer Use · 代码精度"
-          }
-        ]
-      },
-      {
-        "id": "gemini",
-        "icon": "✨",
-        "name": "Gemini 3.5 Flash",
-        "meta": "Google · 2026.05.19 发布",
-        "desc": "Google 最新的速度王者，提供 1M 上下文，在大规模高频任务中效率无敌。",
-        "specs": [
-          {
-            "label": "上下文",
-            "value": "1M tokens"
-          },
-          {
-            "label": "优势",
-            "value": "极速响应 · 高性价比 · 全模态"
-          }
-        ]
-      },
-      {
-        "id": "deepseek",
+        "id": "deepseek-r1",
         "icon": "🐳",
-        "name": "DeepSeek V4 Pro",
-        "meta": "DeepSeek · 2026.04.24 发布",
-        "desc": "DeepSeek V4 Pro 奠定了开源代码与推理模型的新标准，提供顶级推理逻辑。",
+        "name": "DeepSeek-R1",
+        "meta": "DeepSeek · 开源权重 / 强化学习推理",
+        "desc": "DeepSeek 开源的划时代深度推理模型，采用纯强化学习驱动的长思维链机制，在数学与代码基准上比肩顶级商业闭源模型。",
+        "specs": [
+          {
+            "label": "上下文",
+            "value": "128K (最大 64K 输出)"
+          },
+          {
+            "label": "核心优势",
+            "value": "AIME 79.8% · MATH-500 97.3% · 开源免费权重"
+          }
+        ]
+      },
+      {
+        "id": "claude-sonnet",
+        "icon": "🎭",
+        "name": "Claude 3.5 Sonnet",
+        "meta": "Anthropic · 闭源商业 / 软件工程之王",
+        "desc": "公认的软件工程与代码生成行业金标，SWE-bench Verified 达 53.7%，首度原生支持 Computer Use 桌面操控能力。",
+        "specs": [
+          {
+            "label": "上下文",
+            "value": "200K (支持 Prompt Caching)"
+          },
+          {
+            "label": "核心优势",
+            "value": "SWE-bench 53.7% · 卓越架构重构 · 顶级 Agent 生态"
+          }
+        ]
+      },
+      {
+        "id": "openai-o1",
+        "icon": "🧠",
+        "name": "OpenAI o1",
+        "meta": "OpenAI · 闭源商业 / 强化推理旗舰",
+        "desc": "OpenAI 旗舰推理大模型，专为复杂科学、高等数学和高难度编程设计，在 GPQA Diamond 取得 75.7% 博士级评测高分。",
+        "specs": [
+          {
+            "label": "上下文",
+            "value": "200K tokens"
+          },
+          {
+            "label": "核心优势",
+            "value": "GPQA Diamond 75.7% · 竞技级数学 · 自主规划"
+          }
+        ]
+      },
+      {
+        "id": "deepseek-v3",
+        "icon": "⚡",
+        "name": "DeepSeek-V3",
+        "meta": "DeepSeek · 开源权重 / 671B MoE",
+        "desc": "全球最强开源 MoE 基座之一，拥有 6710 亿总参数（激活 370 亿），以极致经济的推理成本提供超越普通稠密模型的综合性能。",
         "specs": [
           {
             "label": "上下文",
             "value": "128K tokens"
           },
           {
-            "label": "优势",
-            "value": "深度推理 · 代码生成专家"
+            "label": "核心优势",
+            "value": "$0.14 / $0.28 单价 · Multi-head Latent Attention"
           }
         ]
       },
       {
-        "id": "qwen",
+        "id": "gemini-flash",
+        "icon": "✨",
+        "name": "Gemini 2.0 Flash",
+        "meta": "Google · 闭源商业 / 极速与超长上下文",
+        "desc": "Google 新一代全模态速度王者，拥有惊人的 180+ tokens/s 生成速度与 100万原生上下文，长文本处理效率极高。",
+        "specs": [
+          {
+            "label": "上下文",
+            "value": "1,048,576 (1M) tokens"
+          },
+          {
+            "label": "核心优势",
+            "value": "180+ t/s 极速吞吐 · 原生搜索集成 · 极低延迟"
+          }
+        ]
+      },
+      {
+        "id": "qwen-max",
         "icon": "🌐",
-        "name": "Qwen 3.7 Max",
-        "meta": "阿里巴巴 · 2026.05.20 发布",
-        "desc": "Qwen 3.7 Max 稳居开源生态最前沿，提供全面且顶尖的各领域能力。",
+        "name": "Qwen 2.5 (72B / Max)",
+        "meta": "阿里巴巴 · 开源权重 & 云服务 / 全能选手",
+        "desc": "阿里巴巴开源生态旗舰，涵盖稠密 72B 与垂直 Coder 专属版本，中文及多语言能力出众，是企业私有化落地的黄金基座。",
         "specs": [
           {
             "label": "上下文",
-            "value": "256K tokens"
+            "value": "128K tokens"
           },
           {
-            "label": "优势",
-            "value": "全能表现 · 多语言支持"
-          }
-        ]
-      },
-      {
-        "id": "glm",
-        "icon": "🧠",
-        "name": "GLM-5.2",
-        "meta": "智谱AI · 2026.06.13 发布",
-        "desc": "智谱AI 发布的 GLM-5.2，支持 1M 超长上下文，专为超长跨度 Agent 工作流与复杂编程任务打造。",
-        "specs": [
-          {
-            "label": "上下文",
-            "value": "1M tokens"
-          },
-          {
-            "label": "优势",
-            "value": "超长序列 Agent · 开源权重"
+            "label": "核心优势",
+            "value": "全栈开源生态 · 卓越多语言表现 · 企业私有部署"
           }
         ]
       }
     ],
     "timelineTag": "TIMELINE",
-    "timelineTitle": "2026 模型发布时间线",
+    "timelineTitle": "大模型演进与突破时间线",
     "listingTimelineTitle": "发布时间轴",
     "listingSearchPlaceholder": "搜索文章...",
     "timeline": [
       {
-        "date": "2026.06.26",
-        "name": "GPT-5.6 Sol",
-        "desc": "OpenAI 正式发布针对 Agent 优化的旗舰模型",
+        "date": "2025.01",
+        "name": "DeepSeek-R1",
+        "desc": "DeepSeek 开源发布全新强化学习推理模型 R1，以极低训练成本达成前沿推理突破，引爆全球 AI 行业关注",
         "latest": true
       },
       {
-        "date": "2026.06.13",
-        "name": "GLM-5.2",
-        "desc": "智谱AI开源专为长跨度Agent设计的 GLM-5.2 模型",
+        "date": "2024.12",
+        "name": "DeepSeek-V3",
+        "desc": "DeepSeek 正式发布 671B MoE 基础模型 V3，刷新开源模型在知识与代码基准上的天花板",
         "latest": false
       },
       {
-        "date": "2026.06.09",
-        "name": "Claude Fable 5",
-        "desc": "Anthropic 推出顶级 Agent 工作流模型 Fable 5",
+        "date": "2024.12",
+        "name": "OpenAI o1",
+        "desc": "OpenAI 正式发布 o1 旗舰推理模型与面向快速推理的 o3-mini，确立 Test-time Compute 新范式",
         "latest": false
       },
       {
-        "date": "2026.05.20",
-        "name": "Qwen 3.7 Max",
-        "desc": "阿里巴巴树立新的全能开源基座标杆",
+        "date": "2024.12",
+        "name": "Gemini 2.0",
+        "desc": "Google 推送 Gemini 2.0 Flash 系列，树立低延迟生成与长上下文检索的工程新标杆",
         "latest": false
       },
       {
-        "date": "2026.05.19",
-        "name": "Gemini 3.5 Flash",
-        "desc": "Google 发布极速全模态处理模型",
-        "latest": false
-      },
-      {
-        "date": "2026.04.24",
-        "name": "DeepSeek V4 Pro",
-        "desc": "DeepSeek 推出新一代顶尖推理专家模型",
-        "latest": false
-      },
-      {
-        "date": "2025.02.20",
-        "name": "Claude 3.7 & Grok 3",
-        "desc": "强化推理能力（Test-time Compute）的大模型密集发布",
-        "latest": false
-      },
-      {
-        "date": "2025.02.05",
-        "name": "Gemini 2.0 Flash",
-        "desc": "Google 正式向全球推送 Gemini 2.0 Flash 系列",
-        "latest": false
-      },
-      {
-        "date": "2025.01.20",
-        "name": "DeepSeek R1",
-        "desc": "DeepSeek 发布震撼行业的开源推理模型",
-        "latest": true
-      },
-      {
-        "date": "2024.10.22",
+        "date": "2024.10",
         "name": "Claude 3.5 Sonnet (Upd)",
-        "desc": "Anthropic 升级 Sonnet 并引入 Computer Use (计算机使用) 能力",
+        "desc": "Anthropic 升级 Sonnet 并公开 Computer Use (操作电脑) 功能，领跑真实软件工程与 Agent 评测",
         "latest": false
       },
       {
-        "date": "2024.09.19",
-        "name": "Qwen 2.5",
-        "desc": "阿里巴巴开源 Qwen 2.5 全系列基座模型",
+        "date": "2024.09",
+        "name": "Qwen 2.5 全系列",
+        "desc": "阿里巴巴开源 Qwen 2.5 全栈基座及针对编码的 Qwen 2.5 Coder 32B，赋能全球开发者",
         "latest": false
       },
       {
-        "date": "2024.07.23",
-        "name": "Llama 3.1",
-        "desc": "Meta 发布包含 405B 超大参数量的 Llama 3.1 开源模型",
-        "latest": false
-      },
-      {
-        "date": "2024.06.20",
-        "name": "Claude 3.5 Sonnet",
-        "desc": "Anthropic 发布新一代模型，树立代码能力新标杆",
-        "latest": false
-      },
-      {
-        "date": "2024.05.13",
+        "date": "2024.05",
         "name": "GPT-4o",
-        "desc": "OpenAI 发布极速、原生全模态的旗舰模型",
+        "desc": "OpenAI 推出原生端到端全模态模型 GPT-4o，兼具文本、语音与视觉的极速交互",
         "latest": false
-      },
-      {
-        "date": "2024.02.15",
-        "name": "Gemini 1.5 Pro",
-        "desc": "Google 首次公布支持 100万（后升至200万）上下文的下一代模型",
-        "latest": false
-      },
-      {
-        "date": "2023.07.18",
-        "name": "Llama 2",
-        "desc": "Meta 宣布开源，极大地推动了开源生态的繁荣",
-        "latest": false
-      },
-      {
-        "date": "2023.03.14",
-        "name": "GPT-4",
-        "desc": "推理能力和多模态理解的划时代飞跃",
-        "latest": false
-      },
-      {
-        "date": "2022.11.30",
-        "name": "ChatGPT",
-        "desc": "基于 GPT-3.5 的 ChatGPT 问世，彻底引爆生成式 AI 浪潮",
-        "latest": false
-      },
-      {
-        "date": "2020.05.28",
-        "name": "GPT-3",
-        "desc": "OpenAI 发布 1750亿 参数模型，展示 Few-shot 惊人能力",
-        "latest": false
-      },
-      {
-        "date": "2018.10.11",
-        "name": "BERT",
-        "desc": "Google 提出双向编码器表示，横扫多项 NLP 任务记录",
-        "latest": false
-      },
-      {
-        "date": "2017.06.12",
-        "name": "Transformer",
-        "desc": "Google 发布 Attention Is All You Need，奠定大模型时代基础",
-        "latest": false
-      }
-    ],
-    "relatedTitle": "相关文章",
-    "readMore": "阅读全文",
-    "relatedArticles": [
-      {
-        "tag": "深度解析",
-        "tagClass": "tag",
-        "datetime": "2026-03-08",
-        "date": "2026.03.08",
-        "title": "GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro：终极横评",
-        "desc": "四大维度全面评测三大顶级模型的真实表现。",
-        "link": "/articles/model-comparison-2026/"
-      },
-      {
-        "tag": "行业观察",
-        "tagClass": "tag tag-amber",
-        "datetime": "2026-03-08",
-        "date": "2026.03.08",
-        "title": "2026 年 AI 大模型发展趋势",
-        "desc": "从推理飞跃到 Agent 成熟的全景分析。",
-        "link": "/articles/ai-trends-2026/"
-      },
-      {
-        "tag": "多模态",
-        "tagClass": "tag tag-rose",
-        "datetime": "2026-02-28",
-        "date": "2026.02.28",
-        "title": "多模态大模型入门指南",
-        "desc": "探索多模态模型的图文理解与应用案例。",
-        "link": "/articles/multimodal-guide/"
       }
     ],
     "paginationPrev": "上一页",
     "paginationNext": "下一页",
-    "benchmarksTitle": "全维能力雷达与核心评测榜单",
-    "benchmarksSubtitle": "涵盖 SWE-bench、GPQA 等前沿高难度学术评测与 LMSYS 盲测数据",
-    "radarLabels": [
-      "真实工程 (SWE Verified)",
-      "结对编程 (Aider)",
-      "指令遵循 (AlpacaEval 2)",
-      "极限推理 (ARC-AGI)",
-      "多轮对话 (MT-Bench)",
-      "无污染评测 (LiveBench)",
-      "文档视觉 (DocVQA)",
-      "长视频理解 (Video-MME)",
-      "API与工具 (BFCL V3)",
-      "网页智能体 (BrowserGym)",
-      "超长文分析 (InfiniteBench)",
-      "高难盲测跑分 (Arena Hard)"
-    ],
-    "radarDatasets": [
-      {
-        "label": "GPT-5.6 Sol",
-        "data": [
-          92,
-          95,
-          96,
-          68,
-          95,
-          90,
-          95,
-          88,
-          96,
-          85,
-          98,
-          95
-        ]
-      },
-      {
-        "label": "Claude Fable 5",
-        "data": [
-          94,
-          92,
-          95,
-          65,
-          94,
-          88,
-          92,
-          85,
-          92,
-          90,
-          99,
-          93
-        ]
-      },
-      {
-        "label": "DeepSeek V4 Pro",
-        "data": [
-          88,
-          90,
-          92,
-          72,
-          90,
-          85,
-          85,
-          78,
-          88,
-          75,
-          92,
-          91
-        ]
-      },
-      {
-        "label": "Qwen 3.7 Max",
-        "data": [
-          85,
-          88,
-          90,
-          62,
-          88,
-          82,
-          88,
-          80,
-          90,
-          72,
-          95,
-          89
-        ]
-      },
-      {
-        "label": "Gemini 3.5 Flash",
-        "data": [
-          75,
-          80,
-          85,
-          55,
-          85,
-          80,
-          88,
-          92,
-          85,
-          68,
-          90,
-          82
-        ]
-      },
-      {
-        "label": "GLM-5.2",
-        "data": [
-          80,
-          82,
-          86,
-          58,
-          86,
-          78,
-          84,
-          75,
-          86,
-          70,
-          94,
-          85
-        ]
-      }
-    ]
+    "readMore": "阅读文章"
   },
   "projects": {
     "heroTag": "PORTFOLIO & PROJECTS",
