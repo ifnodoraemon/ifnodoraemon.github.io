@@ -438,28 +438,28 @@
           margin-bottom: 4rem;
         }
         .bento-card {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 24px;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 16px;
           padding: 2rem;
           position: relative;
           overflow: hidden;
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
-          transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+          transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
           display: flex;
           flex-direction: column;
         }
         .bento-card:hover {
-          transform: translateY(-5px);
-          border-color: rgba(34, 211, 238, 0.3);
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(34, 211, 238, 0.1);
+          transform: translateY(-3px);
+          border-color: rgba(255, 255, 255, 0.22);
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
         }
         .bento-card::before {
           content: '';
           position: absolute;
           top: 0; left: 0; width: 100%; height: 100%;
-          background: radial-gradient(circle at top left, rgba(34, 211, 238, 0.1), transparent 70%);
+          background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.04), transparent 70%);
           pointer-events: none;
         }
         .bento-main {
@@ -470,7 +470,7 @@
         .bento-main h3 {
           font-size: 2.2rem;
           margin-bottom: 1rem;
-          background: linear-gradient(to right, #fff, var(--accent-cyan));
+          background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
         }
@@ -492,10 +492,10 @@
           color: #fff;
           line-height: 1;
           margin-bottom: 0.5rem;
-          text-shadow: 0 0 20px rgba(255,255,255,0.3);
+          text-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
         .bento-stat .stat-label {
-          color: var(--accent-cyan);
+          color: #888888;
           font-size: 0.85rem;
           text-transform: uppercase;
           letter-spacing: 2px;
@@ -518,8 +518,8 @@
         }
         .stack-chip {
           padding: 0.5rem 1.2rem;
-          background: rgba(0, 0, 0, 0.4);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 20px;
           font-size: 0.85rem;
           color: #e4e4e7;
@@ -542,25 +542,25 @@
         }
         .bento-link-btn {
           flex: 1;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 24px;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 16px;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           color: #fff;
           text-decoration: none;
-          transition: all 0.3s ease;
+          transition: all 0.2s ease;
           gap: 0.8rem;
           backdrop-filter: blur(20px);
         }
         .bento-link-btn:hover {
-          background: rgba(34, 211, 238, 0.1);
-          border-color: var(--accent-cyan);
-          color: var(--accent-cyan);
-          transform: translateY(-5px);
-          box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+          background: rgba(255, 255, 255, 0.06);
+          border-color: rgba(255, 255, 255, 0.25);
+          color: #ffffff;
+          transform: translateY(-3px);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         @media (max-width: 1024px) {
           .bento-grid { grid-template-columns: repeat(2, 1fr); }
@@ -596,11 +596,11 @@
 
           <!-- Stats -->
           <div class="bento-card bento-stat">
-            <div class="stat-num">50<span style="color: var(--accent-cyan);">+</span></div>
+            <div class="stat-num">50<span style="color: #a1a1aa;">+</span></div>
             <div class="stat-label">深度评测研报</div>
           </div>
           <div class="bento-card bento-stat">
-            <div class="stat-num">12<span style="color: var(--accent-cyan);">V</span></div>
+            <div class="stat-num">12<span style="color: #a1a1aa;">V</span></div>
             <div class="stat-label">前沿评测维度</div>
           </div>
 

@@ -153,12 +153,12 @@ function initParticles() {
   const ctx = canvas.getContext('2d');
   let width, height;
   let particles = [];
-  const PARTICLE_COUNT = 40;
+  const PARTICLE_COUNT = 35;
   const COLORS = [
-    'rgba(99, 102, 241, 0.3)',
-    'rgba(139, 92, 246, 0.25)',
-    'rgba(34, 211, 238, 0.2)',
-    'rgba(129, 140, 248, 0.2)'
+    'rgba(255, 255, 255, 0.25)',
+    'rgba(220, 220, 230, 0.2)',
+    'rgba(240, 240, 255, 0.15)',
+    'rgba(255, 255, 255, 0.1)'
   ];
 
   function resize() {
@@ -226,7 +226,7 @@ function initParticles() {
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(99, 102, 241, ${0.04 * (1 - dist / 150)})`;
+          ctx.strokeStyle = `rgba(255, 255, 255, ${0.03 * (1 - dist / 150)})`;
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }
