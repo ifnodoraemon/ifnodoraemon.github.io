@@ -348,6 +348,7 @@ function writeArticles(list, isEn) {
       wordCountText: article.wordCountText,
       readingTimeText: article.readingTimeText,
       prevNextHtml,
+      faqSchema: article.faqSchema || "",
       relatedArticlesHtml,
       lang: isEn ? 'en' : 'zh-CN',
       articles_link: isEn ? '/en/articles/' : '/articles/',
@@ -377,7 +378,7 @@ function buildTocHtml(tocItems, isEn) {
     .map(item => `  <li class="toc-level-${item.depth}"><a href="#${item.id}">${item.text}</a></li>`)
     .join('\n');
 
-  return `<div class="toc-container"><h4>${tocTitle}</h4><ul class="article-toc-list">\n${itemsHtml}\n</ul></div>`;
+  return `<nav class="toc-container" aria-label="Table of Contents"><h4>${tocTitle}</h4><ul class="article-toc-list">\n${itemsHtml}\n</ul></nav>`;
 }
 
 function buildPrevNextHtml(list, index, isEn) {
@@ -874,4 +875,33 @@ function escapeHtml(value) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+
+function generateFaqSchema(markdown) {
+  const qaPairs = [];
+  const regex = /^(#{2,3})\s+(.*?[?？])\s*\n([\s\S]*?)(?=^#{2,3}\s|\n*$)/gm;
+  let match;
+  while ((match = regex.exec(markdown)) !== null) {
+    const question = match[2].trim();
+    let answer = match[3].replace(/<\/?[^>]+(>|$)/g, "").replace(/[#*[\]`]/g, "").trim();
+    answer = answer.substring(0, 300).trim() + (answer.length > 300 ? "..." : "");
+    if (question && answer) {
+      qaPairs.push({ question, answer });
+    }
+  }
+  if (qaPairs.length === 0) return '';
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": qaPairs.map(qa => ({
+      "@type": "Question",
+      "name": qa.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": qa.answer
+      }
+    }))
+  };
+  return `<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n</script>`;
 }
