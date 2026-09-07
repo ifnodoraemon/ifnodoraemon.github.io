@@ -2,8 +2,8 @@
   "meta": {
     "siteName": "大雄话AI",
     "home": {
-      "title": "大雄话AI — GPT-5.4 · Claude 4.6 · Gemini 3.1 技术博客",
-      "desc": "专注 AI 大模型技术研究与实践，覆盖 GPT-5.4、Claude 4.6、Gemini 3.1 Pro，分享提示工程、AI Agent、RAG 应用等实战经验。"
+      "title": "大雄话AI — DeepSeek-V4-Pro · Kimi K3 · GPT-6 Astra 技术博客",
+      "desc": "专注 AI 大模型技术研究与实践，覆盖 DeepSeek-V4-Pro、Kimi K3、GPT-6 Astra，分享提示工程、AI Agent、RAG 应用等实战经验。"
     },
     "models": {
       "title": "2026前沿大模型全维评测与选型指南 | ifnodoraemon 博客",
@@ -627,7 +627,7 @@
   "home": {
     "heroSystem": "系统在线",
     "heroTitle": "深入<span class=\"gradient-text glow\">大模型</span>世界<span class=\"caret-blink\"></span>",
-    "heroDesc": "关于 GPT-5.4、Claude 4.6、Gemini 3.1 的前沿技术洞察与实战工程笔记",
+    "heroDesc": "关于 DeepSeek-V4-Pro、Kimi K3、GPT-6 Astra 的前沿技术洞察与实战工程笔记",
     "btnArticles": "浏览深度文章",
     "btnAbout": "了解更多节点",
     "metric1Val": "6",

@@ -3,7 +3,7 @@
     "siteName": "Nobita Talks AI",
     "home": {
       "title": "Nobita Talks AI — Frontier Tech Insights & Engineering Practices",
-      "desc": "Focusing on AI foundation models research and practice, providing frontier tech insights and exclusive engineering notes on GPT-5.4, Claude 4.6, and Gemini 3.1."
+      "desc": "Focusing on AI foundation models research and practice, providing frontier tech insights and exclusive engineering notes on DeepSeek-V4-Pro, Kimi K3, and GPT-6 Astra."
     },
     "models": {
       "title": "2026 Frontier AI Models Benchmark & Architecture Matrix | ifnodoraemon Blog",
@@ -627,7 +627,7 @@
   "home": {
     "heroSystem": "SYSTEM ONLINE",
     "heroTitle": "Exploring the <span class=\"gradient-text glow\">LLM</span> Frontier<span class=\"caret-blink\"></span>",
-    "heroDesc": "Frontier tech insights and engineering notes on GPT-5.4, Claude 4.6, and Gemini 3.1",
+    "heroDesc": "Frontier tech insights and engineering notes on DeepSeek-V4-Pro, Kimi K3, and GPT-6 Astra",
     "btnArticles": "Read Articles",
     "btnAbout": "More Nodes",
     "metric1Val": "6",
