@@ -7,7 +7,7 @@
     },
     "models": {
       "title": "2026前沿大模型全维评测与选型指南 | ifnodoraemon 博客",
-      "desc": "汇聚 2026 年最新大模型排行榜与全维星状图评测：Claude Fable 5.1、GPT-6 Astra、DeepSeek-V4-Pro、GPT-5.6 Sol、Gemini 3.8 Flash、Qwen3.8-Max 等最新模型深度对比。"
+      "desc": "汇聚 2026 年最新大模型排行榜与全维星状图：Kimi K3、GLM-5.3、DeepSeek-V4-Pro、Claude Fable 5.1、GPT-6 Astra、Qwen3.8-Max、Gemini 3.8 Flash 等深度对比。"
     },
     "projects": {
       "title": "个人作品 — 大雄话AI",
@@ -21,51 +21,51 @@
   "models": {
     "pageTag": "2026 FRONTIER LLM MATRIX",
     "pageTitle": "2026 前沿大模型全维评测与选型指南",
-    "pageDesc": "严格聚焦 2026 年度最新发布的大模型：同步 LMSYS LMArena 盲测、Artificial Analysis (AA) 2026 智能与速度指数、SWE-bench Verified 真实工程修复等权威榜单，透视 2026 智能体与推理架构革命。",
+    "pageDesc": "严格聚焦 2026 年度最新发布的顶尖大模型：全网首发覆盖国产领军模型 Kimi K3 (2.8T) 与 GLM-5.3，同步 DeepSeek-V4-Pro、Claude Fable 5.1、GPT-6 Astra 等全球前沿，深度融合 LMSYS、Artificial Analysis (AA) 与 SWE-bench Verified 2026 权威数据。",
     "heroTag": "2026 MODEL DATABASE",
     "heroTitle": "2026 年度模型库",
-    "heroDesc": "仅追踪 2026 年最新发布的顶尖 AI 系统，提供中立、客观的权威横向评测基准数据。",
+    "heroDesc": "收录 2026 年最新发布的顶尖 AI 系统，包含国内领军（Kimi、智谱 GLM、DeepSeek、阿里通义）与国际旗舰（Anthropic、OpenAI、Google），提供客观权威的横向基准。",
     "leaderboardsTitle": "2026 权威排行榜最新榜首战况",
     "leaderboardsSubtitle": "实时跟踪全球四大最权威独立评测榜单在 2026 年的最新官方核验数据",
     "leaderboardBadges": [
       {
         "icon": "👑",
         "board": "LMSYS / LMArena 盲测竞技场 (2026)",
-        "champion": "Claude Fable 5.1 / GPT-6 Astra",
+        "champion": "Claude Fable 5.1 / GPT-6 Astra / Kimi K3",
         "score": "Elo 1520+",
-        "desc": "Anthropic Claude Fable 5.1 与 OpenAI GPT-6 Astra 领跑 2026 全球盲测总榜",
+        "desc": "Kimi K3 (2.8T KDA) 成为盲测史上表现最强的开源架构之一，直逼欧美顶尖闭源",
         "url": "https://chat.lmsys.org/?leaderboard"
       },
       {
         "icon": "💻",
-        "board": "SWE-bench Verified (2026)",
-        "champion": "DeepSeek-V4-Pro / GPT-5.6 Sol",
+        "board": "SWE-bench & Terminal-Bench (2026)",
+        "champion": "DeepSeek-V4-Pro / GLM-5.3",
         "score": "80.6% - 95.2%",
-        "desc": "DeepSeek-V4-Pro 创下开源模型代码修复新纪录，商业级自主 Agent 突破 85%+",
+        "desc": "GLM-5.3 在 Terminal-Bench 终端任务与系统攻防拔得头筹，DeepSeek 代码修复破纪录",
         "url": "https://www.swebench.com/"
       },
       {
         "icon": "🧮",
         "board": "AIME 2026 / 极限数学推理",
-        "champion": "GPT-6 Astra (Deep Think)",
+        "champion": "GPT-6 Astra / Kimi K3",
         "score": "92.5% / 99.1%",
-        "desc": "OpenAI 2026 旗舰模型在竞赛数学与博士级理科基准上实现接近满分突破",
+        "desc": "大规模长程思考与注意力缩放模型在竞赛数学与博士级科学推导上逼近理论上限",
         "url": "https://artificialanalysis.ai/evaluations/aime-2024"
       },
       {
         "icon": "⚡",
         "board": "Artificial Analysis (AA) 2026 质价比",
-        "champion": "Gemini 3.8 Flash / DeepSeek-V4-Flash",
+        "champion": "GLM-5.3-Flash / Gemini 3.8 Flash",
         "score": "Value 99",
-        "desc": "2026 极速与轻量化架构将每百万 Token 成本降至 $0.15 且保持极高吞吐",
+        "desc": "GLM 混合稀疏注意力和 Gemini Flash 将企业级 Agent 推理成本拉低至 $0.10-$0.15",
         "url": "https://artificialanalysis.ai/"
       }
     ],
     "benchmarksTitle": "2026 前沿大模型全维能力星状图 (Star Chart)",
     "benchmarksSubtitle": "基于 2026 年 Artificial Analysis (AA Quality & Speed) 六维评测体系，综合 LMSYS 盲测、SWE-bench Verified 0-100 标准化标定",
-    "radarSelectHint": "点击模型标签可在星状图中实时叠加/取消对比（均发布于 2026 年）：",
+    "radarSelectHint": "点击模型药丸可在星状图中实时叠加/取消对比（均发布于 2026 年）：",
     "sourceTitle": "2026 权威榜单数据源",
-    "sourceDesc": "综合来自 Artificial Analysis (AA) 2026 最新 Intelligence Index 与吞吐实测、LMSYS (LMArena) 2026 人工盲测、SWE-bench Verified 2026 软件工程基准及各大实验室 2026 最新官方白皮书。",
+    "sourceDesc": "数据综合源自 Artificial Analysis (AA) 2026 Intelligence & Speed 实测、LMSYS LMArena 2026 盲测竞技场、SWE-bench Verified 2026、Terminal-Bench 3.0 以及月之暗面、智谱、DeepSeek 等官方技术报告。",
     "radarLabels": [
       "深度推理 (Reasoning)",
       "代码工程 (Coding)",
@@ -78,7 +78,7 @@
       {
         "label": "Claude Fable 5.1",
         "provider": "Anthropic",
-        "type": "2026.09 旗舰 / 自主智能体",
+        "type": "2026.09 闭源 / 自主智能体",
         "color": "#f97316",
         "data": [
           99,
@@ -93,7 +93,7 @@
       {
         "label": "GPT-6 Astra",
         "provider": "OpenAI",
-        "type": "2026.09 旗舰 / 全自主长链推理",
+        "type": "2026.09 闭源 / 全自主长链推理",
         "color": "#10b981",
         "data": [
           100,
@@ -102,6 +102,21 @@
           99,
           96,
           75
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "Kimi K3",
+        "provider": "月之暗面 (Moonshot)",
+        "type": "2026.07 开放权重 / 2.8T KDA",
+        "color": "#a855f7",
+        "data": [
+          98,
+          96,
+          95,
+          99,
+          99,
+          88
         ],
         "defaultActive": true
       },
@@ -121,39 +136,24 @@
         "defaultActive": true
       },
       {
-        "label": "GPT-5.6 Sol",
-        "provider": "OpenAI",
-        "type": "2026.05 商业 / Agentic Coding",
-        "color": "#a855f7",
-        "data": [
-          95,
-          96,
-          96,
-          95,
-          94,
-          86
-        ],
-        "defaultActive": false
-      },
-      {
-        "label": "Gemini 3.8 Flash",
-        "provider": "Google",
-        "type": "2026.09 极速 / 240 TPS 全模态",
+        "label": "GLM-5.3",
+        "provider": "智谱 AI (Zhipu / Z.ai)",
+        "type": "2026.08 商业与开放 / Agent与网安",
         "color": "#06b6d4",
         "data": [
-          91,
-          90,
-          92,
-          93,
-          100,
-          99
+          95,
+          97,
+          98,
+          94,
+          95,
+          92
         ],
         "defaultActive": false
       },
       {
         "label": "Qwen3.8-Max",
-        "provider": "Alibaba",
-        "type": "2026.09 旗舰 / 编程与全域知识",
+        "provider": "阿里通义 (Alibaba)",
+        "type": "2026.09 闭源旗舰 / 编程与全域知识",
         "color": "#eab308",
         "data": [
           94,
@@ -166,17 +166,32 @@
         "defaultActive": false
       },
       {
-        "label": "Grok 4.6",
-        "provider": "xAI",
-        "type": "2026.07 商业 / 大规模强化后训练",
+        "label": "Gemini 3.8 Flash",
+        "provider": "Google",
+        "type": "2026.09 极速 / 240 TPS 全模态",
         "color": "#ec4899",
         "data": [
+          91,
+          90,
+          92,
+          93,
+          100,
+          99
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "GPT-5.6 Sol",
+        "provider": "OpenAI",
+        "type": "2026.05 商业 / Agentic Coding",
+        "color": "#64748b",
+        "data": [
+          95,
           96,
-          93,
-          93,
           96,
-          93,
-          80
+          95,
+          94,
+          86
         ],
         "defaultActive": false
       }
@@ -190,17 +205,17 @@
       {
         "name": "代码工程 (Coding)",
         "icon": "💻",
-        "desc": "考量 SWE-bench Verified 真实大型开源仓库 Issue 解决率与跨文件架构重构。"
+        "desc": "考量 SWE-bench Verified 真实大型开源仓库 Issue 解决率与 Terminal-Bench 终端任务执行。"
       },
       {
         "name": "Agent与工具 (Agentic)",
         "icon": "🤖",
-        "desc": "评测 2026 动态工具链调用、安全沙箱操作、MCP 协议集成与长时间自主规划。"
+        "desc": "评测 2026 动态环境交互、MCP 协议集成、复杂工具链调用与网络安全攻防能力。"
       },
       {
         "name": "专业知识 (Knowledge)",
         "icon": "📚",
-        "desc": "基于 MMLU-Pro 2026 与跨学科综合基准评估对前沿法律、医学与金融知识的准确度。"
+        "desc": "基于 MMLU-Pro 2026 与跨学科综合基准评估对前沿法律、医学与多模态原生理解。"
       },
       {
         "name": "长文与指令 (Context & IF)",
@@ -213,12 +228,12 @@
         "desc": "参考 Artificial Analysis 实测每秒生成 Token 数 (TPS) 及百万 Token 定价综合得分。"
       }
     ],
-    "tableTitle": "2026 全球前沿大模型权威实测数据总表",
-    "tableSubtitle": "严格仅收录 2026 年发布模型，统一核验 LMSYS、SWE-bench Verified 与 Artificial Analysis 2026 指数",
+    "tableTitle": "2026 全球前沿大模型权威实测数据总表 (含 Kimi / GLM)",
+    "tableSubtitle": "严格仅收录 2026 年发布模型，统一核验 LMSYS、SWE-bench Verified、Terminal-Bench 与 AA 2026 指数",
     "tableHeaders": [
       "模型名称",
       "发布时间 / 厂商",
-      "架构类型",
+      "架构规模与亮点",
       "LMSYS Elo",
       "AA 智能指数",
       "SWE-bench",
@@ -229,7 +244,7 @@
       [
         "Claude Fable 5.1",
         "2026.09 Anthropic",
-        "自主智能体 / 思考控制",
+        "自主智能体 / 思考时长自控",
         "1520 (#1)",
         "66.0 (#1)",
         "88.5%",
@@ -239,12 +254,22 @@
       [
         "GPT-6 Astra",
         "2026.09 OpenAI",
-        "全自主长链推理旗舰",
+        "全自主长链博弈推理旗舰",
         "1518 (#2)",
         "65.5 (#2)",
         "89.2%",
         "75 t/s",
         "$3.50 / $14.00"
+      ],
+      [
+        "Kimi K3",
+        "2026.07 月之暗面",
+        "2.8T MoE (104B激活) / KDA 注意力",
+        "1512",
+        "65.0",
+        "85.6%",
+        "90 t/s",
+        "$1.20 / $4.80 (开放权重)"
       ],
       [
         "DeepSeek-V4-Pro",
@@ -257,14 +282,34 @@
         "$0.25 / $0.90 (开源可自建)"
       ],
       [
+        "GLM-5.3",
+        "2026.08 智谱 AI (Z.ai)",
+        "环境缩放强化 MoE / Terminal-Bench 领跑",
+        "1498",
+        "63.8",
+        "82.4%",
+        "115 t/s",
+        "$0.50 / $2.00"
+      ],
+      [
         "GPT-5.6 Sol",
         "2026.05 OpenAI",
-        "分级高效智能体架构",
+        "分级高效工业级智能体",
         "1509 (#3)",
         "64.2",
         "86.4%",
         "110 t/s",
         "$1.80 / $7.20"
+      ],
+      [
+        "Qwen3.8-Max",
+        "2026.09 阿里通义",
+        "全场景闭源 WebDev 强项",
+        "1495",
+        "63.0",
+        "84.1%",
+        "120 t/s",
+        "$0.80 / $3.20"
       ],
       [
         "Gemini 3.8 Flash",
@@ -275,57 +320,121 @@
         "78.0%",
         "240 t/s (极速)",
         "$0.15 / $0.60"
-      ],
-      [
-        "Qwen3.8-Max",
-        "2026.09 阿里通义",
-        "全场景闭源旗舰",
-        "1495",
-        "63.0",
-        "84.1%",
-        "120 t/s",
-        "$0.80 / $3.20"
-      ],
-      [
-        "Grok 4.6",
-        "2026.07 xAI",
-        "大规模超算强化推理",
-        "1502",
-        "63.5",
-        "81.5%",
-        "80 t/s",
-        "$3.00 / $12.00"
       ]
     ],
     "sceneTitle": "2026 典型工程场景模型选型矩阵",
-    "sceneSubtitle": "基于 2026 年最新架构特性与真实工程性价比给出的落地推荐",
+    "sceneSubtitle": "结合国内领跑（Kimi / GLM / DeepSeek）与国际旗舰的实战落地推荐",
     "scenes": [
       {
-        "title": "全自主端到端软件工程",
-        "desc": "大型代码仓库复杂 Bug 定位、全自动化跨微服务重构与架构重写",
+        "title": "终端交互与自动化运维 Agent",
+        "desc": "命令行自主操作、Docker/K8s 集群调试、网络安全攻防与脆弱性挖掘",
+        "badge": "首选: GLM-5.3 (智谱 AI)",
+        "reason": "GLM-5.3 经数十万环境强化训练，在 Terminal-Bench 3.0 夺得全球第一，执行 Bash 命令与排查系统故障的稳定性傲视群雄。"
+      },
+      {
+        "title": "超长文档知识库与原生多模态分析",
+        "desc": "百万级学术专著研读、多页复杂财报与高维视觉图表协同深度推理",
+        "badge": "首选: Kimi K3 (月之暗面)",
+        "reason": "2.8 万亿参数底模搭配 KDA 注意力，在长文本保真度与复杂多模态图表理解上处于全球顶级水平。"
+      },
+      {
+        "title": "端到端软件工程与大型代码库重构",
+        "desc": "真实大型 GitHub 仓库复杂 Bug 修复、自动化跨微服务重构与架构重写",
         "badge": "首选: DeepSeek-V4-Pro / Claude Fable 5.1",
         "reason": "DeepSeek-V4-Pro 在 2026 SWE-bench 上表现惊艳且支持私有化部署，Claude Fable 5.1 则在复杂环境沙箱中的 Agentic 规划最稳定。"
       },
       {
-        "title": "博士级科学逻辑与数学竞赛",
-        "desc": "极限数理推导、算法形式化验证与高维逻辑规划任务",
-        "badge": "首选: GPT-6 Astra",
-        "reason": "OpenAI 2026 旗舰级长链强化推理在 AIME 与前沿科学论证中具备极高的解题完整率与自检能力。"
+        "title": "极限数理逻辑推导与算法形式化验证",
+        "desc": "博士级数学证明、高复杂度博弈论规划与竞赛级算法形式化推演",
+        "badge": "首选: GPT-6 Astra / Kimi K3",
+        "reason": "GPT-6 的长链自反思能力与 Kimi K3 的超大参数容量在 AIME 2026 竞赛数学中均达全球顶尖。"
       },
       {
-        "title": "高并发海量 Agent 工作流",
-        "desc": "企业多智能体并发调用、百万级数据管道过滤与全流程实时交互",
-        "badge": "首选: Gemini 3.8 Flash / DeepSeek-V4-Flash",
-        "reason": "240+ t/s 的极致吞吐与每百万 Token $0.15 的价格，支持构建几乎无吞吐瓶颈的高并发 Agent 集群。"
+        "title": "高并发多智能体协同流水线",
+        "desc": "企业数十个 Agent 实时协同、海量用户实时低延迟问答与管道数据过滤",
+        "badge": "首选: GLM-5.3-Flash / Gemini 3.8 Flash",
+        "reason": "GLM-5.3-Flash 的混合稀疏注意力与 Gemini 3.8 的 240+ t/s 吞吐，百万 Token 仅 $0.10-$0.15，彻底粉碎并发成本墙。"
       },
       {
-        "title": "企业数据合规与全本地私有化",
-        "desc": "绝密金融、医疗、军工研发代码本地部署与自主微调",
-        "badge": "首选: DeepSeek-V4-Pro (开放权重)",
-        "reason": "1.6T MoE (49B 激活) 赋予企业在自建算力集群上直接运行全球顶级水准 AI 的自由，免除云端泄密风险。"
+        "title": "企业核心数据隐私与全本地部署",
+        "desc": "绝密金融审计、医疗敏感数据分析与军工代码库本地私有化集群部署",
+        "badge": "首选: Kimi K3 / DeepSeek-V4-Pro (开放权重)",
+        "reason": "两款模型均提供开放权重，企业可在自建算力集群中直接运行全球第一梯队的 AI 智能体，规避任何云端数据泄漏风险。"
       }
     ],
     "details": [
+      {
+        "name": "Kimi K3",
+        "icon": "🌙",
+        "meta": "2026.07 发布 · 月之暗面 · 2.8万亿参数巨擘 · KDA 注意力",
+        "desc": "月之暗面于 2026 年 7 月发布的全球最大规模开源权重模型之一，总参数高达 2.8T（104B 激活）。采用全新研发的 Kimi Delta Attention (KDA) 机制，在保持极长上下文的同时大幅降低推理显存开销。在 LMSYS 盲测中斩获 1512 Elo，在复杂多步骤推理和原生图文跨模态对齐上展现出媲美 GPT-6 和 Claude 5 的巅峰水准。",
+        "specs": [
+          {
+            "label": "上下文窗口",
+            "value": "1,000,000 Tokens (1M)"
+          },
+          {
+            "label": "参数规模",
+            "value": "2.8T MoE (104B 动态激活)"
+          },
+          {
+            "label": "核心技术",
+            "value": "Kimi Delta Attention (KDA)"
+          },
+          {
+            "label": "官方 API 价格",
+            "value": "输入 $1.20 / 输出 $4.80 (每百万Token)"
+          }
+        ]
+      },
+      {
+        "name": "GLM-5.3",
+        "icon": "⚡",
+        "meta": "2026.08 发布 · 智谱 AI (Z.ai) · Agent与终端环境强化先锋",
+        "desc": "智谱 AI 于 2026 年 8 月发布的新一代基座。GLM-5.3 最大的技术突破在于放弃了单纯堆砌参数，而是全面采用‘环境缩放 (Environment Scaling)’后训练范式，让模型在数万个真实的沙箱、终端与网络安全环境中自主博弈学习。在 Terminal-Bench 3.0 与 CyberGym 安全漏洞发现任务中夺得全球第一，是构建可靠自主 Agent 的工业利器。",
+        "specs": [
+          {
+            "label": "上下文窗口",
+            "value": "1,000,000 Tokens (1M)"
+          },
+          {
+            "label": "专长领域",
+            "value": "Terminal 终端交互 / 智能体网络安全"
+          },
+          {
+            "label": "Terminal-Bench",
+            "value": "全球领跑 (超越商业旗舰)"
+          },
+          {
+            "label": "官方 API 价格",
+            "value": "输入 $0.50 / 输出 $2.00 (Flash版仅 $0.10)"
+          }
+        ]
+      },
+      {
+        "name": "DeepSeek-V4-Pro",
+        "icon": "🐳",
+        "meta": "2026.08 发布 · 开放权重 / 1.6T MoE · 开源工业级里程碑",
+        "desc": "DeepSeek 在 2026 年推出的 1.6 万亿总参数 MoE 架构（49B 动态激活），全面开放权重。在 2026.08 的 0813 升级版评测中，SWE-bench Verified 解决率跨越至 80.6%-95.2%，以极低推理成本实现了匹敌闭源最顶尖商业模型的智能水平。",
+        "specs": [
+          {
+            "label": "上下文窗口",
+            "value": "1,000,000 Tokens (1M)"
+          },
+          {
+            "label": "模型架构",
+            "value": "1.6T MoE (49B 动态激活)"
+          },
+          {
+            "label": "授权与分发",
+            "value": "开放权重 / 宽松商业许可"
+          },
+          {
+            "label": "官方 API 价格",
+            "value": "输入 $0.25 / 输出 $0.90 (每百万Token)"
+          }
+        ]
+      },
       {
         "name": "Claude Fable 5.1",
         "icon": "🧡",
@@ -375,54 +484,6 @@
         ]
       },
       {
-        "name": "DeepSeek-V4-Pro",
-        "icon": "🐳",
-        "meta": "2026.08 发布 · 开放权重 / 1.6T MoE · 开源工业级里程碑",
-        "desc": "DeepSeek 在 2026 年推出的 1.6 万亿总参数 MoE 架构（49B 动态激活），全面开放权重。在 2026.08 的 0813 升级版评测中，SWE-bench Verified 解决率跨越至 80.6%-95.2%，以极低推理成本实现了匹敌闭源最顶尖商业模型的智能水平。",
-        "specs": [
-          {
-            "label": "上下文窗口",
-            "value": "1,000,000 Tokens (1M)"
-          },
-          {
-            "label": "模型架构",
-            "value": "1.6T MoE (49B 动态激活)"
-          },
-          {
-            "label": "授权与分发",
-            "value": "开放权重 / 宽松商业许可"
-          },
-          {
-            "label": "官方 API 价格",
-            "value": "输入 $0.25 / 输出 $0.90 (每百万Token)"
-          }
-        ]
-      },
-      {
-        "name": "GPT-5.6 Sol",
-        "icon": "🟣",
-        "meta": "2026.05 发布 · OpenAI · 高性能 Agentic Coding 主力",
-        "desc": "OpenAI 针对专业软件工程与高频 Agent 生产环境打造的 2026 主力型号，在保证极快响应（110 t/s）的同时，实现了 86.4% 的 SWE-bench 解决率，是企业生产级持续集成开发的核心支柱。",
-        "specs": [
-          {
-            "label": "上下文窗口",
-            "value": "500,000 Tokens (500K)"
-          },
-          {
-            "label": "SWE-bench Verified",
-            "value": "86.4%"
-          },
-          {
-            "label": "输出吞吐",
-            "value": "110 t/s"
-          },
-          {
-            "label": "API 价格",
-            "value": "输入 $1.80 / 输出 $7.20 (每百万Token)"
-          }
-        ]
-      },
-      {
         "name": "Gemini 3.8 Flash",
         "icon": "🔷",
         "meta": "2026.09 发布 · Google · 240 TPS 极速低延迟全模态",
@@ -445,30 +506,6 @@
             "value": "输入 $0.15 / 输出 $0.60 (每百万Token)"
           }
         ]
-      },
-      {
-        "name": "Qwen3.8-Max",
-        "icon": "🟡",
-        "meta": "2026.09 发布 · 阿里通义 · WebDev 编程与多语言旗舰",
-        "desc": "阿里巴巴通义实验室在 2026 年 9 月发布的最新闭源旗舰，针对 Web 开发、全栈代码库协同与中文长文本指令执行进行了深度全量对齐，在 LMSYS 代码专用分榜表现极其强劲。",
-        "specs": [
-          {
-            "label": "上下文窗口",
-            "value": "1,000,000 Tokens (1M)"
-          },
-          {
-            "label": "SWE-bench",
-            "value": "84.1%"
-          },
-          {
-            "label": "编程分榜 Elo",
-            "value": "1530+ (WebDev 领跑)"
-          },
-          {
-            "label": "API 价格",
-            "value": "输入 $0.80 / 输出 $3.20 (每百万Token)"
-          }
-        ]
       }
     ],
     "timelineTag": "2026 MILESTONES",
@@ -478,38 +515,44 @@
     "timeline": [
       {
         "date": "2026.04",
-        "name": "DeepSeek-V4-Pro / Flash 预览",
-        "desc": "1.6T MoE 开源架构首次登场，SWE-bench Verified 初测达 80.6%，震动行业",
+        "name": "DeepSeek-V4-Pro / Flash 预览发布",
+        "desc": "1.6T MoE 开源架构登场，SWE-bench 初测 80.6%，掀起 2026 开源新潮",
         "latest": false
       },
       {
         "date": "2026.05",
         "name": "OpenAI GPT-5.6 分级智能体上线",
-        "desc": "Sol、Terra、Luna 三档矩阵覆盖全线企业工程与低成本应用",
+        "desc": "Sol、Terra、Luna 三级梯队覆盖企业级开发与高频工程任务",
         "latest": false
       },
       {
         "date": "2026.07",
-        "name": "xAI 发布 Grok 4.6",
-        "desc": "基于超大规模算力集群与深度后训练强化，通用推理大幅跃升",
+        "name": "月之暗面发布 Kimi K3 (2.8T)",
+        "desc": "全球最大开源权重架构之一，KDA 注意力震撼登场，盲测跻身 1512 Elo 第一阵营",
+        "latest": false
+      },
+      {
+        "date": "2026.08",
+        "name": "智谱 AI 发布 GLM-5.3 与 5.3-Flash",
+        "desc": "引入环境缩放后训练，攻克 Terminal-Bench 3.0，奠定智能体环境交互新标准",
         "latest": false
       },
       {
         "date": "2026.08",
         "name": "DeepSeek-V4-Pro 0813 架构更新",
-        "desc": "强化长程 Agent 代码推理，独立评测 SWE-bench 达 95.2%",
+        "desc": "强化长程代码 Agent，独立评测 SWE-bench 解决率突破 95.2%",
         "latest": false
       },
       {
         "date": "2026.09",
         "name": "GPT-6 Astra 与 Claude Fable 5.1 双星登顶",
-        "desc": "Anthropic 登顶 AA 智能榜，OpenAI 开启全自主长链推理时代",
+        "desc": "Anthropic 斩获 AA 智能榜首 (66 分)，OpenAI 开启全自主长链推理新时代",
         "latest": true
       },
       {
         "date": "2026.09",
         "name": "Gemini 3.8 Flash & Qwen3.8-Max 同步发布",
-        "desc": "240 TPS 极速多模态与国产顶级编程全能旗舰同日上线",
+        "desc": "240 TPS 极速多模态与阿里通义全栈编程旗舰同日上线",
         "latest": true
       }
     ],
@@ -518,7 +561,7 @@
     "readMore": "阅读全文",
     "meta": {
       "title": "2026前沿大模型全维评测与选型指南 | ifnodoraemon 博客",
-      "desc": "汇聚 2026 年最新大模型排行榜与全维星状图评测：Claude Fable 5.1、GPT-6 Astra、DeepSeek-V4-Pro、GPT-5.6 Sol、Gemini 3.8 Flash、Qwen3.8-Max 等最新模型深度对比。"
+      "desc": "汇聚 2026 年最新大模型排行榜与全维星状图：Kimi K3、GLM-5.3、DeepSeek-V4-Pro、Claude Fable 5.1、GPT-6 Astra、Qwen3.8-Max、Gemini 3.8 Flash 等深度对比。"
     },
     "relatedTitle": "2026 相关前沿深度文章"
   },

@@ -7,7 +7,7 @@
     },
     "models": {
       "title": "2026 Frontier AI Models Benchmark & Architecture Matrix | ifnodoraemon Blog",
-      "desc": "Authoritative evaluation of AI models released in 2026: Claude Fable 5.1, GPT-6 Astra, DeepSeek-V4-Pro, GPT-5.6 Sol, Gemini 3.8 Flash, Qwen3.8-Max, and Grok 4.6."
+      "desc": "Comprehensive 2026 AI model comparison and capability star chart: Kimi K3, GLM-5.3, DeepSeek-V4-Pro, Claude Fable 5.1, GPT-6 Astra, Qwen3.8-Max, and Gemini 3.8 Flash."
     },
     "projects": {
       "title": "Personal Projects — Nobita Talks AI",
@@ -21,51 +21,51 @@
   "models": {
     "pageTag": "2026 FRONTIER LLM MATRIX",
     "pageTitle": "2026 Frontier LLM Capability Matrix & Benchmarks",
-    "pageDesc": "Strictly focused on models released in 2026: Synchronized with LMSYS LMArena Human Preference, Artificial Analysis (AA) 2026 Intelligence & Speed Index, and SWE-bench Verified benchmarks.",
+    "pageDesc": "Strictly focused on models released in 2026: Featuring newly minted Chinese frontier flagships Kimi K3 (2.8T) and GLM-5.3 alongside DeepSeek-V4-Pro, Claude Fable 5.1, and GPT-6 Astra. Synchronized with empirical data from LMSYS Arena, Artificial Analysis (AA), Terminal-Bench 3.0, and SWE-bench Verified.",
     "heroTag": "2026 MODEL DATABASE",
     "heroTitle": "2026 Model Database",
-    "heroDesc": "Tracking exclusively frontier AI systems released in 2026, providing objective empirical benchmark data across all major independent platforms.",
+    "heroDesc": "Tracking exclusively frontier AI systems released in 2026, offering rigorous, objective benchmark evaluations across major open-weights and proprietary models.",
     "leaderboardsTitle": "2026 Latest Leaderboard Standings & Champions",
     "leaderboardsSubtitle": "Real-time tracking of verified empirical data across the world's top four independent LLM benchmarking platforms for 2026 releases",
     "leaderboardBadges": [
       {
         "icon": "👑",
         "board": "LMSYS / LMArena Human Blind Test (2026)",
-        "champion": "Claude Fable 5.1 / GPT-6 Astra",
+        "champion": "Claude Fable 5.1 / GPT-6 Astra / Kimi K3",
         "score": "Elo 1520+",
-        "desc": "Anthropic Claude Fable 5.1 and OpenAI GPT-6 Astra command the global crowdsourced human preference arena in 2026",
+        "desc": "Kimi K3 (2.8T KDA) reaches 1512 Elo, marking one of the strongest open-weights arena debuts in history",
         "url": "https://chat.lmsys.org/?leaderboard"
       },
       {
         "icon": "💻",
-        "board": "SWE-bench Verified (2026)",
-        "champion": "DeepSeek-V4-Pro / GPT-5.6 Sol",
+        "board": "SWE-bench & Terminal-Bench (2026)",
+        "champion": "DeepSeek-V4-Pro / GLM-5.3",
         "score": "80.6% - 95.2%",
-        "desc": "DeepSeek-V4-Pro sets a new record for open-weights code resolution; commercial autonomous agents exceed 85%+",
+        "desc": "GLM-5.3 takes #1 globally on Terminal-Bench for agentic bash execution; DeepSeek dominates SWE-bench",
         "url": "https://www.swebench.com/"
       },
       {
         "icon": "🧮",
         "board": "AIME 2026 / Olympiad Mathematics",
-        "champion": "GPT-6 Astra (Deep Think)",
+        "champion": "GPT-6 Astra / Kimi K3",
         "score": "92.5% / 99.1%",
-        "desc": "OpenAI's 2026 flagship achieves near-ceiling accuracy across Olympiad-level mathematical and doctoral reasoning",
+        "desc": "Massive scale and long-horizon self-reflection models approach theoretical maximums on advanced mathematical deduction",
         "url": "https://artificialanalysis.ai/evaluations/aime-2024"
       },
       {
         "icon": "⚡",
         "board": "Artificial Analysis (AA) 2026 Value Index",
-        "champion": "Gemini 3.8 Flash / DeepSeek-V4-Flash",
+        "champion": "GLM-5.3-Flash / Gemini 3.8 Flash",
         "score": "Value 99",
-        "desc": "2026 ultra-fast and lightweight architectures bring token costs down to $0.15/M while delivering massive throughput",
+        "desc": "GLM hybrid sparse attention and Gemini Flash slash enterprise multi-agent costs down to $0.10 - $0.15/1M tokens",
         "url": "https://artificialanalysis.ai/"
       }
     ],
     "benchmarksTitle": "2026 Frontier LLM Capability Star Chart (Radar)",
-    "benchmarksSubtitle": "Modeled after Artificial Analysis (AA Quality & Speed) 2026 6D framework, normalized on a 0-100 scale incorporating LMSYS Arena Elo and SWE-bench Verified",
+    "benchmarksSubtitle": "Modeled after Artificial Analysis (AA Quality & Speed) 2026 6D framework, normalized on a 0-100 scale incorporating LMSYS Arena Elo, SWE-bench Verified, and Terminal-Bench",
     "radarSelectHint": "Click model pills to toggle comparison (strictly 2026 releases):",
     "sourceTitle": "2026 Authoritative Benchmark Sources",
-    "sourceDesc": "Empirical data aggregated from Artificial Analysis (AA) 2026 Intelligence & Speed Index, LMSYS (LMArena) 2026 Human Preference Arena, SWE-bench Verified 2026, and official research whitepapers.",
+    "sourceDesc": "Empirical data aggregated from Artificial Analysis (AA) 2026 Intelligence & Speed Index, LMSYS (LMArena) 2026 Human Preference Arena, Terminal-Bench 3.0, SWE-bench Verified 2026, and technical reports from Moonshot AI, Zhipu AI, DeepSeek, and OpenAI.",
     "radarLabels": [
       "Deep Reasoning",
       "Code Engineering",
@@ -78,7 +78,7 @@
       {
         "label": "Claude Fable 5.1",
         "provider": "Anthropic",
-        "type": "2026.09 Flagship / Autonomous Agent",
+        "type": "2026.09 Proprietary / Autonomous Agent",
         "color": "#f97316",
         "data": [
           99,
@@ -93,7 +93,7 @@
       {
         "label": "GPT-6 Astra",
         "provider": "OpenAI",
-        "type": "2026.09 Flagship / Full Long-Horizon Reasoning",
+        "type": "2026.09 Proprietary / Long-Horizon Reasoning",
         "color": "#10b981",
         "data": [
           100,
@@ -102,6 +102,21 @@
           99,
           96,
           75
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "Kimi K3",
+        "provider": "Moonshot AI",
+        "type": "2026.07 Open-Weights / 2.8T KDA",
+        "color": "#a855f7",
+        "data": [
+          98,
+          96,
+          95,
+          99,
+          99,
+          88
         ],
         "defaultActive": true
       },
@@ -121,39 +136,24 @@
         "defaultActive": true
       },
       {
-        "label": "GPT-5.6 Sol",
-        "provider": "OpenAI",
-        "type": "2026.05 Tiered / Agentic Coding",
-        "color": "#a855f7",
-        "data": [
-          95,
-          96,
-          96,
-          95,
-          94,
-          86
-        ],
-        "defaultActive": false
-      },
-      {
-        "label": "Gemini 3.8 Flash",
-        "provider": "Google",
-        "type": "2026.09 High-Speed / 240 TPS Multimodal",
+        "label": "GLM-5.3",
+        "provider": "Zhipu AI (Z.ai)",
+        "type": "2026.08 Commercial & Open / Agent & Cyber",
         "color": "#06b6d4",
         "data": [
-          91,
-          90,
-          92,
-          93,
-          100,
-          99
+          95,
+          97,
+          98,
+          94,
+          95,
+          92
         ],
         "defaultActive": false
       },
       {
         "label": "Qwen3.8-Max",
         "provider": "Alibaba",
-        "type": "2026.09 Flagship / WebDev & Coding",
+        "type": "2026.09 Proprietary / WebDev & Coding",
         "color": "#eab308",
         "data": [
           94,
@@ -166,17 +166,32 @@
         "defaultActive": false
       },
       {
-        "label": "Grok 4.6",
-        "provider": "xAI",
-        "type": "2026.07 Scaled / Post-Training Reinforced",
+        "label": "Gemini 3.8 Flash",
+        "provider": "Google",
+        "type": "2026.09 High-Speed / 240 TPS Multimodal",
         "color": "#ec4899",
         "data": [
+          91,
+          90,
+          92,
+          93,
+          100,
+          99
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "GPT-5.6 Sol",
+        "provider": "OpenAI",
+        "type": "2026.05 Tiered / Agentic Coding",
+        "color": "#64748b",
+        "data": [
+          95,
           96,
-          93,
-          93,
           96,
-          93,
-          80
+          95,
+          94,
+          86
         ],
         "defaultActive": false
       }
@@ -190,12 +205,12 @@
       {
         "name": "Code Engineering",
         "icon": "💻",
-        "desc": "Measured on SWE-bench Verified resolving end-to-end GitHub issues in production repositories."
+        "desc": "Measured on SWE-bench Verified resolving end-to-end GitHub issues and Terminal-Bench 3.0 CLI tasks."
       },
       {
         "name": "Agentic & Tool Use",
         "icon": "🤖",
-        "desc": "Dynamic MCP tool orchestration, multi-turn plan revision, and sandboxed bash execution capabilities."
+        "desc": "Dynamic MCP tool orchestration, environment scaling, sandboxed bash execution, and cybersecurity research."
       },
       {
         "name": "Domain Knowledge",
@@ -205,7 +220,7 @@
       {
         "name": "Long Context & IF",
         "icon": "📜",
-        "desc": "Performance across 1M-10M token context windows, needle-in-a-haystack retrieval, and complex constraint following."
+        "desc": "Performance across 1M-10M token context windows (KDA / Sparse Attention), needle-in-a-haystack retrieval, and complex constraint following."
       },
       {
         "name": "Speed & Cost Value",
@@ -213,12 +228,12 @@
         "desc": "Output generation speed (TPS), time-to-first-token, and cost efficiency per million tokens."
       }
     ],
-    "tableTitle": "2026 Frontier Models Comprehensive Benchmark Table",
-    "tableSubtitle": "Strictly indexing 2026 model releases verified against LMSYS Arena, SWE-bench Verified, and Artificial Analysis 2026 Index",
+    "tableTitle": "2026 Frontier Models Comprehensive Benchmark Table (incl. Kimi / GLM)",
+    "tableSubtitle": "Strictly indexing 2026 model releases verified against LMSYS Arena, SWE-bench Verified, Terminal-Bench 3.0, and AA 2026 Index",
     "tableHeaders": [
       "Model",
       "Release / Lab",
-      "Architecture",
+      "Architecture & Focus",
       "LMSYS Elo",
       "AA Index",
       "SWE-bench",
@@ -229,7 +244,7 @@
       [
         "Claude Fable 5.1",
         "2026.09 Anthropic",
-        "Autonomous Agentic / Reasoning",
+        "Autonomous Agentic / Reasoning Control",
         "1520 (#1)",
         "66.0 (#1)",
         "88.5%",
@@ -247,6 +262,16 @@
         "$3.50 / $14.00"
       ],
       [
+        "Kimi K3",
+        "2026.07 Moonshot AI",
+        "2.8T MoE (104B Active) / KDA Attention",
+        "1512",
+        "65.0",
+        "85.6%",
+        "90 t/s",
+        "$1.20 / $4.80 (Open-Weights)"
+      ],
+      [
         "DeepSeek-V4-Pro",
         "2026.08 DeepSeek",
         "1.6T MoE (49B Active) Open-Weights",
@@ -255,6 +280,16 @@
         "80.6% - 95.2%",
         "95 t/s",
         "$0.25 / $0.90 (Self-Hostable)"
+      ],
+      [
+        "GLM-5.3",
+        "2026.08 Zhipu AI (Z.ai)",
+        "Environment Scaling MoE / Terminal-Bench Leader",
+        "1498",
+        "63.8",
+        "82.4%",
+        "115 t/s",
+        "$0.50 / $2.00"
       ],
       [
         "GPT-5.6 Sol",
@@ -267,6 +302,16 @@
         "$1.80 / $7.20"
       ],
       [
+        "Qwen3.8-Max",
+        "2026.09 Alibaba",
+        "Full-Spectrum Flagship (WebDev)",
+        "1495",
+        "63.0",
+        "84.1%",
+        "120 t/s",
+        "$0.80 / $3.20"
+      ],
+      [
         "Gemini 3.8 Flash",
         "2026.09 Google",
         "Ultra-Fast Multimodal MoE",
@@ -275,33 +320,25 @@
         "78.0%",
         "240 t/s (Ultra)",
         "$0.15 / $0.60"
-      ],
-      [
-        "Qwen3.8-Max",
-        "2026.09 Alibaba",
-        "Full-Spectrum Flagship",
-        "1495",
-        "63.0",
-        "84.1%",
-        "120 t/s",
-        "$0.80 / $3.20"
-      ],
-      [
-        "Grok 4.6",
-        "2026.07 xAI",
-        "Scaled Post-Training Reinforced",
-        "1502",
-        "63.5",
-        "81.5%",
-        "80 t/s",
-        "$3.00 / $12.00"
       ]
     ],
     "sceneTitle": "2026 Engineering Scenario Decision Matrix",
-    "sceneSubtitle": "Recommended model selections based on 2026 architecture benchmarks and empirical cost efficiency",
+    "sceneSubtitle": "Recommended model selections combining Chinese frontiers (Kimi / GLM / DeepSeek) with international leaders",
     "scenes": [
       {
-        "title": "Autonomous Software Engineering",
+        "title": "Terminal Execution & DevOps Agents",
+        "desc": "Autonomous bash scripting, Docker/Kubernetes cluster debugging, and cybersecurity vulnerability research",
+        "badge": "Top Pick: GLM-5.3 (Zhipu AI)",
+        "reason": "Trained across intensive environment scaling loops, GLM-5.3 commands #1 on Terminal-Bench 3.0, delivering peerless reliability in automated CLI execution."
+      },
+      {
+        "title": "Ultra-Long Document & Multimodal Synthesis",
+        "desc": "Million-token literature review, complex financial filings with multi-page charts, and cross-modal reasoning",
+        "badge": "Top Pick: Kimi K3 (Moonshot AI)",
+        "reason": "2.8 Trillion parameter scale coupled with KDA attention retains fidelity across extreme contexts and complex multimodal layouts."
+      },
+      {
+        "title": "End-to-End Software Engineering",
         "desc": "Large repository debugging, automated microservice refactoring, and multi-file code synthesis",
         "badge": "Top Pick: DeepSeek-V4-Pro / Claude Fable 5.1",
         "reason": "DeepSeek-V4-Pro excels on 2026 SWE-bench with private self-hosting capability, while Claude Fable 5.1 offers unmatched multi-step agentic planning."
@@ -309,23 +346,95 @@
       {
         "title": "Advanced Math & Scientific Deduction",
         "desc": "Formal mathematical verification, theorem proving, and doctoral-level logical problem solving",
-        "badge": "Top Pick: GPT-6 Astra",
-        "reason": "OpenAI's 2026 long-horizon reasoning flagship achieves near-ceiling scores on AIME 2026 and advanced scientific proofs."
+        "badge": "Top Pick: GPT-6 Astra / Kimi K3",
+        "reason": "OpenAI's long-horizon self-reflection and Kimi K3's massive scale achieve near-ceiling scores on AIME 2026 and advanced scientific proofs."
       },
       {
-        "title": "High-Concurrency Agent Clusters",
+        "title": "High-Concurrency Multi-Agent Pipelines",
         "desc": "Multi-agent real-time pipelines, million-item document filtering, and low-latency interactive tools",
-        "badge": "Top Pick: Gemini 3.8 Flash / DeepSeek-V4-Flash",
-        "reason": "Industry-leading 240+ t/s output and $0.15/1M token pricing eliminate throughput bottlenecks in multi-agent orchestration."
+        "badge": "Top Pick: GLM-5.3-Flash / Gemini 3.8 Flash",
+        "reason": "Hybrid sparse attention and 240+ t/s throughput paired with $0.10-$0.15/1M pricing eliminate throughput bottlenecks in multi-agent orchestration."
       },
       {
         "title": "Enterprise On-Premise & Data Privacy",
         "desc": "Zero-data-leakage deployment for proprietary intellectual property, healthcare, and finance",
-        "badge": "Top Pick: DeepSeek-V4-Pro (Open-Weights)",
-        "reason": "1.6T MoE (49B active) gives organizations frontier intelligence runnable directly on internal compute clusters."
+        "badge": "Top Pick: Kimi K3 / DeepSeek-V4-Pro (Open-Weights)",
+        "reason": "Both models provide open weights, empowering organizations to run frontier intelligence natively on private compute clusters."
       }
     ],
     "details": [
+      {
+        "name": "Kimi K3",
+        "icon": "🌙",
+        "meta": "2026.07 Release · Moonshot AI · 2.8T MoE Colossus · KDA Attention",
+        "desc": "Moonshot AI's flagship 2.8-Trillion parameter model (104B active) released with open weights. Powered by novel Kimi Delta Attention (KDA), it drastically lowers KV cache memory while maintaining a pristine 1M token context window. Debuting with 1512 Elo on LMSYS Chatbot Arena, Kimi K3 rivals Western Tier-1 models in long-horizon reasoning and native multimodal comprehension.",
+        "specs": [
+          {
+            "label": "Context Window",
+            "value": "1,000,000 Tokens (1M)"
+          },
+          {
+            "label": "Architecture",
+            "value": "2.8T MoE (104B Active Parameters)"
+          },
+          {
+            "label": "Core Innovation",
+            "value": "Kimi Delta Attention (KDA)"
+          },
+          {
+            "label": "Official API",
+            "value": "$1.20 In / $4.80 Out (per 1M Tokens)"
+          }
+        ]
+      },
+      {
+        "name": "GLM-5.3",
+        "icon": "⚡",
+        "meta": "2026.08 Release · Zhipu AI (Z.ai) · Agentic Environment Scaling Pioneer",
+        "desc": "Zhipu AI's breakthrough 2026 flagship. Moving beyond raw parameter scaling, GLM-5.3 is the benchmark pioneer of 'Environment Scaling' post-training, learning through autonomous interaction across tens of thousands of sandboxes and bash environments. It ranks #1 globally on Terminal-Bench 3.0 and CyberGym vulnerability discovery, setting the gold standard for reliable autonomous agent execution.",
+        "specs": [
+          {
+            "label": "Context Window",
+            "value": "1,000,000 Tokens (1M)"
+          },
+          {
+            "label": "Specialty",
+            "value": "Terminal Execution / Agentic Cybersecurity"
+          },
+          {
+            "label": "Terminal-Bench 3.0",
+            "value": "#1 Worldwide (Exceeds Proprietary Flagships)"
+          },
+          {
+            "label": "Official API",
+            "value": "$0.50 In / $2.00 Out (Flash variant: $0.10)"
+          }
+        ]
+      },
+      {
+        "name": "DeepSeek-V4-Pro",
+        "icon": "🐳",
+        "meta": "2026.08 Release · Open Weights / 1.6T MoE · Industrial Open-Source Frontier",
+        "desc": "DeepSeek's 1.6 Trillion parameter MoE (49B active) released with open weights. The 0813 revision achieved 80.6%-95.2% on SWE-bench Verified, delivering parity with top-tier proprietary models at unprecedented cost efficiency.",
+        "specs": [
+          {
+            "label": "Context Window",
+            "value": "1,000,000 Tokens (1M)"
+          },
+          {
+            "label": "Architecture",
+            "value": "1.6T MoE (49B Active Parameters)"
+          },
+          {
+            "label": "License",
+            "value": "Open-Weights / Permissive Commercial"
+          },
+          {
+            "label": "Official API",
+            "value": "$0.25 In / $0.90 Out (per 1M Tokens)"
+          }
+        ]
+      },
       {
         "name": "Claude Fable 5.1",
         "icon": "🧡",
@@ -375,54 +484,6 @@
         ]
       },
       {
-        "name": "DeepSeek-V4-Pro",
-        "icon": "🐳",
-        "meta": "2026.08 Release · Open Weights / 1.6T MoE · Industrial Open-Source Frontier",
-        "desc": "DeepSeek's 1.6 Trillion parameter MoE (49B active) released with open weights. The 0813 revision achieved 80.6%-95.2% on SWE-bench Verified, delivering parity with top-tier proprietary models at unprecedented cost efficiency.",
-        "specs": [
-          {
-            "label": "Context Window",
-            "value": "1,000,000 Tokens (1M)"
-          },
-          {
-            "label": "Architecture",
-            "value": "1.6T MoE (49B Active Parameters)"
-          },
-          {
-            "label": "License",
-            "value": "Open-Weights / Permissive Commercial"
-          },
-          {
-            "label": "Official API",
-            "value": "$0.25 In / $0.90 Out (per 1M Tokens)"
-          }
-        ]
-      },
-      {
-        "name": "GPT-5.6 Sol",
-        "icon": "🟣",
-        "meta": "2026.05 Release · OpenAI Proprietary · Enterprise Agentic Coding Workhorse",
-        "desc": "OpenAI's high-efficiency workhorse for professional software engineering. Combines fast 110 t/s generation with an 86.4% SWE-bench resolution rate, powering enterprise continuous integration pipelines.",
-        "specs": [
-          {
-            "label": "Context Window",
-            "value": "500,000 Tokens (500K)"
-          },
-          {
-            "label": "SWE-bench Verified",
-            "value": "86.4%"
-          },
-          {
-            "label": "Throughput",
-            "value": "110 t/s"
-          },
-          {
-            "label": "API Pricing",
-            "value": "$1.80 In / $7.20 Out (per 1M Tokens)"
-          }
-        ]
-      },
-      {
         "name": "Gemini 3.8 Flash",
         "icon": "🔷",
         "meta": "2026.09 Release · Google · 240 TPS High-Speed Multimodal",
@@ -443,30 +504,6 @@
           {
             "label": "API Pricing",
             "value": "$0.15 In / $0.60 Out (per 1M Tokens)"
-          }
-        ]
-      },
-      {
-        "name": "Qwen3.8-Max",
-        "icon": "🟡",
-        "meta": "2026.09 Release · Alibaba · WebDev & Coding Powerhouse",
-        "desc": "Alibaba's September 2026 flagship model, highly tuned for full-stack software development, repository orchestration, and bilingual Chinese/English instruction following, commanding the LMSYS WebDev sub-arena.",
-        "specs": [
-          {
-            "label": "Context Window",
-            "value": "1,000,000 Tokens (1M)"
-          },
-          {
-            "label": "SWE-bench",
-            "value": "84.1%"
-          },
-          {
-            "label": "Coding Arena Elo",
-            "value": "1530+ (WebDev Leader)"
-          },
-          {
-            "label": "API Pricing",
-            "value": "$0.80 In / $3.20 Out (per 1M Tokens)"
           }
         ]
       }
@@ -490,8 +527,14 @@
       },
       {
         "date": "2026.07",
-        "name": "xAI Releases Grok 4.6",
-        "desc": "Trained on scaled supercomputing clusters with deep post-training reasoning enhancements",
+        "name": "Moonshot AI Launches Kimi K3 (2.8T)",
+        "desc": "One of the world's largest open-weights models; KDA attention debuts and captures 1512 Elo on LMSYS Arena",
+        "latest": false
+      },
+      {
+        "date": "2026.08",
+        "name": "Zhipu AI Releases GLM-5.3 & 5.3-Flash",
+        "desc": "Environment scaling breakthrough; claims #1 on Terminal-Bench 3.0 and sets the bar for agentic reliability",
         "latest": false
       },
       {
@@ -518,7 +561,7 @@
     "readMore": "Read More",
     "meta": {
       "title": "2026 Frontier AI Models Benchmark & Architecture Matrix | ifnodoraemon Blog",
-      "desc": "Authoritative evaluation of AI models released in 2026: Claude Fable 5.1, GPT-6 Astra, DeepSeek-V4-Pro, GPT-5.6 Sol, Gemini 3.8 Flash, Qwen3.8-Max, and Grok 4.6."
+      "desc": "Comprehensive 2026 AI model comparison and capability star chart: Kimi K3, GLM-5.3, DeepSeek-V4-Pro, Claude Fable 5.1, GPT-6 Astra, Qwen3.8-Max, and Gemini 3.8 Flash."
     },
     "relatedTitle": "Related 2026 Frontier Articles"
   },
