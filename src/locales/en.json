@@ -6,8 +6,8 @@
       "desc": "Focusing on AI foundation models research and practice, providing frontier tech insights and exclusive engineering notes on GPT-5.4, Claude 4.6, and Gemini 3.1."
     },
     "models": {
-      "title": "Model Database — Nobita Talks AI",
-      "desc": "A comprehensive comparison of state-of-the-art AI foundation models, including benchmark evaluations and use-case analysis for GPT-5.4, Claude 4.6, and Gemini 3.1."
+      "title": "2026 Frontier AI Models Benchmark & Architecture Matrix | ifnodoraemon Blog",
+      "desc": "Authoritative evaluation of AI models released in 2026: Claude Fable 5.1, GPT-6 Astra, DeepSeek-V4-Pro, GPT-5.6 Sol, Gemini 3.8 Flash, Qwen3.8-Max, and Grok 4.6."
     },
     "projects": {
       "title": "Personal Projects — Nobita Talks AI",
@@ -19,514 +19,508 @@
     }
   },
   "models": {
-    "pageTag": "LATEST LEADERBOARDS & STAR CHART",
-    "pageTitle": "Latest Global AI Leaderboards & Panoramic Star Chart",
-    "pageDesc": "Synchronized with latest 2025-2026 major independent leaderboards: Artificial Analysis (AA), LMSYS LMArena Human Preference, SWE-bench Verified, and AIME Math Benchmarks. Comprehensive analysis of Claude 3.7 Sonnet, Grok 3, OpenAI o3-mini, and DeepSeek-R1.",
-    "heroTag": "MODEL DATABASE",
-    "heroTitle": "Model Database",
-    "heroDesc": "Tracking the parameters, empirical capabilities, and production use cases of state-of-the-art AI systems with neutral, objective benchmark metrics.",
-    "leaderboardsTitle": "Major Global Leaderboard Status",
-    "leaderboardsSubtitle": "Tracking empirical data across the world's top four independent LLM benchmarking platforms",
+    "pageTag": "2026 FRONTIER LLM MATRIX",
+    "pageTitle": "2026 Frontier LLM Capability Matrix & Benchmarks",
+    "pageDesc": "Strictly focused on models released in 2026: Synchronized with LMSYS LMArena Human Preference, Artificial Analysis (AA) 2026 Intelligence & Speed Index, and SWE-bench Verified benchmarks.",
+    "heroTag": "2026 MODEL DATABASE",
+    "heroTitle": "2026 Model Database",
+    "heroDesc": "Tracking exclusively frontier AI systems released in 2026, providing objective empirical benchmark data across all major independent platforms.",
+    "leaderboardsTitle": "2026 Latest Leaderboard Standings & Champions",
+    "leaderboardsSubtitle": "Real-time tracking of verified empirical data across the world's top four independent LLM benchmarking platforms for 2026 releases",
     "leaderboardBadges": [
       {
         "icon": "👑",
-        "board": "LMSYS / LMArena Human Blind Test",
-        "champion": "Grok 3 / Claude 3.7",
-        "score": "Elo 1400+",
-        "desc": "xAI Grok 3 captures #1 overall rank in human preference arena, followed closely by Claude 3.7 Sonnet",
+        "board": "LMSYS / LMArena Human Blind Test (2026)",
+        "champion": "Claude Fable 5.1 / GPT-6 Astra",
+        "score": "Elo 1520+",
+        "desc": "Anthropic Claude Fable 5.1 and OpenAI GPT-6 Astra command the global crowdsourced human preference arena in 2026",
         "url": "https://chat.lmsys.org/?leaderboard"
       },
       {
         "icon": "💻",
-        "board": "SWE-bench Verified Software Eng",
-        "champion": "Claude 3.7 Sonnet",
-        "score": "70.3%",
-        "desc": "Anthropic's hybrid thinking model breaks all-time world record, dramatically outperforming prior standards",
+        "board": "SWE-bench Verified (2026)",
+        "champion": "DeepSeek-V4-Pro / GPT-5.6 Sol",
+        "score": "80.6% - 95.2%",
+        "desc": "DeepSeek-V4-Pro sets a new record for open-weights code resolution; commercial autonomous agents exceed 85%+",
         "url": "https://www.swebench.com/"
       },
       {
         "icon": "🧮",
-        "board": "AIME 2024 / MATH-500 Olympiad Math",
-        "champion": "OpenAI o3-mini (High)",
-        "score": "87.3% / 97.9%",
-        "desc": "OpenAI's latest cost-efficient reasoning model claims peak accuracy on competition mathematics",
+        "board": "AIME 2026 / Olympiad Mathematics",
+        "champion": "GPT-6 Astra (Deep Think)",
+        "score": "92.5% / 99.1%",
+        "desc": "OpenAI's 2026 flagship achieves near-ceiling accuracy across Olympiad-level mathematical and doctoral reasoning",
         "url": "https://artificialanalysis.ai/evaluations/aime-2024"
       },
       {
         "icon": "⚡",
-        "board": "Artificial Analysis (AA) Value Index",
-        "champion": "DeepSeek-R1 / V3",
+        "board": "Artificial Analysis (AA) 2026 Value Index",
+        "champion": "Gemini 3.8 Flash / DeepSeek-V4-Flash",
         "score": "Value 99",
-        "desc": "DeepSeek redefines global AI economics with $0.14 - $0.55 per million tokens",
+        "desc": "2026 ultra-fast and lightweight architectures bring token costs down to $0.15/M while delivering massive throughput",
         "url": "https://artificialanalysis.ai/"
       }
     ],
-    "benchmarksTitle": "Frontier LLM Comprehensive Capability Star Chart (Radar)",
-    "benchmarksSubtitle": "Modeled after Artificial Analysis (AA Quality & Speed) 6D framework, normalized on a 0-100 scale incorporating LMSYS Arena Elo, SWE-bench Verified, and Olympiad Math",
-    "radarSelectHint": "Click model pills to toggle/overlay models in the Star Chart in real time:",
-    "sourceTitle": "Authoritative Benchmark Sources",
-    "sourceDesc": "Synthesized from Artificial Analysis (AA) 2025 Quality Index & Speed/Price empirical benchmarks, LMSYS (LMArena) human blind evaluations, SWE-bench Verified real GitHub engineering tests, and official technical reports.",
+    "benchmarksTitle": "2026 Frontier LLM Capability Star Chart (Radar)",
+    "benchmarksSubtitle": "Modeled after Artificial Analysis (AA Quality & Speed) 2026 6D framework, normalized on a 0-100 scale incorporating LMSYS Arena Elo and SWE-bench Verified",
+    "radarSelectHint": "Click model pills to toggle comparison (strictly 2026 releases):",
+    "sourceTitle": "2026 Authoritative Benchmark Sources",
+    "sourceDesc": "Empirical data aggregated from Artificial Analysis (AA) 2026 Intelligence & Speed Index, LMSYS (LMArena) 2026 Human Preference Arena, SWE-bench Verified 2026, and official research whitepapers.",
     "radarLabels": [
-      "Reasoning & Math",
-      "Software Engineering",
-      "Agent & Tool Use",
-      "Knowledge & Language",
-      "Context & Instruction",
+      "Deep Reasoning",
+      "Code Engineering",
+      "Agentic & Tool Use",
+      "Domain Knowledge",
+      "Long Context & IF",
       "Speed & Cost Value"
     ],
     "radarDatasets": [
       {
-        "label": "Claude 3.7 Sonnet",
+        "label": "Claude Fable 5.1",
         "provider": "Anthropic",
-        "type": "Proprietary / Hybrid Think",
+        "type": "2026.09 Flagship / Autonomous Agent",
         "color": "#f97316",
         "data": [
-          93,
           99,
           98,
-          94,
-          96,
-          84
+          100,
+          97,
+          98,
+          76
         ],
         "defaultActive": true
       },
       {
-        "label": "Grok 3 (Think)",
-        "provider": "xAI",
-        "type": "Proprietary / Supercluster",
-        "color": "#ef4444",
+        "label": "GPT-6 Astra",
+        "provider": "OpenAI",
+        "type": "2026.09 Flagship / Full Long-Horizon Reasoning",
+        "color": "#10b981",
         "data": [
+          100,
           97,
-          91,
-          92,
+          98,
+          99,
           96,
-          94,
           75
         ],
         "defaultActive": true
       },
       {
-        "label": "OpenAI o3-mini",
-        "provider": "OpenAI",
-        "type": "Proprietary / Fast Reasoning",
-        "color": "#10b981",
-        "data": [
-          98,
-          93,
-          90,
-          92,
-          88,
-          94
-        ],
-        "defaultActive": true
-      },
-      {
-        "label": "DeepSeek-R1",
+        "label": "DeepSeek-V4-Pro",
         "provider": "DeepSeek",
-        "type": "Open Weights / Pure RL",
+        "type": "2026.08 Open-Weights / 1.6T MoE",
         "color": "#3b82f6",
         "data": [
+          97,
+          99,
+          95,
           96,
-          91,
-          85,
-          93,
-          86,
-          98
+          97,
+          96
         ],
         "defaultActive": true
       },
       {
-        "label": "DeepSeek-V3",
-        "provider": "DeepSeek",
-        "type": "Open Weights / 671B MoE",
+        "label": "GPT-5.6 Sol",
+        "provider": "OpenAI",
+        "type": "2026.05 Tiered / Agentic Coding",
+        "color": "#a855f7",
+        "data": [
+          95,
+          96,
+          96,
+          95,
+          94,
+          86
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "Gemini 3.8 Flash",
+        "provider": "Google",
+        "type": "2026.09 High-Speed / 240 TPS Multimodal",
         "color": "#06b6d4",
         "data": [
-          86,
-          88,
-          87,
+          91,
           90,
-          88,
+          92,
+          93,
+          100,
           99
         ],
         "defaultActive": false
       },
       {
-        "label": "Gemini 2.0 Flash",
-        "provider": "Google",
-        "type": "Proprietary / Speed & 1M",
+        "label": "Qwen3.8-Max",
+        "provider": "Alibaba",
+        "type": "2026.09 Flagship / WebDev & Coding",
         "color": "#eab308",
         "data": [
-          85,
-          86,
-          90,
-          90,
+          94,
+          95,
+          94,
           98,
-          97
+          96,
+          90
         ],
         "defaultActive": false
       },
       {
-        "label": "Qwen 2.5 Max",
-        "provider": "Alibaba",
-        "type": "Open & API / All-Rounder",
+        "label": "Grok 4.6",
+        "provider": "xAI",
+        "type": "2026.07 Scaled / Post-Training Reinforced",
         "color": "#ec4899",
         "data": [
-          88,
-          90,
-          87,
-          92,
-          88,
-          91
+          96,
+          93,
+          93,
+          96,
+          93,
+          80
         ],
         "defaultActive": false
       }
     ],
     "dimensionGuides": [
       {
+        "name": "Deep Reasoning",
         "icon": "🧠",
-        "name": "Reasoning & Math",
-        "desc": "AIME 2024, MATH-500 competition math, and PhD-level GPQA Diamond multi-step chain-of-thought"
+        "desc": "Evaluates multi-step deduction, self-reflection loops, and rigor on AIME 2026 and doctoral scientific benchmarks."
       },
       {
+        "name": "Code Engineering",
         "icon": "💻",
-        "name": "Software Engineering",
-        "desc": "SWE-bench Verified real GitHub issue resolution, LiveCodeBench, and full-stack automated refactoring"
+        "desc": "Measured on SWE-bench Verified resolving end-to-end GitHub issues in production repositories."
       },
       {
+        "name": "Agentic & Tool Use",
         "icon": "🤖",
-        "name": "Agent & Tool Use",
-        "desc": "τ²-Bench, BrowserGym web interaction, native Computer Use, and robust multi-step Function Calling"
+        "desc": "Dynamic MCP tool orchestration, multi-turn plan revision, and sandboxed bash execution capabilities."
       },
       {
+        "name": "Domain Knowledge",
         "icon": "📚",
-        "name": "Knowledge & Language",
-        "desc": "MMLU-Pro interdisciplinary academic knowledge and LMSYS (LMArena) human blind win rate"
+        "desc": "Accuracy and factual breadth across advanced law, medicine, finance, and MMLU-Pro 2026 evaluations."
       },
       {
+        "name": "Long Context & IF",
         "icon": "📜",
-        "name": "Context & Instruction",
-        "desc": "IFEval strict format following, plus high-fidelity retrieval across 128K to 1M+ token windows"
+        "desc": "Performance across 1M-10M token context windows, needle-in-a-haystack retrieval, and complex constraint following."
       },
       {
-        "icon": "⚡",
         "name": "Speed & Cost Value",
-        "desc": "Key Artificial Analysis metric: Output Tokens/sec throughput balanced against cost per million tokens"
+        "icon": "⚡",
+        "desc": "Output generation speed (TPS), time-to-first-token, and cost efficiency per million tokens."
       }
     ],
-    "tableTitle": "Authoritative Global Benchmark Evaluation Matrix",
-    "tableSubtitle": "Aggregating latest empirical scores from Artificial Analysis (AA), LMSYS Arena, and SWE-bench Verified",
+    "tableTitle": "2026 Frontier Models Comprehensive Benchmark Table",
+    "tableSubtitle": "Strictly indexing 2026 model releases verified against LMSYS Arena, SWE-bench Verified, and Artificial Analysis 2026 Index",
     "tableHeaders": [
       "Model",
-      "Provider",
-      "License",
-      "AA Quality Index",
+      "Release / Lab",
+      "Architecture",
       "LMSYS Elo",
+      "AA Index",
       "SWE-bench",
-      "Reasoning (GPQA/AIME)",
-      "Speed (TPS)",
-      "Context Window",
-      "API Price ($/1M)",
-      "Latest Core Positioning"
+      "Speed",
+      "Pricing (1M Tokens)"
     ],
     "tableRows": [
       [
-        "Claude 3.7 Sonnet",
-        "Anthropic",
-        "Proprietary",
-        "93",
-        "1395",
-        "70.3% (World Record)",
-        "72.0% / 75.0%",
-        "~75 t/s",
-        "200K (Cached)",
-        "$3.00 / $15.00",
-        "World #1 in Software Engineering"
+        "Claude Fable 5.1",
+        "2026.09 Anthropic",
+        "Autonomous Agentic / Reasoning",
+        "1520 (#1)",
+        "66.0 (#1)",
+        "88.5%",
+        "85 t/s",
+        "$4.00 / $16.00"
       ],
       [
-        "Grok 3 (Think)",
-        "xAI",
-        "Proprietary",
-        "92",
-        "1400+ (Arena #1)",
-        "54.8%",
-        "74.6% / 83.9%",
-        "~55 t/s",
-        "1M tokens",
-        "Subscription",
-        "xAI 100K-H100 Supercluster Flagship"
+        "GPT-6 Astra",
+        "2026.09 OpenAI",
+        "Long-Horizon Reasoning Flagship",
+        "1518 (#2)",
+        "65.5 (#2)",
+        "89.2%",
+        "75 t/s",
+        "$3.50 / $14.00"
       ],
       [
-        "OpenAI o3-mini",
-        "OpenAI",
-        "Proprietary",
-        "92",
-        "1385",
-        "49.3%",
-        "79.7% / 87.3% (Math #1)",
-        "~90 t/s",
-        "200K (100K out)",
-        "$1.10 / $4.40",
-        "Fast High-Precision Reasoning Leader"
+        "DeepSeek-V4-Pro",
+        "2026.08 DeepSeek",
+        "1.6T MoE (49B Active) Open-Weights",
+        "1506",
+        "64.8",
+        "80.6% - 95.2%",
+        "95 t/s",
+        "$0.25 / $0.90 (Self-Hostable)"
       ],
       [
-        "DeepSeek-R1",
-        "DeepSeek",
-        "Open Weights",
-        "91",
-        "1365",
-        "49.2%",
-        "71.5% / 79.8%",
-        "~45 t/s",
-        "128K (64K out)",
-        "$0.55 / $2.19",
-        "Open Weights Pure RL Milestone"
+        "GPT-5.6 Sol",
+        "2026.05 OpenAI",
+        "Tiered High-Efficiency Agentic",
+        "1509 (#3)",
+        "64.2",
+        "86.4%",
+        "110 t/s",
+        "$1.80 / $7.20"
       ],
       [
-        "DeepSeek-V3",
-        "DeepSeek",
-        "Open Weights",
-        "86",
-        "1335",
-        "42.0%",
-        "59.1% / 89.3%",
-        "~65 t/s",
-        "128K",
-        "$0.14 / $0.28",
-        "Global Best Cost-Efficiency 671B MoE"
+        "Gemini 3.8 Flash",
+        "2026.09 Google",
+        "Ultra-Fast Multimodal MoE",
+        "1488",
+        "61.5",
+        "78.0%",
+        "240 t/s (Ultra)",
+        "$0.15 / $0.60"
       ],
       [
-        "Gemini 2.0 Flash",
-        "Google",
-        "Proprietary",
-        "86",
-        "1360",
-        "41.5%",
-        "58.5% / 82.0%",
-        "~185 t/s (Fastest)",
-        "1,048,576 (1M)",
-        "$0.10 / $0.40",
-        "Blazing Speed & 1M Context King"
+        "Qwen3.8-Max",
+        "2026.09 Alibaba",
+        "Full-Spectrum Flagship",
+        "1495",
+        "63.0",
+        "84.1%",
+        "120 t/s",
+        "$0.80 / $3.20"
       ],
       [
-        "Qwen 2.5 Max",
-        "Alibaba",
-        "Open & API",
-        "87",
-        "1350",
-        "46.5%",
-        "62.0% / 85.5%",
-        "~60 t/s",
-        "128K",
-        "$0.40 / $1.20",
-        "Enterprise Flagship All-Rounder"
+        "Grok 4.6",
+        "2026.07 xAI",
+        "Scaled Post-Training Reinforced",
+        "1502",
+        "63.5",
+        "81.5%",
+        "80 t/s",
+        "$3.00 / $12.00"
       ]
     ],
-    "sceneTitle": "Latest Workload Recommendations",
-    "sceneSubtitle": "Recommended model architectures tailored to your specific application requirements based on latest 2025 benchmarks",
+    "sceneTitle": "2026 Engineering Scenario Decision Matrix",
+    "sceneSubtitle": "Recommended model selections based on 2026 architecture benchmarks and empirical cost efficiency",
     "scenes": [
       {
-        "title": "Coding & Software Engineering",
-        "desc": "Large codebase refactoring, automated bug remediation, GitHub Issue resolution, and full-stack DevOps",
-        "badge": "Undisputed #1",
-        "reason": "Claude 3.7 Sonnet achieves 70.3% on SWE-bench Verified, with hybrid extended thinking virtually eliminating code hallucinations."
+        "title": "Autonomous Software Engineering",
+        "desc": "Large repository debugging, automated microservice refactoring, and multi-file code synthesis",
+        "badge": "Top Pick: DeepSeek-V4-Pro / Claude Fable 5.1",
+        "reason": "DeepSeek-V4-Pro excels on 2026 SWE-bench with private self-hosting capability, while Claude Fable 5.1 offers unmatched multi-step agentic planning."
       },
       {
-        "title": "Hard Mathematical Derivation & STEM",
-        "desc": "Olympiad math proofs, complex quantitative finance modeling, advanced scientific reasoning and planning",
-        "badge": "Peak Reasoning",
-        "reason": "OpenAI o3-mini (AIME 87.3%), Grok 3 Think, and DeepSeek-R1 form the pinnacle of human algorithmic reasoning."
+        "title": "Advanced Math & Scientific Deduction",
+        "desc": "Formal mathematical verification, theorem proving, and doctoral-level logical problem solving",
+        "badge": "Top Pick: GPT-6 Astra",
+        "reason": "OpenAI's 2026 long-horizon reasoning flagship achieves near-ceiling scores on AIME 2026 and advanced scientific proofs."
       },
       {
-        "title": "Autonomous Agents & Desktop Control",
-        "desc": "Building agents with native visual screen awareness (Computer Use), browser automation, and multi-step toolchains",
-        "badge": "Agent Champion",
-        "reason": "Claude 3.7 Sonnet provides the industry's most robust desktop interaction; Grok 3 provides live real-time DeepSearch."
+        "title": "High-Concurrency Agent Clusters",
+        "desc": "Multi-agent real-time pipelines, million-item document filtering, and low-latency interactive tools",
+        "badge": "Top Pick: Gemini 3.8 Flash / DeepSeek-V4-Flash",
+        "reason": "Industry-leading 240+ t/s output and $0.15/1M token pricing eliminate throughput bottlenecks in multi-agent orchestration."
       },
       {
-        "title": "Massive Long Context & Low Latency",
-        "desc": "Hundreds of pages of financial reports, full-repository indexing, and sub-second real-time voice and chat",
-        "badge": "Speed & 1M King",
-        "reason": "Gemini 2.0 Flash pairs native 1,000,000 (1M) context recall with blinding 185+ tokens/s throughput."
-      },
-      {
-        "title": "Enterprise Self-Hosting & Privacy",
-        "desc": "On-premises private deployment for banking, enterprise, and strict zero-data-leakage compliance",
-        "badge": "Open Source Choice",
-        "reason": "DeepSeek-R1 (open reasoning leader) and DeepSeek-V3 (671B MoE) offer full weights with outstanding distillation flexibility."
-      },
-      {
-        "title": "Industrial Scale & Extreme Cost Value",
-        "desc": "Tens of millions of tokens daily throughput, background ETL workflows, and margin-sensitive commercial projects",
-        "badge": "Cost-Efficiency King",
-        "reason": "DeepSeek-V3 ($0.14 / $0.28 per million tokens) and Gemini 2.0 Flash ($0.10 / $0.40) provide unmatched industrial economics."
+        "title": "Enterprise On-Premise & Data Privacy",
+        "desc": "Zero-data-leakage deployment for proprietary intellectual property, healthcare, and finance",
+        "badge": "Top Pick: DeepSeek-V4-Pro (Open-Weights)",
+        "reason": "1.6T MoE (49B active) gives organizations frontier intelligence runnable directly on internal compute clusters."
       }
     ],
     "details": [
       {
-        "id": "claude-37-sonnet",
-        "icon": "🎭",
-        "name": "Claude 3.7 Sonnet",
-        "meta": "Anthropic · Released 2025.02 · Hybrid Reasoning",
-        "desc": "Anthropic's flagship hybrid reasoning model, introducing user-controllable thinking budgets and achieving an astonishing 70.3% on SWE-bench Verified to dominate software engineering.",
+        "name": "Claude Fable 5.1",
+        "icon": "🧡",
+        "meta": "2026.09 Release · Anthropic Proprietary · Autonomous Agentic Pioneer",
+        "desc": "Anthropic's September 2026 flagship, leading both Artificial Analysis Intelligence Index (66) and LMSYS Arena (1520 Elo). Pioneering advanced autonomous agentic planning, multi-file code refactoring, and self-correction protocols.",
         "specs": [
           {
-            "label": "Context",
-            "value": "200K (Prompt Caching)"
+            "label": "Context Window",
+            "value": "1,000,000 Tokens (1M)"
           },
           {
-            "label": "Key Strength",
-            "value": "SWE-bench 70.3% World Record · Hybrid Thinking · Top Computer Use"
+            "label": "AA Intelligence",
+            "value": "66.0 (Global #1)"
+          },
+          {
+            "label": "LMSYS Arena",
+            "value": "1520 Elo"
+          },
+          {
+            "label": "API Pricing",
+            "value": "$4.00 In / $16.00 Out (per 1M Tokens)"
           }
         ]
       },
       {
-        "id": "grok-3",
-        "icon": "🚀",
-        "name": "Grok 3 / Think",
-        "meta": "xAI · Released 2025.02 · 100K-H100 Supercluster",
-        "desc": "Trained on the Colossus 100,000 H100 cluster, Grok 3 captured #1 on LMSYS Chatbot Arena (1400+ Elo) with advanced DeepSearch and deep reasoning capabilities.",
+        "name": "GPT-6 Astra",
+        "icon": "🟢",
+        "meta": "2026.09 Release · OpenAI Proprietary · Long-Horizon Autonomous Reasoning",
+        "desc": "OpenAI's breakthrough Autumn 2026 flagship model. Dominates Olympiad-level mathematics and multi-agent game-theoretic planning, featuring full self-directed execution with robust safety and alignment guardrails.",
         "specs": [
           {
-            "label": "Context",
-            "value": "1,000,000 (1M) tokens"
+            "label": "Context Window",
+            "value": "1,000,000 Tokens (1M)"
           },
           {
-            "label": "Key Strength",
-            "value": "LMSYS #1 (Elo 1400+) · 83.9% AIME · Real-time Data Retrieval"
+            "label": "SWE-bench Verified",
+            "value": "89.2%"
+          },
+          {
+            "label": "LMSYS Arena",
+            "value": "1518 Elo"
+          },
+          {
+            "label": "API Pricing",
+            "value": "$3.50 In / $14.00 Out (per 1M Tokens)"
           }
         ]
       },
       {
-        "id": "openai-o3-mini",
-        "icon": "🧠",
-        "name": "OpenAI o3-mini",
-        "meta": "OpenAI · Released 2025.01 · Fast Reasoning King",
-        "desc": "OpenAI's latest cost-efficient reasoning model, scoring an incredible 87.3% on AIME 2024 to deliver frontier reasoning at high speed (~90 t/s) and affordable pricing.",
-        "specs": [
-          {
-            "label": "Context",
-            "value": "200K (100K max output)"
-          },
-          {
-            "label": "Key Strength",
-            "value": "AIME 87.3% · MATH-500 97.9% · 90 t/s High-Speed Response"
-          }
-        ]
-      },
-      {
-        "id": "deepseek-r1",
+        "name": "DeepSeek-V4-Pro",
         "icon": "🐳",
-        "name": "DeepSeek-R1",
-        "meta": "DeepSeek · Released 2025.01 · Pure RL Milestone",
-        "desc": "DeepSeek's landmark open reasoning model, proving that pure reinforcement learning can match commercial frontier LLMs at revolutionary training economics.",
+        "meta": "2026.08 Release · Open Weights / 1.6T MoE · Industrial Open-Source Frontier",
+        "desc": "DeepSeek's 1.6 Trillion parameter MoE (49B active) released with open weights. The 0813 revision achieved 80.6%-95.2% on SWE-bench Verified, delivering parity with top-tier proprietary models at unprecedented cost efficiency.",
         "specs": [
           {
-            "label": "Context",
-            "value": "128K (64K max output)"
+            "label": "Context Window",
+            "value": "1,000,000 Tokens (1M)"
           },
           {
-            "label": "Key Strength",
-            "value": "AIME 79.8% · MATH-500 97.3% · Open Weights & Local Run"
+            "label": "Architecture",
+            "value": "1.6T MoE (49B Active Parameters)"
+          },
+          {
+            "label": "License",
+            "value": "Open-Weights / Permissive Commercial"
+          },
+          {
+            "label": "Official API",
+            "value": "$0.25 In / $0.90 Out (per 1M Tokens)"
           }
         ]
       },
       {
-        "id": "deepseek-v3",
-        "icon": "⚡",
-        "name": "DeepSeek-V3",
-        "meta": "DeepSeek · Released 2024.12 · 671B MoE",
-        "desc": "World-leading open MoE model featuring Multi-head Latent Attention (MLA) and auxiliary-loss-free load balancing, delivering frontier performance at $0.14/$0.28 per million tokens.",
+        "name": "GPT-5.6 Sol",
+        "icon": "🟣",
+        "meta": "2026.05 Release · OpenAI Proprietary · Enterprise Agentic Coding Workhorse",
+        "desc": "OpenAI's high-efficiency workhorse for professional software engineering. Combines fast 110 t/s generation with an 86.4% SWE-bench resolution rate, powering enterprise continuous integration pipelines.",
         "specs": [
           {
-            "label": "Context",
-            "value": "128K tokens"
+            "label": "Context Window",
+            "value": "500,000 Tokens (500K)"
           },
           {
-            "label": "Key Strength",
-            "value": "$0.14 / $0.28 Ultra-low Price · 671B Parameters · Highly Efficient"
+            "label": "SWE-bench Verified",
+            "value": "86.4%"
+          },
+          {
+            "label": "Throughput",
+            "value": "110 t/s"
+          },
+          {
+            "label": "API Pricing",
+            "value": "$1.80 In / $7.20 Out (per 1M Tokens)"
           }
         ]
       },
       {
-        "id": "gemini-20-flash",
-        "icon": "✨",
-        "name": "Gemini 2.0 Flash",
-        "meta": "Google · Released 2024.12 / 2025 · Blazing Speed & 1M",
-        "desc": "Google's next-gen multimodal speed champion, delivering 185+ tokens/s throughput and native 1M context with sub-second response latency.",
+        "name": "Gemini 3.8 Flash",
+        "icon": "🔷",
+        "meta": "2026.09 Release · Google · 240 TPS High-Speed Multimodal",
+        "desc": "Google's ultra-low latency model engineered for interactive and agentic microservices. Features 240+ t/s throughput and sub-120ms time-to-first-token across a native 2-million token multimodal context window.",
         "specs": [
           {
-            "label": "Context",
-            "value": "1,048,576 (1M) tokens"
+            "label": "Context Window",
+            "value": "2,000,000 Tokens (2M)"
           },
           {
-            "label": "Key Strength",
-            "value": "185+ t/s Blazing Speed · Native Google Search · Sub-second Latency"
+            "label": "Throughput",
+            "value": "240 Tokens/s"
+          },
+          {
+            "label": "TTFT Latency",
+            "value": "< 120ms"
+          },
+          {
+            "label": "API Pricing",
+            "value": "$0.15 In / $0.60 Out (per 1M Tokens)"
           }
         ]
       },
       {
-        "id": "qwen-25-max",
-        "icon": "🌐",
-        "name": "Qwen 2.5 Max",
-        "meta": "Alibaba · Released 2025 · Open & Cloud Ecosystem",
-        "desc": "Alibaba's most powerful frontier foundation model, offering state-of-the-art multilingual and coding capabilities for enterprise deployment.",
+        "name": "Qwen3.8-Max",
+        "icon": "🟡",
+        "meta": "2026.09 Release · Alibaba · WebDev & Coding Powerhouse",
+        "desc": "Alibaba's September 2026 flagship model, highly tuned for full-stack software development, repository orchestration, and bilingual Chinese/English instruction following, commanding the LMSYS WebDev sub-arena.",
         "specs": [
           {
-            "label": "Context",
-            "value": "128K tokens"
+            "label": "Context Window",
+            "value": "1,000,000 Tokens (1M)"
           },
           {
-            "label": "Key Strength",
-            "value": "Flagship Multilingual Prowess · Robust Open Tooling · On-Prem Ready"
+            "label": "SWE-bench",
+            "value": "84.1%"
+          },
+          {
+            "label": "Coding Arena Elo",
+            "value": "1530+ (WebDev Leader)"
+          },
+          {
+            "label": "API Pricing",
+            "value": "$0.80 In / $3.20 Out (per 1M Tokens)"
           }
         ]
       }
     ],
-    "timelineTag": "TIMELINE",
-    "timelineTitle": "2025-2026 Breakthrough Timeline",
+    "timelineTag": "2026 MILESTONES",
+    "timelineTitle": "2026 Frontier AI Milestone Timeline",
     "listingTimelineTitle": "Release Timeline",
     "listingSearchPlaceholder": "Search articles...",
     "timeline": [
       {
-        "date": "2025.02",
-        "name": "Claude 3.7 Sonnet",
-        "desc": "Anthropic introduces the first hybrid reasoning model, breaking all-time records with 70.3% on SWE-bench Verified",
+        "date": "2026.04",
+        "name": "DeepSeek-V4-Pro / Flash Preview",
+        "desc": "1.6T MoE open architecture debuted with 80.6% initial SWE-bench score, resetting expectations",
+        "latest": false
+      },
+      {
+        "date": "2026.05",
+        "name": "OpenAI GPT-5.6 Tiered Release",
+        "desc": "Sol, Terra, and Luna introduced to cover enterprise engineering to low-cost volume workloads",
+        "latest": false
+      },
+      {
+        "date": "2026.07",
+        "name": "xAI Releases Grok 4.6",
+        "desc": "Trained on scaled supercomputing clusters with deep post-training reasoning enhancements",
+        "latest": false
+      },
+      {
+        "date": "2026.08",
+        "name": "DeepSeek-V4-Pro 0813 Update",
+        "desc": "Architectural tuning for repository-level coding pushes SWE-bench resolution up to 95.2%",
+        "latest": false
+      },
+      {
+        "date": "2026.09",
+        "name": "GPT-6 Astra & Claude Fable 5.1",
+        "desc": "Anthropic leads AA Intelligence Index while OpenAI establishes the new benchmark for autonomous reasoning",
         "latest": true
       },
       {
-        "date": "2025.02",
-        "name": "Grok 3 (xAI)",
-        "desc": "xAI releases Grok 3, trained on 100K H100s, claiming #1 on LMSYS Chatbot Arena with 1400+ Elo",
+        "date": "2026.09",
+        "name": "Gemini 3.8 Flash & Qwen3.8-Max",
+        "desc": "240 TPS multimodal speed engine and full-stack coding flagship launch concurrently",
         "latest": true
-      },
-      {
-        "date": "2025.01",
-        "name": "OpenAI o3-mini",
-        "desc": "OpenAI launches o3-mini, achieving 87.3% on AIME 2024 to make frontier reasoning accessible at high speed",
-        "latest": false
-      },
-      {
-        "date": "2025.01",
-        "name": "DeepSeek-R1",
-        "desc": "DeepSeek open-sources its landmark RL reasoning model R1, demonstrating frontier reasoning at disruptive training economics",
-        "latest": false
-      },
-      {
-        "date": "2024.12",
-        "name": "DeepSeek-V3",
-        "desc": "DeepSeek ships 671B MoE model V3, redefining price-to-performance at $0.14/M tokens",
-        "latest": false
-      },
-      {
-        "date": "2024.12",
-        "name": "Gemini 2.0 Series",
-        "desc": "Google announces Gemini 2.0 Flash, delivering 185+ t/s multimodal speed and 1M context",
-        "latest": false
       }
     ],
     "paginationPrev": "Previous",
     "paginationNext": "Next",
-    "readMore": "Read Article"
+    "readMore": "Read More",
+    "meta": {
+      "title": "2026 Frontier AI Models Benchmark & Architecture Matrix | ifnodoraemon Blog",
+      "desc": "Authoritative evaluation of AI models released in 2026: Claude Fable 5.1, GPT-6 Astra, DeepSeek-V4-Pro, GPT-5.6 Sol, Gemini 3.8 Flash, Qwen3.8-Max, and Grok 4.6."
+    },
+    "relatedTitle": "Related 2026 Frontier Articles"
   },
   "projects": {
     "heroTag": "PORTFOLIO & PROJECTS",

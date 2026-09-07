@@ -398,21 +398,21 @@
     const presetTop = document.getElementById('presetTop');
     if (presetTop) {
       presetTop.addEventListener('click', () => {
-        setVisibility(ds => ['Claude 3.7 Sonnet', 'Grok 3 (Think)', 'OpenAI o3-mini', 'DeepSeek-R1'].includes(ds.label));
+        setVisibility(ds => ['Claude Fable 5.1', 'GPT-6 Astra', 'DeepSeek-V4-Pro', 'GPT-5.6 Sol'].includes(ds.label));
       });
     }
 
     const presetOpen = document.getElementById('presetOpen');
     if (presetOpen) {
       presetOpen.addEventListener('click', () => {
-        setVisibility(ds => ['DeepSeek-R1', 'DeepSeek-V3', 'Qwen 2.5 Max'].includes(ds.label));
+        setVisibility(ds => ['DeepSeek-V4-Pro', 'Qwen3.8-Max'].includes(ds.label));
       });
     }
 
     const presetSpeed = document.getElementById('presetSpeed');
     if (presetSpeed) {
       presetSpeed.addEventListener('click', () => {
-        setVisibility(ds => ['OpenAI o3-mini', 'Gemini 2.0 Flash', 'DeepSeek-V3'].includes(ds.label));
+        setVisibility(ds => ['Gemini 3.8 Flash', 'GPT-5.6 Sol', 'DeepSeek-V4-Pro'].includes(ds.label));
       });
     }
 
