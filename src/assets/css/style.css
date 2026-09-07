@@ -4201,3 +4201,20 @@ mark {
     grid-template-columns: 1fr;
   }
 }
+
+/* Semantic Image Styles (SEO) */
+.article-detail-content figure {
+  margin: 2rem 0;
+  text-align: center;
+}
+.article-detail-content figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.article-detail-content figcaption {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
