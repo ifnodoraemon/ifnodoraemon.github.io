@@ -25,7 +25,7 @@ In conventional Multi-Head Attention (MHA), storing Key-Value tensors across seq
 
 KV Cache Size = 2 × B × L × N × D × sizeof(FP16)
 
-For a model with D=8192 and N=80:
+For a typical 100B+ parameter model utilizing GQA (Grouped Query Attention) with KV hidden dimension D=2048 and N=80 layers:
 * At L = 4K, a single request consumes **2.6 GB**;
 * At L = 1M, KV Cache explodes to **655 GB**!
 
@@ -59,7 +59,7 @@ Rather than attending pairwise across all historical tokens, KDA dynamically tra
 
 Stress testing across 8x 80GB GPU nodes:
 
-| Metric | Standard MHA | DeepSeek MLA | Kimi KDA |
+| Metric | Baseline GQA | DeepSeek MLA | Kimi KDA |
 | :--- | :--- | :--- | :--- |
 | **100K Context VRAM** | 64.2 GB | 14.8 GB (-77%) | **8.6 GB (-86%)** |
 | **1M Context VRAM** | 642 GB (OOM) | 148 GB (Concurrent) | **42 GB (Minimal constant)**|
