@@ -298,7 +298,7 @@ img { max-width: 100%; display: block; }
 }
 
 .nav-links a.github-link {
-  color: var(--text-faint);
+  color: var(--text-muted);
 }
 
 .nav-links a.github-link:hover::before,
@@ -1132,7 +1132,9 @@ mark {
   justify-content: center;
   gap: 0.15rem;
   padding: 0.75rem 2rem;
-  border-radius: 8px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border: 1px solid var(--border);
   position: relative;
   text-transform: none;
   transition: all 0.2s var(--ease);
@@ -2377,6 +2379,7 @@ mark {
 /* Page Hero (inner pages) */
 .page-main {
   padding-top: 60px;
+  flex: 1;
 }
 
 .page-hero {
@@ -2807,6 +2810,7 @@ mark {
 /* Blockquotes (tips/notes) */
 .article-detail-content blockquote {
   border-left: 3px solid var(--accent);
+  box-shadow: -3px 0 15px var(--accent-glow);
   background: rgba(255, 255, 255, 0.03);
   border-radius: 0 8px 8px 0;
   padding: 1rem 1.25rem;
@@ -3313,7 +3317,7 @@ mark {
     width: 260px;
     flex-shrink: 0;
     position: sticky;
-    top: 100px;
+    top: 110px;
     height: auto;
     max-height: calc(100vh - 120px);
     overflow-y: auto;
@@ -4222,3 +4226,11 @@ mark {
 
 ::selection { background: var(--selection-bg); color: #fff; }
 ::-moz-selection { background: var(--selection-bg); color: #fff; }
+
+h1, h2, h3, h4, h5, h6 { scroll-margin-top: 90px; }
+
+.article-detail-content li::marker {
+  color: var(--accent);
+}
+
+h1, h2, h3, .glitch-title { text-wrap: balance; }
