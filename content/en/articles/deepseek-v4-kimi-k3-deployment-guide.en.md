@@ -24,8 +24,8 @@ For trillion-scale MoE models, GPU memory must account for **static weights** pl
 
 | Model | Total / Active Parameters | Precision | Weight VRAM | Target GPU Topology |
 | :--- | :--- | :--- | :--- | :--- |
-| **DeepSeek-V4-Pro** | 1.6T / 49B | FP8 | ~1.6 TB | **2-3 Nodes × 8x H100/B200 (16-24x 80GB)** |
-| **Kimi K3** | 2.8T / 104B | FP8 Hybrid | ~2.7 TB | **4 Nodes × 8x H100/B200 (32x 80GB)** |
+| **DeepSeek-V4-Pro** | 1.6T / 49B | FP8 | ~1.6 TB | **4 Nodes H100 (32x80GB) or 2 Nodes B200 (16x192GB)** |
+| **Kimi K3** | 2.8T / 104B | FP8 Hybrid | ~2.7 TB | **6 Nodes H100 (48x80GB) or 3 Nodes B200 (24x192GB)** |
 
 > **Crucial Requirement**: Inter-node fabric requires **400Gbps/800Gbps RoCEv2 or InfiniBand (IB)**. Slower commodity ethernet will severely bottleneck cross-node Expert Parallelism (EP).
 
@@ -87,4 +87,4 @@ server {
 
 For an enterprise processing 5 Billion tokens monthly:
 * **Proprietary API Costs**: Exceeds **$33,000 / month (~$400K annually)**;
-* **Self-Hosted Cluster**: Reserved GPU node costs remain flat (~$18K/month) regardless of volume spikes, with 100% data sovereignty and zero telemetry leaks.\n
+* **Self-Hosted 4-Node Cluster**: Reserved GPU node costs remain flat (~$36K - $44K/month) regardless of volume spikes, with 100% data sovereignty and zero telemetry leaks.\n
