@@ -7,8 +7,15 @@ Sitemap: https://blog.llmgo.top/sitemap.xml
 # Crawl-delay
 Crawl-delay: 1
 
-# AI Bot Policies
+# Generative Engine Optimization (GEO) Bot Policies
+# Explicitly allowing AI Search & Training bots to digest our content
 User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
 Allow: /
 
 User-agent: Google-Extended
@@ -20,8 +27,11 @@ Allow: /
 User-agent: anthropic-ai
 Allow: /
 
-User-agent: Amazonbot
-Disallow: /
+User-agent: PerplexityBot
+Allow: /
 
 User-agent: CCBot
-Disallow: /
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
