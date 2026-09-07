@@ -155,10 +155,10 @@ function initParticles() {
   let particles = [];
   const PARTICLE_COUNT = 35;
   const COLORS = [
-    'rgba(255, 255, 255, 0.25)',
-    'rgba(220, 220, 230, 0.2)',
-    'rgba(240, 240, 255, 0.15)',
-    'rgba(255, 255, 255, 0.1)'
+    'rgba(56, 189, 248, 0.35)',
+    'rgba(99, 102, 241, 0.3)',
+    'rgba(168, 85, 247, 0.25)',
+    'rgba(45, 212, 191, 0.2)'
   ];
 
   function resize() {
