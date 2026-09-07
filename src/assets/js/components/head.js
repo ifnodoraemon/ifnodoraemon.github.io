@@ -14,13 +14,13 @@ export function getHeadMeta({ title, description, url, keywords }) {
   <meta property="og:url" content="${url}">
   <meta property="og:title" content="${title}">
   <meta property="og:description" content="${description}">
-  <meta property="og:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta property="og:image" content="https://blog.llmgo.top/og-image.png">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:site_name" content="大雄话AI">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${title}">
   <meta name="twitter:description" content="${description}">
-  <meta name="twitter:image" content="https://ifnodoraemon.github.io/og-image.png">
+  <meta name="twitter:image" content="https://blog.llmgo.top/og-image.png">
   <meta name="google-adsense-account" content="ca-pub-5078775507335151">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/og-image.png">

@@ -83,7 +83,7 @@ const zhData = {
 function generateBlogJsonLd(articles, isEn) {
   const siteName = isEn ? 'Nobita Talks AI' : '大雄话AI';
   const siteDesc = isEn ? 'AI foundation models tech blog' : '专注 AI 大模型技术研究与实践的技术博客';
-  const siteUrl = isEn ? 'https://ifnodoraemon.github.io/en/' : 'https://ifnodoraemon.github.io/';
+  const siteUrl = isEn ? 'https://blog.llmgo.top/en/' : 'https://blog.llmgo.top/';
   const lang = isEn ? 'en' : 'zh-CN';
 
   const blogPosts = articles.slice(0, 10).map(a => ({
@@ -100,7 +100,7 @@ function generateBlogJsonLd(articles, isEn) {
     name: siteName,
     description: siteDesc,
     url: siteUrl,
-    image: 'https://ifnodoraemon.github.io/og-image.png',
+    image: 'https://blog.llmgo.top/og-image.png',
     author: {
       '@type': 'Person',
       name: 'ifnodoraemon',

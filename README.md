@@ -2,7 +2,7 @@
 
 Welcome to **Nobita Talks AI**, a technical experimental node observing the rapid evolution of Artificial Intelligence.
 
-🔗 **[Visit the Live Site](https://ifnodoraemon.github.io)**
+🔗 **[Visit the Live Site](https://blog.llmgo.top)**
 
 ---
 

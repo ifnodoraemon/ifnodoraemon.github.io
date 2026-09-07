@@ -18,7 +18,7 @@ import markedKatex from 'marked-katex-extension';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const BUILD_OUT_DIR = path.join(ROOT, '.temp_build');
-const SITE_URL = 'https://ifnodoraemon.github.io';
+const SITE_URL = 'https://blog.llmgo.top';
 const REQUIRED_FRONTMATTER = ['title', 'slug', 'date', 'tag', 'description'];
 const STATIC_ROUTES = new Set([
   '/',

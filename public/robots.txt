@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://ifnodoraemon.github.io/sitemap.xml
+Sitemap: https://blog.llmgo.top/sitemap.xml
 
 # Crawl-delay
 Crawl-delay: 1
