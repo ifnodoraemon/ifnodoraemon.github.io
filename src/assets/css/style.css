@@ -3830,6 +3830,128 @@ mark {
 /* ================================================
    BENCHMARK RADAR & STAR CHART (AA STYLE)
    ================================================ */
+/* Leaderboard Cards Grid */
+.leaderboard-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto 2.5rem;
+}
+
+@media (max-width: 992px) {
+  .leaderboard-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .leaderboard-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.leaderboard-badge-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  text-decoration: none;
+  transition: all 0.25s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.leaderboard-badge-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.25s var(--ease);
+}
+
+.leaderboard-badge-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.leaderboard-badge-card:hover::before {
+  opacity: 1;
+}
+
+.leaderboard-badge-card .lb-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.leaderboard-badge-card .lb-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.leaderboard-badge-card .lb-board {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
+}
+
+.leaderboard-badge-card .lb-external {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  transition: color 0.2s var(--ease), transform 0.2s var(--ease);
+  margin-left: auto;
+}
+
+.leaderboard-badge-card:hover .lb-external {
+  color: #ffffff;
+  transform: translate(2px, -2px);
+}
+
+.leaderboard-badge-card .lb-champion {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+
+.leaderboard-badge-card .lb-score {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #a1a1aa;
+  margin-bottom: 0.75rem;
+}
+
+.leaderboard-badge-card .lb-desc {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  line-height: 1.45;
+  padding-top: 0.65rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  margin-top: auto;
+}
+
 .benchmark-source-banner {
   display: flex;
   align-items: center;

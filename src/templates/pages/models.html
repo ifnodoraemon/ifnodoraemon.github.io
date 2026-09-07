@@ -82,9 +82,25 @@
           <p class="section-subtitle">{{models.benchmarksSubtitle}}</p>
         </div>
 
+        <!-- Major Leaderboard Highlights Grid -->
+        <div class="leaderboard-cards-grid fade-in">
+          {{#each models.leaderboardBadges}}
+          <a href="{{this.url}}" target="_blank" rel="noopener noreferrer" class="leaderboard-badge-card">
+            <div class="lb-header">
+              <span class="lb-icon">{{this.icon}}</span>
+              <span class="lb-board">{{this.board}}</span>
+              <span class="lb-external">↗</span>
+            </div>
+            <div class="lb-champion">{{this.champion}}</div>
+            <div class="lb-score">{{this.score}}</div>
+            <div class="lb-desc">{{this.desc}}</div>
+          </a>
+          {{/each}}
+        </div>
+
         <!-- Source Banner -->
         <div class="benchmark-source-banner fade-in">
-          <div class="source-badge-tag">🏆 权威榜单认证</div>
+          <div class="source-badge-tag">🏆 {{#if isEn}}Verified Leaderboards{{else}}权威榜单认证{{/if}}</div>
           <div class="source-text">
             <strong>{{models.sourceTitle}}</strong>：{{models.sourceDesc}}
           </div>
@@ -96,8 +112,9 @@
             <div class="radar-pills-header">
               <span class="radar-pills-label">{{models.radarSelectHint}}</span>
               <div class="radar-presets">
-                <button type="button" class="preset-btn" id="presetTop">{{#if isEn}}Top 3 Frontier{{else}}顶级三强{{/if}}</button>
-                <button type="button" class="preset-btn" id="presetOpen">{{#if isEn}}Open Weights{{else}}开源主力{{/if}}</button>
+                <button type="button" class="preset-btn" id="presetTop">{{#if isEn}}Top Frontier{{else}}顶级巅峰{{/if}}</button>
+                <button type="button" class="preset-btn" id="presetOpen">{{#if isEn}}Open Weights{{else}}开源标杆{{/if}}</button>
+                <button type="button" class="preset-btn" id="presetSpeed">{{#if isEn}}Speed & Value{{else}}极速性价比{{/if}}</button>
                 <button type="button" class="preset-btn" id="presetAll">{{#if isEn}}All Models{{else}}全选对比{{/if}}</button>
               </div>
             </div>
@@ -381,14 +398,21 @@
     const presetTop = document.getElementById('presetTop');
     if (presetTop) {
       presetTop.addEventListener('click', () => {
-        setVisibility(ds => ['DeepSeek-R1', 'Claude 3.5 Sonnet', 'OpenAI o1'].includes(ds.label));
+        setVisibility(ds => ['Claude 3.7 Sonnet', 'Grok 3 (Think)', 'OpenAI o3-mini', 'DeepSeek-R1'].includes(ds.label));
       });
     }
 
     const presetOpen = document.getElementById('presetOpen');
     if (presetOpen) {
       presetOpen.addEventListener('click', () => {
-        setVisibility(ds => ['DeepSeek-R1', 'DeepSeek-V3', 'Qwen 2.5 (72B/Max)'].includes(ds.label));
+        setVisibility(ds => ['DeepSeek-R1', 'DeepSeek-V3', 'Qwen 2.5 Max'].includes(ds.label));
+      });
+    }
+
+    const presetSpeed = document.getElementById('presetSpeed');
+    if (presetSpeed) {
+      presetSpeed.addEventListener('click', () => {
+        setVisibility(ds => ['OpenAI o3-mini', 'Gemini 2.0 Flash', 'DeepSeek-V3'].includes(ds.label));
       });
     }
 

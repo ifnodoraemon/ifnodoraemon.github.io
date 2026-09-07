@@ -19,17 +19,53 @@
     }
   },
   "models": {
-    "pageTag": "MODEL BENCHMARKS & RADAR",
-    "pageTitle": "AI 模型全景对比与综合评测",
-    "pageDesc": "综合 Artificial Analysis (AA)、LMSYS Chatbot Arena 与 SWE-bench Verified 等全球权威评测榜单，多维度深度透视前沿大模型能力边界",
+    "pageTag": "LATEST LEADERBOARDS & STAR CHART",
+    "pageTitle": "全球顶级 AI 大模型最新权威排行榜与星状图评测",
+    "pageDesc": "同步 2025-2026 最新四大权威榜单：Artificial Analysis (AA)、LMSYS LMArena 盲测竞技场、SWE-bench Verified 真实工程与 AIME 数学极限评测，全景透视 Claude 3.7 Sonnet、Grok 3、OpenAI o3-mini 与 DeepSeek-R1 等最新前沿模型",
     "heroTag": "MODEL DATABASE",
     "heroTitle": "全景模型库",
     "heroDesc": "追踪最先进 AI 系统的参数、真实能力评测与落地场景，提供中立、客观的横向基准数据。",
+    "leaderboardsTitle": "各大权威排行榜最新榜首战况",
+    "leaderboardsSubtitle": "实时跟踪全球四大最权威独立评测榜单的最新官方核验数据",
+    "leaderboardBadges": [
+      {
+        "icon": "👑",
+        "board": "LMSYS / LMArena 盲测竞技场",
+        "champion": "Grok 3 / Claude 3.7",
+        "score": "Elo 1400+",
+        "desc": "xAI Grok 3 登顶人工盲测竞技场，Claude 3.7 Sonnet 紧随其后",
+        "url": "https://chat.lmsys.org/?leaderboard"
+      },
+      {
+        "icon": "💻",
+        "board": "SWE-bench Verified 真实工程",
+        "champion": "Claude 3.7 Sonnet",
+        "score": "70.3%",
+        "desc": "Anthropic 混合思考架构创下世界新纪录，断崖式领跑真实代码修复",
+        "url": "https://www.swebench.com/"
+      },
+      {
+        "icon": "🧮",
+        "board": "AIME 2024 / MATH-500 极限数学",
+        "champion": "OpenAI o3-mini (High)",
+        "score": "87.3% / 97.9%",
+        "desc": "OpenAI 新一代轻量推理模型在竞赛级数学与博士级理科评测上问鼎",
+        "url": "https://artificialanalysis.ai/evaluations/aime-2024"
+      },
+      {
+        "icon": "⚡",
+        "board": "Artificial Analysis (AA) 质价比",
+        "champion": "DeepSeek-R1 / V3",
+        "score": "Value 99",
+        "desc": "DeepSeek 以百万 Token $0.14-$0.55 重新定义全球大模型经济学",
+        "url": "https://artificialanalysis.ai/"
+      }
+    ],
     "benchmarksTitle": "前沿大模型全维能力星状图 (Star Chart)",
-    "benchmarksSubtitle": "参考 Artificial Analysis (AA Quality & Speed) 六维评测框架，综合 LMSYS 盲测与代码工程基准进行 0-100 标准化标定",
+    "benchmarksSubtitle": "参考 Artificial Analysis (AA Quality & Speed) 六维评测体系，综合 LMSYS 盲测、SWE-bench Verified 与数学竞赛基准进行 0-100 标准化标定",
     "radarSelectHint": "点击模型标签可在星状图中实时叠加/取消对比：",
     "sourceTitle": "权威榜单数据源",
-    "sourceDesc": "综合来自 Artificial Analysis (AA) Quality Index 与生成速度/价格实测、LMSYS Chatbot Arena 人工盲测、SWE-bench Verified 真实工程代码评测，以及各大模型官方最新技术报告。",
+    "sourceDesc": "综合来自 Artificial Analysis (AA) 2025 最新 Quality Index 与速度/价格实测、LMSYS (LMArena) 盲测竞技场、SWE-bench Verified 真实工程修复榜单，以及各大模型官方最新技术白皮书。",
     "radarLabels": [
       "深度推理 (Reasoning)",
       "代码工程 (Coding)",
@@ -40,9 +76,54 @@
     ],
     "radarDatasets": [
       {
+        "label": "Claude 3.7 Sonnet",
+        "provider": "Anthropic",
+        "type": "闭源商业 / 混合思考",
+        "color": "#f97316",
+        "data": [
+          93,
+          99,
+          98,
+          94,
+          96,
+          84
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "Grok 3 (Think)",
+        "provider": "xAI",
+        "type": "闭源商业 / 超算推理",
+        "color": "#ef4444",
+        "data": [
+          97,
+          91,
+          92,
+          96,
+          94,
+          75
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "OpenAI o3-mini",
+        "provider": "OpenAI",
+        "type": "闭源商业 / 极速推理",
+        "color": "#10b981",
+        "data": [
+          98,
+          93,
+          90,
+          92,
+          88,
+          94
+        ],
+        "defaultActive": true
+      },
+      {
         "label": "DeepSeek-R1",
         "provider": "DeepSeek",
-        "type": "开源权重",
+        "type": "开源权重 / 纯RL推理",
         "color": "#3b82f6",
         "data": [
           96,
@@ -55,44 +136,14 @@
         "defaultActive": true
       },
       {
-        "label": "Claude 3.5 Sonnet",
-        "provider": "Anthropic",
-        "type": "闭源商业",
-        "color": "#f97316",
-        "data": [
-          90,
-          98,
-          97,
-          92,
-          94,
-          84
-        ],
-        "defaultActive": true
-      },
-      {
-        "label": "OpenAI o1",
-        "provider": "OpenAI",
-        "type": "闭源商业",
-        "color": "#10b981",
-        "data": [
-          98,
-          93,
-          90,
-          95,
-          88,
-          68
-        ],
-        "defaultActive": true
-      },
-      {
         "label": "DeepSeek-V3",
         "provider": "DeepSeek",
-        "type": "开源权重",
+        "type": "开源权重 / 671B MoE",
         "color": "#06b6d4",
         "data": [
           86,
           88,
-          86,
+          87,
           90,
           88,
           99
@@ -100,47 +151,32 @@
         "defaultActive": false
       },
       {
-        "label": "GPT-4o",
-        "provider": "OpenAI",
-        "type": "闭源商业",
-        "color": "#a855f7",
-        "data": [
-          85,
-          86,
-          92,
-          93,
-          91,
-          86
-        ],
-        "defaultActive": false
-      },
-      {
         "label": "Gemini 2.0 Flash",
         "provider": "Google",
-        "type": "闭源商业",
+        "type": "闭源商业 / 极速全模态",
         "color": "#eab308",
         "data": [
-          84,
           85,
-          88,
-          89,
+          86,
+          90,
+          90,
           98,
-          96
+          97
         ],
         "defaultActive": false
       },
       {
-        "label": "Qwen 2.5 (72B/Max)",
+        "label": "Qwen 2.5 Max",
         "provider": "阿里巴巴",
-        "type": "开源权重",
+        "type": "开源权重 & API / 全能旗舰",
         "color": "#ec4899",
         "data": [
-          86,
-          89,
-          85,
-          91,
+          88,
+          90,
           87,
-          92
+          92,
+          88,
+          91
         ],
         "defaultActive": false
       }
@@ -149,36 +185,36 @@
       {
         "icon": "🧠",
         "name": "深度推理 (Reasoning)",
-        "desc": "GPQA Diamond 博士级推理、AIME 2024 与 MATH-500 竞赛级数学思维链推导能力"
+        "desc": "AIME 2024、MATH-500 竞赛级数学与 GPQA Diamond 博士级复杂思维链推导"
       },
       {
         "icon": "💻",
         "name": "代码工程 (Coding)",
-        "desc": "SWE-bench Verified 真实 GitHub Issue 修复率、LiveCodeBench 与复杂重构"
+        "desc": "SWE-bench Verified 真实 GitHub Issue 修复、LiveCodeBench 与复杂架构重构"
       },
       {
         "icon": "🤖",
         "name": "Agent与工具 (Agentic)",
-        "desc": "τ²-Bench、BrowserGym 网页操作，以及原生 Computer Use 与 Function Calling 准确率"
+        "desc": "τ²-Bench、BrowserGym 网页自主操作、原生 Computer Use 与复杂工具链调用"
       },
       {
         "icon": "📚",
         "name": "专业知识 (Knowledge)",
-        "desc": "MMLU-Pro 高难度跨学科综合知识水平与 LMSYS Arena Hard 盲测胜率"
+        "desc": "MMLU-Pro 高难度跨学科综合知识水平与 LMSYS (LMArena) 人类盲测胜率"
       },
       {
         "icon": "📜",
         "name": "长文与指令 (Context & IF)",
-        "desc": "IFEval 严苛格式遵循能力，以及 128K 至 100万+ 超长上下文的针大海（Needle）召回"
+        "desc": "IFEval 严格指令格式遵循，以及 128K 至 100万+ 超长窗口真实检索精准度"
       },
       {
         "icon": "⚡",
         "name": "速度与性价比 (Speed & Value)",
-        "desc": "Artificial Analysis 标志性指标：每秒输出 Token 数 (TPS) 与每百万 Token 调用成本的综合质价比"
+        "desc": "Artificial Analysis 标志性维度：每秒输出 Token 数 (TPS) 与每百万 Token 调用成本的综合质价比"
       }
     ],
-    "tableTitle": "各大权威榜单综合实测矩阵",
-    "tableSubtitle": "涵盖 Artificial Analysis (AA)、LMSYS 人工盲测、SWE-bench 与学术级难度评测最新实测数据",
+    "tableTitle": "各大权威排行榜最新实测综合矩阵",
+    "tableSubtitle": "汇聚 Artificial Analysis (AA)、LMSYS Arena 盲测、SWE-bench Verified 与数学基准官方实测指标",
     "tableHeaders": [
       "模型名称",
       "机构",
@@ -190,148 +226,199 @@
       "输出速度",
       "上下文窗口",
       "API 单价 ($/1M)",
-      "核心优势定位"
+      "最新核心定位"
     ],
     "tableRows": [
+      [
+        "Claude 3.7 Sonnet",
+        "Anthropic",
+        "闭源商业",
+        "93",
+        "1395",
+        "70.3% (新世界纪录)",
+        "72.0% / 75.0%",
+        "~75 t/s",
+        "200K (带缓存)",
+        "$3.00 / $15.00",
+        "全球软件工程与代码断崖第一"
+      ],
+      [
+        "Grok 3 (Think)",
+        "xAI",
+        "闭源商业",
+        "92",
+        "1400+ (竞技场第1)",
+        "54.8%",
+        "74.6% / 83.9%",
+        "~55 t/s",
+        "1M tokens",
+        "商业订阅",
+        "xAI 10万卡超级算力巅峰旗舰"
+      ],
+      [
+        "OpenAI o3-mini",
+        "OpenAI",
+        "闭源商业",
+        "92",
+        "1385",
+        "49.3%",
+        "79.7% / 87.3% (数学第1)",
+        "~90 t/s",
+        "200K (100K输出)",
+        "$1.10 / $4.40",
+        "极速高精思维链与数学王者"
+      ],
       [
         "DeepSeek-R1",
         "DeepSeek",
         "开源权重",
-        "90",
+        "91",
         "1365",
         "49.2%",
         "71.5% / 79.8%",
         "~45 t/s",
-        "128K (64K 输出)",
+        "128K (64K输出)",
         "$0.55 / $2.19",
-        "开源强化推理标杆"
-      ],
-      [
-        "Claude 3.5 Sonnet",
-        "Anthropic",
-        "闭源商业",
-        "89",
-        "1374",
-        "53.7%",
-        "65.0% / 78.3%",
-        "~75 t/s",
-        "200K (带缓存)",
-        "$3.00 / $15.00",
-        "软件工程与代码之王"
-      ],
-      [
-        "OpenAI o1",
-        "OpenAI",
-        "闭源商业",
-        "91",
-        "1385",
-        "48.9%",
-        "75.7% / 83.3%",
-        "~50 t/s",
-        "200K",
-        "$15.00 / $60.00",
-        "深度思维链推理巅峰"
+        "开源纯强化学习推理标杆"
       ],
       [
         "DeepSeek-V3",
         "DeepSeek",
         "开源权重",
-        "84",
+        "86",
         "1335",
         "42.0%",
         "59.1% / 89.3%",
         "~65 t/s",
         "128K",
         "$0.14 / $0.28",
-        "极致性价比通用 MoE"
-      ],
-      [
-        "GPT-4o",
-        "OpenAI",
-        "闭源商业",
-        "86",
-        "1362",
-        "38.8%",
-        "56.1% / 76.6%",
-        "~110 t/s",
-        "128K",
-        "$2.50 / $10.00",
-        "全模态成熟生态标杆"
+        "全球极致性价比 671B MoE"
       ],
       [
         "Gemini 2.0 Flash",
         "Google",
         "闭源商业",
-        "85",
-        "1355",
+        "86",
+        "1360",
         "41.5%",
         "58.5% / 82.0%",
-        "~180 t/s",
+        "~185 t/s (最快)",
         "1,048,576 (1M)",
         "$0.10 / $0.40",
-        "极速响应与百万长文"
+        "极速狂飙与百万长文本之王"
       ],
       [
-        "Qwen 2.5 (72B/Max)",
+        "Qwen 2.5 Max",
         "阿里巴巴",
-        "开源权重",
-        "85",
-        "1338",
-        "44.5%",
-        "57.8% / 85.2%",
+        "开源 & API",
+        "87",
+        "1350",
+        "46.5%",
+        "62.0% / 85.5%",
         "~60 t/s",
         "128K",
         "$0.40 / $1.20",
-        "私有化部署全能主力"
+        "国内开源与全能旗舰标杆"
       ]
     ],
-    "sceneTitle": "业务落地选型推荐",
-    "sceneSubtitle": "基于客观实测表现，为你的具体业务场景推荐综合最优模型方案",
+    "sceneTitle": "业务落地最新选型指南",
+    "sceneSubtitle": "根据 2025 最新权威实测表现，为你的具体应用场景推荐最优模型架构",
     "scenes": [
       {
-        "title": "代码开发与系统重构",
-        "desc": "针对复杂代码库开发、全栈自动化重构、GitHub Issue 修复及日常 Copilot 结对编程",
-        "badge": "首选标杆",
-        "reason": "Claude 3.5 Sonnet 在 SWE-bench Verified (53.7%) 稳居第一；DeepSeek-R1 在算法思维与单元测试生成上极具优势。"
+        "title": "代码开发与系统级架构重构",
+        "desc": "大规模工程项目重构、复杂算法与 GitHub Issue 自动化修复、DevOps 自动化运维",
+        "badge": "无可争议第一",
+        "reason": "Claude 3.7 Sonnet 在 SWE-bench Verified 达到史无前例的 70.3%，混合思考机制彻底解决传统大模型代码幻觉。"
       },
       {
-        "title": "前沿科学与复杂深度推理",
-        "desc": "数学竞赛证明推导、复杂科研文献研判、金融量化逻辑建模与复杂决策规划任务",
-        "badge": "极限推理",
-        "reason": "OpenAI o1 与 DeepSeek-R1 开启原生强化学习思考链，AIME (80%+) 与 MATH-500 (97%+) 处于第一梯队。"
+        "title": "高难度数学推导与博士级科研",
+        "desc": "数学奥林匹克证明推导、复杂金融工程建模、前沿物理/生物跨学科科研推理",
+        "badge": "极限推理王",
+        "reason": "OpenAI o3-mini (AIME 87.3%)、Grok 3 Think 与 DeepSeek-R1 为当前人类最强的逻辑推导核心。"
       },
       {
-        "title": "自主智能体与系统操作",
-        "desc": "构建具备自主决策、浏览器自动化（Browser Agent）与跨应用多步工具调用链的 Agent 系统",
+        "title": "自主智能体与全自动计算机操控",
+        "desc": "构建具备屏幕感知（Computer Use）、浏览器自主探索与跨系统多步 API 调用的超级 Agent",
         "badge": "最强智能体",
-        "reason": "Claude 3.5 Sonnet 原生支持 Computer Use 屏幕交互；GPT-4o 具备业内最完备稳定的 Function Calling 生态。"
+        "reason": "Claude 3.7 Sonnet 具备业内最强视觉屏幕交互与长链规划；Grok 3 具备实时全网 DeepSearch。"
       },
       {
-        "title": "百万长上下文与极速吞吐",
-        "desc": "需要实时阅读数百页财报、分析千万行仓库全貌，或对用户交互延迟有极高要求的实时场景",
-        "badge": "极速长文",
-        "reason": "Gemini 2.0 Flash 拥有原生 100万 (1M) 上下文海量召回能力，同时提供高达 180+ t/s 的极致生成吞吐。"
+        "title": "海量长文档研读与极速实时交互",
+        "desc": "数十万行代码库全局检索、完整书籍与财报深度解析、高并发实时低延迟语音/对话",
+        "badge": "极速长文王者",
+        "reason": "Gemini 2.0 Flash 拥有原生 100万 (1M) 上下文与 185+ tokens/s 生成速度，响应延迟仅百毫秒级。"
       },
       {
-        "title": "企业私有化与数据合规",
-        "desc": "金融、政企与垂直行业内网私有部署，要求完全自主可控、零数据外泄与私有领域微调",
-        "badge": "开源主力",
-        "reason": "DeepSeek-V3 (671B MoE) 与 Qwen 2.5 72B 为当前开源社区最顶尖的双子星基座，架构成熟，调优友好。"
+        "title": "企业私有化部署与数据主权合规",
+        "desc": "金融机构、军工政企与对数据安全极度敏感的场景，要求 100% 离线自主可控与垂直私有微调",
+        "badge": "开源自研首选",
+        "reason": "DeepSeek-R1（推理最强开源）与 DeepSeek-V3（671B MoE 通用最强）提供完整权重与极佳蒸馏微调基础。"
       },
       {
-        "title": "大规模调用与极致性价比",
-        "desc": "日均千万级 Token 吞吐的生产级应用、后台批处理任务，对单价成本极其敏感的商业项目",
-        "badge": "质价比之王",
-        "reason": "DeepSeek-V3 ($0.14 / $0.28 每百万Token) 与 Gemini 2.0 Flash ($0.10 / $0.40) 彻底重构了行业调用成本曲线。"
+        "title": "大规模工业化调用与极致性价比",
+        "desc": "日均千万级 Token 生产负载、海量数据清洗与分类，对单价成本极度敏感的商业化落地",
+        "badge": "降本增效之王",
+        "reason": "DeepSeek-V3 ($0.14 / $0.28 每百万Token) 与 Gemini 2.0 Flash ($0.10 / $0.40) 为全球企业提供工业级性价比。"
       }
     ],
     "details": [
       {
+        "id": "claude-37-sonnet",
+        "icon": "🎭",
+        "name": "Claude 3.7 Sonnet",
+        "meta": "Anthropic · 2025.02 发布 · 混合思考架构",
+        "desc": "Anthropic 划时代的混合思考旗舰模型，首次允许开发者自由控制思考时间，在 SWE-bench Verified 创下 70.3% 的惊人纪录，统领软件工程与 Agent 领域。",
+        "specs": [
+          {
+            "label": "上下文",
+            "value": "200K (支持 Prompt Caching)"
+          },
+          {
+            "label": "核心优势",
+            "value": "SWE-bench 70.3% 破纪录 · 混合思考 · 顶级 Computer Use"
+          }
+        ]
+      },
+      {
+        "id": "grok-3",
+        "icon": "🚀",
+        "name": "Grok 3 / Think",
+        "meta": "xAI · 2025.02 发布 · 10万卡超级算力产物",
+        "desc": "马斯克旗下 xAI 依托 Colossus 超级算力集群训练的顶级旗舰，登顶 LMSYS Chatbot Arena (1400+ Elo)，具备极致深度思考与全网实时 DeepSearch 能力。",
+        "specs": [
+          {
+            "label": "上下文",
+            "value": "1,000,000 (1M) tokens"
+          },
+          {
+            "label": "核心优势",
+            "value": "LMSYS 盲测第1 (Elo 1400+) · 83.9% AIME · 实时数据检索"
+          }
+        ]
+      },
+      {
+        "id": "openai-o3-mini",
+        "icon": "🧠",
+        "name": "OpenAI o3-mini",
+        "meta": "OpenAI · 2025.01 发布 · 新一代极速推理王者",
+        "desc": "OpenAI 最新的高性价比思维链推理模型，在 AIME 竞赛数学斩获 87.3% 的第一梯队成绩，以极低价格提供超越前代 o1 的综合推理体验。",
+        "specs": [
+          {
+            "label": "上下文",
+            "value": "200K (最大 100K 思考输出)"
+          },
+          {
+            "label": "核心优势",
+            "value": "AIME 87.3% · MATH-500 97.9% · 极速 90 t/s 高频响应"
+          }
+        ]
+      },
+      {
         "id": "deepseek-r1",
         "icon": "🐳",
         "name": "DeepSeek-R1",
-        "meta": "DeepSeek · 开源权重 / 强化学习推理",
-        "desc": "DeepSeek 开源的划时代深度推理模型，采用纯强化学习驱动的长思维链机制，在数学与代码基准上比肩顶级商业闭源模型。",
+        "meta": "DeepSeek · 2025.01 发布 · 纯强化学习里程碑",
+        "desc": "DeepSeek 开源的划时代深度推理模型，开创纯强化学习长思维链训练范式，在竞赛数学与学术推理上比肩闭源顶尖模型，权重完全开源免费。",
         "specs": [
           {
             "label": "上下文",
@@ -344,45 +431,11 @@
         ]
       },
       {
-        "id": "claude-sonnet",
-        "icon": "🎭",
-        "name": "Claude 3.5 Sonnet",
-        "meta": "Anthropic · 闭源商业 / 软件工程之王",
-        "desc": "公认的软件工程与代码生成行业金标，SWE-bench Verified 达 53.7%，首度原生支持 Computer Use 桌面操控能力。",
-        "specs": [
-          {
-            "label": "上下文",
-            "value": "200K (支持 Prompt Caching)"
-          },
-          {
-            "label": "核心优势",
-            "value": "SWE-bench 53.7% · 卓越架构重构 · 顶级 Agent 生态"
-          }
-        ]
-      },
-      {
-        "id": "openai-o1",
-        "icon": "🧠",
-        "name": "OpenAI o1",
-        "meta": "OpenAI · 闭源商业 / 强化推理旗舰",
-        "desc": "OpenAI 旗舰推理大模型，专为复杂科学、高等数学和高难度编程设计，在 GPQA Diamond 取得 75.7% 博士级评测高分。",
-        "specs": [
-          {
-            "label": "上下文",
-            "value": "200K tokens"
-          },
-          {
-            "label": "核心优势",
-            "value": "GPQA Diamond 75.7% · 竞技级数学 · 自主规划"
-          }
-        ]
-      },
-      {
         "id": "deepseek-v3",
         "icon": "⚡",
         "name": "DeepSeek-V3",
-        "meta": "DeepSeek · 开源权重 / 671B MoE",
-        "desc": "全球最强开源 MoE 基座之一，拥有 6710 亿总参数（激活 370 亿），以极致经济的推理成本提供超越普通稠密模型的综合性能。",
+        "meta": "DeepSeek · 2024.12 发布 · 671B MoE 基础模型",
+        "desc": "全球顶尖开源 MoE 基座，采用 Multi-head Latent Attention (MLA) 与无辅助损失负载均衡架构，以极致经济的调用成本提供卓越综合性能。",
         "specs": [
           {
             "label": "上下文",
@@ -390,16 +443,16 @@
           },
           {
             "label": "核心优势",
-            "value": "$0.14 / $0.28 单价 · Multi-head Latent Attention"
+            "value": "$0.14 / $0.28 极低单价 · 671B 参数开源 · 架构极其高效"
           }
         ]
       },
       {
-        "id": "gemini-flash",
+        "id": "gemini-20-flash",
         "icon": "✨",
         "name": "Gemini 2.0 Flash",
-        "meta": "Google · 闭源商业 / 极速与超长上下文",
-        "desc": "Google 新一代全模态速度王者，拥有惊人的 180+ tokens/s 生成速度与 100万原生上下文，长文本处理效率极高。",
+        "meta": "Google · 2024.12 / 2025 发布 · 极速与百万长文",
+        "desc": "Google 新一代速度与全模态王者，拥有惊人的 185+ tokens/s 生成速度与 100万原生上下文，长文本处理效率极高，延迟极低。",
         "specs": [
           {
             "label": "上下文",
@@ -407,16 +460,16 @@
           },
           {
             "label": "核心优势",
-            "value": "180+ t/s 极速吞吐 · 原生搜索集成 · 极低延迟"
+            "value": "185+ t/s 极速狂飙 · 原生搜索集成 · 亚秒级多模态交互"
           }
         ]
       },
       {
-        "id": "qwen-max",
+        "id": "qwen-25-max",
         "icon": "🌐",
-        "name": "Qwen 2.5 (72B / Max)",
-        "meta": "阿里巴巴 · 开源权重 & 云服务 / 全能选手",
-        "desc": "阿里巴巴开源生态旗舰，涵盖稠密 72B 与垂直 Coder 专属版本，中文及多语言能力出众，是企业私有化落地的黄金基座。",
+        "name": "Qwen 2.5 Max",
+        "meta": "阿里巴巴 · 2025 发布 · 国内最强旗舰生态",
+        "desc": "阿里巴巴开源与云端生态最强旗舰，结合 Qwen 2.5 Coder 专属代码模型，多语言及复杂任务表现优异，是企业私有化落地的黄金基座。",
         "specs": [
           {
             "label": "上下文",
@@ -424,56 +477,50 @@
           },
           {
             "label": "核心优势",
-            "value": "全栈开源生态 · 卓越多语言表现 · 企业私有部署"
+            "value": "国内前沿能力标杆 · 卓越多语言表现 · 企业私有部署"
           }
         ]
       }
     ],
     "timelineTag": "TIMELINE",
-    "timelineTitle": "大模型演进与突破时间线",
+    "timelineTitle": "2025-2026 大模型最新突破时间线",
     "listingTimelineTitle": "发布时间轴",
     "listingSearchPlaceholder": "搜索文章...",
     "timeline": [
       {
+        "date": "2025.02",
+        "name": "Claude 3.7 Sonnet",
+        "desc": "Anthropic 发布业界首款混合思考模型，在 SWE-bench Verified 创下 70.3% 的世界新纪录",
+        "latest": true
+      },
+      {
+        "date": "2025.02",
+        "name": "Grok 3 (xAI)",
+        "desc": "马斯克旗下 xAI 发布 Grok 3 系列，基于 10 万张 H100 集群训练，登顶 LMSYS 竞技场 (Elo 1400+)",
+        "latest": true
+      },
+      {
+        "date": "2025.01",
+        "name": "OpenAI o3-mini",
+        "desc": "OpenAI 推出新一代轻量思维链推理模型，AIME 竞赛数学达到 87.3%，大幅降低前沿推理成本",
+        "latest": false
+      },
+      {
         "date": "2025.01",
         "name": "DeepSeek-R1",
-        "desc": "DeepSeek 开源发布全新强化学习推理模型 R1，以极低训练成本达成前沿推理突破，引爆全球 AI 行业关注",
-        "latest": true
+        "desc": "DeepSeek 正式开源纯强化学习推理模型 R1，以颠覆性成本实现顶尖推理，引爆全球 AI 格局",
+        "latest": false
       },
       {
         "date": "2024.12",
         "name": "DeepSeek-V3",
-        "desc": "DeepSeek 正式发布 671B MoE 基础模型 V3，刷新开源模型在知识与代码基准上的天花板",
+        "desc": "DeepSeek 发布 671B MoE 基础模型，刷新开源知识与代码天花板，单价低至 $0.14/M tokens",
         "latest": false
       },
       {
         "date": "2024.12",
-        "name": "OpenAI o1",
-        "desc": "OpenAI 正式发布 o1 旗舰推理模型与面向快速推理的 o3-mini，确立 Test-time Compute 新范式",
-        "latest": false
-      },
-      {
-        "date": "2024.12",
-        "name": "Gemini 2.0",
-        "desc": "Google 推送 Gemini 2.0 Flash 系列，树立低延迟生成与长上下文检索的工程新标杆",
-        "latest": false
-      },
-      {
-        "date": "2024.10",
-        "name": "Claude 3.5 Sonnet (Upd)",
-        "desc": "Anthropic 升级 Sonnet 并公开 Computer Use (操作电脑) 功能，领跑真实软件工程与 Agent 评测",
-        "latest": false
-      },
-      {
-        "date": "2024.09",
-        "name": "Qwen 2.5 全系列",
-        "desc": "阿里巴巴开源 Qwen 2.5 全栈基座及针对编码的 Qwen 2.5 Coder 32B，赋能全球开发者",
-        "latest": false
-      },
-      {
-        "date": "2024.05",
-        "name": "GPT-4o",
-        "desc": "OpenAI 推出原生端到端全模态模型 GPT-4o，兼具文本、语音与视觉的极速交互",
+        "name": "Gemini 2.0 系列",
+        "desc": "Google 全面推送 Gemini 2.0 Flash / Pro，树立 180+ t/s 极速生成与百万长文新标杆",
         "latest": false
       }
     ],
