@@ -3847,7 +3847,7 @@ mark {
   to { opacity: 0.9; }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1400px) {
   .cyber-core { display: none; }
   .cyber-live-log { display: none; }
 }

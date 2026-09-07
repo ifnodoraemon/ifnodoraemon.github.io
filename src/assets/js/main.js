@@ -62,6 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // — Terminal Hero Animation —
   initTerminalAnimation();
 
+  // — Cyber Live Log Stream —
+  initLiveLogStream();
+
   // — Reading Progress Bar (Articles only) —
   const articleContent = document.querySelector('.article-detail-content');
   if (articleContent) {
@@ -236,6 +239,37 @@ function initParticles() {
   window.addEventListener('resize', resize, { passive: true });
   init();
   animate();
+}
+
+// ============================================
+// Cyber Live Log Stream
+// ============================================
+function initLiveLogStream() {
+  const content = document.querySelector('#liveLogStream .log-content');
+  if (!content) return;
+  const logs = [
+    "Establishing neural link...",
+    "Syncing with node [0x9A4F]...",
+    "Quantum state: STABLE",
+    "Loading memory slices...",
+    "Warning: Anomaly detected in vector space",
+    "Bypassing security protocols...",
+    "Accessing classified AI models...",
+    "Compute cores running at 98% capacity",
+    "Allocating VRAM for agent tasks...",
+    "Model inference: 145 tokens/sec",
+    "Running multi-agent consensus...",
+    "Swe-bench worker spawned",
+    "Memory GC executed. Freed 42GB."
+  ];
+  setInterval(() => {
+    const p = document.createElement('p');
+    p.innerText = "> " + logs[Math.floor(Math.random() * logs.length)];
+    content.appendChild(p);
+    if (content.children.length > 8) {
+      content.removeChild(content.firstChild);
+    }
+  }, 1200);
 }
 
 // ============================================
