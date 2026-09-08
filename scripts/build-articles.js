@@ -59,7 +59,7 @@ renderer.code = function ({ text, lang }) {
 };
 
 renderer.image = function ({ href, title, text }) {
-  let out = `<img src="${href}" alt="${escapeHtml(text || '')}" loading="lazy"`;
+  let out = `<img src="${href}" alt="${escapeHtml(text || '')}" loading="lazy" decoding="async"`;
   if (title) {
     out += ` title="${escapeHtml(title)}"`;
   }
