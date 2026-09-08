@@ -78,22 +78,18 @@ export function renderNav(activePage = '') {
         <span></span>
       </button>
     </div>
-    <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
   `;
 
   // Mobile menu toggle
   const toggle = nav.querySelector('#menu-toggle');
   const navLinks = nav.querySelector('#nav-links');
-  const backdrop = nav.querySelector('#nav-backdrop');
 
   function openMenu() {
     toggle.classList.add('active');
     toggle.setAttribute('aria-expanded', 'true');
     toggle.setAttribute('aria-label', isEn ? 'Close menu' : '关闭菜单');
     navLinks.classList.add('open');
-    if (backdrop) backdrop.classList.add('open');
     nav.classList.add('menu-open');
-    document.body.classList.add('nav-open');
   }
 
   function closeMenu() {
@@ -101,9 +97,7 @@ export function renderNav(activePage = '') {
     toggle.setAttribute('aria-expanded', 'false');
     toggle.setAttribute('aria-label', isEn ? 'Open menu' : '打开菜单');
     navLinks.classList.remove('open');
-    if (backdrop) backdrop.classList.remove('open');
     nav.classList.remove('menu-open');
-    document.body.classList.remove('nav-open');
   }
 
   function toggleMenu() {
@@ -126,17 +120,14 @@ export function renderNav(activePage = '') {
       });
     });
 
-    if (backdrop) {
-      backdrop.addEventListener('click', () => {
-        closeMenu();
-      });
-    }
-
-    document.addEventListener('click', (e) => {
+    const handleOutsideClick = (e) => {
       if (navLinks.classList.contains('open') && !nav.contains(e.target)) {
         closeMenu();
       }
-    });
+    };
+
+    document.addEventListener('click', handleOutsideClick);
+    document.addEventListener('touchstart', handleOutsideClick, { passive: true });
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && navLinks.classList.contains('open')) {
