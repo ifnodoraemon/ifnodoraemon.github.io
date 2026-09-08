@@ -35,7 +35,7 @@ In enterprise on-premise deployments, the biggest bottleneck is always the **VRA
 Even running 16-bit LoRA fine-tuning on a traditional 70B model (like Llama-3-70B) will easily devour 150GB+ of VRAM (because you must store model weights, activations, gradients, and optimizer states).
 
 **Extreme Memory Compression Strategies (Running 70B on a single node):**
-1. **QLoRA (4-bit NormalFloat Compression)**: Load the foundational base model in 4-bit quantization. This immediately slashes the static VRAM footprint of a 70B model from ~140GB down to approximately **39GB**.
+1. **QLoRA (4-bit NormalFloat Compression)**: Load the foundational base model in 4-bit quantization. This immediately slashes the static VRAM footprint of a 70B model from ~140GB down to approximately **39GB**. For deep dives into quantization algorithms and practical tradeoffs, check out our [LLM Quantization Hands-On Guide](/en/articles/quantization-hands-on-guide/).
 2. **Gradient Checkpointing**: The other half of the VRAM assassin is the forward-pass Activations. By enabling this, you trade **compute time for storage space**—discarding intermediate activations and recomputing them during backpropagation. This can slash activation VRAM usage by up to 70%.
 
 **The Trade-off**: QLoRA + Gradient Checkpointing results in roughly a 25%-40% slowdown in overall training time. However, in the GPU-constrained landscape of 2026, this is the golden compromise.
@@ -181,7 +181,7 @@ In 2026, ML alchemy has transitioned from "voodoo parameter tweaking" to quantif
 2. **Catastrophic Forgetting**: The model loses its general capabilities after fine-tuning. Solution: mix in 5-10% general data.
 3. **Data Leakage**: Overlap between evaluation and training sets. Solution: strictly partition datasets.
 4. **Format Inconsistency**: Training chat template differs from inference. Solution: use the tokenizer's `apply_chat_template`.
-5. **Eyeball Evaluation**: This is the most common enterprise anti-pattern. Solution: Use `lm-eval-harness` for objective benchmarks, and use GPT-5.4 as a judge (LLM-as-a-Judge) for subjective evaluation to quantify win rates before and after fine-tuning.
+5. **Eyeball Evaluation**: This is the most common enterprise anti-pattern. Solution: Use `lm-eval-harness` for objective benchmarks, and use GPT-5.4 as a judge (LLM-as-a-Judge) for subjective evaluation to quantify win rates before and after fine-tuning (see our [Comprehensive LLM Evaluation Guide](/en/articles/llm-evaluation-guide/)).
 
 ## Commercial API Fine-Tuning
 
@@ -192,3 +192,16 @@ If you don't want to manage GPU infrastructure, you can use commercial API fine-
 | OpenAI Fine-tuning | GPT-5-mini, GPT-5, GPT-5.4 | 10 | Easiest; supports SFT and DPO |
 | Anthropic Fine-tuning | Claude 3 Haiku (via Bedrock) | 32 | Managed through Amazon Bedrock |
 | Google Vertex AI | Gemini 3.x series | 100 | Deeply integrated with Google Cloud |
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How should you decide between Full Fine-Tuning, LoRA, and QLoRA?
+For the vast majority of enterprise use cases (such as tone adaptation, format compliance, and domain knowledge injection), **LoRA** delivers over 98% of full fine-tuning performance while slashing VRAM requirements by more than 70%, making it the industry default. On consumer GPUs with tight memory limits, **QLoRA** is the optimal path (see our [LLM Quantization Hands-On Guide](/en/articles/quantization-hands-on-guide/)). Full Fine-Tuning should be reserved exclusively for continuous pre-training on foundational reasoning where high-end multi-GPU clusters are readily available.
+
+### Q2: What is the minimum dataset size required to achieve solid fine-tuning results?
+Data quality and diversity vastly outweigh raw volume. If your goal is style alignment or strict JSON output conformance, **200 to 500 meticulously curated samples** are often sufficient for noticeable convergence. For complex multi-turn vertical reasoning, a target of **2,000 to 5,000 diverse, noise-free Q&A pairs** is recommended; blindly feeding tens of thousands of scraped, uncurated rows frequently induces severe overfitting and catastrophic forgetting.
+
+### Q3: How do you systematically evaluate fine-tuned model quality beyond casual manual testing?
+Establish a three-tier automated evaluation framework: run standardized benchmarks via `lm-evaluation-harness` to detect catastrophic forgetting in base reasoning; deploy a blind LLM-as-a-Judge test against an immutable domain Golden Testset to score win rates, rubric compliance, and hallucination rates; and enforce automated schema validation on generated outputs. For setup architectures and evaluation harnesses, consult our [Comprehensive LLM Evaluation Guide](/en/articles/llm-evaluation-guide/).

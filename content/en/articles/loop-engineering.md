@@ -54,7 +54,7 @@ To solve information obsolescence and absence, engineers began building RAG (Ret
 
 *"Agent = Model + Harness"*
 
-At this layer, development focus shifted to the **Harness/scaffolding** built around the model. For example, using frameworks like LangGraph to design strict state machine boundaries.
+At this layer, development focus shifted to the **Harness/scaffolding** built around the model. For example, using frameworks like LangGraph to design strict state machine boundaries (see our guide on [Building AI Agent Applications from Scratch](/en/articles/build-ai-agent/)).
 *   **Core Action**: Introducing permission controls, tool standardization (like the MCP protocol), and crucially, **Maker-Checker separation (separation of execution and acceptance)**.
 *   **Operation Mechanism**: The model (Maker) is only responsible for generating artifacts (like a piece of code). The Harness is responsible for executing real verification in a sandbox (like running `npm run test`). The test suite (Checker) gives an objective physical judgment, rather than letting the model say "I think it's done well".
 *   **Control Plane**: **System Layer**. The Agent can only operate within a whitelist, and all actions are anchored by physical facts (like Exit code 0).
@@ -73,7 +73,7 @@ True Loop Engineering is absolutely not simply writing a `while(true)`. It is a 
 2. **Drive (DRIVE)**:
    Automatically assembles the Prompt based on the current state to drive the next action.
 3. **Execution Constraints (HARNESS)**:
-   Inherits all security protections, tool calls, and sandbox execution mechanisms from the third layer.
+   Inherits all security protections, tool calls, and sandbox execution mechanisms from the third layer (detailed in [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/)).
 4. **Independent Referee (CHECKER)**:
    An independent verification node with an **isolated context**. The evaluator cannot see the Agent's original reasoning path, only the final artifact and scoring rubric. This eliminates the model's cognitive bias (preventing the model from being "convinced" by its own previous faulty reasoning).
 5. **Safety Gates (GATES)**:
@@ -100,3 +100,16 @@ Mastering this causal chain, the next time your Agent crashes, you won't need to
 ## Conclusion
 
 From "how to say" to "when to stop", AI engineering is rapidly converging with traditional software engineering. Future excellent Agent developers must be **Loop Engineers** who are proficient in state management, convergence judgment, and system architecture.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: What is the fundamental difference between a Loop architecture and a DAG-based workflow?
+A DAG (Directed Acyclic Graph) assumes predetermined deterministic pathways where step transitions are known ahead of time, making it ideal for predictable pipeline automation. In contrast, Loop Engineering addresses open-ended, exploratory tasks with high uncertainty, relying on an adaptive closed-loop convergence system (Goal, Drive, Harness, Checker, Gates). In production systems, high-performing agents often blend both: a DAG or state machine coordinates top-level stages while individual nodes execute autonomous convergence loops (see [Building AI Agent Applications from Scratch](/en/articles/build-ai-agent/)).
+
+### Q2: How can engineering teams mechanically eliminate doom-loops when agents fail repeatedly?
+Doom-loops occur when accumulated error traces in the context window bias the model into repeating ineffective actions. Mechanically resolving this requires control-plane interventions: enforcing hard physical circuit breakers (max iteration counts and token spend gates), employing an isolated-context Checker to avoid confirmation bias, and applying state deduplication at the runtime layer (explore [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/)).
+
+### Q3: When should you adopt a Multi-Agent architecture versus a single robust Agent?
+Stick with a single agent paired with a separated Maker-Checker evaluator when tasks are inherently sequential and benefit from unified working memory. Multi-agent systems should only be introduced when subtasks have crisp logical boundaries, require strict tool permission isolation (e.g., sandboxed code execution vs. web fetching), and operate on independent contexts. Prematurely introducing multi-agent choreography usually amplifies debugging friction, token consumption, and state drift without adding reliability.

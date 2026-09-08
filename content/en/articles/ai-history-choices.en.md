@@ -145,7 +145,7 @@ RNN's sequential nature meant that buying more GPUs couldn't speed up training. 
 
 ### The Scene
 
-In 2020, OpenAI released GPT-3 (175B parameters), showcasing stunning few-shot learning capabilities. In late 2022, ChatGPT ignited the consumer market. By 2026, GPT-5.4, Claude 4.6, and Gemini 3.1 form a three-way standoff.
+In 2020, OpenAI released GPT-3 (175B parameters), showcasing stunning few-shot learning capabilities. In late 2022, ChatGPT ignited the consumer market. By 2026, GPT-5.4, Claude 4.6, and Gemini 3.1 form a three-way standoff (for an in-depth empirical breakdown of these frontier architectures, see our [2026 Mainstream Foundation Models Comparison](/en/articles/model-comparison-2026/)).
 
 But "large language models" is just a broad category. The real technology choice was: **Why did the decoder-only autoregressive path (GPT) win over Encoder-Decoder (T5) or Encoder-only (BERT)?**
 
@@ -208,7 +208,7 @@ This is the most fundamental throughline. Review every failed technology:
 ## Lessons for 2026 Readers
 
 1. **Don't Worship the Current "Optimal Solution"**  
-   Historically, every technology deemed "irreplaceable" was disrupted by the next compute/data leap. Transformer's $O(N^2)$ attention mechanism is already being challenged by Mamba (SSMs) and Linear Attention (RWKV).
+   Historically, every technology deemed "irreplaceable" was disrupted by the next compute/data leap. Transformer's $O(N^2)$ attention mechanism is already being challenged by Mamba (SSMs) and Linear Attention (RWKV) (explore how these alternative designs and runtime trends are playing out in our [Deep Dive into 2026 AI Trends](/en/articles/ai-trends-2026/)).
 
 2. **Watch the Hardware Roadmap**  
    The signal for the next technology transition isn't in papers—it's in the product roadmaps of NVIDIA, AMD, and Google TPU. When new hardware makes a previously "impractical" algorithm practical, that's the eve of revolution.
@@ -219,3 +219,16 @@ This is the most fundamental throughline. Review every failed technology:
 ---
 
 *Original content from "AI Tech Observer"—a 2026 retrospective on the underlying logic of AI's seventy-year technical evolution.*
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: Why did the Transformer architecture decisively eclipse RNN/LSTM in sequence modeling?
+The fundamental turning point was **native hardware parallelization across modern GPU clusters**. RNNs and LSTMs compute sequentially step-by-step across token time horizons, bottlenecking execution pipelines and leaving GPU CUDA cores severely underutilized; in contrast, Transformer self-attention casts sequence modeling into massive tensor matrix multiplications that fully exploit distributed hardware scaling curves.
+
+### Q2: Has the classical Scaling Law reached an impenetrable physical plateau in 2026?
+While pre-training scaling laws face diminishing returns due to the exhaustion of pristine human text datasets, the frontier has pivoted toward **Test-Time Compute (TTC) and post-training reinforcement learning**. Allocating extra runtime compute via Process Reward Models (PRMs) and chain-of-thought exploration continues to yield predictable logarithmic accuracy gains, a paradigm analyzed in our [Deep Dive into 2026 AI Trends](/en/articles/ai-trends-2026/).
+
+### Q3: Will emerging architectures like Mamba or Linear Attention completely displace Transformers?
+An outright replacement is unlikely in the immediate term, but hybrid architectures (combining Attention with State Space Models) are already capturing critical niches. Transformers enjoy a deeply entrenched ecosystem of hardware-optimized kernels and KV Cache infrastructure, whereas SSMs specifically shine at subduing $O(1)$ memory state bottlenecks in ultra-long contexts; for practical deployment trade-offs, consult our [2026 Mainstream Foundation Models Comparison](/en/articles/model-comparison-2026/).

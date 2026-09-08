@@ -9,7 +9,7 @@ description: Explore the vision and text capabilities of multimodal models like 
 
 ## What is Multimodal AI?
 
-Multimodal AI refers to artificial intelligence systems capable of simultaneously understanding and processing **multiple data types** (text, images, audio, video). In 2026, multimodal capabilities have become standard for top-tier foundation models:
+Multimodal AI refers to artificial intelligence systems capable of simultaneously understanding and processing **multiple data types** (text, images, audio, video). In 2026, multimodal capabilities have become standard for top-tier foundation models (see our [2026 Mainstream Foundation Models Comparison](/en/articles/model-comparison-2026/) for comprehensive cross-model evaluations):
 
 | Model | Text | Image | Audio | Video | Code |
 |------|:----:|:----:|:----:|:----:|:----:|
@@ -104,6 +104,8 @@ Native multimodal models entirely skip the intermediate text-translation middlem
 
 ## Multimodal Prompting Tips
 
+While foundational principles from our [Prompt Engineering Practice Guide](/en/articles/prompt-engineering-guide/) continue to apply, multimodal inputs demand deliberate spatial grounding and clear comparative structures. Key techniques include:
+
 ### Mixed Image & Text Prompts
 
 ```text
@@ -189,3 +191,16 @@ print(invoice_info.model_dump_json(indent=2))
 3. **Privacy and Security**: Ensure no sensitive information is included before uploading images/videos.
 4. **Hallucination Risks**: Multimodal models can still hallucinate when describing fine image details.
 5. **Cost Control**: Image token consumption is much higher than text; be mindful of costs during bulk image analysis.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How does the production maturity of vision understanding compare to speech understanding?
+Vision understanding (document parsing, UI breakdown, defect detection) has attained enterprise-grade maturity, reliably hitting >95% precision when paired with structured JSON schema outputs. In contrast, while native end-to-end voice models now achieve sub-300ms latency, handling multi-speaker crosstalk, heavy background noise, and extreme dialect shifts still triggers occasional hallucinations, making voice currently best suited for interactive concierge and customer assistant workflows.
+
+### Q2: How much more expensive are multimodal API calls compared to text, and how can teams control costs?
+Because vision models slice images into Vision Transformer tiles, an uncompressed 4K image can consume over 6,800 tokens—the equivalent of reading a 10-page text document. Production architectures must enforce backend downscaling (capping max dimensions to 1024px or 512px) and implement local filter models to discard redundant video frames, cutting API spend by upwards of 80%; for detailed token pricing benchmarks, see our [2026 Mainstream Foundation Models Comparison](/en/articles/model-comparison-2026/).
+
+### Q3: What is the architectural difference between image understanding (Vision-LLMs) and image generation models?
+Vision-LLMs employ Vision Transformers to project image patches into the autoregressive text embedding space, optimizing for high-level semantic extraction and reasoning. Image generation models, on the other hand, rely on Diffusion Transformers (DiT) to denoise latent noise maps into pixel space. When building end-to-end multimodal agents, architects often use structured [prompt engineering strategies](/en/articles/prompt-engineering-guide/) to turn visual interpretations into precise generation directives.

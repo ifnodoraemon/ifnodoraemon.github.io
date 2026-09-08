@@ -131,14 +131,14 @@ for event in app.stream(inputs, stream_mode="values"):
 ## Best Practices
 
 1. **Make tool descriptions precise**: LLMs decide when to call tools via their docstrings, the clearer the better.
-2. **Limit the number of tools**: Keep it under 10 tools per Agent; too many will decrease selection accuracy.
+2. **Limit the number of tools**: Keep it under 10 tools per Agent; too many will decrease selection accuracy. For large-scale external integrations, use the [MCP Protocol](/en/articles/mcp-guide/) for decoupling and standardized tool serving.
 3. **Add safety guardrails**: Set explicit permissions and controls for sensitive tools like code execution or database operations.
 4. **Implement graceful degradation**: When tool calls fail, the Agent should be able to identify the failure and switch strategies.
 5. **Monitoring and logging**: Record the input and output of every tool call to facilitate debugging and optimization.
 
 ## Enterprise-Grade Agent Architecture (Phase 2 Deep Dive)
 
-In real-world production environments, an Agent might encounter API limits, database locks, or asynchronous jobs that take hours to complete. A naive synchronous architecture will instantly collapse. Here are the most hardcore industry practices:
+In real-world production environments, an Agent might encounter API limits, database locks, or asynchronous jobs that take hours to complete. A naive synchronous architecture will instantly collapse (see our [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/) for in-depth operational patterns). Here are the most hardcore industry practices:
 
 ### 1. Cross-Session Persistence & Interruption Recovery (Redis Checkpointer)
 
@@ -181,3 +181,16 @@ For a `Coder Agent` with code execution capabilities (like the `execute_python` 
 
 ## Conclusion
 In 2026, building excellent AI Agents has long surpassed the infantile phase of "writing two lines of prompt and blindly calling an API." To actually deploy large language models to enterprise production lines and withstand millions of malicious requests and traffic spikes, it has evolved into a hyper-dimensional backend discipline merging **exact state-machine topological design, centralized distributed scheduling, microsecond-level cache control, and OS-level sandbox defense**.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How should engineering teams choose between LangChain/LangGraph, LlamaIndex, and building custom frameworks?
+LangGraph is ideal for complex, multi-step stateful workflows requiring human-in-the-loop and interruption recovery, while LlamaIndex excels in document-centric RAG pipelines. For mission-critical production systems requiring ultra-low latency, deterministic controls, and high concurrency, writing a lightweight custom Agent Loop around native APIs often provides superior maintainability. For architectural trade-offs, explore our guide on [From Prompt to Loop Engineering](/en/articles/loop-engineering/).
+
+### Q2: What is the fundamental difference between the ReAct paradigm and native Function Calling?
+ReAct is a prompting pattern that relies on the model outputting textual Thought/Action/Observation steps parsed by regex, which is fragile under edge cases. Native Function Calling is an alignment capability trained directly into foundation models to emit structured JSON arguments conforming to provided schemas with high reliability. Modern agent runtimes typically leverage native Function Calling at the execution layer while orchestrating overall planning via stateful graphs.
+
+### Q3: How do you effectively mitigate Agent tool-calling hallucinations and infinite execution loops?
+First, strictly validate and summarize tool return payloads before re-injecting them into the message history to prevent error compounding. Second, implement hard runtime guardrails, strict iteration and budget caps, and no-progress detectors to trip safety breakers. Detailed defensive patterns are detailed in [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/).

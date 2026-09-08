@@ -28,7 +28,7 @@ When orchestrating dozens of collaborating Agents, network jitter and Model API 
 
 **Architecture Paradigm Shift:**
 *   **Externalized State**: An Agent's current execution Node and Local State must be serialized and saved to Redis or Postgres before and after every step.
-*   **Idempotency Design**: Under a retry mechanism, an Agent might be awakened multiple times to execute the same tool (e.g., "deduct user points"). To prevent dirty data, the tool invocation layer must implement strict Exactly-Once semantics, issuing request tokens based on a unique `Task_ID + Step_ID`.
+*   **Idempotency Design**: Under a retry mechanism, an Agent might be awakened multiple times to execute the same tool (e.g., "deduct user points"). To prevent dirty data, the tool invocation layer must implement strict Exactly-Once semantics, issuing request tokens based on a unique `Task_ID + Step_ID`. For deep runtime constraints and guardrail architectures, see [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/).
 
 ### 2. Self-Healing Routing
 A standard Router simply hardcodes branching conditions based on input. In advanced orchestration, the Router itself is a model with a confidence judgment mechanism:
@@ -42,7 +42,7 @@ A standard Router simply hardcodes branching conditions based on input. In advan
 
 When your orchestration system becomes as complex as a microservice mesh, how do you know that tweaking a System Prompt or upgrading a base model version hasn't caused an implicit Regression?
 
-In 2026, launching to production without Evals (Automated Evaluation Metrics) is considered flying blind.
+In 2026, launching to production without Evals (Automated Evaluation Metrics) is considered flying blind. For a full methodology on constructing domain-specific benchmarks, see our guide on [Building an LLM Evaluation System for Your Business](/en/articles/llm-evaluation-guide/).
 
 ### 1. Breaking the Three Biases of LLM-as-a-Judge
 Using an LLM to evaluate another LLM's output (LLM-as-a-Judge) is mainstream, but using models natively as referees introduces severe statistical biases:
@@ -75,3 +75,16 @@ To make scoring continuous and statistically meaningful, rather than a simple "g
 ## Conclusion
 
 True AI Engineering is evolving from "how to coax the model into saying the right thing" into "how to build an industrial control system with deterministic SLAs in a distributed network full of randomness and probabilistic failures". Mastering distributed orchestration and high-confidence Evals is your mandatory path to becoming an advanced AI Architect.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How can multi-agent systems mathematically prevent error compounding across long execution graphs?
+Mitigate compounding errors by decomposing long sequential graphs into modular sub-graphs with deterministic verification checkpoints and verifier sub-agents. Enforce strict output schema validation and invariant assertions at each step; failing assertions trigger local self-correction or rollbacks rather than propagating degraded states. Production runtime techniques are covered in [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/).
+
+### Q2: How can we minimize LLM-as-a-Judge costs while maintaining statistical confidence in regression testing?
+Implement calibrated blind swapping to eliminate position bias, extract token logprobs via G-Eval to obtain smooth floating-point confidence distributions, and apply stratified sampling where full judge evaluations run only on critical paths. Align judge calibrations with occasional human expert spot-checks, as detailed in our guide on [Reject Benchmark Hacking: How to Build an LLM Evaluation System for Your Business](/en/articles/llm-evaluation-guide/).
+
+### Q3: Why are durable workflow orchestrators like Temporal preferred over native in-memory state machines?
+In-memory state graphs fail during pod restarts, worker preemptions, or third-party API rate limits, risking lost execution state or catastrophic duplicate actions. Durable event-driven orchestrators persist state after each step, providing replayability, deterministic timeouts, and idempotency guarantees required for enterprise SLAs.

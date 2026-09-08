@@ -403,7 +403,7 @@ Already supported by GitHub Copilot, OpenAI Codex, Google Gemini, Claude Code, a
 
 ## Where Skills Fit in the AI Customization Stack
 
-To understand Skills' positioning, you need to see the **complete customization hierarchy** of AI coding assistants:
+To understand Skills' positioning, you need to see the **complete customization hierarchy** of AI coding assistants. In a comprehensive workflow for [AI coding mastery](/en/articles/ai-coding-mastery/), clear separation between these customization layers prevents prompt drift and token bloat:
 
 ```mermaid
 graph TB
@@ -420,7 +420,7 @@ graph TB
 
 ### Skills vs MCP: Complementary, Not Competing
 
-Many people confuse Skills and MCP (Model Context Protocol). They operate at **entirely different levels**:
+Many people confuse Skills and [MCP (Model Context Protocol)](/en/articles/mcp-guide/). They operate at **entirely different levels**:
 
 | Dimension | Skills | MCP |
 |-----------|--------|-----|

@@ -67,7 +67,7 @@ curl -Iv 127.0.0.1:8080
 
 要在企业中落地基于 2026 环境缩放的大模型 Agent，核心挑战在于**安全性与隔离性**。绝不能允许模型直接在宿主机执行原始 Shell。
 
-目前生产环境最标准的架构是：**MCP（Model Context Protocol）+ 微虚拟机（Firecracker / Kata Containers）**。
+目前生产环境最标准的架构是：**MCP（Model Context Protocol）+ 微虚拟机（Firecracker / Kata Containers）**。更多关于智能体循环控制设计可参考 [从 Prompt 到 Loop 工程架构演进](/articles/loop-engineering/)。
 
 ### Python 生产级沙箱调度核心实现
 
@@ -130,3 +130,16 @@ class SecureSandboxedAgentRuntime:
 1. **放弃“一次性生成完美代码”的幻想**：大模型的本质是概率预测，而现代 Agent 的威力来自**迭代校正**。建立起能把编译器报错、单元测试失败堆栈精准回传给模型的执行闭环，比写 1000 字的 Prompt 有用百倍。
 2. **拥抱 MCP 标准协议**：2026 年 Anthropic 与开源社区联合推进的 Model Context Protocol 已经成为事实上的工具连接标准，将企业内部系统封装为标准 MCP Server，能让具备环境缩放能力的模型即插即用。
 3. **安全红线不可妥协**：赋予 Agent 终端权限时，必须坚决执行容器沙箱化、只读挂载关键目录、以及出口网络白名单策略。
+
+---
+
+## 常见问题 (FAQ)
+
+### Q1: 环境缩放（Environment Scaling）与传统的强化学习（RLHF）在训练本质上有何不同？
+传统 RLHF 依赖人类标注偏好或静态文本的打分函数，容易遭遇奖励作弊（Reward Hacking）且缺乏客观物理验证；而环境缩放将真实的操作系统沙箱、编译器和单元测试作为环境反馈源，由终端执行的真实状态转移与 Exit Code 构成强闭环。关于如何在外层系统约束模型行为，可参考 [AI Agent 架构演进：从 Prompt 到 Loop 工程](/articles/loop-engineering/)。
+
+### Q2: 允许 Agent 自主执行 Shell 命令时，如何防止容器逃逸和高危破坏？
+必须采用多层纵深防御体系：底层使用轻量级微虚拟机（如 Firecracker、Kata Containers 或 gVisor）实现内核级隔离，应用层剥夺 root 权限并挂载只读根文件系统，网络层实施白名单访问控制并配置严苛的超时与 CPU 配额。构建健壮且可观测的智能体运行环境，建议参考 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/)。
+
+### Q3: 为什么引入沙箱交互后，模型依然容易出现死循环或重复犯错？
+这是由于缺乏显式的状态跟踪和失败归因机制。若仅将原始报错追加在上下文末尾，长文本累积会导致模型注意力稀释并重复无效尝试；应在运行时设计结构化的状态快照、差异对比（Diffing）与回溯逻辑，强制模型在连续多次失败后切换解题策略。

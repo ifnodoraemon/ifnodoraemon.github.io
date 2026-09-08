@@ -62,7 +62,7 @@ featuredStats:
 
 ### 推理与编码评测
 
-基于公开基准测试（2026 年 3 月数据）：
+基于公开基准测试与[系统化大模型评估指标](/articles/llm-evaluation-guide/)（2026 年 3 月数据）：
 
 | 基准 | GPT-5.4 | Claude Sonnet 4.6 | Gemini 3.1 Pro |
 |------|---------|-------------------|----------------|
@@ -163,7 +163,7 @@ response = model.generate_content("解释量子计算的基本原理")
 **推算极速法则**：
 当你的业务持续请求量达到每秒大约 **1,600 Tokens (输入+输出)** 时，自托管 70B 模型与调用 API 的成本开始持平。一旦越过这个 **Breakeven Point**，流量越大，自托管省下的钱成指数级增长。
 
-> **架构师建议**：引入 **AI Gateway (如 Kong AI Gateway 或 LiteLLM)** 进行统一调度分流。将 80% 的日常对话打入本地免费的 Llama 4 8B，仅将 20% 的极端复杂推理路由或 Failback 到 GPT-5.4。
+> **架构师建议**：引入 **AI Gateway (如 Kong AI Gateway 或 LiteLLM)** 进行统一调度分流。将 80% 的日常对话打入本地免费的 Llama 4 8B（面向中文专属业务亦可混合调度 [2026 国产主流大模型](/articles/domestic-llm-comparison-2026/)），仅将 20% 的极端复杂推理路由或 Failback 到 GPT-5.4。
 
 ### 显存暴漏：KV Cache 的物理极客公式
 
@@ -198,3 +198,16 @@ KV_Cache_Size_Per_Token = 2 * 2 * n_layers * d_model
 - **Gemini 3.1 Pro**：长文本王——原生百万上下文 + Deep Think 数学推理，价格最亲民
 
 最佳实践：**根据任务特性组合使用** — GPT-5-mini 做简单任务、Claude Sonnet 4.6 做编码推理、Gemini 3.1 Pro 做长文档、GPT-5.4 做需要计算机操控的复杂自动化。
+
+---
+
+## 常见问题 (FAQ)
+
+### Q1: 2026 年进行日常研发与复杂工程编码，首选哪款大模型？
+综合测试与实际开发者反馈，**Claude Sonnet 4.6** 是日常编码与脚本编写的首选，兼具 Opus 级代码质量与极佳的性价比；对于需要多文件协同重构或长任务链的工程场景，**Claude Opus 4.6** 凭借 SWE-bench Pro 72.7% 的解决率与 Agent Teams 表现领先。如果需要结合 GUI 自动化测试或 Playwright 交互，具备原生计算机操控能力的 **GPT-5.4 Thinking** 则具备不可替代的优势。
+
+### Q2: 企业在调用三大主流模型 API 时，有哪些立竿见影的成本优化手段？
+核心在于充分利用厂商提供的长上下文与批处理优化机制。例如 Claude 的 Prompt Caching 可对长前缀降低高达 90% 的输入成本，OpenAI 的 Tool Search 也能显著削减工具调用的 Token 消耗；离线或异步评测任务应优先采用 Batch API（享受 50% 账单折扣）。此外，建立科学的模型分流与指标监控机制，具体方法可参考 [拒绝榜单刷分：如何构筑契合业务的 LLM 评估体系](/articles/llm-evaluation-guide/)。
+
+### Q3: 三大海外模型对中文本土化任务的支持如何？何时应转向国产模型？
+GPT-5.4 与 Claude 4.6 在中文通用推理与日常问答上表现稳健，但在国内法律政策合规、专业行业术语以及网络热梗理解上仍存在语料盲区。对于涉及敏感数据不出域、私有化部署要求或追求极致中文语义理解与高并发吞吐的业务，建议优先参考 [2026 国产大模型巅峰决选：Kimi K3 vs GLM-5.3 vs DeepSeek-V4 实测与工程选型指南](/articles/domestic-llm-comparison-2026/) 进行混合架构选型。

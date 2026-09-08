@@ -151,7 +151,7 @@ flowchart TD
    sudo systemctl restart docker
    ```
 5. **部署真身**：
-   无需在外部安装庞大的 CUDA Toolkit。直接在 Docker 中拉模型：
+   无需在外部安装庞大的 CUDA Toolkit。直接在 Docker 中拉模型（可结合 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 加载 AWQ 或 GPTQ 量化权重，以显著降低显存开销）：
    ```bash
    # 容器内跑通了 nvidia-smi，就意味着所有的链条严丝合缝
    docker run --rm --gpus all nvidia/cuda:12.1.1-base-ubuntu22.04 nvidia-smi
@@ -179,7 +179,7 @@ flowchart TD
 这其实是从**场景1**延伸：先打通这五层驱动栈 (`nvidia-driver-535-server`)。随后，这台物理机还要作为巨大的软件容器，被层层套上去：
 驱动 -> `CUDA Toolkit` -> `cuDNN` -> `TensorRT` -> `Python Env` -> `框架`。
 
-**致命痛点**：因为全部叠在系统层面，一旦张三需要跑 TensorFlow（依赖旧 CUDA），李四需要跑最新的 vLLM（依赖最新 CUDA），环境就会发生冲突撕裂。这就是我们疯狂推崇**场景1**的原因。
+**致命痛点**：因为全部叠在系统层面，一旦张三需要跑 TensorFlow（依赖旧 CUDA），李四需要跑最新的 [vLLM](/articles/vllm-serving-guide/)（依赖最新 CUDA），环境就会发生冲突撕裂。这就是我们疯狂推崇**场景1**的原因。
 
 ### 场景 4：数据中心怪兽 —— HGX / DGX NVSwitch 节点
 
@@ -268,3 +268,16 @@ flowchart TD
 | **检验容器底座** | `docker run --rm --gpus all nvidia/cuda:12.1.1-base-ubuntu22.04 nvidia-smi` | 如果跑完输出状态信息，证明你的 Container Toolkit 环境金身大成。 |
 
 只要你能从“这 5 个层级”的视角俯瞰整个报错信息，你就一定能够像庖丁解牛一样，指哪打哪地解决所有驱动深坑。祝武运昌隆！
+
+---
+
+## 常见问题 (FAQ)
+
+### Q1: nvidia-smi 能够正常显示，但运行 PyTorch 或 CUDA 程序却报错 "CUDA error: no kernel image is available" 或 "No CUDA GPUs are available"，该如何排查？
+首先检查 `nvidia-smi` 右上角显示的 Driver API 版本是否满足上层框架的最低要求。若报错为 "no kernel image"，通常是 PyTorch 编译所支持的 GPU 计算能力（Compute Capability / SM 架构）与当前物理卡不匹配；若报错为 "No CUDA GPUs"，则通常是宿主机 `LD_LIBRARY_PATH` 缺失了 `libnvidia-compute` 的软链接，或者普通用户缺少 `/dev/nvidia*` 字符设备的访问权限。在部署生产级推理服务时，推荐参考 [vLLM 生产级部署全指南](/articles/vllm-serving-guide/) 在标准 Docker 镜像中直接运行。
+
+### Q2: 宿主机驱动版本（Driver API）与开发环境 CUDA Toolkit（Runtime API）版本之间到底是什么兼容关系？
+Driver API（由内核模块及 `libnvidia-compute` 提供，对应 `nvidia-smi`）严格向下兼容上层 Runtime API（由 `cuda-toolkit` / `nvcc` 提供）。这意味着宿主机只要安装了高版本驱动（如 550.x），无论是在物理机 Conda 环境还是 Docker 容器中，都可以向下兼容运行针对 CUDA 12.1、11.8 编译的各类深度学习镜像。开发时无需在宿主机全局覆盖安装庞大的 CUDA Toolkit，保持宿主机高版本 LTS 驱动即可。
+
+### Q3: Docker 容器无法使用 GPU，报错 "Failed to initialize NVML" 或 "could not select device driver"，根因通常是什么？
+此类错误绝大多数发生在系统执行自动补丁更新之后。核心排查顺序为：先验证宿主机 `nvidia-container-toolkit` 是否已通过 `nvidia-ctk runtime configure --runtime=docker` 注入 Docker 守护进程配置并重启服务；再确认宿主机 Linux 内核是否发生静默升级，导致旧内核下的预编译驱动模块无法被新内核加载。如果显卡显存处于极限吃紧状态，也可参考 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 压缩模型显存，避免容器初始化分配显存失败。

@@ -33,7 +33,7 @@ That sequence is fine for a demo, but once tasks become more complex, a fixed pa
 
 Our eventual conclusion was this: **the system should provide goals, tools, state, and boundaries, but it should not predefine the path.**
 
-In other words, the backend should behave like a runtime, not a workflow engine. It should tell the model what it can see, what it can do, and which outputs are not allowed to land, but it should not secretly encode what the next step ought to be.
+In other words, the backend should behave like a runtime, not a workflow engine. It should tell the model what it can see, what it can do, and which outputs are not allowed to land, but it should not secretly encode what the next step ought to be. To learn how to implement stateful agents using graph engines, check out our guide on [Building AI Agent Applications from Scratch](/en/articles/build-ai-agent/).
 
 ```mermaid
 graph LR
@@ -148,7 +148,7 @@ So our later work shifted away from adding more system-prompt rules and toward c
 - compress older history into digests once token pressure rises
 - move runtime state to pull-based observation tools
 
-These changes are not as flashy as switching models, but they often have a larger impact on stability. A surprising number of "reasoning problems" are actually context engineering problems.
+These changes are not as flashy as switching models, but they often have a larger impact on stability. A surprising number of "reasoning problems" are actually context engineering problems (see our deep dive in the [Context Engineering Guide](/en/articles/context-engineering-guide/)).
 
 ## 7. Delegation Is a Boundary Tool, Not a Performance Feature
 
@@ -182,3 +182,16 @@ A good agent system should:
 - rely on traces to debug reality instead of tuning prompts by instinct
 
 Once those foundations are solid, model autonomy starts turning into genuine capability. Without them, even a sophisticated prompt is usually just another form of workflow.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How can we reliably prevent AI Agents from falling into infinite dead loops (Doom-loops)?
+Preventing doom-loops requires defense-in-depth: set hard execution step limits (Max Steps) and token budget ceilings at the runtime layer; implement no-progress detectors that trip when identical tool calls or repeated errors occur; and decouple verification into an isolated Checker node. For a comprehensive convergence architecture, see [AI Agent Architecture Evolution: From Prompt to Loop Engineering](/en/articles/loop-engineering/).
+
+### Q2: How should an Agent Runtime handle tool execution timeouts and third-party API outages?
+Every tool invocation must be governed by asynchronous timeout budgets (typically 10-30s) and circuit breakers to prevent blocking the agent execution thread. When a tool call times out or throws an error, runtime should catch the exception and return a clean, structured observation message (e.g., "Request timed out; consider narrowing query filters") rather than raw stack traces, allowing the model to adapt or fall back gracefully.
+
+### Q3: What is the recommended strategy when dealing with context window overflow in long-horizon agent tasks?
+Avoid naive sliding-window truncations that discard foundational system instructions or critical historical constraints. Instead, employ hierarchical context hygiene: prune verbose raw tool outputs into compact summaries, persist stable conclusions into dedicated working memory structures, and periodically synthesize older conversational turns into rolling digests. For implementation details, refer to our [Context Engineering Guide](/en/articles/context-engineering-guide/).

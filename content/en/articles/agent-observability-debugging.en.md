@@ -26,7 +26,7 @@ In traditional web services, we care about interface Latency, Error Rate, and Th
 3. Two RAG (Retrieval-Augmented Generation) searches.
 4. Spawning of other Sub-Agents.
 
-Traditional flat logs cannot represent this **deep, tree-like execution structure**. When you see a final hallucinated response returned to the user, you can't immediately isolate the cause: Did the RAG system fail to retrieve the right chunk? Was the prompt poorly constructed? Or did a tool return dirty data that misled the model?
+Traditional flat logs cannot represent this **deep, tree-like execution structure**. When you see a final hallucinated response returned to the user, you can't immediately isolate the cause: Did the RAG system fail to retrieve the right chunk? Was the prompt poorly constructed? Or did a tool return dirty data that misled the model? Structuring explicit state exposure and audit trails is essential for reliable deployment, as explored in [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/).
 
 ## The Core Concept of Agent Debugging: Execution Trees
 
@@ -81,3 +81,16 @@ There are many observability and evaluation tools specifically targeting LLM/Age
 In the era of developing monolithic scripts, you might not have needed complex tracing. But when you start building multi-agent collaboration systems or deploying Agents into production environments where they are accountable for business outcomes, **observability is your lifeline.**
 
 Establishing a closed loop of: Trace Collection -> LLM Automated Evaluation -> Error Node Discovery -> Prompt Modification -> Replay, is the correct posture for developing highly efficient AI Agents in 2026. Stop groping in the dark in your console—let your Agents run in the daylight!
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How do we mitigate explosive storage costs when logging full-fidelity multi-span agent traces?
+Implement an intelligent tiered sampling strategy: log lightweight metadata (durations, token tallies, tool names, exit codes) for successful low-complexity interactions, while enforcing 100% full-payload retention for failed spans, tool exceptions, or sessions with negative user feedback. Combining this with prompt payload sanitization from our [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/) drastically curtails trace storage overhead.
+
+### Q2: How can execution traces effectively pinpoint the root cause of agent infinite loops?
+Examine the trace tree and diff consecutive input/output spans. If the agent receives identical tool error outputs and repeatedly responds with near-identical tool arguments across multiple steps, the system suffers from inadequate error recovery reflection and missing iteration budgets. Introducing state diffing and circuit breaker patterns from [Deep Dive into AI Agent Architecture Evolution: From Prompt to Loop Engineering](/en/articles/loop-engineering/) breaks these deadlocks.
+
+### Q3: How should teams structure LLM-as-a-Judge evaluations within automated CI/CD pipelines?
+Maintain a versioned Golden Dataset of representative agent tasks paired with benchmark reference trajectories. During pull request testing, replay candidate agent runs and instruct the judge model to evaluate tool selection precision, step efficiency, and hallucination rates against baseline traces, automatically blocking deployment if regression thresholds are breached.

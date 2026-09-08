@@ -151,7 +151,7 @@ Here are four of the most frequent enterprise and personal AI deployment setups,
    sudo systemctl restart docker
    ```
 5. **Deploy the Workload**:
-   Do NOT install the massive host CUDA Toolkit. Pull images directly:
+   Do NOT install the massive host CUDA Toolkit. Pull images directly (and apply techniques from our [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/) to fit larger models into available VRAM):
    ```bash
    # If this outputs nvidia-smi stats from inside the container, the entire 5-layer pipeline is flawless.
    docker run --rm --gpus all nvidia/cuda:12.1.1-base-ubuntu22.04 nvidia-smi
@@ -179,7 +179,7 @@ Here are four of the most frequent enterprise and personal AI deployment setups,
 This is an extension of **Scenario 1**: Deploy the 5-layer stack (`nvidia-driver-535-server`). Afterwards, you must layer the software stack onto the bare metal OS:
 Driver -> `CUDA Toolkit` -> `cuDNN` -> `TensorRT` -> `Python Env` -> `Frameworks`.
 
-**Fatal Flaw**: Because everything sits on the system layer, immediately tear-inducing conflicts arise when User A needs TensorFlow (old CUDA) and User B runs vLLM (bleeding-edge CUDA). This is why Scenario 1 is drastically preferred.
+**Fatal Flaw**: Because everything sits on the system layer, immediately tear-inducing conflicts arise when User A needs TensorFlow (old CUDA) and User B runs [vLLM](/en/articles/vllm-serving-guide/) (bleeding-edge CUDA). This is why Scenario 1 is drastically preferred.
 
 ### Scenario 4: The Data Center Behemoth — HGX / DGX NVSwitch Servers
 
@@ -267,3 +267,16 @@ Tape this to your monitor. When the deployment seems doomed, run these down the 
 | **Container Runtime Health** | `docker run --rm --gpus all nvidia/cuda:12.1.1-base-ubuntu22.04 nvidia-smi` | Output proves your `nvidia-ctk` daemon links seamlessly pierced Docker boundaries. |
 
 Mastering this "5-Layer Perspective" transforms confusing tracebacks into simple manual checklists. May your terminal never print `version mismatch` again!
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How do GPU host driver versions (Driver API) interact with application CUDA Toolkit versions (Runtime API)?
+The `CUDA Version` reported in `nvidia-smi` represents the maximum CUDA Driver API version supported by the host kernel module and `libnvidia-compute`, whereas `nvcc -V` reports the compiler toolchain Runtime API version. NVIDIA's driver architecture maintains strict backward compatibility, meaning a modern host driver (e.g., version 550.x) can execute containerized applications or Conda environments built against CUDA 12.1, 11.8, or earlier runtimes without modifying host packages. For high-throughput model serving environments, follow our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/) to deploy within standardized runtime containers.
+
+### Q2: Why does nvidia-smi execute normally while PyTorch or CUDA workloads fail with "No CUDA GPUs are available"?
+This discrepancy usually occurs because user-space dynamic linking paths fail to resolve or file permissions on GPU device nodes are restricted. Verify that `LD_LIBRARY_PATH` includes paths to `libcuda.so` and `libnvidia-compute.so`, and ensure that non-root system users possess read/write permissions for `/dev/nvidia*` character devices. Inside Docker containers, verify that the NVIDIA Container Toolkit is installed and the container was launched with the `--gpus all` flag; additionally, if models run out of GPU memory during initial allocation, consult our [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/) to reduce memory footprint.
+
+### Q3: What causes Docker container GPU passthrough errors like "Failed to initialize NVML" or "could not select device driver"?
+These errors most commonly arise following an automatic host Linux kernel update that disconnects pre-compiled kernel modules from userspace libraries. First, verify that `nvidia-ctk runtime configure --runtime=docker` has configured the Docker daemon and restart the Docker service. If the host kernel was recently patched, execute `sudo dpkg-reconfigure nvidia-dkms-<version>` or reinstall matching kernel headers to recompile the dynamic kernel module for your active kernel version.

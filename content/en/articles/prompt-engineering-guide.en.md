@@ -57,7 +57,7 @@ Answer: The final price is $170.
 
 ### 3. ReAct Framework
 
-Combining Reasoning and Acting allows the model to think while calling external tools. This is the core prompting strategy for building AI Agents:
+Combining Reasoning and Acting allows the model to think while calling external tools or querying a [RAG knowledge base](/en/articles/rag-in-practice/). This is the core prompting strategy for building AI Agents:
 
 ```text
 Thought: The user wants to know the weather in New York today, I need to call the weather API.
@@ -254,6 +254,19 @@ Different models respond to prompts in varying ways. Here are the prompting tips
 - ❌ **Vague prompts**: "Write some code for me" → ✅ "Write a user registration endpoint in Python using FastAPI, including email validation."
 - ❌ **Poor-quality examples**: If Few-Shot examples contain errors, the model will learn those incorrect patterns.
 - ❌ **Ignoring System Prompts**: The System Prompt has a much greater influence on output style and behavior than user prompts.
-- ❌ **Overloading inputs**: An excessively long prompt can lower the attention weight placed on key instructions.
+- ❌ **Overloading inputs**: An excessively long prompt can lower the attention weight placed on key instructions. For complex tasks with large reference materials, refer to our [Context Engineering Guide](/en/articles/context-engineering-guide/) for structured window management and pruning.
 
 Prompt engineering is not a one-and-done job; it is a process of continuous iterative optimization. It is highly recommended to build a team **prompt template library** to accumulate and refine knowledge over time.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: When should I choose Few-Shot prompting over Zero-Shot in production?
+Few-Shot prompting is indispensable when enforcing strict custom formatting (such as complex JSON/YAML schemas), domain-specific classification taxonomies, or idiosyncratic writing tones where 3–5 representative examples anchor behavior. Conversely, for standard reasoning, code generation, or generalized translation on frontier reasoning models (like Claude Sonnet 4.6 or GPT-5.4), direct Zero-Shot instructions paired with Chain-of-Thought deliver higher latency efficiency and lower token usage. If example counts threaten your prompt budget, leverage dynamic sample selection techniques outlined in our [Context Engineering Guide](/en/articles/context-engineering-guide/).
+
+### Q2: What are the foundational best practices for architecting an enterprise System Prompt?
+First, establish explicit behavioral boundaries and refusal protocols specifying what role the agent fulfills and what out-of-scope actions it must decline. Second, mandate structured schemas with deterministic fallback formats when tool calls or JSON decoding encounter exceptions. Third, avoid bloating static system prompts with large factual corpora; instead, inject verified knowledge on demand through an enterprise pipeline detailed in our [RAG in Practice Guide](/en/articles/rag-in-practice/).
+
+### Q3: Can system prompt instructions alone completely protect against prompt injection and jailbreaks?
+No, relying solely on prompt instructions ("ignore previous commands") is insufficient because LLMs inherently treat instructions and untrusted data within the same attention stream. Enterprise security demands defense-in-depth: run input through low-latency semantic classifier firewalls (such as Llama Prompt Guard 2), wrap untrusted external inputs in dynamically generated runtime GUID delimiters, and enforce least-privilege tool access with Human-in-the-Loop checkpoints before triggering destructive side effects.

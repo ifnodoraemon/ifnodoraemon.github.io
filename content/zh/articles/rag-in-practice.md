@@ -163,7 +163,7 @@ rewritten = [
 
 ### 3. 上下文组装
 
-将检索到的文档片段结构化地注入提示：
+将检索到的文档片段结构化地注入提示，配合严谨的[提示工程设计](/articles/prompt-engineering-guide/)（如清晰的分隔符与引用约束）能有效降低幻觉并引导模型严格依据事实作答：
 
 ```text
 基于以下参考文档回答用户问题。如果文档中没有相关信息，请明确说明。
@@ -190,7 +190,7 @@ rewritten = [
 
 ### 5. RAG 自动化量化评估体系
 
-“感觉 RAG 效果不好”是无法指导工程迭代的。企业级落地必须引入量化指标。我们推荐使用 **[Ragas](https://github.com/explodinggradients/ragas)** 或 **TruLens** 框架，利用 LLM-as-a-Judge 从三个维度对 RAG 进行算分：
+“感觉 RAG 效果不好”是无法指导工程迭代的。企业级落地必须引入量化指标（关于科学评估体系与评测指标的深度设计，可参考[业务化 LLM 评估体系指南](/articles/llm-evaluation-guide/)）。我们推荐使用 **[Ragas](https://github.com/explodinggradients/ragas)** 或 **TruLens** 框架，利用 LLM-as-a-Judge 从三个维度对 RAG 进行算分：
 
 1. **Context Precision (上下文精度)**：检索出的文档中，有用的信息是否排在最前面？（评测检索组件的排序能力）
 2. **Context Recall (上下文召回率)**：检索出的文档，是否完全覆盖了回答该 Query 所需的所有知识？（评测索引与切分策略）

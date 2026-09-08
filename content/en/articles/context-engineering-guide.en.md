@@ -11,7 +11,7 @@ extraTags:
   - RAG
 ---
 
-In 2026, pure "Prompt Engineering" is no longer sufficient to support production-grade AI Agent applications. When developers face context windows of tens or hundreds of thousands of tokens, the most common problem is no longer "the model doesn't understand my instructions," but rather **long-conversation amnesia, context poisoning, and the severe hallucinations that follow.**
+In 2026, pure "Prompt Engineering" is no longer sufficient to support production-grade AI Agent applications. While foundational [prompt engineering principles](/en/articles/prompt-engineering-guide/) remain indispensable for individual turns, developers facing context windows of tens or hundreds of thousands of tokens encounter deeper systemic challenges: **long-conversation amnesia, context poisoning, and the severe hallucinations that follow.**
 
 To solve this, the industry has embraced a core concept: **Context Engineering**. Its fundamental premise is: **Do not treat the context window as a bottomless trash can to dump everything into; instead, treat it as the Agent's working memory (RAM) and manage it strictly.**
 
@@ -42,7 +42,7 @@ When an Agent calls `fetch_user_activity_logs(user_id)` and it returns 10,000 lo
 
 ### 2. Select: Precise Retrieval, Load on Demand
 
-This is an extension of traditional RAG concepts in Agent runtimes. The Select strategy requires the Agent to actively fetch the necessary information to execute the current step.
+This is an extension of traditional [Retrieval-Augmented Generation (RAG)](/en/articles/rag-in-practice/) concepts in Agent runtimes. The Select strategy requires the Agent to actively fetch the necessary information to execute the current step.
 
 **Best Practices:**
 - **Tiered Retrieval:** Grade your knowledge base. Tier 1 is core rules hardcoded in the System Prompt; Tier 2 is task guidelines obtained via fast vector retrieval; Tier 3 is deep search tools actively invoked by the Agent.
@@ -69,3 +69,16 @@ In complex tasks, Agents often need to wear multiple hats (e.g., planning the ta
 Context Engineering marks the shift in AI application development from "mystical prompt tweaking" to "rigorous information architecture design."
 
 In 2026, excellent Agent developers are also excellent **Context Architects**. Remember: **The best context does not contain everything; it contains just the right critical clues.** By managing your Agent's RAM through the W-S-C-I strategies, you can build production-grade AI systems that truly adapt to long-cycle, complex scenarios.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: What is the fundamental difference between Context Engineering and Prompt Engineering?
+Prompt Engineering focuses on crafting instructions, role personas, and few-shot formatting within a single LLM invocation (detailed in our [Prompt Engineering Practice Guide](/en/articles/prompt-engineering-guide/)). Context Engineering treats the context window as dynamic working memory (RAM), orchestrating the end-to-end information lifecycle across persistence, selective retrieval, rolling compression, and sub-agent isolation—marking a paradigm shift from prompt craft to systems architecture.
+
+### Q2: How can developers handle context overflow and degradation in long-horizon Agent tasks?
+Rather than naively relying on million-token nominal limits, developers must enforce the Write and Select strategies within the W-S-C-I framework. Offload intermediate step outputs and raw document dumps into external storage and selectively pull high-SNR snippets on demand via [RAG retrieval pipelines](/en/articles/rag-in-practice/) to eliminate attention dilution and context distraction.
+
+### Q3: What practical techniques work best for dynamic context compression?
+Three highly effective production patterns include: 1) rolling-window state summarization, where a compact secondary LLM periodically distills conversation history into a structured goals-and-state manifest; 2) tool call squashing, which condenses iterative command retries and extensive console outputs into single-line factual outcomes; and 3) hierarchical memory trees that preserve top-level semantic anchors in active context while referencing detailed operational logs externally.

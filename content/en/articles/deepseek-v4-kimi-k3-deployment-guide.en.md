@@ -19,7 +19,7 @@ However, deploying trillion-parameter Mixture-of-Experts (MoE) architectures wit
 
 For trillion-scale MoE models, GPU memory must account for **static weights** plus **dynamic KV cache**:
 
-* **FP8 Precision (2026 Enterprise Standard)**: Requires ~1.0 GB VRAM per 1 Billion parameters;
+* **FP8 Precision (2026 Enterprise Standard)**: Requires ~1.0 GB VRAM per 1 Billion parameters (for practical quantization tooling, see our [Quantization Hands-on Guide](/en/articles/quantization-hands-on-guide/));
 * **BF16 Precision**: Requires ~2.0 GB VRAM per 1 Billion parameters.
 
 | Model | Total / Active Parameters | Precision | Weight VRAM | Target GPU Topology |
@@ -33,7 +33,7 @@ For trillion-scale MoE models, GPU memory must account for **static weights** pl
 
 ## 2. Distributed Parallelism: Combining TP, PP, and EP
 
-Within an individual 8-GPU node, use **Tensor Parallelism (TP=8)** across NVLink. Across nodes, configure **Pipeline Parallelism (PP=2 or PP=4)** or Expert Parallelism (EP):
+Within an individual 8-GPU node, use **Tensor Parallelism (TP=8)** across NVLink. Across nodes, configure **Pipeline Parallelism (PP=2 or PP=4)** or Expert Parallelism (EP). For foundational cluster tuning, see our [Production Guide to vLLM Serving & Tuning](/en/articles/vllm-serving-guide/):
 
 ```bash
 # Master Node Startup Script (vLLM Distributed Cluster)
@@ -88,3 +88,16 @@ server {
 For an enterprise processing 5 Billion tokens monthly:
 * **Proprietary API Costs**: Exceeds **$33,000 / month (~$400K annually)**;
 * **Self-Hosted 4-Node Cluster**: Reserved GPU node costs remain flat (~$36K - $44K/month) regardless of volume spikes, with 100% data sovereignty and zero telemetry leaks.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How do we diagnose cross-node NCCL timeouts or All-to-All hangs when deploying DeepSeek-V4?
+Cross-node hangs are typically triggered by network packet drops, mismatched MTUs, or PFC flow control issues during MoE All-to-All routing. Verify that InfiniBand or RoCEv2 interfaces have consistent MTU settings, set `NCCL_CROSS_NIC=1` and `NCCL_IB_DISABLE=0`, and run with `NCCL_DEBUG=INFO` to isolate the stalled rank. Comprehensive cluster networking and serving patterns are detailed in our [Production Guide to vLLM Serving & Tuning](/en/articles/vllm-serving-guide/).
+
+### Q2: Can we run trillion-parameter MoE models on smaller GPU clusters using 4-bit AWQ or GPTQ quantization?
+Yes. Applying 4-bit weight quantization (W4A16) via AWQ or GPTQ compresses 1.6T MoE static model weights down to approximately 900 GB, allowing deployment across 2 nodes (16x 80GB GPUs) instead of 4 nodes. However, dequantization overhead on memory bandwidth slightly elevates per-token latency under light loads. Step-by-step conversion and benchmarking recipes are provided in our [LLM Quantization in Practice: AWQ, GPTQ, and GGUF Hands-On Guide](/en/articles/quantization-hands-on-guide/).
+
+### Q3: Why does enabling Chunked Prefill improve system throughput while slightly increasing single-request TTFT?
+Chunked Prefill breaks large context prompts into uniform token chunks that are co-scheduled alongside decoding steps. This deliberately prevents a single long-context prompt from monopolizing all GPU compute cores, drastically improving P99 tail latency and overall system concurrency at the cost of negligible single-request prefill overhead.

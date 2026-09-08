@@ -62,7 +62,7 @@ Before comparing, let's review the model release cadence of the top three vendor
 
 ### Reasoning and Coding Benchmarks
 
-Based on public benchmarks (March 2026 data):
+Based on public benchmarks and [standardized LLM evaluation frameworks](/en/articles/llm-evaluation-guide/) (March 2026 data):
 
 | Benchmark | GPT-5.4 | Claude Sonnet 4.6 | Gemini 3.1 Pro |
 |------|---------|-------------------|----------------|
@@ -163,7 +163,7 @@ Let's take running **Llama-4-70B** on a rented/purchased **8x H100 (80GB)** serv
 **Rule of Thumb Formula**:
 When your sustained business traffic exceeds roughly **1,600 Tokens per second (input+output)**, self-hosting a 70B model breaks even with the API cost. Once past this **Breakeven Point**, the savings from self-hosting compound exponentially as traffic scales.
 
-> **Architect's Advice**: Introduce an **AI Gateway (e.g., Kong AI Gateway or LiteLLM)** for unified traffic orchestration. Route 80% of routine conversations to a zero-variable-cost local Llama-4 8B, while reserving the remaining 20% of highly complex reasoning or failovers to GPT-5.4.
+> **Architect's Advice**: Introduce an **AI Gateway (e.g., Kong AI Gateway or LiteLLM)** for unified traffic orchestration. Route 80% of routine conversations to a zero-variable-cost local Llama-4 8B (or cost-effective endpoints from [Frontier Chinese LLMs](/en/articles/domestic-llm-comparison-2026/)), while reserving the remaining 20% of highly complex reasoning or failovers to GPT-5.4.
 
 ### VRAM Explosion: The Physical Geek Formula for KV Cache
 
@@ -198,3 +198,16 @@ The foundation model landscape in March 2026:
 - **Gemini 3.1 Pro**: The Context King — Native million context + Deep Think math reasoning, most budget-friendly.
 
 Best Practice: **Combine them based on task characteristics** — GPT-5-mini for simple tasks, Claude Sonnet 4.6 for coding/reasoning, Gemini 3.1 Pro for long documents, and GPT-5.4 for complex automation requiring computer control.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: Which model is the best choice for everyday coding and complex software engineering in 2026?
+Based on comprehensive testing and developer sentiment, **Claude Sonnet 4.6** is the prime recommendation for day-to-day coding, offering Opus-tier output quality at a fraction of the cost ($3/$15 per 1M tokens). For multi-file architectural refactoring and autonomous repository-level engineering, **Claude Opus 4.6** leads the industry with a 72.7% SWE-bench Pro success rate and Agent Teams support. When end-to-end browser testing or desktop GUI manipulation is required, **GPT-5.4 Thinking** remains unmatched with its native computer use capabilities.
+
+### Q2: How can engineering teams effectively minimize commercial LLM API costs in production?
+Cost reduction begins with architectural design rather than brute-force rate limiting. Teams should leverage provider-level caching primitives such as Claude's Prompt Caching (slashing input fees up to 90%) and OpenAI's Tool Search to eliminate redundant context tokens, while delegating asynchronous evaluation workloads to Batch APIs at 50% discounts. Establishing a disciplined benchmark pipeline is critical for routing decisions, as detailed in our guide on [Building an LLM Evaluation System for Your Business](/en/articles/llm-evaluation-guide/).
+
+### Q3: How do the frontier US models handle Chinese language tasks compared to domestic Chinese alternatives?
+While GPT-5.4 and Claude 4.6 handle standard Chinese conversational queries with high fluency, they can struggle with localized regulatory compliance, idiomatic nuances, and domain-specific terminology. For organizations bound by domestic data residency requirements or seeking optimal price-performance on Chinese text corpora, reviewing our [2026 Frontier Chinese LLMs Benchmark and Architecture Guide](/en/articles/domestic-llm-comparison-2026/) provides actionable dual-routing strategies.

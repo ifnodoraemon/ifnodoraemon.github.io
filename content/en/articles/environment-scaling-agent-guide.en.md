@@ -53,7 +53,7 @@ Through Environment Scaling, GLM-5.3 mastered three indispensable reflexes:
 
 ## 3. Production Architecture: Zero-Escape Sandboxed Agent Runtime
 
-For enterprise production, granting an agent CLI execution rights requires rigorous isolation. The industry standard in 2026 pairs **MCP (Model Context Protocol)** with **MicroVMs (Firecracker / Kata Containers)**.
+For enterprise production, granting an agent CLI execution rights requires rigorous isolation. The industry standard in 2026 pairs **MCP (Model Context Protocol)** with **MicroVMs (Firecracker / Kata Containers)**. For an architectural breakdown of control layers, see our guide on [Loop Engineering](/en/articles/loop-engineering/).
 
 ```python
 import subprocess
@@ -114,3 +114,16 @@ class SecureSandboxedAgentRuntime:
 1. **Replace Monolithic Prompts with Feedback Loops**: LLM agents thrive on iterative correction. Routing live compiler errors and test failures back into the reasoning loop is infinitely more effective than lengthy prompt constraints.
 2. **Standardize on MCP**: The Model Context Protocol provides universal interoperability for tool discovery, file handling, and database interactions across 2026 frontier models.
 3. **Enforce Sandboxed Security**: Production deployments must mandate isolated ephemeral containers, read-only root filesystems, and strict egress network filtering.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How does Environment Scaling differ fundamentally from traditional RLHF?
+Traditional RLHF relies on static preference pairs and subjective scalar reward models, which are prone to reward hacking and cannot verify execution soundness. In contrast, Environment Scaling places models directly inside interactive operating system sandboxes where compilers, unit tests, and system exit codes provide deterministic, verifiable feedback loops. For more details on orchestrating these iterations, see [Deep Dive into AI Agent Architecture Evolution: From Prompt to Loop Engineering](/en/articles/loop-engineering/).
+
+### Q2: How can teams guarantee zero-escape isolation when granting autonomous agents CLI execution rights?
+A defense-in-depth approach is mandatory: use microVM isolation (such as Firecracker, Kata Containers, or gVisor) rather than shared-kernel containers, drop root privileges with read-only root filesystems, enforce strict outbound network whitelisting, and set bounded CPU and timeout limits. Practical implementation strategies are covered in [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/).
+
+### Q3: Why do agents still get caught in repetitive retry loops even with real-time feedback?
+Infinite loops typically occur when error messages simply append to an ever-growing prompt context, causing attention degradation where the model repeats failing commands. Production runtimes must implement structured state diffing, explicit trajectory memory, and backtracking mechanisms that interrupt the loop and force strategy switching after repeated failures.

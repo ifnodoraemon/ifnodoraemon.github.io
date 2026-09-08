@@ -182,7 +182,7 @@ What does a good `AGENTS.md` look like? Here's an example from my Hugo tech blog
 3. **Iterate through friction** — AI keeps making the same mistake (e.g., always forgetting `tagClass` in Hugo frontmatter)? Immediately encode it into the rule file
 4. **Provide benchmark file paths** — Instead of lengthy descriptions, "New articles should follow the format in `content/zh/articles/mcp-guide.md`" says it all
 
-Cross-tool universality is `AGENTS.md`'s killer advantage. Whether you use Cursor, Copilot, Claude Code, or Aider, they all automatically read this file from the project root. Configure once, effective everywhere.
+Cross-tool universality is `AGENTS.md`'s killer advantage. Whether you use Cursor, Copilot, Claude Code, or Aider, they all automatically read this file from the project root. Configure once, effective everywhere. For modular domain capabilities and workflow automation, explore our deep dive on [Skills for AI Coding Assistants](/en/articles/skills-guide/).
 
 ---
 
@@ -382,7 +382,7 @@ If you remember only one rule: **Never merge code you don't understand.** Even i
 
 Methodology first, tools second. **Tools serve methodology, not the other way around.**
 
-A key 2026 development is the widespread adoption of [MCP (Model Context Protocol)](/articles/mcp-guide) — the USB-C of AI tools, enabling different AI coding tools to connect to databases, GitHub, file systems, and other external resources through a unified protocol. MCP support has become an important factor in tool selection.
+A key 2026 development is the widespread adoption of [MCP (Model Context Protocol)](/en/articles/mcp-guide/) — the USB-C of AI tools, enabling different AI coding tools to connect to databases, GitHub, file systems, and other external resources through a unified protocol. MCP support has become an important factor in tool selection.
 
 ### AI-Native IDEs — Editors Rebuilt from the Ground Up for AI
 
@@ -474,3 +474,16 @@ Remember these four principles:
 4. **Sessions are disposable**. Don't fear starting new chats. After 30 turns, switch to a fresh session, inject essential docs, and restart — quality is always better than continuing a stale conversation
 
 One final thought: **The ceiling of AI coding tools isn't model intelligence — it's your methodology for wielding them.** The six methods and five anti-patterns in this article are your complete roadmap from "being used by AI" to "using AI."
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How should project-level `AGENTS.md` rules coordinate with modular `Skills`?
+Keep `AGENTS.md` lean (under 200 lines) as the global project constitution defining architectural boundaries, styling rules, and critical safety red lines across the whole repository. In contrast, delegate specialized repetitive tasks—such as database migrations, framework-specific refactoring, or CI workflow generation—to dedicated plug-and-play skills. Learn how to construct and package these workflows in our [Skills Deep Dive: Give Your AI Coding Assistant a Professional Brain](/en/articles/skills-guide/).
+
+### Q2: Why does my AI coding assistant struggle to interact with external databases and local services?
+Ad-hoc natural language prompts often fail because language models lack standard execution interfaces to developer infrastructure. In 2026, the industry standard is to expose databases, Git repositories, and documentation as standardized servers via the Model Context Protocol. For step-by-step setup guides and tool integration patterns, see our [MCP Protocol Guide: From Concept to Production](/en/articles/mcp-guide/).
+
+### Q3: How do we prevent AI assistants from causing accidental regressions in massive legacy codebases?
+Enforce a strict two-stage protocol: mandate a read-only "Plan Mode" where the assistant first generates a `PLAN.md` detailing affected files and dependency risks without touching source code. Once you review and approve the plan, execute changes incrementally in isolated sessions verified by deterministic TDD test harnesses, ensuring errors are caught before merging into the main branch.

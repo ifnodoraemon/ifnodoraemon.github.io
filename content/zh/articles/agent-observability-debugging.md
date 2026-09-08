@@ -26,7 +26,7 @@ AI Agent 与传统软件最大的区别在于它是**非确定性（Non-determin
 3. 两次 RAG 检索
 4. 甚至唤起其他的 Sub-Agent
 
-传统的扁平日志（Flat Logs）无法呈现这种**深度的树状执行结构**。当你看到一条最终返回给用户的回答存在幻觉时，你很难立刻定位：是 RAG 没搜到正确内容？还是 Prompt 写得不够清晰？或者是工具返回了脏数据误导了模型？
+传统的扁平日志（Flat Logs）无法呈现这种**深度的树状执行结构**。当你看到一条最终返回给用户的回答存在幻觉时，你很难立刻定位：是 RAG 没搜到正确内容？还是 Prompt 写得不够清晰？或者是工具返回了脏数据误导了模型？在运行时构建规范的状态暴露与审计机制至关重要，具体实践可参考 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/)。
 
 ## Agent 调试的核心理念：Execution Trees
 
@@ -81,3 +81,16 @@ AI Agent 与传统软件最大的区别在于它是**非确定性（Non-determin
 在开发单体脚本的时代，你可能不需要复杂的追踪。但当你开始构建多 Agent 协作系统，或者将 Agent 部署到需要为业务结果负责的生产环境时，**可观测性就是你的命门**。
 
 建立从 Trace 采集 -> LLM 自动评估 -> 发现错误节点 -> 修改 Prompt 重放 的闭环，才是 2026 年高效开发 AI Agent 的正确姿势。不要再在控制台里盲人摸象了，让你的 Agent 在阳光下奔跑吧！
+
+---
+
+## 常见问题 (FAQ)
+
+### Q1: 引入全链路 Trace 追踪后，海量 Token 和 Payload 导致存储成本剧增，该如何治理？
+生产环境中应采用分级采样（Tiered Sampling）策略：对成功的简短任务仅保留基础元数据（如耗时、Token 计数和 Exit Code），对非零退出码、异常超时或用户反馈负向评价的 Trajectory 实行 100% 全量 Payload 留存。此外，结合 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/) 中的上下文治理原则，在记录前清洗过滤掉冗长的大文件内容或重复数据块，能显著压缩 Trace 存储开销。
+
+### Q2: 如何利用 Trajectory Trace 快速定位 Agent 陷入死循环的根本原因？
+在 Trace 树中重点比对连续重复节点的 Input/Output Diff。如果工具返回相同的错误信息而 LLM 在多次重试中生成了几乎一致的 Tool Call 参数，表明提示词缺乏失败自省逻辑或系统缺乏显式的 Loop 计数器。此时应在运行时引入状态回溯与断路器（Circuit Breaker）机制，具体控制流设计可参考 [从 Prompt 到 Loop 工程架构演进](/articles/loop-engineering/)。
+
+### Q3: 在 CI/CD 自动化流水线中，如何利用 LLM-as-a-Judge 评估 Agent 的版本迭代？
+建议构建包含历史疑难工单和真实 Trajectory 的黄金基准测试集（Golden Dataset）。在自动化构建流水线中重放待测 Agent 版本，让裁判模型针对“工具选择准确率”、“执行步骤冗余度”与“最终结果一致性”三个维度进行打分，并设定回归门禁阈值，防止 Prompt 或代码变更引入非预期的智能退化。

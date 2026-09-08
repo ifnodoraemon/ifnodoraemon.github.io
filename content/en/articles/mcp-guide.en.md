@@ -81,6 +81,8 @@ graph TB
 - Client-Server connections are strictly **1:1**, ensuring isolation and security
 - Servers must **declaratively register** their capabilities — the LLM cannot "guess" tool existence
 
+In production [agent runtime practices](/en/articles/agent-runtime-practices/), the Host functions as the central runtime environment coordinating state exposure, tool governance, and guardrails to ensure stable agent execution.
+
 ## Three Core Primitives
 
 MCP defines three core capability vectors — **Tools, Resources, and Prompts** — each addressing a fundamental need for AI interaction with the external world:
@@ -238,7 +240,7 @@ Many confuse MCP with traditional Function Calling. They operate at **different 
 | **Security model** | Relies on application-level implementation | Built-in OAuth 2.0 auth, permission levels, user confirmation flows |
 | **Use case** | Simple, one-off tool calls | Complex multi-tool orchestration and long-term interaction |
 
-> **In one sentence**: Function Calling is an LLM's **capability** ("I can call functions"). MCP is the **standardized protocol** managing that capability ("everyone calls functions by the same rules"). MCP doesn't replace Function Calling — it builds a complete ecosystem framework on top of it.
+> **In one sentence**: Function Calling is an LLM's **capability** ("I can call functions"). MCP is the **standardized protocol** managing that capability ("everyone calls functions by the same rules"). MCP doesn't replace Function Calling — it builds a complete ecosystem framework on top of it. When [building an AI agent](/en/articles/build-ai-agent/), standardizing tool connections via MCP eliminates endless glue code and simplifies client-server integration.
 
 ## Hands-On: Build Your First MCP Server
 

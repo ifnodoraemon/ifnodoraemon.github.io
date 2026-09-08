@@ -35,7 +35,7 @@ description: LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准�
 传统的 70B 模型（如 Llama-3-70B）哪怕是做 16-bit LoRA 微调，也会轻易吃掉 150GB+ 的显存（因为你需要保存模型权重、激活值、梯度和优化器状态）。
 
 **极致显存压缩方案 (单卡玩转 70B)：**
-1. **QLoRA (4-bit NormalFloat 压缩)**：将基础底座加载为 4-bit 量化。这能将 70B 模型的静态显存占用从 140GB 暴降到约 **39GB**。
+1. **QLoRA (4-bit NormalFloat 压缩)**：将基础底座加载为 4-bit 量化。这能将 70B 模型的静态显存占用从 140GB 暴降到约 **39GB**。关于 AWQ、GPTQ 与 NF4 的量化原理与实操选型，详见 [大模型量化实战指南](/articles/quantization-hands-on-guide/)。
 2. **Gradient Checkpointing (梯度检查点)**：显存杀手的另一半是前向传播的激活值（Activations）。通过开启此功能，用**计算时间换存储空间**，丢弃中间激活值，在反向传播时重新计算。这能将激活值显存占用锐减 70%。
 
 **权衡 (Trade-off)**：QLoRA + Gradient Checkpointing 会导致整体训练时间减慢约 25%-40%，但在显卡极度紧缺的 2026 年，这是最黄金的妥协方案。
@@ -181,7 +181,7 @@ python -m vllm.entrypoints.openai.api_server \
 2. **灾难性遗忘**：微调后模型丧失通用能力。解决方案：混入 5-10% 的通用数据
 3. **数据泄漏**：评估集与训练集有重叠。解决方案：严格划分数据集
 4. **格式不一致**：训练数据的 chat template 与推理时不一致。解决方案：使用 tokenizer 的 `apply_chat_template`
-5. **靠肉眼评估**：这是最常见的企业级错误。解决方案：使用 `lm-eval-harness` 跑客观题，使用 GPT-5.4 作为裁判 (LLM-as-a-Judge) 跑主观评测，量化微调前后的胜率。
+5. **靠肉眼评估**：这是最常见的企业级错误。解决方案：使用 `lm-eval-harness` 跑客观题，使用 GPT-5.4 作为裁判 (LLM-as-a-Judge) 跑主观评测，量化微调前后的胜率（系统化评估体系请参考 [大模型系统化评测指南](/articles/llm-evaluation-guide/)）。
 
 ## 商业 API 微调
 
@@ -192,3 +192,16 @@ python -m vllm.entrypoints.openai.api_server \
 | OpenAI Fine-tuning | GPT-5-mini, GPT-5, GPT-5.4 | 10 条 | 最简单，支持监督微调和 DPO |
 | Anthropic Fine-tuning | Claude 3 Haiku（via Bedrock） | 32 条 | 通过 Amazon Bedrock 托管 |
 | Google Vertex AI | Gemini 3.x 系列 | 100 条 | 与 Google Cloud 深度集成 |
+
+---
+
+## 常见问题 (FAQ)
+
+### Q1: 全参数微调 (Full FT) 与 LoRA / QLoRA 应该如何取舍？
+对于大多数企业业务场景（如领域知识注入、指令遵循、角色塑造或输出格式约束），**LoRA** 已经能够达到全参数微调 98% 以上的效果，且训练显存需求降低 70% 以上，是性价比最高的默认选择；在显卡预算极其有限的消费级显卡上，可选用 **QLoRA**（实战落地可参考 [大模型量化实战指南](/articles/quantization-hands-on-guide/)）。只有在需要重塑底层语言理解能力、大规模预训练连续学习，或拥有充足 8x H100 集群资源的场景下，才考虑全参数微调。
+
+### Q2: 启动一个领域大模型微调，最少需要多少条标注数据？
+数据质量远比数据数量重要。如果目标是学习特定的结构化输出格式或风格语气，**200~500 条**高质量、多样化且经人工严格质检的问答对即可取得显著改善；如果目标是注入特定行业深层专业推理逻辑，通常建议准备 **2000~5000 条**覆盖各种长尾边缘用例的样本，盲目堆砌数万条低质数据反而会导致严重过拟合与基础能力退化。
+
+### Q3: 如何科学量化微调后模型的效果，避免靠人工随机“抽测”？
+科学评测必须建立分层量化基准：底层使用标准基准工具（如 `lm-evaluation-harness`）测试通用认知与数学推理能力，监控是否存在灾难性遗忘；业务层构建固定的 Golden Testset 并引入 LLM-as-a-Judge 自动化对比微调前后的胜率、拒绝率与格式合规率；最后结合自动化护栏对极端异常用例进行回归验证。完整评测流程与指标体系可参考 [大模型系统化评测指南](/articles/llm-evaluation-guide/)。

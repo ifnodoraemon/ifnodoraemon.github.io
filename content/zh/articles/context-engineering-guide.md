@@ -11,7 +11,7 @@ extraTags:
   - RAG
 ---
 
-在 2026 年的今天，单纯的 "Prompt Engineering（提示工程）" 已经不足以支撑生产级别的 AI Agent 应用。当开发者面对几千到十万 token 甚至更长的上下文窗口时，最常见的问题不再是“模型不懂我的指令”，而是**长对话遗忘、上下文污染（Context Poisoning）以及随之而来的严重幻觉**。
+在 2026 年的今天，单纯依靠基础的 [Prompt Engineering（提示工程）](/articles/prompt-engineering-guide/) 已经不足以支撑生产级别的 AI Agent 应用。当开发者面对几千到十万 token 甚至更长的上下文窗口时，最常见的问题不再是“模型不懂我的指令”，而是**长对话遗忘、上下文污染（Context Poisoning）以及随之而来的严重幻觉**。
 
 为了解决这一问题，业界提出了一个核心理念：**Context Engineering（上下文工程）**。它的核心思想是：**不要把上下文窗口当作一个无限塞东西的垃圾桶，而是要把它当作 Agent 的工作内存（RAM）来严格管理。**
 
@@ -42,7 +42,7 @@ extraTags:
 
 ### 2. Select：精准检索，按需加载
 
-这是对传统 RAG 概念在 Agent 运行时的延伸。Select 策略要求 Agent 主动去拉取执行当前步骤所必需的信息。
+这是对传统 [RAG（检索增强生成）](/articles/rag-in-practice/) 概念在 Agent 运行时的延伸。Select 策略要求 Agent 主动去拉取执行当前步骤所必需的信息。
 
 **实践原则：**
 - **Tiered Retrieval（分层检索）**：将知识库分级。一级是硬编码在 System Prompt 中的核心规则；二级是通过快速向量检索获得的任务指南；三级是 Agent 主动调用的深度搜索工具。
@@ -69,3 +69,16 @@ extraTags:
 Context Engineering 标志着 AI 应用开发从“玄学的提示词微调”走向了“严谨的信息架构设计”。
 
 在 2026 年，优秀的 Agent 开发者也是优秀的 **Context 架构师**。记住：**最好的上下文不是包含了一切，而是只包含了恰到好处的关键线索。** 通过 W-S-C-I（写入、检索、压缩、隔离）四大策略管理你的 Agent RAM，你将能够构建出真正适应长周期、复杂场景的生产级 AI 系统。
+
+---
+
+## 常见问题 (FAQ)
+
+### Q1: Context Engineering（上下文工程）与传统的 Prompt Engineering（提示工程）有什么本质区别？
+Prompt Engineering 聚焦于单次请求中指令词句的表达优化（如角色设定、Few-Shot 示例构造，详见 [大模型提示工程实践指南](/articles/prompt-engineering-guide/)）；而 Context Engineering 关注系统运行时全生命周期的信息流架构，将上下文视为有限的工作内存，负责动态调度、外部持久化、状态压缩与隔离，两者是从“指令调优”向“系统工程”的范式跃迁。
+
+### Q2: 当 Agent 面临海量背景信息与长对话轮次时，如何防止上下文溢出与信噪比退化？
+不能盲目依赖模型标称的百万 Token 窗口，应严格遵循 W-S-C-I 框架中的写入与检索策略。将长文本和中间执行产物交由外部存储与 [RAG 检索增强架构](/articles/rag-in-practice/) 按需切片拉取，同时限制单次加载的上下文长度，彻底规避“迷失在中间（Lost in the Middle）”与上下文污染。
+
+### Q3: 动态上下文压缩（Context Compression）在工程中有哪些高效实用的落地技巧？
+工程上常用的三大技巧包括：一是利用轻量快速小模型对超 N 轮的历史记录进行状态提炼（State Summarization），用目标推进清单替代全量对话；二是执行工具调用折叠（Tool Call Squashing），将失败重试与过长日志压缩为单行执行结论；三是采用分层树状记忆索引（Hierarchical Memory），仅保留高层语义标签并在命中时局部展开。

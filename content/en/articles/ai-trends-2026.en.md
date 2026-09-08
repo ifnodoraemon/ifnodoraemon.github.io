@@ -98,7 +98,7 @@ Key trends:
 
 ## Trend 6: The Counterattack of Non-Transformer Architectures
 
-Transformers dominated the industry for 8 years, but their $O(N^2)$ attention mechanism remains a grueling bottleneck against million-token contexts. In 2026, alternative architectures finally tore open specific enterprise niches:
+Transformers dominated the industry for 8 years (for context on how they historically eclipsed RNNs, see [The Critical Crossroads in AI History](/en/articles/ai-history-choices/)), but their $O(N^2)$ attention mechanism remains a grueling bottleneck against million-token contexts. In 2026, alternative architectures finally tore open specific enterprise niches:
 
 - **SSMs (State Space Models, e.g., Mamba / Jamba)**:
   - **The Advantage**: They boast a constant $O(1)$ inference VRAM footprint. Whether your prompt is one thousand words or one million words, its KV Cache (strictly speaking, its Hidden State) remains definitively fixed in size! This delivers terrifying cost advantages for ultra-long document QA or infinite-state-machine code generation.
@@ -180,10 +180,23 @@ When serving open-source models, you must make a brutal choice on your Continuou
 
 ## Conclusion
 
-As of March 2026, the AI foundation model landscape is dominated by a triopoly:
+As of March 2026, the AI foundation model landscape is dominated by a triopoly (for detailed benchmark metrics and practical feature comparisons, explore our [2026 Foundation Models Comparison](/en/articles/model-comparison-2026/)):
 
 1. **OpenAI**: GPT-5.4 leads with all-around capability (million-context + computer control + low hallucination).
 2. **Anthropic**: Claude 4.6 establishes differentiation in coding, Agents, and code quality.
 3. **Google**: Gemini 3.1 Pro excels with native million-context and Deep Think reasoning.
 
 **Advice for developers**: Don't cling to a single model. The best practice is **compositional routing** based on the task—use GPT-5-mini for simple tasks, Claude Sonnet 4.6 for coding and reasoning, Gemini 3.1 Pro for processing long documents, and GPT-5.4 for automations requiring computer control.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: In 2026, should software engineers prioritize learning AI Agent architectures or model fine-tuning?
+Engineers should decisively prioritize **AI Agent architecture and runtime orchestration**. Frontier foundation models have acquired immense reasoning and in-context adaptation skills, meaning the vast majority of enterprise problems are best solved via prompt orchestration, dynamic tool integration (like MCP), and sandbox feedback loops. Full-parameter fine-tuning remains costly and bottlenecked by data curation, making it a specialized lever suited primarily for domain-specific edge compression or strict offline deployments.
+
+### Q2: Will prompt engineering become obsolete as models gain advanced reasoning and computer use capabilities?
+Prompt engineering is not dying; it is evolving into **Context Engineering and systematic constraint design**. While superficial "jailbreak tricks" and brittle phrasing hacks have indeed faded, production engineering now demands structured system prompts, deterministic schema enforcement, and intelligent context window management. To understand how architectural shifts redefine developer abstractions over time, explore [The Critical Crossroads in AI History](/en/articles/ai-history-choices/).
+
+### Q3: What is the recommended balance between open-source models and proprietary commercial APIs for enterprises?
+Industry best practice favors a **hybrid semantic routing architecture**. Enterprises should leverage commercial APIs for top-tier reasoning, multimodal vision, and complex code generation where development velocity is paramount, while deploying quantized open-source models (such as Llama 4 or Qwen) on-premises for privacy-sensitive data, offline batch ETL, and low-latency classification. For comprehensive pricing and performance benchmarks across the leading frontier engines, review our [2026 Mainstream Foundation Models Comparison](/en/articles/model-comparison-2026/).

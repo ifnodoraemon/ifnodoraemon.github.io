@@ -163,7 +163,7 @@ The standard architecture for 2026 is the **Late Interaction Architecture** util
 
 ### 3. Context Assembly
 
-Inject the retrieved document snippets structurally into the prompt:
+Inject the retrieved document snippets structurally into the prompt. Leveraging structured constraints from [prompt engineering practices](/en/articles/prompt-engineering-guide/) (such as explicit delimiter framing and citation rules) significantly curtails hallucinations and steers the LLM toward faithful answers:
 
 ```text
 Answer the user's question based on the following reference documents. If the information is not in the documents, state clearly that you do not know.
@@ -190,7 +190,7 @@ Enterprise RAG in 2026 has moved far beyond simple "text chunking + vector searc
 
 ### 5. Automated RAG Quantitative Evaluation
 
-Saying "the RAG feels inaccurate" doesn't help engineering teams iterate. Enterprise deployment requires quantitative metrics. We recommend frameworks like **[Ragas](https://github.com/explodinggradients/ragas)** or **TruLens**, which use LLM-as-a-Judge to score RAG systems across three dimensions:
+Saying "the RAG feels inaccurate" doesn't help engineering teams iterate. Enterprise deployment requires quantitative metrics (see our [LLM evaluation guide](/en/articles/llm-evaluation-guide/) for building business-aligned test suites and mitigating judge biases). We recommend frameworks like **[Ragas](https://github.com/explodinggradients/ragas)** or **TruLens**, which use LLM-as-a-Judge to score RAG systems across three dimensions:
 
 1. **Context Precision**: Are the most relevant retrieved documents ranked at the very top? (Evaluates the retriever and re-ranker).
 2. **Context Recall**: Do the retrieved documents contain all the necessary information to answer the question? (Evaluates chunking and indexing strategies).

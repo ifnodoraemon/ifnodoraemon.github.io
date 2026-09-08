@@ -112,7 +112,7 @@ Now that we know 90% of regular users are dealing with weight-only quantization 
 
 **Quick Selection Guide**:
 - If you have OCD and want to **defend the model's absolute baseline intelligence** under strict VRAM limits → Use **AWQ** 
-- If you are deploying an API and want to **maximize tokens-per-second** → Get a **GPTQ** model and run it on vLLM.
+- If you are deploying an API and want to **maximize tokens-per-second** → Get a **GPTQ** model and run it on [vLLM](/en/articles/vllm-serving-guide/).
 - If your machine **only has an Apple Silicon Mac or Intel CPU** → Download a **GGUF** format and enjoy it via Ollama / LM Studio. We usually recommend `Q4_K_M`.
 
 ---
@@ -221,6 +221,19 @@ This magic trick means: **Although it essentially only takes up 4.5 bits of phys
 ## Final Conclusion
 
 Quantization is not a "lossy, cheap substitute"; it is the very bedrock that keeps LLMs operational in the real world. Remember these three maxims:
-1. **For Personal Hacking**: Embrace 4-bit AWQ / GGUF without hesitation. Experience incredibly powerful models for a fraction of the hardware cost.
-2. **For Production inference endpoints (with modern hardware)**: Abandon complex SmoothQuant engineering. Mindlessly run FP8 inside vLLM. It is the officially anointed optimal solution.
+1. **For Personal Hacking**: Embrace 4-bit AWQ / GGUF without hesitation (see our hands-on workflows in the [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/)). Experience incredibly powerful models for a fraction of the hardware cost.
+2. **For Production inference endpoints (with modern hardware)**: Abandon complex SmoothQuant engineering. Mindlessly run FP8 inside [vLLM](/en/articles/vllm-serving-guide/). It is the officially anointed optimal solution.
 3. **Always Benchmark the Truth**: Perplexity is a good mirror, but for tasks requiring extreme logical rigor like coding or math, any compression below 4-bit might break your pipeline. Your model is only truly "running" if it survives your actual business tasks.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How should I choose between FP16 and BF16 for LLM training and inference?
+Unless your hardware is constrained to legacy architectures (such as Volta or Turing cards lacking native bfloat16 Tensor Cores), **BF16** is almost universally the preferred choice. BF16 shares the exact same 8-bit dynamic range exponent as FP32, making it virtually immune to underflow and overflow without requiring dynamic loss scaling during training or fine-tuning. For serving modern foundation models at scale, BF16 integrates seamlessly into high-throughput backends like our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
+
+### Q2: What accuracy loss threshold is considered acceptable when quantizing for production?
+In enterprise deployments, an acceptable threshold typically requires a perplexity (PPL) increase under 0.1 to 0.2 and a downstream task accuracy drop within 1% across core benchmarks like MMLU or GSM8k. While creative chat and summarization applications easily tolerate the ~2-3% drop of 4-bit AWQ or GPTQ, tasks demanding mathematical or syntactic precision (such as code generation) should use FP8 or refer to our [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/) to protect sensitive weight outliers.
+
+### Q3: When should teams adopt mixed precision instead of full-model uniform quantization?
+Mixed precision is essential during model pre-training, fine-tuning (e.g., QLoRA), and inference pipelines where specific layers exhibit high numerical sensitivity. Typically, bulk matrix multiplications in feed-forward layers run on INT8/FP8 Tensor Cores, while fragile operations like token embeddings, LayerNorm, and Softmax remain in BF16 or FP32 to prevent numerical degradation.

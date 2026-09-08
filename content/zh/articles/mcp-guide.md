@@ -81,6 +81,8 @@ graph TB
 - Client 和 Server 之间是严格的 **1:1 关系**，确保隔离和安全
 - Server 必须通过**声明式注册**暴露自身能力，LLM 不能"猜测"工具的存在
 
+在实际的 [Agent 运行时设计实践](/articles/agent-runtime-practices/) 中，Host 扮演了执行核心的角色，负责协调状态暴露、工具治理与安全护栏，确保智能体具备稳定的执行环境。
+
 ## 三大核心原语
 
 MCP 协议定义了三种核心能力向量——**Tools、Resources、Prompts**。它们分别满足了 AI 与外部世界交互的三种根本需求：
@@ -238,7 +240,7 @@ sequenceDiagram
 | **安全模型** | 依赖应用层自行实现 | 内置 OAuth 2.0 授权、权限分级、用户确认流程 |
 | **适用场景** | 简单、一次性的工具调用 | 复杂的多工具编排与长期交互 |
 
-> **一句话总结**：Function Calling 是 LLM 的一种**能力**（"我能调用函数"），MCP 是管理这种能力的**标准化协议**（"大家按统一规则来调用函数"）。MCP 不是取代 Function Calling——它是在 Function Calling 之上构建的完整生态框架。
+> **一句话总结**：Function Calling 是 LLM 的一种**能力**（"我能调用函数"），MCP 是管理这种能力的**标准化协议**（"大家按统一规则来调用函数"）。MCP 不是取代 Function Calling——它是在 Function Calling 之上构建的完整生态框架。在[从零搭建 AI Agent 应用](/articles/build-ai-agent/)时，使用 MCP 协议可以极大降低多工具接入与维护的复杂度。
 
 ## 手把手实战：构建你的第一个 MCP Server
 

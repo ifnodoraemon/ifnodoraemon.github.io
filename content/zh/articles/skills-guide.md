@@ -403,7 +403,7 @@ Windsurf 通过 `.windsurfrules` 文件和 Cascade 系统深度集成：
 
 ## Skills 在 AI 定制体系中的位置
 
-理解 Skills 的定位，需要看到 AI 编程助手的**完整定制层级**：
+理解 Skills 的定位，需要看到 AI 编程助手的**完整定制层级**。在进阶的 [AI 编程驾驭实践](/articles/ai-coding-mastery/) 中，各层级职责清晰是避免上下文污染和提示词膨胀的关键基石：
 
 ```mermaid
 graph TB
@@ -420,7 +420,7 @@ graph TB
 
 ### Skills vs MCP：互补而非竞争
 
-很多人会混淆 Skills 和 MCP（Model Context Protocol），两者是**完全不同层次**的概念：
+很多人会混淆 Skills 和 [MCP（Model Context Protocol）](/articles/mcp-guide/)，两者是**完全不同层次**的概念：
 
 | 维度 | Skills | MCP |
 |------|--------|-----|

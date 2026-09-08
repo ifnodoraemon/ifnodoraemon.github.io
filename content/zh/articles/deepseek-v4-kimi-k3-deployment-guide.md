@@ -58,7 +58,7 @@ graph TD
 
 ## 二、Show Me The Code：一键起飞的启动脚本
 
-官方文档里的 `python -m vllm.entrypoints.openai.api_server` 是糊弄小孩的。以下是我们真正在用的高并发集群启动参数（基于 vLLM 0.12）：
+官方文档里的 `python -m vllm.entrypoints.openai.api_server` 是糊弄小孩的。关于基础服务化架构与高吞吐调优，可先参考 [vLLM 生产级部署全指南](/articles/vllm-serving-guide/)。以下是我们真正在用的高并发集群启动参数（基于 vLLM 0.12）：
 
 ```bash
 #!/bin/bash
@@ -82,7 +82,7 @@ vllm serve "deepseek-ai/DeepSeek-V4-Pro" \
 ```
 
 ### 核心参数解毒：
-* `--kv-cache-dtype fp8`：**救命稻草**。直接将 KV Cache 切成 FP8，这是你能把 `max-model-len` 拉到 130K 的唯一原因，精度损失在业务端（非数学证明）完全不可感知。
+* `--kv-cache-dtype fp8`：**救命稻草**。直接将 KV Cache 切成 FP8，这是你能把 `max-model-len` 拉到 130K 的唯一原因，精度损失在业务端（非数学证明）完全不可感知。更多模型量化实操可参考 [大模型量化实战指南](/articles/quantization-hands-on-guide/)。
 * `--enable-chunked-prefill`：**吞吐量神器**。2026 年必开的特性，将极长 Prompt 的 Prefill（预填充）阶段切块，与 Decode（解码）阶段混合调度。**没有它，一个长文本请求进来，其他所有并发用户的生成都会被卡死长达 3 秒。**
 * `--gpu-memory-utilization 0.92`：留 8% 给系统内核和 CUDA Context。设成 0.99 的勇士最后都在修内核崩溃的工单。
 
@@ -127,3 +127,16 @@ vllm serve "moonshot-ai/Kimi-K3-Open" \
 **结论极其暴力**：只要你的业务规模越过了“日均 20 亿 Token”的生死线，私有化部署的成本是调 API 的 **十分之一**。而且最关键的是——你公司的核心源码、客户财报数据，**再也不用在公网上裸奔了。**
 
 > **工程师寄语**：2026 年，大模型已经走下了“炼丹”的神坛，彻底进入了“炼钢”的工程化时代。算力不等于生产力，能够把 1.6T 模型在集群里调校到 95% 吞吐率的工程师，才是这个时代最硬核的魔法师。
+
+---
+
+## 常见问题 (FAQ)
+
+### Q1: 部署 DeepSeek-V4-Pro 时频繁遇到跨节点通信死锁或 All-to-All 挂起，该如何排查？
+绝大多数跨节点挂起由 NCCL 网络超时或网卡拥塞引起。首先检查各节点的 InfiniBand/RoCEv2 MTU 与 PFC 流控配置，确保 `NCCL_IB_DISABLE=0` 且 `NCCL_CROSS_NIC=1`；其次在启动 vLLM 时加入 `NCCL_DEBUG=INFO` 定位卡住的具体 Rank，并适当调大 `NCCL_COMM_BLOCKING=1` 与超时阈值。更系统化的分布式推理集群拓扑调优可参考 [vLLM 生产级部署全指南](/articles/vllm-serving-guide/)。
+
+### Q2: 如果没有足够数量的 H100/H800，能否使用 INT4/AWQ 量化在更小显存集群上运行？
+可以，但需要权衡吞吐与精度。对于 1.6T MoE 模型，使用 AWQ 或 GPTQ 进行 4-bit 权重量化（W4A16）可将静态显存压至约 900 GB，允许在 2 节点（16 张 80GB GPU）上运行；但注意解码阶段需要频繁反量化，单并发延迟会有所上升。具体量化转化脚本与精度校验流程请参阅 [大模型量化实战指南：AWQ、GPTQ 与 GGUF](/articles/quantization-hands-on-guide/)。
+
+### Q3: 为什么开启 `--enable-chunked-prefill` 后，并发吞吐提升明显但个别请求的 TTFT 反而变长？
+Chunked Prefill 的核心原理是将长序列 Prefill 切片为较小的 Token 块，穿插在 Decode 周期中调度，从而牺牲了极低负载下单一长请求的绝对抢占优先级，换取整个集群的 P99 尾部延迟稳定与整体吞吐量成倍提升；对于高并发生产网关而言，这是保障服务 SLA 的标准工业实践。

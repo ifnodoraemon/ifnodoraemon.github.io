@@ -131,14 +131,14 @@ for event in app.stream(inputs, stream_mode="values"):
 ## 最佳实践
 
 1. **工具描述要精确**：LLM 通过工具的 docstring 决定何时调用，描述越清晰越好
-2. **限制工具数量**：单个 Agent 不超过 10 个工具，太多会降低选择准确率
+2. **限制工具数量**：单个 Agent 不超过 10 个工具，太多会降低选择准确率。对于复杂工具生态，可采用 [MCP 协议](/articles/mcp-guide/) 进行标准化接入与解耦
 3. **添加安全护栏**：对代码执行、数据库操作等敏感工具设置权限控制
 4. **实现优雅降级**：工具调用失败时，Agent 应能识别并切换策略
 5. **监控与日志**：记录每次工具调用的输入输出，便于调试和优化
 
 ## 企业级 Agent 架构实践 (Phase 2 深度化)
 
-在真实的生产环境中，Agent 在运行过程中可能会遭遇 API 熔断、数据库锁、或者是长达几小时的异步任务。常规的单体架构会瞬间崩溃，以下是业内最 hardcore 的落地实践：
+在真实的生产环境中，Agent 在运行过程中可能会遭遇 API 熔断、数据库锁、或者是长达几小时的异步任务。常规的单体架构会瞬间崩溃（深入的运行时避坑指南可参考 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/)），以下是业内最 hardcore 的落地实践：
 
 ### 1. 跨会话的持久化与中断恢复 (Redis Checkpointer)
 
@@ -181,3 +181,16 @@ with RedisSaver(redis_conn) as checkpointer:
 
 ## 总结
 2026 年，优秀的 AI Agent 开发早已脱离了“写两句 Prompt 调调 API”的幼儿阶段。要想让大语言模型真正落地企业生产线，并扛住千万级别规模的恶意请求和流量洪峰，它已经变成了一门融合了**确切状态机拓扑设计、分布式持久化调度、微秒级缓存控制以及操作系统级沙盒防御**的超高维后端复杂系统工程学。
+
+---
+
+## 常见问题 (FAQ)
+
+### Q1: LangChain、LlamaIndex 与从零自研框架，企业该如何选型？
+如果项目核心是复杂多步骤流转与中断恢复，优先选择以状态图为核心的 LangGraph；如果主要围绕私有文档的检索与问答，LlamaIndex 的 RAG 生态更成熟；而在追求极致并发、低延迟与高确定性的核心生产场景下，轻量级自研配合明确的状态机定义往往是最可控的选择。深入探讨可参考 [AI Agent 架构演进：从 Prompt 到 Loop 工程](/articles/loop-engineering/)。
+
+### Q2: ReAct 范式与原生 Function Calling 有什么本质区别？
+ReAct 是一种纯文本提示词工程范式，依赖模型在输出中模拟 Thought/Action/Observation 并在文本层面解析工具调用，容错率较低；而原生 Function Calling 是大模型在预训练与微调阶段对 JSON Schema 调用的原生对齐能力，输出确定性与参数解析准确率显著更高。现代生产级框架通常在底层使用 Function Calling 作为执行基座，而在外层构建状态机循环。
+
+### Q3: 如何有效治理 Agent 在长任务中的工具调用幻觉与死循环？
+首先应严格校验并压缩回灌上下文的工具返回结果，避免错误堆叠引发 Doom-loop；其次必须在 Runtime 层设置薄且硬的 Guardrail 与最大迭代次数，并配置无进展检测机制中断死循环。系统化的状态隔离与观测设计可参考 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/)。
