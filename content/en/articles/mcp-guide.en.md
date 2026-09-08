@@ -492,6 +492,6 @@ graph LR
 ## FAQ
 
 - **How does MCP differ from regular APIs?** MCP is a specialized API protocol designed specifically for AI-to-system interaction. Regular APIs serve programmers; MCP serves AI.
-- **Do I need to modify existing backend services?** No. MCP Servers act as middleware, wrapping existing APIs and data sources in the MCP protocol. Your backend remains unchanged.
+- **Do I need to modify existing backend services?** No. MCP Servers act as middleware, wrapping existing APIs and data sources in the MCP protocol. Your backend remains unchanged. This non-invasive architecture is especially useful when you [build an AI agent](/en/articles/build-ai-agent/) to quickly integrate tools.
 - **Does MCP introduce security risks?** MCP has robust built-in security (OAuth, permission control, user confirmation), but only if properly configured. In enterprise environments, always enable sandboxing and tool auditing.
 - **How do I choose between Tool vs Resource?** If the operation **changes system state** (write, delete, send), use a Tool. If it only **reads data** to provide context, use a Resource.

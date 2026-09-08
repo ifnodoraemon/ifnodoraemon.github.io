@@ -197,11 +197,10 @@ If you don't want to manage GPU infrastructure, you can use commercial API fine-
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: How should you decide between Full Fine-Tuning, LoRA, and QLoRA?
-For the vast majority of enterprise use cases (such as tone adaptation, format compliance, and domain knowledge injection), **LoRA** delivers over 98% of full fine-tuning performance while slashing VRAM requirements by more than 70%, making it the industry default. On consumer GPUs with tight memory limits, **QLoRA** is the optimal path (see our [LLM Quantization Hands-On Guide](/en/articles/quantization-hands-on-guide/)). Full Fine-Tuning should be reserved exclusively for continuous pre-training on foundational reasoning where high-end multi-GPU clusters are readily available.
+### Q1: How should I choose between Full Fine-Tuning and LoRA?
 
-### Q2: What is the minimum dataset size required to achieve solid fine-tuning results?
-Data quality and diversity vastly outweigh raw volume. If your goal is style alignment or strict JSON output conformance, **200 to 500 meticulously curated samples** are often sufficient for noticeable convergence. For complex multi-turn vertical reasoning, a target of **2,000 to 5,000 diverse, noise-free Q&A pairs** is recommended; blindly feeding tens of thousands of scraped, uncurated rows frequently induces severe overfitting and catastrophic forgetting.
+Generally, LoRA is recommended as it significantly reduces computational requirements while retaining the base model's capabilities. If VRAM is extremely limited, consider QLoRA as detailed in our [LLM Quantization Hands-On Guide](/en/articles/quantization-hands-on-guide/).
 
-### Q3: How do you systematically evaluate fine-tuned model quality beyond casual manual testing?
-Establish a three-tier automated evaluation framework: run standardized benchmarks via `lm-evaluation-harness` to detect catastrophic forgetting in base reasoning; deploy a blind LLM-as-a-Judge test against an immutable domain Golden Testset to score win rates, rubric compliance, and hallucination rates; and enforce automated schema validation on generated outputs. For setup architectures and evaluation harnesses, consult our [Comprehensive LLM Evaluation Guide](/en/articles/llm-evaluation-guide/).
+### Q2: How much training data is needed?
+
+Data quality is more important than quantity. Preparing 200-500 high-quality samples is usually enough for good results, while too much low-quality data can cause catastrophic forgetting.

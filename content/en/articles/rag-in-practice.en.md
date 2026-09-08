@@ -219,9 +219,14 @@ print(result) # Outputs specific scores between 0 and 1 for each metric
 ```
 *Run this evaluation script every time you modify chunking strategies or swap Embedding models. Deploy changes only if the scores (especially Faithfulness) strictly improve or remain perfectly stable.*
 
-## Frequently Asked Questions
+---
+## Frequently Asked Questions (FAQ)
 
-- **Inaccurate Retrieval**: First check the match between your splitting strategy and the Embedding model.
-- **Hallucinations in Answers**: Emphasize in the prompt to "answer solely based on the provided documents."
-- **High Latency**: Consider caching retrieval results for popular queries and using Flash-Lite to reduce LLM latency.
-- **High Costs**: Pre-compute Embeddings for static documents, and only process incremental data in real-time.
+### Q1: How can I fix inaccurate retrieval in my RAG system?
+First, verify the alignment between your semantic chunking strategy and the Embedding model you are using. For complex scenarios, adopting multi-vector retrieval or hybrid search pipelines can significantly improve precision.
+
+### Q2: What should I do to prevent hallucinations in RAG answers?
+To mitigate hallucinations, explicitly instruct the model to "answer solely based on the provided documents." You can follow the [prompt engineering guide](/en/articles/prompt-engineering-guide/) to design stricter context assembly templates with proper citations.
+
+### Q3: How do I reduce high latency during concurrent RAG queries?
+For high-concurrency environments, consider adopting Late Interaction architectures (like ColBERT v2) for rapid reranking instead of heavy cross-encoders. Additionally, caching popular queries and leveraging optimized lightweight LLMs will further cut down latency.

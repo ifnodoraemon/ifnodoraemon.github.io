@@ -84,3 +84,13 @@ Adopt an 80/20 hybrid strategy combining algorithmic data synthesis with real-wo
 
 ### Q3: What is the optimal tradeoff between automated LLM-as-a-Judge and human evaluation?
 Automated judges are essential for continuous integration (CI/CD) and regression suites, delivering rapid, cost-effective detection of hallucination and schema violations across large batches. Human evaluation should be reserved for high-stakes edge cases, compliance verification, and periodic meta-calibration of judge prompts. The gold standard is treating human review as the ground truth to calibrate and adjust the variance tolerances of the automated panel.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q4: How can we avoid over-reliance on a single LLM as a judge in evaluations?
+By introducing a mixed panel of judges and multiple blind evaluations, biases can be significantly reduced. For detailed implementations, refer to our [LLM Fine-Tuning Guide](/en/articles/fine-tuning-guide/) to optimize the judge models themselves.
+
+### Q5: Why is Context Precision so critical?
+Context Precision dictates not just retrieval accuracy but directly impacts generation quality. Optimizing this often requires targeted [LLM fine-tuning](/en/articles/fine-tuning-guide/) on business-specific data to improve recall.

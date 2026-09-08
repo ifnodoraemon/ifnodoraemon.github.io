@@ -587,7 +587,7 @@ graph LR
 
 - **What's the difference between Skills and System Prompts?** System Prompts are built-in platform instructions that developers cannot modify. Skills are developer-defined, task-domain-specific knowledge extensions.
 - **Do Skills consume extra tokens?** Yes, Skills content is injected into the AI's context window, consuming token quota. But the three-layer progressive loading mechanism ensures only relevant Skills are loaded, minimizing waste.
-- **How do I choose between Skills and MCP?** If you need to **teach AI how to do things** (standards, workflows, templates), use Skills. If you need AI to **connect to external systems** (APIs, databases, filesystems), use MCP. They're complementary.
+- **How do I choose between Skills and MCP?** If you need to **teach AI how to do things** (standards, workflows, templates), use Skills. If you need AI to **connect to external systems** (APIs, databases, filesystems), use [MCP](/en/articles/mcp-guide/). They're complementary.
 - **Can Skills work across platforms?** Most Skills formats are platform-specific. But `AGENTS.md` is an open standard supported by OpenAI, GitHub, Google, Anthropic, and more — currently the best cross-platform option.
 - **Do OpenAI's GPTs count as Skills?** GPTs are essentially "Skills + Model + Tools" pre-packaged as a product. They bundle Instructions, Knowledge, and Capabilities together — a higher-level form of Skills.
 - **How many Skills should a project have?** There's no fixed number. Follow the "single responsibility" principle — each Skill solves one specific domain's problems. Typically 3-8 Skills cover a mid-size project's main needs.

@@ -14,7 +14,7 @@ An AI Agent is an AI system capable of **perceiving its environment, making auto
 - 🔄 **Loop execution**: Continuously adjust actions based on feedback
 - 🛠️ **Tool calling**: Search the web, execute code, operate databases
 - 📋 **Task planning**: Break down complex goals into actionable steps
-- 🧠 **Memory management**: Maintain context and state over long conversations
+- 🧠 **Memory management**: Maintain [context](/en/articles/context-engineering-guide/) and state over long conversations
 
 ## Architecture Design
 
@@ -181,17 +181,14 @@ Because standard HTTP requests usually timeout after 60 seconds, a synchronous b
 For a `Coder Agent` with code execution capabilities (like the `execute_python` tool from Step 2), it is utterly irresponsible to run its generated code directly on the host machine—this is highly susceptible to Prompt Injection attacks leading to catastrophic `rm -rf` scenarios. The only enterprise-grade solution is routing execution via gRPC to completely physically isolated, lightweight MicroVMs (like AWS Firecracker VMs or heavily restricted Docker sidecars) for sandbox execution. Even if an Agent "jailbreaks" and generates malicious commands, it will merely destroy a disposable sandbox with a nanosecond lifecycle, guaranteeing the absolute safety of the host application.
 
 ## Conclusion
-In 2026, building excellent AI Agents has long surpassed the infantile phase of "writing two lines of prompt and blindly calling an API." To actually deploy large language models to enterprise production lines and withstand millions of malicious requests and traffic spikes, it has evolved into a hyper-dimensional backend discipline merging **exact state-machine topological design, centralized distributed scheduling, microsecond-level cache control, and OS-level sandbox defense**.
+In 2026, building excellent AI Agents has long surpassed the infantile phase of "writing two lines of [prompt](/en/articles/prompt-engineering-guide/) and blindly calling an API." To actually deploy large language models to enterprise production lines and withstand millions of malicious requests and traffic spikes, it has evolved into a hyper-dimensional backend discipline merging **exact state-machine topological design, centralized distributed scheduling, microsecond-level cache control, and OS-level sandbox defense**.
 
 ---
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: How should engineering teams choose between LangChain/LangGraph, LlamaIndex, and building custom frameworks?
-LangGraph is ideal for complex, multi-step stateful workflows requiring human-in-the-loop and interruption recovery, while LlamaIndex excels in document-centric RAG pipelines. For mission-critical production systems requiring ultra-low latency, deterministic controls, and high concurrency, writing a lightweight custom Agent Loop around native APIs often provides superior maintainability. For architectural trade-offs, explore our guide on [From Prompt to Loop Engineering](/en/articles/loop-engineering/).
+### Q1: How can we extend an Agent's capabilities through external protocols?
+In practical applications, Agents need to interact with various external systems. We recommend using the [MCP Protocol](/en/articles/mcp-guide/), which completely decouples tool calling from business logic and provides a standardized extension mechanism. This improves security and simplifies architecture design.
 
-### Q2: What is the fundamental difference between the ReAct paradigm and native Function Calling?
-ReAct is a prompting pattern that relies on the model outputting textual Thought/Action/Observation steps parsed by regex, which is fragile under edge cases. Native Function Calling is an alignment capability trained directly into foundation models to emit structured JSON arguments conforming to provided schemas with high reliability. Modern agent runtimes typically leverage native Function Calling at the execution layer while orchestrating overall planning via stateful graphs.
-
-### Q3: How do you effectively mitigate Agent tool-calling hallucinations and infinite execution loops?
-First, strictly validate and summarize tool return payloads before re-injecting them into the message history to prevent error compounding. Second, implement hard runtime guardrails, strict iteration and budget caps, and no-progress detectors to trip safety breakers. Detailed defensive patterns are detailed in [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/).
+### Q2: How do Agents handle large-scale concurrent requests?
+By combining Redis persistence mechanisms with distributed task orchestration engines (such as Temporal), Agents can achieve extremely strong concurrent processing and disaster recovery capabilities. This is much more stable than traditional monolithic synchronous architectures.

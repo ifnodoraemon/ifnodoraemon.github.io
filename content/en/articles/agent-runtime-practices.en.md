@@ -108,7 +108,7 @@ For example:
 - `goal_manage` can easily become "the model must plan before acting"
 - a report block tree can quietly turn into "outline first, fill section by section, finalize at the end"
 
-That is just a phase machine in disguise.
+That is just a phase machine in disguise. To understand how to break this orchestration limit, read about [loop engineering](/en/articles/loop-engineering/).
 
 We ended up setting a very explicit rule for ourselves: **structured state is optional scaffolding, not a mandatory thinking path.** The model may use subgoals to externalize decomposition, may store stable facts in working memory, or may continue exploring directly. The runtime should never assume that because a structure exists, the model must follow a fixed sequence around it.
 
@@ -195,3 +195,13 @@ Every tool invocation must be governed by asynchronous timeout budgets (typicall
 
 ### Q3: What is the recommended strategy when dealing with context window overflow in long-horizon agent tasks?
 Avoid naive sliding-window truncations that discard foundational system instructions or critical historical constraints. Instead, employ hierarchical context hygiene: prune verbose raw tool outputs into compact summaries, persist stable conclusions into dedicated working memory structures, and periodically synthesize older conversational turns into rolling digests. For implementation details, refer to our [Context Engineering Guide](/en/articles/context-engineering-guide/).
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q4: How should Agent Runtime handle exception flows?
+Instead of crashing, the Runtime should catch errors and return them to the model as state or observations. This allows the model to autonomously decide the next action, and you can also refer to [loop engineering](/en/articles/loop-engineering/) for optimization.
+
+### Q5: Why avoid hardcoding business logic into the Runtime?
+Hardcoding diminishes the LLM's reasoning capabilities, degrading it into a simple workflow executor. A more elegant approach is designing these as constrained tools for safe exploration.

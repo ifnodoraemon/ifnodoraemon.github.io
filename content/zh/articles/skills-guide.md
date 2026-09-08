@@ -587,7 +587,7 @@ graph LR
 
 - **Skills 和 System Prompt 有什么区别？** System Prompt 是平台内置的、开发者无法修改的底层指令。Skills 是开发者自定义的、针对特定任务领域的专业知识扩展。
 - **使用 Skills 会消耗额外的 Token 吗？** 是的，Skills 的内容会被注入到 AI 的上下文窗口中，占用 Token 额度。但三层渐进式加载机制确保只有相关的 Skills 才会被加载，最大限度减少浪费。
-- **如何选择该用 Skills 还是 MCP？** 如果你需要**教 AI 怎么做事**（规范、流程、模板），用 Skills；如果你需要**让 AI 连接外部系统**（API、数据库、文件系统），用 MCP。两者是互补关系。
+- **如何选择该用 Skills 还是 MCP？** 如果你需要**教 AI 怎么做事**（规范、流程、模板），用 Skills；如果你需要**让 AI 连接外部系统**（API、数据库、文件系统），用 [MCP](/articles/mcp-guide/)。两者是互补关系。
 - **Skills 可以跨平台通用吗？** 目前大部分 Skills 格式是平台专属的。但 `AGENTS.md` 作为开放标准已被 OpenAI、GitHub、Google、Anthropic 等多平台支持，是目前最好的跨平台方案。
 - **OpenAI 的 GPTs 算不算 Skills？** GPTs 本质上是"Skills + 模型 + 工具"的预封装产品。它将 Instructions（指令）、Knowledge（知识库）和 Capabilities（工具权限）打包在一起，可以看作更高级的 Skills 表现形式。
 - **一个项目应该有多少个 Skills？** 没有固定数量。遵循"单一职责"原则，每个 Skill 解决一个具体领域的问题。通常 3-8 个 Skills 即可覆盖一个中型项目的主要需求。

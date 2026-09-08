@@ -127,3 +127,22 @@ A defense-in-depth approach is mandatory: use microVM isolation (such as Firecra
 
 ### Q3: Why do agents still get caught in repetitive retry loops even with real-time feedback?
 Infinite loops typically occur when error messages simply append to an ever-growing prompt context, causing attention degradation where the model repeats failing commands. Production runtimes must implement structured state diffing, explicit trajectory memory, and backtracking mechanisms that interrupt the loop and force strategy switching after repeated failures.
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How to design effective multi-task sandboxes for environment scaling training?
+Designing effective sandboxes requires covering diverse real-world scenarios, such as OS dependency conflicts and network anomalies. High-fidelity execution feedback is essential; refer to [Loop Engineering](/en/articles/loop-engineering/) for orchestrating agent stability.
+
+### Q2: Why is plain text chain-of-thought insufficient for practical sysadmin tasks?
+Plain text reasoning lacks grounding in real physical or system states, causing models to fall into confident but flawed logic. Environment scaling forces models to adjust based on real errors, embodying the best practices of [Loop Engineering](/en/articles/loop-engineering/).
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How to design effective multi-task sandboxes for environment scaling training?
+Designing effective sandboxes requires covering diverse real-world scenarios, such as OS dependency conflicts and network anomalies. High-fidelity execution feedback is essential; refer to [Loop Engineering](/en/articles/loop-engineering/) for orchestrating agent stability.
+
+### Q2: Why is plain text chain-of-thought insufficient for practical sysadmin tasks?
+Plain text reasoning lacks grounding in real physical or system states, causing models to fall into confident but flawed logic. Environment scaling forces models to adjust based on real errors, embodying the best practices of [Loop Engineering](/en/articles/loop-engineering/).

@@ -103,13 +103,12 @@ From "how to say" to "when to stop", AI engineering is rapidly converging with t
 
 ---
 
+---
+
 ## Frequently Asked Questions (FAQ)
 
-### Q1: What is the fundamental difference between a Loop architecture and a DAG-based workflow?
-A DAG (Directed Acyclic Graph) assumes predetermined deterministic pathways where step transitions are known ahead of time, making it ideal for predictable pipeline automation. In contrast, Loop Engineering addresses open-ended, exploratory tasks with high uncertainty, relying on an adaptive closed-loop convergence system (Goal, Drive, Harness, Checker, Gates). In production systems, high-performing agents often blend both: a DAG or state machine coordinates top-level stages while individual nodes execute autonomous convergence loops (see [Building AI Agent Applications from Scratch](/en/articles/build-ai-agent/)).
+### Q1: How should termination conditions be designed in Loop Engineering?
+Termination conditions must be metrics that can be objectively judged by machines. In Agent development, this is typically determined by test coverage or returns from independent verification nodes to avoid subjective bias. For more practices, refer to [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/).
 
-### Q2: How can engineering teams mechanically eliminate doom-loops when agents fail repeatedly?
-Doom-loops occur when accumulated error traces in the context window bias the model into repeating ineffective actions. Mechanically resolving this requires control-plane interventions: enforcing hard physical circuit breakers (max iteration counts and token spend gates), employing an isolated-context Checker to avoid confirmation bias, and applying state deduplication at the runtime layer (explore [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/)).
-
-### Q3: When should you adopt a Multi-Agent architecture versus a single robust Agent?
-Stick with a single agent paired with a separated Maker-Checker evaluator when tasks are inherently sequential and benefit from unified working memory. Multi-agent systems should only be introduced when subtasks have crisp logical boundaries, require strict tool permission isolation (e.g., sandboxed code execution vs. web fetching), and operate on independent contexts. Prematurely introducing multi-agent choreography usually amplifies debugging friction, token consumption, and state drift without adding reliability.
+### Q2: Why is the ReAct architecture prone to doom-loops?
+Because every failed attempt is appended to the context, causing context pollution and amplifying the model's error bias. By isolating the context with Loop Engineering's independent referee (Checker) mechanism and setting safety gates, doom-loops can be effectively blocked.

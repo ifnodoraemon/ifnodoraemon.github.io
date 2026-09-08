@@ -79,6 +79,3 @@ Prompt Engineering focuses on crafting instructions, role personas, and few-shot
 
 ### Q2: How can developers handle context overflow and degradation in long-horizon Agent tasks?
 Rather than naively relying on million-token nominal limits, developers must enforce the Write and Select strategies within the W-S-C-I framework. Offload intermediate step outputs and raw document dumps into external storage and selectively pull high-SNR snippets on demand via [RAG retrieval pipelines](/en/articles/rag-in-practice/) to eliminate attention dilution and context distraction.
-
-### Q3: What practical techniques work best for dynamic context compression?
-Three highly effective production patterns include: 1) rolling-window state summarization, where a compact secondary LLM periodically distills conversation history into a structured goals-and-state manifest; 2) tool call squashing, which condenses iterative command retries and extensive console outputs into single-line factual outcomes; and 3) hierarchical memory trees that preserve top-level semantic anchors in active context while referencing detailed operational logs externally.

@@ -232,3 +232,13 @@ While pre-training scaling laws face diminishing returns due to the exhaustion o
 
 ### Q3: Will emerging architectures like Mamba or Linear Attention completely displace Transformers?
 An outright replacement is unlikely in the immediate term, but hybrid architectures (combining Attention with State Space Models) are already capturing critical niches. Transformers enjoy a deeply entrenched ecosystem of hardware-optimized kernels and KV Cache infrastructure, whereas SSMs specifically shine at subduing $O(1)$ memory state bottlenecks in ultra-long contexts; for practical deployment trade-offs, consult our [2026 Mainstream Foundation Models Comparison](/en/articles/model-comparison-2026/).
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: What guidance do historical technology choices offer for modern AI development?
+Modern AI development is still constrained by compute and data scale. Understanding historical choices helps developers make sensible architectural trade-offs under resource limits, a dynamic further discussed in the [Deep Dive into 2026 AI Trends](/en/articles/ai-trends-2026/).
+
+### Q2: Will symbolism completely disappear in future AI?
+No. With the rise of Neuro-symbolic AI, combining the explainability of symbolism with the generalization of deep learning has become a frontier research direction, especially in vertical domains requiring rigorous logical reasoning.

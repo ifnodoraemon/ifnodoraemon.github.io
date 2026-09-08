@@ -70,13 +70,12 @@ Both architectural paradigms prove that mathematical optimization can break phys
 
 ---
 
+---
+
 ## Frequently Asked Questions (FAQ)
 
-### Q1: Can DeepSeek MLA be stacked with FP8 or INT4 quantization in production deployments?
-Yes, MLA and low-bit numeric quantization operate on orthogonal dimensions and are commonly paired in production inference engines. While MLA reduces the dimensionality of stored key-value vectors via latent projections, weights and the latent KV representations can still be quantized to FP8 (E4M3/E5M2) or INT4, reducing aggregate VRAM demand to less than 10% of native MHA. For detailed quantization benchmarks and tradeoff analysis, see our [LLM Quantization Precision Guide](/en/articles/quantization-precision-guide/).
+### Q1: Can DeepSeek MLA be stacked with FP8 or INT4 quantization?
+Yes. While MLA reduces the dimensionality of stored key-value vectors via latent projections, weights and the latent KV representations can still be quantized to FP8 or INT4, reducing aggregate VRAM demand significantly. For detailed quantization benchmarks, see our [LLM Quantization Precision Guide](/en/articles/quantization-precision-guide/).
 
-### Q2: How does Kimi KDA compare with pure SSM / Mamba architectures in long-context retrieval?
-Pure state-space models (SSMs) frequently suffer from information decay and loss of precision on exact multi-hop recall benchmarks such as Needle In A Haystack (NIAH). KDA resolves this by retaining a direct attention query mechanism while compressing contextual background token redundancy into an incremental recurrent delta state, thereby achieving linear memory complexity without sacrificing factual precision.
-
-### Q3: What infrastructure considerations are critical when serving MLA models across distributed clusters?
-MLA decoding relies on dynamic matrix decompression and de-projection, shifting bottlenecks from memory capacity toward tensor compute and cross-GPU communications. Serving clusters require high-bandwidth NVLink for intra-node tensor parallelism and low-latency RDMA (RoCEv2 or InfiniBand) for inter-node scaling. Detailed hardware abstraction and driver topology guidelines can be found in [Mapping the NVIDIA GPU Driver Stack](/en/articles/nvidia-gpu-package-architecture/).
+### Q2: How does Kimi KDA compare with pure SSM / Mamba architectures?
+Pure SSMs frequently suffer from information decay on exact multi-hop recall benchmarks. KDA resolves this by retaining a direct attention query mechanism while compressing contextual background token redundancy into an incremental recurrent delta state.

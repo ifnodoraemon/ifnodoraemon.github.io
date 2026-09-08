@@ -191,16 +191,12 @@ print(invoice_info.model_dump_json(indent=2))
 3. **Privacy and Security**: Ensure no sensitive information is included before uploading images/videos.
 4. **Hallucination Risks**: Multimodal models can still hallucinate when describing fine image details.
 5. **Cost Control**: Image token consumption is much higher than text; be mindful of costs during bulk image analysis.
-
 ---
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: How does the production maturity of vision understanding compare to speech understanding?
-Vision understanding (document parsing, UI breakdown, defect detection) has attained enterprise-grade maturity, reliably hitting >95% precision when paired with structured JSON schema outputs. In contrast, while native end-to-end voice models now achieve sub-300ms latency, handling multi-speaker crosstalk, heavy background noise, and extreme dialect shifts still triggers occasional hallucinations, making voice currently best suited for interactive concierge and customer assistant workflows.
+### Q1: How do multimodal models handle long video inputs?
+Models like Gemini 3.1 Pro natively support long video understanding. In practice, developers can extract keyframes or process videos in segments, combined with [Prompt Engineering Practice Guide](/en/articles/prompt-engineering-guide/) to optimize analysis accuracy and efficiency.
 
-### Q2: How much more expensive are multimodal API calls compared to text, and how can teams control costs?
-Because vision models slice images into Vision Transformer tiles, an uncompressed 4K image can consume over 6,800 tokens—the equivalent of reading a 10-page text document. Production architectures must enforce backend downscaling (capping max dimensions to 1024px or 512px) and implement local filter models to discard redundant video frames, cutting API spend by upwards of 80%; for detailed token pricing benchmarks, see our [2026 Mainstream Foundation Models Comparison](/en/articles/model-comparison-2026/).
-
-### Q3: What is the architectural difference between image understanding (Vision-LLMs) and image generation models?
-Vision-LLMs employ Vision Transformers to project image patches into the autoregressive text embedding space, optimizing for high-level semantic extraction and reasoning. Image generation models, on the other hand, rely on Diffusion Transformers (DiT) to denoise latent noise maps into pixel space. When building end-to-end multimodal agents, architects often use structured [prompt engineering strategies](/en/articles/prompt-engineering-guide/) to turn visual interpretations into precise generation directives.
+### Q2: How are Vision Tokens calculated?
+Multimodal models typically split images into Patches based on Vision Transformers (ViT). High-resolution images lead to massive token consumption, so performing downsampling in the backend is recommended to balance costs and parsing precision.
