@@ -68,7 +68,7 @@ featuredStats:
 |------|---------|-------------------|----------------|
 | SimpleBench（推理） | 90%（超越人类 83%） | 85.2% | 87.4% |
 | OSWorld-Verified（计算机操控） | 75.0%（超越人类） | — | — |
-| HumanEval（代码） | 93.8% | 95.2% | 91.6% |
+| HumanEval（代码） | 93.8% | 96.4% | 91.6% |
 | SWE-bench Pro（工程） | ✅ 改进 | 72.7%（Opus 4.6） | — |
 | MATH（数学） | 88.5% | 86.3% | 89.7% |
 
@@ -156,7 +156,7 @@ response = model.generate_content("解释量子计算的基本原理")
 
 当流量到达一定规模时，你必须计算**自托管模型（Self-hosting）**与**商业 API** 的成本交叉点（Breakeven Point）。
 
-我们以购买/租赁 1 台 **8x H100 (80GB)** 服务器（约 $30/小时 按需租赁，或整机买断折旧）运行 **Llama-4-70B** 为例：
+我们以购买/租赁 1 台 **8x H100 (80GB)** 服务器（约 $30/小时 按需租赁，或整机买断折旧）运行 **Llama-4-Maverick-400B** 为例：
 - 假设 API (比如 GPT-5.4) 的混合成本估算为 **$5.00 / 1M tokens**。
 - 一台 8x H100 开满 Continuous Batching 并使用 vLLM 的 PagedAttention 后，假设每秒吞吐量（Tokens per Second）为 $T$。
 
@@ -179,7 +179,7 @@ KV_Cache_Size_Per_Token = 2 * 2 * n_layers * n_kv_heads * d_head
 // d_model：隐藏层维度（70B 模型一般是 8192）
 ```
 
-以 70B 模型为例，每一个 Token 消耗约 **2.6MB** 显存。
+以 70B 模型为例，每一个 Token 消耗约 **0.31MB** 显存。
 如果你想支持 **1M（一百万）Tokens** 的超长上下文单次对话，它的 KV Cache 就需要吃掉：
 `1,000,000 * 2.6 MB ≈ 2,600,000 MB ≈ 2.6 TB`
 

@@ -554,8 +554,8 @@ timeline
     2024 : .cursorrules 单文件 : 最早的自定义指令实现
     2025 Q1 : CLAUDE.md + copilot-instructions.md : 多平台开始支持项目级配置
     2025 Q2 : ChatGPT Custom Instructions + GPTs 成熟 : OpenAI 建立三层定制体系
-    2025 Q3 : SKILL.md 发布 : Anthropic 推出模块化 Skills 系统
-    2025 Q4 : AGENTS.md 标准 : OpenAI 和 GitHub 联合推动跨平台开放标准
+    2025-10-16 : SKILL.md 发布 : Anthropic 推出模块化 Skills 系统
+    2025-05-16 : AGENTS.md 标准 : OpenAI 和 GitHub 联合推动跨平台开放标准
     2026 Q1 : Agent Skills 2.0 : 子代理、动态注入、跨平台兼容
 ```
 

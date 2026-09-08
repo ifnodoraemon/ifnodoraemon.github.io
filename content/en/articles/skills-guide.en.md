@@ -554,8 +554,8 @@ timeline
     2024 : .cursorrules single file : Earliest custom instructions implementation
     2025 Q1 : CLAUDE.md + copilot-instructions.md : Multiple platforms begin supporting project-level config
     2025 Q2 : ChatGPT Custom Instructions + GPTs mature : OpenAI establishes three-tier customization system
-    2025 Q3 : SKILL.md launches : Anthropic introduces modular Skills system
-    2025 Q4 : AGENTS.md standard : OpenAI and GitHub co-drive cross-platform open standard
+    2025-10-16 : SKILL.md launches : Anthropic introduces modular Skills system
+    2025-05-16 : AGENTS.md standard : OpenAI and GitHub co-drive cross-platform open standard
     2026 Q1 : Agent Skills 2.0 : Subagents, dynamic injection, cross-platform compatibility
 ```
 

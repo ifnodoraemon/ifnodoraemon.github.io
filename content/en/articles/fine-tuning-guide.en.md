@@ -89,7 +89,7 @@ lora_config = LoraConfig(
 # Apply LoRA
 model = get_peft_model(model, lora_config)
 model.print_trainable_parameters()
-# → trainable params: 13.6M || all params: 8.03B || 0.17%
+# → trainable params: 13.6M || all params: 109B || 0.17%
 ```
 
 ### Step 3: Large-Scale Multi-GPU Training (DeepSpeed ZeRO)
@@ -100,21 +100,21 @@ Single-GPU QLoRA is only suitable for small-scale validation. Once you move to p
 - **ZeRO-2**: Partitions both optimizer states + gradients. Ideal for 8x A100 single-node training with virtually no speed degradation.
 - **ZeRO-3**: Partitions optimizer states, gradients, **and the model parameters themselves**. Necessary for extreme cross-node training of models with billions/trillions of parameters, but will result in catastrophic slowdowns if the RDMA network is subpar due to hyper-frequent communication overhead.
 
-```javascript
-// deepspeed_config.json (Enterprise ZeRO-2 Configuration Example)
+```json
+
 {
-    "fp16": { "enabled": "auto", "loss_scale": 0 },
-    "bf16": { "enabled": "auto" },
+    "fp16": { "enabled": true, "loss_scale": 0 },
+    "bf16": { "enabled": true },
     "zero_optimization": {
-        "stage": 2, // Enable ZeRO-2 gradient & optimizer partitioning
+        "stage": 2, 
         "allgather_partitions": true,
         "allgather_bucket_size": 2e8,
-        "overlap_comm": true, // Overlap compute and communication to hide network latency
+        "overlap_comm": true, 
         "reduce_scatter": true,
         "reduce_bucket_size": 2e8
     },
-    "gradient_accumulation_steps": "auto",
-    "gradient_clipping": "auto" // Crucial to prevent Loss explosion
+    "gradient_accumulation_steps": 1,
+    "gradient_clipping": 1.0 
 }
 ```
 

@@ -391,7 +391,7 @@ This single parameter change can be more impactful than all other optimizations 
 |-----|------------|---------------|--------|
 | **H100/H800** | FP8 (`--quantization fp8`) | <1% | ~1.5x throughput, zero-calibration |
 | **A100/L40S** | INT8 GPTQ/AWQ | ≈0% | 2x memory reduction |
-| **Blackwell B200** | NVFP4 | ≤1% | 3x throughput vs FP8 |
+| **Blackwell B200** | NVFP4 | ≤1% | 2x throughput vs FP8 |
 
 **KV Cache Quantization** (`--kv-cache-dtype fp8_e5m2`): Halves KV Cache memory with minimal quality impact, especially impactful for long-context (8K-128K) scenarios.
 

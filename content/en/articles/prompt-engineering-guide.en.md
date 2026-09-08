@@ -218,8 +218,8 @@ Do not expect to stop hackers purely by "begging" the model in the system prompt
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # Before ever hitting the core GPT-5.4, pass the input through the extremely fast, cheap Guard model for binary classification
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Prompt-Guard-86M")
-model = AutoModelForSequenceClassification.from_pretrained("meta-llama/Prompt-Guard-86M")
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-Prompt-Guard-2-86M")
+model = AutoModelForSequenceClassification.from_pretrained("meta-llama/Llama-Prompt-Guard-2-86M")
 
 inputs = tokenizer(user_input, return_tensors="pt")
 logits = model(**inputs).logits

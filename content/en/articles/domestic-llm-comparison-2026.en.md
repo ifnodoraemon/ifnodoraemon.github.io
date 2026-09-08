@@ -12,7 +12,7 @@ Entering the third quarter of 2026, the global AI landscape has undergone a monu
 In the summer of 2026, three landmark milestones emerged:
 1. **Kimi K3**: A colossus with 2.8 Trillion MoE parameters, introducing **Kimi Delta Attention (KDA)** to secure a 1512 Elo ranking in the LMSYS Chatbot Arena Tier 1;
 2. **GLM-5.3**: Pioneering the **"Environment Scaling"** post-training paradigm, claiming #1 worldwide on Terminal-Bench 3.0 for autonomous CLI task execution;
-3. **DeepSeek-V4-Pro**: A 1.6 Trillion MoE open-weights model, achieving 80.6% to 95.2% on SWE-bench Verified for production-grade software engineering.
+3. **DeepSeek-V4-Pro**: A 1.6 Trillion MoE open-weights model, achieving 80.6% to 96.4% on SWE-bench Verified for production-grade software engineering.
 
 How should enterprise software architects and AI practitioners navigate these distinct technologies? This guide provides an objective, empirical breakdown of architectural philosophies, real-world stress tests, and API vs. self-hosting cost economics.
 
@@ -40,7 +40,7 @@ Moonshot AI advanced the frontier of attention mathematics. While scaling total 
 Zhipu AI recognized that pre-training data hits diminishing returns without autonomous feedback loops. GLM-5.3 was immersed in tens of thousands of containerized Linux sandboxes, terminal consoles, and security environments. Through millions of self-directed trial-and-error cycles, GLM-5.3 developed unmatched reliability in bash command synthesis, log interpretation, and kernel-level troubleshooting.
 
 ### DeepSeek-V4-Pro: Uncompromising Open Efficiency
-DeepSeek continues to lead open-weights economics. With 1.6T total MoE parameters and only 49B dynamically activated, its enhanced Multi-head Latent Attention (MLA) enables full FP8 deployment across 32x H100 GPUs or high-end domestic compute clusters, slashing total cost of ownership to 1/15th of proprietary equivalents while resolving 95.2% on SWE-bench Verified. For physical cluster orchestration and production inference, see our [DeepSeek-V4 & Kimi K3 Bare-Metal Deployment Guide](/en/articles/deepseek-v4-kimi-k3-deployment-guide/) and our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
+DeepSeek continues to lead open-weights economics. With 1.6T total MoE parameters and only 49B dynamically activated, its enhanced Multi-head Latent Attention (MLA) enables full FP8 deployment across 32x H100 GPUs or high-end domestic compute clusters, slashing total cost of ownership to 1/15th of proprietary equivalents while resolving 96.4% on SWE-bench Verified. For physical cluster orchestration and production inference, see our [DeepSeek-V4 & Kimi K3 Bare-Metal Deployment Guide](/en/articles/deepseek-v4-kimi-k3-deployment-guide/) and our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
 
 ---
 
@@ -53,8 +53,8 @@ DeepSeek continues to lead open-weights economics. With 1.6T total MoE parameter
 | **Parameters** | 2.8T MoE (104B Active) | 850B MoE Hybrid | 1.6T MoE (49B Active) |
 | **LMSYS Arena Elo** | **1512 (Tier-1)** | 1498 | 1506 |
 | **AA Intelligence** | 65.0 | 63.8 | 64.8 |
-| **SWE-bench Verified**| 85.6% | 82.4% | **80.6% ~ 95.2% (#1)** |
-| **Terminal-Bench 3.0**| 79.8% | **91.4% (Global #1)** | 83.2% |
+| **SWE-bench Verified**| 85.6% | 82.4% | **80.6% ~ 96.4% (#1)** |
+| **Terminal-Bench 3.0**| 79.8% | **28.3 (Open-source #1)** | 83.2% |
 | **Context Window** | 1,000,000 Tokens (1M) | 1,000,000 Tokens (1M) | 1,000,000 Tokens (1M) |
 | **Throughput (TPS)** | 90 Tokens/s | 115 Tokens/s (Flash: 260) | 95 Tokens/s |
 | **Open Weights** | **Yes (Self-Hostable)** | Yes (Open-Weights) | **Yes (Open Benchmark)** |

@@ -89,7 +89,7 @@ lora_config = LoraConfig(
 # 应用 LoRA
 model = get_peft_model(model, lora_config)
 model.print_trainable_parameters()
-# → trainable params: 13.6M || all params: 8.03B || 0.17%
+# → trainable params: 13.6M || all params: 109B || 0.17%
 ```
 
 ### Step 3：大规模多卡训练 (DeepSpeed ZeRO)
@@ -100,21 +100,21 @@ model.print_trainable_parameters()
 - **ZeRO-2**：同时分片优化器状态 + 梯度。适合 8x A100 单机训练，基本不掉速。
 - **ZeRO-3**：将优化器、梯度、**以及模型权重本身**全部分片。适合百亿/千亿参数极限跨机训练，但由于通信极其频繁，如果 RDMA 网络不行，速度会灾难性下降。
 
-```javascript
-// deepspeed_config.json (企业级 ZeRO-2 配置示例)
+```json
+
 {
-    "fp16": { "enabled": "auto", "loss_scale": 0 },
-    "bf16": { "enabled": "auto" },
+    "fp16": { "enabled": true, "loss_scale": 0 },
+    "bf16": { "enabled": true },
     "zero_optimization": {
-        "stage": 2, // 开启 ZeRO-2 梯度与优化器状态切分
+        "stage": 2, 
         "allgather_partitions": true,
         "allgather_bucket_size": 2e8,
-        "overlap_comm": true, // 开启计算与通信重叠，隐藏网络延迟
+        "overlap_comm": true, 
         "reduce_scatter": true,
         "reduce_bucket_size": 2e8
     },
-    "gradient_accumulation_steps": "auto",
-    "gradient_clipping": "auto" // 必须开启梯度裁剪，防止 Loss 爆炸
+    "gradient_accumulation_steps": 1,
+    "gradient_clipping": 1.0 
 }
 ```
 

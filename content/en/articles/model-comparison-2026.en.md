@@ -68,7 +68,7 @@ Based on public benchmarks and [standardized LLM evaluation frameworks](/en/arti
 |------|---------|-------------------|----------------|
 | SimpleBench (Reasoning) | 90% (Beats human 83%) | 85.2% | 87.4% |
 | OSWorld-Verified (Computer Control) | 75.0% (Beats human) | — | — |
-| HumanEval (Code) | 93.8% | 95.2% | 91.6% |
+| HumanEval (Code) | 93.8% | 96.4% | 91.6% |
 | SWE-bench Pro (Engineering) | ✅ Improved | 72.7% (Opus 4.6) | — |
 | MATH | 88.5% | 86.3% | 89.7% |
 
@@ -156,7 +156,7 @@ In enterprise production environments, hardcoding applications to a single LLM A
 
 When traffic reaches a certain scale, you must calculate the exact **Breakeven Point** between **Self-hosting** and **Commercial APIs**.
 
-Let's take running **Llama-4-70B** on a rented/purchased **8x H100 (80GB)** server (roughly $30/hour on-demand) as an example:
+Let's take running **Llama-4-Maverick-400B** on a rented/purchased **8x H100 (80GB)** server (roughly $30/hour on-demand) as an example:
 - Assume a blended API cost (e.g., GPT-5.4) of **$5.00 / 1M tokens**.
 - Given an 8x H100 node fully utilizing Continuous Batching and vLLM's PagedAttention, maximizing token throughput ($T$) per second.
 
@@ -179,7 +179,7 @@ KV_Cache_Size_Per_Token = 2 * 2 * n_layers * n_kv_heads * d_head
 // d_model: Hidden layer dimension (usually 8192 for a 70B model)
 ```
 
-For a 70B model, every single Token consumes approximately **2.6MB** of VRAM.
+For a 70B model, every single Token consumes approximately **0.31MB** of VRAM.
 If you want to support an ultra-long context of **1 Million Tokens** for a single conversation, its KV Cache alone will devour:
 `1,000,000 * 2.6 MB ≈ 2,600,000 MB ≈ 2.6 TB`
 

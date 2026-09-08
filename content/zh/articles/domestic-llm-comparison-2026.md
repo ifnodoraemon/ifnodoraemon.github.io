@@ -11,8 +11,8 @@ description: "深度实测 2026 年三大国产顶流大模型：从 Kimi K3 的
 
 2026 年夏天，三大国产技术里程碑接踵而至：
 1. **Kimi K3**：拥有 2.8 万亿总参数（MoE），独创 **Kimi Delta Attention（KDA）**，以 1512 Elo 直插 LMSYS 竞技场第一梯队；
-2. **GLM-5.3**：不拼单纯参数规模，全面确立 **“环境缩放（Environment Scaling）”** 范式，在 Terminal-Bench 3.0 夺得全球第一；
-3. **DeepSeek-V4-Pro**：1.6 万亿参数 MoE 开放权重，0813 升级版将 SWE-bench Verified 真实工程修复推至 95.2% 的惊人高度。
+2. **GLM-5.3**：不拼单纯参数规模，全面确立 **“环境缩放（Environment Scaling）”** 范式，在 Terminal-Bench 3.0 夺得开源第一 (28.3 分)；
+3. **DeepSeek-V4-Pro**：1.6 万亿参数 MoE 开放权重，0813 升级版将 SWE-bench Verified 真实工程修复推至 96.4% 的惊人高度。
 
 面对技术路线迥异的“国产三强”，企业架构师与 AI 开发者在实际工程中该如何选型？本文将从**核心架构原理解析**、**三大真实工程场景横向实测**到**API 与私有化部署成本测算**，为你提供最客观中立的决策指南。
 
@@ -47,7 +47,7 @@ description: "深度实测 2026 年三大国产顶流大模型：从 Kimi K3 的
 
 ### 3. DeepSeek-V4-Pro：极致架构效率与开源普惠
 DeepSeek 延续了极致性价比路线。1.6 万亿 MoE 架构仅需动态激活 49B 参数，继续深化 **MLA（Multi-head Latent Attention）** 低秩压缩与无共享专家路由。
-* **工程优势**：在 32 张 H100（4 节点）乃至国产高端算力集群上即可完成 FP8 完整部署，以相当于欧美同级闭源模型 1/15 的硬件门槛，实现了 80.6%~95.2% 的 SWE-bench 解决率。具体私有化落地可参考 [DeepSeek-V4 与 Kimi K3 物理机群部署指南](/articles/deepseek-v4-kimi-k3-deployment-guide/) 与 [vLLM 在线推理服务实战](/articles/vllm-serving-guide/)。
+* **工程优势**：在 32 张 H100（4 节点）乃至国产高端算力集群上即可完成 FP8 完整部署，以相当于欧美同级闭源模型 1/15 的硬件门槛，实现了 80.6%~96.4% 的 SWE-bench 解决率。具体私有化落地可参考 [DeepSeek-V4 与 Kimi K3 物理机群部署指南](/articles/deepseek-v4-kimi-k3-deployment-guide/) 与 [vLLM 在线推理服务实战](/articles/vllm-serving-guide/)。
 
 ---
 
@@ -60,8 +60,8 @@ DeepSeek 延续了极致性价比路线。1.6 万亿 MoE 架构仅需动态激�
 | **基础参数规模** | 2.8T MoE (104B 动态激活) | 850B MoE (稀疏混合) | 1.6T MoE (49B 动态激活) |
 | **LMSYS Arena Elo** | **1512 (盲测第一阵营)** | 1498 | 1506 |
 | **AA 智能指数** | 65.0 | 63.8 | 64.8 |
-| **SWE-bench Verified**| 85.6% | 82.4% | **80.6% ~ 95.2% (榜首)** |
-| **Terminal-Bench 3.0**| 79.8% | **91.4% (全球第一)** | 83.2% |
+| **SWE-bench Verified**| 85.6% | 82.4% | **80.6% ~ 96.4% (榜首)** |
+| **Terminal-Bench 3.0**| 79.8% | **28.3 (开源第一)** | 83.2% |
 | **原生上下文窗口** | 1,000,000 Tokens (1M) | 1,000,000 Tokens (1M) | 1,000,000 Tokens (1M) |
 | **实测输出吞吐 (TPS)**| 90 Tokens/s | 115 Tokens/s (Flash: 260) | 95 Tokens/s |
 | **开放权重与自建** | **支持开源自建** | 支持开放权重 | **全面开放权重 (开源标杆)** |

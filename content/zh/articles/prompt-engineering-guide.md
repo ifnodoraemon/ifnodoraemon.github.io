@@ -218,8 +218,8 @@ system_prompt = f"""
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # 在到达核心 GPT-5.4 之前，先让廉价极速的 Guard 模型做二分类
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Prompt-Guard-86M")
-model = AutoModelForSequenceClassification.from_pretrained("meta-llama/Prompt-Guard-86M")
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-Prompt-Guard-2-86M")
+model = AutoModelForSequenceClassification.from_pretrained("meta-llama/Llama-Prompt-Guard-2-86M")
 
 inputs = tokenizer(user_input, return_tensors="pt")
 logits = model(**inputs).logits

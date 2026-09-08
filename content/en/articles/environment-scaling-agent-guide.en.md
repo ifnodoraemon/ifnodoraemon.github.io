@@ -11,7 +11,7 @@ If 2024 was the zenith of Prompt Engineering and 2025 normalized Context Enginee
 
 Every developer who built LLM agents has experienced the frustration: no matter how meticulously you craft the system prompt or provide few-shot exemplars, the moment the model receives permission to run bash commands or configure infrastructure, a single non-zero exit code frequently leads to cascading hallucinations and infinite retry loops.
 
-Why did **GLM-5.3** capture the world #1 rank on **Terminal-Bench 3.0** with an unprecedented **91.4%** success rate across thousands of real-world system tasks? This guide analyzes how Environment Scaling has become the foundation of modern agentic AI and provides an enterprise-ready implementation of zero-escape sandboxing.
+Why did **GLM-5.3** capture the world #1 rank on **Terminal-Bench 3.0** with an unprecedented **28.3** score across thousands of real-world system tasks? This guide analyzes how Environment Scaling has become the foundation of modern agentic AI and provides an enterprise-ready implementation of zero-escape sandboxing.
 
 ---
 

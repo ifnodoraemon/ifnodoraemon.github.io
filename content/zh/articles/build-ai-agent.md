@@ -175,7 +175,7 @@ with RedisSaver(redis_conn) as checkpointer:
 1. **API Gateway 发号器**：接收用户请求，不阻塞执行，而是立即返回一个 UUID 凭证（`Job_ID`）。
 2. **Temporal Worker 监听队列**：后台独立的 Worker 集群监听队列，拉起专属的 LangGraph 线程开始执行。
 3. **休眠与自动轮询**：当 Agent 必须等待某个外部网页渲染时，调用 `await asyncio.sleep(300)`。此时 Temporal 会将当前 Agent 的完整内存树状结构 Checkpoint 落盘数据库，并释放 CPU 等待唤醒资源（100% Crash-safe）。
-4. **状态双向全工真回调**：任务完成后，通过 Webhook 或 WebSocket 将最终答案精确推送回浏览器前端。
+4. **状态双向全双工回调**：任务完成后，通过 Webhook 或 WebSocket 将最终答案精确推送回浏览器前端。
 
 ### 3. 多模态与多智能体的沙盒物理隔离
 对于具备代码执行能力的 `Coder Agent`（如我们在 Step 2 写的 `execute_python` Tool），决不能直接在宿主机内执行其生成的代码（极易遭受 Prompt Injection 注入攻击而导致 rm -rf 悲剧）。企业级的唯一做法是通过 gRPC 接口，让 Agent 与完全物理隔离的极轻量级 MicroVM（如 AWS Firecracker 虚拟机或高度受限的 Docker 边车）进行沙盒通信。即使 Agent “越狱”生成了恶意指令，也只会导致当前纳秒级生命周期的沙盒熔断销毁，无法伤及宿主应用分毫。

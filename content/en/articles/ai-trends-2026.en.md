@@ -109,7 +109,7 @@ Transformers dominated the industry for 8 years (for context on how they histori
 
 The "Everything in the Cloud" paradigm was shattered by exorbitant bandwidth costs and corporate privacy red lines. The 2026 doctrine is: "If it can run on the phone, never send it to the cloud."
 
-- **The Extreme Compression of SLMs (Small Language Models)**: 1B to 8B parameter models (like Llama-4-8B, Qwen-5-3B) became the undisputed protagonists of edge arrays.
+- **The Extreme Compression of SLMs (Small Language Models)**: 1B to 8B parameter models (like Llama-4-Scout-17B, Qwen-5-3B) became the undisputed protagonists of edge arrays.
 - **Heterogeneous Compute & 4-Bit Quantization**:
   - On iOS and Android, developers use `MLX` or `ExecuTorch` to push models entirely offline.
   - Using extreme 4-bit or 3-bit quantization formats like **GGUF** or **EXL2** allows a 7B model to run comfortably within less than 4GB of mobile RAM.
@@ -158,7 +158,7 @@ This is the most dominant inference acceleration technique of 2026. It completel
 During traditional autoregressive generation, because the immense model weights must be hauled out of VRAM for every single Token generated, GPU compute cores are essentially idling 80% of the time waiting for memory transfers.
 **How Speculative Decoding Works**:
 1. **Drafting**: A tiny, blazing-fast "draft" model (e.g., Llama-3-8B) rapidly guesses the next $K$ tokens (e.g., writing out 5 words ahead).
-2. **Verifying**: The massive main model (e.g., Llama-4-70B) takes all $K$ tokens simultaneously and performs a **parallel** forward pass to verify them.
+2. **Verifying**: The massive main model (e.g., Llama-4-Maverick-400B) takes all $K$ tokens simultaneously and performs a **parallel** forward pass to verify them.
 3. **The ROI**: As long as the draft model gets it right even half the time, the large model accepts multiple tokens while only paying the memory fetch penalty once. This boosts generation speed (Tokens/s) by **2x to 2.5x** with zero degradation in mathematical precision.
 
 ### 2. Extreme Semantic Complexity Routing

@@ -44,7 +44,7 @@ What's your primary scenario?
 │   └─ VRAM-Starved (< 24GB)           → QLoRA (use NF4 quantized base + high-precision LoRA adapters)
 │
 ├─ Datacenter Inference (Pursuing Max Throughput & Lowest Cost)
-│   ├─ Bleeding Edge: Blackwell B200 → NVFP4 (≤1% accuracy loss, 3x throughput of FP8)
+│   ├─ Bleeding Edge: Blackwell B200 → NVFP4 (≤1% accuracy loss, 2x throughput of FP8)
 │   ├─ Modern: Hopper H100/H800      → FP8 E4M3 (<1% loss, 1.5x throughput, **zero calibration**)
 │   └─ Legacy: A100/L40S/T4          → INT8 / INT4 (GPTQ/AWQ) or SmoothQuant W8A8
 │
