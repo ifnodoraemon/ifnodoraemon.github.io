@@ -280,3 +280,13 @@ This discrepancy usually occurs because user-space dynamic linking paths fail to
 
 ### Q3: What causes Docker container GPU passthrough errors like "Failed to initialize NVML" or "could not select device driver"?
 These errors most commonly arise following an automatic host Linux kernel update that disconnects pre-compiled kernel modules from userspace libraries. First, verify that `nvidia-ctk runtime configure --runtime=docker` has configured the Docker daemon and restart the Docker service. If the host kernel was recently patched, execute `sudo dpkg-reconfigure nvidia-dkms-<version>` or reinstall matching kernel headers to recompile the dynamic kernel module for your active kernel version.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: What is the core difference between nvidia-dkms and linux-modules-nvidia?
+`nvidia-dkms` dynamically compiles the driver modules for the current system kernel, offering better compatibility with kernel upgrades, whereas `linux-modules-nvidia` is pre-compiled and breaks upon kernel updates. We recommend using DKMS in production, as outlined in the [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
+
+### Q2: How do I fix the "Driver/library version mismatch" error?
+This is caused by a version mismatch between the kernel-mode driver modules and user-mode libraries (libnvidia-*). You must completely uninstall the existing drivers and reinstall matching versions. Before doing this, review the [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/) for best practices on environment dependencies.

@@ -281,3 +281,13 @@ Driver API（由内核模块及 `libnvidia-compute` 提供，对应 `nvidia-smi`
 
 ### Q3: Docker 容器无法使用 GPU，报错 "Failed to initialize NVML" 或 "could not select device driver"，根因通常是什么？
 此类错误绝大多数发生在系统执行自动补丁更新之后。核心排查顺序为：先验证宿主机 `nvidia-container-toolkit` 是否已通过 `nvidia-ctk runtime configure --runtime=docker` 注入 Docker 守护进程配置并重启服务；再确认宿主机 Linux 内核是否发生静默升级，导致旧内核下的预编译驱动模块无法被新内核加载。如果显卡显存处于极限吃紧状态，也可参考 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 压缩模型显存，避免容器初始化分配显存失败。
+
+---
+
+## 常见问题 (FAQ)
+
+### Q1: nvidia-dkms 和 linux-modules-nvidia 有什么核心区别？
+`nvidia-dkms` 会在当前系统内核现场编译驱动模块，对内核升级的兼容性更好；而 `linux-modules-nvidia` 是预编译的，一旦内核升级就会失效。建议在生产环境中结合 [vLLM 生产级部署全指南](/articles/vllm-serving-guide/) 采用 dkms 方式。
+
+### Q2: 出现 "Driver/library version mismatch" 该怎么办？
+这是因为内核态驱动模块和用户态库 (libnvidia-*) 版本不一致导致。需要完全卸载现有驱动并重新安装匹配版本。在进行此类操作前，可以参考 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 了解环境依赖的最佳实践。

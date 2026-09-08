@@ -237,3 +237,13 @@ In enterprise deployments, an acceptable threshold typically requires a perplexi
 
 ### Q3: When should teams adopt mixed precision instead of full-model uniform quantization?
 Mixed precision is essential during model pre-training, fine-tuning (e.g., QLoRA), and inference pipelines where specific layers exhibit high numerical sensitivity. Typically, bulk matrix multiplications in feed-forward layers run on INT8/FP8 Tensor Cores, while fragile operations like token embeddings, LayerNorm, and Softmax remain in BF16 or FP32 to prevent numerical degradation.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q4: How can I resolve Out-of-Memory (OOM) issues during the quantization process?
+When quantizing large models, you can use block-wise loading techniques to control VRAM usage. For more detailed operational advice, please refer to the best practices in our [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/).
+
+### Q5: How well does the vLLM inference framework support various quantization formats?
+Mainstream quantization formats like AWQ and GPTQ are currently supported in most inference frameworks. For detailed information on using these formats in production environments, please consult our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).

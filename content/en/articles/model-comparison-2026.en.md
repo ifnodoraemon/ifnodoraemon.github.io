@@ -200,14 +200,10 @@ The foundation model landscape in March 2026:
 Best Practice: **Combine them based on task characteristics** — GPT-5-mini for simple tasks, Claude Sonnet 4.6 for coding/reasoning, Gemini 3.1 Pro for long documents, and GPT-5.4 for complex automation requiring computer control.
 
 ---
-
 ## Frequently Asked Questions (FAQ)
 
-### Q1: Which model is the best choice for everyday coding and complex software engineering in 2026?
-Based on comprehensive testing and developer sentiment, **Claude Sonnet 4.6** is the prime recommendation for day-to-day coding, offering Opus-tier output quality at a fraction of the cost ($3/$15 per 1M tokens). For multi-file architectural refactoring and autonomous repository-level engineering, **Claude Opus 4.6** leads the industry with a 72.7% SWE-bench Pro success rate and Agent Teams support. When end-to-end browser testing or desktop GUI manipulation is required, **GPT-5.4 Thinking** remains unmatched with its native computer use capabilities.
+### Q1: What is the core decision logic when choosing between GPT-4, Claude 3, and Gemini 1.5 series?
+For coding and complex reasoning tasks, the Claude 3 series demonstrates strong contextual coherence. For processing extremely long texts and multimodal tasks, the Gemini 1.5 series with its massive context window offers significant advantages. The GPT-4 series remains the most robust in general capabilities and ecosystem compatibility. For a more comprehensive evaluation matrix, please refer to our [LLM Evaluation Guide](/en/articles/llm-evaluation-guide/).
 
-### Q2: How can engineering teams effectively minimize commercial LLM API costs in production?
-Cost reduction begins with architectural design rather than brute-force rate limiting. Teams should leverage provider-level caching primitives such as Claude's Prompt Caching (slashing input fees up to 90%) and OpenAI's Tool Search to eliminate redundant context tokens, while delegating asynchronous evaluation workloads to Batch APIs at 50% discounts. Establishing a disciplined benchmark pipeline is critical for routing decisions, as detailed in our guide on [Building an LLM Evaluation System for Your Business](/en/articles/llm-evaluation-guide/).
-
-### Q3: How do the frontier US models handle Chinese language tasks compared to domestic Chinese alternatives?
-While GPT-5.4 and Claude 4.6 handle standard Chinese conversational queries with high fluency, they can struggle with localized regulatory compliance, idiomatic nuances, and domain-specific terminology. For organizations bound by domestic data residency requirements or seeking optimal price-performance on Chinese text corpora, reviewing our [2026 Frontier Chinese LLMs Benchmark and Architecture Guide](/en/articles/domestic-llm-comparison-2026/) provides actionable dual-routing strategies.
+### Q2: Is it strictly necessary to use international models for localized business scenarios in China?
+Not necessarily. Leading domestic LLMs have developed distinct advantages in Chinese semantic understanding and regulatory compliance, alongside more cost-effective API pricing tiers. However, for highly advanced general reasoning or global expansion use cases, international models are still preferred. For detailed comparisons of Chinese models, please see our [Domestic LLM Comparison](/en/articles/domestic-llm-comparison-2026/).

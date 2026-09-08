@@ -237,3 +237,13 @@ QLoRA 这座微调界的丰碑，为什么采用了奇怪的 `NF4 (NormalFloat 4
 
 ### Q3: 什么时候应该使用混合精度（Mixed Precision）而非全量量化？
 在模型训练、参数高效微调（如 LoRA/QLoRA）以及对数值敏感度极高的端到端生成场景中，混合精度是首选策略。工程上通常将占用参数量与计算量大头的线性投影层压缩至 INT8/FP8 以利用专用 Tensor Core 提速，而将易发生数值溢出的 Embedding 词表层、LayerNorm 层和 Softmax 概率归一化保留在 BF16/FP32，从而在显存与输出稳定性之间取得完美平衡。
+
+---
+
+## 常见问题 (FAQ)
+
+### Q4: 如何解决量化过程中的显存峰值（OOM）问题？
+在进行大模型量化时，可以采用分块加载（Block-wise loading）技术来控制显存占用。更详细的操作建议可以参考 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 中的最佳实践。
+
+### Q5: vLLM 推理框架对各种量化格式的支持情况如何？
+目前主流的量化格式如 AWQ, GPTQ 等均已在大多数推理框架中受支持。有关在生产环境中使用这些格式的详细信息，请参阅 [vLLM 生产级部署全指南](/articles/vllm-serving-guide/)。

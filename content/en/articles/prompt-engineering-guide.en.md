@@ -261,13 +261,12 @@ Prompt engineering is not a one-and-done job; it is a process of continuous iter
 
 ---
 
+---
+
 ## Frequently Asked Questions (FAQ)
 
-### Q1: When should I choose Few-Shot prompting over Zero-Shot in production?
-Few-Shot prompting is indispensable when enforcing strict custom formatting (such as complex JSON/YAML schemas), domain-specific classification taxonomies, or idiosyncratic writing tones where 3–5 representative examples anchor behavior. Conversely, for standard reasoning, code generation, or generalized translation on frontier reasoning models (like Claude Sonnet 4.6 or GPT-5.4), direct Zero-Shot instructions paired with Chain-of-Thought deliver higher latency efficiency and lower token usage. If example counts threaten your prompt budget, leverage dynamic sample selection techniques outlined in our [Context Engineering Guide](/en/articles/context-engineering-guide/).
+### Q1: What are the engineering tradeoffs between Few-shot and Zero-shot?
+In production, Zero-shot is ideal for clear, standard instructions where token efficiency is a priority. Few-shot is better when you need strict output formats (like JSON) or a specific domain tone. If context windows are a concern, you can dynamically retrieve examples using a [RAG approach](/en/articles/rag-in-practice/) (Dynamic Few-shot).
 
-### Q2: What are the foundational best practices for architecting an enterprise System Prompt?
-First, establish explicit behavioral boundaries and refusal protocols specifying what role the agent fulfills and what out-of-scope actions it must decline. Second, mandate structured schemas with deterministic fallback formats when tool calls or JSON decoding encounter exceptions. Third, avoid bloating static system prompts with large factual corpora; instead, inject verified knowledge on demand through an enterprise pipeline detailed in our [RAG in Practice Guide](/en/articles/rag-in-practice/).
-
-### Q3: Can system prompt instructions alone completely protect against prompt injection and jailbreaks?
-No, relying solely on prompt instructions ("ignore previous commands") is insufficient because LLMs inherently treat instructions and untrusted data within the same attention stream. Enterprise security demands defense-in-depth: run input through low-latency semantic classifier firewalls (such as Llama Prompt Guard 2), wrap untrusted external inputs in dynamically generated runtime GUID delimiters, and enforce least-privilege tool access with Human-in-the-Loop checkpoints before triggering destructive side effects.
+### Q2: What are the best practices for System Prompts?
+A System Prompt should establish a clear persona, boundaries, and strict constraints. Avoid hardcoding extensive background knowledge directly; instead, rely on [context engineering](/en/articles/context-engineering-guide/) to supply information on demand. Structuring your System Prompt with Markdown also helps the model parse instruction hierarchies effectively.
