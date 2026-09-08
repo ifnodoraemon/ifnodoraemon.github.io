@@ -340,9 +340,8 @@ Register the Server in Claude Desktop's `claude_desktop_config.json`:
   "mcpServers": {
     "notes": {
       "command": "python",
-      "args": ["note_server.py"],
-      "cwd": "/path/to/your/project"
-    }
+      "args": ["/path/to/your/project/note_server.py"],
+      }
   }
 }
 ```
@@ -355,7 +354,7 @@ Or in VS Code's `.vscode/mcp.json`:
     "notes": {
       "type": "stdio",
       "command": "python",
-      "args": ["note_server.py"]
+      "args": ["/path/to/your/project/note_server.py"]
     }
   }
 }

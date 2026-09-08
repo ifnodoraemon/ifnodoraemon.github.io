@@ -129,16 +129,17 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptTemplate
 
 # 1. 建立向量库连接并检索最相关的历史示例
-client = weaviate.Client("http://localhost:8080")
+client = weaviate.connect_to_local()
 embeddings = OpenAIEmbeddings()
 
 def get_dynamic_examples(user_query: str, k: int = 3):
     # 将用户 query 向量化并去 Weaviate 中近似搜索 (ANN)
     vector = embeddings.embed_query(user_query)
-    results = client.query.get("QA_History", ["question", "answer"])\
-        .with_near_vector({"vector": vector})\
-        .with_limit(k).do()
-    return results['data']['Get']['QA_History']
+    results = client.collections.get("QA_History").query.near_vector(
+        near_vector=vector, 
+        limit=k
+    )
+    return [obj.properties for obj in results.objects]
 
 # 2. 动态拼装 Prompt
 examples = get_dynamic_examples("如何处理数据库死锁？")

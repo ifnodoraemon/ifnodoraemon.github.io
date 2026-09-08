@@ -129,16 +129,17 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptTemplate
 
 # 1. Connect to Vector DB and retrieve relevant examples
-client = weaviate.Client("http://localhost:8080")
+client = weaviate.connect_to_local()
 embeddings = OpenAIEmbeddings()
 
 def get_dynamic_examples(user_query: str, k: int = 3):
     # Vectorize the user query and perform ANN search in Weaviate
     vector = embeddings.embed_query(user_query)
-    results = client.query.get("QA_History", ["question", "answer"])\
-        .with_near_vector({"vector": vector})\
-        .with_limit(k).do()
-    return results['data']['Get']['QA_History']
+    results = client.collections.get("QA_History").query.near_vector(
+        near_vector=vector, 
+        limit=k
+    )
+    return [obj.properties for obj in results.objects]
 
 # 2. Dynamically Assemble the Prompt
 examples = get_dynamic_examples("How to resolve a database deadlock?")

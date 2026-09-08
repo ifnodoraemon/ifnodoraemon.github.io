@@ -105,7 +105,7 @@ chunks = semantic_splitter.create_documents([raw_text])
 
 ### HNSW 核心参数揭秘与 Trade-off
 
-如果你自托管 Weaviate 或 Milvus，必须精通以下两个底层控制参数：
+如果你自托管 Milvus 等向量库，必须精通以下底层控制参数：
 
 | 参数 | 物理意义 | 内存及性能影响 | 召回率 (Recall) 影响 |
 |------|----------|----------------|----------------------|
@@ -113,7 +113,7 @@ chunks = semantic_splitter.create_documents([raw_text])
 | `efConstruction` | 构建索引时，探索邻居的候选队列深度。 | **决定构建时间**：不直接增加内存大小，但翻倍此参数会让数据插入速度慢 4 倍。 | 越高，图的拓扑结构越优化，能显著提升并发查询速度和极限召回率。 |
 
 **企业级最佳实践**：
-如果预算受限无法将所有向量放入内存，务必开启 **IVF-PQ (倒排文件 + 乘积量化)**。它将 3072 维的浮点数压缩为 8 bit 的聚类中心 ID，可将内存占用缩减 90%，代价是大约 3-5% 的召回率折损（可通过粗排后的精确 Rerank 弥补）。
+如果预算受限无法将所有向量放入内存，务必开启量化策略（如 Milvus 的 **IVF-PQ**，或 Weaviate 的 **HNSW-PQ**）。它将 3072 维的浮点数压缩为 8 bit 的聚类中心 ID，可将内存占用缩减 90%，代价是大约 3-5% 的召回率折损（可通过粗排后的精确 Rerank 弥补）。
 
 ### 检索策略
 
@@ -122,7 +122,7 @@ from langchain_community.vectorstores import Weaviate
 import weaviate
 
 # 连接向量数据库
-client = weaviate.Client(url="http://localhost:8080")
+client = weaviate.connect_to_local()
 
 # 创建检索器（混合搜索 = 向量 + BM25 关键词）
 retriever = vectorstore.as_retriever(

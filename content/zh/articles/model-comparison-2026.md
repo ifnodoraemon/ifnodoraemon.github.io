@@ -172,7 +172,7 @@ response = model.generate_content("解释量子计算的基本原理")
 在 2026 年，作为 AI 架构师，你必须会心算这段公式：
 
 ```text
-KV_Cache_Size_Per_Token = 2 * 2 * n_layers * d_model
+KV_Cache_Size_Per_Token = 2 * 2 * n_layers * n_kv_heads * d_head
 // 2 代表 Key 和 Value 两个矩阵
 // 第二个 2 代表 FP16/BF16 占用的字节数 (2 bytes)
 // n_layers：模型层数（70B 模型一般是 80）

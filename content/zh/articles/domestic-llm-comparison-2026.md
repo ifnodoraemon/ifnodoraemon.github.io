@@ -47,7 +47,7 @@ description: "深度实测 2026 年三大国产顶流大模型：从 Kimi K3 的
 
 ### 3. DeepSeek-V4-Pro：极致架构效率与开源普惠
 DeepSeek 延续了极致性价比路线。1.6 万亿 MoE 架构仅需动态激活 49B 参数，继续深化 **MLA（Multi-head Latent Attention）** 低秩压缩与无共享专家路由。
-* **工程优势**：在 8 张 H100 乃至国产高端算力集群上即可完成 FP8 完整部署，以相当于欧美同级闭源模型 1/15 的硬件门槛，实现了 80.6%~95.2% 的 SWE-bench 解决率。具体私有化落地可参考 [DeepSeek-V4 与 Kimi K3 物理机群部署指南](/articles/deepseek-v4-kimi-k3-deployment-guide/) 与 [vLLM 在线推理服务实战](/articles/vllm-serving-guide/)。
+* **工程优势**：在 32 张 H100（4 节点）乃至国产高端算力集群上即可完成 FP8 完整部署，以相当于欧美同级闭源模型 1/15 的硬件门槛，实现了 80.6%~95.2% 的 SWE-bench 解决率。具体私有化落地可参考 [DeepSeek-V4 与 Kimi K3 物理机群部署指南](/articles/deepseek-v4-kimi-k3-deployment-guide/) 与 [vLLM 在线推理服务实战](/articles/vllm-serving-guide/)。
 
 ---
 

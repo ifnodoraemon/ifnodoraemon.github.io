@@ -39,7 +39,7 @@ DeepSeek's Multi-head Latent Attention compresses the hidden representations int
 
 c_t^{KV} = W^{DKV} h_t
 
-where latent dimension d_c << N_heads × d_h. **Only the compressed latent representation c_t^{KV} is retained in GPU memory**.
+where latent dimension d_c << N_heads × d_h. **Only the compressed latent representation c_t^{KV} and the decoupled RoPE keys are retained in GPU memory**.
 
 During decoding, keys and values are projected on the fly. Because projection matrices can be fused directly into output layers, KV Cache memory drops by over **75%** while fully preserving independent multi-head attention expressive power.
 

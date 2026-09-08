@@ -172,7 +172,7 @@ The core pain point supporting long context windows is the **KV Cache VRAM Explo
 In 2026, as an AI Architect, you must be able to mentally calculate this formula:
 
 ```text
-KV_Cache_Size_Per_Token = 2 * 2 * n_layers * d_model
+KV_Cache_Size_Per_Token = 2 * 2 * n_layers * n_kv_heads * d_head
 // First 2: Key and Value matrices
 // Second 2: Bytes per element in FP16/BF16 (2 bytes)
 // n_layers: Number of transformer layers (usually 80 for a 70B model)

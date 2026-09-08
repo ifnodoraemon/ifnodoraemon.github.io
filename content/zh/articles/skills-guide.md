@@ -359,7 +359,7 @@ GPTs 是 OpenAI 的"Skills 包"概念——用户可以创建针对特定任务�
 
 **③ Codex Agent + AGENTS.md（开发者级）**
 
-OpenAI 的 Codex 是面向专业开发者的 AI 编码代理。Codex 原生支持 `AGENTS.md` 开放标准：
+现代 AI 编码代理（如 Cline、Aider）原生支持 `AGENTS.md` 开放标准：
 
 - 在仓库根目录放置 `AGENTS.md`，Codex 自动读取项目结构、编码规范和构建命令
 - 支持在 monorepo 中嵌套放置 `AGENTS.md`，子项目获得独立的上下文指导

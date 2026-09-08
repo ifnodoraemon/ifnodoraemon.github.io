@@ -30,7 +30,7 @@ All foundational vision models operate on underlying **Vision Transformers (ViT)
 - **Base Token Overhead**: Using GPT-5.4 as an example, every image first deducts an initialization overhead of 85 base tokens.
 - **Patch Scaling**: Assuming it slices the image into 512x512 blocks (Tiles), each Tile corresponds to 170 tokens.
 - **The Cost Assassin**: If you upload a raw 4K resolution (3840 x 2160) giant image, it will be sliced into roughly `ceil(3840/512) * ceil(2160/512) = 8 * 5 = 40` Tiles.
-- **The Final Bill**: `85 + (40 * 170) = 6,885 Tokens`. Merely "glancing" at a high-res original image costs the equivalent of reading 10 pages of pure text!
+- **The Final Bill**: `85 + (6 * 170) = 1,105 Tokens`. Merely "glancing" at a high-res original image costs the equivalent of reading 10 pages of pure text!
 
 **Architect's Anti-Pitfall Guide**:
 In production environments, **it is absolutely forbidden for the frontend to upload high-definition raw images directly to the native API**.

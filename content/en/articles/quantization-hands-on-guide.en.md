@@ -40,7 +40,7 @@ What do you want to do?
 │   → vLLM + FP8 full quantization, squeeze every drop from H100
 │
 └─ Route 4: I need to fine-tune a large model on limited VRAM (QLoRA)
-    → BitsAndBytes NF4 quantized base + LoRA adapter, fine-tune 70B on 24GB
+    → BitsAndBytes NF4 quantized base + LoRA adapter, fine-tune 32B on 24GB
 ```
 
 ---
@@ -391,13 +391,13 @@ Effect: KV Cache memory usage **halved**. Particularly impactful for long-contex
 
 ## Route 4: Quantization for Fine-Tuning (QLoRA)
 
-When you want to fine-tune a 70B model on a consumer GPU (e.g., RTX 4090 with 24GB VRAM), QLoRA is the only viable option.
+When you want to fine-tune a 32B model on a consumer GPU (e.g., RTX 4090 with 24GB VRAM), QLoRA is the only viable option.
 
 ### Core Concept
 
 ```text
 QLoRA's genius:
-  1. Quantize base model with NF4 → 70B shrinks from 140GB to ~35GB
+  1. Quantize base model with NF4 → 32B shrinks from 64GB to ~16GB
   2. Freeze quantized base weights (don't train!)
   3. Attach tiny LoRA adapters (typically just tens of MB)
   4. Only train the LoRA adapters

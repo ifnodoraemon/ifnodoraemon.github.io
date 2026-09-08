@@ -40,7 +40,7 @@ featuredStats:
 │   → vLLM + FP8 全量化，零校准或静态校准，极限压榨 H100
 │
 └─ 路线四：我要在有限显存下微调大模型（QLoRA）
-    → BitsAndBytes NF4 量化基座 + LoRA 适配器，24GB 显卡微调 70B
+    → BitsAndBytes NF4 量化基座 + LoRA 适配器，24GB 显卡微调 32B
 ```
 
 ---
@@ -409,7 +409,7 @@ vllm serve Qwen/Qwen3-32B-Instruct \
 
 ## 路线四：微调场景的量化（QLoRA）
 
-当你想在消费级 GPU（如 RTX 4090 的 24GB 显存）上微调 70B 级别的大模型时，QLoRA 是唯一可行的方案。
+当你想在消费级 GPU（如 RTX 4090 的 24GB 显存）上微调 32B 级别的大模型时，QLoRA 是唯一可行的方案。
 
 ### 核心思路
 

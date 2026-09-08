@@ -39,7 +39,7 @@ graph LR
 ### Step 1: Install Dependencies
 
 ```bash
-pip install langchain langchain-anthropic tavily-python
+pip install langchain langchain-anthropic langgraph tavily-python
 ```
 
 ### Step 2: Define Tools
@@ -91,7 +91,8 @@ class AgentState(TypedDict):
 # 2. Node Logic: The Model Reasoning Node
 def call_model(state: AgentState):
     llm = ChatAnthropic(model="claude-sonnet-4-6-20260217")
-    llm_with_tools = llm.bind_tools(tools)
+    tools = [get_current_time, search_web, execute_python]
+llm_with_tools = llm.bind_tools(tools)
     response = llm_with_tools.invoke(state["messages"])
     return {"messages": [response]}
 

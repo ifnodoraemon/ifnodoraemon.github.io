@@ -228,11 +228,11 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
 
 ```text
 # V1 前缀缓存指标（Counter 类型，精确可靠）
-vllm:prefix_cache_hits              # 命中的缓存 Token 总数 (Counter)
-vllm:prefix_cache_queries           # 查询的缓存 Token 总数 (Counter)
+vllm_prefix_cache_hits              # 命中的缓存 Token 总数 (Counter)
+vllm_prefix_cache_queries           # 查询的缓存 Token 总数 (Counter)
 
 # 用 PromQL 计算实时命中率（Grafana 面板用这个）
-(rate(vllm:prefix_cache_hits[5m]) / rate(vllm:prefix_cache_queries[5m])) * 100
+(rate(vllm_prefix_cache_hits[5m]) / rate(vllm_prefix_cache_queries[5m])) * 100
 ```
 
 **健康的缓存命中率参考值**：
@@ -467,7 +467,7 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
 批处理 / 离线推理（高吞吐优先）：2048 ~ 4096
   → GPU 被塞满，吞吐拉满，但单请求延迟会上升
 
-自适应思路：监控 vllm:num_requests_waiting
+自适应思路：监控 vllm_num_requests_waiting
   → 如果长期 > 0，说明请求在排队，考虑增大 max-num-seqs 或加机器
   → 如果长期 = 0 且 GPU 利用率 < 50%，说明太空闲，可以减小此值节约资源
 ```
@@ -634,29 +634,29 @@ vLLM 内置了丰富的 Prometheus 指标端点（`http://localhost:8000/metrics
 
 ```text
 # ─── Token 计量 ───
-vllm:prompt_tokens_total            # 累计输入 Token 总数 (Counter)
-vllm:generation_tokens_total        # 累计输出 Token 总数 (Counter)
-vllm:request_prompt_tokens          # 每请求输入 Token 分布 (Histogram)
-vllm:request_generation_tokens      # 每请求输出 Token 分布 (Histogram)
+vllm_prompt_tokens_total            # 累计输入 Token 总数 (Counter)
+vllm_generation_tokens_total        # 累计输出 Token 总数 (Counter)
+vllm_request_prompt_tokens          # 每请求输入 Token 分布 (Histogram)
+vllm_request_generation_tokens      # 每请求输出 Token 分布 (Histogram)
 
 # ─── 缓存效率 ───（V1 新指标，替代已废弃的 gpu_prefix_cache_hit_rate）
-vllm:prefix_cache_hits              # 缓存命中 Token 总数 (Counter)
-vllm:prefix_cache_queries           # 缓存查询 Token 总数 (Counter)
-vllm:prompt_tokens_cached           # 已缓存的 Prompt Token 数
-vllm:prompt_tokens_recomputed       # 被缓存但仍需重算的 Token 数
+vllm_prefix_cache_hits              # 缓存命中 Token 总数 (Counter)
+vllm_prefix_cache_queries           # 缓存查询 Token 总数 (Counter)
+vllm_prompt_tokens_cached           # 已缓存的 Prompt Token 数
+vllm_prompt_tokens_recomputed       # 被缓存但仍需重算的 Token 数
 
 # ─── 延迟指标 ───
-vllm:time_to_first_token_seconds    # 首 Token 延迟 TTFT (Histogram)
-vllm:inter_token_latency_seconds    # Token 间延迟 ITL (Histogram)
-vllm:e2e_request_latency_seconds    # 端到端请求延迟 (Histogram)
+vllm_time_to_first_token_seconds    # 首 Token 延迟 TTFT (Histogram)
+vllm_inter_token_latency_seconds    # Token 间延迟 ITL (Histogram)
+vllm_e2e_request_latency_seconds    # 端到端请求延迟 (Histogram)
 
 # ─── 资源饱和度 ───
-vllm:gpu_cache_usage_perc           # KV Cache 显存占用比（走向 1.0 就危险了！）
-vllm:num_requests_running           # 正在执行的请求数
-vllm:num_requests_waiting           # 排队等待的请求数
+vllm_gpu_cache_usage_perc           # KV Cache 显存占用比（走向 1.0 就危险了！）
+vllm_num_requests_running           # 正在执行的请求数
+vllm_num_requests_waiting           # 排队等待的请求数
 
 # ─── 吞吐量 ───
-vllm:num_preemptions_total          # 请求被抢占次数（如果频繁 → 显存不够）
+vllm_num_preemptions_total          # 请求被抢占次数（如果频繁 → 显存不够）
 ```
 
 > **⚠️ 关键配置**：vLLM 的 API 服务使用多进程架构。**必须设置** `PROMETHEUS_MULTIPROC_DIR` 环境变量指向一个共享临时目录，否则 Prometheus 指标数据会丢失或不一致。
@@ -665,12 +665,12 @@ vllm:num_preemptions_total          # 请求被抢占次数（如果频繁 → �
 
 | 面板 | PromQL | 告警阈值 | 含义 |
 |------|--------|---------|------|
-| **🔥 缓存命中率** | `rate(vllm:prefix_cache_hits[5m]) / rate(vllm:prefix_cache_queries[5m]) * 100` | <50% 持续 10min | 缓存效率低，利润下降 |
-| Token 吞吐量 | `rate(vllm:generation_tokens_total[5m])` | 突降 >50% | 引擎可能卡住 |
-| KV Cache 使用率 | `vllm:gpu_cache_usage_perc` | >0.95 | 即将 OOM |
-| 请求排队长度 | `vllm:num_requests_waiting` | >100 持续 1min | 需要扩容 |
-| P99 首Token延迟 | `histogram_quantile(0.99, rate(vllm:time_to_first_token_seconds_bucket[5m]))` | >3s | 用户体验恶化 |
-| 抢占次数 | `rate(vllm:num_preemptions_total[5m])` | >0 持续 | 显存严重不足 |
+| **🔥 缓存命中率** | `rate(vllm_prefix_cache_hits[5m]) / rate(vllm_prefix_cache_queries[5m]) * 100` | <50% 持续 10min | 缓存效率低，利润下降 |
+| Token 吞吐量 | `rate(vllm_generation_tokens_total[5m])` | 突降 >50% | 引擎可能卡住 |
+| KV Cache 使用率 | `vllm_gpu_cache_usage_perc` | >0.95 | 即将 OOM |
+| 请求排队长度 | `vllm_num_requests_waiting` | >100 持续 1min | 需要扩容 |
+| P99 首Token延迟 | `histogram_quantile(0.99, rate(vllm_time_to_first_token_seconds_bucket[5m]))` | >3s | 用户体验恶化 |
+| 抢占次数 | `rate(vllm_num_preemptions_total[5m])` | >0 持续 | 显存严重不足 |
 
 ### Token 计费的五大陷阱
 
@@ -835,12 +835,12 @@ vllm serve /models/Qwen2.5-72B-Instruct \
 ```text
 ✅ 设置 PROMETHEUS_MULTIPROC_DIR（多进程指标聚合必须）
 ✅ Grafana 看板必看 6 个面板:
-   - 缓存命中率: rate(vllm:prefix_cache_hits[5m]) / rate(vllm:prefix_cache_queries[5m])
-   - KV Cache 使用率: vllm:gpu_cache_usage_perc（>0.95 告警）
-   - Token 吞吐量: rate(vllm:generation_tokens_total[5m])
-   - 请求排队长度: vllm:num_requests_waiting（>100 告警）
+   - 缓存命中率: rate(vllm_prefix_cache_hits[5m]) / rate(vllm_prefix_cache_queries[5m])
+   - KV Cache 使用率: vllm_gpu_cache_usage_perc（>0.95 告警）
+   - Token 吞吐量: rate(vllm_generation_tokens_total[5m])
+   - 请求排队长度: vllm_num_requests_waiting（>100 告警）
    - P99 TTFT: histogram_quantile(0.99, ...)（>3s 告警）
-   - 抢占次数: rate(vllm:num_preemptions_total[5m])（>0 告警）
+   - 抢占次数: rate(vllm_num_preemptions_total[5m])（>0 告警）
 ```
 
 ### 六、计费与业务层

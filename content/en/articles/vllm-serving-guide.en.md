@@ -216,11 +216,11 @@ vLLM V1 uses Counter-based metrics (replacing the deprecated `gpu_prefix_cache_h
 
 ```text
 # V1 prefix cache metrics (Counter type, precise and reliable)
-vllm:prefix_cache_hits              # Cache hit tokens total (Counter)
-vllm:prefix_cache_queries           # Cache query tokens total (Counter)
+vllm_prefix_cache_hits              # Cache hit tokens total (Counter)
+vllm_prefix_cache_queries           # Cache query tokens total (Counter)
 
 # PromQL for real-time hit rate (use this in Grafana)
-(rate(vllm:prefix_cache_hits[5m]) / rate(vllm:prefix_cache_queries[5m])) * 100
+(rate(vllm_prefix_cache_hits[5m]) / rate(vllm_prefix_cache_queries[5m])) * 100
 ```
 
 **Healthy cache hit rate benchmarks**:
@@ -478,17 +478,17 @@ User → [API Gateway (auth/rate-limit)] → [vLLM Engine]
 
 ```text
 # Token metering
-vllm:prompt_tokens_total / vllm:generation_tokens_total
+vllm_prompt_tokens_total / vllm_generation_tokens_total
 
 # Cache efficiency (V1, replaces deprecated gpu_prefix_cache_hit_rate)
-vllm:prefix_cache_hits / vllm:prefix_cache_queries
-# PromQL: (rate(vllm:prefix_cache_hits[5m]) / rate(vllm:prefix_cache_queries[5m])) * 100
+vllm_prefix_cache_hits / vllm_prefix_cache_queries
+# PromQL: (rate(vllm_prefix_cache_hits[5m]) / rate(vllm_prefix_cache_queries[5m])) * 100
 
 # Latency
-vllm:time_to_first_token_seconds / vllm:inter_token_latency_seconds
+vllm_time_to_first_token_seconds / vllm_inter_token_latency_seconds
 
 # Saturation
-vllm:gpu_cache_usage_perc / vllm:num_requests_waiting / vllm:num_preemptions_total
+vllm_gpu_cache_usage_perc / vllm_num_requests_waiting / vllm_num_preemptions_total
 ```
 
 > **⚠️ Must set** `PROMETHEUS_MULTIPROC_DIR` env var for correct multi-process metric collection.

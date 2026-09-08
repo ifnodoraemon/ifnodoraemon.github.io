@@ -139,7 +139,7 @@ class SecureSandboxedAgentRuntime:
 传统 RLHF 依赖人类标注偏好或静态文本的打分函数，容易遭遇奖励作弊（Reward Hacking）且缺乏客观物理验证；而环境缩放将真实的操作系统沙箱、编译器和单元测试作为环境反馈源，由终端执行的真实状态转移与 Exit Code 构成强闭环。关于如何在外层系统约束模型行为，可参考 [AI Agent 架构演进：从 Prompt 到 Loop 工程](/articles/loop-engineering/)。
 
 ### Q2: 允许 Agent 自主执行 Shell 命令时，如何防止容器逃逸和高危破坏？
-必须采用多层纵深防御体系：底层使用轻量级微虚拟机（如 Firecracker、Kata Containers 或 gVisor）实现内核级隔离，应用层剥夺 root 权限并挂载只读根文件系统，网络层实施白名单访问控制并配置严苛的超时与 CPU 配额。构建健壮且可观测的智能体运行环境，建议参考 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/)。
+必须采用多层纵深防御体系：底层使用轻量级微虚拟机（如 Firecracker、Kata Containers）或用户态沙箱（如 gVisor）实现内核级隔离，应用层剥夺 root 权限并挂载只读根文件系统，网络层实施白名单访问控制并配置严苛的超时与 CPU 配额。构建健壮且可观测的智能体运行环境，建议参考 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/)。
 
 ### Q3: 为什么引入沙箱交互后，模型依然容易出现死循环或重复犯错？
 这是由于缺乏显式的状态跟踪和失败归因机制。若仅将原始报错追加在上下文末尾，长文本累积会导致模型注意力稀释并重复无效尝试；应在运行时设计结构化的状态快照、差异对比（Diffing）与回溯逻辑，强制模型在连续多次失败后切换解题策略。

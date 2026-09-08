@@ -124,7 +124,7 @@ description: 回顾 AI 七十年发展史上的六次关键技术岔路口，剖
 
 2017 年，Google Brain 团队发表了 *"Attention Is All You Need"*，提出 Transformer 架构。在此之前，序列建模的霸主是 **RNN/LSTM**。
 
-短短三年内，Transformer 统一了 NLP（BERT/GPT）、计算机视觉（ViT）、语音（Whisper）和多模态（CLIP），成为有史以来最具通用性的神经网络架构。
+短短五年内，Transformer 统一了 NLP（BERT/GPT）、计算机视觉（ViT）、语音（Whisper）和多模态（CLIP），成为有史以来最具通用性的神经网络架构。
 
 ### 为什么 Transformer 击败了 RNN/LSTM？
 

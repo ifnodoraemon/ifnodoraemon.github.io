@@ -60,9 +60,12 @@ def calibrated_judge(answer_A, answer_B, rubric):
     # Second scoring: Blind swap, B is first
     score_2 = invoke_judge(model, rubric, A=answer_B, B=answer_A)
     
-    # Only when both judgments agree, it's counted as a valid Eval
-    if score_1.winner == score_2.winner:
-        return score_1.winner
+    # Only when both judgments agree on the actual answer
+    winner_1 = answer_A if score_1.winner == "A" else answer_B
+    winner_2 = answer_B if score_2.winner == "A" else answer_A
+    
+    if winner_1 == winner_2:
+        return winner_1
     return "TIE" # Requires Human Review
 ```
 

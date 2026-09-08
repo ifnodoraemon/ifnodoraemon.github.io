@@ -61,8 +61,11 @@ def calibrated_judge(answer_A, answer_B, rubric):
     score_2 = invoke_judge(model, rubric, A=answer_B, B=answer_A)
     
     # 只有当两次评判结果一致时，才计入有效 Evals
-    if score_1.winner == score_2.winner:
-        return score_1.winner
+    winner_1 = answer_A if score_1.winner == "A" else answer_B
+    winner_2 = answer_B if score_2.winner == "A" else answer_A
+    
+    if winner_1 == winner_2:
+        return winner_1
     return "TIE" # 判定为平局或需要人工介入 (Human Review)
 ```
 

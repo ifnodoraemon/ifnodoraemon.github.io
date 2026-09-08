@@ -124,7 +124,7 @@ In 2012, Alex Krizhevsky's 8-layer CNN **AlexNet** demolished the ImageNet compe
 
 In 2017, the Google Brain team published *"Attention Is All You Need"*, introducing the Transformer architecture. Before this, **RNN/LSTM** ruled sequence modeling.
 
-Within three years, Transformers unified NLP (BERT/GPT), computer vision (ViT), speech (Whisper), and multimodal understanding (CLIP)—becoming the most universal neural architecture in history.
+Within five years, Transformers unified NLP (BERT/GPT), computer vision (ViT), speech (Whisper), and multimodal understanding (CLIP)—becoming the most universal neural architecture in history.
 
 ### Why Did Transformers Defeat RNN/LSTM?
 

@@ -26,7 +26,7 @@ featuredStats:
 
 这不是 AI 不行，也不是工具没选对——而是**你驾驭 AI 的方式不对**。
 
-2026 年了，AI 编程工具已经从"Tab 补全"进化到了能够自主规划、执行、验证的 [Agent 形态](/articles/build-ai-agent)。Claude Code 可以直接跑你的测试套件；GitHub Copilot Coding Agent 能从 Issue 自动开 PR；OpenAI Codex CLI 在沙盒里执行命令。工具不缺——缺的是**把工具用对的方法论**。
+2026 年了，AI 编程工具已经从"Tab 补全"进化到了能够自主规划、执行、验证的 [Agent 形态](/articles/build-ai-agent)。Claude Code 可以直接跑你的测试套件；GitHub Copilot Coding Agent 能从 Issue 自动开 PR；Cline CLI 在沙盒里执行命令。工具不缺——缺的是**把工具用对的方法论**。
 
 这篇文章要回答一个核心问题：**怎样才能让 AI 稳定地、可靠地帮你写出生产级代码？**
 
@@ -340,7 +340,7 @@ AI 犯错时，大多数人会说"这个不对，试试别的方法"。这是最
 
 **核心问题：长会话 → 旧信息堆积 → AI 混乱 → 质量断崖式下降**
 
-LLM 的上下文窗口不是"越大越好"。即使 [Gemini 3.1 Pro 有 1M token 上下文](/articles/ai-trends-2026)，模型对长上下文中间位置信息的注意力仍然最低。更重要的是——每轮对话的历史消息都在消耗你的有效上下文空间。30 轮对话 × 每轮平均 2000 token ≈ 60K token 的历史噪音，留给真正重要信息的空间越来越少。
+LLM 的上下文窗口不是"越大越好"。即使 [Gemini 3.1 Pro 有 10M token 上下文](/articles/ai-trends-2026)，模型对长上下文中间位置信息的注意力仍然最低。更重要的是——每轮对话的历史消息都在消耗你的有效上下文空间。30 轮对话 × 每轮平均 2000 token ≈ 60K token 的历史噪音，留给真正重要信息的空间越来越少。
 
 **解决方案：会话分段法**
 
@@ -409,7 +409,7 @@ LLM 的上下文窗口不是"越大越好"。即使 [Gemini 3.1 Pro 有 1M token
 | 工具 | 核心优势 | 开源 | 安装 |
 |------|---------|------|------|
 | **Claude Code** | 前沿推理能力，大规模重构首选 | ❌ | `npm i -g @anthropic-ai/claude-code` |
-| **OpenAI Codex CLI** | Rust 构建，ChatGPT 订阅直接用，沙盒执行 | ✅ | `npm i -g @openai/codex` |
+| **Cline CLI** | Rust 构建，ChatGPT 订阅直接用，沙盒执行 | ✅ | `npm install -g @cline/cli` |
 | **Gemini CLI** | 免费层大方，1M token 上下文，ReAct 循环 | ✅ | `npm i -g @google/gemini-cli` |
 | **OpenCode** | 模型无关（支持 75+ LLM），TUI 界面，隐私优先 | ✅ | `curl -fsSL https://opencode.ai/install \| bash` |
 | **Aider** | 终端结对编程先驱，每次编辑自动 Git commit | ✅ | `pip install aider-chat` |

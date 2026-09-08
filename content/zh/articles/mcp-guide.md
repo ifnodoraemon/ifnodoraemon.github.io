@@ -340,9 +340,8 @@ if __name__ == "__main__":
   "mcpServers": {
     "notes": {
       "command": "python",
-      "args": ["note_server.py"],
-      "cwd": "/path/to/your/project"
-    }
+      "args": ["/path/to/your/project/note_server.py"],
+      }
   }
 }
 ```
@@ -355,7 +354,7 @@ if __name__ == "__main__":
     "notes": {
       "type": "stdio",
       "command": "python",
-      "args": ["note_server.py"]
+      "args": ["/path/to/your/project/note_server.py"]
     }
   }
 }

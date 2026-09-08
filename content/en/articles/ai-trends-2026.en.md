@@ -109,7 +109,7 @@ Transformers dominated the industry for 8 years (for context on how they histori
 
 The "Everything in the Cloud" paradigm was shattered by exorbitant bandwidth costs and corporate privacy red lines. The 2026 doctrine is: "If it can run on the phone, never send it to the cloud."
 
-- **The Extreme Compression of SLMs (Small Language Models)**: 1B to 8B parameter models (like Llama-4-8B, Qwen-2.5-3B) became the undisputed protagonists of edge arrays.
+- **The Extreme Compression of SLMs (Small Language Models)**: 1B to 8B parameter models (like Llama-4-8B, Qwen-5-3B) became the undisputed protagonists of edge arrays.
 - **Heterogeneous Compute & 4-Bit Quantization**:
   - On iOS and Android, developers use `MLX` or `ExecuTorch` to push models entirely offline.
   - Using extreme 4-bit or 3-bit quantization formats like **GGUF** or **EXL2** allows a 7B model to run comfortably within less than 4GB of mobile RAM.

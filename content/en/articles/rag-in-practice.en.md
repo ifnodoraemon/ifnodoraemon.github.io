@@ -122,7 +122,7 @@ from langchain_community.vectorstores import Weaviate
 import weaviate
 
 # Connect to the vector database
-client = weaviate.Client(url="http://localhost:8080")
+client = weaviate.connect_to_local()
 
 # Create retriever (Hybrid Search = Vector + BM25 Keywords)
 retriever = vectorstore.as_retriever(

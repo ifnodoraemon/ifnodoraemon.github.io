@@ -359,7 +359,7 @@ GPTs are OpenAI's "Skills package" concept — users can create custom ChatGPT v
 
 **③ Codex Agent + AGENTS.md (Developer-level)**
 
-OpenAI's Codex is an AI coding agent for professional developers. Codex natively supports the `AGENTS.md` open standard:
+Modern AI coding agents (like Cline, Aider) natively support the `AGENTS.md` open standard:
 
 - Place `AGENTS.md` at the repo root, and Codex automatically reads project structure, coding standards, and build commands
 - Supports nested `AGENTS.md` in monorepos for independent subproject context

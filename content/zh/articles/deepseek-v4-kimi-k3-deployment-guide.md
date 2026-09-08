@@ -45,7 +45,7 @@ graph TD
     
     Node1 <==>|400Gbps IB / RoCEv2| Node2
     Node2 <==>|Pipeline Parallel (PP=2)| Node3
-    Node3 <==>|Expert Parallel (EP=4)| Node4
+    Node3 <==>|Expert Parallel (EP=2)| Node4
     Node1 <==>|All-to-All| Node4
     
     API[vLLM / SGLang Gateway] --> Node1
@@ -106,7 +106,7 @@ export LD_PRELOAD=/opt/moonshot/libkda_accelerator.so
 # K3 专属启动参数
 vllm serve "moonshot-ai/Kimi-K3-Open" \
   --tensor-parallel-size 8 \
-  --pipeline-parallel-size 4 \
+  --pipeline-parallel-size 8 \
   --trust-remote-code
 ```
 
