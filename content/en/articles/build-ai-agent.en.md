@@ -92,7 +92,7 @@ class AgentState(TypedDict):
 def call_model(state: AgentState):
     llm = ChatAnthropic(model="claude-sonnet-4-6-20260217")
     tools = [get_current_time, search_web, execute_python]
-llm_with_tools = llm.bind_tools(tools)
+    llm_with_tools = llm.bind_tools(tools)
     response = llm_with_tools.invoke(state["messages"])
     return {"messages": [response]}
 

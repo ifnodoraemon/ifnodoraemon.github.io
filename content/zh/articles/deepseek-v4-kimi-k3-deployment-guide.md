@@ -4,7 +4,7 @@ slug: deepseek-v4-kimi-k3-deployment-guide
 date: 2026-09-07
 tag: 部署实战
 tagClass: tag-orange
-description: "这不是一篇官方文档的搬运，而是我们烧了上百万 GPU 租金换来的排障血泪史。实战拆解如何在 4 节点 H100 裸金属集群上，通过 vLLM 0.12 的混合并行（TP8+PP2+EP4）与 Triton 算子优化，成功压榨 1.6T 级 MoE 模型的每一滴极限吞吐量。"
+description: "这不是一篇官方文档的搬运，而是我们烧了上百万 GPU 租金换来的排障血泪史。实战拆解如何在 8 节点 H100 裸金属集群上，通过 vLLM 2.0 的混合并行（TP8+PP2+EP2）与 Triton 算子优化，成功压榨 1.6T 级 MoE 模型的每一滴极限吞吐量。"
 ---
 
 > **作者按**：2026 年 8 月，当 DeepSeek-V4-Pro（1.6T MoE）与 Kimi K3（2.8T MoE）开放权重的那个夜晚，整个开源社区沸腾了。但在随后的两周里，无数技术团队经历了从“狂喜”到“绝望”的过山车——面对动辄数 TB 的恐怖显存占用和跨机通信的“死亡延迟”，传统的单机部署经验被彻底碾碎。
@@ -58,7 +58,7 @@ graph TD
 
 ## 二、Show Me The Code：一键起飞的启动脚本
 
-官方文档里的 `python -m vllm.entrypoints.openai.api_server` 是糊弄小孩的。关于基础服务化架构与高吞吐调优，可先参考 [vLLM 生产级部署全指南](/articles/vllm-serving-guide/)。以下是我们真正在用的高并发集群启动参数（基于 vLLM 0.12）：
+官方文档里的 `python -m vllm.entrypoints.openai.api_server` 是糊弄小孩的。关于基础服务化架构与高吞吐调优，可先参考 [vLLM 生产级部署全指南](/articles/vllm-serving-guide/)。以下是我们真正在用的高并发集群启动参数（基于 vLLM 2.0）：
 
 ```bash
 #!/bin/bash
@@ -121,7 +121,7 @@ vllm serve "moonshot-ai/Kimi-K3-Open" \
 * **调 API（闭源顶级模型）**：
   * 按 $2.5 / 1M Token 平均计算，每天成本 $50,000 美元。
   * **一年成本：约 1.3 亿人民币。**
-* **自建 4 节点 H100 集群**：
+* **自建 8 节点 H100 集群**：
   * 32 张 H100 服务器租用（三年期折算）+ 万兆专线 + 机架电费，**一年成本：约 1200 万人民币。**
 
 **结论极其暴力**：只要你的业务规模越过了“日均 20 亿 Token”的生死线，私有化部署的成本是调 API 的 **十分之一**。而且最关键的是——你公司的核心源码、客户财报数据，**再也不用在公网上裸奔了。**

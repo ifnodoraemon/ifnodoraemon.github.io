@@ -97,7 +97,7 @@ DeepSeek 延续了极致性价比路线。1.6 万亿 MoE 架构仅需动态激�
 ## 常见问题 (FAQ)
 
 ### Q1: 私有化部署 DeepSeek-V4 与 Kimi K3 对硬件基础设施有哪些硬性门槛？
-DeepSeek-V4 采用低激活参数 MoE（仅 49B 动态激活），在 8 张 H100 或配备高带宽互联的国产计算卡上即可跑通 FP8 全量推理，配合 [vLLM 生产级部署实战](/articles/vllm-serving-guide/) 即可快速搭建高并发 API 集群；而 Kimi K3 总参数高达 2.8T，即使 KDA 注意力大幅压缩了 KV Cache，也要求至少 4 机 32 卡与 400Gbps RoCEv2/IB 网络拓扑。关于网络配置与驱动避坑细节，可参考 [DeepSeek-V4 与 Kimi K3 物理机群硬核部署指南](/articles/deepseek-v4-kimi-k3-deployment-guide/)。
+DeepSeek-V4 采用低激活参数 MoE（仅 49B 动态激活），在 32 张 H100 或配备高带宽互联的国产计算卡上即可跑通 FP8 全量推理，配合 [vLLM 生产级部署实战](/articles/vllm-serving-guide/) 即可快速搭建高并发 API 集群；而 Kimi K3 总参数高达 2.8T，即使 KDA 注意力大幅压缩了 KV Cache，也要求至少 4 机 32 卡与 400Gbps RoCEv2/IB 网络拓扑。关于网络配置与驱动避坑细节，可参考 [DeepSeek-V4 与 Kimi K3 物理机群硬核部署指南](/articles/deepseek-v4-kimi-k3-deployment-guide/)。
 
 ### Q2: 国产大模型官方 API 的稳定性与限流表现如何，生产环境应如何做容灾？
 2026 年国产顶流模型的 API 在日常请求中的首字延迟（TTFT）与可用性已逼近海外一线水准，综合表现可参阅 [2026 年主流大模型横评](/articles/model-comparison-2026/)。但在晚高峰或大版本发布初期，突发流量仍可能引发瞬时 429 限流或延迟抖动。生产系统必须在网关层设计智能熔断降级（Circuit Breaker）、指数退避重试（Exponential Backoff）以及多供应商跨模型 Fallback 路由机制。

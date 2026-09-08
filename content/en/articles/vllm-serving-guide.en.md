@@ -318,7 +318,7 @@ docker run -d \
   -v /path/to/models:/models \
   -e VLLM_API_KEY=your-secret-key \
   -e PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus \
-  vllm/vllm-openai:latest \
+  vllm/vllm-openai:v2.0.1 \
   --model /models/Qwen2.5-72B-Instruct \
   --dtype auto \
   --gpu-memory-utilization 0.90 \
