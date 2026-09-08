@@ -564,3 +564,16 @@ pip install -U gptqmodel --no-build-isolation
 2. **AWQ for precision, GPTQ for speed, GGUF for universality**: They're not interchangeable—pick by scenario
 3. **FP8 is the endgame for production**: If you have H100s, `--quantization fp8` is the optimal answer
 4. **Always validate after quantization**: Perplexity takes 30 seconds, benchmarks take 30 minutes, business testing may take 3 days—but those 3 days prevent 3 months of nightmares
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How should I choose between AWQ, GPTQ, and GGUF in production?
+For Linux inference servers running high-throughput engines, choose **AWQ** (best perplexity retention by protecting salient weights) or **GPTQ**; for local workstations, Macs, or edge inference, choose **GGUF** paired with llama.cpp or Ollama. In modern cloud data centers with Hopper or Ada GPUs, native **FP8** is the definitive choice. Check our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/) for deployment recipes.
+
+### Q2: Why did my 4-bit quantized model save memory but fail to run faster?
+Weight-only quantization (W4A16) dequantizes weights back to FP16/BF16 in SRAM/registers during matrix multiplication, so compute latency is not reduced. The speedup from weight-only quantization comes primarily from overcoming memory-bandwidth bottlenecks in single-batch or small-batch regimes. For multi-batch acceleration, use full FP8 or W8A8 quantization to exploit specialized Tensor Cores.
+
+### Q3: How can I verify that my quantized model hasn't suffered accuracy collapse?
+Follow a three-stage validation pipeline: first, measure PPL (Perplexity) on a clean benchmark such as WikiText-2 (a degradation delta under 0.2 is standard); second, run generic benchmark evaluations (e.g. MMLU, GSM8k); third, execute automated regression tests on domain-specific prompts to prevent formatting regressions. See our [LLM Evaluation Guide](/en/articles/llm-evaluation-guide/) for test harnesses.

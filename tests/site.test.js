@@ -80,6 +80,16 @@ test('built assets reference the correct search index path and article pages inc
   assert.match(enArticleHtml, /\/og\/en\/agent-runtime-practices\.svg/);
 });
 
+test('build outputs include IndexNow key and articles with FAQPage / TechArticle schema', () => {
+  const indexNowKeyPath = path.join(ROOT, 'dist', 'd0b17a8c4e6f9a2b5d8e1f4c7a0b3e6f.txt');
+  assert.ok(fs.existsSync(indexNowKeyPath), 'expected dist IndexNow key file to exist');
+
+  const vllmHtml = fs.readFileSync(path.join(ROOT, 'dist', 'articles', 'vllm-serving-guide', 'index.html'), 'utf-8');
+  assert.match(vllmHtml, /"@type":\s*"TechArticle"/);
+  assert.match(vllmHtml, /"@type":\s*"FAQPage"/);
+  assert.match(vllmHtml, /"url":\s*"https:\/\/blog\.llmgo\.top\/favicon\.svg"/);
+});
+
 test('built CSS preserves critical responsive layout styles and mobile components', () => {
   const assetsDir = path.join(ROOT, 'dist', 'assets');
   const cssFile = fs.readdirSync(assetsDir).find(file => file.startsWith('main-') && file.endsWith('.css'));

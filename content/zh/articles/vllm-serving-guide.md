@@ -919,3 +919,16 @@ vllm serve /models/Qwen2.5-72B-Instruct \
 5. **计费做在网关层**：不要改 vLLM 源码，在网关层拦截 `usage` 字段是最干净的方案。
 
 vLLM 的迭代速度极快（几乎每周都有新版本），建议持续关注其 [官方文档](https://docs.vllm.ai/) 和 [GitHub Releases](https://github.com/vllm-project/vllm/releases)。
+
+---
+
+## 常见问题 (FAQ)
+
+### Q1: vLLM 启动时报错 CUDA out of memory (OOM) 怎么排查？
+首先检查 `--gpu-memory-utilization`，默认 0.90 会预留 90% 显存给模型权重和 KV Cache，若宿主系统还有其他显存占用可临时降至 0.85。其次务必根据业务上限显式指定 `--max-model-len`（如 4096 或 8192），避免按模型理论极限预分配过大 KV Cache。若显存依旧不足，建议结合 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 开启 AWQ 或 FP8 权重量化。
+
+### Q2: 张量并行 (Tensor Parallel) 与流水线并行 (Pipeline Parallel) 怎么选？
+在单机多卡环境（如 4卡或 8卡 A100/H100 NVLink），优先使用张量并行 `--tensor-parallel-size`，通信延迟极低且切分均匀；对于跨多台机器的分布式推理，建议使用张量并行（单机内）+ 数据并行（多实例多副本），通过前置负载均衡分发，避免跨节点流水线并行带来的通信瓶颈。
+
+### Q3: vLLM 与 Ollama、TGI 相比在生产环境的核心优势是什么？
+vLLM 的核心优势在于高并发生产级吞吐，依托 PagedAttention、连续批处理（Continuous Batching）和自动前缀缓存（APC），在高并发与长文本混合请求下的吞吐量是轻量级本地引擎的 3~5 倍，且天然兼容 OpenAI 完整 API 协议。更多底层显卡架构可参考 [NVIDIA GPU 封装架构演进](/articles/nvidia-gpu-package-architecture/)。

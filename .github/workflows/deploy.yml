@@ -50,3 +50,8 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Submit URLs to IndexNow (Bing & AI Engines)
+        if: success()
+        run: npm run indexnow
+        continue-on-error: true

@@ -60,7 +60,7 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "TechArticle",
     "headline": "{{title}}",
     "description": "{{description}}",
     "datePublished": "{{isoDate}}",
@@ -73,14 +73,19 @@
     },
     "publisher": {
       "@type": "Organization",
-      "name": "大雄话AI",
-      "url": "https://blog.llmgo.top"
+      "name": "{{meta.siteName}}",
+      "url": "https://blog.llmgo.top",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://blog.llmgo.top/favicon.svg"
+      }
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://blog.llmgo.top{{articles_prefix}}/articles/{{slug}}/"
     },
-    "articleSection": "{{tag}}"
+    "articleSection": "{{tag}}",
+    "inLanguage": "{{lang}}"
   }
   </script>
   <script type="application/ld+json">
@@ -90,11 +95,11 @@
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "{{meta.siteName}}", "item": "https://blog.llmgo.top{{articles_prefix}}/" },
       { "@type": "ListItem", "position": 2, "name": "{{breadcrumb_articles}}", "item": "https://blog.llmgo.top{{articles_prefix}}/articles/" },
-      { "@type": "ListItem", "position": 3, "name": "{{title}}" }
+      { "@type": "ListItem", "position": 3, "name": "{{title}}", "item": "https://blog.llmgo.top{{articles_prefix}}/articles/{{slug}}/" }
     ]
   }
   </script>
-  {{{faqSchema}}}
+  {{faqSchema}}
 </head>
 <body>
   <div class="bg-grid" aria-hidden="true"></div>

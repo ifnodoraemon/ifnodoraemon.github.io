@@ -618,3 +618,16 @@ vllm serve /models/Qwen2.5-72B-Instruct \
 5. **Bill at the gateway**: Don't modify vLLM source code. Intercept `usage` at the gateway layer.
 
 Stay updated via [official docs](https://docs.vllm.ai/) and [GitHub Releases](https://github.com/vllm-project/vllm/releases).
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: How to troubleshoot CUDA out of memory (OOM) when launching vLLM?
+First inspect `--gpu-memory-utilization` (default 0.90 allocates 90% of GPU VRAM for weights and KV Cache); adjust it to 0.85 if other background processes consume VRAM. Most importantly, explicitly configure `--max-model-len` (e.g. 4096 or 8192) according to your practical workload instead of letting it allocate for the theoretical context window. If VRAM remains constrained, enable 4-bit/8-bit weight quantization by consulting our [Quantization Hands-on Guide](/en/articles/quantization-hands-on-guide/).
+
+### Q2: When should I choose Tensor Parallelism vs Pipeline Parallelism?
+On a single machine with multiple GPUs connected via NVLink (such as 4x or 8x A100/H100), Tensor Parallelism (`--tensor-parallel-size`) is preferred because NVLink communication latency is negligible. For multi-node distributed setups, the best practice is multi-instance Data Parallelism with a lightweight load balancer, which prevents inter-node network synchronization bottlenecks.
+
+### Q3: What makes vLLM superior to Ollama or TGI for production serving?
+vLLM is specifically engineered for high-concurrency enterprise throughput. Utilizing PagedAttention, Continuous Batching, and Chunked Prefill with Automatic Prefix Caching (APC), vLLM achieves 3x to 5x higher sustained throughput under variable batch requests while exposing a native OpenAI-compatible API. For hardware background, refer to our [NVIDIA GPU Package Architecture](/en/articles/nvidia-gpu-package-architecture/) breakdown.

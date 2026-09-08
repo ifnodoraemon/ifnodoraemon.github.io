@@ -106,6 +106,15 @@ function generateBlogJsonLd(articles, isEn) {
       name: 'ifnodoraemon',
       url: 'https://github.com/ifnodoraemon'
     },
+    publisher: {
+      '@type': 'Organization',
+      name: siteName,
+      url: 'https://blog.llmgo.top',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://blog.llmgo.top/favicon.svg'
+      }
+    },
     inLanguage: lang,
     dateCreated: '2026-03-05',
     blogPost: blogPosts

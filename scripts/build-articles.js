@@ -309,6 +309,8 @@ function prepareArticles(list, isEn) {
     const wordCount = plainText.trim().split(/\s+/).filter(Boolean).length + (plainText.match(/[\u4e00-\u9fa5]/g) || []).length;
     const readingTime = Math.max(1, Math.ceil(wordCount / 250));
 
+    const faqSchema = generateFaqSchema(mdContent, fm.faq);
+
     return {
       ...fm,
       file,
@@ -323,6 +325,7 @@ function prepareArticles(list, isEn) {
       wordCountText: isEn ? `${wordCount} words` : `约 ${wordCount} 字`,
       readingTimeText: isEn ? `${readingTime} min read` : `预计阅读 ${readingTime} 分钟`,
       meta: isEn ? enLocales.meta : zhLocales.meta,
+      faqSchema,
     };
   });
 }
@@ -878,30 +881,71 @@ function escapeHtml(value) {
 }
 
 
-function generateFaqSchema(markdown) {
+function generateFaqSchema(markdown, frontmatterFaq) {
+  if (Array.isArray(frontmatterFaq) && frontmatterFaq.length > 0) {
+    const qaPairs = frontmatterFaq
+      .map(item => ({
+        question: String(item.question || item.q || '').trim(),
+        answer: cleanFaqAnswer(String(item.answer || item.a || ''))
+      }))
+      .filter(item => item.question && item.answer);
+
+    if (qaPairs.length > 0) {
+      return formatFaqJsonLd(qaPairs);
+    }
+  }
+
+  const faqSectionRegex = /##\s+(?:常见问题|FAQ|Frequently Asked Questions|常见疑问)[\s\S]*?(?=(?:^##\s+[^\n#])|$)/i;
+  const sectionMatch = markdown.match(faqSectionRegex);
+  if (!sectionMatch) return '';
+
+  const targetText = sectionMatch[0];
   const qaPairs = [];
-  const regex = /^(#{2,3})\s+(.*?[?？])\s*\n([\s\S]*?)(?=^#{2,3}\s|\n*$)/gm;
+  const qRegex = /###\s+(?:Q\d*[:：]\s*|问题\d*[:：]\s*)?([^\n?？]+[?？]?)\n+([\s\S]*?)(?=(?:^###\s+)|$)/gm;
   let match;
-  while ((match = regex.exec(markdown)) !== null) {
-    const question = match[2].trim();
-    let answer = match[3].replace(/<\/?[^>]+(>|$)/g, "").replace(/[#*[\]`]/g, "").trim();
-    answer = answer.substring(0, 300).trim() + (answer.length > 300 ? "..." : "");
+  while ((match = qRegex.exec(targetText)) !== null) {
+    const question = match[1].trim();
+    const answer = cleanFaqAnswer(match[2]);
     if (question && answer) {
       qaPairs.push({ question, answer });
     }
   }
+
   if (qaPairs.length === 0) return '';
+  return formatFaqJsonLd(qaPairs);
+}
+
+function cleanFaqAnswer(raw) {
+  let answer = String(raw || '')
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/__([^_]+)__/g, '$1')
+    .replace(/^#+\s+/gm, '')
+    .replace(/\s*\n+\s*/g, ' ')
+    .trim();
+
+  if (answer.length > 300) {
+    answer = answer.slice(0, 300) + '...';
+  }
+  return answer;
+}
+
+function formatFaqJsonLd(qaPairs) {
   const schema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": qaPairs.map(qa => ({
-      "@type": "Question",
-      "name": qa.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": qa.answer
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': qaPairs.map(qa => ({
+      '@type': 'Question',
+      'name': qa.question,
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': qa.answer
       }
     }))
   };
-  return `<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n</script>`;
+  return `<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n  </script>`;
 }
