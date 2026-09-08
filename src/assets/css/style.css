@@ -963,10 +963,10 @@ mark {
 }
 
 @keyframes scanline {
-  0% { top: -10%; opacity: 0; }
+  0% { transform: translateY(-100%); opacity: 0; }
   10% { opacity: 0.5; }
   90% { opacity: 0.5; }
-  100% { top: 110%; opacity: 0; }
+  100% { transform: translateY(1100%); opacity: 0; }
 }
 
 /* Content Container */
