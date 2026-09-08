@@ -79,3 +79,133 @@ test('built assets reference the correct search index path and article pages inc
   assert.match(enArticleHtml, /class="article-related fade-in"/);
   assert.match(enArticleHtml, /\/og\/en\/agent-runtime-practices\.svg/);
 });
+
+test('built CSS preserves critical responsive layout styles and mobile components', () => {
+  const assetsDir = path.join(ROOT, 'dist', 'assets');
+  const cssFile = fs.readdirSync(assetsDir).find(file => file.startsWith('main-') && file.endsWith('.css'));
+  assert.ok(cssFile, 'expected built main css bundle');
+
+  const css = fs.readFileSync(path.join(assetsDir, cssFile), 'utf-8');
+  const requiredStyles = [
+    'toc-container',
+    'article-list-item',
+    'filter-btn',
+    'usecase-grid',
+    'usecase-card',
+    'timeline',
+    'about-terminal-body',
+    'katex-display',
+  ];
+
+  for (const style of requiredStyles) {
+    assert.ok(css.includes(style), `expected built CSS to contain "${style}"`);
+  }
+});
+
+test('mobile navigation drawer preserves containing block safety and responsive styles', () => {
+  const assetsDir = path.join(ROOT, 'dist', 'assets');
+  const cssFile = fs.readdirSync(assetsDir).find(file => file.startsWith('main-') && file.endsWith('.css'));
+  assert.ok(cssFile, 'expected built main css bundle');
+
+  const css = fs.readFileSync(path.join(assetsDir, cssFile), 'utf-8');
+  assert.ok(css.includes('body.nav-open'), 'expected body.nav-open scroll lock style');
+  assert.ok(css.includes('.nav-links-main'), 'expected .nav-links-main container');
+  assert.ok(css.includes('.nav-links-extra'), 'expected .nav-links-extra container');
+  assert.ok(/\.navbar:?:before/.test(css), 'expected navbar background blur on pseudo element');
+  assert.ok(css.includes('.menu-toggle.active'), 'expected animated active hamburger icon');
+  assert.ok(css.includes('.nav-backdrop'), 'expected nav-backdrop overlay for mobile menu');
+});
+
+test('renderNav initializes mobile navigation and toggles drawer state correctly', async () => {
+  const { renderNav } = await import('../src/assets/js/components/nav.js');
+
+  const classList = (initial = []) => {
+    const set = new Set(initial);
+    return {
+      add: (c) => set.add(c),
+      remove: (c) => set.delete(c),
+      toggle: (c) => {
+        if (set.has(c)) { set.delete(c); return false; }
+        set.add(c);
+        return true;
+      },
+      contains: (c) => set.has(c)
+    };
+  };
+
+  const mockToggle = {
+    classList: classList(),
+    attrs: {},
+    setAttribute: function(k, v) { this.attrs[k] = v; },
+    addEventListener: function(evt, fn) { if (evt === 'click') this.onclick = fn; }
+  };
+
+  const mockLinks = {
+    classList: classList(),
+    querySelectorAll: () => [],
+    addEventListener: () => {}
+  };
+
+  const mockBackdrop = {
+    classList: classList(),
+    addEventListener: function(evt, fn) { if (evt === 'click') this.onclick = fn; }
+  };
+
+  const mockNav = {
+    classList: classList(),
+    setAttribute: () => {},
+    innerHTML: '',
+    querySelector: function(sel) {
+      if (sel === '#menu-toggle') return mockToggle;
+      if (sel === '#nav-links') return mockLinks;
+      if (sel === '#nav-backdrop') return mockBackdrop;
+      return null;
+    },
+    contains: () => false
+  };
+
+  const originalWindow = global.window;
+  const originalDocument = global.document;
+
+  global.window = {
+    location: { pathname: '/', search: '', hash: '' },
+    innerWidth: 375,
+    addEventListener: () => {}
+  };
+
+  global.document = {
+    body: { classList: classList() },
+    documentElement: { classList: classList() },
+    getElementById: (id) => id === 'navbar' ? mockNav : null,
+    addEventListener: () => {}
+  };
+
+  try {
+    renderNav('home');
+
+    assert.ok(mockNav.innerHTML.includes('class="nav-links-main"'));
+    assert.ok(mockNav.innerHTML.includes('class="nav-links-extra"'));
+    assert.ok(mockNav.innerHTML.includes('id="menu-toggle"'));
+    assert.ok(mockNav.innerHTML.includes('id="nav-backdrop"'));
+
+    // Open drawer
+    mockToggle.onclick({ stopPropagation: () => {} });
+    assert.equal(mockToggle.classList.contains('active'), true);
+    assert.equal(mockLinks.classList.contains('open'), true);
+    assert.equal(mockBackdrop.classList.contains('open'), true);
+    assert.equal(global.document.body.classList.contains('nav-open'), true);
+    assert.equal(mockToggle.attrs['aria-expanded'], 'true');
+
+    // Close via backdrop click
+    mockBackdrop.onclick();
+    assert.equal(mockToggle.classList.contains('active'), false);
+    assert.equal(mockLinks.classList.contains('open'), false);
+    assert.equal(mockBackdrop.classList.contains('open'), false);
+    assert.equal(global.document.body.classList.contains('nav-open'), false);
+    assert.equal(mockToggle.attrs['aria-expanded'], 'false');
+  } finally {
+    global.window = originalWindow;
+    global.document = originalDocument;
+  }
+});
+
