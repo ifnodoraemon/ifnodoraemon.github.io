@@ -14,6 +14,7 @@ import { fileURLToPath } from 'url';
 import { marked } from 'marked';
 import matter from 'gray-matter';
 import markedKatex from 'marked-katex-extension';
+import hljs from 'highlight.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -44,18 +45,25 @@ marked.setOptions({
 const renderer = new marked.Renderer();
 renderer.code = function ({ text, lang }) {
   if (lang === 'mermaid') {
-    return `<pre class="mermaid">\n${text}\n</pre>\n`;
+    return `<pre class="mermaid">
+${text}
+</pre>
+`;
   }
 
-  const langClass = lang ? ` class="language-${lang}"` : '';
-  const escapedText = escapeHtml(text);
+  const validLang = hljs.getLanguage(lang) ? lang : 'plaintext';
+  let highlighted = text;
+  try {
+    highlighted = hljs.highlight(text, { language: validLang }).value;
+  } catch(e) {}
 
   return `<div class="code-block-wrapper">
-  <button class="copy-code-btn" aria-label="Copy code" title="Copy code">
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  <button class="copy-btn" aria-label="Copy code">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
   </button>
-  <pre><code${langClass}>${escapedText}</code></pre>
-</div>\n`;
+  <pre><code class="hljs language-${validLang}">${highlighted}</code></pre>
+</div>
+`;
 };
 
 renderer.image = function ({ href, title, text }) {
