@@ -590,7 +590,9 @@
     "navi_title": "🤖 Navi - Governed Agent OS",
     "navi_desc": "Personal open-source flagship project: A local-first, governed personal AI assistant Agent OS. Powered by declarative schema-validated capability manifests for task planning, durable Goal/Run state machines, scoped typed memory with conflict resolution, and Linux Bubblewrap (bwrap) sandbox isolation. Shipped with CLI, authenticated local FastAPI services, and native WeChat & Telegram connectors.",
     "nowcoder_title": "🏢 Nowcoder Enterprise Recruitment & AI Resume Scoring",
-    "nowcoder_desc": "Core engineering for a commercial B2B recruitment & talent acquisition platform. Developed enterprise backend services using Java / Spring Boot microservices and high-concurrency database designs, supporting massive enterprise job postings, candidate pipelines, and complex RBAC. Designed and deployed an AI resume scoring & matching system based on Python scikit-learn (sklearn) Support Vector Machine (SVM) and multidimensional text feature engineering."
+    "nowcoder_desc": "Core engineering for a commercial B2B recruitment & talent acquisition platform. Developed enterprise backend services using Java / Spring Boot microservices and high-concurrency database designs, supporting massive enterprise job postings, candidate pipelines, and complex RBAC. Designed and deployed an AI resume scoring & matching system based on Python scikit-learn (sklearn) Support Vector Machine (SVM) and multidimensional text feature engineering.",
+    "maas_title": "⚡ Heterogeneous MaaS Platform (K8s + GPUStack Serving Cluster)",
+    "maas_desc": "An enterprise Model-as-a-Service (MaaS) computing substrate engineered for large-scale LLM deployment. Built on Kubernetes (K8s) and GPUStack to virtualize and schedule heterogeneous compute clusters. Deep operational mastery in multi-chip unified model serving across NVIDIA (A800 / H800), Huawei Ascend (910B / 310P NPUs), and Iluvatar (PPU 810E) accelerators; tuned vLLM and MindIE runtime kernels, weight distribution caching, dynamic batching, and multi-tenant resilient routing."
   },
   "about": {
     "heroTag": "ARCHITECT DOSSIER // BUPT CS",
@@ -623,7 +625,11 @@
     "eduDesc": "Specialized in computer architecture, operating systems, distributed computing, and deep learning, building the rigorous engineering foundation required for low-level systems work.",
     "skillsTitle": "Tech Stack & Matrix",
     "skills": [
-      "vLLM & SGLang Serving",
+      "K8s & GPUStack (MaaS Serving)",
+      "NVIDIA A800 / H800 / H100 Cluster",
+      "Huawei Ascend 910B & 310P (MindIE)",
+      "Iluvatar PPU 810E Heterogeneous Infra",
+      "vLLM & SGLang High-Throughput Serving",
       "DeepSeek MLA & KDA Attention",
       "Model Context Protocol (MCP)",
       "Java & Spring Boot (Enterprise B2B)",
@@ -631,13 +637,11 @@
       "PyTorch & Triton Kernels",
       "FP8 / AWQ Quantization",
       "FlashAttention-3",
-      "H100/A100 Cluster Topology",
       "Agent Loop & MCTS Reflection",
-      "Docker & Linux eBPF Sandbox",
-      "Distributed Parallelism (TP/PP/EP)"
+      "Docker & Linux eBPF Sandbox"
     ],
-    "clusterTitle": "Hardware & Cluster Experience",
-    "clusterDesc": "Hands-on experience tuning 4-node 32x H100 bare-metal clusters, 8x A100/H800 nodes, and RTX 4090 clusters across InfiniBand RoCE topologies and multi-GPU parallel pipelines.",
+    "clusterTitle": "Hardware & Heterogeneous Cluster Portfolio",
+    "clusterDesc": "Hands-on experience tuning enterprise MaaS heterogeneous serving clusters built on Kubernetes (K8s) + GPUStack. Deep operational mastery spanning NVIDIA (A800 / H800 / 32-GPU H100 bare-metal clusters), Huawei Ascend (910B / 310P NPUs), and Iluvatar (PPU 810E) accelerators, covering unified virtualization, weight caching, cross-platform MindIE / vLLM serving, and distributed parallel pipelines.",
     "p3": "All whitepapers and reproducible benchmarks are continuously iterated. Connect via the following interfaces:",
     "contactBtn": "GitHub @ifnodoraemon",
     "emailBtn": "Direct Email",
@@ -660,7 +664,11 @@
     "sys3Name": "Doraemon Code (Autonomous Dev Agent)",
     "sys3Role": "Single-Process Local Code Agent",
     "sys3Desc": "Open-source Claude Code alternative for local autonomous programming with 39+ native tool integrations.",
-    "sys3LinkText": "View GitHub Repo"
+    "sys3LinkText": "View GitHub Repo",
+    "sys0Name": "Heterogeneous MaaS Serving Platform (K8s + GPUStack)",
+    "sys0Role": "Compute Architect & Cluster Engineer",
+    "sys0Desc": "Engineered cross-chip LLM serving foundations via K8s and GPUStack, managing heterogeneous clusters across NVIDIA (A800/H800), Huawei Ascend (910B/310P), and Iluvatar PPU 810E with optimized weight caching, MindIE/vLLM engines, and multi-tenant resilient routing.",
+    "sys0LinkText": "Explore Infra Specs"
   },
   "home": {
     "heroSystem": "LLM ARCHITECTURE & AGENTIC RUNTIMES",

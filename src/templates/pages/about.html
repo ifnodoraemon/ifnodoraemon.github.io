@@ -186,7 +186,21 @@
               </h2>
               <p style="color: #7d8597; font-size: 0.88rem; margin-bottom: 1.25rem;">{{about.flagshipSubtitle}}</p>
               
-              <div class="about-pillars-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                            <div class="about-pillars-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                <div class="about-pillar-box">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                    <h4>⚡ {{about.sys0Name}}</h4>
+                    <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #f59e0b; background: rgba(245, 158, 11, 0.08); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid rgba(245, 158, 11, 0.2);">MAAS INFRA</span>
+                  </div>
+                  <p style="font-size: 0.78rem; color: #a1a8b8; font-family: var(--font-mono); margin-bottom: 0.5rem;">{{about.sys0Role}}</p>
+                  <p>{{about.sys0Desc}}</p>
+                  <div style="margin-top: 1rem;">
+                    <a href="{{linkPrefix}}/projects/" class="bento-more-link" style="margin-top: 0; font-size: 0.78rem;">
+                      <span>{{about.sys0LinkText}}</span>
+                      <span class="arrow">→</span>
+                    </a>
+                  </div>
+                </div>
                 <div class="about-pillar-box">
                   <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
                     <h4>🤖 {{about.sys1Name}}</h4>

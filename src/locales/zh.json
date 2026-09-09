@@ -590,7 +590,9 @@
     "navi_title": "🤖 Navi - Governed Agent OS",
     "navi_desc": "个人 GitHub 开源旗舰项目：面向未来的本地优先、受安全治理个人 AI 助手操作系统 (Local-First Governed Agent OS)。核心基于声明式 Schema 严格校验的 Capability Manifest 驱动任务规划，具备持久化 Goal/Run 状态机、多层级记忆作用域与 Linux Bubblewrap (bwrap) 安全沙箱隔离，并提供 CLI、受认证的本地 FastAPI 接口以及微信 (WeChat/Weixin) & Telegram 连接器支持。",
     "nowcoder_title": "🏢 牛客企业端招聘与 AI 智能简历评估系统",
-    "nowcoder_desc": "深度参与的商业级企业端（B端）人力资源与智能招聘系统。后端核心采用 Java / Spring Boot 微服务架构与高并发数据库设计，保障海量企业客户招聘、职位发布、候选人流转与企业多级组织权限（RBAC）流转；同时自主设计并落地基于 Python scikit-learn (sklearn) SVM（支持向量机）的智能简历打分与人岗匹配算法系统，通过多维特征工程与文本拓扑匹配，实现海量简历与 JD 的高精度自动化评估与排序推荐。"
+    "nowcoder_desc": "深度参与的商业级企业端（B端）人力资源与智能招聘系统。后端核心采用 Java / Spring Boot 微服务架构与高并发数据库设计，保障海量企业客户招聘、职位发布、候选人流转与企业多级组织权限（RBAC）流转；同时自主设计并落地基于 Python scikit-learn (sklearn) SVM（支持向量机）的智能简历打分与人岗匹配算法系统，通过多维特征工程与文本拓扑匹配，实现海量简历与 JD 的高精度自动化评估与排序推荐。",
+    "maas_title": "⚡ 异构算力 MaaS 平台 (K8s + GPUStack 统一推理集群)",
+    "maas_desc": "面向大模型规模化落地的模型即服务 (MaaS) 算力底座。基于 Kubernetes (K8s) 与 GPUStack 构建异构算力统一虚拟化与推理调度集群。深度负责跨芯片架构的模型部署与算力切分排障，涵盖 NVIDIA (A800 / H800)、华为昇腾 (Ascend 910B / 310P NPU) 及天数智芯 (PPU 810E) 等异构硬件；深度攻坚 vLLM / MindIE 跨平台算子适配、权重分发缓存、动态批处理与多租户高可用服务网关。"
   },
   "about": {
     "heroTag": "ARCHITECT DOSSIER // BUPT CS",
@@ -623,7 +625,11 @@
     "eduDesc": "主修体系结构、操作系统、分布式计算与深度学习，奠定了深入底层硬件拓扑与并行计算的系统工程基础。",
     "skillsTitle": "核心技术矩阵 // Tech Stack & Infra",
     "skills": [
-      "vLLM & SGLang Serving",
+      "K8s & GPUStack (MaaS Serving)",
+      "NVIDIA A800 / H800 / H100 Cluster",
+      "Huawei Ascend 910B & 310P (MindIE)",
+      "Iluvatar PPU 810E Heterogeneous Infra",
+      "vLLM & SGLang High-Throughput Serving",
       "DeepSeek MLA & KDA Attention",
       "Model Context Protocol (MCP)",
       "Java & Spring Boot (Enterprise B2B)",
@@ -631,13 +637,11 @@
       "PyTorch & Triton Kernels",
       "FP8 / AWQ Quantization",
       "FlashAttention-3",
-      "H100/A100 Cluster Topology",
       "Agent Loop & MCTS Reflection",
-      "Docker & Linux eBPF Sandbox",
-      "Distributed Parallelism (TP/PP/EP)"
+      "Docker & Linux eBPF Sandbox"
     ],
-    "clusterTitle": "硬件与集群实战经验 // Cluster Portfolio",
-    "clusterDesc": "实战调优 4 节点 32 卡 H100 裸金属集群、8 卡 A100/H800 与 RTX 4090 异构集群，熟稔 InfiniBand RoCE 拓扑、NVLink 带宽分配与多机多卡混合并行编排。",
+    "clusterTitle": "硬件与异构算力集群实战 // Cluster & MaaS Portfolio",
+    "clusterDesc": "实战调优基于 Kubernetes (K8s) + GPUStack 的企业级 MaaS 异构推理集群，深度覆盖 NVIDIA (A800 / H800 / 32 卡 H100 裸金属集群)、华为昇腾 (Ascend 910B / 310P) 及天数智芯 (PPU 810E) 等异构算力芯片的统一虚拟化调度、权重分发、MindIE / vLLM 跨平台推理适配与混合并行集群编排。",
     "p3": "所有的架构研报与代码复现均在持续迭代。可通过以下接口建立连接：",
     "contactBtn": "GitHub @ifnodoraemon",
     "emailBtn": "邮件直接联系",
@@ -660,7 +664,11 @@
     "sys3Name": "Doraemon Code (本地全功能编程助手)",
     "sys3Role": "全流程单进程代码 Agent",
     "sys3Desc": "对标 Claude Code 的开源本地编程 Agent，支持 39+ 工具沙箱直调与多模型热切换。",
-    "sys3LinkText": "查看 GitHub 源码"
+    "sys3LinkText": "查看 GitHub 源码",
+    "sys0Name": "异构算力 MaaS 推理平台 (K8s + GPUStack)",
+    "sys0Role": "异构算力架构 / 推理集群系统工程",
+    "sys0Desc": "基于 K8s 与 GPUStack 搭建跨芯片大模型服务底座，统一调度 NVIDIA (A800/H800)、华为昇腾 (Ascend 910B/310P) 与天数智芯 PPU 810E，实现跨架构模型权重分发、vLLM/MindIE 引擎适配与高可用推理调度。",
+    "sys0LinkText": "查看算力集群详情"
   },
   "home": {
     "heroSystem": "LLM ARCHITECTURE & AGENTIC RUNTIMES",

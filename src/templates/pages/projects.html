@@ -92,6 +92,37 @@
       <div class="container">
         <div class="projects-grid fade-in">
           
+          <!-- Project 0: Heterogeneous MaaS Platform -->
+          <div class="agent-project-card terminal-window flagship">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="dot close"></span>
+                <span class="dot minimize"></span>
+                <span class="dot expand"></span>
+              </div>
+              <div class="terminal-title">Execute: maas_gpustack_k8s.sh</div>
+              <span class="terminal-badge">MAAS / HETERO INFRA</span>
+            </div>
+            <div class="terminal-body">
+              <div class="project-glow"></div>
+              <h3>{{projects.maas_title}}</h3>
+              <p>{{projects.maas_desc}}</p>
+              <div class="project-tags">
+                <span class="mini-tag">Kubernetes (K8s)</span>
+                <span class="mini-tag">GPUStack</span>
+                <span class="mini-tag">MaaS Platform</span>
+                <span class="mini-tag">NVIDIA A800/H800</span>
+                <span class="mini-tag">Ascend 910B/310P</span>
+                <span class="mini-tag">PPU 810E</span>
+                <span class="mini-tag">vLLM & MindIE</span>
+                <span class="mini-tag">Heterogeneous Serving</span>
+              </div>
+              <div class="project-links">
+                <a href="{{linkPrefix}}/about/" class="btn-ghost">{{#if isEn}}View Architecture Specs{{else}}查看算力架构详情{{/if}}</a>
+              </div>
+            </div>
+          </div>
+          
           <!-- Project 1: Navi Agent OS -->
           <div class="agent-project-card terminal-window flagship">
             <div class="terminal-header">
