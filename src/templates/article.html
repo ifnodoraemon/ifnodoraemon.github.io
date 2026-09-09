@@ -37,13 +37,24 @@
   <meta name="google-adsense-account" content="ca-pub-5078775507335151">
 
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-4WZN5Q7VS6');
+    // Delay Google Analytics until user interaction to improve Lighthouse/CWV scores
+    const loadGA = () => {
+      if (window.gaLoaded) return;
+      window.gaLoaded = true;
+      const script = document.createElement('script');
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6';
+      script.async = true;
+      document.head.appendChild(script);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-4WZN5Q7VS6');
+    };
+    ['scroll', 'mousemove', 'touchstart', 'keydown'].forEach(e => window.addEventListener(e, loadGA, {once: true, passive: true}));
+    // Fallback if no interaction
+    setTimeout(loadGA, 5000);
   </script>
 
   <!-- Assets -->
@@ -140,21 +151,41 @@
             
             <!-- Giscus Comments -->
             <div class="giscus-container">
-              <script src="https://giscus.app/client.js"
-                data-repo="ifnodoraemon/ifnodoraemon.github.io"
-                data-repo-id="R_kgDON7u7iA"
-                data-category="Announcements"
-                data-category-id="DIC_kwDON7u7iM4CnKDE"
-                data-mapping="specific"
-                data-term="{{slug}}"
-                data-strict="0"
-                data-reactions-enabled="1"
-                data-emit-metadata="0"
-                data-input-position="top"
-                data-theme="dark"
-                data-lang="{{lang}}"
-                crossorigin="anonymous"
-                async>
+              <div id="giscus-lazy-container"></div>
+              <script>
+                const giscusContainer = document.getElementById('giscus-lazy-container');
+                const loadGiscus = () => {
+                  if (window.giscusLoaded) return;
+                  window.giscusLoaded = true;
+                  const script = document.createElement('script');
+                  script.src = "https://giscus.app/client.js";
+                  script.setAttribute("data-repo", "ifnodoraemon/ifnodoraemon.github.io");
+                  script.setAttribute("data-repo-id", "R_kgDON7u7iA");
+                  script.setAttribute("data-category", "Announcements");
+                  script.setAttribute("data-category-id", "DIC_kwDON7u7iM4CnKDE");
+                  script.setAttribute("data-mapping", "specific");
+                  script.setAttribute("data-term", "{{slug}}");
+                  script.setAttribute("data-strict", "0");
+                  script.setAttribute("data-reactions-enabled", "1");
+                  script.setAttribute("data-emit-metadata", "0");
+                  script.setAttribute("data-input-position", "top");
+                  script.setAttribute("data-theme", "dark");
+                  script.setAttribute("data-lang", "{{#if isEn}}en{{else}}zh-CN{{/if}}");
+                  script.setAttribute("crossorigin", "anonymous");
+                  script.async = true;
+                  giscusContainer.appendChild(script);
+                };
+                if ('IntersectionObserver' in window) {
+                  const observer = new IntersectionObserver((entries) => {
+                    if (entries[0].isIntersecting) {
+                      loadGiscus();
+                      observer.disconnect();
+                    }
+                  }, { rootMargin: '200px' });
+                  observer.observe(giscusContainer);
+                } else {
+                  setTimeout(loadGiscus, 3000);
+                }
               </script>
             </div>
           </div>

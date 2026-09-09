@@ -32,12 +32,24 @@
   <meta name="google-adsense-account" content="ca-pub-5078775507335151">
 
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-4WZN5Q7VS6');
+    // Delay Google Analytics until user interaction to improve Lighthouse/CWV scores
+    const loadGA = () => {
+      if (window.gaLoaded) return;
+      window.gaLoaded = true;
+      const script = document.createElement('script');
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6';
+      script.async = true;
+      document.head.appendChild(script);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-4WZN5Q7VS6');
+    };
+    ['scroll', 'mousemove', 'touchstart', 'keydown'].forEach(e => window.addEventListener(e, loadGA, {once: true, passive: true}));
+    // Fallback if no interaction
+    setTimeout(loadGA, 5000);
   </script>
 
   <!-- JSON-LD Structured Data -->
