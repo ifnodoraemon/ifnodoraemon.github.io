@@ -552,7 +552,7 @@ function generateListingPage(articlesList, isEn = false) {
   <link rel="alternate" hreflang="zh" href="${SITE_URL}/articles/" />
   <link rel="alternate" hreflang="en" href="${SITE_URL}/en/articles/" />
   <link rel="alternate" hreflang="x-default" href="${SITE_URL}/articles/" />
-  <meta name="theme-color" content="#06060b">
+  <meta name="theme-color" content="#090a0f">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:title" content="${pageTitle}">

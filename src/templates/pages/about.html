@@ -11,7 +11,7 @@
   <link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/about/" />
   <link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/about/" />
   <link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/about/" />
-  <meta name="theme-color" content="#06060b">
+  <meta name="theme-color" content="#090a0f">
 
   <!-- Open Graph -->
   <meta property="og:type" content="profile">
@@ -116,14 +116,14 @@
               > {{about.heroDesc}}
             </p>
 
-            <div class="content-reveal" style="padding-left: 1rem; border-left: 2px solid rgba(99, 102, 241, 0.3); background: rgba(99, 102, 241, 0.03); margin-top: 2rem; margin-bottom: 2rem; border-radius: 0 4px 4px 0;">
+            <div class="content-reveal" style="padding-left: 1rem; border-left: 2px solid var(--accent); background: rgba(99, 102, 241, 0.04); margin-top: 2rem; margin-bottom: 2rem; border-radius: 0 4px 4px 0;">
               <!-- Intro Paragraph -->
               <p style="margin-bottom: 2rem;">{{about.p1}}</p>
               
               <!-- Educational Background -->
               <div class="education-section" style="margin-bottom: 2rem;">
                 <h2 style="font-size: 1.1rem; color: var(--accent-light); margin-bottom: 0.8rem; font-family: var(--font-mono);">&gt; {{about.eduTitle}}</h2>
-                <div style="background: rgba(6, 6, 11, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 4px; display: flex; flex-direction: column; gap: 0.5rem;">
+                <div style="background: var(--bg-surface); border: 1px solid var(--border); padding: 1rem; border-radius: 6px; display: flex; flex-direction: column; gap: 0.5rem;">
                   <div style="display: flex; align-items: center; gap: 0.5rem;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
                     <span style="font-weight: 500; font-size: 1.05rem; color: var(--text-base);">{{about.eduSchool}}</span>
@@ -140,7 +140,7 @@
                 <h2 style="font-size: 1.1rem; color: var(--accent-light); margin-bottom: 1rem; font-family: var(--font-mono);">&gt; {{about.skillsTitle}}</h2>
                 <div class="skills-grid" style="display: flex; flex-wrap: wrap; gap: 0.6rem;">
                   {{#each about.skills}}
-                  <span class="skill-badge" style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); color: var(--accent-light); padding: 0.4rem 0.8rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.85rem; transition: all 0.3s ease; cursor: default;" onmouseover="this.style.background='rgba(99, 102, 241, 0.2)'; this.style.borderColor='rgba(99, 102, 241, 0.6)'; this.style.boxShadow='0 0 10px rgba(99,102,241,0.2)';" onmouseout="this.style.background='rgba(99, 102, 241, 0.1)'; this.style.borderColor='rgba(99, 102, 241, 0.3)'; this.style.boxShadow='none';">
+                  <span class="skill-badge" style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.25); color: var(--accent-light); padding: 0.4rem 0.8rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.85rem; transition: all 0.3s ease; cursor: default;" onmouseover="this.style.background='rgba(99, 102, 241, 0.18)'; this.style.borderColor='rgba(99, 102, 241, 0.5)'; this.style.boxShadow='0 0 10px rgba(99,102,241,0.2)';" onmouseout="this.style.background='rgba(99, 102, 241, 0.08)'; this.style.borderColor='rgba(99, 102, 241, 0.25)'; this.style.boxShadow='none';">
                     {{this}}
                   </span>
                   {{/each}}
@@ -186,7 +186,7 @@
                 </a>
               </div>
             </div>
-            <div class="hero-metrics-panel" style="margin-top: 2rem; background: rgba(6, 6, 11, 0.5); backdrop-filter: blur(8px); border: 1px solid rgba(99, 102, 241, 0.2); padding: 1.5rem; position: relative;">
+            <div class="hero-metrics-panel" style="margin-top: 2rem; background: var(--bg-surface); backdrop-filter: blur(8px); border: 1px solid var(--border); padding: 1.5rem; position: relative; border-radius: 8px;">
               <div class="hud-bracket left"></div>
               <h4 style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-light); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em; text-align: center;">> {{about.statsTitle}}</h4>
               <div class="hero-metrics" style="gap: 1.5rem; justify-content: center; flex-wrap: wrap;">

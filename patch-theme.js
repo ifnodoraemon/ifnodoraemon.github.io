@@ -2,31 +2,32 @@ import fs from 'fs';
 let css = fs.readFileSync('src/assets/css/style.css', 'utf8');
 
 const newPalette = `:root {
-  /* Palette - Oceanic Aurora (Modern Deep Indigo/Cyan) */
-  --bg:          #050814;
-  --bg-surface:  #0a0f25;
-  --bg-elevated: #111836;
-  --border:      rgba(99, 102, 241, 0.15);
-  --border-hover:rgba(99, 102, 241, 0.35);
+  /* Palette - Obsidian Iris (Modern High-End AI Engineering) */
+  --bg:          #090a0f;
+  --bg-surface:  #11131a;
+  --bg-elevated: #181b24;
+  --border:      rgba(255, 255, 255, 0.08);
+  --border-hover:rgba(255, 255, 255, 0.18);
 
-  --text:        #f8fafc;
+  --text:        #f1f5f9;
   --text-muted:  #94a3b8;
-  --text-faint:  #475569;
+  --text-faint:  #64748b;
 
-  --accent:      #38bdf8;
-  --accent-light:#7dd3fc;
-  --accent-cyan: #22d3ee;
-  --accent-glow: rgba(56, 189, 248, 0.25);
-  --gradient:    linear-gradient(135deg, #6366f1 0%, #38bdf8 100%);
-  --selection-bg:rgba(56, 189, 248, 0.3);
+  --accent:      #6366f1;
+  --accent-light:#818cf8;
+  --accent-cyan: #38bdf8;
+  --accent-glow: rgba(99, 102, 241, 0.2);
+  --gradient:    linear-gradient(135deg, #ffffff 0%, #cbd5e1 45%, #818cf8 100%);
+  --selection-bg:rgba(99, 102, 241, 0.35);
 
   --amber:       #fbbf24;
-  --emerald:     #34d399;
-  --cyan:        #22d3ee;`;
+  --emerald:     #10b981;
+  --cyan:        #38bdf8;
+  --rose:        #f43f5e;
+  --purple:      #a855f7;`;
 
-css = css.replace(/:root\s*{\s*\/\* Palette - Vercel.*?--cyan:\s*#[a-f0-9]+;/is, newPalette);
+css = css.replace(/:root\s*{\s*\/\* Palette - .*?--purple:\s*#[a-f0-9]+;/is, newPalette);
 
-// Add custom selection style
 if (!css.includes('::selection')) {
   css += '\n::selection { background: var(--selection-bg); color: #fff; }\n::-moz-selection { background: var(--selection-bg); color: #fff; }\n';
 }

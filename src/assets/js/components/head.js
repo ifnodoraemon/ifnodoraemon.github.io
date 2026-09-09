@@ -9,7 +9,7 @@ export function getHeadMeta({ title, description, url, keywords }) {
   <meta name="author" content="ifnodoraemon">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="${url}">
-  <meta name="theme-color" content="#06060b">
+  <meta name="theme-color" content="#090a0f">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${url}">
   <meta property="og:title" content="${title}">
