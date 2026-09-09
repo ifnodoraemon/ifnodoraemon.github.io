@@ -89,7 +89,7 @@ lora_config = LoraConfig(
 # 应用 LoRA
 model = get_peft_model(model, lora_config)
 model.print_trainable_parameters()
-# → trainable params: 13.6M || all params: 109B || 0.17%
+# → trainable params: 13.6M || all params: 109B || 0.012%（若仅注入部分核心注意力投影层）
 ```
 
 ### Step 3：大规模多卡训练 (DeepSpeed ZeRO)
@@ -103,7 +103,7 @@ model.print_trainable_parameters()
 ```json
 
 {
-    "fp16": { "enabled": true, "loss_scale": 0 },
+    "fp16": { "enabled": false },
     "bf16": { "enabled": true },
     "zero_optimization": {
         "stage": 2, 
@@ -120,10 +120,11 @@ model.print_trainable_parameters()
 
 训练启动命令：
 ```bash
+# 生产环境必开 --gradient_checkpointing True
 accelerate launch \
     --config_file accelerate_deepspeed_config.yaml \
     train.py \
-    --gradient_checkpointing True \ # 生产环境必开
+    --gradient_checkpointing True \
     --learning_rate 2e-5
 ```
 

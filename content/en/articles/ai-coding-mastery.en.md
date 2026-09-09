@@ -340,7 +340,7 @@ The more precise your error feedback, the more accurate the fix. Vague feedback 
 
 **Core problem: Long sessions → stale information accumulates → AI gets confused → quality cliff-drops**
 
-LLM context windows aren't "bigger is better." Even with [Gemini 3.1 Pro's 1M token context](/articles/ai-trends-2026), model attention to information in the middle of long contexts remains lowest. More importantly — every turn's history messages consume your effective context space. 30 turns × 2000 tokens average per turn ≈ 60K tokens of historical noise, leaving less and less room for truly important information.
+LLM context windows aren't "bigger is better." Even with [Gemini 3.1 Pro's 1M token context](/en/articles/ai-trends-2026/), model attention to information in the middle of long contexts remains lowest. More importantly — every turn's history messages consume your effective context space. 30 turns × 2000 tokens average per turn ≈ 60K tokens of historical noise, leaving less and less room for truly important information.
 
 **Solution: Session Segmentation**
 

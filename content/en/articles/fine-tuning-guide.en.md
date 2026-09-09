@@ -89,7 +89,7 @@ lora_config = LoraConfig(
 # Apply LoRA
 model = get_peft_model(model, lora_config)
 model.print_trainable_parameters()
-# → trainable params: 13.6M || all params: 109B || 0.17%
+# → trainable params: 13.6M || all params: 109B || 0.012% (when targeting core attention projection layers)
 ```
 
 ### Step 3: Large-Scale Multi-GPU Training (DeepSpeed ZeRO)
@@ -103,7 +103,7 @@ Single-GPU QLoRA is only suitable for small-scale validation. Once you move to p
 ```json
 
 {
-    "fp16": { "enabled": true, "loss_scale": 0 },
+    "fp16": { "enabled": false },
     "bf16": { "enabled": true },
     "zero_optimization": {
         "stage": 2, 
@@ -120,10 +120,11 @@ Single-GPU QLoRA is only suitable for small-scale validation. Once you move to p
 
 Training Launch Command:
 ```bash
+# Mandatory in production: --gradient_checkpointing True
 accelerate launch \
     --config_file accelerate_deepspeed_config.yaml \
     train.py \
-    --gradient_checkpointing True \ # Mandatory in production
+    --gradient_checkpointing True \
     --learning_rate 2e-5
 ```
 

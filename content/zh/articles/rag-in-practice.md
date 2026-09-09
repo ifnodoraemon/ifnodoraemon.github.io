@@ -185,7 +185,7 @@ rewritten = [
 - **HyDE (假设性文档嵌入)**：与其直接用用户的简短 Query 去检索，不如先让 LLM 根据 Query “瞎编”一个大概的答案，然后用这个**假答案的 Embedding** 去检索真实的文档。这极大缓解了 Query 与文档之间词汇不对称（Vocabulary Mismatch）的问题。
 - **GraphRAG (知识图谱 RAG)**：面对“请总结公司第三季度所有产品的风险点”这类宏观全局问题，由于答案散落在几百个文档的碎块中，纯向量检索会由于 Top-K 限制而永远失效。
   - **抽取引擎**：使用 `instructor` 或 Pydantic 约束 LLM，强行抽取 `(实体A, 关系, 实体B)` 三元组，存入 Neo4j 等图数据引擎。
-  - **社区发现**：调用 Python 的 `NetworkX` 库，运行 **Hierarchical Leiden 算法**。该算法将数万个节点在图谱上根据连通性数学聚类成无数个密集的社区（Community）。
+  - **社区发现**：结合 Python 的 `NetworkX` 库与 `leidenalg`（或 `graspologic` 后端），运行 **Hierarchical Leiden 算法**。该算法将数万个节点在图谱上根据连通性数学聚类成无数个密集的社区（Community）。
   - **Map-Reduce 宏观推理**：LLM 提前对每个“社区”进行摘要。当遇到全局问题时，直接在这些高层的宏观社区摘要上进行 Map-Reduce 归纳映射，彻底降维打击原有的碎块化检索。
 
 ### 5. RAG 自动化量化评估体系

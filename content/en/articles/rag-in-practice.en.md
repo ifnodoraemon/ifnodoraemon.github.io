@@ -185,7 +185,7 @@ Enterprise RAG in 2026 has moved far beyond simple "text chunking + vector searc
 - **HyDE (Hypothetical Document Embeddings)**: Instead of searching with a short user query, have the LLM hallucinate a "hypothetical answer" first. Then, use the **embedding of that fake answer** to search the vector database for real documents. This drastically mitigates the Vocabulary Mismatch problem between short questions and long technical documents.
 - **GraphRAG (Knowledge Graph RAG)**: For macro-global questions like "Summarize the risk factors across all products in Q3", pure vector search will always fail due to Top-K limits, because the answer is scattered across hundreds of fragmented docs.
   - **Extraction Engine**: Utilize `instructor` or Pydantic representations to constrain the LLM, coercing it to extract `(Entity_A, Relationship, Entity_B)` triplets and ingesting them into Neo4j.
-  - **Community Detection**: Invoke Python's `NetworkX` library to run the **Hierarchical Leiden Algorithm**. This algorithm mathematically clusters tens of thousands of nodes into densely connected "Communities" based on graph network connectivity.
+  - **Community Detection**: Combine Python's `NetworkX` library with `leidenalg` (or `graspologic` backends) to run the **Hierarchical Leiden Algorithm**. This algorithm mathematically clusters tens of thousands of nodes into densely connected "Communities" based on graph network connectivity.
   - **Map-Reduce Macro Reasoning**: The LLM pre-summarizes each clustered "Community". When faced with a global narrative query, RAG performs a Map-Reduce aggregation directly over these high-level community summaries rather than fighting with isolated raw chunks.
 
 ### 5. Automated RAG Quantitative Evaluation

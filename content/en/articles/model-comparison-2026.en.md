@@ -69,7 +69,7 @@ Based on public benchmarks and [standardized LLM evaluation frameworks](/en/arti
 | SimpleBench (Reasoning) | 90% (Beats human 83%) | 85.2% | 87.4% |
 | OSWorld-Verified (Computer Control) | 75.0% (Beats human) | — | — |
 | HumanEval (Code) | 93.8% | 96.4% | 91.6% |
-| SWE-bench Pro (Engineering) | ✅ Improved | 72.7% (Opus 4.6) | — |
+| SWE-bench Verified (Engineering) | ✅ Improved | 80.8% (Opus 4.6) | — |
 | MATH | 88.5% | 86.3% | 89.7% |
 
 **Key Findings**:
@@ -87,7 +87,7 @@ Based on public benchmarks and [standardized LLM evaluation frameworks](/en/arti
 
 # Claude Sonnet 4.6: Widely recognized as #1 in code quality
 # Extended Thinking mode plans before coding, resulting in cleaner code
-# Opus 4.6 scores an industry-high 72.7% on SWE-bench real-world tasks
+# Opus 4.6 scores an industry-high 80.8% on SWE-bench Verified real-world tasks
 
 # Gemini 3.1 Pro: Strongest grasp of massive codebases
 # Native 1M token context can ingest entire projects at once
@@ -156,14 +156,14 @@ In enterprise production environments, hardcoding applications to a single LLM A
 
 When traffic reaches a certain scale, you must calculate the exact **Breakeven Point** between **Self-hosting** and **Commercial APIs**.
 
-Let's take running **Llama-4-Maverick-400B** on a rented/purchased **8x H100 (80GB)** server (roughly $30/hour on-demand) as an example:
+Let's take running an **open-source 70B model (such as Llama-3.3-70B or Qwen-2.5-72B)** on a rented/purchased **8x H100 (80GB)** server (roughly $30/hour on-demand) as an example:
 - Assume a blended API cost (e.g., GPT-5.4) of **$5.00 / 1M tokens**.
 - Given an 8x H100 node fully utilizing Continuous Batching and vLLM's PagedAttention, maximizing token throughput ($T$) per second.
 
 **Rule of Thumb Formula**:
 When your sustained business traffic exceeds roughly **1,600 Tokens per second (input+output)**, self-hosting a 70B model breaks even with the API cost. Once past this **Breakeven Point**, the savings from self-hosting compound exponentially as traffic scales.
 
-> **Architect's Advice**: Introduce an **AI Gateway (e.g., Kong AI Gateway or LiteLLM)** for unified traffic orchestration. Route 80% of routine conversations to a zero-variable-cost local Llama-4 8B (or cost-effective endpoints from [Frontier Chinese LLMs](/en/articles/domestic-llm-comparison-2026/)), while reserving the remaining 20% of highly complex reasoning or failovers to GPT-5.4.
+> **Architect's Advice**: Introduce an **AI Gateway (e.g., Kong AI Gateway or LiteLLM)** for unified traffic orchestration. Route 80% of routine conversations to zero-variable-cost local lightweight models (such as Qwen-2.5-7B or Llama-3.1-8B, or cost-effective endpoints from [Frontier Chinese LLMs](/en/articles/domestic-llm-comparison-2026/)), while reserving the remaining 20% of highly complex reasoning or failovers to GPT-5.4.
 
 ### VRAM Explosion: The Physical Geek Formula for KV Cache
 
@@ -181,7 +181,7 @@ KV_Cache_Size_Per_Token = 2 * 2 * n_layers * n_kv_heads * d_head
 
 For a 70B model, every single Token consumes approximately **0.31MB** of VRAM.
 If you want to support an ultra-long context of **1 Million Tokens** for a single conversation, its KV Cache alone will devour:
-`1,000,000 * 2.6 MB ≈ 2,600,000 MB ≈ 2.6 TB`
+`1,000,000 * 0.31 MB ≈ 310,000 MB ≈ 310 GB`
 
 **This is intrinsically why your personal 24GB consumer GPU can never run an actual 1M context.**
 
@@ -202,8 +202,8 @@ Best Practice: **Combine them based on task characteristics** — GPT-5-mini for
 ---
 ## Frequently Asked Questions (FAQ)
 
-### Q1: What is the core decision logic when choosing between GPT-4, Claude 3, and Gemini 1.5 series?
-For coding and complex reasoning tasks, the Claude 3 series demonstrates strong contextual coherence. For processing extremely long texts and multimodal tasks, the Gemini 1.5 series with its massive context window offers significant advantages. The GPT-4 series remains the most robust in general capabilities and ecosystem compatibility. For a more comprehensive evaluation matrix, please refer to our [LLM Evaluation Guide](/en/articles/llm-evaluation-guide/).
+### Q1: What is the core decision logic when choosing between GPT-5.4, Claude 4.6, and Gemini 3.1 Pro?
+For software engineering, large refactors, and complex agentic tool use, Claude Sonnet 4.6 and Opus 4.6 lead the field with Extended Thinking and unmatched contextual precision. For massive million-token multimodal contexts spanning video and high-density audio, Gemini 3.1 Pro delivers top-tier math reasoning with exceptional cost efficiency. For high-autonomy computer control, OS automation, and unified reasoning, GPT-5.4 stands out as the all-rounder flagship. For deeper evaluation metrics, explore our [LLM Evaluation Guide](/en/articles/llm-evaluation-guide/).
 
 ### Q2: Is it strictly necessary to use international models for localized business scenarios in China?
 Not necessarily. Leading domestic LLMs have developed distinct advantages in Chinese semantic understanding and regulatory compliance, alongside more cost-effective API pricing tiers. However, for highly advanced general reasoning or global expansion use cases, international models are still preferred. For detailed comparisons of Chinese models, please see our [Domestic LLM Comparison](/en/articles/domestic-llm-comparison-2026/).

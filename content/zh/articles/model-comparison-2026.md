@@ -69,7 +69,7 @@ featuredStats:
 | SimpleBench（推理） | 90%（超越人类 83%） | 85.2% | 87.4% |
 | OSWorld-Verified（计算机操控） | 75.0%（超越人类） | — | — |
 | HumanEval（代码） | 93.8% | 96.4% | 91.6% |
-| SWE-bench Pro（工程） | ✅ 改进 | 72.7%（Opus 4.6） | — |
+| SWE-bench Verified（工程） | ✅ 改进 | 80.8%（Opus 4.6） | — |
 | MATH（数学） | 88.5% | 86.3% | 89.7% |
 
 **关键发现**：
@@ -87,7 +87,7 @@ featuredStats:
 
 # Claude Sonnet 4.6：代码质量公认第一
 # Extended Thinking 模式先规划再编码，代码更整洁
-# Opus 4.6 在 SWE-bench 实际工程任务上 72.7% 业内最高
+# Opus 4.6 在 SWE-bench Verified 实际工程任务上 80.8% 业内最高
 
 # Gemini 3.1 Pro：大型代码库理解最强
 # 原生 1M token 上下文可一次读入整个项目
@@ -156,14 +156,14 @@ response = model.generate_content("解释量子计算的基本原理")
 
 当流量到达一定规模时，你必须计算**自托管模型（Self-hosting）**与**商业 API** 的成本交叉点（Breakeven Point）。
 
-我们以购买/租赁 1 台 **8x H100 (80GB)** 服务器（约 $30/小时 按需租赁，或整机买断折旧）运行 **Llama-4-Maverick-400B** 为例：
+我们以购买/租赁 1 台 **8x H100 (80GB)** 服务器（约 $30/小时 按需租赁，或整机买断折旧）运行**开源 70B 级别大模型（如 Llama-3.3-70B 或 Qwen-2.5-72B）**为例：
 - 假设 API (比如 GPT-5.4) 的混合成本估算为 **$5.00 / 1M tokens**。
 - 一台 8x H100 开满 Continuous Batching 并使用 vLLM 的 PagedAttention 后，假设每秒吞吐量（Tokens per Second）为 $T$。
 
 **推算极速法则**：
 当你的业务持续请求量达到每秒大约 **1,600 Tokens (输入+输出)** 时，自托管 70B 模型与调用 API 的成本开始持平。一旦越过这个 **Breakeven Point**，流量越大，自托管省下的钱成指数级增长。
 
-> **架构师建议**：引入 **AI Gateway (如 Kong AI Gateway 或 LiteLLM)** 进行统一调度分流。将 80% 的日常对话打入本地免费的 Llama 4 8B（面向中文专属业务亦可混合调度 [2026 国产主流大模型](/articles/domestic-llm-comparison-2026/)），仅将 20% 的极端复杂推理路由或 Failback 到 GPT-5.4。
+> **架构师建议**：引入 **AI Gateway (如 Kong AI Gateway 或 LiteLLM)** 进行统一调度分流。将 80% 的日常对话打入本地免费的开源端侧模型（如 Qwen-2.5-7B 或 Llama-3.1-8B，面向中文专属业务亦可混合调度 [2026 国产主流大模型](/articles/domestic-llm-comparison-2026/)），仅将 20% 的极端复杂推理路由或 Failback 到 GPT-5.4。
 
 ### 显存暴漏：KV Cache 的物理极客公式
 
@@ -181,7 +181,7 @@ KV_Cache_Size_Per_Token = 2 * 2 * n_layers * n_kv_heads * d_head
 
 以 70B 模型为例，每一个 Token 消耗约 **0.31MB** 显存。
 如果你想支持 **1M（一百万）Tokens** 的超长上下文单次对话，它的 KV Cache 就需要吃掉：
-`1,000,000 * 2.6 MB ≈ 2,600,000 MB ≈ 2.6 TB`
+`1,000,000 * 0.31 MB ≈ 310,000 MB ≈ 310 GB`
 
 **这也就是为什么你个人的 24G 显卡永远跑不了 1M 上下文的原因。**
 
@@ -202,8 +202,8 @@ KV_Cache_Size_Per_Token = 2 * 2 * n_layers * n_kv_heads * d_head
 ---
 ## 常见问题 (FAQ)
 
-### Q1: 在选择GPT-4系列、Claude 3系列和Gemini 1.5时，核心决策逻辑是什么？
-在代码编写与复杂推理任务中，Claude 3系列表现出极强的上下文连贯性；对于长文本处理和多模态任务，Gemini 1.5的百万级上下文窗口具有显著优势；而GPT-4系列则在通用能力和生态兼容性上最为稳健。如需更全面的评测维度，可参考我们的[大模型评测指南](/articles/llm-evaluation-guide/)。
+### Q1: 在选择 GPT-5.4、Claude 4.6 系列和 Gemini 3.1 Pro 时，核心决策逻辑是什么？
+在系统级编程重构、复杂长流程 Agent 与工具编排中，Claude Sonnet 4.6 / Opus 4.6 凭借 Extended Thinking 与极高的工程连贯性占据首选；对于包含复杂音视频的原生百万级超长文本任务，Gemini 3.1 Pro 兼具最高性价比与数学推理优势；而在需要原生屏幕感知与计算机操控（Computer-Using Agent）等高阶自主化任务中，GPT-5.4 凭借全能表现领跑。如需更系统化的评测框架，可参考我们的[大模型评测指南](/articles/llm-evaluation-guide/)。
 
 ### Q2: 针对国内业务场景，是否必须选择海外大模型？
 并非必须。当前国内头部大模型在中文语义理解和本地化合规方面已经具备明显优势，且在API定价层级（API pricing tiers）上更具性价比。对于对通用推理能力要求极高的场景，海外模型仍是首选。关于国产模型的详细对比，请查阅[国产大模型对比评测](/articles/domestic-llm-comparison-2026/)。

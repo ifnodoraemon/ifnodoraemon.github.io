@@ -4,7 +4,7 @@ slug: ai-trends-2026
 date: 2026-03-07
 tag: 行业趋势
 tagClass: tag-green
-description: 从 Thinking 推理模式到 Agent 化应用，深度剖析 2026 年 AI 大模型领域最值得关注的六大发展趋势。
+description: 从 Thinking 推理模式到 Agent 化应用，深度剖析 2026 年 AI 大模型领域最值得关注的十一大核心发展趋势。
 ---
 
 ## 趋势一：推理能力大跃进

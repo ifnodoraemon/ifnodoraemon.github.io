@@ -99,7 +99,7 @@ vLLM 引入了**连续批处理**（也叫 iteration-level scheduling）：
 第 6 轮: [请求A开始解码!] + [请求B解码1Token] + [请求C解码1Token] + ...
 ```
 
-**核心调度策略**：vLLM V0.28 引擎默认优先调度**正在解码的请求**，再用剩余预算调度新的预填充块。这意味着用户 B 和 C 几乎感受不到用户 A 的超长输入带来的延迟抖动——Token 一直在流畅地蹦出来。
+**核心调度策略**：vLLM V1 引擎（v0.28.0）默认优先调度**正在解码的请求**，再用剩余预算调度新的预填充块。这意味着用户 B 和 C 几乎感受不到用户 A 的超长输入带来的延迟抖动——Token 一直在流畅地蹦出来。
 
 > **在线服务必开**：`--enable-chunked-prefill`。这不是一个可选项，而是生产环境的标配。
 
@@ -191,7 +191,7 @@ APC 在以下情况下收益递减或几乎无效：
 2. **每个请求都完全不同**：没有共享前缀，哈希表查不到任何命中。
 3. **缓存 Miss 反而有微小开销**：哈希计算和查表本身需要 CPU 时间（但通常可忽略不计）。
 
-> **关键配置**：启动时加 `--enable-prefix-caching`（在 vLLM V0.28 中默认开启）。
+> **关键配置**：启动时加 `--enable-prefix-caching`（在 vLLM V1 引擎 / v0.28.0 中默认开启）。
 
 ### 在 API 响应中获取缓存命中数据
 
@@ -224,7 +224,7 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
 
 ### 缓存命中率监控：Prometheus 指标
 
-除了单请求级别的 `cached_tokens`，你还需要**全局缓存命中率**来评估系统整体效率。vLLM V0.28 使用 Counter 类型指标（替代了旧版已废弃的 Gauge 指标 `gpu_prefix_cache_hit_rate`）：
+除了单请求级别的 `cached_tokens`，你还需要**全局缓存命中率**来评估系统整体效率。vLLM V1 引擎（v0.28.0）使用 Counter 类型指标（替代了旧版已废弃的 Gauge 指标 `gpu_prefix_cache_hit_rate`）：
 
 ```text
 # V1 前缀缓存指标（Counter 类型，精确可靠）
@@ -486,7 +486,7 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
 |---------|---------|---------|------|
 | **H100/H800** | FP8 (`--quantization fp8`) | <1% | 吞吐提升 ~1.5x，**零校准**开箱即用 |
 | **A100/L40S** | INT8 GPTQ/AWQ | ≈0% | 显存减半，速度持平或略快 |
-| **Blackwell B200** | NVFP4 | ≤1% | 吞吐是 FP8 的 **3x** |
+| **Blackwell B200** | NVFP4 | ≤1% | 吞吐是 FP8 的 **2x** |
 | **任何卡** | INT4 AWQ | 1~3% | 极限压缩，单卡跑更大模型 |
 
 #### [8] KV Cache 量化——容易被忽视的隐藏加速器

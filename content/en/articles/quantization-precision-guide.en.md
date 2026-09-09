@@ -18,7 +18,7 @@ featuredStats:
 ## Beginner's Guide: What is Quantization? Will the Model Get "Dumber"?
 
 In 2026, the biggest anxiety when tinkering with Large Language Models isn't raw compute power; it's **VRAM (Video RAM)**. 
-Take an extreme example: Even at FP16 precision, Llama 4 Maverick 400B requires about 800GB of VRAM just to store the weights. That means even if you stuff an $300,000 server with eight H100s, you can barely fit it, let alone run inference. Even a 70B model needs ~140GB — far beyond the limit of any single consumer GPU.
+Take an extreme example: Even at FP16 precision, Llama 4 Maverick 400B requires about 800GB of VRAM just to store the weights. That means even an entire $300,000 server with eight 80GB H100s (640GB total) cannot even fit the weights alone (requiring at least an 8x H200 node or a 16x H100 cluster), let alone run inference. Even a 70B model needs ~140GB — far beyond the limit of any single consumer GPU.
 
 This harsh reality forced the adoption of **Quantization**.
 
@@ -210,7 +210,7 @@ Why did QLoRA—the monument of the fine-tuning world—use a weird format calle
 
 ## The End Game: Blackwell and the OCP MX Microscaling Standard
 
-In recent years, tech giants realized that fighting over software wasn't enough; they needed a unified hardware standard. In 2025, AMD, Nvidia, Meta, Intel, and others unprecedentedly united to forge the `OCP Microscaling (MX)` standard.
+In recent years, tech giants realized that fighting over software wasn't enough; they needed a unified hardware standard. First proposed in late 2023 and formalized in 2024, AMD, Nvidia, Meta, Intel, and others unprecedentedly united to forge the `OCP Microscaling (MX)` specification.
 
 Its core idea is highly disruptive:
 Stop arguing about FP8 vs INT8. Just use a technique called **"Communal Scaling Factors"** (e.g., MXFP6, MXFP4).
