@@ -31,7 +31,7 @@ export function renderNav(activePage = '') {
   togglePath += window.location.search + window.location.hash;
 
   let linksHtml = navItems.map(item => 
-    `<a href="${item.href}"${activePage === item.id ? ' class="active" aria-current="page"' : ''}><span>${item.title}</span><span class="nav-arrow" aria-hidden="true">&gt;</span></a>`
+    `<a href="${item.href}"${activePage === item.id ? ' class="active" aria-current="page"' : ''}><span>${item.title}</span></a>`
   ).join('\n          ');
 
   nav.setAttribute('aria-label', isEn ? 'Main navigation' : '主导航');
@@ -46,12 +46,8 @@ export function renderNav(activePage = '') {
           </svg>
         </div>
         <div class="brand-text-wrapper">
-          <span class="brand-text-zh">${isEn ? 'NOBITA TALKS AI' : '大雄话AI'}<span class="brand-version">v5.4</span></span>
-          <span class="brand-text-en"><span class="terminal-prompt">&gt;</span> ${isEn ? 'sys.init()' : '模型核心已装载'}<span class="cursor-blink">_</span></span>
-        </div>
-        <div class="brand-status">
-          <span class="status-dot"></span>
-          <span>ONLINE</span>
+          <span class="brand-text-zh">${isEn ? 'NOBITA TALKS AI' : '大雄话AI'}</span>
+          <span class="brand-text-en">${isEn ? 'AI Architecture & Engineering' : 'AI 架构与技术笔记'}</span>
         </div>
       </a>
       <div class="nav-links" id="nav-links">
@@ -65,10 +61,8 @@ export function renderNav(activePage = '') {
             </svg>
             <span>GitHub</span>
           </a>
-          <a href="${togglePath}" class="lang-toggle" title="Toggle Language">
-            <span class="lang-bracket">[</span>
+          <a href="${togglePath}" class="lang-toggle" title="${isEn ? 'Switch to Chinese' : '切换至英文'}" aria-label="Toggle Language">
             <span class="lang-text">${isEn ? '中文' : 'ENG'}</span>
-            <span class="lang-bracket">]</span>
           </a>
         </div>
       </div>
