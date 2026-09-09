@@ -5772,3 +5772,62 @@ h1, h2, h3, .glitch-title { text-wrap: balance; }
   border-color: rgba(56, 189, 248, 0.35);
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.08);
 }
+
+/* ================================================
+   CATEGORIZED SKILLS MATRIX
+   ================================================ */
+.about-skills-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.about-skills-category {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1.1rem 1.4rem;
+  transition: all 0.25s var(--ease);
+}
+
+.about-skills-category:hover {
+  background: rgba(255, 255, 255, 0.025);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.4);
+}
+
+.about-skills-category-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.about-skills-category-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.about-skills-category-name {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.about-skills-category-sub {
+  font-size: 0.72rem;
+  color: #717d96;
+  font-family: var(--font-mono);
+  margin-left: auto;
+  letter-spacing: 0.02em;
+}
+
+.about-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

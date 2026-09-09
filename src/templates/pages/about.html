@@ -274,11 +274,31 @@
                 <span>&gt;</span>
                 <span>{{about.skillsTitle}}</span>
               </h2>
+              
+              {{#if about.skillCategories}}
+              <div class="about-skills-container">
+                {{#each about.skillCategories}}
+                <div class="about-skills-category">
+                  <div class="about-skills-category-header">
+                    <span class="about-skills-category-icon">{{this.icon}}</span>
+                    <h3 class="about-skills-category-name">{{this.name}}</h3>
+                    <span class="about-skills-category-sub">{{this.sub}}</span>
+                  </div>
+                  <div class="about-skills-list">
+                    {{#each this.skills}}
+                    <span class="about-skill-pill">{{this}}</span>
+                    {{/each}}
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+              {{else}}
               <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
                 {{#each about.skills}}
                 <span class="about-skill-pill">{{this}}</span>
                 {{/each}}
               </div>
+              {{/if}}
             </div>
 
             <!-- Metrics Panel -->

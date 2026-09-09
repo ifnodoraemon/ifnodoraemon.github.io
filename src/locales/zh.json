@@ -625,20 +625,49 @@
     "eduDesc": "主修体系结构、操作系统、分布式计算与深度学习，奠定了深入底层硬件拓扑与并行计算的系统工程基础。",
     "skillsTitle": "核心技术矩阵 // Tech Stack & Infra",
     "skills": [
-      "K8s & GPUStack (MaaS Serving)",
-      "NVIDIA A800 / H800 / H100 Cluster",
-      "Huawei Ascend 910B & 310P (MindIE)",
-      "Iluvatar PPU 810E Heterogeneous Infra",
-      "vLLM & SGLang High-Throughput Serving",
-      "DeepSeek MLA & KDA Attention",
-      "Model Context Protocol (MCP)",
-      "Java & Spring Boot (Enterprise B2B)",
-      "Python & scikit-learn (SVM)",
-      "PyTorch & Triton Kernels",
-      "FP8 / AWQ Quantization",
-      "FlashAttention-3",
-      "Agent Loop & MCTS Reflection",
-      "Docker & Linux eBPF Sandbox"
+      "vLLM & SGLang 高吞吐推理",
+      "PagedAttention 显存虚拟化",
+      "DeepSeek MLA & KDA Attention 拓扑",
+      "Kubernetes (K8s) & GPUStack 异构调度",
+      "NVIDIA A800 / H800 / H100 集群实战",
+      "华为昇腾 910B & 310P (CANN / MindIE)",
+      "天数智芯 PPU 810E 跨架构推理",
+      "FP8 / AWQ / SmoothQuant 动态量化",
+      "PyTorch & Triton 算子级开发",
+      "FlashAttention-3 加速",
+      "RoPE 长上下文扩展算法",
+      "Model Context Protocol (MCP) 统一总线",
+      "Agent Runloop 状态机与执行循环",
+      "MCTS 树搜索反思与自纠错",
+      "Linux Bubblewrap (bwrap) 安全沙箱",
+      "Docker 容器隔离 & eBPF 安全遥测",
+      "Dynamic Tool Calling 动态工具调用",
+      "Durable Memory 持久化多作用域记忆",
+      "WeChat / Telegram 连接器适配工程",
+      "Python 3.13+ (Core / Asyncio 异步高并发)",
+      "FastAPI / Uvicorn 生产级微服务",
+      "scikit-learn (SVM / NLP 文本特征工程)",
+      "NumPy & Pandas 科学计算与数据清洗",
+      "PyTorch 深度学习网络建模与微调",
+      "OpenCV 计算机视觉 & 零拷贝流媒体硬解码",
+      "YOLO 目标检测与 ByteTrack 多目标追踪",
+      "Poetry / UV 现代包管理与工程规范",
+      "Java (Core / JVM 调优 / JUC 并发编程)",
+      "Spring Boot 企业级微服务框架",
+      "Spring Cloud 分布式治理与网关",
+      "MyBatis-Plus / Spring Data JPA",
+      "MySQL / PostgreSQL 高可用数据库设计",
+      "Redis 分布式缓存与锁机制",
+      "RabbitMQ / Kafka 高并发消息队列",
+      "企业级多租户 RBAC 权限与海量业务流",
+      "C++ / Python Qt (PyQt / PySide / Qt Widgets)",
+      "QML / Qt 跨平台桌面 GUI 客户端架构与通信",
+      "JavaScript (ES6+) & TypeScript",
+      "Vue 3 全家桶 (Composition API / Pinia)",
+      "ECharts 交互式多维数据图表研报",
+      "Node.js & Vite 极速静态构建工程",
+      "WebSocket 实时全双工流式推送通信",
+      "TailwindCSS / 现代科技感工业 UI 规范"
     ],
     "clusterTitle": "硬件与异构算力集群实战 // Cluster & MaaS Portfolio",
     "clusterDesc": "实战调优基于 Kubernetes (K8s) + GPUStack 的企业级 MaaS 异构推理集群，深度覆盖 NVIDIA (A800 / H800 / 32 卡 H100 裸金属集群)、华为昇腾 (Ascend 910B / 310P) 及天数智芯 (PPU 810E) 等异构算力芯片的统一虚拟化调度、权重分发、MindIE / vLLM 跨平台推理适配与混合并行集群编排。",
@@ -668,7 +697,87 @@
     "sys0Name": "异构算力 MaaS 推理平台 (K8s + GPUStack)",
     "sys0Role": "异构算力架构 / 推理集群系统工程",
     "sys0Desc": "基于 K8s 与 GPUStack 搭建跨芯片大模型服务底座，统一调度 NVIDIA (A800/H800)、华为昇腾 (Ascend 910B/310P) 与天数智芯 PPU 810E，实现跨架构模型权重分发、vLLM/MindIE 引擎适配与高可用推理调度。",
-    "sys0LinkText": "查看算力集群详情"
+    "sys0LinkText": "查看算力集群详情",
+    "skillCategories": [
+      {
+        "icon": "⚡",
+        "name": "大模型系统、异构算力与推理引擎",
+        "sub": "HPC / Serving / Kernels",
+        "skills": [
+          "vLLM & SGLang 高吞吐推理",
+          "PagedAttention 显存虚拟化",
+          "DeepSeek MLA & KDA Attention 拓扑",
+          "Kubernetes (K8s) & GPUStack 异构调度",
+          "NVIDIA A800 / H800 / H100 集群实战",
+          "华为昇腾 910B & 310P (CANN / MindIE)",
+          "天数智芯 PPU 810E 跨架构推理",
+          "FP8 / AWQ / SmoothQuant 动态量化",
+          "PyTorch & Triton 算子级开发",
+          "FlashAttention-3 加速",
+          "RoPE 长上下文扩展算法"
+        ]
+      },
+      {
+        "icon": "🤖",
+        "name": "自主智能体系统与运行时协议",
+        "sub": "Agent OS / MCP / Sandboxing",
+        "skills": [
+          "Model Context Protocol (MCP) 统一总线",
+          "Agent Runloop 状态机与执行循环",
+          "MCTS 树搜索反思与自纠错",
+          "Linux Bubblewrap (bwrap) 安全沙箱",
+          "Docker 容器隔离 & eBPF 安全遥测",
+          "Dynamic Tool Calling 动态工具调用",
+          "Durable Memory 持久化多作用域记忆",
+          "WeChat / Telegram 连接器适配工程"
+        ]
+      },
+      {
+        "icon": "🐍",
+        "name": "Python 工程、数据科学与算法技术栈",
+        "sub": "Python 3.13 / ML / Computer Vision",
+        "skills": [
+          "Python 3.13+ (Core / Asyncio 异步高并发)",
+          "FastAPI / Uvicorn 生产级微服务",
+          "scikit-learn (SVM / NLP 文本特征工程)",
+          "NumPy & Pandas 科学计算与数据清洗",
+          "PyTorch 深度学习网络建模与微调",
+          "OpenCV 计算机视觉 & 零拷贝流媒体硬解码",
+          "YOLO 目标检测与 ByteTrack 多目标追踪",
+          "Poetry / UV 现代包管理与工程规范"
+        ]
+      },
+      {
+        "icon": "☕",
+        "name": "Java 企业级后端、微服务与高并发架构",
+        "sub": "Enterprise B2B / High Concurrency",
+        "skills": [
+          "Java (Core / JVM 调优 / JUC 并发编程)",
+          "Spring Boot 企业级微服务框架",
+          "Spring Cloud 分布式治理与网关",
+          "MyBatis-Plus / Spring Data JPA",
+          "MySQL / PostgreSQL 高可用数据库设计",
+          "Redis 分布式缓存与锁机制",
+          "RabbitMQ / Kafka 高并发消息队列",
+          "企业级多租户 RBAC 权限与海量业务流"
+        ]
+      },
+      {
+        "icon": "💻",
+        "name": "全栈前端、跨平台桌面 GUI 与 Qt 开发",
+        "sub": "Frontend / Qt Desktop / Visualization",
+        "skills": [
+          "C++ / Python Qt (PyQt / PySide / Qt Widgets)",
+          "QML / Qt 跨平台桌面 GUI 客户端架构与通信",
+          "JavaScript (ES6+) & TypeScript",
+          "Vue 3 全家桶 (Composition API / Pinia)",
+          "ECharts 交互式多维数据图表研报",
+          "Node.js & Vite 极速静态构建工程",
+          "WebSocket 实时全双工流式推送通信",
+          "TailwindCSS / 现代科技感工业 UI 规范"
+        ]
+      }
+    ]
   },
   "home": {
     "heroSystem": "LLM ARCHITECTURE & AGENTIC RUNTIMES",

@@ -625,20 +625,49 @@
     "eduDesc": "Specialized in computer architecture, operating systems, distributed computing, and deep learning, building the rigorous engineering foundation required for low-level systems work.",
     "skillsTitle": "Tech Stack & Matrix",
     "skills": [
-      "K8s & GPUStack (MaaS Serving)",
-      "NVIDIA A800 / H800 / H100 Cluster",
-      "Huawei Ascend 910B & 310P (MindIE)",
-      "Iluvatar PPU 810E Heterogeneous Infra",
       "vLLM & SGLang High-Throughput Serving",
-      "DeepSeek MLA & KDA Attention",
-      "Model Context Protocol (MCP)",
-      "Java & Spring Boot (Enterprise B2B)",
-      "Python & scikit-learn (SVM)",
-      "PyTorch & Triton Kernels",
-      "FP8 / AWQ Quantization",
-      "FlashAttention-3",
-      "Agent Loop & MCTS Reflection",
-      "Docker & Linux eBPF Sandbox"
+      "PagedAttention Memory Virtualization",
+      "DeepSeek MLA & KDA Attention Topologies",
+      "Kubernetes (K8s) & GPUStack Cluster Scheduling",
+      "NVIDIA A800 / H800 / H100 Cluster Operations",
+      "Huawei Ascend 910B & 310P (CANN / MindIE)",
+      "Iluvatar PPU 810E Cross-Chip Serving",
+      "FP8 / AWQ / SmoothQuant Quantization",
+      "PyTorch & Triton Custom Kernels",
+      "FlashAttention-3 Acceleration",
+      "RoPE Long-Context Scaling",
+      "Model Context Protocol (MCP) Unified Bus",
+      "Agent Runloops & Finite State Machines",
+      "MCTS Tree Search Reflection & Self-Correction",
+      "Linux Bubblewrap (bwrap) Sandbox Isolation",
+      "Docker Containers & eBPF Observability",
+      "Dynamic Tool Calling & Plan Synthesis",
+      "Durable Memory & Multi-Scope Provenance",
+      "WeChat & Telegram Connector Adapters",
+      "Python 3.13+ (Core / High-Concurrency Asyncio)",
+      "FastAPI & Uvicorn Production Microservices",
+      "scikit-learn (SVM / NLP Feature Engineering)",
+      "NumPy & Pandas High-Performance Data Analysis",
+      "PyTorch Deep Learning & Model Tuning",
+      "OpenCV Video Pipelines & Zero-Copy Hardware Decoding",
+      "YOLO Object Detection & ByteTrack Multi-Target Tracking",
+      "Poetry & UV Modern Dependency Packaging",
+      "Java (Core / JVM Internals / JUC Concurrency)",
+      "Spring Boot Microservices Architecture",
+      "Spring Cloud Governance & API Gateways",
+      "MyBatis-Plus & Spring Data JPA",
+      "MySQL & PostgreSQL Relational Schema Design",
+      "Redis Distributed Caching & Locks",
+      "RabbitMQ & Kafka Event Streaming Queues",
+      "Multi-Tenant Enterprise RBAC & B2B Pipelines",
+      "C++ & Python Qt (PyQt / PySide / Qt Widgets)",
+      "QML & Qt Cross-Platform Desktop GUI Architecture",
+      "JavaScript (ES6+) & TypeScript",
+      "Vue 3 Ecosystem (Composition API & Pinia)",
+      "ECharts Interactive Data Visualizations",
+      "Node.js & Vite Tooling & SSG Pipelines",
+      "WebSocket Real-Time Full-Duplex Streaming",
+      "TailwindCSS & Modern Sci-Fi Industrial UI Design"
     ],
     "clusterTitle": "Hardware & Heterogeneous Cluster Portfolio",
     "clusterDesc": "Hands-on experience tuning enterprise MaaS heterogeneous serving clusters built on Kubernetes (K8s) + GPUStack. Deep operational mastery spanning NVIDIA (A800 / H800 / 32-GPU H100 bare-metal clusters), Huawei Ascend (910B / 310P NPUs), and Iluvatar (PPU 810E) accelerators, covering unified virtualization, weight caching, cross-platform MindIE / vLLM serving, and distributed parallel pipelines.",
@@ -668,7 +697,87 @@
     "sys0Name": "Heterogeneous MaaS Serving Platform (K8s + GPUStack)",
     "sys0Role": "Compute Architect & Cluster Engineer",
     "sys0Desc": "Engineered cross-chip LLM serving foundations via K8s and GPUStack, managing heterogeneous clusters across NVIDIA (A800/H800), Huawei Ascend (910B/310P), and Iluvatar PPU 810E with optimized weight caching, MindIE/vLLM engines, and multi-tenant resilient routing.",
-    "sys0LinkText": "Explore Infra Specs"
+    "sys0LinkText": "Explore Infra Specs",
+    "skillCategories": [
+      {
+        "icon": "⚡",
+        "name": "LLM Systems, Heterogeneous Compute & Serving Engines",
+        "sub": "HPC / Serving / Kernels",
+        "skills": [
+          "vLLM & SGLang High-Throughput Serving",
+          "PagedAttention Memory Virtualization",
+          "DeepSeek MLA & KDA Attention Topologies",
+          "Kubernetes (K8s) & GPUStack Cluster Scheduling",
+          "NVIDIA A800 / H800 / H100 Cluster Operations",
+          "Huawei Ascend 910B & 310P (CANN / MindIE)",
+          "Iluvatar PPU 810E Cross-Chip Serving",
+          "FP8 / AWQ / SmoothQuant Quantization",
+          "PyTorch & Triton Custom Kernels",
+          "FlashAttention-3 Acceleration",
+          "RoPE Long-Context Scaling"
+        ]
+      },
+      {
+        "icon": "🤖",
+        "name": "Autonomous Agent Systems & Runtime Protocols",
+        "sub": "Agent OS / MCP / Sandboxing",
+        "skills": [
+          "Model Context Protocol (MCP) Unified Bus",
+          "Agent Runloops & Finite State Machines",
+          "MCTS Tree Search Reflection & Self-Correction",
+          "Linux Bubblewrap (bwrap) Sandbox Isolation",
+          "Docker Containers & eBPF Observability",
+          "Dynamic Tool Calling & Plan Synthesis",
+          "Durable Memory & Multi-Scope Provenance",
+          "WeChat & Telegram Connector Adapters"
+        ]
+      },
+      {
+        "icon": "🐍",
+        "name": "Python Engineering, Data Science & Machine Learning",
+        "sub": "Python 3.13 / ML / Computer Vision",
+        "skills": [
+          "Python 3.13+ (Core / High-Concurrency Asyncio)",
+          "FastAPI & Uvicorn Production Microservices",
+          "scikit-learn (SVM / NLP Feature Engineering)",
+          "NumPy & Pandas High-Performance Data Analysis",
+          "PyTorch Deep Learning & Model Tuning",
+          "OpenCV Video Pipelines & Zero-Copy Hardware Decoding",
+          "YOLO Object Detection & ByteTrack Multi-Target Tracking",
+          "Poetry & UV Modern Dependency Packaging"
+        ]
+      },
+      {
+        "icon": "☕",
+        "name": "Java Enterprise Backend & Distributed Architecture",
+        "sub": "Enterprise B2B / High Concurrency",
+        "skills": [
+          "Java (Core / JVM Internals / JUC Concurrency)",
+          "Spring Boot Microservices Architecture",
+          "Spring Cloud Governance & API Gateways",
+          "MyBatis-Plus & Spring Data JPA",
+          "MySQL & PostgreSQL Relational Schema Design",
+          "Redis Distributed Caching & Locks",
+          "RabbitMQ & Kafka Event Streaming Queues",
+          "Multi-Tenant Enterprise RBAC & B2B Pipelines"
+        ]
+      },
+      {
+        "icon": "💻",
+        "name": "Frontend, Cross-Platform Desktop GUI & Qt Engineering",
+        "sub": "Frontend / Qt Desktop / Visualization",
+        "skills": [
+          "C++ & Python Qt (PyQt / PySide / Qt Widgets)",
+          "QML & Qt Cross-Platform Desktop GUI Architecture",
+          "JavaScript (ES6+) & TypeScript",
+          "Vue 3 Ecosystem (Composition API & Pinia)",
+          "ECharts Interactive Data Visualizations",
+          "Node.js & Vite Tooling & SSG Pipelines",
+          "WebSocket Real-Time Full-Duplex Streaming",
+          "TailwindCSS & Modern Sci-Fi Industrial UI Design"
+        ]
+      }
+    ]
   },
   "home": {
     "heroSystem": "LLM ARCHITECTURE & AGENTIC RUNTIMES",
