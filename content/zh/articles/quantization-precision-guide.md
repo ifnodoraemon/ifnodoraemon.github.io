@@ -210,7 +210,7 @@ QLoRA 这座微调界的丰碑，为什么采用了奇怪的 `NF4 (NormalFloat 4
 
 ## 终局展望：Blackwell 与 OCP MX 微缩放标准
 
-这几年巨头们为了卷大模型，不仅软件打得头破血流，底层标准也开始一统江湖。2023 年秋季提出并在 2024 年正式规范化的 `OCP Microscaling (MX)` 缩放标准，由 AMD、Nvidia、Meta、Intel 等破天荒联合制定。
+这几年巨头们为了卷大模型，不仅软件打得头破血流，底层标准也开始一统江湖。2023 年秋季提出并在 2024 年正式规范化的 `OCP Microscaling (MX)` 缩放标准，由 AMD、Arm、Intel、Meta、Microsoft、NVIDIA、Qualcomm 等七大巨头破天荒联合制定。
 
 它的核心极具颠覆性：
 不再纠结于 FP8 还是 INT8，直接上一种叫 **“大锅饭缩放因子”** 的技术（比如 MXFP6, MXFP4）。

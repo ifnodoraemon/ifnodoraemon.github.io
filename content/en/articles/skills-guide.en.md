@@ -553,7 +553,8 @@ timeline
     title Skills System Evolution Timeline
     2023.08 / 11 : ChatGPT Custom Instructions & GPTs launch : OpenAI establishes early prompt customization
     2024 : .cursorrules single file : Earliest editor-level custom instructions implementation
-    2024.10 : copilot-instructions.md & CLAUDE.md : Multi-platform support for project-level configurations
+    2024.10 : copilot-instructions.md : GitHub Copilot supports repo-level custom instructions
+    2025.02 : CLAUDE.md specification : Claude Code launches project-level memory and rules
     2025-05-16 : AGENTS.md standard published : Driving cross-platform open agent standards
     2025-10-16 : SKILL.md launches : Anthropic introduces modular Agent Skills system
     2026 Q1 : Agent Skills 2.0 : Multi-agent orchestration, dynamic injection, and cross-platform compatibility

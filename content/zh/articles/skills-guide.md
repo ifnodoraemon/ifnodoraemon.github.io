@@ -553,7 +553,8 @@ timeline
     title Skills 系统演进时间线
     2023.08 / 11 : ChatGPT Custom Instructions 与 GPTs 推出 : OpenAI 奠定早期提示词定制体系
     2024 : .cursorrules 单文件 : 早期编辑器级自定义指令实践
-    2024.10 : copilot-instructions.md 与 CLAUDE.md : 多平台开始支持项目级配置
+    2024.10 : copilot-instructions.md : GitHub Copilot 支持仓库级自定义指令
+    2025.02 : CLAUDE.md 规范 : Claude Code 推出项目级内存与架构规范
     2025-05-16 : AGENTS.md 规范发布 : 推动跨平台开放代理标准
     2025-10-16 : SKILL.md 发布 : Anthropic 推出模块化 Agent Skills 系统
     2026 Q1 : Agent Skills 2.0 : 多代理协同、动态注入与跨平台生态兼容

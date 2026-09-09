@@ -210,7 +210,7 @@ Why did QLoRA—the monument of the fine-tuning world—use a weird format calle
 
 ## The End Game: Blackwell and the OCP MX Microscaling Standard
 
-In recent years, tech giants realized that fighting over software wasn't enough; they needed a unified hardware standard. First proposed in late 2023 and formalized in 2024, AMD, Nvidia, Meta, Intel, and others unprecedentedly united to forge the `OCP Microscaling (MX)` specification.
+In recent years, tech giants realized that fighting over software wasn't enough; they needed a unified hardware standard. First proposed in late 2023 and formalized in 2024, AMD, Arm, Intel, Meta, Microsoft, NVIDIA, Qualcomm, and others unprecedentedly united to forge the `OCP Microscaling (MX)` specification.
 
 Its core idea is highly disruptive:
 Stop arguing about FP8 vs INT8. Just use a technique called **"Communal Scaling Factors"** (e.g., MXFP6, MXFP4).
