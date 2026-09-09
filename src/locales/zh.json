@@ -10,8 +10,8 @@
       "desc": "汇聚 2026 年最新大模型排行榜与全维星状图：Kimi K3、GLM-5.3、DeepSeek-V4-Pro、Claude Fable 5.1、GPT-6 Astra、Qwen3.8-Max、Gemini 3.8 Flash 等深度对比。"
     },
     "projects": {
-      "title": "个人作品 — 大雄话AI",
-      "desc": "基于各大顶级模型开发的创新实验项目与开源工具演示。"
+      "title": "作品与系统工程 | 大雄话AI",
+      "desc": "ifnodoraemon (大雄) 的代表性技术作品与落地系统，涵盖 Navi 本地 Agent OS、牛客企业端后端与 AI 智能简历评分系统、Doraemon Code 代码智能体与高并发服务矩阵。"
     },
     "about": {
       "title": "关于节点 — 大雄话AI",
@@ -566,9 +566,9 @@
     "relatedTitle": "2026 相关前沿深度文章"
   },
   "projects": {
-    "heroTag": "PORTFOLIO & PROJECTS",
-    "heroTitle": "个人作品",
-    "heroDesc": "探索大型语言模型的边界能力，构建实验性工具与 Agent 应用演示。",
+    "heroTag": "PORTFOLIO & FLAGSHIP SYSTEMS",
+    "heroTitle": "核心作品与系统工程",
+    "heroDesc": "涵盖自主个人智能体操作系统、千万级商业企业端高并发架构与 AI 简历打分系统、分布式推理加速等硬核实战落地工程。",
     "comingSoon": "新项目正在构建中",
     "comingDesc": "正在开发基于多 Agent 协同的工作流自动化平台。敬请期待后续开源发布与在线 Demo。",
     "btnGithub": "关注我的 GitHub",
@@ -586,7 +586,11 @@
     "p5_title": "Smart Campus AI",
     "p5_desc": "公司内部全栈项目：基于 Python 开发的全流程智慧园区系统，涵盖从前端摄像头视频流接入、AI 算法推理、到后端的自动告警触发与多渠道告警通知。",
     "p6_title": "openDataAnalysis",
-    "p6_desc": "一个交互式的表格数据分析工具。支持上传 CSV 或 Excel 文件，由智能体自动进行数据检查和查询，并生成带有交互式图表的研报。前端采用 Vue3 + ECharts，后端采用 Go。"
+    "p6_desc": "一个交互式的表格数据分析工具。支持上传 CSV 或 Excel 文件，由智能体自动进行数据检查和查询，并生成带有交互式图表的研报。前端采用 Vue3 + ECharts，后端采用 Go。",
+    "navi_title": "🤖 Navi - Governed Agent OS",
+    "navi_desc": "个人 GitHub 开源旗舰项目：面向未来的本地优先、受安全治理个人 AI 助手操作系统 (Local-First Governed Agent OS)。核心基于声明式 Schema 严格校验的 Capability Manifest 驱动任务规划，具备持久化 Goal/Run 状态机、多层级记忆作用域与 Linux Bubblewrap (bwrap) 安全沙箱隔离，并提供 CLI、受认证的本地 FastAPI 接口以及微信 (WeChat/Weixin) & Telegram 连接器支持。",
+    "nowcoder_title": "🏢 牛客企业端招聘与 AI 智能简历评估系统",
+    "nowcoder_desc": "深度参与的商业级企业端（B端）人力资源与智能招聘系统。后端核心采用 Java / Spring Boot 微服务架构与高并发数据库设计，保障海量企业客户招聘、职位发布、候选人流转与企业多级组织权限（RBAC）流转；同时自主设计并落地基于 Python scikit-learn (sklearn) SVM（支持向量机）的智能简历打分与人岗匹配算法系统，通过多维特征工程与文本拓扑匹配，实现海量简历与 JD 的高精度自动化评估与排序推荐。"
   },
   "about": {
     "heroTag": "ARCHITECT DOSSIER // BUPT CS",
@@ -622,6 +626,8 @@
       "vLLM & SGLang Serving",
       "DeepSeek MLA & KDA Attention",
       "Model Context Protocol (MCP)",
+      "Java & Spring Boot (Enterprise B2B)",
+      "Python & scikit-learn (SVM)",
       "PyTorch & Triton Kernels",
       "FP8 / AWQ Quantization",
       "FlashAttention-3",
@@ -640,7 +646,21 @@
     "stat1": "万字架构研报",
     "stat2": "顶流大模型实测",
     "stat3": "硬核工程专栏",
-    "stat4": "代码物理机复现率"
+    "stat4": "代码物理机复现率",
+    "flagshipTitle": "代表性生产系统 // Flagship Production Systems",
+    "flagshipSubtitle": "从亿级并发的企业端架构到本地自研 Agent OS 的全链路工程落地",
+    "sys1Name": "Navi - Governed Personal Agent OS",
+    "sys1Role": "个人开源架构师 / 操作系统设计",
+    "sys1Desc": "本地优先的个人 AI 助手操作系统。基于声明式 Capability Manifest、Bubblewrap OS 容器级沙箱、Goal/Run 状态机，原生打通微信与 Telegram。",
+    "sys1LinkText": "查看 GitHub 源码",
+    "sys2Name": "牛客企业端与 AI 简历评分系统 (hr.nowcoder.com)",
+    "sys2Role": "后端核心业务开发 / 机器学习算法落地",
+    "sys2Desc": "基于 Java / Spring Boot 微服务架构支撑海量企业招聘业务流；研发基于 Python scikit-learn (sklearn) SVM 的智能简历打分系统，实现人岗自动化精准评估。",
+    "sys2LinkText": "访问企业端生产系统",
+    "sys3Name": "Doraemon Code (本地全功能编程助手)",
+    "sys3Role": "全流程单进程代码 Agent",
+    "sys3Desc": "对标 Claude Code 的开源本地编程 Agent，支持 39+ 工具沙箱直调与多模型热切换。",
+    "sys3LinkText": "查看 GitHub 源码"
   },
   "home": {
     "heroSystem": "LLM ARCHITECTURE & AGENTIC RUNTIMES",

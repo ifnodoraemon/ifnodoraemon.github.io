@@ -10,8 +10,8 @@
       "desc": "Comprehensive 2026 AI model comparison and capability star chart: Kimi K3, GLM-5.3, DeepSeek-V4-Pro, Claude Fable 5.1, GPT-6 Astra, Qwen3.8-Max, and Gemini 3.8 Flash."
     },
     "projects": {
-      "title": "Personal Projects — Nobita Talks AI",
-      "desc": "Innovative experimental projects and open-source tool demonstrations built on top-tier LLMs."
+      "title": "Projects & Systems Portfolio | Nobita Talks AI",
+      "desc": "Representative engineering systems by ifnodoraemon, featuring Navi Governed Agent OS, Nowcoder Enterprise HR Backend & AI Resume Scoring, Doraemon Code, and high-concurrency platforms."
     },
     "about": {
       "title": "About This Node — Nobita Talks AI",
@@ -566,9 +566,9 @@
     "relatedTitle": "Related 2026 Frontier Articles"
   },
   "projects": {
-    "heroTag": "PORTFOLIO & PROJECTS",
-    "heroTitle": "Personal Projects",
-    "heroDesc": "Exploring the capability boundaries of large language models, building experimental tools and Agent application demos.",
+    "heroTag": "PORTFOLIO & FLAGSHIP SYSTEMS",
+    "heroTitle": "Featured Engineering Works",
+    "heroDesc": "Spanning governed local-first agent operating systems, high-concurrency enterprise recruitment backends, ML resume scoring engines, and high-throughput inference runtimes.",
     "comingSoon": "New projects are brewing",
     "comingDesc": "Currently developing a multi-agent orchestrated workflow automation platform. Stay tuned for open-source releases and online demos.",
     "btnGithub": "Follow my GitHub",
@@ -586,7 +586,11 @@
     "p5_title": "Smart Campus AI",
     "p5_desc": "Internal full-stack project: A Python-based end-to-end smart campus system covering everything from front-end camera video stream ingestion, AI algorithm inference, to back-end automated alert triggering and multi-channel notifications.",
     "p6_title": "openDataAnalysis",
-    "p6_desc": "An interactive tabular data analysis tool. Supports uploading CSV or Excel files, with an Agent automatically inspecting and querying data to generate analysis reports with interactive charts. Built with Vue3, ECharts, and Go."
+    "p6_desc": "An interactive tabular data analysis tool. Supports uploading CSV or Excel files, with an Agent automatically inspecting and querying data to generate analysis reports with interactive charts. Built with Vue3, ECharts, and Go.",
+    "navi_title": "🤖 Navi - Governed Agent OS",
+    "navi_desc": "Personal open-source flagship project: A local-first, governed personal AI assistant Agent OS. Powered by declarative schema-validated capability manifests for task planning, durable Goal/Run state machines, scoped typed memory with conflict resolution, and Linux Bubblewrap (bwrap) sandbox isolation. Shipped with CLI, authenticated local FastAPI services, and native WeChat & Telegram connectors.",
+    "nowcoder_title": "🏢 Nowcoder Enterprise Recruitment & AI Resume Scoring",
+    "nowcoder_desc": "Core engineering for a commercial B2B recruitment & talent acquisition platform. Developed enterprise backend services using Java / Spring Boot microservices and high-concurrency database designs, supporting massive enterprise job postings, candidate pipelines, and complex RBAC. Designed and deployed an AI resume scoring & matching system based on Python scikit-learn (sklearn) Support Vector Machine (SVM) and multidimensional text feature engineering."
   },
   "about": {
     "heroTag": "ARCHITECT DOSSIER // BUPT CS",
@@ -622,6 +626,8 @@
       "vLLM & SGLang Serving",
       "DeepSeek MLA & KDA Attention",
       "Model Context Protocol (MCP)",
+      "Java & Spring Boot (Enterprise B2B)",
+      "Python & scikit-learn (SVM)",
       "PyTorch & Triton Kernels",
       "FP8 / AWQ Quantization",
       "FlashAttention-3",
@@ -640,7 +646,21 @@
     "stat1": "Original Whitepapers",
     "stat2": "Frontier Models Benchmarked",
     "stat3": "Core System Vectors",
-    "stat4": "Bare-metal Code Repro Rate"
+    "stat4": "Bare-metal Code Repro Rate",
+    "flagshipTitle": "Flagship Production Systems",
+    "flagshipSubtitle": "End-to-end engineering track record from high-concurrency enterprise B2B backends to autonomous Agent OS",
+    "sys1Name": "Navi - Governed Personal Agent OS",
+    "sys1Role": "Creator & OS System Architect",
+    "sys1Desc": "A local-first personal AI assistant OS featuring declarative capability manifests, Bubblewrap sandboxing, durable Goal/Run loops, and WeChat/Telegram connectors.",
+    "sys1LinkText": "View GitHub Repo",
+    "sys2Name": "Nowcoder Enterprise HR & AI Resume Scoring (hr.nowcoder.com)",
+    "sys2Role": "Core Backend Engineering / ML Scoring System",
+    "sys2Desc": "Java / Spring Boot enterprise microservices powering B2B recruitment workflows; engineered a Python scikit-learn (sklearn) SVM resume evaluation system for precise automated candidate scoring.",
+    "sys2LinkText": "Visit Production System",
+    "sys3Name": "Doraemon Code (Autonomous Dev Agent)",
+    "sys3Role": "Single-Process Local Code Agent",
+    "sys3Desc": "Open-source Claude Code alternative for local autonomous programming with 39+ native tool integrations.",
+    "sys3LinkText": "View GitHub Repo"
   },
   "home": {
     "heroSystem": "LLM ARCHITECTURE & AGENTIC RUNTIMES",

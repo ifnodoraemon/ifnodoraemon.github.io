@@ -5748,3 +5748,27 @@ h1, h2, h3, .glitch-title { text-wrap: balance; }
   border-color: rgba(255, 255, 255, 0.15);
   color: #ffffff;
 }
+
+/* Terminal Badge & Flagship Card Enhancements */
+.terminal-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #a1a8b8;
+  margin-left: auto;
+}
+
+.agent-project-card.flagship {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(17, 19, 26, 0.75);
+}
+
+.agent-project-card.flagship:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.08);
+}
