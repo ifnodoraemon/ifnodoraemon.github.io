@@ -91,153 +91,57 @@
 
   <!-- Hero -->
   <header class="hero">
-    
-    <!-- CYBER CORE VISUAL -->
-    <div class="cyber-core-container">
-      <div class="cyber-core">
-        <div class="core-ring ring-1"></div>
-        <div class="core-ring ring-2"></div>
-        <div class="core-ring ring-3"></div>
-        <div class="core-center"></div>
-      </div>
-      <div class="cyber-live-log" id="liveLogStream">
-        <div class="log-header">SYSTEM.LOG_STREAM // ACTIVE</div>
-        <div class="log-content"></div>
-      </div>
-    </div>
-
-    <div class="hero-bg-elements">
+    <div class="hero-glow-beam" aria-hidden="true"></div>
+    <div class="hero-bg-elements" aria-hidden="true">
       <div class="hero-orb hero-orb-1"></div>
       <div class="hero-orb hero-orb-2"></div>
       <div class="hero-orb hero-orb-3"></div>
       <div class="hero-grid-overlay"></div>
     </div>
-    <div class="hero-scanline"></div>
     
-    <div class="hero-container hero-terminal-wrapper fade-in" id="hero-container">
-      <div class="terminal-window">
-        <div class="terminal-header">
-          <div class="terminal-dots">
-            <span class="dot close"></span>
-            <span class="dot minimize"></span>
-            <span class="dot expand"></span>
-          </div>
-          <div class="terminal-title">admin@ai-node: ~</div>
-        </div>
-        
-        <div class="terminal-body" id="hero-terminal">
-          <!-- Fallback content if JS is disabled -->
-          <div class="terminal-fallback">
-            <div class="hero-hud-top">
-              <div class="hud-line"></div>
-              <div class="hero-badge">
-                <span class="badge-pulse"></span>
-                <span class="badge-text" data-en="{{home.heroSystem}}">{{home.heroSystem}}</span>
-              </div>
-              <div class="hud-line"></div>
-            </div>
-            
-            <h1 class="hero-title">
-              {{{home.heroTitle}}}
-            </h1>
-            <p class="hero-description typewriter">
-              {{home.heroDesc}}
-            </p>
-            
-            <div class="hero-metrics-panel">
-              <div class="hud-bracket left"></div>
-              <div class="hero-metrics">
-                <div class="metric">
-                  <span class="metric-value blur-reveal" data-val="{{home.metric1Val}}">{{home.metric1Val}}</span>
-                  <span class="metric-label"><span>{{home.metric1Label}}</span></span>
-                </div>
-                <div class="metric-divider"></div>
-                <div class="metric">
-                  <span class="metric-value blur-reveal">{{home.metric2Val}}</span>
-                  <span class="metric-label"><span>{{home.metric2Label}}</span></span>
-                </div>
-                <div class="metric-divider"></div>
-                <div class="metric">
-                  <span class="metric-value blur-reveal">{{home.metric3Val}}</span>
-                  <span class="metric-label"><span>{{home.metric3Label}}</span></span>
-                </div>
-              </div>
-              <div class="hud-bracket right"></div>
-            </div>
-            
-            <div class="hero-actions">
-              <a href="{{linkPrefix}}/#articles" class="btn-primary btn-glitch">
-                <span class="btn-glow"></span>
-                <span>{{home.btnArticles}}</span>
-                <div class="btn-cyber-corners"></div>
-              </a>
-              <a href="{{linkPrefix}}/about/" class="btn-ghost btn-cyber">
-                <span>{{home.btnAbout}}</span>
-                <div class="btn-cyber-corners"></div>
-              </a>
-            </div>
-          </div>
+    <div class="container hero-content-container fade-in">
+      <div class="hero-badge-pill">
+        <span class="badge-pulse"></span>
+        <span class="badge-text" data-en="{{home.heroSystem}}">{{home.heroSystem}}</span>
+        <span class="badge-arrow">✦</span>
+      </div>
+      
+      <h1 class="hero-title">
+        {{{home.heroTitle}}}
+      </h1>
+      
+      <p class="hero-description">
+        {{home.heroDesc}}
+      </p>
+      
+      <div class="hero-actions">
+        <a href="{{linkPrefix}}/#articles" class="btn-primary">
+          <span>{{home.btnArticles}}</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="{{linkPrefix}}/models/" class="btn-secondary">
+          <span>{{#if isEn}}2026 Model Radar{{else}}2026 模型评测{{/if}}</span>
+        </a>
+        <a href="{{linkPrefix}}/about/" class="btn-ghost">
+          <span>{{home.btnAbout}}</span>
+        </a>
+      </div>
 
-          <!-- JavaScript Animated Terminal Content -->
-          <div class="term-seq-container">
-            <div class="term-line term-seq-1 hidden"><span class="term-prompt">❯</span> <span class="term-cmd type-text" data-text="{{home.terminalCmdInit}}"></span></div>
-            <div class="term-line term-dim term-seq-2 hidden">{{home.terminalSysInit}}</div>
-            <div class="term-line term-dim term-seq-3 hidden">{{home.terminalSysLoad}}</div>
-            
-            <div class="term-spacer hidden term-seq-3"></div>
-            
-            <div class="term-line term-seq-4 hidden"><span class="term-prompt">❯</span> <span class="term-cmd type-text" data-text="{{home.terminalCmdTitle}}"></span></div>
-            <div class="term-line content-reveal term-seq-5 hidden">
-              <h1 class="hero-title">{{{home.heroTitle}}}</h1>
-              <p class="hero-description">{{home.heroDesc}}</p>
-            </div>
-            
-            <div class="term-spacer hidden term-seq-5"></div>
-            
-            <div class="term-line term-seq-6 hidden"><span class="term-prompt">❯</span> <span class="term-cmd type-text" data-text="{{home.terminalCmdMetrics}}"></span></div>
-            <div class="term-line content-reveal term-seq-7 hidden">
-              <div class="hero-metrics-panel">
-                <div class="hud-bracket left"></div>
-                <div class="hero-metrics">
-                  <div class="metric">
-                    <span class="metric-value blur-reveal" data-val="{{home.metric1Val}}">{{home.metric1Val}}</span>
-                    <span class="metric-label"><span>{{home.metric1Label}}</span></span>
-                  </div>
-                  <div class="metric-divider"></div>
-                  <div class="metric">
-                    <span class="metric-value blur-reveal">{{home.metric2Val}}</span>
-                    <span class="metric-label"><span>{{home.metric2Label}}</span></span>
-                  </div>
-                  <div class="metric-divider"></div>
-                  <div class="metric">
-                    <span class="metric-value blur-reveal">{{home.metric3Val}}</span>
-                    <span class="metric-label"><span>{{home.metric3Label}}</span></span>
-                  </div>
-                </div>
-                <div class="hud-bracket right"></div>
-              </div>
-            </div>
-            
-            <div class="term-spacer hidden term-seq-7"></div>
-            
-            <div class="term-line term-seq-8 hidden"><span class="term-prompt">❯</span> <span class="term-cmd type-text" data-text="{{home.terminalCmdAction}}"></span></div>
-            <div class="term-line content-reveal term-seq-9 hidden">
-              <div class="hero-actions">
-                <a href="{{linkPrefix}}/#articles" class="btn-primary btn-glitch">
-                  <span class="btn-glow"></span>
-                  <span>{{home.btnArticles}}</span>
-                  <div class="btn-cyber-corners"></div>
-                </a>
-                <a href="{{linkPrefix}}/about/" class="btn-ghost btn-cyber">
-                  <span>{{home.btnAbout}}</span>
-                  <div class="btn-cyber-corners"></div>
-                </a>
-              </div>
-            </div>
-            
-            <div class="term-spacer hidden term-seq-9"></div>
-            
-            <div class="term-line term-seq-10 hidden active-prompt"><span class="term-prompt">❯</span><span class="cursor-blink">▍</span></div>
+      <div class="hero-metrics-panel">
+        <div class="hero-metrics">
+          <div class="metric">
+            <span class="metric-value blur-reveal" data-val="{{home.metric1Val}}">{{home.metric1Val}}</span>
+            <span class="metric-label"><span>{{home.metric1Label}}</span></span>
+          </div>
+          <div class="metric-divider"></div>
+          <div class="metric">
+            <span class="metric-value blur-reveal">{{home.metric2Val}}</span>
+            <span class="metric-label"><span>{{home.metric2Label}}</span></span>
+          </div>
+          <div class="metric-divider"></div>
+          <div class="metric">
+            <span class="metric-value blur-reveal">{{home.metric3Val}}</span>
+            <span class="metric-label"><span>{{home.metric3Label}}</span></span>
           </div>
         </div>
       </div>
