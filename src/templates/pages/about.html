@@ -11,7 +11,7 @@
   <link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/about/" />
   <link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/about/" />
   <link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/about/" />
-  <meta name="theme-color" content="#090a0f">
+  <meta name="theme-color" content="#0b0c10">
 
   <!-- Open Graph -->
   <meta property="og:type" content="profile">
@@ -33,7 +33,6 @@
 
   <!-- Google tag (gtag.js) -->
   <script>
-    // Delay Google Analytics until user interaction to improve Lighthouse/CWV scores
     const loadGA = () => {
       if (window.gaLoaded) return;
       window.gaLoaded = true;
@@ -48,7 +47,6 @@
       gtag('config', 'G-4WZN5Q7VS6');
     };
     ['scroll', 'mousemove', 'touchstart', 'keydown'].forEach(e => window.addEventListener(e, loadGA, {once: true, passive: true}));
-    // Fallback if no interaction
     setTimeout(loadGA, 5000);
   </script>
 
@@ -65,7 +63,7 @@
         "https://github.com/ifnodoraemon",
         "https://x.com/ifnodoraemon"
       ],
-      "jobTitle": "Software Engineer",
+      "jobTitle": "LLM Systems Architect",
       "alumniOf": {
         "@type": "CollegeOrUniversity",
         "name": "Beijing University of Posts and Telecommunications"
@@ -78,7 +76,6 @@
   <link rel="apple-touch-icon" href="/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="stylesheet" href="/src/assets/css/style.css">
 </head>
@@ -86,139 +83,187 @@
   <div class="bg-grid" aria-hidden="true"></div>
   <canvas id="particles" aria-hidden="true"></canvas>
   <nav id="navbar" class="navbar" aria-label="主导航"></nav>
-<main class="page-main">
-    <!-- Page Hero (Terminal Header Style) -->
-    <section class="page-hero" style="padding-bottom: 2rem;">
-      <div class="container hero-terminal-wrapper" style="max-width: 900px;">
-        <div class="terminal-window fade-in" style="margin-top: 2rem;">
+
+  <main class="page-main">
+    <section class="page-hero" style="padding: 7rem 1.5rem 4rem;">
+      <div class="container hero-terminal-wrapper" style="max-width: 960px;">
+        <div class="terminal-window fade-in">
+          
           <div class="terminal-header">
             <div class="terminal-dots">
               <span class="dot close"></span>
               <span class="dot minimize"></span>
               <span class="dot expand"></span>
             </div>
-            <div class="terminal-title">sys.getProfile("Nobita")</div>
+            <div class="terminal-title">sys.getProfile("ifnodoraemon // Nobita")</div>
+            <div style="margin-left: auto; font-family: var(--font-mono); font-size: 0.7rem; color: #10b981; display: flex; align-items: center; gap: 0.4rem;">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px rgba(16,185,129,0.8);"></span>
+              <span>ONLINE // NODE: BUPT-LLM-01</span>
+            </div>
           </div>
+
           <div class="terminal-body about-terminal-body">
-            <div class="hero-hud-top">
-              <div class="hud-line"></div>
-              <div class="hero-badge">
+            
+            <!-- Persona Header -->
+            <div class="hero-hud-top" style="margin-bottom: 1.5rem;">
+              <div class="hero-badge-pill" style="margin-bottom: 0;">
                 <span class="badge-pulse"></span>
                 <span class="badge-text">{{about.heroTag}}</span>
               </div>
-              <div class="hud-line"></div>
             </div>
             
-            <h1 class="hero-title" style="align-items: flex-start; text-align: left; font-size: 2.5rem; margin-top: 1rem; margin-bottom: 0.5rem;">
+            <h1 class="hero-title" style="align-items: flex-start; text-align: left; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 750; margin-bottom: 0.4rem;">
               {{about.heroTitle}}
             </h1>
-            <p class="hero-description" style="align-items: flex-start; text-align: left; opacity: 0.8; font-family: var(--font-mono);">
+            <p style="color: #7d8597; font-family: var(--font-mono); font-size: 0.92rem; margin-bottom: 1.5rem;">
               > {{about.heroDesc}}
             </p>
 
-            <div class="content-reveal" style="padding-left: 1rem; border-left: 2px solid var(--accent); background: rgba(99, 102, 241, 0.04); margin-top: 2rem; margin-bottom: 2rem; border-radius: 0 4px 4px 0;">
-              <!-- Intro Paragraph -->
-              <p style="margin-bottom: 2rem;">{{about.p1}}</p>
-              
-              <!-- Educational Background -->
-              <div class="education-section" style="margin-bottom: 2rem;">
-                <h2 style="font-size: 1.1rem; color: var(--accent-light); margin-bottom: 0.8rem; font-family: var(--font-mono);">&gt; {{about.eduTitle}}</h2>
-                <div style="background: var(--bg-surface); border: 1px solid var(--border); padding: 1rem; border-radius: 6px; display: flex; flex-direction: column; gap: 0.5rem;">
-                  <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                    <span style="font-weight: 500; font-size: 1.05rem; color: var(--text-base);">{{about.eduSchool}}</span>
-                  </div>
-                  <div style="display: flex; align-items: center; gap: 0.5rem; padding-left: 1.5rem;">
-                    <span style="color: var(--accent-cyan); opacity: 0.7;">↳</span>
-                    <span style="font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-muted);">{{about.eduMajor}}</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Core Skills -->
-              <div class="skills-section" style="margin-bottom: 2rem;">
-                <h2 style="font-size: 1.1rem; color: var(--accent-light); margin-bottom: 1rem; font-family: var(--font-mono);">&gt; {{about.skillsTitle}}</h2>
-                <div class="skills-grid" style="display: flex; flex-wrap: wrap; gap: 0.6rem;">
-                  {{#each about.skills}}
-                  <span class="skill-badge" style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.25); color: var(--accent-light); padding: 0.4rem 0.8rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.85rem; transition: all 0.3s ease; cursor: default;" onmouseover="this.style.background='rgba(99, 102, 241, 0.18)'; this.style.borderColor='rgba(99, 102, 241, 0.5)'; this.style.boxShadow='0 0 10px rgba(99,102,241,0.2)';" onmouseout="this.style.background='rgba(99, 102, 241, 0.08)'; this.style.borderColor='rgba(99, 102, 241, 0.25)'; this.style.boxShadow='none';">
-                    {{this}}
-                  </span>
-                  {{/each}}
-                </div>
-              </div>
-
-              <!-- System Objectives / Knowledge Base -->
-              <div class="objectives-section" style="margin-bottom: 1rem;">
-                <h2 style="font-size: 1.1rem; color: var(--accent-light); margin-bottom: 0.8rem; font-family: var(--font-mono);">&gt; {{about.contentFocus}}</h2>
-                <p style="margin-bottom: 0.8rem;">{{about.p2}}</p>
-                <ul style="list-style: none; padding-left: 0; margin-bottom: 1rem;">
-                  <li style="position: relative; padding-left: 1.5rem; margin-bottom: 0.5rem;"><span style="position: absolute; left: 0; color: var(--accent-cyan);">+</span> {{about.li1}}</li>
-                  <li style="position: relative; padding-left: 1.5rem; margin-bottom: 0.5rem;"><span style="position: absolute; left: 0; color: var(--accent-cyan);">+</span> {{about.li2}}</li>
-                  <li style="position: relative; padding-left: 1.5rem; margin-bottom: 0.5rem;"><span style="position: absolute; left: 0; color: var(--accent-cyan);">+</span> {{about.li3}}</li>
-                  <li style="position: relative; padding-left: 1.5rem; margin-bottom: 0.5rem;"><span style="position: absolute; left: 0; color: var(--accent-cyan);">+</span> {{about.li4}}</li>
-                </ul>
-              </div>
-
-              <p style="opacity: 0.8; font-size: 0.9em; margin-bottom: 1.5rem; margin-top: 2rem;">// {{about.p3}}</p>
-              
-              <div class="hero-actions about-actions" style="justify-content: flex-start;">
-                <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="btn-primary btn-cyber" style="padding: 0.6rem 1.5rem;">
-                  <span class="btn-glow"></span>
-                  <span style="display: flex; align-items: center; gap: 0.5rem;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    {{about.contactBtn}}
-                  </span>
-                  <div class="btn-cyber-corners"></div>
-                </a>
-                <a href="mailto:ifnodoraemon@gmail.com" class="btn-ghost btn-cyber" style="padding: 0.6rem 1.5rem;">
-                  <span style="display: flex; align-items: center; gap: 0.5rem;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                    {{about.emailBtn}}
-                  </span>
-                  <div class="btn-cyber-corners"></div>
-                </a>
-                <a href="https://x.com/ifnodoraemon" target="_blank" rel="noopener" class="btn-ghost btn-cyber" style="padding: 0.6rem 1.5rem;">
-                  <span style="display: flex; align-items: center; gap: 0.5rem;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                    X (Twitter)
-                  </span>
-                  <div class="btn-cyber-corners"></div>
-                </a>
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 1.5rem; margin-bottom: 2.2rem;">
+              <p style="color: #cbd5e1; font-size: 1rem; line-height: 1.75; margin-bottom: 1rem;">
+                {{about.p1}}
+              </p>
+              <div style="background: rgba(255, 255, 255, 0.02); border-left: 2px solid rgba(255, 255, 255, 0.2); padding: 0.75rem 1rem; border-radius: 0 6px 6px 0;">
+                <p style="margin: 0; font-size: 0.88rem; font-style: italic; color: #a3abc0; line-height: 1.6;">
+                  “{{about.authorMotto}}”
+                </p>
               </div>
             </div>
-            <div class="hero-metrics-panel" style="margin-top: 2rem; background: var(--bg-surface); backdrop-filter: blur(8px); border: 1px solid var(--border); padding: 1.5rem; position: relative; border-radius: 8px;">
-              <div class="hud-bracket left"></div>
-              <h4 style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-light); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em; text-align: center;">> {{about.statsTitle}}</h4>
-              <div class="hero-metrics" style="gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
-                <div class="metric">
-                  <span class="metric-value blur-reveal" style="font-size: 2rem;">50+</span>
-                  <span class="metric-label" style="font-size: 0.70rem;"><span>{{about.stat1}}</span></span>
+
+            <!-- Engineering Creed -->
+            <div class="about-section-block">
+              <h2 class="about-section-title">
+                <span>&gt;</span>
+                <span>{{about.creedTitle}}</span>
+              </h2>
+              <div class="about-creed-grid">
+                <div class="about-creed-card">
+                  <h3>01. {{about.creed1Title}}</h3>
+                  <p>{{about.creed1Desc}}</p>
                 </div>
-                <div class="metric-divider" style="height: 30px;"></div>
-                <div class="metric">
-                  <span class="metric-value blur-reveal" style="font-size: 2rem;">10+</span>
-                  <span class="metric-label" style="font-size: 0.70rem;"><span>{{about.stat2}}</span></span>
+                <div class="about-creed-card">
+                  <h3>02. {{about.creed2Title}}</h3>
+                  <p>{{about.creed2Desc}}</p>
                 </div>
-                <div class="metric-divider" style="height: 30px;"></div>
-                <div class="metric">
-                  <span class="metric-value blur-reveal" style="font-size: 2rem;">6</span>
-                  <span class="metric-label" style="font-size: 0.70rem;"><span>{{about.stat3}}</span></span>
-                </div>
-                <div class="metric-divider" style="height: 30px;"></div>
-                <div class="metric">
-                  <span class="metric-value blur-reveal" style="font-size: 2rem;">2K+</span>
-                  <span class="metric-label" style="font-size: 0.70rem;"><span>{{about.stat4}}</span></span>
+                <div class="about-creed-card">
+                  <h3>03. {{about.creed3Title}}</h3>
+                  <p>{{about.creed3Desc}}</p>
                 </div>
               </div>
-              <div class="hud-bracket right"></div>
             </div>
 
-            <div style="margin-top: 2rem; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 1.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-              <h4 style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin: 0;">{{about.linksTitle}}:</h4>
-              <a href="https://openai.com" target="_blank" rel="noopener" class="footer-link" style="font-family: var(--font-mono); font-size: 0.8rem;">[OpenAI]</a>
-              <a href="https://anthropic.com" target="_blank" rel="noopener" class="footer-link" style="font-family: var(--font-mono); font-size: 0.8rem;">[Anthropic]</a>
-              <a href="https://deepmind.google" target="_blank" rel="noopener" class="footer-link" style="font-family: var(--font-mono); font-size: 0.8rem;">[Google DeepMind]</a>
-              <a href="https://huggingface.co" target="_blank" rel="noopener" class="footer-link" style="font-family: var(--font-mono); font-size: 0.8rem;">[Hugging Face]</a>
+            <!-- 4 Core Pillars -->
+            <div class="about-section-block">
+              <h2 class="about-section-title">
+                <span>&gt;</span>
+                <span>{{about.pillarsTitle}}</span>
+              </h2>
+              <div class="about-pillars-grid">
+                <div class="about-pillar-box">
+                  <h4>⚡ {{about.pillar1Name}}</h4>
+                  <p>{{about.pillar1Detail}}</p>
+                </div>
+                <div class="about-pillar-box">
+                  <h4>🧠 {{about.pillar2Name}}</h4>
+                  <p>{{about.pillar2Detail}}</p>
+                </div>
+                <div class="about-pillar-box">
+                  <h4>🤖 {{about.pillar3Name}}</h4>
+                  <p>{{about.pillar3Detail}}</p>
+                </div>
+                <div class="about-pillar-box">
+                  <h4>📊 {{about.pillar4Name}}</h4>
+                  <p>{{about.pillar4Detail}}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Academic & Cluster Experience -->
+            <div class="about-section-block">
+              <h2 class="about-section-title">
+                <span>&gt;</span>
+                <span>{{#if isEn}}Academic & Infrastructure Foundations{{else}}学术底座与硬件集群{{/if}}</span>
+              </h2>
+              <div class="about-infra-panel">
+                <div class="about-infra-item">
+                  <h4>🎓 {{about.eduTitle}}</h4>
+                  <p style="font-weight: 600; color: #f1f3f7; margin-bottom: 0.25rem;">{{about.eduSchool}}</p>
+                  <p style="color: #7d8597; font-family: var(--font-mono); font-size: 0.78rem; margin-bottom: 0.5rem;">{{about.eduMajor}}</p>
+                  <p>{{about.eduDesc}}</p>
+                </div>
+                <div class="about-infra-item">
+                  <h4>🖥️ {{about.clusterTitle}}</h4>
+                  <p>{{about.clusterDesc}}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Core Skills / Tech Matrix -->
+            <div class="about-section-block">
+              <h2 class="about-section-title">
+                <span>&gt;</span>
+                <span>{{about.skillsTitle}}</span>
+              </h2>
+              <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                {{#each about.skills}}
+                <span class="about-skill-pill">{{this}}</span>
+                {{/each}}
+              </div>
+            </div>
+
+            <!-- Metrics Panel -->
+            <div class="hero-metrics-panel" style="margin-top: 1.5rem; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); padding: 1.5rem; border-radius: 12px;">
+              <h4 style="font-family: var(--font-mono); font-size: 0.76rem; color: #7d8597; margin-bottom: 1.25rem; text-transform: uppercase; letter-spacing: 0.1em; text-align: center;">> {{about.statsTitle}}</h4>
+              <div class="hero-metrics" style="gap: 2rem; justify-content: center; flex-wrap: wrap;">
+                <div class="metric">
+                  <span class="metric-value blur-reveal" style="font-size: 2rem; color: #f1f3f7;">30+</span>
+                  <span class="metric-label" style="font-size: 0.72rem; color: #7d8597;">{{about.stat1}}</span>
+                </div>
+                <div class="metric-divider" style="height: 30px;"></div>
+                <div class="metric">
+                  <span class="metric-value blur-reveal" style="font-size: 2rem; color: #f1f3f7;">10+</span>
+                  <span class="metric-label" style="font-size: 0.72rem; color: #7d8597;">{{about.stat2}}</span>
+                </div>
+                <div class="metric-divider" style="height: 30px;"></div>
+                <div class="metric">
+                  <span class="metric-value blur-reveal" style="font-size: 2rem; color: #f1f3f7;">4</span>
+                  <span class="metric-label" style="font-size: 0.72rem; color: #7d8597;">{{about.stat3}}</span>
+                </div>
+                <div class="metric-divider" style="height: 30px;"></div>
+                <div class="metric">
+                  <span class="metric-value blur-reveal" style="font-size: 2rem; color: #f1f3f7;">100%</span>
+                  <span class="metric-label" style="font-size: 0.72rem; color: #7d8597;">{{about.stat4}}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Direct Connect -->
+            <p style="color: #7d8597; font-size: 0.85rem; font-family: var(--font-mono); margin-top: 2rem; margin-bottom: 1.25rem;">
+              // {{about.p3}}
+            </p>
+            
+            <div class="hero-actions about-actions" style="justify-content: flex-start; gap: 0.85rem; margin-top: 0;">
+              <a href="https://github.com/ifnodoraemon" target="_blank" rel="noopener" class="hero-search-btn" style="padding: 0.6rem 1.4rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                <span>{{about.contactBtn}}</span>
+              </a>
+              <a href="mailto:ifnodoraemon@gmail.com" class="llm-radar-link" style="padding: 0.6rem 1.4rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                <span>{{about.emailBtn}}</span>
+              </a>
+              <a href="https://x.com/ifnodoraemon" target="_blank" rel="noopener" class="llm-radar-link" style="padding: 0.6rem 1.4rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                <span>X (Twitter)</span>
+              </a>
+            </div>
+
+            <!-- External Frontier Labs -->
+            <div style="margin-top: 2.2rem; border-top: 1px dashed rgba(255,255,255,0.06); padding-top: 1.25rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+              <h4 style="font-family: var(--font-mono); font-size: 0.72rem; color: #5a6173; text-transform: uppercase; letter-spacing: 0.08em; margin: 0;">{{about.linksTitle}}:</h4>
+              <a href="https://openai.com" target="_blank" rel="noopener" class="footer-link" style="font-family: var(--font-mono); font-size: 0.76rem; color: #7d8597;">[OpenAI]</a>
+              <a href="https://anthropic.com" target="_blank" rel="noopener" class="footer-link" style="font-family: var(--font-mono); font-size: 0.76rem; color: #7d8597;">[Anthropic]</a>
+              <a href="https://deepmind.google" target="_blank" rel="noopener" class="footer-link" style="font-family: var(--font-mono); font-size: 0.76rem; color: #7d8597;">[Google DeepMind]</a>
+              <a href="https://huggingface.co" target="_blank" rel="noopener" class="footer-link" style="font-family: var(--font-mono); font-size: 0.76rem; color: #7d8597;">[Hugging Face]</a>
             </div>
 
           </div>
@@ -226,7 +271,8 @@
       </div>
     </section>
   </main>
+
   <footer id="site-footer" class="footer"></footer>
-<script type="module" src="/src/assets/js/main.js"></script>
+  <script type="module" src="/src/assets/js/main.js"></script>
 </body>
 </html>
