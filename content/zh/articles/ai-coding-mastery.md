@@ -127,7 +127,7 @@ graph TB
     subgraph 三层上下文
         L1["常驻层（Always-On）"] --> |AGENTS.md / .cursorrules| Note1["极简基础规则，每次自动加载"]
         L2["按需层（Auto-Attached）"] --> |.cursor/rules/*.mdc| Note2["按文件路径自动激活"]
-        L3["临时层（Session）"] --> |chat 内 @ 引用| Note3["当前任务所需的具体文件"]
+        L3["临时层（Session）"] --> |"chat 内 @ 引用"| Note3["当前任务所需的具体文件"]
     end
 ```
 

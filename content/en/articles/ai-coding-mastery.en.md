@@ -127,7 +127,7 @@ graph TB
     subgraph Three-Layer Context
         L1["Always-On Layer"] --> |AGENTS.md / .cursorrules| Note1["Minimal base rules, auto-loaded every time"]
         L2["Auto-Attached Layer"] --> |.cursor/rules/*.mdc| Note2["Activated by file path"]
-        L3["Session Layer"] --> |@ references in chat| Note3["Specific files for current task"]
+        L3["Session Layer"] --> |"@ references in chat"| Note3["Specific files for current task"]
     end
 ```
 

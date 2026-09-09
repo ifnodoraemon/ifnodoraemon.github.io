@@ -43,10 +43,10 @@ graph TD
         G4[GPU 24-31: TP=8]
     end
     
-    Node1 <==>|400Gbps IB / RoCEv2| Node2
-    Node2 <==>|Pipeline Parallel (PP=2)| Node3
-    Node3 <==>|Expert Parallel (EP=2)| Node4
-    Node1 <==>|All-to-All| Node4
+    Node1 <==>|"400Gbps IB / RoCEv2"| Node2
+    Node2 <==>|"Pipeline Parallel (PP=2)"| Node3
+    Node3 <==>|"Expert Parallel (EP=2)"| Node4
+    Node1 <==>|"All-to-All"| Node4
     
     API[vLLM / SGLang Gateway] --> Node1
 ```
