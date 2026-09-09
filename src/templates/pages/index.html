@@ -89,7 +89,7 @@
   <!-- Navigation -->
   <nav id="navbar" class="navbar" aria-label="主导航"></nav>
 
-  <!-- Hero -->
+  <!-- Hero: LLM Engineering Cockpit -->
   <header class="hero">
     <div class="hero-glow-beam" aria-hidden="true"></div>
     <div class="hero-bg-elements" aria-hidden="true">
@@ -99,51 +99,120 @@
       <div class="hero-grid-overlay"></div>
     </div>
     
-    <div class="container hero-content-container fade-in">
-      <div class="hero-badge-pill">
-        <span class="badge-pulse"></span>
-        <span class="badge-text" data-en="{{home.heroSystem}}">{{home.heroSystem}}</span>
-        <span class="badge-arrow">✦</span>
-      </div>
-      
-      <h1 class="hero-title">
-        {{{home.heroTitle}}}
-      </h1>
-      
-      <p class="hero-description">
-        {{home.heroDesc}}
-      </p>
-      
-      <div class="hero-actions">
-        <a href="{{linkPrefix}}/#articles" class="btn-primary">
-          <span>{{home.btnArticles}}</span>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="{{linkPrefix}}/models/" class="btn-secondary">
-          <span>{{#if isEn}}2026 Model Radar{{else}}2026 模型评测{{/if}}</span>
-        </a>
-        <a href="{{linkPrefix}}/about/" class="btn-ghost">
-          <span>{{home.btnAbout}}</span>
-        </a>
-      </div>
+    <div class="container hero-container fade-in">
+      <div class="hero-cockpit-grid">
+        
+        <!-- Left: Editorial Authority & Instant Search -->
+        <div class="hero-content-left">
+          <div class="hero-badge-pill">
+            <span class="badge-pulse"></span>
+            <span class="badge-text">{{home.heroSystem}}</span>
+            <span class="badge-arrow">✦</span>
+          </div>
+          
+          <h1 class="hero-title">
+            {{{home.heroTitle}}}
+          </h1>
+          
+          <p class="hero-description">
+            {{home.heroDesc}}
+          </p>
+          
+          <!-- Hero Search & Query Bar -->
+          <form action="{{linkPrefix}}/articles/" method="GET" class="hero-search-bar" role="search">
+            <div class="hero-search-input-wrap">
+              <svg class="hero-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" name="q" placeholder="{{home.searchPlaceholder}}" class="hero-search-input" autocomplete="off" aria-label="Search LLM Articles">
+            </div>
+            <button type="submit" class="hero-search-btn">
+              <span>{{home.searchBtn}}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </form>
 
-      <div class="hero-metrics-panel">
-        <div class="hero-metrics">
-          <div class="metric">
-            <span class="metric-value blur-reveal" data-val="{{home.metric1Val}}">{{home.metric1Val}}</span>
-            <span class="metric-label"><span>{{home.metric1Label}}</span></span>
-          </div>
-          <div class="metric-divider"></div>
-          <div class="metric">
-            <span class="metric-value blur-reveal">{{home.metric2Val}}</span>
-            <span class="metric-label"><span>{{home.metric2Label}}</span></span>
-          </div>
-          <div class="metric-divider"></div>
-          <div class="metric">
-            <span class="metric-value blur-reveal">{{home.metric3Val}}</span>
-            <span class="metric-label"><span>{{home.metric3Label}}</span></span>
+          <!-- Hot Architectural Tags -->
+          <div class="hero-hot-tags">
+            <span class="hot-label">{{home.hotLabel}}</span>
+            <a href="{{linkPrefix}}/articles/?q=vLLM" class="hot-tag">vLLM 推理部署</a>
+            <a href="{{linkPrefix}}/articles/?q=MLA" class="hot-tag">DeepSeek MLA</a>
+            <a href="{{linkPrefix}}/articles/?q=Agent" class="hot-tag">Agent 运行时</a>
+            <a href="{{linkPrefix}}/models/" class="hot-tag highlight">2026 模型雷达</a>
+            <a href="{{linkPrefix}}/articles/?q=quantization" class="hot-tag">FP8 量化</a>
           </div>
         </div>
+
+        <!-- Right: Real-time LLM Systems Topology Card -->
+        <div class="hero-content-right">
+          <div class="hero-llm-card">
+            <div class="llm-card-header">
+              <div class="llm-card-dots" aria-hidden="true">
+                <span class="card-dot dot-red"></span>
+                <span class="card-dot dot-amber"></span>
+                <span class="card-dot dot-green"></span>
+              </div>
+              <span class="llm-card-title">LLM_TOPOLOGY_MONITOR // PROD</span>
+              <span class="llm-card-status">ONLINE</span>
+            </div>
+
+            <div class="llm-card-body">
+              <div class="llm-metric-row">
+                <div class="metric-meta">
+                  <span class="metric-label">INFERENCE ENGINE</span>
+                  <span class="metric-value">vLLM PagedAttention</span>
+                </div>
+                <span class="metric-chip chip-cyan">KV Cache -68%</span>
+              </div>
+
+              <div class="llm-metric-row">
+                <div class="metric-meta">
+                  <span class="metric-label">ATTENTION TOPOLOGY</span>
+                  <span class="metric-value">DeepSeek MLA (Latent Compression)</span>
+                </div>
+                <span class="metric-chip chip-azure">1/7 KV Footprint</span>
+              </div>
+
+              <div class="llm-metric-row">
+                <div class="metric-meta">
+                  <span class="metric-label">AGENT RUNTIME</span>
+                  <span class="metric-value">Model Context Protocol (MCP)</span>
+                </div>
+                <span class="metric-chip chip-violet">Loop & Tools</span>
+              </div>
+
+              <div class="llm-metric-row">
+                <div class="metric-meta">
+                  <span class="metric-label">BENCHMARK RADAR</span>
+                  <span class="metric-value">Frontier Arena & SWE-bench</span>
+                </div>
+                <span class="metric-chip chip-amber">Verified</span>
+              </div>
+            </div>
+
+            <div class="llm-card-footer">
+              <div class="llm-stats-quick">
+                <div class="quick-stat">
+                  <span class="num">30+</span>
+                  <span class="desc">{{#if isEn}}PAPERS{{else}}深度研报{{/if}}</span>
+                </div>
+                <div class="quick-stat">
+                  <span class="num">100%</span>
+                  <span class="desc">{{#if isEn}}CODEBENCH{{else}}实战代码{{/if}}</span>
+                </div>
+                <div class="quick-stat">
+                  <span class="num">vLLM</span>
+                  <span class="desc">PROD VER</span>
+                </div>
+              </div>
+              <a href="{{linkPrefix}}/models/" class="llm-radar-link">
+                <span>{{#if isEn}}Model Radar 2026{{else}}2026 模型雷达全景评测{{/if}}</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </header>
@@ -237,8 +306,8 @@
       </div>
     </section>
 
-    <!-- ====== Topics ====== -->
-    <section id="topics" class="section section-tight">
+    <!-- ====== LLM Architecture Pillars ====== -->
+    <section id="pillars" class="section section-tight">
       <div class="container">
         <div class="section-header fade-in">
           <div class="section-tag">
@@ -252,49 +321,92 @@
             <span>{{home.topicsDesc}}</span>
           </p>
         </div>
-        <div class="topic-grid fade-in">
-          <a href="{{linkPrefix}}/articles/?tag={{home.topic1Name}}" class="topic-card">
-            <span class="topic-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
-            </span>
-            <span class="topic-name">{{home.topic1Name}}</span>
-            <span class="topic-count">12 {{home.topicUnit}}</span>
+        <div class="pillars-grid fade-in">
+          
+          <!-- Pillar 1: Foundations & Attention -->
+          <a href="{{linkPrefix}}/articles/?q=MLA" class="pillar-card">
+            <div class="pillar-header">
+              <div class="pillar-icon-box icon-cyan">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+              </div>
+              <span class="pillar-index">01 // ATTENTION</span>
+            </div>
+            <h3 class="pillar-title">{{home.pillar1Title}}</h3>
+            <p class="pillar-desc">{{home.pillar1Desc}}</p>
+            <div class="pillar-tags">
+              <span class="pillar-tag">MLA Compression</span>
+              <span class="pillar-tag">KV Cache</span>
+              <span class="pillar-tag">GPU Bandwidth</span>
+            </div>
+            <div class="pillar-cta">
+              <span>{{#if isEn}}Explore Pillar{{else}}进入专栏研报{{/if}}</span>
+              <span class="arrow">→</span>
+            </div>
           </a>
-          <a href="{{linkPrefix}}/articles/?tag={{home.topic2Name}}" class="topic-card">
-            <span class="topic-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
-            </span>
-            <span class="topic-name">{{home.topic2Name}}</span>
-            <span class="topic-count">8 {{home.topicUnit}}</span>
+
+          <!-- Pillar 2: Serving & High-Throughput Inference -->
+          <a href="{{linkPrefix}}/articles/?q=vLLM" class="pillar-card">
+            <div class="pillar-header">
+              <div class="pillar-icon-box icon-azure">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              </div>
+              <span class="pillar-index">02 // INFERENCE</span>
+            </div>
+            <h3 class="pillar-title">{{home.pillar2Title}}</h3>
+            <p class="pillar-desc">{{home.pillar2Desc}}</p>
+            <div class="pillar-tags">
+              <span class="pillar-tag">vLLM Serving</span>
+              <span class="pillar-tag">PagedAttention</span>
+              <span class="pillar-tag">FP8 Quant</span>
+            </div>
+            <div class="pillar-cta">
+              <span>{{#if isEn}}Explore Pillar{{else}}进入推理专栏{{/if}}</span>
+              <span class="arrow">→</span>
+            </div>
           </a>
-          <a href="{{linkPrefix}}/articles/?tag={{home.topic3Name}}" class="topic-card">
-            <span class="topic-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            </span>
-            <span class="topic-name">{{home.topic3Name}}</span>
-            <span class="topic-count">10 {{home.topicUnit}}</span>
+
+          <!-- Pillar 3: Agent Systems & Runtimes -->
+          <a href="{{linkPrefix}}/articles/?q=Agent" class="pillar-card">
+            <div class="pillar-header">
+              <div class="pillar-icon-box icon-violet">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              </div>
+              <span class="pillar-index">03 // RUNTIME</span>
+            </div>
+            <h3 class="pillar-title">{{home.pillar3Title}}</h3>
+            <p class="pillar-desc">{{home.pillar3Desc}}</p>
+            <div class="pillar-tags">
+              <span class="pillar-tag">Agent Loop</span>
+              <span class="pillar-tag">MCP Protocol</span>
+              <span class="pillar-tag">Reflection</span>
+            </div>
+            <div class="pillar-cta">
+              <span>{{#if isEn}}Explore Pillar{{else}}进入智能体专栏{{/if}}</span>
+              <span class="arrow">→</span>
+            </div>
           </a>
-          <a href="{{linkPrefix}}/articles/?tag={{home.topic4Name}}" class="topic-card">
-            <span class="topic-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
-            </span>
-            <span class="topic-name">{{home.topic4Name}}</span>
-            <span class="topic-count">7 {{home.topicUnit}}</span>
+
+          <!-- Pillar 4: Model Radar & Benchmarks -->
+          <a href="{{linkPrefix}}/models/" class="pillar-card">
+            <div class="pillar-header">
+              <div class="pillar-icon-box icon-amber">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <span class="pillar-index">04 // RADAR</span>
+            </div>
+            <h3 class="pillar-title">{{home.pillar4Title}}</h3>
+            <p class="pillar-desc">{{home.pillar4Desc}}</p>
+            <div class="pillar-tags">
+              <span class="pillar-tag">2026 Radar</span>
+              <span class="pillar-tag">Arena Evals</span>
+              <span class="pillar-tag">SWE-bench</span>
+            </div>
+            <div class="pillar-cta">
+              <span>{{#if isEn}}Open Radar{{else}}进入模型雷达{{/if}}</span>
+              <span class="arrow">→</span>
+            </div>
           </a>
-          <a href="{{linkPrefix}}/articles/?tag={{home.topic5Name}}" class="topic-card">
-            <span class="topic-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            </span>
-            <span class="topic-name">{{home.topic5Name}}</span>
-            <span class="topic-count">6 {{home.topicUnit}}</span>
-          </a>
-          <a href="{{linkPrefix}}/articles/?tag={{home.topic6Name}}" class="topic-card">
-            <span class="topic-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-            </span>
-            <span class="topic-name">{{home.topic6Name}}</span>
-            <span class="topic-count">9 {{home.topicUnit}}</span>
-          </a>
+
         </div>
       </div>
     </section>
