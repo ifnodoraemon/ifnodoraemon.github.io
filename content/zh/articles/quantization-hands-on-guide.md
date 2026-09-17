@@ -4,7 +4,7 @@ slug: quantization-hands-on-guide
 date: 2026-04-22
 tag: 量化部署
 tagClass: tag-blue
-description: 告别理论焦虑，手把手教你量化大模型。从直接下载预量化模型，到自己用 AWQ/GPTQ/GGUF 动手压缩权重，再到 vLLM FP8 零校准生产部署和 QLoRA 微调——四条路线，每条都有可直接复制的完整代码和命令。
+description: 告别理论焦虑，手把手教你大模型量化全流程实操：涵盖 GGUF 本地运行（Qwen3-8B-Q4_K_M.gguf、llama.cpp、Ollama）、AWQ 与 GPTQ 动手压缩，以及 vLLM FP8 生产部署与 QLoRA 微调，每条路线均附完整代码。
 featured: true
 featuredStats:
   - label: 实战路线
@@ -103,16 +103,22 @@ ollama run qwen3:32b-q4_K_M
 **方案 C：llama.cpp（命令行极客）**
 
 ```bash
-# 直接从 HuggingFace 下载 GGUF 文件
-huggingface-cli download bartowski/Qwen3-32B-GGUF \
-  --include "Qwen3-32B-Q4_K_M.gguf" \
+# 直接从 HuggingFace 下载 GGUF 文件（以 Qwen3-8B-Q4_K_M 为例，轻量级终端优选）
+huggingface-cli download bartowski/Qwen3-8B-GGUF \
+  --include "Qwen3-8B-Q4_K_M.gguf" \
   --local-dir ./models
 
-# 用 llama.cpp 的 server 模式启动 OpenAI 兼容 API
+# 本地命令行快速推理测试
+./llama-cli \
+  -m ./models/Qwen3-8B-Q4_K_M.gguf \
+  -p "系统: 你是一个专业的技术助手。\n用户: 用两句话解释什么是 4-bit 量化。\n助手:" \
+  -n 256 -ngl 99
+
+# 或者用 llama-server 启动 OpenAI 兼容 API（端口 8080）
 llama-server \
-  -m ./models/Qwen3-32B-Q4_K_M.gguf \
+  -m ./models/Qwen3-8B-Q4_K_M.gguf \
   --port 8080 \
-  -ngl 99    # 尽可能多地把层放到 GPU 上
+  -ngl 99    # 尽可能多地把层放到 GPU 显存
 ```
 
 > **路线一小结**：如果你是个人用户，直接下载 GGUF Q4_K_M 跑 Ollama 就是最优解。省下的时间够你多喝两杯咖啡。
@@ -650,3 +656,6 @@ GPTQModel 兼容 AutoGPTQ 格式的模型文件，老模型可以直接加载。
 
 ### Q3: 量化后的模型如何评估是否有严重精度受损？
 标准工程评测分为三步：第一步运行 PPL（Perplexity 困惑度测试，如 WikiText-2），若困惑度增量在 0.2 以内属于安全范围；第二步运行通用评测集（如 MMLU、GSM8k）；第三步必须在具体业务 Prompt 测试集中进行回归校验，防范代码与 JSON 格式化输出崩坏。更多评测工具配置可参考 [大模型系统化评测指南](/articles/llm-evaluation-guide/)。
+
+### Q4: 如何在本地快速下载并运行 Qwen3-8B-Q4_K_M.gguf 模型？
+使用 `huggingface-cli download bartowski/Qwen3-8B-GGUF --include "Qwen3-8B-Q4_K_M.gguf" --local-dir ./models` 即可高速下载。随后可通过 `./llama-cli -m ./models/Qwen3-8B-Q4_K_M.gguf -p "你好" -n 256` 运行命令行对话，或在目录下新建单行 `Modelfile`（内容为 `FROM ./models/Qwen3-8B-Q4_K_M.gguf`）后通过 `ollama create qwen3-8b -f Modelfile` 导入 Ollama。该量化版本运行时显存仅需约 5.2GB，在保留 99% 以上 FP16 精度基准的同时，可流畅运行于消费级 8GB 显卡和 Apple Silicon 设备。

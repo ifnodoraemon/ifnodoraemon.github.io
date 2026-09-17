@@ -10,6 +10,7 @@
     "build": "npm run pages && npm run articles && vite build",
     "test:smoke": "node --test tests/site.test.js",
     "indexnow": "node scripts/submit-indexnow.js",
+    "gsc": "node scripts/generate-gsc-urls.js",
     "preview": "vite preview"
   },
   "keywords": [],
