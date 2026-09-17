@@ -57,7 +57,7 @@ Answer: The final price is $170.
 
 ### 3. ReAct Framework
 
-Combining Reasoning and Acting allows the model to think while calling external tools or querying a [RAG knowledge base](/en/articles/rag-in-practice/). This is the core prompting strategy for building AI Agents:
+Combining Reasoning and Acting allows the model to think while calling external tools or querying a [retrieval-augmented generation system](/en/articles/rag-in-practice/). This is the core prompting strategy for building AI Agents:
 
 ```text
 Thought: The user wants to know the weather in New York today, I need to call the weather API.
@@ -266,7 +266,7 @@ Prompt engineering is not a one-and-done job; it is a process of continuous iter
 ## Frequently Asked Questions (FAQ)
 
 ### Q1: What are the engineering tradeoffs between Few-shot and Zero-shot?
-In production, Zero-shot is ideal for clear, standard instructions where token efficiency is a priority. Few-shot is better when you need strict output formats (like JSON) or a specific domain tone. If context windows are a concern, you can dynamically retrieve examples using a [RAG approach](/en/articles/rag-in-practice/) (Dynamic Few-shot).
+In production, Zero-shot is ideal for clear, standard instructions where token efficiency is a priority. Few-shot is better when you need strict output formats (like JSON) or a specific domain tone. If context windows are a concern, you can dynamically retrieve examples using [retrieval-augmented generation strategies](/en/articles/rag-in-practice/) (Dynamic Few-shot).
 
 ### Q2: What are the best practices for System Prompts?
 A System Prompt should establish a clear persona, boundaries, and strict constraints. Avoid hardcoding extensive background knowledge directly; instead, rely on [context engineering](/en/articles/context-engineering-guide/) to supply information on demand. Structuring your System Prompt with Markdown also helps the model parse instruction hierarchies effectively.

@@ -4,7 +4,7 @@ slug: quantization-hands-on-guide
 date: 2026-04-22
 tag: Quantization
 tagClass: tag-blue
-description: "Stop theorizing, start quantizing. From downloading pre-quantized models, to hands-on weight compression with AWQ/GPTQ/GGUF, to vLLM FP8 zero-calibration production deployment and QLoRA fine-tuning—four routes, each with complete copy-paste code."
+description: "Hands-on LLM quantization guide: download and run GGUF models (Qwen3-8B-Q4_K_M.gguf, llama.cpp, Ollama), quantize with AWQ/GPTQ, and deploy vLLM FP8 in production with copy-paste code."
 featured: true
 featuredStats:
   - label: Routes
@@ -17,7 +17,7 @@ featuredStats:
 
 ## Introduction: What Problem Does This Article Solve?
 
-If you've read my other article [Quantization Precision Guide](/articles/quantization-precision-guide), you already know how much "intelligence" quantization costs (spoiler: 8-bit is nearly free, 4-bit is the sweet spot).
+If you've read my other article [Quantization Precision Guide](/en/articles/quantization-precision-guide/), you already know how much "intelligence" quantization costs (spoiler: 8-bit is nearly free, 4-bit is the sweet spot).
 
 But there's a huge gap between "knowing you should quantize" and "actually doing it":
 - AutoGPTQ's GitHub page screams **"🚨 Unmaintained"**—what do you use instead?
@@ -103,16 +103,22 @@ Download [LM Studio](https://lmstudio.ai/), search for your model, pick a quanti
 **Option C: llama.cpp (CLI geek)**
 
 ```bash
-# Download GGUF from HuggingFace
-huggingface-cli download bartowski/Qwen3-32B-GGUF \
-  --include "Qwen3-32B-Q4_K_M.gguf" \
+# Download GGUF from HuggingFace (e.g., Qwen3-8B-Q4_K_M for lightweight edge deployment)
+huggingface-cli download bartowski/Qwen3-8B-GGUF \
+  --include "Qwen3-8B-Q4_K_M.gguf" \
   --local-dir ./models
 
-# Start an OpenAI-compatible API server
+# Run local CLI inference with Qwen3-8B-Q4_K_M.gguf
+./llama-cli \
+  -m ./models/Qwen3-8B-Q4_K_M.gguf \
+  -p "System: You are an expert AI assistant.\nUser: Explain 4-bit quantization in two sentences.\nAssistant:" \
+  -n 256 -ngl 99
+
+# Or launch high-performance OpenAI-compatible API server (port 8080)
 llama-server \
-  -m ./models/Qwen3-32B-Q4_K_M.gguf \
+  -m ./models/Qwen3-8B-Q4_K_M.gguf \
   --port 8080 \
-  -ngl 99    # offload as many layers to GPU as possible
+  -ngl 99    # offload all layers to GPU VRAM
 ```
 
 > **Route 1 summary**: If you're a personal user, downloading GGUF Q4_K_M and running Ollama is the optimal solution.
@@ -577,3 +583,6 @@ Weight-only quantization (W4A16) dequantizes weights back to FP16/BF16 in SRAM/r
 
 ### Q3: How can I verify that my quantized model hasn't suffered accuracy collapse?
 Follow a three-stage validation pipeline: first, measure PPL (Perplexity) on a clean benchmark such as WikiText-2 (a degradation delta under 0.2 is standard); second, run generic benchmark evaluations (e.g. MMLU, GSM8k); third, execute automated regression tests on domain-specific prompts to prevent formatting regressions. See our [LLM Evaluation Guide](/en/articles/llm-evaluation-guide/) for test harnesses.
+
+### Q4: How do I download and run Qwen3-8B-Q4_K_M.gguf locally?
+To download and run `Qwen3-8B-Q4_K_M.gguf`, use `huggingface-cli download bartowski/Qwen3-8B-GGUF --include "Qwen3-8B-Q4_K_M.gguf" --local-dir ./models`. You can then launch it with llama.cpp using `./llama-cli -m ./models/Qwen3-8B-Q4_K_M.gguf -p "Hello" -n 256` or import it directly into Ollama via a custom `Modelfile` (`FROM ./models/Qwen3-8B-Q4_K_M.gguf`). With an active VRAM footprint around 5.2GB, the Q4_K_M quantization level retains over 99% of dense FP16 perplexity while fitting comfortably on modern 8GB GPUs and Apple Silicon.
