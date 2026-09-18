@@ -26,7 +26,7 @@ Have you ever experienced any of these?
 
 This isn't AI being incompetent, nor is it about picking the wrong tool — **your approach to wielding AI is wrong**.
 
-In 2026, AI coding tools have evolved from "Tab completion" to autonomous [Agent systems](/articles/build-ai-agent) capable of planning, executing, and verifying on their own. Claude Code can run your test suites directly; GitHub Copilot Coding Agent auto-creates PRs from Issues; Cline CLI executes commands in sandboxes. Tools are abundant — what's missing is **the methodology to use them correctly**.
+In 2026, AI coding tools have evolved from "Tab completion" to autonomous [Agent systems](/en/articles/build-ai-agent/) capable of planning, executing, and verifying on their own. Claude Code can run your test suites directly; GitHub Copilot Coding Agent auto-creates PRs from Issues; Cline CLI executes commands in sandboxes. Tools are abundant — what's missing is **the methodology to use them correctly**.
 
 This article answers one core question: **How can you make AI reliably and consistently produce production-grade code?**
 

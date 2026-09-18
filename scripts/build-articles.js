@@ -345,8 +345,10 @@ function writeArticles(list, isEn) {
 
     const html = applyTemplate(template, {
       title: article.title,
+      jsonTitle: JSON.stringify(article.title),
       slug: article.slug,
       description: article.description,
+      jsonDescription: JSON.stringify(article.description),
       date: article.isoDate,
       isoDate: article.isoDate,
       dateFormatted: article.dateFormatted,

@@ -584,11 +584,16 @@ graph LR
     end
 ```
 
-## FAQ
+## Frequently Asked Questions (FAQ)
 
-- **What's the difference between Skills and System Prompts?** System Prompts are built-in platform instructions that developers cannot modify. Skills are developer-defined, task-domain-specific knowledge extensions.
-- **Do Skills consume extra tokens?** Yes, Skills content is injected into the AI's context window, consuming token quota. But the three-layer progressive loading mechanism ensures only relevant Skills are loaded, minimizing waste.
-- **How do I choose between Skills and MCP?** If you need to **teach AI how to do things** (standards, workflows, templates), use Skills. If you need AI to **connect to external systems** (APIs, databases, filesystems), use [MCP](/en/articles/mcp-guide/). They're complementary.
-- **Can Skills work across platforms?** Most Skills formats are platform-specific. But `AGENTS.md` is an open standard supported by OpenAI, GitHub, Google, Anthropic, and more — currently the best cross-platform option.
-- **Do OpenAI's GPTs count as Skills?** GPTs are essentially "Skills + Model + Tools" pre-packaged as a product. They bundle Instructions, Knowledge, and Capabilities together — a higher-level form of Skills.
-- **How many Skills should a project have?** There's no fixed number. Follow the "single responsibility" principle — each Skill solves one specific domain's problems. Typically 3-8 Skills cover a mid-size project's main needs.
+### Q1: What is the fundamental difference between Skills and System Prompts?
+System Prompts are immutable foundational instructions embedded by model providers and platform engines to enforce security baselines and core behavioral traits. Skills are developer-defined, domain-specific modular knowledge packages governed by on-demand activation. Rather than bloating the system prompt, Skills are dynamically compiled into context only when specific tasks (such as refactoring, test generation, or API security review) require specialized workflows.
+
+### Q2: Does configuring multiple project Skills cause excessive token consumption?
+No. Modern Agent Skill runtimes utilize a three-tier progressive loading architecture: only lightweight metadata (skill names and descriptions, taking fewer than 50 tokens) is indexed initially. Full instruction bodies and templates are pulled into active context strictly when the orchestrator classifies user intent toward that skill. This just-in-time approach reduces token overhead by over 90% compared to monolithic prompt injection.
+
+### Q3: How should software architects decide between implementing Skills versus MCP?
+Skills and MCP are complementary layers of the AI developer stack: Skills define **how the agent reasons and executes** (standards, decision heuristics, lint constraints, and style templates), while [MCP (Model Context Protocol)](/en/articles/mcp-guide/) provides **the physical hands to interact with systems** (database connections, git APIs, cloud execution sandboxes). Skills guide the model on how to compose and parameterize MCP tools safely.
+
+### Q4: Are modern Skills formats portable across different IDEs and platforms?
+Yes. Open standards such as `AGENTS.md`, `CLAUDE.md`, and modular `SKILL.md` specifications rely on platform-agnostic Markdown conventions. They are natively supported across industry tools including GitHub Copilot, Cursor, Claude Code, and emerging agent workbenches. By committing Skills directly into version control, engineering teams guarantee unified AI code generation practices across heterogeneous developer environments.

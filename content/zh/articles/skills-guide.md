@@ -584,11 +584,16 @@ graph LR
     end
 ```
 
-## 常见问题
+## 常见问题 (FAQ)
 
-- **Skills 和 System Prompt 有什么区别？** System Prompt 是平台内置的、开发者无法修改的底层指令。Skills 是开发者自定义的、针对特定任务领域的专业知识扩展。
-- **使用 Skills 会消耗额外的 Token 吗？** 是的，Skills 的内容会被注入到 AI 的上下文窗口中，占用 Token 额度。但三层渐进式加载机制确保只有相关的 Skills 才会被加载，最大限度减少浪费。
-- **如何选择该用 Skills 还是 MCP？** 如果你需要**教 AI 怎么做事**（规范、流程、模板），用 Skills；如果你需要**让 AI 连接外部系统**（API、数据库、文件系统），用 [MCP](/articles/mcp-guide/)。两者是互补关系。
-- **Skills 可以跨平台通用吗？** 目前大部分 Skills 格式是平台专属的。但 `AGENTS.md` 作为开放标准已被 OpenAI、GitHub、Google、Anthropic 等多平台支持，是目前最好的跨平台方案。
-- **OpenAI 的 GPTs 算不算 Skills？** GPTs 本质上是"Skills + 模型 + 工具"的预封装产品。它将 Instructions（指令）、Knowledge（知识库）和 Capabilities（工具权限）打包在一起，可以看作更高级的 Skills 表现形式。
-- **一个项目应该有多少个 Skills？** 没有固定数量。遵循"单一职责"原则，每个 Skill 解决一个具体领域的问题。通常 3-8 个 Skills 即可覆盖一个中型项目的主要需求。
+### Q1: Skills 与传统 System Prompt 的本质区别是什么？
+System Prompt 是由平台和模型厂商固化的底层基底指令，通常包含全局安全伦理红线且不可被开发者直接抹除或替换。Skills 则是开发者根据特定业务工程领域自定义的高阶外挂知识规范包，遵循按需激活与模块化装配原则，可以根据开发场景（如专项测试、架构评审、SQL 审查）动态注入大模型上下文，避免提示词膨胀。
+
+### Q2: 项目中引入多个 Skills 是否会导致 Token 消耗暴增？
+不会。成熟的 Agent Skills 系统采用三层渐进式装配机制：首先仅加载轻量级元数据列表（Skill Name 与描述，仅耗费数十 Token），仅当模型通过意图识别判定当前任务必须调用某项能力时，才会全量拉取对应的正文与操作规范。相比每次对话机械注入万字完整文档，这种惰性加载方案节省了 90% 以上的上下文空间。
+
+### Q3: 工程架构中如何决策该采用 Skills 还是 MCP？
+两者的角色完全互补：Skills 负责教大模型**如何正确思考与执行流程**（即最佳实践、规范清单、架构约束和代码模板）；而 [MCP（Model Context Protocol）](/articles/mcp-guide/) 负责为大模型提供**与外部世界交互的实际工具**（如操作数据库客户端、调用外部 API、读取沙箱环境）。Skills 指导大模型何时以及如何以合规参数调用对应的 MCP 工具。
+
+### Q4: 现代 Skills 体系支持跨平台和跨编辑器迁移吗？
+支持。以 `AGENTS.md`、`CLAUDE.md` 及通用 `SKILL.md` 为代表的文件规范采用纯文本开放标准编写，已被 GitHub Copilot、Cursor、Claude Code 以及各大开源 Agent 运行时广泛支持。开发者只需将 Skills 文件纳入项目的 Git 版本控制，团队成员即可在各自偏好的 IDE 工具中获得完全一致的 AI 辅助效果。

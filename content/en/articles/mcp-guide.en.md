@@ -489,9 +489,16 @@ graph LR
 - **Agent communication protocol**: Enabling multi-AI-Agent collaboration via MCP
 - **Enterprise readiness**: Comprehensive governance structures and compliance auditing frameworks
 
-## FAQ
+## Frequently Asked Questions (FAQ)
 
-- **How does MCP differ from regular APIs?** MCP is a specialized API protocol designed specifically for AI-to-system interaction. Regular APIs serve programmers; MCP serves AI.
-- **Do I need to modify existing backend services?** No. MCP Servers act as middleware, wrapping existing APIs and data sources in the MCP protocol. Your backend remains unchanged. This non-invasive architecture is especially useful when you [build an AI agent](/en/articles/build-ai-agent/) to quickly integrate tools.
-- **Does MCP introduce security risks?** MCP has robust built-in security (OAuth, permission control, user confirmation), but only if properly configured. In enterprise environments, always enable sandboxing and tool auditing.
-- **How do I choose between Tool vs Resource?** If the operation **changes system state** (write, delete, send), use a Tool. If it only **reads data** to provide context, use a Resource.
+### Q1: How does MCP fundamentally differ from traditional APIs?
+MCP (Model Context Protocol) is an open standard purpose-built for AI model-to-system interactions. Traditional REST/gRPC APIs are designed for human software engineers who manually inspect API documentation and write bespoke client glue code. MCP is designed directly for AI agents, providing automated runtime tool discovery, structured resource context ingestion, and bi-directional RPC execution loops.
+
+### Q2: Do enterprise engineering teams need to refactor existing backend services to use MCP?
+No refactoring is required. MCP Servers function as a lightweight, non-invasive gateway layer that wraps existing microservice endpoints, database clients, or third-party SDKs into standardized Tools and Resources. When you [build an AI agent](/en/articles/build-ai-agent/), this decoupled architecture allows you to integrate complex production toolchains without touching underlying legacy backends.
+
+### Q3: Does deploying MCP Servers introduce security or data exfiltration risks?
+MCP incorporates robust native security primitives, including OAuth 2.0 authorization, incremental scope negotiation, and human-in-the-loop confirmation prompts for high-impact actions. In enterprise production deployments, teams should enforce containerized sandbox isolation (via Docker or gVisor) and establish rigorous parameter validation to prevent indirect prompt injection vulnerabilities.
+
+### Q4: How should developers choose between designing an MCP Tool versus an MCP Resource?
+The defining criterion is **state mutability and side effects**: if an operation alters external system state (e.g., creating database records, triggering builds, committing code, sending notifications), it must be defined as a **Tool**. If an operation is strictly read-only and idempotent for providing background context (e.g., retrieving file contents, reading schema definitions, inspecting logs), it should be defined as a **Resource**.

@@ -88,6 +88,29 @@ test('build outputs include IndexNow key and articles with FAQPage / TechArticle
   assert.match(vllmHtml, /"@type":\s*"TechArticle"/);
   assert.match(vllmHtml, /"@type":\s*"FAQPage"/);
   assert.match(vllmHtml, /"url":\s*"https:\/\/blog\.llmgo\.top\/favicon\.svg"/);
+
+  const distArticles = [
+    ...fs.readdirSync(path.join(ROOT, 'dist', 'articles')).map(d => path.join(ROOT, 'dist', 'articles', d, 'index.html')),
+    ...fs.readdirSync(path.join(ROOT, 'dist', 'en', 'articles')).map(d => path.join(ROOT, 'dist', 'en', 'articles', d, 'index.html')),
+  ].filter(f => fs.existsSync(f) && fs.statSync(f).isFile());
+
+  assert.equal(distArticles.length, 60, 'expected 60 built articles');
+
+  for (const file of distArticles) {
+    const html = fs.readFileSync(file, 'utf-8');
+    const jsonLdBlocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+    let foundFaq = false;
+    let foundTechArticle = false;
+
+    for (const block of jsonLdBlocks) {
+      const parsed = JSON.parse(block[1]);
+      if (parsed['@type'] === 'FAQPage') foundFaq = true;
+      if (parsed['@type'] === 'TechArticle') foundTechArticle = true;
+    }
+
+    assert.ok(foundFaq, `expected FAQPage schema in ${file}`);
+    assert.ok(foundTechArticle, `expected TechArticle schema in ${file}`);
+  }
 });
 
 test('built CSS preserves critical responsive layout styles and mobile components', () => {

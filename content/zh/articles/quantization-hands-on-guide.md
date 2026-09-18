@@ -17,7 +17,7 @@ featuredStats:
 
 ## 前言：这篇文章解决什么问题？
 
-如果你读过我的另一篇文章[《大模型量化精度全景图》](/articles/quantization-precision-guide)，你应该已经知道了"量化会让模型变笨多少"的答案（剧透：8-bit 几乎免费，4-bit 是甜蜜点）。
+如果你读过我的另一篇文章[《大模型量化精度全景图》](/articles/quantization-precision-guide/)，你应该已经知道了"量化会让模型变笨多少"的答案（剧透：8-bit 几乎免费，4-bit 是甜蜜点）。
 
 但"知道该量化"和"真正动手量化"之间，还隔着一条巨大的鸿沟：
 - AutoGPTQ 的 GitHub 首页赫然写着 **"🚨 Unmaintained"**，该用什么替代？

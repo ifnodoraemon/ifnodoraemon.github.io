@@ -26,7 +26,7 @@ featuredStats:
 
 这不是 AI 不行，也不是工具没选对——而是**你驾驭 AI 的方式不对**。
 
-2026 年了，AI 编程工具已经从"Tab 补全"进化到了能够自主规划、执行、验证的 [Agent 形态](/articles/build-ai-agent)。Claude Code 可以直接跑你的测试套件；GitHub Copilot Coding Agent 能从 Issue 自动开 PR；Cline CLI 在沙盒里执行命令。工具不缺——缺的是**把工具用对的方法论**。
+2026 年了，AI 编程工具已经从"Tab 补全"进化到了能够自主规划、执行、验证的 [Agent 形态](/articles/build-ai-agent/)。Claude Code 可以直接跑你的测试套件；GitHub Copilot Coding Agent 能从 Issue 自动开 PR；Cline CLI 在沙盒里执行命令。工具不缺——缺的是**把工具用对的方法论**。
 
 这篇文章要回答一个核心问题：**怎样才能让 AI 稳定地、可靠地帮你写出生产级代码？**
 
@@ -382,7 +382,7 @@ LLM 的上下文窗口不是"越大越好"。即使 [Gemini 3.1 Pro 拥有高达
 
 说完方法论，最后才是工具选型。**工具服务于方法论，而不是反过来。**
 
-2026 年的一个关键变化是 [MCP 协议（Model Context Protocol）](/articles/mcp-guide)的全面普及——它就像 AI 工具界的 USB-C，让不同的 AI 编程工具可以通过统一协议连接数据库、GitHub、文件系统等外部资源。选工具时，MCP 支持程度已成为重要指标。
+2026 年的一个关键变化是 [MCP 协议（Model Context Protocol）](/articles/mcp-guide/)的全面普及——它就像 AI 工具界的 USB-C，让不同的 AI 编程工具可以通过统一协议连接数据库、GitHub、文件系统等外部资源。选工具时，MCP 支持程度已成为重要指标。
 
 ### AI 原生 IDE——从底层为 AI 重新设计的编辑器
 
