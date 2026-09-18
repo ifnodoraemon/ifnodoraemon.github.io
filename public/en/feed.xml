@@ -1,18 +1,221 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-  <title>AI Tech Observer</title>
-  <link>https://blog.llmgo.top/</link>
+  <title>Nobita Talks AI</title>
+  <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Mon, 09 Mar 2026 08:26:07 GMT</pubDate>
+  <pubDate>Fri, 18 Sep 2026 05:00:32 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
-    <title>Deep Dive into 6 AI Foundation Model Trends in 2026</title>
+    <title>Under the Hood of Browser-use (100k+ Stars): DOM Tree Distillation, Vision Grounding, and Production Web Agents</title>
+    <link>https://blog.llmgo.top/en/articles/browser-use-agent-architecture/</link>
+    <guid>https://blog.llmgo.top/en/articles/browser-use-agent-architecture/</guid>
+    <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+    <description>Why do traditional Selenium and Playwright scripts constantly break against modern web frontends? We dissect the architecture of Browser-use, the breakout open-source project with over 100k GitHub stars: DOM tree pruning, Set-of-Mark (SoM) visual coordinate grounding, state machine resilience, and end-to-end production recipes.</description>
+  </item>
+  <item>
+    <title>SGLang vs vLLM Architecture Showdown: RadixAttention, Structured Decoding, and High-Concurrency Benchmarks</title>
+    <link>https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/</link>
+    <guid>https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/</guid>
+    <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+    <description>A deep architectural breakdown between the dual titans of 2026 LLM inference: vLLM and SGLang. We dissect PagedAttention block paging versus RadixAttention tree-based prefix caching, compare scheduler-level structured decoding (JSON Schema) mechanics, and deliver rigorous benchmarks on an 8x H100 cluster alongside an enterprise decision framework.</description>
+  </item>
+  <item>
+    <title>Speculative Decoding in Production: From Draft Models to EAGLE-3 Dynamic Trees for 3x-5x Lossless Acceleration</title>
+    <link>https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/</guid>
+    <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+    <description>Why is autoregressive LLM decoding fundamentally bottlenecked by memory bandwidth? We dissect the mathematical proof of lossless distribution invariance in speculative decoding, trace its evolution from dual-model drafts to EAGLE-2/3 dynamic draft trees, and provide production configurations in vLLM and SGLang.</description>
+  </item>
+  <item>
+    <title>Test-Time Compute and GRPO in Practice: From PPO to Critic-Free Reinforcement Learning</title>
+    <link>https://blog.llmgo.top/en/articles/test-time-compute-grpo/</link>
+    <guid>https://blog.llmgo.top/en/articles/test-time-compute-grpo/</guid>
+    <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+    <description>A deep dive into the paradigm shift from pre-training scaling laws to test-time compute. We deconstruct the mathematical derivation of DeepSeek-R1's Group Relative Policy Optimization (GRPO), critic-free architecture advantages, emergent self-reflection in long reasoning traces, and a complete, reproducible hands-on implementation.</description>
+  </item>
+  <item>
+    <title>Deploying 2026 Frontier Open Models On-Premise: Running DeepSeek-V4 and Kimi K3 on Multi-Node GPU Clusters</title>
+    <link>https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/</guid>
+    <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+    <description>Complete enterprise on-premise deployment guide for 1.6T - 2.8T MoE open-weight models: Hardware planning across GPU clusters, vLLM / SGLang distributed TP/PP configuration, FP8 dynamic quantization, and high-concurrency API gateway production setups.</description>
+  </item>
+  <item>
+    <title>2026 Frontier Chinese LLMs Face-off: Kimi K3 vs GLM-5.3 vs DeepSeek-V4 Practical Benchmark &amp; Architecture Selection</title>
+    <link>https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/</link>
+    <guid>https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/</guid>
+    <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+    <description>In-depth evaluation of China's top three frontier models in 2026: Kimi K3's 2.8T KDA attention, GLM-5.3's environment-scaled terminal execution, and DeepSeek-V4-Pro's 1.6T MoE software engineering prowess.</description>
+  </item>
+  <item>
+    <title>Beyond Simple Prompts: How Environment Scaling Is Reshaping Autonomous Agents in 2026</title>
+    <link>https://blog.llmgo.top/en/articles/environment-scaling-agent-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/environment-scaling-agent-guide/</guid>
+    <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+    <description>Analyzing the major post-training paradigm shift of 2026: from text autoregression to multi-environment sandboxed RL. Deep dive into GLM-5.3's Terminal-Bench 3.0 breakthrough, Linux container orchestration, MCP protocol integration, and sandboxed agent engineering.</description>
+  </item>
+  <item>
+    <title>Demystifying 2026 Architecture Breakthroughs: How Kimi Delta Attention and DeepSeek MLA Conquered the Memory Wall</title>
+    <link>https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/</link>
+    <guid>https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/</guid>
+    <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+    <description>In the era of million-token context windows and trillion-parameter MoE, how KV Cache memory saturation became the core bottleneck. Deep mathematical and architectural breakdown of Moonshot's KDA and DeepSeek's MLA low-rank projections.</description>
+  </item>
+  <item>
+    <title>Evolving Models at Runtime: From Basic Reflection to MCTS-based Test-Time Compute</title>
+    <link>https://blog.llmgo.top/en/articles/agent-reflection-self-correction/</link>
+    <guid>https://blog.llmgo.top/en/articles/agent-reflection-self-correction/</guid>
+    <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
+    <description>The potential of LLMs extends beyond pre-trained parameters. We dive deep into the frontier of Test-Time Compute: from Actor-Critic architecture to leveraging Monte Carlo Tree Search (MCTS) to decode the limits of Agent self-correction.</description>
+  </item>
+  <item>
+    <title>2026 AI Paradigm Shift: Distributed Agent Orchestration &amp; Evals to Combat Error Compounding</title>
+    <link>https://blog.llmgo.top/en/articles/agent-orchestration-evals/</link>
+    <guid>https://blog.llmgo.top/en/articles/agent-orchestration-evals/</guid>
+    <pubDate>Wed, 15 Jul 2026 00:00:00 GMT</pubDate>
+    <description>As LLMs move into complex enterprise production, how do we use distributed orchestration to combat error compounding? How do we build a statistically significant Evals system?</description>
+  </item>
+  <item>
+    <title>Deep Dive into AI Agent Architecture Evolution: From Prompt to Loop Engineering</title>
+    <link>https://blog.llmgo.top/en/articles/loop-engineering/</link>
+    <guid>https://blog.llmgo.top/en/articles/loop-engineering/</guid>
+    <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
+    <description>A deep dive into the evolution of AI Agent architectures, exploring the 4-layer control plane extrapolation from Prompt, Context, Harness to Loop Engineering, and the 4 diseases of the ReAct architecture.</description>
+  </item>
+  <item>
+    <title>Agent Observability &amp; Debugging: The Path from Black Box to White Box</title>
+    <link>https://blog.llmgo.top/en/articles/agent-observability-debugging/</link>
+    <guid>https://blog.llmgo.top/en/articles/agent-observability-debugging/</guid>
+    <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
+    <description>AI Agents are not traditional software; we are debugging the reasoning process rather than the code itself. This article explores Trajectory Evaluation, LLM-as-a-Judge, and practical applications of mainstream Agent observability tools like LangSmith and Langfuse.</description>
+  </item>
+  <item>
+    <title>Context Engineering Guide: Managing Context Window like RAM</title>
+    <link>https://blog.llmgo.top/en/articles/context-engineering-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/context-engineering-guide/</guid>
+    <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
+    <description>The hottest concept in 2026, evolving from Prompt Engineering to Context Engineering. A deep dive into managing the context window through Write, Select, Compress, and Isolate strategies to solve long-context amnesia, hallucinations, and context poisoning.</description>
+  </item>
+  <item>
+    <title>AI Coding Mastery: From 'Build Me an X' to Architecture Orchestrator</title>
+    <link>https://blog.llmgo.top/en/articles/ai-coding-mastery/</link>
+    <guid>https://blog.llmgo.top/en/articles/ai-coding-mastery/</guid>
+    <pubDate>Mon, 04 May 2026 00:00:00 GMT</pubDate>
+    <description>Tools don't matter — methodology does. A deep dive into six core methods for mastering AI coding: Spec-Driven Development, Context Engineering, TDD Verification Loops, Multi-Agent Orchestration, Advanced Prompting, and Session Hygiene. Plus a 20+ tool matrix and five anti-patterns to avoid.</description>
+  </item>
+  <item>
+    <title>Reject Benchmark Hacking: How to Build an LLM Evaluation System for Your Business (LLM-as-a-Judge)</title>
+    <link>https://blog.llmgo.top/en/articles/llm-evaluation-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/llm-evaluation-guide/</guid>
+    <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
+    <description>Cease the obsession with writing more code; shift focus to deep evaluation thinking. We deconstruct LLM-as-a-Judge biases, the mathematics behind metrics, and reshaping CI/CD defenses for probabilistic systems.</description>
+  </item>
+  <item>
+    <title>LLM Quantization Hands-On Guide: Four Routes from Zero to Production</title>
+    <link>https://blog.llmgo.top/en/articles/quantization-hands-on-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/quantization-hands-on-guide/</guid>
+    <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
+    <description>Hands-on LLM quantization guide: download and run GGUF models (Qwen3-8B-Q4_K_M.gguf, llama.cpp, Ollama), quantize with AWQ/GPTQ, and deploy vLLM FP8 in production with copy-paste code.</description>
+  </item>
+  <item>
+    <title>The Critical Crossroads in AI History: Why Was *That One* Chosen Every Time?</title>
+    <link>https://blog.llmgo.top/en/articles/ai-history-choices/</link>
+    <guid>https://blog.llmgo.top/en/articles/ai-history-choices/</guid>
+    <pubDate>Wed, 15 Apr 2026 00:00:00 GMT</pubDate>
+    <description>A retrospective of six pivotal technology crossroads in AI's seventy-year history, dissecting the compute constraints, data dividends, and scalability logic behind each historical choice.</description>
+  </item>
+  <item>
+    <title>vLLM Online Inference in Production: From Architecture to Token Billing</title>
+    <link>https://blog.llmgo.top/en/articles/vllm-serving-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/vllm-serving-guide/</guid>
+    <pubDate>Tue, 14 Apr 2026 00:00:00 GMT</pubDate>
+    <description>A deep dive into vLLM's core architecture (PagedAttention, continuous batching, APC prefix caching, speculative decoding) for online serving. Covers OpenAI-compatible API setup, performance tuning, token billing systems, and complete Docker deployment with Prometheus monitoring.</description>
+  </item>
+  <item>
+    <title>Mapping the NVIDIA GPU Driver Stack: From Kernel Modules to Container Runtimes</title>
+    <link>https://blog.llmgo.top/en/articles/nvidia-gpu-package-architecture/</link>
+    <guid>https://blog.llmgo.top/en/articles/nvidia-gpu-package-architecture/</guid>
+    <pubDate>Sun, 05 Apr 2026 00:00:00 GMT</pubDate>
+    <description>A deep dive into the complex Linux NVIDIA GPU driver package structures. Understand the 5-layer architecture bridging nvidia-dkms, libnvidia, nvidia-utils, and driver metapackages. Plus, discover enterprise best practices and troubleshooting guides for 4 core deployment scenarios, including Docker model servers and DGX clusters.</description>
+  </item>
+  <item>
+    <title>LLM Quantization Precision Guide: From FP32 to 1-bit, How Much Quality Do You Actually Lose?</title>
+    <link>https://blog.llmgo.top/en/articles/quantization-precision-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/quantization-precision-guide/</guid>
+    <pubDate>Tue, 31 Mar 2026 00:00:00 GMT</pubDate>
+    <description>A comprehensive comparison of FP32, BF16, FP16, FP8, INT8, INT4, NF4, FP4, 1.58-bit and all major quantization formats — with real benchmark data and an in-depth FP8 vs INT8 technical analysis.</description>
+  </item>
+  <item>
+    <title>7 Runtime Practices for Building AI Agents</title>
+    <link>https://blog.llmgo.top/en/articles/agent-runtime-practices/</link>
+    <guid>https://blog.llmgo.top/en/articles/agent-runtime-practices/</guid>
+    <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
+    <description>Based on a real data analysis agent project, this article distills 7 reusable Agent Runtime practices covering state exposure, tool design, context control, guardrails, delegation, and trace-driven iteration.</description>
+  </item>
+  <item>
+    <title>MCP Deep Dive: The USB-C Port for AI</title>
+    <link>https://blog.llmgo.top/en/articles/mcp-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/mcp-guide/</guid>
+    <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
+    <description>From architecture to hands-on development, a complete guide to the Model Context Protocol. Includes Python SDK tutorial, security mechanisms, and ecosystem comparison.</description>
+  </item>
+  <item>
+    <title>Skills Deep Dive: Give Your AI Coding Assistant a Professional Brain</title>
+    <link>https://blog.llmgo.top/en/articles/skills-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/skills-guide/</guid>
+    <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
+    <description>From core principles to cross-platform practice, a complete guide to the AI coding assistant Skills system. Covers SKILL.md mechanics, six-platform comparison, hands-on writing guide, and best practices.</description>
+  </item>
+  <item>
+    <title>Prompt Engineering Practice Guide</title>
+    <link>https://blog.llmgo.top/en/articles/prompt-engineering-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/prompt-engineering-guide/</guid>
+    <pubDate>Mon, 09 Mar 2026 00:00:00 GMT</pubDate>
+    <description>An in-depth exploration of designing effective prompts to improve model output quality. Covers core techniques like Few-Shot, Chain-of-Thought, and ReAct with practical examples.</description>
+  </item>
+  <item>
+    <title>Deep Dive into 11 AI Foundation Model Trends in 2026</title>
     <link>https://blog.llmgo.top/en/articles/ai-trends-2026/</link>
     <guid>https://blog.llmgo.top/en/articles/ai-trends-2026/</guid>
     <pubDate>Sat, 07 Mar 2026 00:00:00 GMT</pubDate>
-    <description>From Thinking reasoning modes to Agentic applications, a deep dive into the top 6 trends in AI foundation models for 2026.</description>
+    <description>From Thinking reasoning modes to Agentic applications, a deep dive into the top 11 trends in AI foundation models for 2026.</description>
+  </item>
+  <item>
+    <title>Building AI Agent Applications from Scratch</title>
+    <link>https://blog.llmgo.top/en/articles/build-ai-agent/</link>
+    <guid>https://blog.llmgo.top/en/articles/build-ai-agent/</guid>
+    <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
+    <description>A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.</description>
+  </item>
+  <item>
+    <title>Retrieval-Augmented Generation (RAG) in Practice: Strategies &amp; Production Best Practices</title>
+    <link>https://blog.llmgo.top/en/articles/rag-in-practice/</link>
+    <guid>https://blog.llmgo.top/en/articles/rag-in-practice/</guid>
+    <pubDate>Tue, 03 Mar 2026 00:00:00 GMT</pubDate>
+    <description>A complete guide on how to use retrieval-augmented generation strategies and production best practices. Covers vector databases, semantic chunking, ColBERT reranking, GraphRAG, and automated Ragas evaluation.</description>
+  </item>
+  <item>
+    <title>2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</title>
+    <link>https://blog.llmgo.top/en/articles/model-comparison-2026/</link>
+    <guid>https://blog.llmgo.top/en/articles/model-comparison-2026/</guid>
+    <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
+    <description>A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.</description>
+  </item>
+  <item>
+    <title>Multimodal AI Models Starter Guide</title>
+    <link>https://blog.llmgo.top/en/articles/multimodal-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/multimodal-guide/</guid>
+    <pubDate>Sat, 28 Feb 2026 00:00:00 GMT</pubDate>
+    <description>Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.</description>
+  </item>
+  <item>
+    <title>LLM Fine-Tuning Guide: How It Works, Real-World Use Cases, and Workflows</title>
+    <link>https://blog.llmgo.top/en/articles/fine-tuning-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/fine-tuning-guide/</guid>
+    <pubDate>Wed, 25 Feb 2026 00:00:00 GMT</pubDate>
+    <description>Discover how LLM fine-tuning works under the hood, explore proven enterprise use cases (LoRA, QLoRA, Full Fine-Tuning), and learn end-to-end workflows from data preparation to vLLM serving.</description>
   </item>
 </channel>
 </rss>

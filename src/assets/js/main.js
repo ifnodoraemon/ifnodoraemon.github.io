@@ -93,26 +93,67 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // — Copy Code Button with $ Stripping —
-  document.querySelectorAll('.copy-code-btn').forEach(btn => {
+  document.querySelectorAll('.copy-code-btn, .copy-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const codeBlock = btn.nextElementSibling;
+      const codeBlock = btn.nextElementSibling?.querySelector('code') || btn.nextElementSibling;
       if (!codeBlock) return;
       
-      let code = codeBlock.innerText;
+      let code = codeBlock.innerText || codeBlock.textContent || '';
       // Strip starting '$ ' from bash commands before copying
       const lines = code.split('\n');
       const cleanLines = lines.map(line => line.trim().startsWith('$ ') ? line.trim().substring(2) : line);
       code = cleanLines.join('\n');
 
-      navigator.clipboard.writeText(code).then(() => {
-        const originalHtml = btn.innerHTML;
-        btn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-        setTimeout(() => {
-          btn.innerHTML = originalHtml;
-        }, 2000);
-      });
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(() => {
+          const originalHtml = btn.innerHTML;
+          btn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+          setTimeout(() => {
+            btn.innerHTML = originalHtml;
+          }, 2000);
+        }).catch(err => {
+          console.warn('Clipboard write failed:', err);
+        });
+      }
     });
   });
+
+  // — Table of Contents (TOC) Scroll Spy —
+  const tocLinks = document.querySelectorAll('.article-toc-list a');
+  if (tocLinks.length > 0 && articleContent) {
+    const headings = Array.from(tocLinks)
+      .map(link => {
+        const id = link.getAttribute('href')?.replace(/^#/, '');
+        return id ? document.getElementById(id) : null;
+      })
+      .filter(Boolean);
+
+    if (headings.length > 0) {
+      const updateTocActiveState = () => {
+        const scrollPosition = window.scrollY + 120;
+        let activeHeading = headings[0];
+
+        for (let i = 0; i < headings.length; i++) {
+          if (headings[i].offsetTop <= scrollPosition) {
+            activeHeading = headings[i];
+          } else {
+            break;
+          }
+        }
+
+        if (activeHeading) {
+          const activeId = activeHeading.id;
+          tocLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            link.classList.toggle('active', href === `#${activeId}`);
+          });
+        }
+      };
+
+      window.addEventListener('scroll', updateTocActiveState, { passive: true });
+      updateTocActiveState();
+    }
+  }
 
   // — Back to Top —
   const backToTop = document.getElementById('back-to-top');
@@ -130,12 +171,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // — Medium Zoom —
-  if (typeof mediumZoom !== 'undefined') {
-    mediumZoom('.article-detail-content img', {
-      margin: 24,
-      background: '#0a0a1a'
-    });
-  }
+  const initMediumZoom = () => {
+    if (typeof mediumZoom !== 'undefined') {
+      mediumZoom('.article-detail-content img', {
+        margin: 24,
+        background: '#0a0a1a'
+      });
+    }
+  };
+  initMediumZoom();
+  window.addEventListener('load', initMediumZoom, { once: true });
 
 });
 

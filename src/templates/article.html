@@ -13,6 +13,7 @@
   <link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/{{slug}}/" />
   <link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/{{slug}}/" />
   <link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/{{slug}}/" />
+  <link rel="alternate" type="application/rss+xml" title="{{meta.siteName}} RSS Feed" href="{{rssFeedPath}}" />
   <meta name="theme-color" content="#090a0f">
 
   <!-- Open Graph / Article -->
@@ -205,30 +206,6 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>
-  <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'dark',
-      themeVariables: {
-        darkMode: true,
-        background: '#0a0a1a',
-        mainBkg: '#1a1a2e',
-        nodeBorder: '#6366f1',
-        clusterBkg: 'rgba(99,102,241,0.06)',
-        clusterBorder: 'rgba(99,102,241,0.2)',
-        titleColor: '#a5b4fc',
-        nodeTextColor: '#e2e8f0',
-        primaryColor: '#1e1e3a',
-        primaryTextColor: '#e2e8f0',
-        primaryBorderColor: '#6366f1',
-        lineColor: '#818cf8',
-        secondaryColor: '#1a1a2e',
-        tertiaryColor: '#1a1a2e',
-        fontFamily: 'Inter, Noto Sans SC, sans-serif',
-        fontSize: '14px',
-      }
-    });
-  </script>
+  {{mermaidScript}}
 </body>
 </html>

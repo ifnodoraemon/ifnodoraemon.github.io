@@ -58,8 +58,8 @@ ${text}
   } catch(e) {}
 
   return `<div class="code-block-wrapper">
-  <button class="copy-btn" aria-label="Copy code">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+  <button class="copy-code-btn copy-btn" aria-label="Copy code">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
   </button>
   <pre><code class="hljs language-${validLang}">${highlighted}</code></pre>
 </div>
@@ -343,6 +343,33 @@ function writeArticles(list, isEn) {
     const prevNextHtml = buildPrevNextHtml(list, index, isEn);
     const relatedArticlesHtml = buildRelatedArticlesHtml(article, list, isEn);
 
+    const hasMermaid = article.htmlContent.includes('class="mermaid"');
+    const mermaidScript = hasMermaid ? `  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#0a0a1a',
+        mainBkg: '#1a1a2e',
+        nodeBorder: '#6366f1',
+        clusterBkg: 'rgba(99,102,241,0.06)',
+        clusterBorder: 'rgba(99,102,241,0.2)',
+        titleColor: '#a5b4fc',
+        nodeTextColor: '#e2e8f0',
+        primaryColor: '#1e1e3a',
+        primaryTextColor: '#e2e8f0',
+        primaryBorderColor: '#6366f1',
+        lineColor: '#818cf8',
+        secondaryColor: '#1a1a2e',
+        tertiaryColor: '#1a1a2e',
+        fontFamily: 'Inter, Noto Sans SC, sans-serif',
+        fontSize: '14px',
+      }
+    });
+  </script>` : '';
+
     const html = applyTemplate(template, {
       title: article.title,
       jsonTitle: JSON.stringify(article.title),
@@ -363,6 +390,8 @@ function writeArticles(list, isEn) {
       prevNextHtml,
       faqSchema: article.faqSchema || "",
       relatedArticlesHtml,
+      mermaidScript,
+      rssFeedPath: isEn ? '/en/feed.xml' : '/feed.xml',
       lang: isEn ? 'en' : 'zh-CN',
       articles_link: isEn ? '/en/articles/' : '/articles/',
       articles_prefix: isEn ? '/en' : '',
@@ -510,8 +539,9 @@ function generateListingPage(articlesList, isEn = false) {
     .join('\n');
 
   const lang = isEn ? 'en' : 'zh-CN';
-  const pageTitle = isEn ? 'All Articles — AI Tech Observer' : '全部文章 — AI 大模型观察';
-  const pageDesc = isEn ? 'All AI technology articles and deep dives.' : 'AI 大模型观察全部技术文章列表。涵盖提示工程、AI Agent、RAG、模型微调、多模态等前沿 AI 主题。';
+  const siteName = isEn ? enLocales.meta.siteName : zhLocales.meta.siteName;
+  const pageTitle = isEn ? `All Articles — ${siteName}` : `全部文章 — ${siteName}`;
+  const pageDesc = isEn ? 'All AI technology articles and deep dives.' : `${siteName}全部技术文章列表。涵盖提示工程、AI Agent、RAG、模型微调、多模态等前沿 AI 主题。`;
   const canonicalUrl = isEn ? `${SITE_URL}/en/articles/` : `${SITE_URL}/articles/`;
   const heroTag = 'ALL ARTICLES';
   const heroTitle = isEn ? 'All Articles' : '全部文章';
@@ -546,6 +576,7 @@ function generateListingPage(articlesList, isEn = false) {
   const html = `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
+  <meta name="google-site-verification" content="OOjVKBvpXj_qIa2QHCWvYdRPa5WnY7IY8rnls3Hc76Y" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${pageTitle}</title>
@@ -555,6 +586,7 @@ function generateListingPage(articlesList, isEn = false) {
   <link rel="alternate" hreflang="zh" href="${SITE_URL}/articles/" />
   <link rel="alternate" hreflang="en" href="${SITE_URL}/en/articles/" />
   <link rel="alternate" hreflang="x-default" href="${SITE_URL}/articles/" />
+  <link rel="alternate" type="application/rss+xml" title="${escapeHtml(siteName)} RSS Feed" href="${isEn ? '/en/feed.xml' : '/feed.xml'}" />
   <meta name="theme-color" content="#090a0f">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${canonicalUrl}">
@@ -562,18 +594,28 @@ function generateListingPage(articlesList, isEn = false) {
   <meta property="og:description" content="${pageDesc}">
   <meta property="og:image" content="${SITE_URL}/og-image.png">
   <meta property="og:locale" content="${isEn ? 'en_US' : 'zh_CN'}">
-  <meta property="og:site_name" content="${isEn ? 'Nobita Talks AI' : '大雄话AI'}">
+  <meta property="og:site_name" content="${escapeHtml(siteName)}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${pageTitle}">
   <meta name="twitter:description" content="${pageDesc}">
   <meta name="twitter:image" content="${SITE_URL}/og-image.png">
   <meta name="google-adsense-account" content="ca-pub-5078775507335151">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-4WZN5Q7VS6');
+    const loadGA = () => {
+      if (window.gaLoaded) return;
+      window.gaLoaded = true;
+      const script = document.createElement('script');
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6';
+      script.async = true;
+      document.head.appendChild(script);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-4WZN5Q7VS6');
+    };
+    ['scroll', 'mousemove', 'touchstart', 'keydown'].forEach(e => window.addEventListener(e, loadGA, {once: true, passive: true}));
+    setTimeout(loadGA, 5000);
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/og-image.png">
@@ -699,18 +741,24 @@ function generateSitemap(articlesList) {
 function generateRssFeed(articlesList, isEn = false) {
   if (articlesList.length === 0 && isEn) return;
 
+  const siteName = isEn ? enLocales.meta.siteName : zhLocales.meta.siteName;
+  const channelLink = isEn ? `${SITE_URL}/en/` : `${SITE_URL}/`;
   const feedPath = isEn ? '/en/feed.xml' : '/feed.xml';
   const outPath = isEn
     ? path.join(BUILD_OUT_DIR, 'public', 'en', 'feed.xml')
     : path.join(BUILD_OUT_DIR, 'public', 'feed.xml');
-  const title = isEn ? 'AI Tech Observer' : 'AI 大模型观察';
+  const repoOutPath = isEn
+    ? path.join(ROOT, 'public', 'en', 'feed.xml')
+    : path.join(ROOT, 'public', 'feed.xml');
+  const title = siteName;
   const desc = isEn ? 'Focusing on AI foundation models and tech insights' : '专注 AI 大模型技术研究与实践的技术博客';
   const lang = isEn ? 'en' : 'zh-CN';
   const pubDate = new Date().toUTCString();
 
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  fs.mkdirSync(path.dirname(repoOutPath), { recursive: true });
 
-  let xml = `<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n<channel>\n  <title>${title}</title>\n  <link>${SITE_URL}/</link>\n  <description>${desc}</description>\n  <language>${lang}</language>\n  <pubDate>${pubDate}</pubDate>\n  <atom:link href="${SITE_URL}${feedPath}" rel="self" type="application/rss+xml" />\n`;
+  let xml = `<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n<channel>\n  <title>${escapeHtml(title)}</title>\n  <link>${channelLink}</link>\n  <description>${escapeHtml(desc)}</description>\n  <language>${lang}</language>\n  <pubDate>${pubDate}</pubDate>\n  <atom:link href="${SITE_URL}${feedPath}" rel="self" type="application/rss+xml" />\n`;
 
   articlesList.forEach(article => {
     const slugPrefix = article.isEn ? '/en/articles/' : '/articles/';
@@ -727,6 +775,7 @@ function generateRssFeed(articlesList, isEn = false) {
   xml += '</channel>\n</rss>\n';
 
   fs.writeFileSync(outPath, xml, 'utf-8');
+  fs.writeFileSync(repoOutPath, xml, 'utf-8');
   console.log(`  ✓ public${feedPath}`);
 }
 

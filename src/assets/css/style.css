@@ -3939,12 +3939,20 @@ mark {
 
 .article-toc-list a {
   color: var(--text-muted);
-  transition: color 0.2s var(--ease);
+  transition: all 0.2s var(--ease);
   display: block;
 }
 
 .article-toc-list a:hover {
   color: var(--accent-light);
+}
+
+.article-toc-list a.active {
+  color: var(--accent-light);
+  font-weight: 600;
+  border-left: 2px solid var(--accent);
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
 }
 
 .toc-level-2 {
@@ -4157,7 +4165,8 @@ mark {
   position: relative;
 }
 
-.copy-code-btn {
+.copy-code-btn,
+.copy-btn {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -4175,11 +4184,20 @@ mark {
   z-index: 10;
 }
 
-.code-block-wrapper:hover .copy-code-btn {
+.copy-code-btn svg,
+.copy-btn svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.code-block-wrapper:hover .copy-code-btn,
+.code-block-wrapper:hover .copy-btn {
   opacity: 1;
 }
 
-.copy-code-btn:hover {
+.copy-code-btn:hover,
+.copy-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   color: var(--text);
 }

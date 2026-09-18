@@ -252,3 +252,47 @@ test('build outputs include 404 pages and no uncompiled template variables leak 
   assert.ok(grpoEnHtml.includes('content="en_US"'), 'expected resolved en_US og:locale');
 });
 
+test('all pages include valid RSS alternate links and feeds are generated correctly', () => {
+  assert.ok(fs.existsSync(path.join(ROOT, 'dist', 'feed.xml')), 'expected dist/feed.xml');
+  assert.ok(fs.existsSync(path.join(ROOT, 'dist', 'en', 'feed.xml')), 'expected dist/en/feed.xml');
+
+  const zhFeed = fs.readFileSync(path.join(ROOT, 'dist', 'feed.xml'), 'utf-8');
+  const enFeed = fs.readFileSync(path.join(ROOT, 'dist', 'en', 'feed.xml'), 'utf-8');
+
+  assert.match(zhFeed, /<title>大雄话AI<\/title>/);
+  assert.match(zhFeed, /<link>https:\/\/blog\.llmgo\.top\/<\/link>/);
+  assert.match(enFeed, /<title>Nobita Talks AI<\/title>/);
+  assert.match(enFeed, /<link>https:\/\/blog\.llmgo\.top\/en\/<\/link>/);
+
+  const samplePages = [
+    path.join(ROOT, 'dist', 'index.html'),
+    path.join(ROOT, 'dist', 'en', 'index.html'),
+    path.join(ROOT, 'dist', 'about', 'index.html'),
+    path.join(ROOT, 'dist', 'en', 'about', 'index.html'),
+    path.join(ROOT, 'dist', 'models', 'index.html'),
+    path.join(ROOT, 'dist', 'en', 'models', 'index.html'),
+    path.join(ROOT, 'dist', 'projects', 'index.html'),
+    path.join(ROOT, 'dist', 'en', 'projects', 'index.html'),
+    path.join(ROOT, 'dist', 'articles', 'index.html'),
+    path.join(ROOT, 'dist', 'en', 'articles', 'index.html'),
+    path.join(ROOT, 'dist', 'articles', 'vllm-serving-guide', 'index.html'),
+    path.join(ROOT, 'dist', 'en', 'articles', 'vllm-serving-guide', 'index.html'),
+  ];
+
+  for (const p of samplePages) {
+    const html = fs.readFileSync(p, 'utf-8');
+    assert.match(html, /<link\s+rel="alternate"\s+type="application\/rss\+xml"/, `expected RSS alternate tag in ${p}`);
+  }
+});
+
+test('code blocks have copy buttons with appropriate styling and copy-code-btn class', () => {
+  const vllmHtml = fs.readFileSync(path.join(ROOT, 'dist', 'articles', 'vllm-serving-guide', 'index.html'), 'utf-8');
+  assert.match(vllmHtml, /class="copy-code-btn copy-btn"/, 'expected copy-code-btn class on copy buttons');
+
+  const cssFile = fs.readdirSync(path.join(ROOT, 'dist', 'assets')).find(file => file.startsWith('main-') && file.endsWith('.css'));
+  const css = fs.readFileSync(path.join(ROOT, 'dist', 'assets', cssFile), 'utf-8');
+  assert.ok(css.includes('.copy-code-btn'), 'expected .copy-code-btn in CSS');
+  assert.ok(css.includes('.article-toc-list a.active'), 'expected .article-toc-list a.active in CSS');
+});
+
+

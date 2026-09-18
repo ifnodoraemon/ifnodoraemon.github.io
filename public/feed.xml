@@ -1,12 +1,173 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-  <title>AI 大模型观察</title>
+  <title>大雄话AI</title>
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Mon, 09 Mar 2026 08:26:07 GMT</pubDate>
+  <pubDate>Fri, 18 Sep 2026 05:00:32 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>突破 10 万 Star 的 Browser-use 架构深度剖析：DOM 树提纯、视觉定位与生产级网页 Agent 实战</title>
+    <link>https://blog.llmgo.top/articles/browser-use-agent-architecture/</link>
+    <guid>https://blog.llmgo.top/articles/browser-use-agent-architecture/</guid>
+    <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+    <description>为什么传统 Selenium/Playwright 脚本在动态前端下频频崩溃？深度拆解斩获 10 万+ GitHub Star 的现象级项目 Browser-use 的底层架构：DOM 树智能提纯降噪、Set-of-Mark (SoM) 视觉坐标定位、状态机闭环容错，并手把手构建一个可生产落地的企业级网页自动化智能体。</description>
+  </item>
+  <item>
+    <title>SGLang vs vLLM 架构对决：RadixAttention 树状缓存、结构化输出与高并发基准实测</title>
+    <link>https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/</link>
+    <guid>https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/</guid>
+    <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+    <description>深度剖析 2026 年两大顶级开源推理引擎 vLLM 与 SGLang 的底层内核差异。全面对比 PagedAttention 块级分页与 RadixAttention 基数树前缀缓存机制、调度层结构化输出（JSON Schema）实现原理，并基于 8x H100 集群提供严苛的多场景基准压测与工程选型决策树。</description>
+  </item>
+  <item>
+    <title>投机采样 (Speculative Decoding) 生产实操：从 Draft Model 到 EAGLE-3 动态推测树实现 3x~5x 无损加速</title>
+    <link>https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/</link>
+    <guid>https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/</guid>
+    <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+    <description>大模型解码阶段的核心物理瓶颈是什么？全面解密投机采样（Speculative Decoding）的数学无损证明、拒绝采样检验机制，深入剖析从双模型投机、Medusa 到清华开源爆款 EAGLE-2/3 动态自适应推测树的架构演进，并提供在 vLLM 与 SGLang 中开启生产级 3x~5x 加速的实操配置。</description>
+  </item>
+  <item>
+    <title>推理时扩展 (Test-Time Compute) 与 GRPO 强化学习实战：从 PPO 到无 Critic 策略优化</title>
+    <link>https://blog.llmgo.top/articles/test-time-compute-grpo/</link>
+    <guid>https://blog.llmgo.top/articles/test-time-compute-grpo/</guid>
+    <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+    <description>深入剖析从预训练 Scaling Law 向推理时算力扩展 (Test-Time Scaling) 的范式转移。全面拆解 DeepSeek-R1 核心的 GRPO 组相对策略优化数学推导、无 Critic 架构优势、长思维链自我反思涌现机制，并提供完整的极简实战代码。</description>
+  </item>
+  <item>
+    <title>2026 血泪踩坑实录：在物理机群跑通 DeepSeek-V4 与 Kimi K3 的硬核部署指南</title>
+    <link>https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/</link>
+    <guid>https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/</guid>
+    <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+    <description>这不是一篇官方文档的搬运，而是我们烧了上百万 GPU 租金换来的排障血泪史。实战拆解如何在 4 节点（32 卡）H100 裸金属集群上，通过 vLLM 0.28.0 的混合并行（TP8+PP2+EP2）与 Triton 算子优化，成功压榨 1.6T 级 MoE 模型的每一滴极限吞吐量。</description>
+  </item>
+  <item>
+    <title>2026 国产大模型巅峰决选：Kimi K3 vs GLM-5.3 vs DeepSeek-V4 实测与工程选型指南</title>
+    <link>https://blog.llmgo.top/articles/domestic-llm-comparison-2026/</link>
+    <guid>https://blog.llmgo.top/articles/domestic-llm-comparison-2026/</guid>
+    <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+    <description>深度实测 2026 年三大国产顶流大模型：从 Kimi K3 的 2.8T KDA 注意力、GLM-5.3 的环境缩放 Terminal 领跑，到 DeepSeek-V4-Pro 的 1.6T MoE 软件工程突破，全方位剖析架构、成本与工程落地场景。</description>
+  </item>
+  <item>
+    <title>告别单纯 Prompt：2026 年“环境缩放 (Environment Scaling)”如何重塑自主 Agent</title>
+    <link>https://blog.llmgo.top/articles/environment-scaling-agent-guide/</link>
+    <guid>https://blog.llmgo.top/articles/environment-scaling-agent-guide/</guid>
+    <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+    <description>剖析 2026 年大模型后训练的重大范式跃迁：为什么从文本自回归走向多任务环境沙箱博弈？结合 GLM-5.3 在 Terminal-Bench 3.0 的登顶实践，详解 Linux 容器编排、MCP 协议集成与零逃逸安全沙箱工程实战。</description>
+  </item>
+  <item>
+    <title>解密 2026 架构创新：Kimi Delta Attention 与 DeepSeek MLA 是如何干掉显存墙的？</title>
+    <link>https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/</link>
+    <guid>https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/</guid>
+    <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+    <description>在百万级长上下文与数万亿 MoE 时代，KV Cache 显存暴涨如何成为推理核心瓶颈？硬核剖析月之暗面 Kimi Delta Attention (KDA) 的增量状态演进与 DeepSeek 多头潜变量注意力 (MLA) 的低秩投影数学原理。</description>
+  </item>
+  <item>
+    <title>让模型在运行中进化：从基础反思到基于 MCTS 的 Test-Time Compute 搜索</title>
+    <link>https://blog.llmgo.top/articles/agent-reflection-self-correction/</link>
+    <guid>https://blog.llmgo.top/articles/agent-reflection-self-correction/</guid>
+    <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
+    <description>大语言模型的潜力不止于预训练参数。本文带你深入探讨 Test-Time Compute 的前沿：从 Actor-Critic 双边架构，一路深入到利用蒙特卡洛树搜索（MCTS）解码 Agent 的自我纠错极限。</description>
+  </item>
+  <item>
+    <title>2026 AI 开发范式：对抗复合误差的分布式 Agent 编排与量化 Evals 体系</title>
+    <link>https://blog.llmgo.top/articles/agent-orchestration-evals/</link>
+    <guid>https://blog.llmgo.top/articles/agent-orchestration-evals/</guid>
+    <pubDate>Wed, 15 Jul 2026 00:00:00 GMT</pubDate>
+    <description>当大模型走向复杂的企业级落地，如何通过分布式编排对抗链路误差复合？如何构建具有统计学置信度的 Evals 评估体系？本文带你从基础概念直击硬核底座。</description>
+  </item>
+  <item>
+    <title>深度解析 AI Agent 架构演进：从 Prompt 到 Loop 工程</title>
+    <link>https://blog.llmgo.top/articles/loop-engineering/</link>
+    <guid>https://blog.llmgo.top/articles/loop-engineering/</guid>
+    <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
+    <description>深度解析 AI Agent 架构演进，探讨从 Prompt、Context、Harness 到 Loop 工程的四层控制面外推，以及 ReAct 架构的四大顽疾。</description>
+  </item>
+  <item>
+    <title>Agent 可观测性与调试：从黑盒到白盒的进阶之路</title>
+    <link>https://blog.llmgo.top/articles/agent-observability-debugging/</link>
+    <guid>https://blog.llmgo.top/articles/agent-observability-debugging/</guid>
+    <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
+    <description>AI Agent 不再是传统软件，调试的是推理过程而非代码。本文详细探讨 Trajectory Evaluation、LLM-as-a-Judge 和主流 Agent 观测工具（LangSmith, Langfuse 等）的实战应用。</description>
+  </item>
+  <item>
+    <title>Context Engineering 实战指南：把上下文窗口当 RAM 管理</title>
+    <link>https://blog.llmgo.top/articles/context-engineering-guide/</link>
+    <guid>https://blog.llmgo.top/articles/context-engineering-guide/</guid>
+    <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
+    <description>2026 年最火的新概念，从 Prompt Engineering 进化到 Context Engineering。详解如何通过 Write/Select/Compress/Isolate 四大策略管理上下文窗口，解决长对话遗忘、幻觉与上下文污染。</description>
+  </item>
+  <item>
+    <title>AI 编程驾驭指南：从「帮我写个 XX」到架构编排者</title>
+    <link>https://blog.llmgo.top/articles/ai-coding-mastery/</link>
+    <guid>https://blog.llmgo.top/articles/ai-coding-mastery/</guid>
+    <pubDate>Mon, 04 May 2026 00:00:00 GMT</pubDate>
+    <description>工具再多也没用——决定 AI 编程质量的是驾驭方法论。本文深入拆解六大核心方法（Spec-Driven、上下文工程、TDD 验证环、多 Agent 编排、高级 Prompt、会话卫生），附 20+ 工具矩阵、五大反模式避坑指南和完整实战工作流。</description>
+  </item>
+  <item>
+    <title>拒绝榜单刷分：如何构筑契合业务的 LLM 评估体系</title>
+    <link>https://blog.llmgo.top/articles/llm-evaluation-guide/</link>
+    <guid>https://blog.llmgo.top/articles/llm-evaluation-guide/</guid>
+    <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
+    <description>不再迷恋堆砌代码，建立大模型评估思维才是核心。本文深度剖析 LLM-as-a-Judge 的底层偏差、Ragas 算分的数学机制，以及如何用概率思维重塑 CI/CD 防线。</description>
+  </item>
+  <item>
+    <title>大模型量化实战手册：从零开始，四条路线全覆盖</title>
+    <link>https://blog.llmgo.top/articles/quantization-hands-on-guide/</link>
+    <guid>https://blog.llmgo.top/articles/quantization-hands-on-guide/</guid>
+    <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
+    <description>告别理论焦虑，手把手教你大模型量化全流程实操：涵盖 GGUF 本地运行（Qwen3-8B-Q4_K_M.gguf、llama.cpp、Ollama）、AWQ 与 GPTQ 动手压缩，以及 vLLM FP8 生产部署与 QLoRA 微调，每条路线均附完整代码。</description>
+  </item>
+  <item>
+    <title>AI 关键技术的历史抉择：为什么每次都选了「那一个」？</title>
+    <link>https://blog.llmgo.top/articles/ai-history-choices/</link>
+    <guid>https://blog.llmgo.top/articles/ai-history-choices/</guid>
+    <pubDate>Wed, 15 Apr 2026 00:00:00 GMT</pubDate>
+    <description>回顾 AI 七十年发展史上的六次关键技术岔路口，剖析每一次「历史选择」背后的算力约束、数据红利与可扩展性逻辑。</description>
+  </item>
+  <item>
+    <title>vLLM 在线推理服务实战：从架构原理到 Token 计费，一文搞定生产部署</title>
+    <link>https://blog.llmgo.top/articles/vllm-serving-guide/</link>
+    <guid>https://blog.llmgo.top/articles/vllm-serving-guide/</guid>
+    <pubDate>Tue, 14 Apr 2026 00:00:00 GMT</pubDate>
+    <description>深入浅出解析 vLLM 核心架构（PagedAttention、连续批处理、APC 前缀缓存、推测解码），面向在线推理服务场景，手把手教你搭建 OpenAI 兼容 API、调优性能参数、搭建 Token 计费体系。附完整 Docker 部署方案与 Prometheus 监控配置。</description>
+  </item>
+  <item>
+    <title>NVIDIA GPU 驱动栈全视野解析：从内核模块到容器运行时的包关系图谱</title>
+    <link>https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/</link>
+    <guid>https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/</guid>
+    <pubDate>Sun, 05 Apr 2026 00:00:00 GMT</pubDate>
+    <description>深度拆解 Linux 下 NVIDIA GPU 烦杂的驱动包结构。本文为您详解 nvidia-dkms、libnvidia、nvidia-utils 与 driver metapackage 之间的五层架构，并按「Docker 模型服务器」、「个人桌面」、「DGX 算力集群」等核心场景提供企业级安装最佳实践和避坑指南。</description>
+  </item>
+  <item>
+    <title>大模型量化精度全景图：从 FP32 到 1-bit，精度损失到底有多大？</title>
+    <link>https://blog.llmgo.top/articles/quantization-precision-guide/</link>
+    <guid>https://blog.llmgo.top/articles/quantization-precision-guide/</guid>
+    <pubDate>Tue, 31 Mar 2026 00:00:00 GMT</pubDate>
+    <description>全面对比 FP32、BF16、FP16、FP8、INT8、INT4、NF4、FP4、1.58-bit 等所有主流量化精度格式，用真实 Benchmark 数据告诉你：每降低一级精度，模型到底会“变蠢”多少。含 FP8 vs INT8 深度技术对比。</description>
+  </item>
+  <item>
+    <title>做 AI Agent 的 7 条运行时实践</title>
+    <link>https://blog.llmgo.top/articles/agent-runtime-practices/</link>
+    <guid>https://blog.llmgo.top/articles/agent-runtime-practices/</guid>
+    <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
+    <description>基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。</description>
+  </item>
+  <item>
+    <title>MCP 协议深度解析：AI 的「USB-C 接口」</title>
+    <link>https://blog.llmgo.top/articles/mcp-guide/</link>
+    <guid>https://blog.llmgo.top/articles/mcp-guide/</guid>
+    <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
+    <description>从架构原理到实战开发，完整解析 Model Context Protocol。含 Python SDK 实战、安全机制、生态对比。</description>
+  </item>
+  <item>
+    <title>Skills 深度解析：给 AI 编程助手装上「专业大脑」</title>
+    <link>https://blog.llmgo.top/articles/skills-guide/</link>
+    <guid>https://blog.llmgo.top/articles/skills-guide/</guid>
+    <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
+    <description>从核心原理到跨平台实战，完整解析 AI 编程助手的 Skills 系统。涵盖 SKILL.md 机制、六大平台对比、实战编写指南与最佳实践。</description>
+  </item>
   <item>
     <title>大模型提示工程实践指南</title>
     <link>https://blog.llmgo.top/articles/prompt-engineering-guide/</link>
@@ -15,11 +176,11 @@
     <description>深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。</description>
   </item>
   <item>
-    <title>2026 年 AI 大模型六大趋势深度解析</title>
+    <title>2026 年 AI 大模型十一大趋势深度解析</title>
     <link>https://blog.llmgo.top/articles/ai-trends-2026/</link>
     <guid>https://blog.llmgo.top/articles/ai-trends-2026/</guid>
     <pubDate>Sat, 07 Mar 2026 00:00:00 GMT</pubDate>
-    <description>从 Thinking 推理模式到 Agent 化应用，深度剖析 2026 年 AI 大模型领域最值得关注的六大发展趋势。</description>
+    <description>从 Thinking 推理模式到 Agent 化应用，深度剖析 2026 年 AI 大模型领域最值得关注的十一大核心发展趋势。</description>
   </item>
   <item>
     <title>从零搭建 AI Agent 应用</title>
@@ -29,11 +190,11 @@
     <description>手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。</description>
   </item>
   <item>
-    <title>RAG 检索增强生成实战</title>
+    <title>RAG 检索增强生成实战：企业级检索策略与高并发工程最佳实践</title>
     <link>https://blog.llmgo.top/articles/rag-in-practice/</link>
     <guid>https://blog.llmgo.top/articles/rag-in-practice/</guid>
     <pubDate>Tue, 03 Mar 2026 00:00:00 GMT</pubDate>
-    <description>从向量数据库选型到 Embedding 策略，完整构建一套企业级 RAG 系统。含 Pinecone、Weaviate 对比实测。</description>
+    <description>从向量数据库选型到 Embedding 策略，深度剖析 Naive RAG、混合检索、HyDE 与 GraphRAG 架构选型矩阵，总结 7 大企业级检索增强生成最佳实践，含 Pinecone 与 Weaviate 性能实测。</description>
   </item>
   <item>
     <title>2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</title>
@@ -50,11 +211,11 @@
     <description>探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。</description>
   </item>
   <item>
-    <title>大模型微调全流程详解</title>
+    <title>大模型微调全流程指南：底层工作原理、高价值落地用例与生产实战</title>
     <link>https://blog.llmgo.top/articles/fine-tuning-guide/</link>
     <guid>https://blog.llmgo.top/articles/fine-tuning-guide/</guid>
     <pubDate>Wed, 25 Feb 2026 00:00:00 GMT</pubDate>
-    <description>LoRA、QLoRA、Full Fine-tuning 三种方案对比，从数据准备到模型部署的完整工作流与最佳实践。</description>
+    <description>深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。</description>
   </item>
 </channel>
 </rss>

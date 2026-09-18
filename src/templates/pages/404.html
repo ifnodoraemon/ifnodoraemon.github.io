@@ -146,7 +146,7 @@
         <div class="glitch-wrapper">
           <h1 class="glitch-title">404</h1>
         </div>
-        <h2>Node Disconnected</h2>
+        <h2>{{#if isEn}}Node Disconnected{{else}}节点连接中断{{/if}}</h2>
         <p>{{#if isEn}}The requested signal was lost in the void. Let's return to known space.{{else}}请求的信号已在虚空中丢失，让我们返回已知空间。{{/if}}</p>
         <div class="actions-404">
           <a href="{{linkPrefix}}/" class="btn-primary">
