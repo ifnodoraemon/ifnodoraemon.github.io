@@ -13,7 +13,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { marked } from 'marked';
 import matter from 'gray-matter';
-import markedKatex from 'marked-katex-extension';
+import markedKatex from './marked-katex.js';
 import hljs from 'highlight.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

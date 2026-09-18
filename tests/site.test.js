@@ -208,3 +208,12 @@ test('renderNav initializes mobile navigation and toggles dropdown state correct
   }
 });
 
+test('math formulas are rendered with KaTeX without unparsed delimiters', () => {
+  const grpoHtml = fs.readFileSync(path.join(ROOT, 'dist', 'articles', 'test-time-compute-grpo', 'index.html'), 'utf-8');
+  assert.ok(grpoHtml.includes('class="katex"'), 'expected KaTeX inline elements');
+  assert.ok(grpoHtml.includes('class="katex-display"'), 'expected KaTeX display elements');
+  assert.ok(!grpoHtml.includes('$A_i$'), 'raw $A_i$ should not remain unparsed');
+  assert.ok(!grpoHtml.includes('$$D_{KL}'), 'raw $$D_{KL} should not remain unparsed');
+  assert.ok(fs.existsSync(path.join(ROOT, 'dist', 'vendor', 'katex', 'katex.min.css')), 'expected vendor katex css');
+});
+

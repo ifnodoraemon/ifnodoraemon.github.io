@@ -82,7 +82,7 @@ The transition from Chat AI to Agent AI is the most significant trend of 2026:
 
 The cost of large models has dropped significantly over the past year:
 
-| Model | Input ($/M tokens) | Output ($/M tokens) |
+| Model | Input (USD/M tokens) | Output (USD/M tokens) |
 |------|-------------------|-------------------|
 | GPT-5.4 | $2.50 | $15.00 |
 | GPT-5 | $1.25 | $10.00 |
