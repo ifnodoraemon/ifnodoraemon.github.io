@@ -92,7 +92,7 @@ Round 5: [Req A remaining prefix tokens] + [Req B decode 1 token] + [Req C decod
 Round 6: [Req A starts decoding!] + [Req B decode 1 token] + [Req C decode 1 token]
 ```
 
-**Core scheduling policy**: vLLM V1 engine (v0.8.0) prioritizes **active decode requests** first, then uses remaining budget for new prefill chunks. Users B and C barely notice User A's massive input.
+**Core scheduling policy**: vLLM V1 engine (v0.29.0) prioritizes **active decode requests** first, then uses remaining budget for new prefill chunks. Users B and C barely notice User A's massive input.
 
 > **Must-enable for online services**: `--enable-chunked-prefill`.
 
@@ -179,7 +179,7 @@ Eviction rules:
 2. **Every request is unique**: No shared prefixes, no cache hits
 3. **Minor miss overhead**: Hash computation costs CPU time (usually negligible)
 
-> **Key config**: `--enable-prefix-caching` (default in vLLM V1 engine / v0.8.0).
+> **Key config**: `--enable-prefix-caching` (default in vLLM V1 engine / v0.29.0).
 
 ### Getting Cache Hit Data in API Responses
 
@@ -212,7 +212,7 @@ The `usage` field will now include `prompt_tokens_details`:
 
 ### Cache Hit Rate Monitoring: Prometheus Metrics
 
-vLLM V1 engine (v0.8.0) uses Counter-based metrics (replacing the deprecated `gpu_prefix_cache_hit_rate` Gauge):
+vLLM V1 engine (v0.29.0) uses Counter-based metrics (replacing the deprecated `gpu_prefix_cache_hit_rate` Gauge):
 
 ```text
 # V1 prefix cache metrics (Counter type, precise and reliable)
@@ -318,7 +318,7 @@ docker run -d \
   -v /path/to/models:/models \
   -e VLLM_API_KEY=your-secret-key \
   -e PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus \
-  vllm/vllm-openai:v0.8.0 \
+  vllm/vllm-openai:v0.29.0 \
   --model /models/Qwen2.5-72B-Instruct \
   --dtype auto \
   --gpu-memory-utilization 0.90 \
