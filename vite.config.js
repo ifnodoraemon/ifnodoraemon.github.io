@@ -58,10 +58,12 @@ export default defineConfig({
         about: resolve(__dirname, '.temp_build/about/index.html'),
         models: resolve(__dirname, '.temp_build/models/index.html'),
         projects: resolve(__dirname, '.temp_build/projects/index.html'),
+        notFound: resolve(__dirname, '.temp_build/404.html'),
         mainEn: resolve(__dirname, '.temp_build/en/index.html'),
         aboutEn: resolve(__dirname, '.temp_build/en/about/index.html'),
         modelsEn: resolve(__dirname, '.temp_build/en/models/index.html'),
         projectsEn: resolve(__dirname, '.temp_build/en/projects/index.html'),
+        notFoundEn: resolve(__dirname, '.temp_build/en/404.html'),
         ...getArticleInputs(),
       }
     }

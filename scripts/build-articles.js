@@ -370,6 +370,7 @@ function writeArticles(list, isEn) {
       encodedUrl: encodeURIComponent(`${SITE_URL}${isEn ? '/en' : ''}/articles/${article.slug}/`),
       breadcrumb_articles: isEn ? 'Articles' : '文章',
       return_text: isEn ? '← Back to Articles' : '← 返回文章列表',
+      ogLocale: isEn ? 'en_US' : 'zh_CN',
       'meta.siteName': isEn ? enLocales.meta.siteName : zhLocales.meta.siteName,
     });
 

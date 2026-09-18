@@ -240,3 +240,15 @@ test('math formulas are rendered with KaTeX without unparsed delimiters', () => 
   assert.ok(fs.existsSync(path.join(ROOT, 'dist', 'vendor', 'katex', 'katex.min.css')), 'expected vendor katex css');
 });
 
+test('build outputs include 404 pages and no uncompiled template variables leak into dist HTML', () => {
+  assert.ok(fs.existsSync(path.join(ROOT, 'dist', '404.html')), 'expected dist/404.html');
+  assert.ok(fs.existsSync(path.join(ROOT, 'dist', 'en', '404.html')), 'expected dist/en/404.html');
+
+  const grpoHtml = fs.readFileSync(path.join(ROOT, 'dist', 'articles', 'test-time-compute-grpo', 'index.html'), 'utf-8');
+  assert.ok(grpoHtml.includes('content="zh_CN"'), 'expected resolved zh_CN og:locale');
+  assert.ok(!grpoHtml.includes('{{#if'), 'no uncompiled Handlebars if tags');
+
+  const grpoEnHtml = fs.readFileSync(path.join(ROOT, 'dist', 'en', 'articles', 'test-time-compute-grpo', 'index.html'), 'utf-8');
+  assert.ok(grpoEnHtml.includes('content="en_US"'), 'expected resolved en_US og:locale');
+});
+
