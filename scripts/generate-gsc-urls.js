@@ -8,6 +8,10 @@
 const SITE_URL = 'https://blog.llmgo.top';
 
 const PRIORITY_SLUGS = [
+  'test-time-compute-grpo',
+  'sglang-vs-vllm-architecture',
+  'speculative-decoding-eagle-guide',
+  'browser-use-agent-architecture',
   'quantization-hands-on-guide',
   'rag-in-practice',
   'fine-tuning-guide',
