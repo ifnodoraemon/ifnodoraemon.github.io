@@ -1,0 +1,22 @@
+{
+  "name": "大雄话AI — Nobita Talks AI",
+  "short_name": "大雄话AI",
+  "description": "专注 AI 大模型架构设计、前沿技术追踪与高并发系统落地实战",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090a0f",
+  "theme_color": "#090a0f",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png"
+    }
+  ]
+}

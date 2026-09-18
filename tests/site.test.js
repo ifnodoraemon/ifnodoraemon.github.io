@@ -295,4 +295,31 @@ test('code blocks have copy buttons with appropriate styling and copy-code-btn c
   assert.ok(css.includes('.article-toc-list a.active'), 'expected .article-toc-list a.active in CSS');
 });
 
+test('build outputs include valid site.webmanifest and pages link to manifest and skip link', () => {
+  const manifestDist = path.join(ROOT, 'dist', 'site.webmanifest');
+  assert.ok(fs.existsSync(manifestDist), 'expected dist/site.webmanifest to exist');
+
+  const manifestData = JSON.parse(fs.readFileSync(manifestDist, 'utf-8'));
+  assert.ok(manifestData.name.includes('Nobita Talks AI'));
+  assert.equal(manifestData.display, 'standalone');
+
+  const samplePages = [
+    path.join(ROOT, 'dist', 'index.html'),
+    path.join(ROOT, 'dist', 'en', 'index.html'),
+    path.join(ROOT, 'dist', 'about', 'index.html'),
+    path.join(ROOT, 'dist', 'articles', 'index.html'),
+    path.join(ROOT, 'dist', 'articles', 'vllm-serving-guide', 'index.html'),
+  ];
+
+  for (const p of samplePages) {
+    const html = fs.readFileSync(p, 'utf-8');
+    assert.match(html, /<link\s+rel="manifest"\s+href="\/site\.webmanifest"/, `expected manifest link in ${p}`);
+  }
+
+  const cssFile = fs.readdirSync(path.join(ROOT, 'dist', 'assets')).find(file => file.startsWith('main-') && file.endsWith('.css'));
+  const css = fs.readFileSync(path.join(ROOT, 'dist', 'assets', cssFile), 'utf-8');
+  assert.ok(css.includes('.skip-link'), 'expected .skip-link in CSS');
+});
+
+
 

@@ -36,6 +36,7 @@ export function renderNav(activePage = '') {
 
   nav.setAttribute('aria-label', isEn ? 'Main navigation' : '主导航');
   nav.innerHTML = `
+    <a href="#main-content" class="skip-link">${isEn ? 'Skip to main content' : '跳至主要内容'}</a>
     <div class="nav-container">
       <a href="${langPrefix}/" class="nav-brand">
         <div class="brand-icon glow">

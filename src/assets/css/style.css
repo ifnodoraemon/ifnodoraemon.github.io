@@ -149,6 +149,27 @@ img { max-width: 100%; display: block; }
   .container {
     padding: 0 1rem;
   }
+/* Accessibility: Skip to Content */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1.5rem;
+  z-index: 10000;
+  padding: 0.6rem 1.2rem;
+  background: var(--accent, #6366f1);
+  color: #ffffff;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transition: top 0.2s ease;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 1.5rem;
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
 }
 
 /* === NAVIGATION === */

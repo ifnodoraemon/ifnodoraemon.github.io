@@ -619,6 +619,7 @@ function generateListingPage(articlesList, isEn = false) {
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/og-image.png">
+  <link rel="manifest" href="/site.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -796,6 +797,9 @@ function generateOgImage(article) {
     `<tspan x="88" dy="${index === 0 ? 0 : descDy}">${escapeHtml(line)}</tspan>`
   )).join('');
 
+  const tagWidth = Math.max(160, Math.round(article.tag.length * 14 + 48));
+  const brandText = article.isEn ? 'NOBITA TALKS AI' : '大雄话AI';
+
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -821,10 +825,10 @@ function generateOgImage(article) {
   <circle cx="1110" cy="498" r="112" fill="rgba(34,211,238,0.12)" />
   <text id="title" x="88" y="176" fill="#e4e4e7" font-size="56" font-weight="700" font-family="Inter, Noto Sans SC, sans-serif">${titleTspans}</text>
   <text id="desc" x="88" y="398" fill="#a1a1aa" font-size="26" font-weight="500" font-family="Inter, Noto Sans SC, sans-serif">${descTspans}</text>
-  <rect x="88" y="492" width="196" height="52" rx="26" fill="rgba(99,102,241,0.14)" stroke="rgba(99,102,241,0.28)" />
-  <text x="118" y="525" fill="#818cf8" font-size="22" font-weight="700" font-family="JetBrains Mono, monospace">${escapeHtml(article.tag)}</text>
+  <rect x="88" y="492" width="${tagWidth}" height="52" rx="26" fill="rgba(99,102,241,0.14)" stroke="rgba(99,102,241,0.28)" />
+  <text x="114" y="525" fill="#818cf8" font-size="22" font-weight="700" font-family="JetBrains Mono, monospace">${escapeHtml(article.tag)}</text>
   <text x="88" y="566" fill="#71717a" font-size="20" font-weight="500" font-family="JetBrains Mono, monospace">${escapeHtml(article.dateFormatted)}</text>
-  <text x="944" y="562" fill="#22d3ee" font-size="22" font-weight="700" font-family="JetBrains Mono, monospace">NOBITA TALKS AI</text>
+  <text x="1100" y="562" text-anchor="end" fill="#22d3ee" font-size="22" font-weight="700" font-family="JetBrains Mono, monospace">${escapeHtml(brandText)}</text>
 </svg>`;
 
   fs.mkdirSync(ogDir, { recursive: true });

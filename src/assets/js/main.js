@@ -19,6 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
   renderNav(activePage);
   renderFooter(footerStyle);
 
+  // — Accessibility: ensure main content target id exists —
+  const mainEl = document.querySelector('main');
+  if (mainEl && !mainEl.id) {
+    mainEl.id = 'main-content';
+    mainEl.setAttribute('tabindex', '-1');
+  }
+
   // — Navbar scroll effect —
   const navbar = document.getElementById('navbar');
   if (navbar) {
@@ -156,19 +163,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // — Back to Top —
-  const backToTop = document.getElementById('back-to-top');
-  if (backToTop) {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 500) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
-      }
-    }, { passive: true });
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+  let backToTop = document.getElementById('back-to-top');
+  if (!backToTop) {
+    backToTop = document.createElement('button');
+    backToTop.id = 'back-to-top';
+    backToTop.className = 'back-to-top';
+    backToTop.setAttribute('aria-label', 'Back to top');
+    backToTop.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>`;
+    document.body.appendChild(backToTop);
   }
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 500) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
+    }
+  }, { passive: true });
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
   // — Medium Zoom —
   const initMediumZoom = () => {
