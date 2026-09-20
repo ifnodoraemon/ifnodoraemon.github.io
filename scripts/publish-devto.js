@@ -4,11 +4,12 @@
  *
  * Usage:
  *   node scripts/publish-devto.js [slug] [--draft]
- *   npm run publish:devto ai-coding-mastery
+ *   node scripts/publish-devto.js --top
+ *   node scripts/publish-devto.js --all
+ *   npm run publish:devto --top
  *
  * Requirements:
  *   DEV.to API Key in `.devto-api-key` or `DEVTO_API_KEY` env var.
- *   Obtain from: https://dev.to/settings/extensions -> DEV Community API Keys
  */
 
 import fs from 'fs';
@@ -20,6 +21,44 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const EN_ARTICLES_DIR = path.join(ROOT, 'content', 'en', 'articles');
 const SITE_URL = 'https://blog.llmgo.top';
+const PUBLISHED_TRACK_FILE = path.join(ROOT, '.devto-published.json');
+
+// Core top-tier engineering & research articles
+const TOP_TIER_SLUGS = [
+  'test-time-compute-grpo',
+  'sglang-vs-vllm-architecture',
+  'speculative-decoding-eagle-guide',
+  'vllm-serving-guide',
+  'browser-use-agent-architecture',
+  'mcp-guide',
+  'skills-guide',
+  'quantization-hands-on-guide',
+  'quantization-precision-guide',
+  'fine-tuning-guide',
+  'rag-in-practice',
+  'prompt-engineering-guide',
+  'build-ai-agent',
+  'model-comparison-2026',
+  'deepseek-v4-kimi-k3-deployment-guide'
+];
+
+function getPublishedMap() {
+  if (fs.existsSync(PUBLISHED_TRACK_FILE)) {
+    try {
+      return JSON.parse(fs.readFileSync(PUBLISHED_TRACK_FILE, 'utf-8'));
+    } catch (_) {}
+  }
+  return {};
+}
+
+function recordPublished(slug, url) {
+  const map = getPublishedMap();
+  map[slug] = {
+    url,
+    publishedAt: new Date().toISOString()
+  };
+  fs.writeFileSync(PUBLISHED_TRACK_FILE, JSON.stringify(map, null, 2));
+}
 
 function getApiKey() {
   if (process.env.DEVTO_API_KEY) return process.env.DEVTO_API_KEY.trim();
@@ -51,6 +90,7 @@ function formatTags(tagStr, slug) {
   if (slug.includes('vllm') || slug.includes('sglang') || slug.includes('compute')) tags.push('machinelearning');
   if (slug.includes('prompt')) tags.push('promptengineering');
   if (slug.includes('rag')) tags.push('datascience');
+  if (slug.includes('quantization')) tags.push('performance');
 
   for (const def of defaults) {
     if (tags.length < 4 && !tags.includes(def)) tags.push(def);
@@ -60,11 +100,8 @@ function formatTags(tagStr, slug) {
 
 // Transform content: convert internal links to absolute and append canonical note
 function prepareMarkdown(content, slug, title) {
-  // Convert /en/articles/<slug>/ to absolute URL
   let md = content.replace(/\]\(\/en\/articles\/([a-zA-Z0-9_-]+)\/?\)/g, '](https://blog.llmgo.top/en/articles/$1/)');
   md = md.replace(/\]\(\/articles\/([a-zA-Z0-9_-]+)\/?\)/g, '](https://blog.llmgo.top/articles/$1/)');
-
-  // Convert image relative links if any
   md = md.replace(/\]\(\/([^\)]+)\)/g, '](https://blog.llmgo.top/$1)');
 
   const canonicalUrl = `${SITE_URL}/en/articles/${slug}/`;
@@ -82,8 +119,7 @@ async function publishArticle(apiKey, filePath, isDraft = false) {
   const tags = formatTags(data.tag, slug);
   const markdownBody = prepareMarkdown(content, slug, title);
 
-  console.log(`\n📤 正在发布文章至 DEV.to...`);
-  console.log(`   📌 标题: ${title}`);
+  console.log(`\n📤 正在发布: "${title}"`);
   console.log(`   🏷️  标签: ${tags.join(', ')}`);
   console.log(`   🔗 Canonical 原文: ${canonicalUrl}`);
   console.log(`   📝 状态: ${isDraft ? '草稿 (Draft)' : '正式公开发布 (Published)'}`);
@@ -112,16 +148,17 @@ async function publishArticle(apiKey, filePath, isDraft = false) {
   const resData = await res.json();
 
   if (!res.ok) {
-    console.error(`\n❌ 发布失败 (${res.status}):`, resData.error || resData.message || JSON.stringify(resData));
-    process.exit(1);
+    console.error(`   ❌ 发布失败 (${res.status}):`, resData.error || resData.message || JSON.stringify(resData));
+    return { success: false, error: resData };
   }
 
-  console.log(`\n🎉 发布成功！`);
+  console.log(`   🎉 发布成功！`);
   console.log(`   🔗 DEV.to 文章地址: ${resData.url}`);
-  if (isDraft) {
-    console.log(`   👀 预览与草稿编辑: https://dev.to/dashboard`);
-  }
+  recordPublished(slug, resData.url);
+  return { success: true, url: resData.url };
 }
+
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function main() {
   console.log('================================================================');
@@ -131,53 +168,91 @@ async function main() {
   const apiKey = getApiKey();
 
   if (!apiKey) {
-    console.log('ℹ️  未检测到 DEV.to API Key\n');
-    console.log('📌 获取并配置 DEV.to API Key (只需 30 秒):');
-    console.log('----------------------------------------------------------------');
-    console.log('1. 打开 DEV.to 扩展设置页面:');
-    console.log('   👉 https://dev.to/settings/extensions');
-    console.log('2. 滚动到底部找到「DEV Community API Keys」:');
-    console.log('   - 在 Description 输入框输入: blog-publisher');
-    console.log('   - 点击「Generate API Key」生成密钥');
-    console.log('3. 复制生成的密钥字符串，并保存至本项目根目录下的 `.devto-api-key` 文件:');
-    console.log(`   - 路径: ${path.join(ROOT, '.devto-api-key')}`);
-    console.log('   - (已自动在 .gitignore 中忽略，安全绝不泄露)');
-    console.log('----------------------------------------------------------------\n');
+    console.log('ℹ️  未检测到 DEV.to API Key (.devto-api-key)\n');
     return;
   }
 
   const args = process.argv.slice(2);
   const isDraft = args.includes('--draft');
-  const slugArg = args.find(a => !a.startsWith('--'));
-
-  if (!fs.existsSync(EN_ARTICLES_DIR)) {
-    console.error(`❌ 英文文章目录不存在: ${EN_ARTICLES_DIR}`);
-    process.exit(1);
-  }
+  const isTop = args.includes('--top') || args.includes('-t');
+  const isAll = args.includes('--all') || args.includes('-a');
+  const force = args.includes('--force');
 
   const enFiles = fs.readdirSync(EN_ARTICLES_DIR).filter(f => f.endsWith('.en.md'));
+  const publishedMap = getPublishedMap();
 
-  if (!slugArg) {
-    console.log('💡 请指定要发布的文章 slug，例如:');
-    console.log('   npm run publish:devto ai-coding-mastery\n');
-    console.log('📚 可发布的英文文章列表:');
-    enFiles.forEach(f => {
-      const slug = f.replace(/\.en\.md$/, '');
-      console.log(`   - ${slug}`);
+  let targetSlugs = [];
+
+  if (isTop) {
+    targetSlugs = TOP_TIER_SLUGS;
+  } else if (isAll) {
+    targetSlugs = enFiles.map(f => f.replace(/\.en\.md$/, ''));
+  } else {
+    const slugArg = args.find(a => !a.startsWith('--'));
+    if (slugArg) {
+      targetSlugs = [slugArg];
+    }
+  }
+
+  if (targetSlugs.length === 0) {
+    console.log('💡 使用方式:');
+    console.log('   npm run publish:devto -- --top            # 发布全部核心高质量技术长文');
+    console.log('   npm run publish:devto <slug>              # 发布单篇指定文章');
+    console.log('   npm run publish:devto <slug> --draft      # 发布为草稿');
+    console.log('\n📚 核心高质量文章列表 (--top):');
+    TOP_TIER_SLUGS.forEach(s => {
+      const status = publishedMap[s] ? `✅ 已发布: ${publishedMap[s].url}` : '⏳ 待发布';
+      console.log(`   - ${s.padEnd(38)} [${status}]`);
     });
-    console.log('\n参数说明:');
-    console.log('   --draft    以草稿形式发布 (可以在 DEV.to 后台先预览)');
     return;
   }
 
-  const targetFile = enFiles.find(f => f === `${slugArg}.en.md` || f.includes(slugArg));
-  if (!targetFile) {
-    console.error(`❌ 未找到匹配 "${slugArg}" 的英文文章！`);
-    console.log('可用文章:', enFiles.map(f => f.replace(/\.en\.md$/, '')).join(', '));
-    process.exit(1);
+  console.log(`📋 待发布任务清单 (${targetSlugs.length} 篇):`);
+
+  let count = 0;
+  let successCount = 0;
+
+  for (const slug of targetSlugs) {
+    count++;
+    const targetFile = enFiles.find(f => f === `${slug}.en.md` || f.includes(slug));
+    if (!targetFile) {
+      console.warn(`\n⚠️ 未找到对应文件: ${slug}，跳过`);
+      continue;
+    }
+
+    if (publishedMap[slug] && !force) {
+      console.log(`\n⏭️  [${count}/${targetSlugs.length}] ${slug} 之前已发布过，跳过 (如需强制重发请加 --force)`);
+      console.log(`   已发布链接: ${publishedMap[slug].url}`);
+      continue;
+    }
+
+    console.log(`\n----------------------------------------------------------------`);
+    console.log(`[${count}/${targetSlugs.length}] 正在处理: ${slug}`);
+
+    const res = await publishArticle(apiKey, path.join(EN_ARTICLES_DIR, targetFile), isDraft);
+    if (res.success) {
+      successCount++;
+    } else if (res.error && JSON.stringify(res.error).includes('Rate limit')) {
+      const errStr = JSON.stringify(res.error);
+      const match = errStr.match(/(\d+)\s*seconds/);
+      const waitSec = match ? match[1] : '300';
+      console.log(`\n⚠️  触发 DEV.to 新账号频率限制 (Rate Limit):`);
+      console.log(`   平台要求新账号每发布一篇需间隔 ${waitSec} 秒 (~5分钟) 防刷。`);
+      console.log(`   已发布文章已安全记录在 .devto-published.json 中，5分钟后重新运行命令将自动断点续传！\n`);
+      break;
+    }
+
+    // Rate limit safety: 2.5 second pause between DEV.to API calls
+    if (count < targetSlugs.length) {
+      console.log(`⏳ 等待 2.5 秒以符合 DEV.to 频控限制...`);
+      await sleep(2500);
+    }
   }
 
-  await publishArticle(apiKey, path.join(EN_ARTICLES_DIR, targetFile), isDraft);
+  console.log('\n================================================================');
+  console.log(`🏁 批量发布任务完成！`);
+  console.log(`   本次成功发布: ${successCount} 篇`);
+  console.log('================================================================');
 }
 
 main();
