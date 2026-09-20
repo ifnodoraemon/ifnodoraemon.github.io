@@ -149,6 +149,8 @@ img { max-width: 100%; display: block; }
   .container {
     padding: 0 1rem;
   }
+}
+
 /* Accessibility: Skip to Content */
 .skip-link {
   position: absolute;
