@@ -353,7 +353,7 @@ function prepareArticles(list, isEn) {
       tocHtml: buildTocHtml(currentToc, isEn),
       imagePath,
       imageUrl: toSiteUrl(imagePath),
-      keywords: [fm.tag, 'AI大模型', 'GPT-5.4', 'Claude 4.6', 'Gemini 3.1', fm.slug.replace(/-/g, ' ')].join(','),
+      keywords: [fm.tag, ...(fm.extraTags || []), isEn ? 'AI Agent' : 'AI智能体', fm.slug.replace(/-/g, ' ')].filter(Boolean).join(','),
       wordCountText: isEn ? `${wordCount} words` : `约 ${wordCount} 字`,
       readingTimeText: isEn ? `${readingTime} min read` : `预计阅读 ${readingTime} 分钟`,
       meta: isEn ? enLocales.meta : zhLocales.meta,
