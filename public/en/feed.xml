@@ -5,8 +5,15 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Sun, 20 Sep 2026 03:20:33 GMT</pubDate>
+  <pubDate>Sun, 20 Sep 2026 05:19:37 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Agentic Loops &amp; State Machine Design: From ReAct to Deterministic Control Flows</title>
+    <link>https://blog.llmgo.top/en/articles/agent-loop-state-machine/</link>
+    <guid>https://blog.llmgo.top/en/articles/agent-loop-state-machine/</guid>
+    <pubDate>Sun, 20 Sep 2026 00:00:00 GMT</pubDate>
+    <description>Why prompt chaining and unconstrained ReAct loops fail in production AI systems. A deep architectural dissection of agent failure modes, Finite State Machine (FSM) graph flows, tool-calling resilience, and circuit breakers with runnable code.</description>
+  </item>
   <item>
     <title>Under the Hood of Browser-use (100k+ Stars): DOM Tree Distillation, Vision Grounding, and Production Web Agents</title>
     <link>https://blog.llmgo.top/en/articles/browser-use-agent-architecture/</link>

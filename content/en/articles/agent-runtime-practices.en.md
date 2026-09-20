@@ -10,6 +10,8 @@ extraTags:
   - Tool Calling
   - Guardrail
   - Trace
+series: ai-agent
+seriesOrder: 3
 ---
 
 Many AI Agent projects eventually drift into a familiar shape: they appear autonomous on the surface, but internally they have already become hidden workflows. The model seems to be "thinking," yet the real decisions about order, phases, and when to finish are still encoded in backend logic.

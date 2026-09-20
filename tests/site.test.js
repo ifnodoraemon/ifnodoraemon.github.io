@@ -94,7 +94,7 @@ test('build outputs include IndexNow key and articles with FAQPage / TechArticle
     ...fs.readdirSync(path.join(ROOT, 'dist', 'en', 'articles')).map(d => path.join(ROOT, 'dist', 'en', 'articles', d, 'index.html')),
   ].filter(f => fs.existsSync(f) && fs.statSync(f).isFile());
 
-  assert.equal(distArticles.length, 60, 'expected 60 built articles');
+  assert.equal(distArticles.length, 62, 'expected 62 built articles');
 
   for (const file of distArticles) {
     const html = fs.readFileSync(file, 'utf-8');

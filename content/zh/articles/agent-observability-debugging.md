@@ -10,6 +10,8 @@ extraTags:
   - Debugging
   - Trajectory Evaluation
   - LangSmith
+series: ai-agent
+seriesOrder: 9
 ---
 
 到了 2026 年，如果你还在用 `print()` 或者查看简单的文本日志来调试你的 AI Agent，那你一定体会过那种绝望：Agent 陷入了无限的工具调用死循环，或者莫名其妙地在第四步“忘记”了第一步的指令。

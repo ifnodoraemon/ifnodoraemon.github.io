@@ -13,6 +13,8 @@ featuredStats:
     value: Dual-Modal Vision+DOM
   - label: Implementation
     value: Production Ready
+series: ai-agent
+seriesOrder: 6
 ---
 
 ## Introduction: The Death of Fragile RPA and Selector-Based Automation

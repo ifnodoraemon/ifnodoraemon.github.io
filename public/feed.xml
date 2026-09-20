@@ -5,8 +5,15 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Sun, 20 Sep 2026 03:20:33 GMT</pubDate>
+  <pubDate>Sun, 20 Sep 2026 05:19:37 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Agent 执行循环与状态机设计：从 ReAct 到确定性控制流</title>
+    <link>https://blog.llmgo.top/articles/agent-loop-state-machine/</link>
+    <guid>https://blog.llmgo.top/articles/agent-loop-state-machine/</guid>
+    <pubDate>Sun, 20 Sep 2026 00:00:00 GMT</pubDate>
+    <description>为什么单纯的 Prompt 链与自由 ReAct 无法支撑生产级系统？深度拆解 Agent 执行循环的四大失效模式、基于有限状态机 (FSM) 的图控流设计、Tool Calling 容错降级与熔断器机制，并提供生产级状态机实战代码。</description>
+  </item>
   <item>
     <title>突破 10 万 Star 的 Browser-use 架构深度剖析：DOM 树提纯、视觉定位与生产级网页 Agent 实战</title>
     <link>https://blog.llmgo.top/articles/browser-use-agent-architecture/</link>

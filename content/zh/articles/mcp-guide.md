@@ -5,6 +5,8 @@ date: 2026-03-12
 tag: MCP
 tagClass: tag-violet
 description: 从架构原理到实战开发，完整解析 Model Context Protocol。含 Python SDK 实战、安全机制、生态对比。
+series: ai-agent
+seriesOrder: 4
 ---
 
 ## 什么是 MCP？

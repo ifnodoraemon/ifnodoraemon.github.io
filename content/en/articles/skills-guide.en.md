@@ -10,6 +10,8 @@ extraTags:
   - Cursor
   - GitHub Copilot
   - OpenAI Codex
+series: ai-agent
+seriesOrder: 5
 ---
 
 ## What Are Skills?

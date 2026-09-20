@@ -5,6 +5,8 @@ date: 2026-07-15
 tag: AI Engineering
 tagClass: tag-blue
 description: As LLMs move into complex enterprise production, how do we use distributed orchestration to combat error compounding? How do we build a statistically significant Evals system?
+series: ai-agent
+seriesOrder: 8
 ---
 
 ## Prologue: Why Prompt Engineering Hit a Dead End

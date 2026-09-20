@@ -5,6 +5,8 @@ date: 2026-03-05
 tag: AI Agent
 tagClass: tag-emerald
 description: A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.
+series: ai-agent
+seriesOrder: 2
 ---
 
 ## What is an AI Agent?

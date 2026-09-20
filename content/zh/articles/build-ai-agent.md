@@ -5,6 +5,8 @@ date: 2026-03-05
 tag: AI Agent
 tagClass: tag-emerald
 description: 手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。
+series: ai-agent
+seriesOrder: 2
 ---
 
 ## 什么是 AI Agent？

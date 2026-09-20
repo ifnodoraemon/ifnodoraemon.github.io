@@ -13,6 +13,8 @@ featuredStats:
     value: 视觉+DOM双模态
   - label: 生产实践
     value: 完整可用代码
+series: ai-agent
+seriesOrder: 6
 ---
 
 ## 引言：传统 RPA 与脆弱自动化脚本的终结

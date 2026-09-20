@@ -37,6 +37,30 @@ const STATIC_ROUTES = new Set([
 const zhLocales = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'locales', 'zh.json'), 'utf-8'));
 const enLocales = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'locales', 'en.json'), 'utf-8'));
 
+const SERIES_DEFINITIONS = {
+  'ai-agent': {
+    id: 'ai-agent',
+    titleZh: '《AI Agent 生产级架构师手册》',
+    titleEn: 'The Production AI Agent Architect Handbook',
+    badgeZh: 'AI Agent 架构师专栏',
+    badgeEn: 'AI Agent Architect Series',
+    descZh: '系统化掌握 2026 生产级 AI Agent 核心架构：从执行循环、状态机控制流，到 MCP 协议、Skills 扩展、多智能体协作与全链路可观测性。',
+    descEn: 'Master production-grade AI Agent architectures in 2026: from execution loops and state machines to MCP, skills, multi-agent orchestration, and observability.',
+    articles: [
+      'agent-loop-state-machine',
+      'build-ai-agent',
+      'agent-runtime-practices',
+      'mcp-guide',
+      'skills-guide',
+      'browser-use-agent-architecture',
+      'agent-reflection-self-correction',
+      'agent-orchestration-evals',
+      'agent-observability-debugging',
+      'environment-scaling-agent-guide',
+    ],
+  },
+};
+
 marked.setOptions({
   gfm: true,
   breaks: false,
@@ -342,6 +366,8 @@ function writeArticles(list, isEn) {
   list.forEach((article, index) => {
     const prevNextHtml = buildPrevNextHtml(list, index, isEn);
     const relatedArticlesHtml = buildRelatedArticlesHtml(article, list, isEn);
+    const seriesCardTop = buildSeriesCardTop(article, list, isEn);
+    const seriesCardBottom = buildSeriesCardBottom(article, list, isEn);
 
     const hasMermaid = article.htmlContent.includes('class="mermaid"');
     const mermaidScript = hasMermaid ? `  <script type="module">
@@ -387,6 +413,8 @@ function writeArticles(list, isEn) {
       content: article.htmlContent,
       wordCountText: article.wordCountText,
       readingTimeText: article.readingTimeText,
+      seriesCardTop,
+      seriesCardBottom,
       prevNextHtml,
       faqSchema: article.faqSchema || "",
       relatedArticlesHtml,
@@ -500,6 +528,149 @@ ${cardsHtml}
         </section>`;
 }
 
+function buildSeriesCardTop(article, allArticlesInLang, isEn) {
+  const seriesId = article.series || Object.keys(SERIES_DEFINITIONS).find(id => SERIES_DEFINITIONS[id].articles.includes(article.slug));
+  if (!seriesId || !SERIES_DEFINITIONS[seriesId]) return '';
+
+  const seriesDef = SERIES_DEFINITIONS[seriesId];
+  const seriesArticles = seriesDef.articles
+    .map(slug => allArticlesInLang.find(a => a.slug === slug))
+    .filter(Boolean);
+
+  const currentIndex = seriesArticles.findIndex(a => a.slug === article.slug);
+  if (currentIndex === -1) return '';
+
+  const totalParts = seriesArticles.length;
+  const currentPartNum = currentIndex + 1;
+  const prevArticle = currentIndex > 0 ? seriesArticles[currentIndex - 1] : null;
+  const nextArticle = currentIndex < totalParts - 1 ? seriesArticles[currentIndex + 1] : null;
+  const prefix = isEn ? '/en/articles/' : '/articles/';
+
+  const title = isEn ? seriesDef.titleEn : seriesDef.titleZh;
+  const badge = isEn ? seriesDef.badgeEn : seriesDef.badgeZh;
+  const desc = isEn ? seriesDef.descEn : seriesDef.descZh;
+
+  const prevLink = prevArticle
+    ? `<a href="${prefix}${prevArticle.slug}/" class="series-nav-btn prev" title="${escapeHtml(prevArticle.title)}">← ${isEn ? 'Prev' : '上一篇'}</a>`
+    : `<span class="series-nav-btn disabled">← ${isEn ? 'Start' : '开篇'}</span>`;
+
+  const nextLink = nextArticle
+    ? `<a href="${prefix}${nextArticle.slug}/" class="series-nav-btn next" title="${escapeHtml(nextArticle.title)}">${isEn ? 'Next' : '下一篇'} →</a>`
+    : `<span class="series-nav-btn disabled">${isEn ? 'End' : '终篇'} →</span>`;
+
+  const chapterItemsHtml = seriesArticles.map((item, idx) => {
+    const isCurrent = item.slug === article.slug;
+    const numStr = String(idx + 1).padStart(2, '0');
+    if (isCurrent) {
+      return `        <li class="series-chapter-item current">
+          <span class="chapter-num">${numStr}</span>
+          <span class="chapter-title">${escapeHtml(item.title)}</span>
+          <span class="chapter-status-badge">${isEn ? 'Reading' : '阅读中'}</span>
+        </li>`;
+    }
+    return `        <li class="series-chapter-item">
+          <a href="${prefix}${item.slug}/" class="series-chapter-link">
+            <span class="chapter-num">${numStr}</span>
+            <span class="chapter-title">${escapeHtml(item.title)}</span>
+          </a>
+        </li>`;
+  }).join('\n');
+
+  return `
+    <div class="article-series-card" data-series="${seriesId}">
+      <div class="series-card-top-row">
+        <div class="series-card-meta">
+          <span class="series-badge">
+            <svg class="series-badge-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <span>${badge}</span>
+          </span>
+          <span class="series-progress-label">${isEn ? `Part ${currentPartNum} / ${totalParts}` : `第 ${currentPartNum} / ${totalParts} 篇`}</span>
+        </div>
+        <div class="series-quick-nav">
+          ${prevLink}
+          ${nextLink}
+        </div>
+      </div>
+      <h3 class="series-title">${title}</h3>
+      <p class="series-desc">${desc}</p>
+      <details class="series-toc-accordion">
+        <summary class="series-toc-trigger">
+          <span class="series-toc-summary-text">
+            <svg class="series-list-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            ${isEn ? `Browse all ${totalParts} chapters in this series` : `查看本专栏全部 ${totalParts} 篇章节架构`}
+          </span>
+          <span class="series-chevron">▾</span>
+        </summary>
+        <div class="series-toc-body">
+          <ol class="series-chapter-list">
+${chapterItemsHtml}
+          </ol>
+        </div>
+      </details>
+    </div>`;
+}
+
+function buildSeriesCardBottom(article, allArticlesInLang, isEn) {
+  const seriesId = article.series || Object.keys(SERIES_DEFINITIONS).find(id => SERIES_DEFINITIONS[id].articles.includes(article.slug));
+  if (!seriesId || !SERIES_DEFINITIONS[seriesId]) return '';
+
+  const seriesDef = SERIES_DEFINITIONS[seriesId];
+  const seriesArticles = seriesDef.articles
+    .map(slug => allArticlesInLang.find(a => a.slug === slug))
+    .filter(Boolean);
+
+  const currentIndex = seriesArticles.findIndex(a => a.slug === article.slug);
+  if (currentIndex === -1) return '';
+
+  const totalParts = seriesArticles.length;
+  const currentPartNum = currentIndex + 1;
+  const nextArticle = currentIndex < totalParts - 1 ? seriesArticles[currentIndex + 1] : null;
+  const firstArticle = seriesArticles[0];
+  const prefix = isEn ? '/en/articles/' : '/articles/';
+  const title = isEn ? seriesDef.titleEn : seriesDef.titleZh;
+
+  let bodyHtml = '';
+  if (nextArticle) {
+    bodyHtml = `
+      <div class="series-footer-next-box">
+        <div class="series-next-hint">${isEn ? 'NEXT IN SERIES' : '下一篇预告'} · ${isEn ? `Part ${currentPartNum + 1}` : `第 ${currentPartNum + 1} 篇`}</div>
+        <a href="${prefix}${nextArticle.slug}/" class="series-next-link">
+          <div class="series-next-info">
+            <h4 class="series-next-title">${escapeHtml(nextArticle.title)}</h4>
+            <p class="series-next-desc">${escapeHtml(nextArticle.description)}</p>
+          </div>
+          <div class="series-next-action">
+            <span class="series-cta-btn">${isEn ? 'Read Next' : '阅读下篇'} →</span>
+          </div>
+        </a>
+      </div>`;
+  } else {
+    bodyHtml = `
+      <div class="series-footer-complete-box">
+        <div class="series-complete-title">🎉 ${isEn ? 'Series Completed!' : '已读完专栏全部章节！'}</div>
+        <p class="series-complete-desc">${isEn ? 'You have completed all chapters in this handbook. Review earlier chapters or explore our other deep dives.' : '恭喜读完《AI Agent 生产级架构师手册》全套内容！你已建立起从执行循环、状态机到 MCP、Skills 与多智能体编排的完整认知。'}</p>
+        <div class="series-complete-actions">
+          <a href="${prefix}${firstArticle.slug}/" class="btn-ghost series-nav-btn">${isEn ? '← Revisit Chapter 1' : '← 重温第一章'}</a>
+          <a href="${isEn ? '/en/articles/' : '/articles/'}" class="btn-primary series-nav-btn">${isEn ? 'All Articles →' : '浏览全部文章 →'}</a>
+        </div>
+      </div>`;
+  }
+
+  return `
+    <div class="article-series-footer-banner">
+      <div class="series-footer-inner">
+        <div class="series-footer-header">
+          <div class="series-footer-badge">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <span>${title}</span>
+          </div>
+          <div class="series-footer-progress">${isEn ? `Part ${currentPartNum} / ${totalParts}` : `专栏进度：${currentPartNum} / ${totalParts}`}</div>
+        </div>
+        ${bodyHtml}
+      </div>
+    </div>`;
+}
+
 function generateListingPage(articlesList, isEn = false) {
   if (articlesList.length === 0 && isEn) return;
 
@@ -509,6 +680,10 @@ function generateListingPage(articlesList, isEn = false) {
   const listItems = articlesList.map((article, index) => {
     const isFeatured = index === 0;
     const pinText = isEn ? '📌 Pinned' : '📌 置顶';
+    const isSeries = article.series === 'ai-agent' || (SERIES_DEFINITIONS['ai-agent'] && SERIES_DEFINITIONS['ai-agent'].articles.includes(article.slug));
+    const seriesBadgeHtml = isSeries
+      ? `<span class="tag tag-series">📚 ${isEn ? 'Agent Series' : 'Agent 专栏'}</span>`
+      : '';
     const tagsHtml = article.extraTags
       ? article.extraTags.map(tag => `<span class="mini-tag">${escapeHtml(tag)}</span>`).join('\n              ')
       : '';
@@ -522,6 +697,7 @@ function generateListingPage(articlesList, isEn = false) {
               <a href="${articlesLinkPrefix}${article.slug}/" class="article-list-item${isFeatured ? ' article-list-featured' : ''}">
                 <div class="article-list-meta">
                   <span class="tag ${article.tagClass || ''}">${escapeHtml(article.tag)}</span>
+                  ${seriesBadgeHtml}
                   ${isFeatured ? `<span class="article-list-pin">${pinText}</span>` : ''}
                   <time datetime="${article.isoDate}" class="mobile-only-date" style="display:none;">${article.dateFormatted}</time>
                 </div>

@@ -5,6 +5,8 @@ date: 2026-09-07
 tag: Agent架构
 tagClass: tag-green
 description: "剖析 2026 年大模型后训练的重大范式跃迁：为什么从文本自回归走向多任务环境沙箱博弈？结合 GLM-5.3 在 Terminal-Bench 3.0 的登顶实践，详解 Linux 容器编排、MCP 协议集成与零逃逸安全沙箱工程实战。"
+series: ai-agent
+seriesOrder: 10
 ---
 
 如果说 2024 年是 Prompt Engineering（提示词工程）的巅峰，2025 年是 Context Engineering（上下文工程）的普及，那么在 **2026 年**，大模型与智能体开发的核心分水岭已经彻底演进为：**环境缩放（Environment Scaling）**。
