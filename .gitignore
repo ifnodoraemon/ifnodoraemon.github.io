@@ -14,3 +14,5 @@ articles/index.html
 # Secret credentials
 *credentials*.json
 *.pem
+*gen-lang-client*.json
+gsc-credentials.json

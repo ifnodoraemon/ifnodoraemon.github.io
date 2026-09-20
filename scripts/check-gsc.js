@@ -7,8 +7,8 @@
  *   npm run gsc:check
  * 
  * Authentication:
- *   Looks for `gsc-credentials.json` in the project root, or
- *   the `GOOGLE_APPLICATION_CREDENTIALS` environment variable.
+ *   Looks for `gsc-credentials.json` or `gen-lang-client-*.json` in the project root,
+ *   or the `GOOGLE_APPLICATION_CREDENTIALS` environment variable.
  */
 
 import fs from 'fs';
@@ -18,7 +18,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const SITE_URL = 'https://blog.llmgo.top/';
+const DEFAULT_SITE_URL = 'https://blog.llmgo.top/';
 
 const DEFAULT_INSPECT_URLS = [
   'https://blog.llmgo.top/about/',
@@ -84,6 +84,16 @@ async function getAccessToken(credentials) {
   return data.access_token;
 }
 
+// Query authorized sites for this service account
+async function getAuthorizedSites(accessToken) {
+  const res = await fetch('https://www.googleapis.com/webmasters/v3/sites', {
+    headers: { 'Authorization': `Bearer ${accessToken}` }
+  });
+  if (!res.ok) return [];
+  const data = await res.json();
+  return data.siteEntry || [];
+}
+
 // Call Google Search Console URL Inspection API
 async function inspectUrl(accessToken, siteUrl, inspectionUrl) {
   const res = await fetch('https://searchconsole.googleapis.com/v1/urlInspection/index:inspect', {
@@ -106,37 +116,44 @@ async function inspectUrl(accessToken, siteUrl, inspectionUrl) {
   return await res.json();
 }
 
+function findCredentialsFile() {
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS && fs.existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
+    return process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  }
+  const defaultNamed = path.join(ROOT, 'gsc-credentials.json');
+  if (fs.existsSync(defaultNamed)) return defaultNamed;
+
+  // Search for gen-lang-client or service account json in ROOT
+  const files = fs.readdirSync(ROOT);
+  for (const f of files) {
+    if (f.endsWith('.json') && (f.startsWith('gen-lang-client') || f.includes('credentials'))) {
+      const fullPath = path.join(ROOT, f);
+      try {
+        const parsed = JSON.parse(fs.readFileSync(fullPath, 'utf-8'));
+        if (parsed.type === 'service_account' && parsed.client_email && parsed.private_key) {
+          return fullPath;
+        }
+      } catch (_) {}
+    }
+  }
+  return null;
+}
+
 async function main() {
   console.log('================================================================');
   console.log('🤖 Google Search Console 自动化索引与收录巡检器');
   console.log('================================================================\n');
 
-  // Check for credentials
-  let credPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-  if (!credPath) {
-    const defaultFile = path.join(ROOT, 'gsc-credentials.json');
-    if (fs.existsSync(defaultFile)) {
-      credPath = defaultFile;
-    }
-  }
+  const credPath = findCredentialsFile();
 
-  if (!credPath || !fs.existsSync(credPath)) {
+  if (!credPath) {
     console.log('ℹ️  未检测到 Google Search Console 服务账号凭证 (gsc-credentials.json)\n');
-    console.log('📌 如何为本助手配置自动 GSC 巡检权限 (只需 3 步):');
+    console.log('📌 如何为本助手配置自动 GSC 巡检权限:');
     console.log('----------------------------------------------------------------');
-    console.log('1. 创建 Google Cloud 服务账号:');
-    console.log('   - 访问: https://console.cloud.google.com/apis/library/searchconsole.googleapis.com');
-    console.log('   - 启用「Google Search Console API」');
-    console.log('   - 在「凭据」页面创建服务账号 (Service Account)，为该账号创建 JSON 密钥');
-    console.log('2. 将 JSON 密钥保存至本项目:');
-    console.log(`   - 命名为: gsc-credentials.json 并存放在根目录 (${path.join(ROOT, 'gsc-credentials.json')})`);
-    console.log('   - (已自动在 .gitignore 中忽略，绝不会泄露或提交到 GitHub)');
-    console.log('3. 在 Google Search Console 中授权:');
-    console.log('   - 打开: https://search.google.com/search-console');
-    console.log('   - 进入「设置」->「用户和权限」->「添加用户」');
-    console.log('   - 填入服务账号邮箱 (如: xxx@project.iam.gserviceaccount.com)，权限选择「完整」或「所有者」');
+    console.log('1. 创建 Google Cloud 服务账号 (Service Account)');
+    console.log('2. 将下载的 JSON 私钥放在博客根目录下');
+    console.log('3. 在 GSC 中授权该服务账号邮箱');
     console.log('----------------------------------------------------------------\n');
-    console.log('💡 配置完成后，直接运行 `npm run gsc:check` 即可自动调用 Google 官方 API 巡检所有页面真实收录状态！\n');
     return;
   }
 
@@ -148,28 +165,61 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`🔑 使用服务账号: ${credentials.client_email}`);
-  console.log(`🌐 站点属性: ${SITE_URL}\n`);
+  console.log(`📄 找到凭证文件: ${path.basename(credPath)}`);
+  console.log(`🔑 服务账号邮箱: ${credentials.client_email}\n`);
 
   let token;
   try {
-    console.log('⏳ 正在向 Google OAuth2 请求安全凭证令牌...');
+    process.stdout.write('⏳ 正在连接 Google OAuth2 验证身份... ');
     token = await getAccessToken(credentials);
-    console.log('✅ Google API 授权成功！\n');
+    console.log('✅ 认证成功！\n');
   } catch (err) {
-    console.error(`❌ 授权失败: ${err.message}`);
+    console.log('❌ 认证失败！');
+    console.error(`错误详情: ${err.message}`);
     process.exit(1);
+  }
+
+  // Check sites
+  const authorizedSites = await getAuthorizedSites(token);
+  console.log(`📋 当前服务账号拥有权限的 GSC 资源站点 (${authorizedSites.length} 个):`);
+
+  let targetSiteUrl = DEFAULT_SITE_URL;
+
+  if (authorizedSites.length === 0) {
+    console.log('   ⚠️  【尚未授权任何站点】\n');
+    console.log('================================================================');
+    console.log('👉 只需要最后一步即可启用自动巡检：');
+    console.log('1. 打开 Google Search Console: https://search.google.com/search-console');
+    console.log('2. 点击左侧底部的「设置 (Settings)」->「用户和权限 (Users and permissions)」');
+    console.log('3. 点击右上角「添加用户 (Add user)」');
+    console.log(`4. 填入邮箱地址:`);
+    console.log(`   👉 \x1b[32m${credentials.client_email}\x1b[0m 👈`);
+    console.log('5. 权限请选择:「完整 (Full)」或「所有者 (Owner)」并保存');
+    console.log('================================================================\n');
+    return;
+  }
+
+  authorizedSites.forEach(s => {
+    console.log(`   - ${s.siteUrl} (权限级别: ${s.permissionLevel})`);
+  });
+  console.log('');
+
+  // Auto-detect matching site URL
+  const match = authorizedSites.find(s => s.siteUrl.includes('llmgo.top'));
+  if (match) {
+    targetSiteUrl = match.siteUrl;
+    console.log(`🎯 自动匹配到博客资源属性: ${targetSiteUrl}\n`);
   }
 
   const urlsToInspect = process.argv.slice(2).length > 0 ? process.argv.slice(2) : DEFAULT_INSPECT_URLS;
 
-  console.log(`📡 开始向 Google URL Inspection API 发起实时查询 (${urlsToInspect.length} 个 URL)...\n`);
+  console.log(`📡 开始向 Google URL Inspection API 发起实时收录检测 (${urlsToInspect.length} 个 URL)...\n`);
 
   for (const url of urlsToInspect) {
     console.log(`----------------------------------------------------------------`);
     console.log(`🔗 检查 URL: ${url}`);
     try {
-      const result = await inspectUrl(token, SITE_URL, url);
+      const result = await inspectUrl(token, targetSiteUrl, url);
       if (result.error) {
         console.error(`   ❌ API 响应错误 (${result.status}): ${result.message}`);
         continue;
@@ -181,7 +231,8 @@ async function main() {
         continue;
       }
 
-      console.log(`   📌 综合判定 (Verdict):       ${idx.verdict || '未知'}`);
+      const verdictIcon = idx.verdict === 'PASS' ? '✅' : (idx.verdict === 'NEUTRAL' ? '⏳' : '❌');
+      console.log(`   ${verdictIcon} 综合判定 (Verdict):       ${idx.verdict || '未知'}`);
       console.log(`   📊 覆盖状态 (Coverage):      ${idx.coverageState || '未知'}`);
       console.log(`   🕒 上次抓取时间:             ${idx.lastCrawlTime || '不适用 (尚未实际抓取)'}`);
       console.log(`   🤖 抓取工具:                 ${idx.crawledAs || '不适用'}`);
@@ -195,7 +246,7 @@ async function main() {
       if (rich?.detectedItems && rich.detectedItems.length > 0) {
         console.log(`   ✨ 结构化数据 (Rich Results):`);
         for (const item of rich.detectedItems) {
-          console.log(`      - ${item.richResultType}: ${item.items?.[0]?.issues?.length ? '有警告' : '✅ 正常'}`);
+          console.log(`      - ${item.richResultType}: ${item.items?.[0]?.issues?.length ? '⚠️ 有警告' : '✅ 正常'}`);
         }
       }
     } catch (e) {
