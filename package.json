@@ -12,6 +12,7 @@
     "seo:audit": "node scripts/audit-seo.js",
     "gsc:check": "node scripts/check-gsc.js",
     "publish:devto": "node scripts/publish-devto.js",
+    "export:domestic": "node scripts/export-domestic.js",
     "indexnow": "node scripts/submit-indexnow.js",
     "gsc": "node scripts/generate-gsc-urls.js",
     "preview": "vite preview"
