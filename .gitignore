@@ -16,3 +16,6 @@ articles/index.html
 *.pem
 *gen-lang-client*.json
 gsc-credentials.json
+.env*
+.devto*
+*devto*key*
