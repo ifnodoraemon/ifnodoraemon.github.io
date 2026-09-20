@@ -32,6 +32,10 @@ export default function seoPlugin({ hostname }) {
       const urls = [];
       
       for (const file of htmlFiles) {
+        // Only index.html represents canonical clean route directories
+        const baseName = path.basename(file);
+        if (baseName !== 'index.html') continue;
+
         // Convert local absolute path to relative path
         let relative = path.relative(outDir, file);
         // Replace Windows backslashes
@@ -61,13 +65,19 @@ ${urls.map(url => `  <url>
 
       fs.writeFileSync(path.join(outDir, 'sitemap.xml'), sitemap);
       
-      const robots = `User-agent: *
-Allow: /
-
-Sitemap: ${hostname}/sitemap.xml
-`;
-      fs.writeFileSync(path.join(outDir, 'robots.txt'), robots);
-      console.log(`\n[seo-plugin] Generated sitemap.xml with ${urls.length} URLs and robots.txt`);
+      const publicRobotsPath = path.join(process.cwd(), 'public', 'robots.txt');
+      const distRobotsPath = path.join(outDir, 'robots.txt');
+      if (fs.existsSync(publicRobotsPath)) {
+        let robotsContent = fs.readFileSync(publicRobotsPath, 'utf-8');
+        if (!robotsContent.includes('Sitemap:')) {
+          robotsContent += `\nSitemap: ${hostname}/sitemap.xml\n`;
+        }
+        fs.writeFileSync(distRobotsPath, robotsContent);
+      } else {
+        const robots = `User-agent: *\nAllow: /\n\nSitemap: ${hostname}/sitemap.xml\n`;
+        fs.writeFileSync(distRobotsPath, robots);
+      }
+      console.log(`\n[seo-plugin] Generated sitemap.xml with ${urls.length} URLs and verified robots.txt`);
     }
   };
 }

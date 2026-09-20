@@ -8,7 +8,9 @@
     "pages": "node scripts/build-pages.js",
     "dev": "npm run pages && npm run articles && vite",
     "build": "npm run pages && npm run articles && vite build",
-    "test:smoke": "node --test tests/site.test.js",
+    "test:smoke": "node --test tests/site.test.js && node scripts/audit-seo.js",
+    "seo:audit": "node scripts/audit-seo.js",
+    "gsc:check": "node scripts/check-gsc.js",
     "indexnow": "node scripts/submit-indexnow.js",
     "gsc": "node scripts/generate-gsc-urls.js",
     "preview": "vite preview"

@@ -10,3 +10,7 @@ articles/index.html
 # Temp and build directories
 .temp*
 .temp_build/
+
+# Secret credentials
+*credentials*.json
+*.pem

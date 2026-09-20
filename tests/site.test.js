@@ -321,5 +321,23 @@ test('build outputs include valid site.webmanifest and pages link to manifest an
   assert.ok(css.includes('.skip-link'), 'expected .skip-link in CSS');
 });
 
+test('sitemap excludes verification tokens and preserves valid directory routes and AI robots policies', () => {
+  const sitemapPath = path.join(ROOT, 'dist', 'sitemap.xml');
+  assert.ok(fs.existsSync(sitemapPath), 'expected dist/sitemap.xml to exist');
+  const sitemap = fs.readFileSync(sitemapPath, 'utf-8');
+
+  // Must not include verification html files or malformed .html/ paths
+  assert.ok(!sitemap.includes('googledb2a852f29a38330'), 'sitemap must not contain google site verification file');
+  assert.ok(!sitemap.includes('404'), 'sitemap must not contain 404 page');
+  assert.ok(!/\.html\//.test(sitemap), 'sitemap must not have URLs ending with .html/');
+
+  const robotsPath = path.join(ROOT, 'dist', 'robots.txt');
+  assert.ok(fs.existsSync(robotsPath), 'expected dist/robots.txt to exist');
+  const robots = fs.readFileSync(robotsPath, 'utf-8');
+  assert.ok(robots.includes('GPTBot'), 'robots.txt must preserve GPTBot policy');
+  assert.ok(robots.includes('ClaudeBot'), 'robots.txt must preserve ClaudeBot policy');
+  assert.ok(robots.includes('Sitemap: https://blog.llmgo.top/sitemap.xml'), 'robots.txt must contain sitemap link');
+});
+
 
 
