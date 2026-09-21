@@ -57,6 +57,7 @@ const SERIES_DEFINITIONS = {
       'agent-orchestration-evals',
       'agent-observability-debugging',
       'environment-scaling-agent-guide',
+      'agent-memory-architecture',
     ],
   },
 };

@@ -5,8 +5,15 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Sun, 20 Sep 2026 05:23:16 GMT</pubDate>
+  <pubDate>Mon, 21 Sep 2026 03:31:56 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>AI Agent Memory Architecture: From Working Memory to Episodic Memory &amp; Hierarchical Graph RAG</title>
+    <link>https://blog.llmgo.top/en/articles/agent-memory-architecture/</link>
+    <guid>https://blog.llmgo.top/en/articles/agent-memory-architecture/</guid>
+    <pubDate>Mon, 21 Sep 2026 00:00:00 GMT</pubDate>
+    <description>Why multi-million token context windows still fail to solve agent amnesia. A deep architectural dissection of the three-tier memory pyramid (Working, Episodic, and Long-Term Semantic Memory), Stanford Generative Agents reflection cycles, Letta (MemGPT) virtual paging, and runnable code with decay curves and hybrid retrieval.</description>
+  </item>
   <item>
     <title>Agentic Loops &amp; State Machine Design: From ReAct to Deterministic Control Flows</title>
     <link>https://blog.llmgo.top/en/articles/agent-loop-state-machine/</link>

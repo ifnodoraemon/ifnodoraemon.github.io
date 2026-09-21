@@ -26,6 +26,7 @@ const PUBLISHED_TRACK_FILE = path.join(ROOT, '.devto-published.json');
 // Core top-tier engineering & research articles
 const TOP_TIER_SLUGS = [
   'agent-loop-state-machine',
+  'agent-memory-architecture',
   'test-time-compute-grpo',
   'sglang-vs-vllm-architecture',
   'speculative-decoding-eagle-guide',

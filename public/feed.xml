@@ -5,8 +5,15 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Sun, 20 Sep 2026 05:23:16 GMT</pubDate>
+  <pubDate>Mon, 21 Sep 2026 03:31:56 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>AI Agent 记忆系统设计：从工作记忆、情景记忆到分层 Graph RAG</title>
+    <link>https://blog.llmgo.top/articles/agent-memory-architecture/</link>
+    <guid>https://blog.llmgo.top/articles/agent-memory-architecture/</guid>
+    <pubDate>Mon, 21 Sep 2026 00:00:00 GMT</pubDate>
+    <description>为什么数百万 Token 的上下文窗口依然无法解决智能体的失忆症？深入剖析从工作记忆、情景记忆到长期语义记忆的三层金字塔模型，详解 Stanford Generative Agents 与 Letta (MemGPT) 的记忆沉淀机制，并提供生产级混合检索与遗忘衰减实战代码。</description>
+  </item>
   <item>
     <title>Agent 执行循环与状态机设计：从 ReAct 到确定性控制流</title>
     <link>https://blog.llmgo.top/articles/agent-loop-state-machine/</link>
