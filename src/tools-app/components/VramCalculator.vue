@@ -147,7 +147,7 @@
                 <span class="meta-val">{{ syncedModelMeta.type }}</span>
               </div>
               <div class="meta-item">
-                <span class="meta-lbl">{{ isEn ? "Derived Params" : "推导参数量" }}:</span>
+                <span class="meta-lbl">{{ isEn ? "Params" : "模型参数" }}:</span>
                 <span class="meta-val text-accent">{{ syncedModelMeta.paramsB.toFixed(2) }}B</span>
               </div>
               <div class="meta-item">
@@ -155,14 +155,14 @@
                 <span class="meta-val">{{ syncedModelMeta.layers }}</span>
               </div>
               <div class="meta-item">
-                <span class="meta-lbl">{{ isEn ? "Hidden Dim" : "隐藏维度 (Hidden)" }}:</span>
+                <span class="meta-lbl">{{ isEn ? "Hidden Dim" : "隐藏维度" }}:</span>
                 <span class="meta-val">{{ syncedModelMeta.hiddenSize }}</span>
               </div>
-              <div class="meta-item">
-                <span class="meta-lbl">{{ isEn ? "Attention / GQA" : "注意力结构 (Q:KV)" }}:</span>
-                <span class="meta-val">Q{{ syncedModelMeta.qHeads }} : KV{{ syncedModelMeta.kvHeads }} (GQA 1:{{ (syncedModelMeta.qHeads / syncedModelMeta.kvHeads).toFixed(0) }})</span>
+              <div class="meta-item full-row">
+                <span class="meta-lbl">{{ isEn ? "Attention Head (GQA)" : "注意力结构 (GQA)" }}:</span>
+                <span class="meta-val">Q{{ syncedModelMeta.qHeads }} : KV{{ syncedModelMeta.kvHeads }} (比例 1:{{ (syncedModelMeta.qHeads / syncedModelMeta.kvHeads).toFixed(0) }})</span>
               </div>
-              <div class="meta-item">
+              <div class="meta-item full-row">
                 <span class="meta-lbl">{{ isEn ? "Default Context" : "原生上下文窗口" }}:</span>
                 <span class="meta-val">{{ syncedModelMeta.maxCtx.toLocaleString() }} Tokens</span>
               </div>
@@ -809,10 +809,11 @@ onUnmounted(() => {
   flex: 1;
   display: flex;
   align-items: center;
+  gap: 8px;
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 6px;
-  padding: 0 8px 0 12px;
+  padding: 0 10px;
   transition: all 0.2s ease;
 }
 
@@ -825,16 +826,16 @@ onUnmounted(() => {
 .search-icon {
   flex-shrink: 0;
   color: #818cf8;
-  margin-right: 8px;
 }
 
 .search-text-input {
   border: none !important;
   background: transparent !important;
   box-shadow: none !important;
-  padding: 8px 0 !important;
+  padding: 8px 4px !important;
   font-size: 0.86rem;
   color: #f1f5f9;
+  flex: 1;
 }
 
 .clear-search-btn {
@@ -1083,9 +1084,13 @@ onUnmounted(() => {
 .synced-meta-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4px 12px;
+  gap: 6px 14px;
   font-size: 0.75rem;
   font-family: var(--font-mono, monospace);
+}
+
+.meta-item.full-row {
+  grid-column: span 2;
 }
 
 .meta-lbl {
@@ -1155,18 +1160,27 @@ onUnmounted(() => {
 }
 
 .metric-card {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(15, 20, 32, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 2px solid rgba(99, 102, 241, 0.4);
   border-radius: 8px;
-  padding: 12px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.metric-card:hover {
+  background: rgba(20, 27, 45, 0.9);
+  border-color: rgba(99, 102, 241, 0.4);
 }
 
 .metric-card.highlight {
-  background: rgba(99, 102, 241, 0.08);
-  border-color: rgba(99, 102, 241, 0.35);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-top: 2px solid #38bdf8;
+  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.12);
 }
 
 .metric-label {
@@ -1189,12 +1203,16 @@ onUnmounted(() => {
 
 .optimal-banner {
   background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  border: 1px solid rgba(16, 185, 129, 0.28);
   color: #34d399;
-  border-radius: 6px;
-  padding: 10px 14px;
+  border-radius: 8px;
+  padding: 11px 16px;
   font-size: 0.88rem;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 12px rgba(16, 185, 129, 0.08);
 }
 
 .cyber-table {

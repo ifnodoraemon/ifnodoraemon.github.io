@@ -7,8 +7,9 @@ const ROOT = resolve(__dirname, '..');
 
 export async function getToolsSsgHtml() {
   try {
-    // Build SSR bundle
+    // Build SSR bundle with identical root so component scope IDs match client CSS
     await build({
+      root: resolve(ROOT, '.temp_build'),
       configFile: false,
       plugins: [(await import('@vitejs/plugin-vue')).default()],
       resolve: {
