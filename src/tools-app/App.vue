@@ -71,7 +71,19 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, nextTick, defineAsyncComponent, h } from 'vue';
+import { ref, computed, onMounted, onUnmounted, nextTick, h } from 'vue';
+
+// Directly import all tool components synchronously so tab switching is 0ms instant
+// and KeepAlive never caches an empty unresolved async comment node
+import MarkdownStudio from './components/MarkdownStudio.vue';
+import Base64Codec from './components/Base64Codec.vue';
+import VramCalculator from './components/VramCalculator.vue';
+import TokenCalculator from './components/TokenCalculator.vue';
+import JsonStudio from './components/JsonStudio.vue';
+import JwtDebugger from './components/JwtDebugger.vue';
+import TimeCron from './components/TimeCron.vue';
+import UrlStudio from './components/UrlStudio.vue';
+import CodeCard from './components/CodeCard.vue';
 
 const props = defineProps({
   lang: {
@@ -81,17 +93,6 @@ const props = defineProps({
 });
 
 const isEn = computed(() => props.lang === 'en');
-
-// Lazy-loaded Tool Components
-const MarkdownStudio = defineAsyncComponent(() => import('./components/MarkdownStudio.vue'));
-const Base64Codec = defineAsyncComponent(() => import('./components/Base64Codec.vue'));
-const VramCalculator = defineAsyncComponent(() => import('./components/VramCalculator.vue'));
-const TokenCalculator = defineAsyncComponent(() => import('./components/TokenCalculator.vue'));
-const JsonStudio = defineAsyncComponent(() => import('./components/JsonStudio.vue'));
-const JwtDebugger = defineAsyncComponent(() => import('./components/JwtDebugger.vue'));
-const TimeCron = defineAsyncComponent(() => import('./components/TimeCron.vue'));
-const UrlStudio = defineAsyncComponent(() => import('./components/UrlStudio.vue'));
-const CodeCard = defineAsyncComponent(() => import('./components/CodeCard.vue'));
 
 // Inline SVG Icon components
 const IconDoc = () => h('svg', { width: 17, height: 17, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 }, [
@@ -200,13 +201,13 @@ function handleWheel(e) {
 let isMouseDown = false;
 let startX = 0;
 let startScrollLeft = 0;
-let draggedDistance = 0;
+let isRealDrag = false;
 const isDragging = ref(false);
 
 function handleMouseDown(e) {
   if (!tabsBarRef.value) return;
   isMouseDown = true;
-  draggedDistance = 0;
+  isRealDrag = false;
   startX = e.pageX - tabsBarRef.value.offsetLeft;
   startScrollLeft = tabsBarRef.value.scrollLeft;
 }
@@ -215,8 +216,8 @@ function handleMouseMove(e) {
   if (!isMouseDown || !tabsBarRef.value) return;
   const x = e.pageX - tabsBarRef.value.offsetLeft;
   const walk = x - startX;
-  draggedDistance = Math.abs(walk);
-  if (draggedDistance > 5) {
+  if (Math.abs(walk) > 8) {
+    isRealDrag = true;
     isDragging.value = true;
     tabsBarRef.value.scrollLeft = startScrollLeft - walk;
     updateScrollState();
@@ -227,13 +228,14 @@ function handleMouseUp() {
   isMouseDown = false;
   setTimeout(() => {
     isDragging.value = false;
-    draggedDistance = 0;
-  }, 60);
+    isRealDrag = false;
+  }, 100);
 }
 
 function handleMouseLeave() {
   isMouseDown = false;
   isDragging.value = false;
+  isRealDrag = false;
 }
 
 function centerActiveTab(tabId) {
@@ -246,7 +248,7 @@ function centerActiveTab(tabId) {
 }
 
 function selectTab(tabId, updateHash = true) {
-  if (isDragging.value || draggedDistance > 5) return;
+  if (isRealDrag) return;
   currentTab.value = tabId;
   if (updateHash && typeof history !== 'undefined') {
     history.replaceState(null, '', `#${tabId}`);
@@ -466,5 +468,6 @@ onUnmounted(() => {
 
 .toolbox-view-wrapper {
   width: 100%;
+  min-height: 500px;
 }
 </style>
