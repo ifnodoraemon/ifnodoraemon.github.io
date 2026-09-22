@@ -195,13 +195,63 @@ document.addEventListener('DOMContentLoaded', () => {
   initMediumZoom();
   window.addEventListener('load', initMediumZoom, { once: true });
 
-  // — Markdown Studio (Tools page) —
-  if (document.getElementById('markdown-editor-app')) {
-    import('./tools/markdown-editor.js').then(({ initMarkdownStudio }) => {
-      initMarkdownStudio();
-    }).catch(err => {
-      console.error('Failed to initialize Markdown Studio:', err);
+  // — Developer Toolbox (Tools page) —
+  const toolsSection = document.getElementById('toolbox-section');
+  if (toolsSection) {
+    const tabBtns = document.querySelectorAll('.tool-tab-btn');
+    const panelMarkdown = document.getElementById('tool-panel-markdown');
+    const panelBase64 = document.getElementById('tool-panel-base64');
+
+    let markdownInited = false;
+    let base64Inited = false;
+
+    function loadMarkdownStudio() {
+      if (markdownInited) return;
+      markdownInited = true;
+      import('./tools/markdown-editor.js').then(({ initMarkdownStudio }) => {
+        initMarkdownStudio();
+      }).catch(err => console.error('Failed to init Markdown Studio:', err));
+    }
+
+    function loadBase64Studio() {
+      if (base64Inited) return;
+      base64Inited = true;
+      import('./tools/base64-tool.js').then(({ initBase64Tool }) => {
+        initBase64Tool();
+      }).catch(err => console.error('Failed to init Base64 Tool:', err));
+    }
+
+    function switchTab(tabName, updateHash = true) {
+      tabBtns.forEach(btn => {
+        const isMatch = btn.dataset.tab === tabName;
+        btn.classList.toggle('active', isMatch);
+        btn.setAttribute('aria-selected', String(isMatch));
+      });
+
+      if (tabName === 'base64') {
+        if (panelMarkdown) panelMarkdown.style.display = 'none';
+        if (panelBase64) panelBase64.style.display = 'block';
+        loadBase64Studio();
+        if (updateHash) history.replaceState(null, '', '#base64');
+      } else {
+        if (panelBase64) panelBase64.style.display = 'none';
+        if (panelMarkdown) panelMarkdown.style.display = 'block';
+        loadMarkdownStudio();
+        if (updateHash) history.replaceState(null, '', '#markdown');
+      }
+    }
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        switchTab(btn.dataset.tab);
+      });
     });
+
+    if (window.location.hash === '#base64') {
+      switchTab('base64', false);
+    } else {
+      switchTab('markdown', false);
+    }
   }
 
 });

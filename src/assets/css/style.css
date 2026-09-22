@@ -6794,6 +6794,274 @@ h1, h2, h3, .glitch-title { text-wrap: balance; }
 }
 
 /* ==========================================================================
+   Toolbox Tab Switcher & Base64 Studio Styles
+   ========================================================================== */
+
+.section-tool-tabs {
+  padding: 1.5rem 0 0.5rem;
+}
+
+.toolbox-tabs-bar {
+  display: inline-flex;
+  background: rgba(18, 20, 30, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 4px;
+  gap: 6px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.tool-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  border-radius: 7px;
+  padding: 8px 18px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tool-tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.tool-tab-btn.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.25) 100%);
+  color: #ffffff;
+  border: 1px solid rgba(99, 102, 241, 0.45);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+}
+
+/* Base64 App Window */
+.base64-app-window {
+  display: flex;
+  flex-direction: column;
+  min-height: 650px;
+  margin-bottom: 3rem;
+  background: rgba(10, 12, 18, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(56, 189, 248, 0.08);
+}
+
+.b64-mode-tabs {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+/* Cyber Checkbox */
+.cyber-checkbox-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cyber-checkbox-wrap input {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 16px;
+  height: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.cyber-checkbox-wrap input:checked + .checkbox-custom {
+  background: #6366f1;
+  border-color: #818cf8;
+}
+
+.cyber-checkbox-wrap input:checked + .checkbox-custom::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 4px;
+  height: 8px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.tool-btn.btn-sm {
+  padding: 4px 10px;
+  font-size: 0.78rem;
+}
+
+/* Base64 Workspace */
+.base64-workspace {
+  display: flex;
+  flex: 1;
+  min-height: 520px;
+  position: relative;
+}
+
+.b64-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: rgba(8, 10, 15, 0.5);
+}
+
+#b64-right-pane {
+  background: rgba(12, 14, 22, 0.4);
+}
+
+.b64-actions-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(15, 18, 28, 0.7);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 10;
+}
+
+.b64-action-btn {
+  white-space: nowrap;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.tool-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.15s ease;
+}
+
+.tool-icon-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Cyber Dropzone */
+.cyber-dropzone {
+  flex: 1;
+  margin: 1.5rem;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.2s ease;
+  min-height: 280px;
+}
+
+.cyber-dropzone:hover, .cyber-dropzone.drag-over {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.dropzone-icon {
+  color: #818cf8;
+  margin-bottom: 1rem;
+}
+
+.dropzone-text {
+  color: #f1f5f9;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.dropzone-sub {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+}
+
+/* Media Preview in Base64 */
+.b64-preview-box {
+  margin: 1rem 1.5rem 0.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.b64-preview-title {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin-bottom: 0.5rem;
+}
+
+.b64-preview-img-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 220px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: repeating-conic-gradient(#1e293b 0% 25%, #0f172a 0% 50%) 50% / 20px 20px;
+  padding: 8px;
+}
+
+.b64-preview-img-wrap img {
+  max-height: 200px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.b64-format-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 0.5rem 1.5rem 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .base64-workspace {
+    flex-direction: column;
+  }
+  .b64-actions-col {
+    flex-direction: row;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px;
+  }
+  .b64-action-btn {
+    min-width: auto;
+    flex: 1;
+  }
+}
+
+/* ==========================================================================
    Print Optimization (@media print)
    Clean, book-quality output for physical printing and PDF export
    ========================================================================== */
@@ -6805,6 +7073,9 @@ h1, h2, h3, .glitch-title { text-wrap: balance; }
 
   /* Hide navigation, heroes, background effects, toolbar, editor */
   #navbar,
+  .section-tool-tabs,
+  .toolbox-tabs-bar,
+  .base64-app-window,
   .skip-link,
   .page-hero,
   .markdown-toolbar,

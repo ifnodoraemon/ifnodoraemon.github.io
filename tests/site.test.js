@@ -297,17 +297,33 @@ test('all pages include valid RSS alternate links and feeds are generated correc
   }
 });
 
-test('tools page includes Markdown Studio components and WebApplication / FAQPage schema', () => {
+test('tools page includes Markdown Studio, Base64 Codec, and WebApplication / FAQPage schema', () => {
   const zhToolsHtml = fs.readFileSync(path.join(ROOT, 'dist', 'tools', 'index.html'), 'utf-8');
   const enToolsHtml = fs.readFileSync(path.join(ROOT, 'dist', 'en', 'tools', 'index.html'), 'utf-8');
 
+  // Tabs
+  assert.match(zhToolsHtml, /id="tab-nav-markdown"/);
+  assert.match(zhToolsHtml, /id="tab-nav-base64"/);
+
+  // Markdown Studio
   assert.match(zhToolsHtml, /id="markdown-editor-app"/);
   assert.match(zhToolsHtml, /id="markdown-input"/);
   assert.match(zhToolsHtml, /id="markdown-preview"/);
+
+  // Base64 Studio
+  assert.match(zhToolsHtml, /id="base64-tool-app"/);
+  assert.match(zhToolsHtml, /id="b64-input"/);
+  assert.match(zhToolsHtml, /id="b64-output"/);
+  assert.match(zhToolsHtml, /id="b64-btn-encode"/);
+  assert.match(zhToolsHtml, /id="b64-btn-decode"/);
+
+  // Schema
   assert.match(zhToolsHtml, /"@type":\s*"WebApplication"/);
   assert.match(zhToolsHtml, /"@type":\s*"FAQPage"/);
 
+  // English page
   assert.match(enToolsHtml, /id="markdown-editor-app"/);
+  assert.match(enToolsHtml, /id="base64-tool-app"/);
   assert.match(enToolsHtml, /"@type":\s*"WebApplication"/);
   assert.match(enToolsHtml, /"@type":\s*"FAQPage"/);
 });

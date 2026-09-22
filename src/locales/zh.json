@@ -18,8 +18,8 @@
       "desc": "关于此站点的缘起、目标以及背后运行的技术细节。"
     },
     "tools": {
-      "title": "在线 Markdown 渲染与多格式导出器 | 大雄话AI 工具箱",
-      "desc": "轻量级高颜值在线 Markdown 编辑与实时渲染工具，支持 KaTeX 数学公式、代码语法高亮、一键导出微信/知乎富文本、独立自包含 HTML、PDF 打印及纯文本排版。"
+      "title": "开发者效率工具箱 — 在线 Markdown 渲染与 Base64 互转 | 大雄话AI",
+      "desc": "轻量级高颜值开发者效率工具箱，提供在线 Markdown 渲染与全格式导出（公众号/知乎富文本、自包含 HTML、PDF），以及支持 UTF-8 Unicode、文件与图片的 Base64 极速编解码互转工具。"
     }
   },
   "models": {
@@ -908,7 +908,40 @@
       {
         "q": "如何将渲染后的文章快速一键多平台发布（如微信公众号、知乎、掘金、CSDN）？",
         "a": "我们为开发者提供了两种极致高效的双轨发布方案：一是直接在页面中点击「复制公众号/知乎富文本」，即可在微信公众号后台或知乎富文本编辑器中直接 Ctrl+V 粘贴发布；二是对于多平台矩阵运营，我们提供了博客自带的命令行工具 <code>npm run export:domestic</code> 配合浏览器插件（如 WechatSync），可自动将内链转换为绝对路径并一键批量推送至掘金、知乎与 CSDN。更多工程化多平台发稿设计理念可参考我们的架构专栏文章：<a href=\"/articles/agent-runtime-practices/\">《生产级 Agent 运行时全景解析》</a>。"
+      },
+      {
+        "q": "为什么原生 JavaScript 的 btoa() 和 atob() 处理中文时会报错？本工具如何解决？",
+        "a": "浏览器原生的 <code>btoa()</code> 仅支持 Latin1 (ASCII 0~255) 字符集。当中文字符或 Emoji 传入时，其 Unicode 编码超过 255，会直接抛出 <code>InvalidCharacterError</code> 异常。本工具基于现代标准的 <code>TextEncoder</code> 与 <code>TextDecoder</code> API，先将任意多语言 Unicode 字符串精准转化为标准的 UTF-8 字节数组（TypedArray），再进行 Base64 编解码，确保中文、日文、数学符号与 Emoji 的 100% 零误差无损互转。"
+      },
+      {
+        "q": "标准 Base64 与 URL-Safe Base64 (Base64URL) 有何差异？在工程中何时选用？",
+        "a": "根据 RFC 4648 规范，标准 Base64 包含字符 <code>+</code> 与 <code>/</code>，并在末尾可能使用 <code>=</code> 补齐。在 URL 路由、Query 参数或 JWT (JSON Web Token) 中传输时，<code>+</code> 常被服务端解析器误当作空格处理，<code>/</code> 会破坏路径层级，<code>=</code> 会干扰键值对分割。URL-Safe Base64 (Base64URL) 规范将 <code>+</code> 替换为 <code>-</code>，将 <code>/</code> 替换为 <code>_</code>，并省略 <code>=</code> 填充。本工具支持一键切换 Base64URL 规范，精准适配微服务与鉴权 Token 开发调试。"
       }
-    ]
+    ],
+    "tabMarkdown": "在线 Markdown 渲染 (Markdown Studio)",
+    "tabBase64": "Base64 编解码互转 (Base64 Codec)",
+    "base64Title": "Base64 编解码与多格式互转",
+    "base64Desc": "支持纯文本 UTF-8 无损编解码、RFC 4648 URL-Safe (Base64URL) 规范以及图片/任意二进制文件与 Base64 互相转换。",
+    "base64TerminalTitle": "Execute: base64_codec.sh --mode=bidirectional --charset=utf-8",
+    "base64ModeText": "文本编解码",
+    "base64ModeFile": "图片/文件转 Base64",
+    "base64ModeDataUrl": "Base64 还原图片/文件",
+    "base64BtnEncode": "编码 ➡️",
+    "base64BtnDecode": "⬅️ 解码",
+    "base64BtnSwap": "⇄ 交换输入与输出",
+    "base64InputLabel": "输入源数据",
+    "base64OutputLabel": "转换输出结果",
+    "base64UrlSafeLabel": "URL-Safe 规范 (Base64URL)",
+    "base64InputPlaceholder": "在此输入待编码的 UTF-8 文本，或待解码的 Base64 字符串...",
+    "base64OutputPlaceholder": "转换结果将实时呈现于此...",
+    "base64DropzoneText": "拖拽文件或图片至此，或点击选择本地文件",
+    "base64CopyDataUrl": "复制 Data URL",
+    "base64CopyImgTag": "复制 <img>",
+    "base64CopyCssBg": "复制 CSS 背景",
+    "base64CopyMdImg": "复制 Markdown 图片",
+    "base64DownloadFile": "下载还原文件",
+    "base64SampleText": "文本示例",
+    "base64SampleJson": "JSON 示例",
+    "base64SampleSvg": "SVG 示例"
   }
 }

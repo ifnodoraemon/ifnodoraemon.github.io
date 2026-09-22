@@ -18,8 +18,8 @@
       "desc": "The origin, goals, and technical details behind this site."
     },
     "tools": {
-      "title": "Online Markdown Studio & Multi-Format Exporter | Nobita Talks AI Tools",
-      "desc": "Modern lightweight online Markdown editor & live renderer supporting KaTeX math typography, code syntax highlighting, rich-text export for WeChat/Zhihu, standalone HTML, and print-ready PDF."
+      "title": "Developer Toolbox — Online Markdown Studio & Base64 Converter | Nobita Talks AI",
+      "desc": "Lightweight, privacy-first developer productivity toolbox featuring an online Markdown studio (with WeChat/Zhihu rich-text, HTML, and PDF export) and a high-performance UTF-8 Base64 encoder/decoder for text, images, and files."
     }
   },
   "models": {
@@ -908,7 +908,40 @@
       {
         "q": "How can I syndicate rendered articles across domestic developer communities (WeChat, Zhihu, Juejin, CSDN)?",
         "a": "We recommend a dual-track workflow: for direct single-article publishing, use 'Copy Rich Text' and paste straight into the target platform editor; for multi-platform distribution pipelines, integrate with our repository CLI <code>npm run export:domestic</code> and browser extensions like WechatSync. Learn more about automated content pipelines in our deep dive: <a href=\"/en/articles/agent-runtime-practices/\">Production Agent Runtime Architecture</a>."
+      },
+      {
+        "q": "Why does native btoa() and atob() fail with non-ASCII and UTF-8 characters, and how does this tool fix it?",
+        "a": "Browser-native <code>btoa()</code> expects Latin1 binary strings (code points 0~255). Any character outside this range (like CJK characters or emojis) throws an <code>InvalidCharacterError</code>. Our engine utilizes the standard <code>TextEncoder</code> and <code>TextDecoder</code> APIs to convert Unicode strings into raw UTF-8 byte arrays before serializing, guaranteeing 100% lossless conversion across all human languages, math symbols, and emojis."
+      },
+      {
+        "q": "What is the difference between standard Base64 and URL-Safe Base64 (Base64URL), and when should you use it?",
+        "a": "Under RFC 4648, standard Base64 incorporates <code>+</code> and <code>/</code>, with optional <code>=</code> padding. When transmitted in URLs, query strings, headers, or JWTs, <code>+</code> is often decoded as a space, <code>/</code> causes route parsing conflicts, and <code>=</code> breaks query key-value separators. URL-Safe Base64 replaces <code>+</code> with <code>-</code>, <code>/</code> with <code>_</code>, and omits trailing <code>=</code> padding. This tool provides instant toggling for Base64URL to support seamless token and microservice debugging."
       }
-    ]
+    ],
+    "tabMarkdown": "Markdown Studio",
+    "tabBase64": "Base64 Codec & Converter",
+    "base64Title": "Base64 Encoder, Decoder & File Converter",
+    "base64Desc": "Lossless UTF-8 Unicode text encoding/decoding, RFC 4648 URL-Safe (Base64URL) support, and bidirectional image/binary file conversion.",
+    "base64TerminalTitle": "Execute: base64_codec.sh --mode=bidirectional --charset=utf-8",
+    "base64ModeText": "Text Codec",
+    "base64ModeFile": "File/Image to Base64",
+    "base64ModeDataUrl": "Base64 to File/Image",
+    "base64BtnEncode": "Encode ➡️",
+    "base64BtnDecode": "⬅️ Decode",
+    "base64BtnSwap": "⇄ Swap Input & Output",
+    "base64InputLabel": "Source Input",
+    "base64OutputLabel": "Converted Output",
+    "base64UrlSafeLabel": "URL-Safe (Base64URL)",
+    "base64InputPlaceholder": "Enter UTF-8 text to encode, or Base64 string to decode...",
+    "base64OutputPlaceholder": "Conversion result will appear here in real time...",
+    "base64DropzoneText": "Drag & drop file or image here, or click to browse",
+    "base64CopyDataUrl": "Copy Data URL",
+    "base64CopyImgTag": "Copy <img>",
+    "base64CopyCssBg": "Copy CSS",
+    "base64CopyMdImg": "Copy Markdown",
+    "base64DownloadFile": "Download File",
+    "base64SampleText": "Sample Text",
+    "base64SampleJson": "Sample JSON",
+    "base64SampleSvg": "Sample SVG"
   }
 }
