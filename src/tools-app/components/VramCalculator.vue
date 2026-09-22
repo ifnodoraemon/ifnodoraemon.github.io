@@ -6,7 +6,7 @@
         <span class="dot minimize"></span>
         <span class="dot expand"></span>
       </div>
-      <div class="terminal-title">Runtime: vram_estimator.sh --arch=dense_and_moe --target=enterprise_gpus</div>
+      <div class="terminal-title">Runtime: vram_estimator.sh --source={{ modelSource }} --target=enterprise_gpus</div>
       <div class="terminal-actions">
         <span class="status-indicator live"><span class="status-pulse"></span>VUE REACTIVE SANDBOX</span>
       </div>
@@ -15,20 +15,149 @@
     <div class="tool-app-body vram-layout">
       <!-- Left Config Controls -->
       <div class="vram-config-panel">
+        <!-- Model Selection Source Mode Tabs -->
         <div class="form-group">
-          <label class="field-label">{{ isEn ? 'Base Model Architecture:' : '基座大模型预设：' }}</label>
-          <select v-model="selectedModelKey" class="cyber-select">
+          <label class="field-label">{{ isEn ? 'Model Source & Selection Mode:' : '模型来源与选择方式：' }}</label>
+          <div class="source-mode-tabs">
+            <button
+              type="button"
+              class="source-tab-btn"
+              :class="{ active: modelSource === 'preset' }"
+              @click="modelSource = 'preset'"
+            >
+              {{ isEn ? 'Featured Presets' : '热门主流预设' }}
+            </button>
+            <button
+              type="button"
+              class="source-tab-btn"
+              :class="{ active: modelSource === 'hf' }"
+              @click="modelSource = 'hf'"
+            >
+              Hugging Face
+            </button>
+            <button
+              type="button"
+              class="source-tab-btn"
+              :class="{ active: modelSource === 'ms' }"
+              @click="modelSource = 'ms'"
+            >
+              ModelScope 魔搭
+            </button>
+            <button
+              type="button"
+              class="source-tab-btn"
+              :class="{ active: modelSource === 'custom' }"
+              @click="modelSource = 'custom'"
+            >
+              {{ isEn ? 'Custom' : '手动自定义' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. Featured Presets Mode -->
+        <div v-if="modelSource === 'preset'" class="form-group">
+          <label class="field-label">{{ isEn ? 'Select Preset Model:' : '选择预设大模型：' }}</label>
+          <select v-model="selectedPresetKey" class="cyber-select" @change="applyPreset">
             <option v-for="(m, key) in PRESET_MODELS" :key="key" :value="key">
               {{ m.name }}
             </option>
           </select>
         </div>
 
-        <div v-if="selectedModelKey === 'custom'" class="form-group">
-          <label class="field-label">{{ isEn ? 'Custom Parameters (Billion):' : '自定义参数量 (Billion B)：' }}</label>
-          <input v-model.number="customParamsB" type="number" min="0.5" max="10000" step="0.5" class="cyber-input">
+        <!-- 2. Hugging Face / ModelScope Online Sync Mode -->
+        <div v-else-if="modelSource === 'hf' || modelSource === 'ms'" class="form-group">
+          <label class="field-label">
+            {{ modelSource === 'hf' ? 'Hugging Face Model ID:' : 'ModelScope (魔搭社区) Model ID:' }}
+          </label>
+          <div class="input-btn-row">
+            <input
+              v-model="onlineModelId"
+              type="text"
+              class="cyber-input"
+              :placeholder="modelSource === 'hf' ? 'e.g. Qwen/Qwen2.5-7B-Instruct or deepseek-ai/DeepSeek-V3' : 'e.g. qwen/Qwen2.5-7B-Instruct or ZhipuAI/glm-4-9b-chat'"
+              @keyup.enter="syncOnlineModel"
+            >
+            <button
+              type="button"
+              class="tool-btn btn-highlight sync-btn"
+              :disabled="isSyncing"
+              @click="syncOnlineModel"
+            >
+              {{ isSyncing ? (isEn ? 'Syncing...' : '同步中...') : (isEn ? '🔄 Sync Config' : '🔄 同步配置') }}
+            </button>
+          </div>
+
+          <!-- Quick Recommendation Chips -->
+          <div class="quick-chips-row">
+            <span class="chips-label">{{ isEn ? 'Quick Pick:' : '快速点选：' }}</span>
+            <button
+              v-for="chip in quickModelChips"
+              :key="chip"
+              type="button"
+              class="quick-chip-btn"
+              @click="selectQuickChip(chip)"
+            >
+              {{ chip }}
+            </button>
+          </div>
+
+          <!-- Sync Error Banner -->
+          <div v-if="syncError" class="sync-error-banner">
+            ⚠️ {{ syncError }}
+          </div>
+
+          <!-- Sync Success Info Card -->
+          <div v-if="syncedModelMeta" class="synced-meta-card">
+            <div class="synced-meta-header">
+              <span class="meta-tag">SYNCED SUCCESS</span>
+              <strong class="meta-title">{{ syncedModelMeta.id }}</strong>
+            </div>
+            <div class="synced-meta-grid">
+              <div class="meta-item">
+                <span class="meta-lbl">{{ isEn ? 'Type' : '架构类型' }}:</span>
+                <span class="meta-val">{{ syncedModelMeta.type }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-lbl">{{ isEn ? 'Params' : '自动推导参数' }}:</span>
+                <span class="meta-val text-accent">{{ syncedModelMeta.paramsB.toFixed(2) }}B</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-lbl">{{ isEn ? 'Layers' : '隐藏层数' }}:</span>
+                <span class="meta-val">{{ syncedModelMeta.layers }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-lbl">{{ isEn ? 'Hidden / Heads' : '隐藏维度/头数' }}:</span>
+                <span class="meta-val">{{ syncedModelMeta.hiddenSize }} / Q{{ syncedModelMeta.qHeads }}:KV{{ syncedModelMeta.kvHeads }}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
+        <!-- 3. Manual Custom Mode -->
+        <div v-else class="custom-fields-grid">
+          <div class="form-group">
+            <label class="field-label">{{ isEn ? 'Parameter Count (Billion B):' : '模型总参数量 (Billion B)：' }}</label>
+            <input v-model.number="modelParamsB" type="number" min="0.1" max="10000" step="0.5" class="cyber-input">
+          </div>
+          <div class="form-group">
+            <label class="field-label">{{ isEn ? 'Layers (Hidden Layers):' : '层数 (Hidden Layers)：' }}</label>
+            <input v-model.number="modelLayers" type="number" min="1" max="256" step="1" class="cyber-input">
+          </div>
+          <div class="form-group">
+            <label class="field-label">{{ isEn ? 'Hidden Dimension (d_model):' : '隐藏维度 (Hidden Size)：' }}</label>
+            <input v-model.number="modelHiddenSize" type="number" min="512" max="32768" step="128" class="cyber-input">
+          </div>
+          <div class="form-group">
+            <label class="field-label">{{ isEn ? 'GQA Ratio (KV Heads / Q Heads):' : '注意力头数比例 (KV / Q)：' }}</label>
+            <div class="gqa-inputs">
+              <input v-model.number="modelQHeads" type="number" min="1" max="256" class="cyber-input" placeholder="Q Heads">
+              <span class="gqa-sep">:</span>
+              <input v-model.number="modelKvHeads" type="number" min="1" max="256" class="cyber-input" placeholder="KV Heads">
+            </div>
+          </div>
+        </div>
+
+        <!-- Precision Grid -->
         <div class="grid-2">
           <div class="form-group">
             <label class="field-label">{{ isEn ? 'Weight Quantization:' : '权重量化精度：' }}</label>
@@ -48,6 +177,7 @@
           </div>
         </div>
 
+        <!-- Sliders -->
         <div class="slider-group">
           <div class="slider-header">
             <label class="field-label">{{ isEn ? 'Context Window Length:' : '上下文窗口长度 (Tokens)：' }}</label>
@@ -65,9 +195,9 @@
         </div>
 
         <!-- GPU Filter Search -->
-        <div class="form-group" style="margin-top: 0.5rem;">
-          <label class="field-label">{{ isEn ? 'Filter GPU Hardware List:' : '快速过滤显卡/加速卡型号：' }}</label>
-          <input v-model="gpuSearchQuery" type="text" :placeholder="isEn ? 'Search RTX, H100, 昇腾, B200...' : '搜索 4090, 5090, 昇腾, H200, B200...'" class="cyber-input">
+        <div class="form-group">
+          <label class="field-label">{{ isEn ? 'Filter GPU Hardware Models:' : '快速过滤计算卡型号：' }}</label>
+          <input v-model="gpuSearchQuery" type="text" :placeholder="isEn ? 'Search RTX 5090, 昇腾, H200, B200...' : '搜索 4090, 5090, 昇腾, H200, B200, L40S...'" class="cyber-input">
         </div>
       </div>
 
@@ -134,12 +264,32 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
   lang: { type: String, default: 'zh' },
   isEn: { type: Boolean, default: false }
 });
+
+const modelSource = ref('preset'); // 'preset' | 'hf' | 'ms' | 'custom'
+const selectedPresetKey = ref('llama-3.3-70b');
+const onlineModelId = ref('Qwen/Qwen2.5-7B-Instruct');
+const isSyncing = ref(false);
+const syncError = ref('');
+const syncedModelMeta = ref(null);
+
+// Active model parameters
+const modelParamsB = ref(70.6);
+const modelLayers = ref(80);
+const modelHiddenSize = ref(8192);
+const modelQHeads = ref(64);
+const modelKvHeads = ref(8);
+
+const weightPrecBytes = ref(2.0); // FP16: 2, INT8: 1, INT4: 0.55
+const kvPrecBytes = ref(2.0); // FP16: 2, FP8: 1
+const ctxLength = ref(8192);
+const concurrency = ref(4);
+const gpuSearchQuery = ref('');
 
 const PRESET_MODELS = {
   'deepseek-v4-pro': {
@@ -205,17 +355,53 @@ const PRESET_MODELS = {
     kvHeads: 4,
     defaultCtx: 8192
   },
-  'custom': {
-    name: 'Custom Model (自定义参数量)',
-    paramsB: 30,
-    layers: 48,
-    hiddenSize: 5120,
-    qHeads: 40,
-    kvHeads: 8,
+  'glm-4-9b': {
+    name: 'GLM-4 9B (Chat/Dense)',
+    paramsB: 9.4,
+    layers: 40,
+    hiddenSize: 4096,
+    qHeads: 32,
+    kvHeads: 2,
     defaultCtx: 8192
   }
 };
 
+const quickModelChips = computed(() => {
+  if (modelSource.value === 'ms') {
+    return [
+      'qwen/Qwen2.5-7B-Instruct',
+      'qwen/Qwen2.5-72B-Instruct',
+      'deepseek-ai/DeepSeek-V3',
+      'ZhipuAI/glm-4-9b-chat',
+      'baichuan-inc/Baichuan2-13B-Chat'
+    ];
+  }
+  return [
+    'Qwen/Qwen2.5-7B-Instruct',
+    'Qwen/Qwen2.5-72B-Instruct',
+    'deepseek-ai/DeepSeek-V3',
+    'google/gemma-2-9b',
+    'mistralai/Mistral-7B-v0.3'
+  ];
+});
+
+function selectQuickChip(chip) {
+  onlineModelId.value = chip;
+  syncOnlineModel();
+}
+
+function applyPreset() {
+  const p = PRESET_MODELS[selectedPresetKey.value];
+  if (!p) return;
+  modelParamsB.value = p.paramsB;
+  modelLayers.value = p.layers;
+  modelHiddenSize.value = p.hiddenSize;
+  modelQHeads.value = p.qHeads;
+  modelKvHeads.value = p.kvHeads;
+  if (p.defaultCtx) ctxLength.value = p.defaultCtx;
+}
+
+// 10 GPU Accelerator Models
 const ALL_GPUS = [
   { id: 'rtx-4090', name: 'NVIDIA RTX 4090', category: '消费级旗舰', vramGb: 24, memType: 'GDDR6X', bandwidth: '1.0 TB/s', bus: 'PCIe 4.0' },
   { id: 'rtx-5090', name: 'NVIDIA RTX 5090', category: 'Blackwell 消费旗舰', vramGb: 32, memType: 'GDDR7', bandwidth: '1.79 TB/s', bus: 'PCIe 5.0' },
@@ -229,45 +415,119 @@ const ALL_GPUS = [
   { id: 'b200-192', name: 'NVIDIA B200 SXM', category: 'Blackwell 顶配', vramGb: 192, memType: 'HBM3e', bandwidth: '8.0 TB/s', bus: 'NVLink 5' }
 ];
 
-const selectedModelKey = ref('llama-3.3-70b');
-const customParamsB = ref(30);
-const weightPrecBytes = ref(2.0); // FP16: 2, INT8: 1, INT4: 0.55
-const kvPrecBytes = ref(2.0); // FP16: 2, FP8: 1
-const ctxLength = ref(8192);
-const concurrency = ref(4);
-const gpuSearchQuery = ref('');
+// Asynchronous Online Config Sync from Hugging Face or ModelScope
+async function syncOnlineModel() {
+  const modelId = onlineModelId.value.trim();
+  if (!modelId) return;
 
-// Auto update default context on model select
-watch(selectedModelKey, (newVal) => {
-  const m = PRESET_MODELS[newVal];
-  if (m && m.defaultCtx) {
-    ctxLength.value = m.defaultCtx;
+  isSyncing.value = true;
+  syncError.value = '';
+  syncedModelMeta.value = null;
+
+  try {
+    let configData = null;
+    let exactParams = null;
+
+    if (modelSource.value === 'hf') {
+      // 1. Try Hugging Face API for exact safetensors parameter count
+      try {
+        const apiRes = await fetch(`https://huggingface.co/api/models/${modelId}`);
+        if (apiRes.ok) {
+          const apiJson = await apiRes.json();
+          const p = apiJson.safetensors?.parameters;
+          if (p) {
+            exactParams = p.BF16 || p.F16 || p.F8_E4M3 || p.F32 || Object.values(p)[0];
+          }
+        }
+      } catch (e) {
+        // Fallback to config calculation
+      }
+
+      // 2. Fetch raw config.json
+      const configRes = await fetch(`https://huggingface.co/${modelId}/raw/main/config.json`);
+      if (!configRes.ok) {
+        if (configRes.status === 401) {
+          throw new Error(props.isEn ? 'This model is gated on Hugging Face (requires login access).' : '该模型在 Hugging Face 上属于闭源/门禁模型 (Gated Repo)，需要登录凭据。');
+        }
+        throw new Error(props.isEn ? `Failed to fetch config.json (HTTP ${configRes.status})` : `无法获取 config.json (HTTP ${configRes.status})，请检查 Model ID 是否正确。`);
+      }
+      configData = await configRes.json();
+
+    } else {
+      // ModelScope
+      const msUrl = `https://www.modelscope.cn/models/${modelId}/resolve/master/config.json`;
+      const configRes = await fetch(msUrl);
+      if (!configRes.ok) {
+        throw new Error(props.isEn ? `Failed to fetch ModelScope config (HTTP ${configRes.status})` : `无法获取魔搭社区 config.json (HTTP ${configRes.status})，请检查模型标识。`);
+      }
+      configData = await configRes.json();
+    }
+
+    // Auto-parse Model Architecture
+    const hiddenSize = configData.hidden_size || configData.d_model || 4096;
+    const layers = configData.num_hidden_layers || configData.n_layer || configData.num_layers || 32;
+    const qHeads = configData.num_attention_heads || configData.n_head || 32;
+    const kvHeads = configData.num_key_value_heads || configData.num_kv_heads || configData.n_head_kv || qHeads;
+    const intermediateSize = configData.intermediate_size || (hiddenSize * 4);
+    const vocabSize = configData.vocab_size || 32000;
+    const maxCtx = configData.max_position_embeddings || configData.max_seq_len || 8192;
+    const modelType = configData.model_type || configData.architectures?.[0] || 'transformer';
+
+    // Parameter Calculation
+    let calculatedParamsB = 0;
+    if (exactParams && typeof exactParams === 'number') {
+      calculatedParamsB = exactParams / 1e9;
+    } else {
+      // Compute from mathematical transformer formula
+      const isMoe = !!(configData.n_routed_experts || configData.num_local_experts);
+      const experts = configData.n_routed_experts || configData.num_local_experts || 1;
+      const moeIntermediate = configData.moe_intermediate_size || intermediateSize;
+
+      const selfAttnParams = hiddenSize * (hiddenSize * (1 + 2 * (kvHeads / qHeads)));
+      const mlpParams = isMoe
+        ? (experts * 3 * hiddenSize * moeIntermediate)
+        : (3 * hiddenSize * intermediateSize);
+
+      const perLayer = selfAttnParams + mlpParams + (4 * hiddenSize); // layer norms
+      const totalEstimated = (layers * perLayer) + (2 * vocabSize * hiddenSize);
+      calculatedParamsB = totalEstimated / 1e9;
+    }
+
+    // Update active state
+    modelParamsB.value = Math.max(0.1, parseFloat(calculatedParamsB.toFixed(2)));
+    modelLayers.value = layers;
+    modelHiddenSize.value = hiddenSize;
+    modelQHeads.value = qHeads;
+    modelKvHeads.value = kvHeads;
+    ctxLength.value = Math.min(131072, Math.max(2048, maxCtx));
+
+    syncedModelMeta.value = {
+      id: modelId,
+      type: modelType,
+      paramsB: calculatedParamsB,
+      layers,
+      hiddenSize,
+      qHeads,
+      kvHeads,
+      maxCtx
+    };
+
+  } catch (err) {
+    syncError.value = err.message || String(err);
+  } finally {
+    isSyncing.value = false;
   }
-});
-
-const currentModel = computed(() => {
-  return PRESET_MODELS[selectedModelKey.value] || PRESET_MODELS['llama-3.3-70b'];
-});
-
-const actualParamsB = computed(() => {
-  if (selectedModelKey.value === 'custom') {
-    return customParamsB.value || 30;
-  }
-  return currentModel.value.paramsB;
-});
+}
 
 // Formula 1: Model Weights (GiB)
 const weightsGb = computed(() => {
-  return actualParamsB.value * weightPrecBytes.value;
+  return modelParamsB.value * weightPrecBytes.value;
 });
 
-// Formula 2: KV Cache per token: 2 * layers * hidden * (kvHeads / qHeads) * kvBytes
+// Formula 2: KV Cache per token
 const kvGb = computed(() => {
-  const m = currentModel.value;
-  const layers = m.layers;
-  const hidden = m.hiddenSize;
-  const gqaRatio = (m.kvHeads || 8) / (m.qHeads || 64);
-  const kvBytesPerToken = 2 * layers * hidden * gqaRatio * kvPrecBytes.value;
+  const gqaRatio = modelKvHeads.value / modelQHeads.value;
+  const kvBytesPerToken = 2 * modelLayers.value * modelHiddenSize.value * gqaRatio * kvPrecBytes.value;
   const totalBytes = kvBytesPerToken * ctxLength.value * concurrency.value;
   return totalBytes / (1024 * 1024 * 1024);
 });
@@ -283,7 +543,7 @@ const recommendationText = computed(() => {
     if (v <= 22) return 'Optimal Fit: 1x RTX 4090 24GB or RTX 5090 32GB can run single-card full speed.';
     if (v <= 44) return 'Optimal Fit: 2x RTX 4090 24GB (TP=2) or 1x L40S 48GB.';
     if (v <= 75) return 'Optimal Fit: 1x NVIDIA A100 / H100 80GB SXM.';
-    if (v <= 135) return 'Optimal Fit: 1x NVIDIA H200 141GB or 2x 80GB GPUs (TP=2).';
+    if (v <= 135) return 'Optimal Fit: 1x NVIDIA H200 141GB or 2x 80GB GPUs (TP=2) / Ascend 910C.';
     if (v <= 185) return 'Optimal Fit: 1x NVIDIA B200 192GB or 4x 80GB GPUs (TP=4).';
     return `Enterprise Topology: Multi-GPU Cluster needed (${Math.ceil(v / 75)}x 80GB or ${Math.ceil(v / 180)}x B200 GPUs).`;
   } else {
@@ -358,7 +618,159 @@ const filteredGpus = computed(() => {
 .vram-config-panel {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.2rem;
+}
+
+.source-mode-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 7px;
+  padding: 3px;
+  gap: 3px;
+  overflow-x: auto;
+}
+
+.source-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 6px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.source-tab-btn.active {
+  background: #6366f1;
+  color: #ffffff;
+}
+
+.input-btn-row {
+  display: flex;
+  gap: 8px;
+}
+
+.sync-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 8px 14px;
+}
+
+.quick-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.chips-label {
+  font-size: 0.72rem;
+  color: var(--text-muted, #94a3b8);
+}
+
+.quick-chip-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: #c7d2fe;
+  font-size: 0.72rem;
+  font-family: var(--font-mono, monospace);
+  padding: 2px 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.quick-chip-btn:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #818cf8;
+}
+
+.sync-error-banner {
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 6px;
+  color: #fca5a5;
+  font-size: 0.8rem;
+  font-family: var(--font-mono, monospace);
+  margin-top: 8px;
+}
+
+.synced-meta-card {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.synced-meta-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meta-tag {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+}
+
+.meta-title {
+  font-size: 0.82rem;
+  color: #f1f5f9;
+}
+
+.synced-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  font-size: 0.75rem;
+  font-family: var(--font-mono, monospace);
+}
+
+.meta-lbl {
+  color: var(--text-muted, #94a3b8);
+  margin-right: 4px;
+}
+
+.meta-val {
+  color: #e2e8f0;
+}
+
+.text-accent {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.custom-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.gqa-inputs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gqa-sep {
+  color: var(--text-muted, #94a3b8);
+  font-weight: 700;
 }
 
 .form-group {
