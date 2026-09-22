@@ -2983,6 +2983,21 @@ mark {
   line-height: 1.7;
 }
 
+.page-hero.tools-hero {
+  padding: 2.2rem 0 1.2rem;
+}
+
+.page-hero.tools-hero h1 {
+  font-size: clamp(1.75rem, 3.5vw, 2.35rem);
+  margin-bottom: 0.4rem;
+}
+
+.page-hero.tools-hero .page-hero-desc {
+  max-width: 750px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
 /* Back link */
 .back-link {
   display: inline-flex;

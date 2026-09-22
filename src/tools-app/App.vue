@@ -255,6 +255,18 @@ function selectTab(tabId, updateHash = true) {
   }
   nextTick(() => {
     centerActiveTab(tabId);
+    if (typeof window !== 'undefined') {
+      const toolboxSection = document.getElementById('toolbox-section');
+      if (toolboxSection) {
+        const rect = toolboxSection.getBoundingClientRect();
+        if (rect.top < 0 || rect.top > 250) {
+          window.scrollTo({
+            top: window.scrollY + rect.top - 70,
+            behavior: 'smooth'
+          });
+        }
+      }
+    }
   });
 }
 
