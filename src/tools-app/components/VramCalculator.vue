@@ -52,7 +52,7 @@
                 v-model="modelSearchQuery"
                 type="text"
                 class="cyber-input search-text-input"
-                :placeholder="modelSource === 'hf' ? (isEn ? 'Search HF models (e.g. Qwen2.5, DeepSeek-V3, Llama-3.3)...' : '搜索 Hugging Face 模型 (如 Qwen2.5, DeepSeek, Llama-3.3)...') : (isEn ? 'Search ModelScope models (e.g. qwen, glm-4, deepseek)...' : '搜索魔搭社区模型 (如 qwen, deepseek, glm-4, baichuan)...')"
+                :placeholder="modelSource === 'hf' ? (isEn ? 'Search HF models (e.g. GLM-5.3, Qwen2.5, DeepSeek-V3)...' : '搜索 Hugging Face 模型 (如 GLM-5.3, Qwen2.5, DeepSeek)...') : (isEn ? 'Search ModelScope models (e.g. GLM-5.3, qwen, deepseek)...' : '搜索魔搭社区模型 (如 GLM-5.3, qwen, deepseek, glm-4)...')"
                 @focus="onSearchFocus"
                 @input="onSearchInput"
                 @keydown.enter="triggerManualSync"
@@ -85,7 +85,7 @@
             >
               <div class="dropdown-header">
                 <span class="dropdown-title">
-                  {{ modelSource === 'hf' ? (isEn ? "Hugging Face Results / Popular" : "Hugging Face 检索 / 推荐模型") : (isEn ? "ModelScope Results / Popular" : "魔搭社区 检索 / 推荐模型") }}
+                  {{ modelSource === 'hf' ? (isEn ? "Hugging Face Live Search / Recommended" : "Hugging Face 检索 / 推荐模型") : (isEn ? "ModelScope Live Search / Recommended" : "魔搭社区 检索 / 推荐模型") }}
                 </span>
                 <span class="dropdown-count">{{ filteredModelResults.length }} {{ isEn ? "models" : "个模型" }}</span>
               </div>
@@ -107,7 +107,7 @@
                   <div class="item-badges">
                     <span v-if="item.params" class="badge params-badge">{{ item.params }}</span>
                     <span v-if="item.downloads" class="badge downloads-badge">↓ {{ item.downloads }}</span>
-                    <span v-if="item.likes" class="badge likes-badge">♥ {{ item.likes }}</span>
+                    <span v-if="item.likes || item.stars" class="badge likes-badge">♥ {{ item.likes || item.stars }}</span>
                   </div>
                 </li>
               </ul>
@@ -134,10 +134,10 @@
             ⚠️ {{ syncError }}
           </div>
 
-          <!-- Synced Model Meta Card (Automatically Derived from config.json) -->
+          <!-- Synced Model Meta Card (Automatically Derived from config.json & Hub APIs) -->
           <div v-if="syncedModelMeta" class="synced-meta-card">
             <div class="synced-meta-header">
-              <span class="meta-tag">AUTOMATICALLY DERIVED</span>
+              <span class="meta-tag">AUTOMATICALLY DERIVED FROM HUB</span>
               <strong class="meta-title">{{ syncedModelMeta.id }}</strong>
               <span class="meta-source-badge">{{ syncedModelMeta.source === 'ms' ? 'ModelScope' : 'Hugging Face' }}</span>
             </div>
@@ -148,7 +148,7 @@
               </div>
               <div class="meta-item">
                 <span class="meta-lbl">{{ isEn ? "Params" : "模型参数" }}:</span>
-                <span class="meta-val text-accent">{{ syncedModelMeta.paramsB.toFixed(2) }}B</span>
+                <span class="meta-val text-accent">{{ syncedModelMeta.paramsDisplay }}</span>
               </div>
               <div class="meta-item">
                 <span class="meta-lbl">{{ isEn ? "Hidden Layers" : "隐藏层数" }}:</span>
@@ -158,13 +158,30 @@
                 <span class="meta-lbl">{{ isEn ? "Hidden Dim" : "隐藏维度" }}:</span>
                 <span class="meta-val">{{ syncedModelMeta.hiddenSize }}</span>
               </div>
-              <div class="meta-item full-row">
-                <span class="meta-lbl">{{ isEn ? "Attention Head (GQA)" : "注意力结构 (GQA)" }}:</span>
-                <span class="meta-val">Q{{ syncedModelMeta.qHeads }} : KV{{ syncedModelMeta.kvHeads }} (比例 1:{{ (syncedModelMeta.qHeads / syncedModelMeta.kvHeads).toFixed(0) }})</span>
+              <div class="meta-item">
+                <span class="meta-lbl">{{ isEn ? "Detected Format" : "检测权重格式" }}:</span>
+                <span class="meta-val">{{ syncedModelMeta.detectedQuant }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-lbl">{{ isEn ? "MoE Structure" : "专家结构 (MoE)" }}:</span>
+                <span class="meta-val">{{ syncedModelMeta.moeInfo }}</span>
               </div>
               <div class="meta-item full-row">
-                <span class="meta-lbl">{{ isEn ? "Default Context" : "原生上下文窗口" }}:</span>
-                <span class="meta-val">{{ syncedModelMeta.maxCtx.toLocaleString() }} Tokens</span>
+                <span class="meta-lbl">{{ isEn ? "Attention & KV Mechanism" : "注意力与 KV 机制" }}:</span>
+                <span class="meta-val">
+                  <span class="kv-mech-badge" :class="syncedModelMeta.isMla ? 'mla-badge' : 'gqa-badge'">
+                    {{ syncedModelMeta.attentionDesc }}
+                  </span>
+                </span>
+              </div>
+              <div class="meta-item full-row">
+                <span class="meta-lbl">{{ isEn ? "Context Limits" : "上下文规格 (Tokens)" }}:</span>
+                <span class="meta-val">
+                  {{ syncedModelMeta.baseCtx.toLocaleString() }} Tokens ({{ isEn ? 'Native' : '原生基础' }})
+                  <template v-if="syncedModelMeta.maxCtx > syncedModelMeta.baseCtx">
+                    → <strong class="text-accent">{{ syncedModelMeta.maxCtx.toLocaleString() }} Tokens</strong> ({{ isEn ? 'Max Extensible' : '最大扩展支持' }})
+                  </template>
+                </span>
               </div>
             </div>
           </div>
@@ -175,30 +192,93 @@
           <div class="form-group">
             <label class="field-label">{{ isEn ? "Weight Quantization:" : "权重量化精度：" }}</label>
             <select v-model.number="weightPrecBytes" class="cyber-select">
-              <option :value="2.0">FP16 / BF16 (16-bit, 2 Bytes/param)</option>
-              <option :value="1.0">INT8 / FP8 (8-bit, 1 Byte/param)</option>
-              <option :value="0.55">AWQ / GPTQ INT4 (4-bit, ~0.55 Bytes)</option>
+              <option :value="2.0">FP16 / BF16 (16-bit, 2.0 Bytes/param)</option>
+              <option :value="1.0">INT8 / FP8 (8-bit, 1.0 Byte/param)</option>
+              <option :value="0.55">AWQ / GPTQ INT4 (4-bit, ~0.55 Bytes/param)</option>
+              <option :value="0.38">GGUF Q3 / Q2 (3-bit, ~0.38 Bytes/param)</option>
             </select>
           </div>
 
           <div class="form-group">
             <label class="field-label">{{ isEn ? "KV Cache Precision:" : "KV Cache 缓存精度：" }}</label>
             <select v-model.number="kvPrecBytes" class="cyber-select">
-              <option :value="2.0">FP16 (2 Bytes/token)</option>
-              <option :value="1.0">FP8 KV Cache (1 Byte/token)</option>
+              <option :value="2.0">FP16 / BF16 (2 Bytes/token, 原生未量化)</option>
+              <option :value="1.0">FP8 KV Cache (1 Byte/token, 节省 50%)</option>
+              <option :value="0.5">INT4 KV Cache (0.5 Bytes/token, 节省 75%)</option>
             </select>
           </div>
         </div>
 
-        <!-- 4. Sliders -->
+        <!-- 4. Context Window Length Slider & Controls -->
         <div class="slider-group">
           <div class="slider-header">
-            <label class="field-label">{{ isEn ? "Context Window Length:" : "上下文窗口长度 (Tokens)：" }}</label>
-            <span class="slider-val-badge">{{ (ctxLength / 1024).toFixed(0) }}K ({{ ctxLength.toLocaleString() }} tokens)</span>
+            <div class="field-label-row">
+              <label class="field-label">{{ isEn ? "Context Window Length:" : "上下文窗口长度：" }}</label>
+              <span class="context-limit-hint">
+                {{ isEn ? "Max Supported:" : "模型支持上限：" }} <strong>{{ modelMaxContext.toLocaleString() }}</strong>
+              </span>
+            </div>
+            <div class="context-val-box">
+              <input
+                v-model.number="ctxLength"
+                type="number"
+                :min="sliderMin"
+                :max="effectiveMaxContext"
+                :step="sliderStep"
+                class="cyber-input context-number-input"
+              >
+              <span class="tokens-unit">Tokens</span>
+              <span class="slider-val-badge">{{ (ctxLength / 1024).toFixed(1) }}K</span>
+            </div>
           </div>
-          <input v-model.number="ctxLength" type="range" min="2048" max="131072" step="2048" class="cyber-range">
+
+          <input
+            v-model.number="ctxLength"
+            type="range"
+            :min="sliderMin"
+            :max="effectiveMaxContext"
+            :step="sliderStep"
+            class="cyber-range"
+          >
+
+          <!-- Quick Context Preset Chips -->
+          <div class="context-presets-row">
+            <span class="presets-label">{{ isEn ? "Presets:" : "常用窗口：" }}</span>
+            <button
+              v-for="p in contextPresets"
+              :key="p.val"
+              type="button"
+              class="context-preset-chip"
+              :class="{ active: ctxLength === p.val }"
+              @click="setContextLength(p.val)"
+            >
+              {{ p.label }}
+            </button>
+            <button
+              type="button"
+              class="context-preset-chip max-chip"
+              :class="{ active: ctxLength === modelMaxContext }"
+              @click="setContextLength(modelMaxContext)"
+              :title="isEn ? 'Set to Model Native Max' : '设置为模型支持的最大上下文'"
+            >
+              MAX ({{ (modelMaxContext / 1024).toFixed(0) }}K)
+            </button>
+          </div>
+
+          <!-- Sliding Window Eviction / RoPE Extrapolation Toggles -->
+          <div class="extra-options-row">
+            <label v-if="modelSlidingWindow" class="toggle-checkbox-label">
+              <input type="checkbox" v-model="useSlidingWindowEviction" class="cyber-checkbox">
+              <span>{{ isEn ? `Enable SWA Eviction (Cap KV to ${modelSlidingWindow.toLocaleString()} tokens)` : `启用 SWA 滑动窗口剔除 (KV 缓存上限锁在 ${modelSlidingWindow.toLocaleString()} Tokens)` }}</span>
+            </label>
+            <label class="toggle-checkbox-label">
+              <input type="checkbox" v-model="enableRopeExtrapolation" class="cyber-checkbox">
+              <span>{{ isEn ? "Allow Long-Context RoPE Extrapolation (up to 4x context)" : "启用 RoPE 超长外推模式 (最高测试 4 倍超长上下文)" }}</span>
+            </label>
+          </div>
         </div>
 
+        <!-- 5. Concurrency Slider -->
         <div class="slider-group">
           <div class="slider-header">
             <label class="field-label">{{ isEn ? "Concurrency (Batch Size):" : "并发请求数 (Batch Size)：" }}</label>
@@ -207,7 +287,7 @@
           <input v-model.number="concurrency" type="range" min="1" max="64" step="1" class="cyber-range">
         </div>
 
-        <!-- 5. GPU Hardware Filter Search -->
+        <!-- 6. GPU Hardware Filter Search -->
         <div class="form-group">
           <label class="field-label">{{ isEn ? "Filter GPU Hardware Models:" : "过滤计算卡硬件型号：" }}</label>
           <input v-model="gpuSearchQuery" type="text" :placeholder="isEn ? 'Search RTX 5090, 昇腾, H200, B200...' : '搜索 4090, 5090, 昇腾, H200, B200, L40S...'" class="cyber-input">
@@ -222,12 +302,18 @@
             <span class="metric-num">{{ weightsGb.toFixed(1) }} GB</span>
           </div>
           <div class="metric-card">
-            <span class="metric-label">{{ isEn ? "KV Cache Memory" : "KV Cache 动态显存" }}</span>
-            <span class="metric-num">{{ kvGb.toFixed(1) }} GB</span>
+            <div class="metric-label-row">
+              <span class="metric-label">{{ isEn ? "KV Cache Memory" : "KV Cache 动态显存" }}</span>
+              <span class="kv-micro-badge" :class="isMlaActive ? 'mla' : 'gqa'">
+                {{ isMlaActive ? 'MLA 压缩' : (modelKvHeads === 1 ? 'MQA 压缩' : `GQA 1:${(modelQHeads / modelKvHeads).toFixed(0)}`) }}
+              </span>
+            </div>
+            <span class="metric-num">{{ kvGb.toFixed(2) }} GB</span>
+            <span class="metric-subtext">~{{ perReqKvKb.toFixed(1) }} KB/req</span>
           </div>
           <div class="metric-card">
-            <span class="metric-label">{{ isEn ? "CUDA Buffer" : "CUDA 运行缓冲区" }}</span>
-            <span class="metric-num">1.6 GB</span>
+            <span class="metric-label">{{ isEn ? "CUDA & Working Memory" : "CUDA 与激活缓冲区" }}</span>
+            <span class="metric-num">{{ cudaBufferGb.toFixed(1) }} GB</span>
           </div>
           <div class="metric-card highlight">
             <span class="metric-label">{{ isEn ? "Total Required VRAM" : "总推荐最低显存" }}</span>
@@ -284,7 +370,7 @@ const props = defineProps({
   isEn: { type: Boolean, default: false }
 });
 
-// Model Platform Source: 'hf' | 'ms' (No preset, no custom)
+// Model Platform Source: 'hf' | 'ms'
 const modelSource = ref('hf');
 const activeModelId = ref('Qwen/Qwen2.5-7B-Instruct');
 const modelSearchQuery = ref('Qwen/Qwen2.5-7B-Instruct');
@@ -295,37 +381,63 @@ const isSearching = ref(false);
 const isSyncing = ref(false);
 const syncError = ref('');
 const hfSearchResults = ref([]);
+const msSearchResults = ref([]);
 const extraMsModels = ref([]);
 
-// Synced Model Metadata - Prepopulated with verified Qwen2.5-7B specs for SSR/SSG
+// Model Architecture Parameters (Reactively Derived from config.json & Hub APIs)
+const modelParamsB = ref(7.61);
+const modelActiveParamsB = ref(7.61);
+const modelLayers = ref(28);
+const modelHiddenSize = ref(3584);
+const modelQHeads = ref(28);
+const modelKvHeads = ref(4);
+const modelHeadDim = ref(128);
+
+// KV Mechanism Specs
+const isMlaActive = ref(false);
+const mlaKvLoraRank = ref(0);
+const mlaQkRopeDim = ref(64);
+const mlaKvDim = ref(576);
+const modelSlidingWindow = ref(null);
+const useSlidingWindowEviction = ref(false);
+
+// Context Limits
+const modelBaseContext = ref(32768);
+const modelMaxContext = ref(131072);
+const enableRopeExtrapolation = ref(false);
+
+// Deployment Options
+const weightPrecBytes = ref(2.0); // FP16: 2, INT8: 1, INT4: 0.55, INT3/2: 0.38
+const kvPrecBytes = ref(2.0); // FP16: 2, FP8: 1, INT4: 0.5
+const ctxLength = ref(8192);
+const concurrency = ref(4);
+const gpuSearchQuery = ref('');
+
+// Prepopulated Verified Specs for SSR/SSG parity
 const syncedModelMeta = ref({
   id: 'Qwen/Qwen2.5-7B-Instruct',
   source: 'hf',
   type: 'Qwen2ForCausalLM',
+  paramsDisplay: '7.61B',
   paramsB: 7.61,
   layers: 28,
   hiddenSize: 3584,
   qHeads: 28,
   kvHeads: 4,
-  maxCtx: 32768
+  headDim: 128,
+  isMla: false,
+  attentionDesc: 'GQA (Q28 : KV4, 比例 1:7)',
+  detectedQuant: 'BF16 / FP16',
+  moeInfo: '稠密架构 (Dense)',
+  baseCtx: 32768,
+  maxCtx: 131072,
+  slidingWindow: 131072
 });
-
-// Active model architecture parameters (automatically derived from config.json)
-const modelParamsB = ref(7.61);
-const modelLayers = ref(28);
-const modelHiddenSize = ref(3584);
-const modelQHeads = ref(28);
-const modelKvHeads = ref(4);
-
-// Deployment inference options
-const weightPrecBytes = ref(2.0); // FP16: 2, INT8: 1, INT4: 0.55
-const kvPrecBytes = ref(2.0); // FP16: 2, FP8: 1
-const ctxLength = ref(8192);
-const concurrency = ref(4);
-const gpuSearchQuery = ref('');
 
 // Top Popular Hugging Face Models
 const POPULAR_HF_MODELS = [
+  { id: 'zai-org/GLM-5.3', name: 'GLM-5.3', org: 'zai-org', params: '753B', downloads: '24.1K', likes: 1120 },
+  { id: 'zai-org/GLM-5.3-Flash', name: 'GLM-5.3-Flash', org: 'zai-org', params: 'Flash', downloads: '89.5K', likes: 1840 },
   { id: 'Qwen/Qwen2.5-7B-Instruct', name: 'Qwen 2.5 7B Instruct', org: 'Qwen', params: '7.6B', downloads: '9.6M', likes: 2219 },
   { id: 'Qwen/Qwen2.5-14B-Instruct', name: 'Qwen 2.5 14B Instruct', org: 'Qwen', params: '14.7B', downloads: '3.2M', likes: 980 },
   { id: 'Qwen/Qwen2.5-32B-Instruct', name: 'Qwen 2.5 32B Instruct', org: 'Qwen', params: '32.5B', downloads: '4.8M', likes: 1450 },
@@ -341,51 +453,94 @@ const POPULAR_HF_MODELS = [
 
 // Top Curated ModelScope (魔搭社区) Models
 const POPULAR_MS_MODELS = [
-  { id: 'qwen/Qwen2.5-7B-Instruct', name: 'Qwen2.5 7B Instruct', nameZh: '通义千问 2.5 7B 对话', org: 'qwen', params: '7.6B' },
-  { id: 'qwen/Qwen2.5-14B-Instruct', name: 'Qwen2.5 14B Instruct', nameZh: '通义千问 2.5 14B 对话', org: 'qwen', params: '14.7B' },
-  { id: 'qwen/Qwen2.5-32B-Instruct', name: 'Qwen2.5 32B Instruct', nameZh: '通义千问 2.5 32B 对话', org: 'qwen', params: '32.5B' },
-  { id: 'qwen/Qwen2.5-72B-Instruct', name: 'Qwen2.5 72B Instruct', nameZh: '通义千问 2.5 72B 对话', org: 'qwen', params: '72.7B' },
-  { id: 'qwen/Qwen2.5-Coder-7B-Instruct', name: 'Qwen2.5 Coder 7B', nameZh: '千问代码大模型 7B', org: 'qwen', params: '7.6B' },
-  { id: 'qwen/Qwen2.5-Coder-32B-Instruct', name: 'Qwen2.5 Coder 32B', nameZh: '千问代码大模型 32B', org: 'qwen', params: '32.5B' },
-  { id: 'deepseek-ai/DeepSeek-V3', name: 'DeepSeek-V3', nameZh: '深度求索 DeepSeek-V3 (MoE 671B)', org: 'deepseek-ai', params: '671B' },
-  { id: 'deepseek-ai/DeepSeek-R1', name: 'DeepSeek-R1', nameZh: '深度求索 DeepSeek-R1 推理大模型', org: 'deepseek-ai', params: '671B' },
-  { id: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-7B', name: 'DeepSeek-R1-Distill-Qwen-7B', nameZh: 'DeepSeek R1 蒸馏 Qwen 7B', org: 'deepseek-ai', params: '7.6B' },
-  { id: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-14B', name: 'DeepSeek-R1-Distill-Qwen-14B', nameZh: 'DeepSeek R1 蒸馏 Qwen 14B', org: 'deepseek-ai', params: '14.7B' },
-  { id: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-32B', name: 'DeepSeek-R1-Distill-Qwen-32B', nameZh: 'DeepSeek R1 蒸馏 Qwen 32B', org: 'deepseek-ai', params: '32.5B' },
-  { id: 'deepseek-ai/DeepSeek-R1-Distill-Llama-70B', name: 'DeepSeek-R1-Distill-Llama-70B', nameZh: 'DeepSeek R1 蒸馏 Llama 70B', org: 'deepseek-ai', params: '70.6B' },
-  { id: 'ZhipuAI/glm-4-9b-chat', name: 'GLM-4 9B Chat', nameZh: '智谱 GLM-4 9B 对话', org: 'ZhipuAI', params: '9.4B' },
-  { id: 'baichuan-inc/Baichuan2-7B-Chat', name: 'Baichuan2 7B Chat', nameZh: '百川 Baichuan2 7B 对话', org: 'baichuan-inc', params: '7B' },
-  { id: 'baichuan-inc/Baichuan2-13B-Chat', name: 'Baichuan2 13B Chat', nameZh: '百川 Baichuan2 13B 对话', org: 'baichuan-inc', params: '13B' },
-  { id: '01ai/Yi-1.5-9B-Chat', name: 'Yi-1.5 9B Chat', nameZh: '零一万物 Yi 1.5 9B', org: '01ai', params: '9B' },
-  { id: '01ai/Yi-1.5-34B-Chat', name: 'Yi-1.5 34B Chat', nameZh: '零一万物 Yi 1.5 34B', org: '01ai', params: '34B' },
-  { id: 'Shanghai_AI_Laboratory/internlm2_5-7b-chat', name: 'InternLM2.5 7B', nameZh: '书生·浦语 InternLM2.5 7B', org: 'Shanghai_AI_Laboratory', params: '7.7B' },
-  { id: 'Shanghai_AI_Laboratory/internlm2_5-20b-chat', name: 'InternLM2.5 20B', nameZh: '书生·浦语 InternLM2.5 20B', org: 'Shanghai_AI_Laboratory', params: '20B' },
-  { id: 'OpenBMB/MiniCPM-2B-sft-bf16', name: 'MiniCPM 2B', nameZh: '面壁智能 MiniCPM 2B', org: 'OpenBMB', params: '2.4B' },
-  { id: 'OpenBMB/MiniCPM3-4B', name: 'MiniCPM3 4B', nameZh: '面壁智能 MiniCPM3 4B', org: 'OpenBMB', params: '4B' },
-  { id: 'moonshotai/Kimi-K3', name: 'Kimi K3', nameZh: '月之暗面 Kimi K3 MoE', org: 'moonshotai', params: 'MoE' }
+  { id: 'ZhipuAI/GLM-5.3', name: 'GLM-5.3', nameZh: '智谱 GLM-5.3 (753B 双稀疏MoE)', org: 'ZhipuAI', params: '753B', downloads: '16.6K', stars: 287 },
+  { id: 'ZhipuAI/GLM-5.3-Flash', name: 'GLM-5.3-Flash', nameZh: '智谱 GLM-5.3 Flash 轻量极速版', org: 'ZhipuAI', params: 'Flash', downloads: '73.9K', stars: 214 },
+  { id: 'ZhipuAI/GLM-4-9B-Chat', name: 'GLM-4-9B-Chat', nameZh: '智谱 GLM-4 9B 对话', org: 'ZhipuAI', params: '9.4B', downloads: '154K', stars: 620 },
+  { id: 'qwen/Qwen2.5-7B-Instruct', name: 'Qwen2.5 7B Instruct', nameZh: '通义千问 2.5 7B 对话', org: 'qwen', params: '7.6B', downloads: '8.2M', stars: 1530 },
+  { id: 'qwen/Qwen2.5-14B-Instruct', name: 'Qwen2.5 14B Instruct', nameZh: '通义千问 2.5 14B 对话', org: 'qwen', params: '14.7B', downloads: '2.1M', stars: 740 },
+  { id: 'qwen/Qwen2.5-32B-Instruct', name: 'Qwen2.5 32B Instruct', nameZh: '通义千问 2.5 32B 对话', org: 'qwen', params: '32.5B', downloads: '3.6M', stars: 1120 },
+  { id: 'qwen/Qwen2.5-72B-Instruct', name: 'Qwen2.5 72B Instruct', nameZh: '通义千问 2.5 72B 对话', org: 'qwen', params: '72.7B', downloads: '4.3M', stars: 2350 },
+  { id: 'qwen/Qwen2.5-Coder-7B-Instruct', name: 'Qwen2.5 Coder 7B', nameZh: '千问代码大模型 7B', org: 'qwen', params: '7.6B', downloads: '1.2M', stars: 890 },
+  { id: 'qwen/Qwen2.5-Coder-32B-Instruct', name: 'Qwen2.5 Coder 32B', nameZh: '千问代码大模型 32B', org: 'qwen', params: '32.5B', downloads: '2.4M', stars: 1410 },
+  { id: 'qwen/Qwen3.8-Flash-Next', name: 'Qwen3.8-Flash-Next', nameZh: '千问 3.8 Flash Next', org: 'qwen', params: '180B', downloads: '65.4K', stars: 1264 },
+  { id: 'deepseek-ai/DeepSeek-V3', name: 'DeepSeek-V3', nameZh: '深度求索 DeepSeek-V3 (MoE 671B)', org: 'deepseek-ai', params: '671B', downloads: '2.6M', stars: 6540 },
+  { id: 'deepseek-ai/DeepSeek-R1', name: 'DeepSeek-R1', nameZh: '深度求索 DeepSeek-R1 推理', org: 'deepseek-ai', params: '671B', downloads: '3.1M', stars: 7890 },
+  { id: 'deepseek-ai/DeepSeek-V4.1-Flash', name: 'DeepSeek-V4.1-Flash', nameZh: '深度求索 V4.1 Flash', org: 'deepseek-ai', params: '484B', downloads: '19.0K', stars: 384 },
+  { id: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-7B', name: 'DeepSeek-R1-Distill-Qwen-7B', nameZh: 'DeepSeek R1 蒸馏 Qwen 7B', org: 'deepseek-ai', params: '7.6B', downloads: '980K', stars: 1120 },
+  { id: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-32B', name: 'DeepSeek-R1-Distill-Qwen-32B', nameZh: 'DeepSeek R1 蒸馏 Qwen 32B', org: 'deepseek-ai', params: '32.5B', downloads: '1.4M', stars: 1650 },
+  { id: 'baichuan-inc/Baichuan2-7B-Chat', name: 'Baichuan2 7B Chat', nameZh: '百川 Baichuan2 7B 对话', org: 'baichuan-inc', params: '7B', downloads: '450K', stars: 320 },
+  { id: 'baichuan-inc/Baichuan2-13B-Chat', name: 'Baichuan2 13B Chat', nameZh: '百川 Baichuan2 13B 对话', org: 'baichuan-inc', params: '13B', downloads: '620K', stars: 410 },
+  { id: '01ai/Yi-1.5-9B-Chat', name: 'Yi-1.5 9B Chat', nameZh: '零一万物 Yi 1.5 9B', org: '01ai', params: '9B', downloads: '380K', stars: 290 },
+  { id: '01ai/Yi-1.5-34B-Chat', name: 'Yi-1.5 34B Chat', nameZh: '零一万物 Yi 1.5 34B', org: '01ai', params: '34B', downloads: '510K', stars: 440 },
+  { id: 'Shanghai_AI_Laboratory/internlm2_5-7b-chat', name: 'InternLM2.5 7B', nameZh: '书生·浦语 InternLM2.5 7B', org: 'Shanghai_AI_Laboratory', params: '7.7B', downloads: '890K', stars: 760 },
+  { id: 'Shanghai_AI_Laboratory/internlm2_5-20b-chat', name: 'InternLM2.5 20B', nameZh: '书生·浦语 InternLM2.5 20B', org: 'Shanghai_AI_Laboratory', params: '20B', downloads: '640K', stars: 580 },
+  { id: 'OpenBMB/MiniCPM-2B-sft-bf16', name: 'MiniCPM 2B', nameZh: '面壁智能 MiniCPM 2B', org: 'OpenBMB', params: '2.4B', downloads: '520K', stars: 410 },
+  { id: 'OpenBMB/MiniCPM5-2B', name: 'MiniCPM5 2B', nameZh: '面壁智能 MiniCPM5 2B', org: 'OpenBMB', params: '2.5B', downloads: '97.0K', stars: 122 },
+  { id: 'moonshotai/Kimi-K3', name: 'Kimi K3', nameZh: '月之暗面 Kimi K3 MoE', org: 'moonshotai', params: 'MoE', downloads: '310K', stars: 580 }
 ];
 
 // Quick Recommendation Chips per platform
 const currentQuickChips = computed(() => {
   if (modelSource.value === 'ms') {
     return [
+      { id: 'ZhipuAI/GLM-5.3', label: 'GLM-5.3' },
+      { id: 'ZhipuAI/GLM-5.3-Flash', label: 'GLM-5.3-Flash' },
       { id: 'qwen/Qwen2.5-7B-Instruct', label: 'Qwen2.5-7B' },
-      { id: 'qwen/Qwen2.5-72B-Instruct', label: 'Qwen2.5-72B' },
       { id: 'deepseek-ai/DeepSeek-V3', label: 'DeepSeek-V3' },
       { id: 'deepseek-ai/DeepSeek-R1', label: 'DeepSeek-R1' },
-      { id: 'ZhipuAI/glm-4-9b-chat', label: 'GLM-4-9B' },
-      { id: 'baichuan-inc/Baichuan2-13B-Chat', label: 'Baichuan2-13B' }
+      { id: 'qwen/Qwen2.5-72B-Instruct', label: 'Qwen2.5-72B' }
     ];
   }
   return [
+    { id: 'zai-org/GLM-5.3', label: 'GLM-5.3' },
     { id: 'Qwen/Qwen2.5-7B-Instruct', label: 'Qwen2.5-7B' },
-    { id: 'Qwen/Qwen2.5-72B-Instruct', label: 'Qwen2.5-72B' },
     { id: 'deepseek-ai/DeepSeek-V3', label: 'DeepSeek-V3' },
     { id: 'deepseek-ai/DeepSeek-R1', label: 'DeepSeek-R1' },
     { id: 'meta-llama/Llama-3.3-70B-Instruct', label: 'Llama-3.3-70B' },
-    { id: 'google/gemma-2-9b-it', label: 'Gemma-2-9B' }
+    { id: 'Qwen/Qwen2.5-72B-Instruct', label: 'Qwen2.5-72B' }
   ];
 });
+
+// Dynamic Context Calculations
+const effectiveMaxContext = computed(() => {
+  if (enableRopeExtrapolation.value) {
+    return Math.min(4194304, modelMaxContext.value * 4);
+  }
+  return modelMaxContext.value;
+});
+
+const sliderMin = computed(() => {
+  return Math.min(512, modelMaxContext.value);
+});
+
+const sliderStep = computed(() => {
+  if (effectiveMaxContext.value <= 8192) return 512;
+  if (effectiveMaxContext.value <= 32768) return 1024;
+  if (effectiveMaxContext.value <= 131072) return 2048;
+  if (effectiveMaxContext.value <= 262144) return 4096;
+  return 8192;
+});
+
+const contextPresets = computed(() => {
+  const standardPresets = [
+    { val: 2048, label: '2K' },
+    { val: 4096, label: '4K' },
+    { val: 8192, label: '8K' },
+    { val: 16384, label: '16K' },
+    { val: 32768, label: '32K' },
+    { val: 65536, label: '64K' },
+    { val: 131072, label: '128K' },
+    { val: 163840, label: '160K' },
+    { val: 262144, label: '256K' },
+    { val: 524288, label: '512K' },
+    { val: 1048576, label: '1M' }
+  ];
+  return standardPresets.filter(p => p.val < effectiveMaxContext.value);
+});
+
+function setContextLength(val) {
+  ctxLength.value = Math.min(effectiveMaxContext.value, Math.max(sliderMin.value, val));
+}
 
 // Search results filtered by current input and platform
 const filteredModelResults = computed(() => {
@@ -400,6 +555,9 @@ const filteredModelResults = computed(() => {
     return POPULAR_HF_MODELS.filter(m => m.id.toLowerCase().includes(q) || m.name.toLowerCase().includes(q));
   } else {
     // ModelScope
+    if (q && msSearchResults.value.length > 0) {
+      return msSearchResults.value;
+    }
     const combined = [...POPULAR_MS_MODELS, ...extraMsModels.value];
     if (!q) return combined;
     return combined.filter(m =>
@@ -440,19 +598,89 @@ async function fetchHfSearch(query) {
   }
 }
 
+// Online ModelScope Search with Smart Alias Resolution
+async function fetchMsSearch(query) {
+  isSearching.value = true;
+  const qLower = query.toLowerCase();
+  const results = [];
+  const seenIds = new Set();
+
+  // 1. Check local catalog first (prioritize exact/partial matches)
+  const allMsCatalog = [...POPULAR_MS_MODELS, ...extraMsModels.value];
+
+  // Specific alias promotion: glm5 / glm5.3 / glm-5 -> ZhipuAI/GLM-5.3 & GLM-5.3-Flash
+  if (qLower.includes('glm5') || qLower.includes('glm-5') || qLower.includes('glm 5')) {
+    const glm5 = allMsCatalog.find(m => m.id === 'ZhipuAI/GLM-5.3');
+    const glm5f = allMsCatalog.find(m => m.id === 'ZhipuAI/GLM-5.3-Flash');
+    if (glm5) { results.push(glm5); seenIds.add(glm5.id); }
+    if (glm5f) { results.push(glm5f); seenIds.add(glm5f.id); }
+  }
+
+  for (const m of allMsCatalog) {
+    if (!seenIds.has(m.id) && (
+      m.id.toLowerCase().includes(qLower) ||
+      (m.name && m.name.toLowerCase().includes(qLower)) ||
+      (m.nameZh && m.nameZh.toLowerCase().includes(qLower))
+    )) {
+      results.push(m);
+      seenIds.add(m.id);
+    }
+  }
+
+  // 2. Query Hugging Face Open API and map known repositories to ModelScope
+  try {
+    const hfRes = await fetch(`https://huggingface.co/api/models?search=${encodeURIComponent(query)}&limit=12`);
+    if (hfRes.ok) {
+      const hfData = await hfRes.json();
+      for (const d of hfData) {
+        let msId = d.id;
+        const [org, name] = d.id.split('/');
+
+        // Map Hugging Face organizations to ModelScope equivalents
+        if (org === 'zai-org' || org === 'THUDM') {
+          msId = `ZhipuAI/${name}`;
+        } else if (org === 'Qwen') {
+          msId = `qwen/${name}`;
+        }
+
+        if (!seenIds.has(msId)) {
+          seenIds.add(msId);
+          results.push({
+            id: msId,
+            name: name || msId,
+            org: msId.split('/')[0] || '',
+            downloads: d.downloads ? formatCount(d.downloads) : null,
+            stars: d.likes || 0
+          });
+        }
+      }
+    }
+  } catch (e) {
+    // Non-blocking fallback
+  }
+
+  msSearchResults.value = results;
+  isSearching.value = false;
+}
+
 function onSearchInput() {
   isDropdownOpen.value = true;
   const q = modelSearchQuery.value.trim();
-  if (modelSource.value === 'hf') {
-    if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
-    if (!q) {
-      hfSearchResults.value = [];
-      return;
-    }
-    searchDebounceTimer = setTimeout(() => {
-      fetchHfSearch(q);
-    }, 280);
+  if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+
+  if (!q) {
+    hfSearchResults.value = [];
+    msSearchResults.value = [];
+    return;
   }
+
+  searchDebounceTimer = setTimeout(() => {
+    if (modelSource.value === 'hf') {
+      fetchHfSearch(q);
+    } else {
+      fetchMsSearch(q);
+    }
+  }, 260);
 }
 
 function onSearchFocus() {
@@ -462,6 +690,7 @@ function onSearchFocus() {
 function clearSearch() {
   modelSearchQuery.value = '';
   hfSearchResults.value = [];
+  msSearchResults.value = [];
 }
 
 function switchSource(source) {
@@ -469,7 +698,7 @@ function switchSource(source) {
   isDropdownOpen.value = false;
   syncError.value = '';
   if (source === 'ms') {
-    const defaultId = 'qwen/Qwen2.5-7B-Instruct';
+    const defaultId = 'ZhipuAI/GLM-5.3';
     activeModelId.value = defaultId;
     modelSearchQuery.value = defaultId;
     syncOnlineModel(defaultId);
@@ -498,14 +727,36 @@ function triggerManualSync() {
 
 // Asynchronous Online Config Sync from Hugging Face or ModelScope
 async function syncOnlineModel(targetId) {
-  const modelId = (targetId || activeModelId.value || '').trim();
+  let modelId = (targetId || activeModelId.value || '').trim();
   if (!modelId) return;
 
+  // Auto-normalize shorthand queries
+  const qLower = modelId.toLowerCase();
+  if (modelSource.value === 'ms') {
+    if (qLower === 'glm5.3' || qLower === 'glm-5.3' || qLower === 'glm5' || qLower === 'glm-5') {
+      modelId = 'ZhipuAI/GLM-5.3';
+    } else if (qLower === 'glm5.3-flash' || qLower === 'glm-5.3-flash') {
+      modelId = 'ZhipuAI/GLM-5.3-Flash';
+    } else if (!modelId.includes('/')) {
+      // Shorthand prefix heuristics
+      if (qLower.startsWith('qwen')) modelId = `qwen/${modelId}`;
+      else if (qLower.startsWith('deepseek')) modelId = `deepseek-ai/${modelId}`;
+      else if (qLower.startsWith('glm')) modelId = `ZhipuAI/${modelId}`;
+    }
+  } else {
+    if (qLower === 'glm5.3' || qLower === 'glm-5.3' || qLower === 'glm5') {
+      modelId = 'zai-org/GLM-5.3';
+    }
+  }
+
+  activeModelId.value = modelId;
+  modelSearchQuery.value = modelId;
   isSyncing.value = true;
   syncError.value = '';
 
   try {
     let configData = null;
+    let tokenizerData = null;
     let exactParams = null;
 
     if (modelSource.value === 'hf') {
@@ -519,9 +770,7 @@ async function syncOnlineModel(targetId) {
             exactParams = p.BF16 || p.F16 || p.F8_E4M3 || p.F32 || Object.values(p)[0];
           }
         }
-      } catch (e) {
-        // Fallback to mathematical estimation
-      }
+      } catch (e) {}
 
       // 2. Fetch raw config.json
       const configRes = await fetch(`https://huggingface.co/${modelId}/raw/main/config.json`);
@@ -533,14 +782,28 @@ async function syncOnlineModel(targetId) {
       }
       configData = await configRes.json();
 
+      // 3. Optional tokenizer_config.json
+      try {
+        const tokRes = await fetch(`https://huggingface.co/${modelId}/raw/main/tokenizer_config.json`);
+        if (tokRes.ok) tokenizerData = await tokRes.json();
+      } catch (e) {}
+
     } else {
       // ModelScope
-      const msUrl = `https://www.modelscope.cn/models/${modelId}/resolve/master/config.json`;
+      // 1. Fetch raw config.json (CORS open)
+      const msUrl = `https://modelscope.cn/models/${modelId}/resolve/master/config.json`;
       const configRes = await fetch(msUrl);
       if (!configRes.ok) {
-        throw new Error(props.isEn ? `Failed to fetch ModelScope config (HTTP ${configRes.status})` : `无法获取魔搭社区 config.json (HTTP ${configRes.status})，请检查模型 ID 是否正确。`);
+        throw new Error(props.isEn ? `Failed to fetch ModelScope config (HTTP ${configRes.status})` : `无法获取魔搭社区 config.json (HTTP ${configRes.status})，请检查模型 ID 是否存在。`);
       }
       configData = await configRes.json();
+
+      // 2. Optional tokenizer_config.json
+      try {
+        const msTokUrl = `https://modelscope.cn/models/${modelId}/resolve/master/tokenizer_config.json`;
+        const tokRes = await fetch(msTokUrl);
+        if (tokRes.ok) tokenizerData = await tokRes.json();
+      } catch (e) {}
     }
 
     // Auto-parse Model Architecture
@@ -550,46 +813,192 @@ async function syncOnlineModel(targetId) {
     const kvHeads = configData.num_key_value_heads || configData.num_kv_heads || configData.n_head_kv || qHeads;
     const intermediateSize = configData.intermediate_size || (hiddenSize * 4);
     const vocabSize = configData.vocab_size || 32000;
-    const maxCtx = configData.max_position_embeddings || configData.max_seq_len || 8192;
     const modelType = configData.model_type || configData.architectures?.[0] || 'transformer';
+
+    // KV Cache & Attention Mechanism Detection (MHA / GQA / MQA / MLA)
+    const isMla = !!(configData.kv_lora_rank);
+    const kvLoraRank = configData.kv_lora_rank || 0;
+    const qkRopeDim = configData.qk_rope_head_dim || 64;
+    const headDim = configData.head_dim || configData.v_head_dim || Math.floor(hiddenSize / qHeads);
+
+    isMlaActive.value = isMla;
+    mlaKvLoraRank.value = kvLoraRank;
+    mlaQkRopeDim.value = qkRopeDim;
+    mlaKvDim.value = isMla ? (kvLoraRank + qkRopeDim) : (2 * kvHeads * headDim);
+    modelHeadDim.value = headDim;
+
+    let attentionDesc = '';
+    if (isMla) {
+      const baselineKvDim = 2 * qHeads * headDim;
+      const savings = Math.max(0, ((1 - (mlaKvDim.value / baselineKvDim)) * 100)).toFixed(1);
+      attentionDesc = `MLA 潜在注意力 (kv_lora: ${kvLoraRank}, qk_rope: ${qkRopeDim}, 显存压缩率 ${savings}%)`;
+    } else if (kvHeads === 1) {
+      attentionDesc = `MQA 多查询注意力 (Q${qHeads} : KV1, 显存压缩率 ${((1 - 1/qHeads)*100).toFixed(0)}%)`;
+    } else if (kvHeads < qHeads) {
+      const ratio = (qHeads / kvHeads).toFixed(0);
+      attentionDesc = `GQA 分组查询注意力 (Q${qHeads} : KV${kvHeads}, 比例 1:${ratio})`;
+    } else {
+      attentionDesc = `MHA 多头注意力 (Q${qHeads} : KV${kvHeads}, 未压缩)`;
+    }
+
+    // Sliding Window Detection
+    const slidingWindow = typeof configData.sliding_window === 'number' && configData.sliding_window > 0
+      ? configData.sliding_window
+      : null;
+    modelSlidingWindow.value = slidingWindow;
+    useSlidingWindowEviction.value = false;
+
+    // Context Limits Extraction (Zero Hardcoding)
+    const contextCandidates = [];
+    const contextKeys = [
+      'max_position_embeddings',
+      'seq_length',
+      'max_sequence_length',
+      'max_seq_len',
+      'model_max_length',
+      'sliding_window',
+      'n_positions',
+      'seq_len',
+      'max_target_positions'
+    ];
+    for (const k of contextKeys) {
+      const v = configData[k];
+      if (typeof v === 'number' && v >= 512 && v <= 10000000) {
+        contextCandidates.push(v);
+      }
+    }
+
+    if (tokenizerData && typeof tokenizerData.model_max_length === 'number') {
+      const tLen = tokenizerData.model_max_length;
+      if (tLen >= 512 && tLen <= 10000000) {
+        contextCandidates.push(tLen);
+      }
+    }
+
+    if (configData.rope_scaling && typeof configData.rope_scaling === 'object') {
+      const factor = configData.rope_scaling.factor;
+      const orig = configData.rope_scaling.original_max_position_embeddings;
+      if (typeof factor === 'number' && factor > 1) {
+        const base = orig || configData.max_position_embeddings || 4096;
+        contextCandidates.push(Math.round(base * factor));
+      }
+    }
+
+    let baseCtx = configData.max_position_embeddings || configData.seq_length || configData.n_positions || 8192;
+    let maxCtx = baseCtx;
+    if (contextCandidates.length > 0) {
+      maxCtx = Math.max(...contextCandidates);
+    }
+    if (baseCtx > maxCtx) baseCtx = maxCtx;
+
+    modelBaseContext.value = baseCtx;
+    modelMaxContext.value = maxCtx;
+
+    // Intelligent context length initialization
+    if (ctxLength.value > effectiveMaxContext.value) {
+      ctxLength.value = effectiveMaxContext.value;
+    } else if (ctxLength.value < sliderMin.value) {
+      ctxLength.value = sliderMin.value;
+    }
+
+    // Auto-detect Weight Quantization Format
+    let detectedQuant = 'BF16 / FP16';
+    let suggestedWeightPrec = 2.0;
+
+    if (configData.quantization_config) {
+      const qCfg = configData.quantization_config;
+      const method = (qCfg.quant_method || qCfg.quant_type || '').toLowerCase();
+      const bits = qCfg.bits || (qCfg.load_in_4bit ? 4 : (qCfg.load_in_8bit ? 8 : null));
+
+      if (method === 'awq' || method === 'gptq' || bits === 4) {
+        detectedQuant = `AWQ / GPTQ (${bits || 4}-bit)`;
+        suggestedWeightPrec = 0.55;
+      } else if (method === 'fp8' || qCfg.fmt === 'e4m3' || bits === 8) {
+        detectedQuant = 'FP8 (8-bit)';
+        suggestedWeightPrec = 1.0;
+      }
+    } else if (configData.torch_dtype === 'float32') {
+      detectedQuant = 'FP32 (32-bit)';
+      suggestedWeightPrec = 4.0;
+    } else if (configData.torch_dtype || configData.dtype) {
+      detectedQuant = (configData.torch_dtype || configData.dtype).toUpperCase();
+      suggestedWeightPrec = 2.0;
+    }
+    weightPrecBytes.value = suggestedWeightPrec;
+
+    // MoE Architecture Extraction
+    const isMoe = !!(configData.n_routed_experts || configData.num_local_experts);
+    const routedExperts = configData.n_routed_experts || configData.num_local_experts || 1;
+    const expertsPerTok = configData.num_experts_per_tok || configData.num_experts_per_token || 1;
+    const moeIntermediate = configData.moe_intermediate_size || intermediateSize;
+    const sharedExperts = configData.n_shared_experts || 0;
+
+    let moeInfo = '稠密架构 (Dense Transformer)';
+    if (isMoe) {
+      moeInfo = `MoE (${routedExperts} 路由专家, 激活 ${expertsPerTok} 专家${sharedExperts ? ` + ${sharedExperts} 共享` : ''})`;
+    }
 
     // Mathematical Parameter Derivation
     let calculatedParamsB = 0;
+    let activeParamsB = 0;
+
     if (exactParams && typeof exactParams === 'number') {
       calculatedParamsB = exactParams / 1e9;
+      activeParamsB = calculatedParamsB;
     } else {
-      const isMoe = !!(configData.n_routed_experts || configData.num_local_experts);
-      const experts = configData.n_routed_experts || configData.num_local_experts || 1;
-      const moeIntermediate = configData.moe_intermediate_size || intermediateSize;
+      // Rigorous Analytical Weight Estimation
+      const attnParams = isMla
+        ? (hiddenSize * (configData.q_lora_rank || hiddenSize) + (configData.q_lora_rank || hiddenSize) * (qHeads * qkRopeDim) + hiddenSize * (kvLoraRank + qkRopeDim) + kvLoraRank * (qHeads * headDim) + (qHeads * headDim) * hiddenSize)
+        : (hiddenSize * (hiddenSize * (1 + 2 * (kvHeads / qHeads))));
 
-      const selfAttnParams = hiddenSize * (hiddenSize * (1 + 2 * (kvHeads / qHeads)));
       const mlpParams = isMoe
-        ? (experts * 3 * hiddenSize * moeIntermediate)
+        ? (routedExperts * 3 * hiddenSize * moeIntermediate) + (sharedExperts * 3 * hiddenSize * intermediateSize)
         : (3 * hiddenSize * intermediateSize);
 
-      const perLayer = selfAttnParams + mlpParams + (4 * hiddenSize);
-      const totalEstimated = (layers * perLayer) + (2 * vocabSize * hiddenSize);
+      const activeMlpParams = isMoe
+        ? (expertsPerTok * 3 * hiddenSize * moeIntermediate) + (sharedExperts * 3 * hiddenSize * intermediateSize)
+        : mlpParams;
+
+      const perLayerTotal = attnParams + mlpParams + (4 * hiddenSize);
+      const perLayerActive = attnParams + activeMlpParams + (4 * hiddenSize);
+
+      const totalEstimated = (layers * perLayerTotal) + (2 * vocabSize * hiddenSize);
+      const activeEstimated = (layers * perLayerActive) + (2 * vocabSize * hiddenSize);
+
       calculatedParamsB = totalEstimated / 1e9;
+      activeParamsB = activeEstimated / 1e9;
     }
 
     // Update active reactive state
     modelParamsB.value = Math.max(0.1, parseFloat(calculatedParamsB.toFixed(2)));
+    modelActiveParamsB.value = Math.max(0.1, parseFloat(activeParamsB.toFixed(2)));
     modelLayers.value = layers;
     modelHiddenSize.value = hiddenSize;
     modelQHeads.value = qHeads;
     modelKvHeads.value = kvHeads;
-    ctxLength.value = Math.min(131072, Math.max(2048, maxCtx));
+
+    const paramsDisplay = isMoe
+      ? `${modelParamsB.value.toFixed(1)}B (激活 ~${modelActiveParamsB.value.toFixed(1)}B)`
+      : `${modelParamsB.value.toFixed(2)}B`;
 
     syncedModelMeta.value = {
       id: modelId,
       source: modelSource.value,
       type: modelType,
+      paramsDisplay,
       paramsB: calculatedParamsB,
       layers,
       hiddenSize,
       qHeads,
       kvHeads,
-      maxCtx
+      headDim,
+      isMla,
+      attentionDesc,
+      detectedQuant,
+      moeInfo,
+      baseCtx,
+      maxCtx,
+      slidingWindow
     };
 
   } catch (err) {
@@ -618,17 +1027,38 @@ const weightsGb = computed(() => {
   return modelParamsB.value * weightPrecBytes.value;
 });
 
-// Formula 2: KV Cache per token
-const kvGb = computed(() => {
-  const gqaRatio = modelKvHeads.value / modelQHeads.value;
-  const kvBytesPerToken = 2 * modelLayers.value * modelHiddenSize.value * gqaRatio * kvPrecBytes.value;
-  const totalBytes = kvBytesPerToken * ctxLength.value * concurrency.value;
-  return totalBytes / (1024 * 1024 * 1024);
+// Formula 2: KV Cache per token with MLA / SWA support
+const perReqKvKb = computed(() => {
+  const effectiveCtx = (useSlidingWindowEviction.value && modelSlidingWindow.value)
+    ? Math.min(ctxLength.value, modelSlidingWindow.value)
+    : ctxLength.value;
+
+  let kvBytesPerToken = 0;
+  if (isMlaActive.value) {
+    // Multi-Head Latent Attention (MLA) compressed dimension
+    kvBytesPerToken = modelLayers.value * mlaKvDim.value * kvPrecBytes.value;
+  } else {
+    // Standard MHA / GQA / MQA
+    const hDim = modelHeadDim.value || Math.floor(modelHiddenSize.value / modelQHeads.value);
+    kvBytesPerToken = 2 * modelLayers.value * modelKvHeads.value * hDim * kvPrecBytes.value;
+  }
+  return (kvBytesPerToken * effectiveCtx) / 1024;
 });
 
-// Formula 3: Total Required VRAM
+const kvGb = computed(() => {
+  const totalKb = perReqKvKb.value * concurrency.value;
+  return totalKb / (1024 * 1024);
+});
+
+// Formula 3: Dynamic CUDA Buffer & Activation Overhead
+const cudaBufferGb = computed(() => {
+  const activationOverhead = Math.min(6.0, (modelParamsB.value * 0.032) + ((ctxLength.value / 1024) * concurrency.value * 0.012));
+  return parseFloat((0.8 + activationOverhead).toFixed(1));
+});
+
+// Formula 4: Total Required VRAM
 const totalVramGb = computed(() => {
-  return weightsGb.value + kvGb.value + 1.6;
+  return weightsGb.value + kvGb.value + cudaBufferGb.value;
 });
 
 const recommendationText = computed(() => {
@@ -1107,6 +1537,26 @@ onUnmounted(() => {
   font-weight: 700;
 }
 
+.kv-mech-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.74rem;
+}
+
+.mla-badge {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+.gqa-badge {
+  background: rgba(99, 102, 241, 0.15);
+  color: #c7d2fe;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -1119,6 +1569,38 @@ onUnmounted(() => {
   font-weight: 500;
 }
 
+.field-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+
+.context-limit-hint {
+  font-size: 0.72rem;
+  color: #818cf8;
+  font-family: var(--font-mono, monospace);
+  margin-right: 12px;
+}
+
+.context-val-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.context-number-input {
+  width: 90px !important;
+  padding: 4px 6px !important;
+  font-size: 0.82rem !important;
+  text-align: right;
+}
+
+.tokens-unit {
+  font-size: 0.72rem;
+  color: var(--text-muted, #94a3b8);
+}
+
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1128,7 +1610,7 @@ onUnmounted(() => {
 .slider-group {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .slider-header {
@@ -1145,6 +1627,80 @@ onUnmounted(() => {
   padding: 2px 8px;
   border-radius: 4px;
   border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.context-presets-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.presets-label {
+  font-size: 0.72rem;
+  color: var(--text-muted, #94a3b8);
+  font-family: var(--font-mono, monospace);
+}
+
+.context-preset-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  font-size: 0.7rem;
+  font-family: var(--font-mono, monospace);
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.context-preset-chip:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #818cf8;
+  color: #ffffff;
+}
+
+.context-preset-chip.active {
+  background: #6366f1;
+  border-color: #818cf8;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.context-preset-chip.max-chip {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+.context-preset-chip.max-chip.active {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.extra-options-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.toggle-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  cursor: pointer;
+}
+
+.toggle-checkbox-label:hover {
+  color: #e2e8f0;
+}
+
+.cyber-checkbox {
+  accent-color: #6366f1;
 }
 
 .vram-results-panel {
@@ -1167,7 +1723,7 @@ onUnmounted(() => {
   padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   transition: all 0.2s ease;
 }
 
@@ -1183,9 +1739,39 @@ onUnmounted(() => {
   box-shadow: 0 4px 20px rgba(56, 189, 248, 0.12);
 }
 
+.metric-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .metric-label {
   font-size: 0.72rem;
   color: var(--text-muted, #94a3b8);
+  font-family: var(--font-mono, monospace);
+}
+
+.kv-micro-badge {
+  font-size: 0.62rem;
+  font-family: var(--font-mono, monospace);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.kv-micro-badge.mla {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fb7185;
+}
+
+.kv-micro-badge.gqa {
+  background: rgba(99, 102, 241, 0.2);
+  color: #818cf8;
+}
+
+.metric-subtext {
+  font-size: 0.68rem;
+  color: #64748b;
   font-family: var(--font-mono, monospace);
 }
 
