@@ -121,7 +121,53 @@ function generateBlogJsonLd(articles, isEn) {
   }, null, 4);
 }
 
+function generateToolsAppJsonLd(toolsData, isEn) {
+  const siteUrl = isEn ? 'https://blog.llmgo.top/en/tools/' : 'https://blog.llmgo.top/tools/';
+  const name = isEn ? 'Online Markdown Studio & Multi-Format Exporter' : '在线 Markdown 渲染与多格式导出器';
+  const desc = toolsData ? toolsData.heroDesc : '';
+
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name,
+    description: desc,
+    url: siteUrl,
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'All',
+    browserRequirements: 'Requires JavaScript. Requires HTML5.',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD'
+    },
+    author: {
+      '@type': 'Person',
+      name: 'ifnodoraemon',
+      url: 'https://github.com/ifnodoraemon'
+    }
+  }, null, 4);
+}
+
+function generateToolsFaqJsonLd(toolsData) {
+  const faqItems = (toolsData?.faqs || []).map(item => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a.replace(/<[^>]+>/g, '')
+    }
+  }));
+
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems
+  }, null, 4);
+}
+
 zhData.jsonLd = generateBlogJsonLd(zhArticles, false);
+zhData.toolsAppJsonLd = generateToolsAppJsonLd(zhData.tools, false);
+zhData.toolsFaqJsonLd = generateToolsFaqJsonLd(zhData.tools);
 
 // Inject dynamic relatedArticles for models page
 zhData.models.relatedArticles = zhArticles.slice(0, 3).map(a => ({
@@ -142,6 +188,8 @@ const enData = {
 };
 
 enData.jsonLd = generateBlogJsonLd(enArticles, true);
+enData.toolsAppJsonLd = generateToolsAppJsonLd(enData.tools, true);
+enData.toolsFaqJsonLd = generateToolsFaqJsonLd(enData.tools);
 
 enData.models.relatedArticles = enArticles.slice(0, 3).map(a => ({
   tag: a.tag || 'Deep Dive',

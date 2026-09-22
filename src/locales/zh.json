@@ -16,6 +16,10 @@
     "about": {
       "title": "关于节点 — 大雄话AI",
       "desc": "关于此站点的缘起、目标以及背后运行的技术细节。"
+    },
+    "tools": {
+      "title": "在线 Markdown 渲染与多格式导出器 | 大雄话AI 工具箱",
+      "desc": "轻量级高颜值在线 Markdown 编辑与实时渲染工具，支持 KaTeX 数学公式、代码语法高亮、一键导出微信/知乎富文本、独立自包含 HTML、PDF 打印及纯文本排版。"
     }
   },
   "models": {
@@ -856,5 +860,55 @@
     "feature2": "实战经验分享",
     "feature3": "前沿趋势洞察",
     "feature4": "开源项目实践"
+  },
+  "tools": {
+    "heroTag": "DEVELOPER WORKFLOW & TOOLS",
+    "heroTitle": "开发者效率工具箱",
+    "heroDesc": "轻量级高颜值在线 Markdown 编辑与全格式导出中心。支持实时渲染、KaTeX 复杂公式、代码语义高亮、公众号/知乎富文本一键复制、独立 HTML 及无损 PDF 导出。",
+    "terminalTitle": "Runtime: markdown_studio.sh --mode=live_render",
+    "editorLabel": "Markdown 源文本",
+    "previewLabel": "实时排版预览",
+    "placeholder": "在此输入或粘贴 Markdown 文本...",
+    "btnCopyWechat": "复制公众号/知乎富文本",
+    "btnExportHtml": "导出独立 HTML",
+    "btnDownloadMd": "下载 Markdown",
+    "btnPrintPdf": "打印 / 导出 PDF",
+    "btnCopyHtml": "复制 HTML 源码",
+    "btnClear": "清空内容",
+    "btnReset": "载入示例文档",
+    "templateLabel": "快捷模板：",
+    "templateDefault": "选择预置模板...",
+    "templateArticle": "技术架构深度文章",
+    "templateReadme": "开源项目标准规范 README",
+    "templateAgent": "AI Agent 提示词与架构规范",
+    "templateMath": "KaTeX 数学公式与推导",
+    "templateWechat": "微信公众号精修排版",
+    "statsWords": "字数",
+    "statsChars": "字符",
+    "statsLines": "行数",
+    "statsReadTime": "预计阅读",
+    "viewModeSplit": "双栏分屏",
+    "viewModeEdit": "仅编辑",
+    "viewModePreview": "仅预览",
+    "faqTitle": "常见问题 (FAQ)",
+    "faqDesc": "关于富文本排版、剪贴板多 MIME 兼容性与离线导出的技术解析",
+    "faqs": [
+      {
+        "q": "为什么直接从网页复制的代码或表格粘贴到微信公众号后台常出现排版错乱？本工具如何解决？",
+        "a": "微信公众号后台采用定制的富文本编辑器，其对外部 CSS 样式隔离严格，不支持大部分外部 class 类名，且对 <code>table</code> 与 <code>pre</code> 的默认内外边距有着不可控的重置机制。本工具的「复制公众号富文本」功能在前端合成时，基于标准 ClipboardItem API 封装，自动遍历并将核心排版属性（如背景色、字体行距、边框、代码块高亮配色）以内联样式（Inline Styles）注入，消除外部样式表依赖，确保在微信公众号、知乎专栏以及各大支持富文本的平台中一键粘贴即所得。"
+      },
+      {
+        "q": "导出的「独立自包含 HTML」包含哪些资源？是否可以在完全离线环境下打开查看？",
+        "a": "导出的独立 HTML 文件完整嵌入了页面排版所需的关键 CSS、响应式栅格系统、深色模式配色方案以及核心代码字体层叠，并且完全移除了外部动态脚本依赖。用户下载生成的 <code>.html</code> 文件后，无需连接网络即可在任何现代浏览器中完整查看渲染后的排版效果与语法高亮，亦可作为离线技术文档直接归档或部署至静态服务器。"
+      },
+      {
+        "q": "本工具在客户端进行 Markdown 解析与公式渲染时，是否会将文档内容上传到云端服务器？",
+        "a": "绝不上传任何数据。本工具的所有逻辑（包含 Marked 语法解析、Highlight.js 语法高亮、KaTeX 数学公式渲染以及剪贴板合成）全部 100% 运行在用户的本地浏览器端沙箱中。即使用户断开网络连接，只要页面已加载，即可全功能离线编写与导出。此外，本工具会自动将当前草稿同步至浏览器的 <code>localStorage</code>，保证用户在误关闭或刷新网页时数据永不丢失。"
+      },
+      {
+        "q": "如何将渲染后的文章快速一键多平台发布（如微信公众号、知乎、掘金、CSDN）？",
+        "a": "我们为开发者提供了两种极致高效的双轨发布方案：一是直接在页面中点击「复制公众号/知乎富文本」，即可在微信公众号后台或知乎富文本编辑器中直接 Ctrl+V 粘贴发布；二是对于多平台矩阵运营，我们提供了博客自带的命令行工具 <code>npm run export:domestic</code> 配合浏览器插件（如 WechatSync），可自动将内链转换为绝对路径并一键批量推送至掘金、知乎与 CSDN。更多工程化多平台发稿设计理念可参考我们的架构专栏文章：<a href=\"/articles/agent-runtime-practices/\">《生产级 Agent 运行时全景解析》</a>。"
+      }
+    ]
   }
 }

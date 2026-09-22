@@ -16,6 +16,10 @@
     "about": {
       "title": "About This Node — Nobita Talks AI",
       "desc": "The origin, goals, and technical details behind this site."
+    },
+    "tools": {
+      "title": "Online Markdown Studio & Multi-Format Exporter | Nobita Talks AI Tools",
+      "desc": "Modern lightweight online Markdown editor & live renderer supporting KaTeX math typography, code syntax highlighting, rich-text export for WeChat/Zhihu, standalone HTML, and print-ready PDF."
     }
   },
   "models": {
@@ -856,5 +860,55 @@
     "feature2": "Hands-On Experience",
     "feature3": "Frontier Trends Insights",
     "feature4": "Open Source Projects"
+  },
+  "tools": {
+    "heroTag": "DEVELOPER WORKFLOW & TOOLS",
+    "heroTitle": "Developer Productivity Toolbox",
+    "heroDesc": "Lightweight, privacy-first online Markdown studio and multi-format exporter. Enjoy real-time preview, KaTeX mathematical typography, code syntax highlighting, one-click rich-text copy for WeChat/Zhihu, standalone HTML, and print-ready PDF export.",
+    "terminalTitle": "Runtime: markdown_studio.sh --mode=live_render",
+    "editorLabel": "Markdown Source",
+    "previewLabel": "Live Formatted Preview",
+    "placeholder": "Type or paste your Markdown here...",
+    "btnCopyWechat": "Copy Rich Text (WeChat/Zhihu)",
+    "btnExportHtml": "Export Standalone HTML",
+    "btnDownloadMd": "Download Markdown (.md)",
+    "btnPrintPdf": "Print / Export PDF",
+    "btnCopyHtml": "Copy Clean HTML",
+    "btnClear": "Clear",
+    "btnReset": "Load Sample",
+    "templateLabel": "Presets:",
+    "templateDefault": "Select Preset Template...",
+    "templateArticle": "Technical Architecture Deep Dive",
+    "templateReadme": "Standard Open-Source README",
+    "templateAgent": "AI Agent Spec & Prompt Template",
+    "templateMath": "KaTeX Math Formulas & Proofs",
+    "templateWechat": "Formatted Newsletter / Column Post",
+    "statsWords": "Words",
+    "statsChars": "Chars",
+    "statsLines": "Lines",
+    "statsReadTime": "Est. Read",
+    "viewModeSplit": "Split",
+    "viewModeEdit": "Edit",
+    "viewModePreview": "Preview",
+    "faqTitle": "Frequently Asked Questions (FAQ)",
+    "faqDesc": "Technical insights on rich-text clipboard synthesis, multi-MIME compatibility, and zero-upload offline exports",
+    "faqs": [
+      {
+        "q": "Why do tables and code blocks often break when copied from the web into WeChat or Zhihu, and how does this tool fix it?",
+        "a": "Rich-text web editors on platforms like WeChat Official Accounts enforce strict CSS sanitization rules and omit external stylesheet classes, often corrupting <code>table</code> and <code>pre</code> block layouts. Our 'Copy Rich Text' engine synthesizes multi-MIME clipboard payloads via the standard ClipboardItem API and automatically inlines essential CSS styling attributes (backgrounds, fonts, borders, paddings, and syntax highlights). This ensures seamless zero-breakage pasting across WeChat, Zhihu, and other rich-text publishers."
+      },
+      {
+        "q": "What assets are bundled into the 'Standalone HTML' export, and can it be viewed completely offline?",
+        "a": "The exported standalone HTML file embeds all required responsive stylesheets, dark/light theme palettes, and typography rules directly within the <code>&lt;style&gt;</code> block, eliminating external network dependencies. Once downloaded, you can open and read your rendered document with full syntax highlighting in any browser completely offline, or publish it as a static archive."
+      },
+      {
+        "q": "Does this tool upload Markdown or document contents to any remote server?",
+        "a": "Zero data is ever transmitted. All operations—including Marked AST tokenization, Highlight.js syntax highlighting, KaTeX formula processing, and clipboard serialization—run 100% locally within your client browser sandbox. Your active draft is automatically mirrored to browser <code>localStorage</code> for instant recovery across accidental reloads and tab closures."
+      },
+      {
+        "q": "How can I syndicate rendered articles across domestic developer communities (WeChat, Zhihu, Juejin, CSDN)?",
+        "a": "We recommend a dual-track workflow: for direct single-article publishing, use 'Copy Rich Text' and paste straight into the target platform editor; for multi-platform distribution pipelines, integrate with our repository CLI <code>npm run export:domestic</code> and browser extensions like WechatSync. Learn more about automated content pipelines in our deep dive: <a href=\"/en/articles/agent-runtime-practices/\">Production Agent Runtime Architecture</a>."
+      }
+    ]
   }
 }

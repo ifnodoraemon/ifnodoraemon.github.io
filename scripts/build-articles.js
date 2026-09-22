@@ -26,11 +26,13 @@ const STATIC_ROUTES = new Set([
   '/about/',
   '/models/',
   '/projects/',
+  '/tools/',
   '/articles/',
   '/en/',
   '/en/about/',
   '/en/models/',
   '/en/projects/',
+  '/en/tools/',
   '/en/articles/',
 ]);
 

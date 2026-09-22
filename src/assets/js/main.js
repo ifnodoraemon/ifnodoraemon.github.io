@@ -195,6 +195,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initMediumZoom();
   window.addEventListener('load', initMediumZoom, { once: true });
 
+  // — Markdown Studio (Tools page) —
+  if (document.getElementById('markdown-editor-app')) {
+    import('./tools/markdown-editor.js').then(({ initMarkdownStudio }) => {
+      initMarkdownStudio();
+    }).catch(err => {
+      console.error('Failed to initialize Markdown Studio:', err);
+    });
+  }
+
 });
 
 

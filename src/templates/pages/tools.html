@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="{{langAttr}}">
+<head>
+  <meta name="google-site-verification" content="OOjVKBvpXj_qIa2QHCWvYdRPa5WnY7IY8rnls3Hc76Y" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{meta.tools.title}}</title>
+  <meta name="description" content="{{meta.tools.desc}}">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://blog.llmgo.top{{linkPrefix}}/tools/">
+  <link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/tools/" />
+  <link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/tools/" />
+  <link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/tools/" />
+  <link rel="alternate" type="application/rss+xml" title="{{meta.siteName}} RSS Feed" href="{{#if isEn}}/en/feed.xml{{else}}/feed.xml{{/if}}" />
+  <meta name="theme-color" content="#090a0f">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://blog.llmgo.top{{linkPrefix}}/tools/">
+  <meta property="og:title" content="{{meta.tools.title}}">
+  <meta property="og:description" content="{{meta.tools.desc}}">
+  <meta property="og:image" content="https://blog.llmgo.top/og-image.png">
+  <meta property="og:locale" content="{{#if isEn}}en_US{{else}}zh_CN{{/if}}">
+  <meta property="og:site_name" content="{{meta.siteName}}">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{meta.tools.title}}">
+  <meta name="twitter:description" content="{{meta.tools.desc}}">
+  <meta name="twitter:image" content="https://blog.llmgo.top/og-image.png">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-5078775507335151">
+
+  <!-- Google tag (gtag.js) -->
+  <script>
+    const loadGA = () => {
+      if (window.gaLoaded) return;
+      window.gaLoaded = true;
+      const script = document.createElement('script');
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-4WZN5Q7VS6';
+      script.async = true;
+      document.head.appendChild(script);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-4WZN5Q7VS6');
+    };
+    ['scroll', 'mousemove', 'touchstart', 'keydown'].forEach(e => window.addEventListener(e, loadGA, {once: true, passive: true}));
+    setTimeout(loadGA, 5000);
+  </script>
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {{{toolsAppJsonLd}}}
+  </script>
+  <script type="application/ld+json">
+  {{{toolsFaqJsonLd}}}
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/og-image.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"></noscript>
+  <link rel="stylesheet" href="/vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="/src/assets/css/style.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <nav id="navbar" class="navbar" aria-label="{{#if isEn}}Main navigation{{else}}主导航{{/if}}"></nav>
+
+  <main class="page-main" id="main-content">
+    <section class="page-hero">
+      <div class="container">
+        <div class="page-hero-content fade-in">
+          <div class="section-tag">// {{tools.heroTag}}</div>
+          <h1>{{tools.heroTitle}}</h1>
+          <p class="page-hero-desc">{{tools.heroDesc}}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Markdown Studio App Section -->
+    <section class="section section-tight" id="markdown-studio-section">
+      <div class="container container-wide">
+        
+        <div class="terminal-window markdown-app-window fade-in" id="markdown-editor-app" data-lang="{{#if isEn}}en{{else}}zh{{/if}}">
+          <!-- Terminal Header -->
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot close"></span>
+              <span class="dot minimize"></span>
+              <span class="dot expand"></span>
+            </div>
+            <div class="terminal-title">{{tools.terminalTitle}}</div>
+            <div class="terminal-actions">
+              <span class="status-indicator live"><span class="status-pulse"></span>CLIENT SANDBOX</span>
+            </div>
+          </div>
+
+          <!-- Studio Toolbar -->
+          <div class="markdown-toolbar">
+            <div class="toolbar-left">
+              <div class="template-selector-wrap">
+                <label for="template-select" class="toolbar-label">{{tools.templateLabel}}</label>
+                <select id="template-select" class="cyber-select" aria-label="{{tools.templateLabel}}">
+                  <option value="">{{tools.templateDefault}}</option>
+                  <option value="article">{{tools.templateArticle}}</option>
+                  <option value="agent">{{tools.templateAgent}}</option>
+                  <option value="readme">{{tools.templateReadme}}</option>
+                  <option value="math">{{tools.templateMath}}</option>
+                  <option value="wechat">{{tools.templateWechat}}</option>
+                </select>
+              </div>
+
+              <!-- View Switcher (Visible on mobile / small screens) -->
+              <div class="view-mode-toggle" role="group" aria-label="View Mode">
+                <button type="button" class="mode-btn active" data-mode="split" title="{{tools.viewModeSplit}}">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18"/></svg>
+                  <span>{{tools.viewModeSplit}}</span>
+                </button>
+                <button type="button" class="mode-btn" data-mode="edit" title="{{tools.viewModeEdit}}">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  <span>{{tools.viewModeEdit}}</span>
+                </button>
+                <button type="button" class="mode-btn" data-mode="preview" title="{{tools.viewModePreview}}">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <span>{{tools.viewModePreview}}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Export Actions -->
+            <div class="toolbar-right">
+              <button type="button" class="tool-btn btn-highlight" id="btn-copy-wechat" title="{{tools.btnCopyWechat}}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>{{tools.btnCopyWechat}}</span>
+              </button>
+
+              <div class="dropdown-wrap">
+                <button type="button" class="tool-btn btn-secondary" id="export-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  <span>{{#if isEn}}Export / Actions{{else}}导出选项{{/if}}</span>
+                  <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="dropdown-menu" id="export-dropdown-menu" role="menu">
+                  <button type="button" class="dropdown-item" id="btn-export-html" role="menuitem">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    <span>{{tools.btnExportHtml}}</span>
+                  </button>
+                  <button type="button" class="dropdown-item" id="btn-download-md" role="menuitem">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <span>{{tools.btnDownloadMd}}</span>
+                  </button>
+                  <button type="button" class="dropdown-item" id="btn-print-pdf" role="menuitem">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                    <span>{{tools.btnPrintPdf}}</span>
+                  </button>
+                  <button type="button" class="dropdown-item" id="btn-copy-html" role="menuitem">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    <span>{{tools.btnCopyHtml}}</span>
+                  </button>
+                  <div class="dropdown-divider"></div>
+                  <button type="button" class="dropdown-item danger" id="btn-clear" role="menuitem">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    <span>{{tools.btnClear}}</span>
+                  </button>
+                  <button type="button" class="dropdown-item" id="btn-reset" role="menuitem">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    <span>{{tools.btnReset}}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dual Workspace -->
+          <div class="markdown-workspace" id="markdown-workspace">
+            <!-- Left: Editor Pane -->
+            <div class="pane editor-pane" id="editor-pane">
+              <div class="pane-header">
+                <div class="pane-title">
+                  <span class="pane-indicator"></span>
+                  <span>{{tools.editorLabel}}</span>
+                </div>
+                <div class="editor-stats" id="editor-stats">
+                  <span class="stat-item"><span id="stat-words">0</span> {{tools.statsWords}}</span>
+                  <span class="stat-sep">/</span>
+                  <span class="stat-item"><span id="stat-chars">0</span> {{tools.statsChars}}</span>
+                  <span class="stat-sep">/</span>
+                  <span class="stat-item"><span id="stat-lines">0</span> {{tools.statsLines}}</span>
+                  <span class="stat-sep">/</span>
+                  <span class="stat-item"><span id="stat-readtime">1m</span> {{tools.statsReadTime}}</span>
+                </div>
+              </div>
+              <div class="pane-content editor-wrapper">
+                <textarea id="markdown-input" class="markdown-textarea" placeholder="{{tools.placeholder}}" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+              </div>
+            </div>
+
+            <!-- Right: Preview Pane -->
+            <div class="pane preview-pane" id="preview-pane">
+              <div class="pane-header">
+                <div class="pane-title">
+                  <span class="pane-indicator preview"></span>
+                  <span>{{tools.previewLabel}}</span>
+                </div>
+                <div class="preview-badge">HTML5 + KaTeX</div>
+              </div>
+              <div class="pane-content preview-wrapper">
+                <div id="markdown-preview" class="markdown-preview article-detail-content"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Toast Notification Container -->
+        <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+      </div>
+    </section>
+
+    <!-- FAQ Module (Required for SEO) -->
+    <section class="section section-faq">
+      <div class="container">
+        <div class="section-header text-center fade-in">
+          <div class="section-tag">// KNOWLEDGE BASE</div>
+          <h2>{{tools.faqTitle}}</h2>
+          <p class="section-desc">{{tools.faqDesc}}</p>
+        </div>
+
+        <div class="faq-grid fade-in">
+          {{#each tools.faqs}}
+          <div class="faq-card terminal-window">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="dot close"></span>
+                <span class="dot minimize"></span>
+                <span class="dot expand"></span>
+              </div>
+              <div class="terminal-title">FAQ #{{@index}}</div>
+            </div>
+            <div class="terminal-body faq-body">
+              <h3 class="faq-question">{{this.q}}</h3>
+              <div class="faq-answer">{{{this.a}}}</div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="site-footer" class="footer"></footer>
+
+  <script type="module" src="/src/assets/js/main.js"></script>
+</body>
+</html>

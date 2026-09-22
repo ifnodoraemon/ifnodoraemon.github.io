@@ -30,6 +30,16 @@ test('route helpers normalize zh and en paths consistently', () => {
     footerStyle: 'simple',
     normalizedPath: '/models/',
   });
+  assert.deepEqual(getPageState('/tools/'), {
+    activePage: 'tools',
+    footerStyle: 'simple',
+    normalizedPath: '/tools/',
+  });
+  assert.deepEqual(getPageState('/en/tools/'), {
+    activePage: 'tools',
+    footerStyle: 'simple',
+    normalizedPath: '/tools/',
+  });
   assert.deepEqual(getPageState('/en/articles/agent-runtime-practices/'), {
     activePage: '',
     footerStyle: 'simple',
@@ -273,6 +283,8 @@ test('all pages include valid RSS alternate links and feeds are generated correc
     path.join(ROOT, 'dist', 'en', 'models', 'index.html'),
     path.join(ROOT, 'dist', 'projects', 'index.html'),
     path.join(ROOT, 'dist', 'en', 'projects', 'index.html'),
+    path.join(ROOT, 'dist', 'tools', 'index.html'),
+    path.join(ROOT, 'dist', 'en', 'tools', 'index.html'),
     path.join(ROOT, 'dist', 'articles', 'index.html'),
     path.join(ROOT, 'dist', 'en', 'articles', 'index.html'),
     path.join(ROOT, 'dist', 'articles', 'vllm-serving-guide', 'index.html'),
@@ -283,6 +295,21 @@ test('all pages include valid RSS alternate links and feeds are generated correc
     const html = fs.readFileSync(p, 'utf-8');
     assert.match(html, /<link\s+rel="alternate"\s+type="application\/rss\+xml"/, `expected RSS alternate tag in ${p}`);
   }
+});
+
+test('tools page includes Markdown Studio components and WebApplication / FAQPage schema', () => {
+  const zhToolsHtml = fs.readFileSync(path.join(ROOT, 'dist', 'tools', 'index.html'), 'utf-8');
+  const enToolsHtml = fs.readFileSync(path.join(ROOT, 'dist', 'en', 'tools', 'index.html'), 'utf-8');
+
+  assert.match(zhToolsHtml, /id="markdown-editor-app"/);
+  assert.match(zhToolsHtml, /id="markdown-input"/);
+  assert.match(zhToolsHtml, /id="markdown-preview"/);
+  assert.match(zhToolsHtml, /"@type":\s*"WebApplication"/);
+  assert.match(zhToolsHtml, /"@type":\s*"FAQPage"/);
+
+  assert.match(enToolsHtml, /id="markdown-editor-app"/);
+  assert.match(enToolsHtml, /"@type":\s*"WebApplication"/);
+  assert.match(enToolsHtml, /"@type":\s*"FAQPage"/);
 });
 
 test('code blocks have copy buttons with appropriate styling and copy-code-btn class', () => {

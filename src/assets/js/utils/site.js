@@ -23,6 +23,9 @@ export function getPageState(pathname = '/') {
   } else if (normalizedPath === '/projects' || normalizedPath.startsWith('/projects/')) {
     activePage = 'projects';
     footerStyle = 'simple';
+  } else if (normalizedPath === '/tools' || normalizedPath.startsWith('/tools/')) {
+    activePage = 'tools';
+    footerStyle = 'simple';
   } else if (normalizedPath === '/articles' || normalizedPath === '/articles/') {
     activePage = 'articles';
     footerStyle = 'simple';

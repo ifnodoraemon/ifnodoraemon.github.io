@@ -15,12 +15,14 @@ export function renderNav(activePage = '') {
     { id: 'articles', title: 'Articles', href: '/en/articles/' },
     { id: 'models', title: 'Models', href: '/en/models/' },
     { id: 'projects', title: 'Projects', href: '/en/projects/' },
+    { id: 'tools', title: 'Tools', href: '/en/tools/' },
     { id: 'about', title: 'About', href: '/en/about/' }
   ] : [
     { id: 'home', title: '首页', href: '/' },
     { id: 'articles', title: '文章', href: '/articles/' },
     { id: 'models', title: '模型', href: '/models/' },
     { id: 'projects', title: '作品', href: '/projects/' },
+    { id: 'tools', title: '工具', href: '/tools/' },
     { id: 'about', title: '关于', href: '/about/' }
   ];
 
