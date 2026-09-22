@@ -61,11 +61,35 @@
       </button>
     </div>
 
-    <!-- Active Tool View Container with KeepAlive -->
+    <!-- Tool View Container with v-show panels (Instant 0ms switching & perfect SSR hydration) -->
     <div class="toolbox-view-wrapper">
-      <KeepAlive>
-        <component :is="activeComponent" :lang="lang" :is-en="isEn" :key="currentTab" />
-      </KeepAlive>
+      <div v-show="currentTab === 'markdown'" id="tool-panel-markdown" class="tool-tab-panel" role="tabpanel" aria-labelledby="tab-nav-markdown">
+        <MarkdownStudio :lang="lang" :is-en="isEn" />
+      </div>
+      <div v-show="currentTab === 'base64'" id="tool-panel-base64" class="tool-tab-panel" role="tabpanel" aria-labelledby="tab-nav-base64">
+        <Base64Codec :lang="lang" :is-en="isEn" />
+      </div>
+      <div v-show="currentTab === 'vram'" id="tool-panel-vram" class="tool-tab-panel" role="tabpanel" aria-labelledby="tab-nav-vram">
+        <VramCalculator :lang="lang" :is-en="isEn" />
+      </div>
+      <div v-show="currentTab === 'token'" id="tool-panel-token" role="tabpanel" aria-labelledby="tab-nav-token">
+        <TokenCalculator :lang="lang" :is-en="isEn" />
+      </div>
+      <div v-show="currentTab === 'json'" id="tool-panel-json" class="tool-tab-panel" role="tabpanel" aria-labelledby="tab-nav-json">
+        <JsonStudio :lang="lang" :is-en="isEn" />
+      </div>
+      <div v-show="currentTab === 'jwt'" id="tool-panel-jwt" class="tool-tab-panel" role="tabpanel" aria-labelledby="tab-nav-jwt">
+        <JwtDebugger :lang="lang" :is-en="isEn" />
+      </div>
+      <div v-show="currentTab === 'cron'" id="tool-panel-cron" class="tool-tab-panel" role="tabpanel" aria-labelledby="tab-nav-cron">
+        <TimeCron :lang="lang" :is-en="isEn" />
+      </div>
+      <div v-show="currentTab === 'url'" id="tool-panel-url" class="tool-tab-panel" role="tabpanel" aria-labelledby="tab-nav-url">
+        <UrlStudio :lang="lang" :is-en="isEn" />
+      </div>
+      <div v-show="currentTab === 'codecard'" id="tool-panel-codecard" class="tool-tab-panel" role="tabpanel" aria-labelledby="tab-nav-codecard">
+        <CodeCard :lang="lang" :is-en="isEn" />
+      </div>
     </div>
   </div>
 </template>
@@ -166,10 +190,7 @@ const tabsBarRef = ref(null);
 const canScrollLeft = ref(false);
 const canScrollRight = ref(false);
 
-const activeComponent = computed(() => {
-  const match = tabs.find(t => t.id === currentTab.value);
-  return match ? match.comp : MarkdownStudio;
-});
+
 
 // Scroll state checker
 function updateScrollState() {
