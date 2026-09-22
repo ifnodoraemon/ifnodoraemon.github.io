@@ -297,33 +297,47 @@ test('all pages include valid RSS alternate links and feeds are generated correc
   }
 });
 
-test('tools page includes Markdown Studio, Base64 Codec, and WebApplication / FAQPage schema', () => {
+test('tools page includes full 9-tool suite and WebApplication / FAQPage schema', () => {
   const zhToolsHtml = fs.readFileSync(path.join(ROOT, 'dist', 'tools', 'index.html'), 'utf-8');
   const enToolsHtml = fs.readFileSync(path.join(ROOT, 'dist', 'en', 'tools', 'index.html'), 'utf-8');
 
-  // Tabs
-  assert.match(zhToolsHtml, /id="tab-nav-markdown"/);
-  assert.match(zhToolsHtml, /id="tab-nav-base64"/);
+  // Tabs for all 9 tools
+  const tabIds = [
+    'tab-nav-markdown',
+    'tab-nav-base64',
+    'tab-nav-vram',
+    'tab-nav-token',
+    'tab-nav-json',
+    'tab-nav-jwt',
+    'tab-nav-cron',
+    'tab-nav-url',
+    'tab-nav-codecard'
+  ];
+  for (const id of tabIds) {
+    assert.match(zhToolsHtml, new RegExp(`id="${id}"`), `expected ${id} in zh tools page`);
+    assert.match(enToolsHtml, new RegExp(`id="${id}"`), `expected ${id} in en tools page`);
+  }
 
-  // Markdown Studio
-  assert.match(zhToolsHtml, /id="markdown-editor-app"/);
-  assert.match(zhToolsHtml, /id="markdown-input"/);
-  assert.match(zhToolsHtml, /id="markdown-preview"/);
-
-  // Base64 Studio
-  assert.match(zhToolsHtml, /id="base64-tool-app"/);
-  assert.match(zhToolsHtml, /id="b64-input"/);
-  assert.match(zhToolsHtml, /id="b64-output"/);
-  assert.match(zhToolsHtml, /id="b64-btn-encode"/);
-  assert.match(zhToolsHtml, /id="b64-btn-decode"/);
+  // App panels for all 9 tools
+  const appIds = [
+    'markdown-editor-app',
+    'base64-tool-app',
+    'vram-tool-app',
+    'token-tool-app',
+    'json-tool-app',
+    'jwt-tool-app',
+    'cron-tool-app',
+    'url-tool-app',
+    'codecard-tool-app'
+  ];
+  for (const id of appIds) {
+    assert.match(zhToolsHtml, new RegExp(`id="${id}"`), `expected ${id} in zh tools page`);
+    assert.match(enToolsHtml, new RegExp(`id="${id}"`), `expected ${id} in en tools page`);
+  }
 
   // Schema
   assert.match(zhToolsHtml, /"@type":\s*"WebApplication"/);
   assert.match(zhToolsHtml, /"@type":\s*"FAQPage"/);
-
-  // English page
-  assert.match(enToolsHtml, /id="markdown-editor-app"/);
-  assert.match(enToolsHtml, /id="base64-tool-app"/);
   assert.match(enToolsHtml, /"@type":\s*"WebApplication"/);
   assert.match(enToolsHtml, /"@type":\s*"FAQPage"/);
 });

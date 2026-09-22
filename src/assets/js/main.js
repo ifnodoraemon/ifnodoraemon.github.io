@@ -199,45 +199,49 @@ document.addEventListener('DOMContentLoaded', () => {
   const toolsSection = document.getElementById('toolbox-section');
   if (toolsSection) {
     const tabBtns = document.querySelectorAll('.tool-tab-btn');
-    const panelMarkdown = document.getElementById('tool-panel-markdown');
-    const panelBase64 = document.getElementById('tool-panel-base64');
+    const toolPanels = document.querySelectorAll('.toolbox-panel');
 
-    let markdownInited = false;
-    let base64Inited = false;
+    const initedTools = new Set();
 
-    function loadMarkdownStudio() {
-      if (markdownInited) return;
-      markdownInited = true;
-      import('./tools/markdown-editor.js').then(({ initMarkdownStudio }) => {
-        initMarkdownStudio();
-      }).catch(err => console.error('Failed to init Markdown Studio:', err));
-    }
+    const TOOL_LOADERS = {
+      markdown: () => import('./tools/markdown-editor.js').then(m => m.initMarkdownStudio()),
+      base64: () => import('./tools/base64-tool.js').then(m => m.initBase64Tool()),
+      vram: () => import('./tools/vram-calculator.js').then(m => m.initVramCalculator()),
+      token: () => import('./tools/token-calculator.js').then(m => m.initTokenCalculator()),
+      json: () => import('./tools/json-studio.js').then(m => m.initJsonStudio()),
+      jwt: () => import('./tools/jwt-studio.js').then(m => m.initJwtStudio()),
+      cron: () => import('./tools/time-cron.js').then(m => m.initTimeCron()),
+      url: () => import('./tools/url-studio.js').then(m => m.initUrlStudio()),
+      codecard: () => import('./tools/code-card.js').then(m => m.initCodeCard())
+    };
 
-    function loadBase64Studio() {
-      if (base64Inited) return;
-      base64Inited = true;
-      import('./tools/base64-tool.js').then(({ initBase64Tool }) => {
-        initBase64Tool();
-      }).catch(err => console.error('Failed to init Base64 Tool:', err));
+    function loadTool(toolName) {
+      if (initedTools.has(toolName)) return;
+      initedTools.add(toolName);
+      const loader = TOOL_LOADERS[toolName];
+      if (loader) {
+        loader().catch(err => console.error(`Failed to init ${toolName}:`, err));
+      }
     }
 
     function switchTab(tabName, updateHash = true) {
+      const activeTab = TOOL_LOADERS[tabName] ? tabName : 'markdown';
+
       tabBtns.forEach(btn => {
-        const isMatch = btn.dataset.tab === tabName;
+        const isMatch = btn.dataset.tab === activeTab;
         btn.classList.toggle('active', isMatch);
         btn.setAttribute('aria-selected', String(isMatch));
       });
 
-      if (tabName === 'base64') {
-        if (panelMarkdown) panelMarkdown.style.display = 'none';
-        if (panelBase64) panelBase64.style.display = 'block';
-        loadBase64Studio();
-        if (updateHash) history.replaceState(null, '', '#base64');
-      } else {
-        if (panelBase64) panelBase64.style.display = 'none';
-        if (panelMarkdown) panelMarkdown.style.display = 'block';
-        loadMarkdownStudio();
-        if (updateHash) history.replaceState(null, '', '#markdown');
+      toolPanels.forEach(panel => {
+        const isTarget = panel.id === `tool-panel-${activeTab}`;
+        panel.style.display = isTarget ? 'block' : 'none';
+        panel.classList.toggle('active', isTarget);
+      });
+
+      loadTool(activeTab);
+      if (updateHash) {
+        history.replaceState(null, '', `#${activeTab}`);
       }
     }
 
@@ -247,11 +251,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    if (window.location.hash === '#base64') {
-      switchTab('base64', false);
+    // Initial hash detection
+    const initialHash = window.location.hash.replace(/^#/, '');
+    if (initialHash && TOOL_LOADERS[initialHash]) {
+      switchTab(initialHash, false);
     } else {
       switchTab('markdown', false);
     }
+
+    window.addEventListener('hashchange', () => {
+      const currentHash = window.location.hash.replace(/^#/, '');
+      if (currentHash && TOOL_LOADERS[currentHash]) {
+        switchTab(currentHash, false);
+      }
+    });
   }
 
 });

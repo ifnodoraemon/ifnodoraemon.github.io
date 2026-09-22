@@ -123,7 +123,7 @@ function generateBlogJsonLd(articles, isEn) {
 
 function generateToolsAppJsonLd(toolsData, isEn) {
   const siteUrl = isEn ? 'https://blog.llmgo.top/en/tools/' : 'https://blog.llmgo.top/tools/';
-  const name = isEn ? 'Online Markdown Studio & Multi-Format Exporter' : '在线 Markdown 渲染与多格式导出器';
+  const name = isEn ? 'AI & Developer All-in-One Toolbox' : 'AI 与开发者全能效率工具箱';
   const desc = toolsData ? toolsData.heroDesc : '';
 
   return JSON.stringify({

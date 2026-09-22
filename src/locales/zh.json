@@ -18,8 +18,8 @@
       "desc": "关于此站点的缘起、目标以及背后运行的技术细节。"
     },
     "tools": {
-      "title": "开发者效率工具箱 — 在线 Markdown 渲染与 Base64 互转 | 大雄话AI",
-      "desc": "轻量级高颜值开发者效率工具箱，提供在线 Markdown 渲染与全格式导出（公众号/知乎富文本、自包含 HTML、PDF），以及支持 UTF-8 Unicode、文件与图片的 Base64 极速编解码互转工具。"
+      "title": "AI 与开发者全能效率工具箱 | 大雄话AI",
+      "desc": "100% 纯前端离线沙箱：在线 Markdown 渲染与导出、大模型推理显存与硬件部署计算器、2026 前沿模型 Token 计费对比、JSON 格式化与 TS 推导、Base64 互转、JWT 离线解析、CRON 时间戳及代码卡片生成器。"
     }
   },
   "models": {
@@ -863,8 +863,8 @@
   },
   "tools": {
     "heroTag": "DEVELOPER WORKFLOW & TOOLS",
-    "heroTitle": "开发者效率工具箱",
-    "heroDesc": "轻量级高颜值在线 Markdown 编辑与全格式导出中心。支持实时渲染、KaTeX 复杂公式、代码语义高亮、公众号/知乎富文本一键复制、独立 HTML 及无损 PDF 导出。",
+    "heroTitle": "开发者与 AI 架构全能工具箱",
+    "heroDesc": "100% 浏览器沙箱运行，零服务器依赖，数据绝对隐私安全。涵盖 Markdown 深度排版、大模型显存与部署测算、Token 账单对比、JSON/TS 推导、Base64/JWT/URL 解码与极客代码卡片生成。",
     "terminalTitle": "Runtime: markdown_studio.sh --mode=live_render",
     "editorLabel": "Markdown 源文本",
     "previewLabel": "实时排版预览",
@@ -916,10 +916,22 @@
       {
         "q": "标准 Base64 与 URL-Safe Base64 (Base64URL) 有何差异？在工程中何时选用？",
         "a": "根据 RFC 4648 规范，标准 Base64 包含字符 <code>+</code> 与 <code>/</code>，并在末尾可能使用 <code>=</code> 补齐。在 URL 路由、Query 参数或 JWT (JSON Web Token) 中传输时，<code>+</code> 常被服务端解析器误当作空格处理，<code>/</code> 会破坏路径层级，<code>=</code> 会干扰键值对分割。URL-Safe Base64 (Base64URL) 规范将 <code>+</code> 替换为 <code>-</code>，将 <code>/</code> 替换为 <code>_</code>，并省略 <code>=</code> 填充。本工具支持一键切换 Base64URL 规范，精准适配微服务与鉴权 Token 开发调试。"
+      },
+      {
+        "q": "大模型显存测算工具的核心公式是什么？如何计算 KV Cache 显存？",
+        "a": "大模型推理显存主要由三部分构成：1. <strong>模型权重显存</strong>： \times B$，其中 $ 为参数量，$ 为量化精度字节数（FP16 为 2B，INT8/FP8 为 1B，INT4 为 0.5B）；2. <strong>KV Cache 显存</strong>：公式为  \times L \times H \times C \times B_{\text{kv}} \times (\text{Heads}_{\text{KV}} / \text{Heads}_Q)$，随上下文长度 $ 与并发数线性倍增；3. <strong>CUDA 运行开销</strong>（通常保留 1.5GB ~ 2GB 缓冲区）。本工具在纯前端通过标准浮点公式精确求和，杜绝部署时 OOM。"
+      },
+      {
+        "q": "本站提供的 JWT 解析器与市面上在线解码工具有何本质区别？",
+        "a": "绝大多数第三方在线 JWT 网站会将用户粘贴的 Token 通过 HTTP 发送至后端服务器进行解析，极易导致生产环境访问凭证、用户身份与内部签名密钥泄露。本站为 GitHub Pages 纯静态架构，所有 Base64URL 拆解、Payload 解析和时间戳转化均 100% 运行在用户的本地浏览器内存中，网络拦截器（Network Tab）零请求发出，为工程师提供绝对安全的调试沙箱。"
+      },
+      {
+        "q": "纯前端 TypeScript Interface 自动推导是如何实现的？",
+        "a": "工具内部实现了一套轻量级 AST 解析算法：递归扫描 JSON 对象的键值类型，对基本类型映射为 <code>string</code>、<code>number</code>、<code>boolean</code>，对复杂嵌套对象提取为独立的子接口 <code>interface SubName { ... }</code>，对数组类型则递归合并求取并集类型，最终在纯前端格式化输出符合 ESLint 规范的 TypeScript 定义。"
       }
     ],
-    "tabMarkdown": "在线 Markdown 渲染 (Markdown Studio)",
-    "tabBase64": "Base64 编解码互转 (Base64 Codec)",
+    "tabMarkdown": "Markdown 渲染",
+    "tabBase64": "Base64 互转",
     "base64Title": "Base64 编解码与多格式互转",
     "base64Desc": "支持纯文本 UTF-8 无损编解码、RFC 4648 URL-Safe (Base64URL) 规范以及图片/任意二进制文件与 Base64 互相转换。",
     "base64TerminalTitle": "Execute: base64_codec.sh --mode=bidirectional --charset=utf-8",
@@ -942,6 +954,34 @@
     "base64DownloadFile": "下载还原文件",
     "base64SampleText": "文本示例",
     "base64SampleJson": "JSON 示例",
-    "base64SampleSvg": "SVG 示例"
+    "base64SampleSvg": "SVG 示例",
+    "tabVram": "大模型显存计算",
+    "tabToken": "Token 与费用对比",
+    "tabJson": "JSON / TS 转换",
+    "tabJwt": "JWT 离线安全解析",
+    "tabCron": "时间戳与 CRON",
+    "tabUrl": "URL 参数解析",
+    "tabCodeCard": "代码卡片生成",
+    "vramTitle": "大模型推理显存与硬件配置测算器",
+    "vramDesc": "精确推演 2026 主流前沿模型在不同量化精度（FP16/INT8/INT4）、上下文长度和并发 Batch Size 下的显存开销，智能给出 GPU 选型与 Tensor Parallelism 建议。",
+    "vramTerminalTitle": "Runtime: vram_estimator.sh --arch=dense_and_moe --target=nvidia_gpus",
+    "tokenTitle": "2026 前沿大模型 Token 计数与 API 账单对比",
+    "tokenDesc": "实时测算输入 Prompt 的 Token 消耗，横向对比 DeepSeek-V4-Pro、Kimi K3、Claude Fable 5.1、GPT-6 Astra 等全球前沿模型的调用费用与上下文窗口占用。",
+    "tokenTerminalTitle": "Runtime: token_pricing_matrix.sh --models=2026_frontier",
+    "jsonTitle": "JSON 格式化、转义反转义与 TypeScript Interface 生成",
+    "jsonDesc": "毫秒级格式化、语法错误行号定位、双向字符串转义/反转义，以及基于 AST 自动推导结构化 TypeScript 类型代码。",
+    "jsonTerminalTitle": "Runtime: json_studio.sh --mode=format_and_ast",
+    "jwtTitle": "JWT (JSON Web Token) 纯前端离线安全解析器",
+    "jwtDesc": "100% 客户端解码 Header 与 Payload，高亮敏感 Claims 并自动进行过期倒计时与本地时间转换，杜绝凭据外泄。",
+    "jwtTerminalTitle": "Runtime: jwt_debugger.sh --offline-sandbox",
+    "cronTitle": "Unix 时间戳转换与 CRON 表达式可视化解析",
+    "cronDesc": "秒级/毫秒级 Unix 时间戳与北京时间/UTC 双向转换，CRON 表达式（5 域）自然语言中文解释与下 5 次触发时刻推演。",
+    "cronTerminalTitle": "Runtime: cron_scheduler.sh --timezone=Asia/Shanghai",
+    "urlTitle": "URL 编解码与 Query 参数可视化表格编辑器",
+    "urlDesc": "支持多层嵌套 URL 解码，将复杂 Query 参数解析为 Key-Value 交互表格，支持单独启停参数并重新组装干净 URL。",
+    "urlTerminalTitle": "Runtime: url_query_builder.sh --rfc=3986",
+    "codeCardTitle": "极客代码卡片截图生成器 (Code to Image)",
+    "codeCardDesc": "纯前端将代码片段渲染为带 macOS 红黄绿圆点、赛博渐变背景与柔和阴影的高清图片，一键下载分享至社交平台。",
+    "codeCardTerminalTitle": "Runtime: code_card_renderer.sh --canvas-export"
   }
 }

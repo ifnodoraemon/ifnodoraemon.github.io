@@ -18,8 +18,8 @@
       "desc": "The origin, goals, and technical details behind this site."
     },
     "tools": {
-      "title": "Developer Toolbox — Online Markdown Studio & Base64 Converter | Nobita Talks AI",
-      "desc": "Lightweight, privacy-first developer productivity toolbox featuring an online Markdown studio (with WeChat/Zhihu rich-text, HTML, and PDF export) and a high-performance UTF-8 Base64 encoder/decoder for text, images, and files."
+      "title": "AI & Developer All-in-One Toolbox | Nobita Talks AI",
+      "desc": "100% Client-Side Sandbox: Online Markdown studio, LLM VRAM & Serving calculator, 2026 frontier token pricing, JSON to TS interface converter, Base64 codec, JWT debugger, Timestamp & CRON scheduler, and code image generator."
     }
   },
   "models": {
@@ -863,8 +863,8 @@
   },
   "tools": {
     "heroTag": "DEVELOPER WORKFLOW & TOOLS",
-    "heroTitle": "Developer Productivity Toolbox",
-    "heroDesc": "Lightweight, privacy-first online Markdown studio and multi-format exporter. Enjoy real-time preview, KaTeX mathematical typography, code syntax highlighting, one-click rich-text copy for WeChat/Zhihu, standalone HTML, and print-ready PDF export.",
+    "heroTitle": "Developer & AI Architecture Toolbox",
+    "heroDesc": "100% client-side sandbox execution with zero server dependencies. Features Markdown typography, LLM VRAM estimation, Token cost analysis, JSON/TS synthesis, Base64/JWT/URL decoders, and code card generation.",
     "terminalTitle": "Runtime: markdown_studio.sh --mode=live_render",
     "editorLabel": "Markdown Source",
     "previewLabel": "Live Formatted Preview",
@@ -916,10 +916,22 @@
       {
         "q": "What is the difference between standard Base64 and URL-Safe Base64 (Base64URL), and when should you use it?",
         "a": "Under RFC 4648, standard Base64 incorporates <code>+</code> and <code>/</code>, with optional <code>=</code> padding. When transmitted in URLs, query strings, headers, or JWTs, <code>+</code> is often decoded as a space, <code>/</code> causes route parsing conflicts, and <code>=</code> breaks query key-value separators. URL-Safe Base64 replaces <code>+</code> with <code>-</code>, <code>/</code> with <code>_</code>, and omits trailing <code>=</code> padding. This tool provides instant toggling for Base64URL to support seamless token and microservice debugging."
+      },
+      {
+        "q": "What is the exact mathematical formulation behind the LLM VRAM Calculator?",
+        "a": "LLM serving memory consists of three components: 1. <strong>Model Weights</strong>:  \times B$ where $ is total parameter count and $ is bytes per parameter (FP16: 2B, INT8/FP8: 1B, INT4: 0.5B); 2. <strong>KV Cache</strong>:  \times L \times H \times C \times B_{\text{kv}} \times (\text{Heads}_{\text{KV}} / \text{Heads}_Q)$, scaling linearly with context length $ and concurrency batch size; 3. <strong>CUDA runtime activation overhead</strong> (~1.5GB to 2GB buffer). Our tool computes this entirely in the client browser to prevent deployment OOM."
+      },
+      {
+        "q": "How does this client-side JWT parser guarantee complete credential security?",
+        "a": "Most online JWT inspection websites transmit tokens to remote backend servers, exposing session credentials and private claims to interceptors. Hosted as a GitHub Pages static site, our debugger performs all Base64URL decoding and claims parsing purely inside your browser memory with zero network requests dispatched."
+      },
+      {
+        "q": "How does the client-side TypeScript Interface generator work without a backend compiler?",
+        "a": "The tool runs an in-memory AST analyzer that recursively parses JSON primitives into <code>string</code>, <code>number</code>, <code>boolean</code>, extracts nested objects into distinct sub-interfaces, and unifies heterogeneous array types into clean TypeScript interfaces directly in client JavaScript."
       }
     ],
     "tabMarkdown": "Markdown Studio",
-    "tabBase64": "Base64 Codec & Converter",
+    "tabBase64": "Base64 Codec",
     "base64Title": "Base64 Encoder, Decoder & File Converter",
     "base64Desc": "Lossless UTF-8 Unicode text encoding/decoding, RFC 4648 URL-Safe (Base64URL) support, and bidirectional image/binary file conversion.",
     "base64TerminalTitle": "Execute: base64_codec.sh --mode=bidirectional --charset=utf-8",
@@ -942,6 +954,34 @@
     "base64DownloadFile": "Download File",
     "base64SampleText": "Sample Text",
     "base64SampleJson": "Sample JSON",
-    "base64SampleSvg": "Sample SVG"
+    "base64SampleSvg": "Sample SVG",
+    "tabVram": "LLM VRAM Sizer",
+    "tabToken": "Token & Cost",
+    "tabJson": "JSON / TS Studio",
+    "tabJwt": "JWT Debugger",
+    "tabCron": "Timestamp & Cron",
+    "tabUrl": "URL Parameters",
+    "tabCodeCard": "Code to Card",
+    "vramTitle": "LLM VRAM & GPU Serving Sizer",
+    "vramDesc": "Accurately estimate VRAM requirements across 2026 frontier models under various quantization levels (FP16/INT8/INT4), context lengths, and concurrency batches, with automated GPU topology recommendations.",
+    "vramTerminalTitle": "Runtime: vram_estimator.sh --arch=dense_and_moe --target=nvidia_gpus",
+    "tokenTitle": "2026 Frontier LLM Token Counter & Pricing Matrix",
+    "tokenDesc": "Compute prompt tokens in real time and benchmark invocation costs across DeepSeek-V4-Pro, Kimi K3, Claude Fable 5.1, and GPT-6 Astra.",
+    "tokenTerminalTitle": "Runtime: token_pricing_matrix.sh --models=2026_frontier",
+    "jsonTitle": "JSON Formatter, String Escaper & TypeScript Interface Generator",
+    "jsonDesc": "Format, minify, escape/unescape JSON, pinpoint syntax errors, and auto-generate clean TypeScript interfaces via AST inference.",
+    "jsonTerminalTitle": "Runtime: json_studio.sh --mode=format_and_ast",
+    "jwtTitle": "JWT (JSON Web Token) Offline Secure Debugger",
+    "jwtDesc": "100% client-side decoding of JWT Headers and Payloads with sensitive claim inspection, live expiration countdown, and zero network transmission.",
+    "jwtTerminalTitle": "Runtime: jwt_debugger.sh --offline-sandbox",
+    "cronTitle": "Unix Timestamp & CRON Expression Studio",
+    "cronDesc": "Bidirectional Unix timestamp converter and visual CRON scheduler with human-readable explanations and next 5 execution time calculations.",
+    "cronTerminalTitle": "Runtime: cron_scheduler.sh --timezone=Asia/Shanghai",
+    "urlTitle": "URL Codec & Query Parameter Interactive Table",
+    "urlDesc": "Deep multi-layer URL decoding and structured query string editing with instant full URL synthesis.",
+    "urlTerminalTitle": "Runtime: url_query_builder.sh --rfc=3986",
+    "codeCardTitle": "Geek Code Card Screenshot Generator (Code to Image)",
+    "codeCardDesc": "Render beautiful macOS-styled code snapshot cards with cyber gradient backgrounds and export to high-resolution PNG.",
+    "codeCardTerminalTitle": "Runtime: code_card_renderer.sh --canvas-export"
   }
 }
