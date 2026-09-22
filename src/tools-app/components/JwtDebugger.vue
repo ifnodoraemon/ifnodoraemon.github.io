@@ -1,5 +1,5 @@
 <template>
-  <div class="terminal-window jwt-window fade-in" id="jwt-tool-app">
+  <div class="terminal-window jwt-window" id="jwt-tool-app">
     <div class="terminal-header">
       <div class="terminal-dots">
         <span class="dot close"></span>

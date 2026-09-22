@@ -1,5 +1,5 @@
 <template>
-  <div class="terminal-window json-window fade-in" id="json-tool-app">
+  <div class="terminal-window json-window" id="json-tool-app">
     <div class="terminal-header">
       <div class="terminal-dots">
         <span class="dot close"></span>

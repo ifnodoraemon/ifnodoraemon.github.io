@@ -1,5 +1,5 @@
 <template>
-  <div class="terminal-window url-window fade-in" id="url-tool-app">
+  <div class="terminal-window url-window" id="url-tool-app">
     <div class="terminal-header">
       <div class="terminal-dots">
         <span class="dot close"></span>

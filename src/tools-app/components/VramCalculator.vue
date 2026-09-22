@@ -1,5 +1,5 @@
 <template>
-  <div class="terminal-window vram-window fade-in" id="vram-tool-app">
+  <div class="terminal-window vram-window" id="vram-tool-app">
     <div class="terminal-header">
       <div class="terminal-dots">
         <span class="dot close"></span>

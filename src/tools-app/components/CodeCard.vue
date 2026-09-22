@@ -1,5 +1,5 @@
 <template>
-  <div class="terminal-window codecard-window fade-in" id="codecard-tool-app">
+  <div class="terminal-window codecard-window" id="codecard-tool-app">
     <div class="terminal-header">
       <div class="terminal-dots">
         <span class="dot close"></span>

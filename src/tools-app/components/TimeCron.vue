@@ -1,5 +1,5 @@
 <template>
-  <div class="terminal-window cron-window fade-in" id="cron-tool-app">
+  <div class="terminal-window cron-window" id="cron-tool-app">
     <div class="terminal-header">
       <div class="terminal-dots">
         <span class="dot close"></span>

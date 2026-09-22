@@ -1,5 +1,5 @@
 <template>
-  <div class="terminal-window markdown-window fade-in" id="markdown-editor-app">
+  <div class="terminal-window markdown-window" id="markdown-editor-app">
     <!-- Header -->
     <div class="terminal-header">
       <div class="terminal-dots">

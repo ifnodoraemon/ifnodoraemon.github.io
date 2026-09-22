@@ -1,5 +1,5 @@
 <template>
-  <div class="terminal-window base64-window fade-in" id="base64-tool-app">
+  <div class="terminal-window base64-window" id="base64-tool-app">
     <div class="terminal-header">
       <div class="terminal-dots">
         <span class="dot close"></span>

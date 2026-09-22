@@ -6845,6 +6845,15 @@ h1, h2, h3, .glitch-title { text-wrap: balance; }
   box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
 }
 
+.toolbox-view-wrapper .terminal-window,
+.toolbox-view-wrapper .fade-in,
+#tools-app .fade-in,
+#tools-app .terminal-window {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
+
 /* Base64 App Window */
 .base64-app-window {
   display: flex;

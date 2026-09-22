@@ -470,4 +470,11 @@ onUnmounted(() => {
   width: 100%;
   min-height: 500px;
 }
+
+.toolbox-view-wrapper :deep(.terminal-window),
+.toolbox-view-wrapper :deep(.fade-in) {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
 </style>
