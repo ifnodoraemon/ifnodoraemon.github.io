@@ -128,7 +128,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Marked } from 'marked';
 import hljs from 'highlight.js/lib/common';
 import markedKatex from '../../assets/js/utils/marked-katex.js';

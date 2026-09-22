@@ -91,56 +91,56 @@
     <!-- Toolbox Vue Island Application & SEO Index -->
     <section class="section section-tight" id="toolbox-section">
       <div class="container container-wide">
-        <div id="tools-app" data-lang="{{#if isEn}}en{{else}}zh{{/if}}">
-          <!-- Static SEO fallback shell for web crawlers -->
-          <div class="seo-crawler-tools-index" style="display: none;">
-            <div id="tab-nav-markdown">{{tools.tabMarkdown}}</div>
-            <div id="tab-nav-base64">{{tools.tabBase64}}</div>
-            <div id="tab-nav-vram">{{tools.tabVram}}</div>
-            <div id="tab-nav-token">{{tools.tabToken}}</div>
-            <div id="tab-nav-json">{{tools.tabJson}}</div>
-            <div id="tab-nav-jwt">{{tools.tabJwt}}</div>
-            <div id="tab-nav-cron">{{tools.tabCron}}</div>
-            <div id="tab-nav-url">{{tools.tabUrl}}</div>
-            <div id="tab-nav-codecard">{{tools.tabCodeCard}}</div>
+        <div id="tools-app" data-lang="{{#if isEn}}en{{else}}zh{{/if}}">{{{toolsAppSsgHtml}}}</div>
 
-            <article id="markdown-editor-app">
-              <h2>{{tools.tabMarkdown}}</h2>
-              <p>{{tools.heroDesc}}</p>
-            </article>
-            <article id="base64-tool-app">
-              <h2>{{tools.tabBase64}}</h2>
-              <p>{{tools.base64Desc}}</p>
-            </article>
-            <article id="vram-tool-app">
-              <h2>{{tools.tabVram}}</h2>
-              <p>{{tools.vramDesc}}</p>
-            </article>
-            <article id="token-tool-app">
-              <h2>{{tools.tabToken}}</h2>
-              <p>{{tools.tokenDesc}}</p>
-            </article>
-            <article id="json-tool-app">
-              <h2>{{tools.tabJson}}</h2>
-              <p>{{tools.jsonDesc}}</p>
-            </article>
-            <article id="jwt-tool-app">
-              <h2>{{tools.tabJwt}}</h2>
-              <p>{{tools.jwtDesc}}</p>
-            </article>
-            <article id="cron-tool-app">
-              <h2>{{tools.tabCron}}</h2>
-              <p>{{tools.cronDesc}}</p>
-            </article>
-            <article id="url-tool-app">
-              <h2>{{tools.tabUrl}}</h2>
-              <p>{{tools.urlDesc}}</p>
-            </article>
-            <article id="codecard-tool-app">
-              <h2>{{tools.tabCodeCard}}</h2>
-              <p>{{tools.codeCardDesc}}</p>
-            </article>
-          </div>
+        <!-- Static SEO fallback shell for web crawlers -->
+        <div class="seo-crawler-tools-index" style="display: none;">
+          <div id="tab-nav-markdown">{{tools.tabMarkdown}}</div>
+          <div id="tab-nav-base64">{{tools.tabBase64}}</div>
+          <div id="tab-nav-vram">{{tools.tabVram}}</div>
+          <div id="tab-nav-token">{{tools.tabToken}}</div>
+          <div id="tab-nav-json">{{tools.tabJson}}</div>
+          <div id="tab-nav-jwt">{{tools.tabJwt}}</div>
+          <div id="tab-nav-cron">{{tools.tabCron}}</div>
+          <div id="tab-nav-url">{{tools.tabUrl}}</div>
+          <div id="tab-nav-codecard">{{tools.tabCodeCard}}</div>
+
+          <article id="markdown-editor-app">
+            <h2>{{tools.tabMarkdown}}</h2>
+            <p>{{tools.heroDesc}}</p>
+          </article>
+          <article id="base64-tool-app">
+            <h2>{{tools.tabBase64}}</h2>
+            <p>{{tools.base64Desc}}</p>
+          </article>
+          <article id="vram-tool-app">
+            <h2>{{tools.tabVram}}</h2>
+            <p>{{tools.vramDesc}}</p>
+          </article>
+          <article id="token-tool-app">
+            <h2>{{tools.tabToken}}</h2>
+            <p>{{tools.tokenDesc}}</p>
+          </article>
+          <article id="json-tool-app">
+            <h2>{{tools.tabJson}}</h2>
+            <p>{{tools.jsonDesc}}</p>
+          </article>
+          <article id="jwt-tool-app">
+            <h2>{{tools.tabJwt}}</h2>
+            <p>{{tools.jwtDesc}}</p>
+          </article>
+          <article id="cron-tool-app">
+            <h2>{{tools.tabCron}}</h2>
+            <p>{{tools.cronDesc}}</p>
+          </article>
+          <article id="url-tool-app">
+            <h2>{{tools.tabUrl}}</h2>
+            <p>{{tools.urlDesc}}</p>
+          </article>
+          <article id="codecard-tool-app">
+            <h2>{{tools.tabCodeCard}}</h2>
+            <p>{{tools.codeCardDesc}}</p>
+          </article>
         </div>
       </div>
     </section>

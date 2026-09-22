@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import Handlebars from 'handlebars';
 import matter from 'gray-matter';
+import { getToolsSsgHtml } from './prerender-tools.js';
 
 Handlebars.registerHelper('json', function(context) {
     return JSON.stringify(context);
@@ -215,7 +216,7 @@ function processTemplate(templateStr, data, isEn) {
 }
 
 // 3. Main build loop
-function buildPages() {
+async function buildPages() {
   if (!fs.existsSync(TEMPLATES_DIR)) {
     console.error(`Templates directory not found: ${TEMPLATES_DIR}`);
     return;
@@ -223,7 +224,12 @@ function buildPages() {
 
   const templates = fs.readdirSync(TEMPLATES_DIR).filter(f => f.endsWith('.html'));
 
-  console.log(`📝 Building ${templates.length} static pages using Handlebars...`);
+  console.log(`📝 Building ${templates.length} static pages using Handlebars & Vue SSG...`);
+
+  // Prerender Vue SSG for tools page
+  const { zhHtml: toolsZhHtml, enHtml: toolsEnHtml } = await getToolsSsgHtml();
+  zhData.toolsAppSsgHtml = toolsZhHtml;
+  enData.toolsAppSsgHtml = toolsEnHtml;
 
   for (const templateFile of templates) {
     const templatePath = path.join(TEMPLATES_DIR, templateFile);
@@ -261,4 +267,4 @@ function buildPages() {
   }
 }
 
-buildPages();
+await buildPages();
