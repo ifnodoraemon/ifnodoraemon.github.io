@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import fs from 'fs'
+import vue from '@vitejs/plugin-vue'
 import seoPlugin from './scripts/vite-plugin-seo.js'
 import htmlMinifyPlugin from './scripts/vite-plugin-html-minify.js'
 
@@ -46,6 +47,7 @@ export default defineConfig({
   base: '/',
   publicDir: resolve(__dirname, '.temp_build/public'),
   plugins: [
+    vue(),
     htmlMinifyPlugin(),
     seoPlugin({ hostname: 'https://blog.llmgo.top' })
   ],

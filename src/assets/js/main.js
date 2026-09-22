@@ -195,77 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMediumZoom();
   window.addEventListener('load', initMediumZoom, { once: true });
 
-  // — Developer Toolbox (Tools page) —
-  const toolsSection = document.getElementById('toolbox-section');
-  if (toolsSection) {
-    const tabBtns = document.querySelectorAll('.tool-tab-btn');
-    const toolPanels = document.querySelectorAll('.toolbox-panel');
 
-    const initedTools = new Set();
-
-    const TOOL_LOADERS = {
-      markdown: () => import('./tools/markdown-editor.js').then(m => m.initMarkdownStudio()),
-      base64: () => import('./tools/base64-tool.js').then(m => m.initBase64Tool()),
-      vram: () => import('./tools/vram-calculator.js').then(m => m.initVramCalculator()),
-      token: () => import('./tools/token-calculator.js').then(m => m.initTokenCalculator()),
-      json: () => import('./tools/json-studio.js').then(m => m.initJsonStudio()),
-      jwt: () => import('./tools/jwt-studio.js').then(m => m.initJwtStudio()),
-      cron: () => import('./tools/time-cron.js').then(m => m.initTimeCron()),
-      url: () => import('./tools/url-studio.js').then(m => m.initUrlStudio()),
-      codecard: () => import('./tools/code-card.js').then(m => m.initCodeCard())
-    };
-
-    function loadTool(toolName) {
-      if (initedTools.has(toolName)) return;
-      initedTools.add(toolName);
-      const loader = TOOL_LOADERS[toolName];
-      if (loader) {
-        loader().catch(err => console.error(`Failed to init ${toolName}:`, err));
-      }
-    }
-
-    function switchTab(tabName, updateHash = true) {
-      const activeTab = TOOL_LOADERS[tabName] ? tabName : 'markdown';
-
-      tabBtns.forEach(btn => {
-        const isMatch = btn.dataset.tab === activeTab;
-        btn.classList.toggle('active', isMatch);
-        btn.setAttribute('aria-selected', String(isMatch));
-      });
-
-      toolPanels.forEach(panel => {
-        const isTarget = panel.id === `tool-panel-${activeTab}`;
-        panel.style.display = isTarget ? 'block' : 'none';
-        panel.classList.toggle('active', isTarget);
-      });
-
-      loadTool(activeTab);
-      if (updateHash) {
-        history.replaceState(null, '', `#${activeTab}`);
-      }
-    }
-
-    tabBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        switchTab(btn.dataset.tab);
-      });
-    });
-
-    // Initial hash detection
-    const initialHash = window.location.hash.replace(/^#/, '');
-    if (initialHash && TOOL_LOADERS[initialHash]) {
-      switchTab(initialHash, false);
-    } else {
-      switchTab('markdown', false);
-    }
-
-    window.addEventListener('hashchange', () => {
-      const currentHash = window.location.hash.replace(/^#/, '');
-      if (currentHash && TOOL_LOADERS[currentHash]) {
-        switchTab(currentHash, false);
-      }
-    });
-  }
 
 });
 

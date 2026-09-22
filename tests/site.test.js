@@ -340,6 +340,12 @@ test('tools page includes full 9-tool suite and WebApplication / FAQPage schema'
   assert.match(zhToolsHtml, /"@type":\s*"FAQPage"/);
   assert.match(enToolsHtml, /"@type":\s*"WebApplication"/);
   assert.match(enToolsHtml, /"@type":\s*"FAQPage"/);
+
+  // Vue Island App Mount Target & Bundled Scripts
+  assert.match(zhToolsHtml, /id="tools-app"/);
+  assert.match(enToolsHtml, /id="tools-app"/);
+  assert.match(zhToolsHtml, /<script type="module" crossorigin src="\/assets\/main-[^"]+\.js">/);
+  assert.match(enToolsHtml, /<script type="module" crossorigin src="\/assets\/main-[^"]+\.js">/);
 });
 
 test('code blocks have copy buttons with appropriate styling and copy-code-btn class', () => {
