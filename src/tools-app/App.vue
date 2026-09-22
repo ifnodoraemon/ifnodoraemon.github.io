@@ -1,21 +1,63 @@
 <template>
   <div class="vue-toolbox-container">
-    <!-- Subnav Tabs Bar -->
-    <div class="toolbox-tabs-bar" role="tablist" aria-label="Tool Switcher">
+    <!-- Subnav Tabs Bar with Horizontal Cyber Scroll & Dragging -->
+    <div class="toolbox-tabs-nav-wrap">
+      <!-- Left Scroll Button -->
       <button
-        v-for="tab in tabs"
-        :key="tab.id"
+        v-show="canScrollLeft"
         type="button"
-        class="tool-tab-btn"
-        :class="{ active: currentTab === tab.id }"
-        :id="`tab-nav-${tab.id}`"
-        role="tab"
-        :aria-selected="currentTab === tab.id"
-        :aria-controls="`tool-panel-${tab.id}`"
-        @click="selectTab(tab.id)"
+        class="tabs-scroll-btn btn-left"
+        :aria-label="isEn ? 'Scroll Left' : '向左滑动'"
+        @click="scrollTabs('left')"
       >
-        <component :is="tab.icon" class="tab-icon" />
-        <span>{{ isEn ? tab.nameEn : tab.nameZh }}</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+
+      <!-- Left Gradient Overflow Indicator -->
+      <div v-show="canScrollLeft" class="scroll-shadow shadow-left" aria-hidden="true"></div>
+
+      <!-- Scrollable Tabs Track -->
+      <div
+        ref="tabsBarRef"
+        class="toolbox-tabs-bar"
+        :class="{ 'is-dragging': isDragging }"
+        role="tablist"
+        aria-label="Tool Switcher"
+        @scroll="updateScrollState"
+        @mousedown="handleMouseDown"
+        @mousemove="handleMouseMove"
+        @mouseup="handleMouseUp"
+        @mouseleave="handleMouseLeave"
+      >
+        <button
+          v-for="tab in tabs"
+          :key="tab.id"
+          type="button"
+          class="tool-tab-btn"
+          :class="{ active: currentTab === tab.id }"
+          :id="`tab-nav-${tab.id}`"
+          role="tab"
+          :aria-selected="currentTab === tab.id"
+          :aria-controls="`tool-panel-${tab.id}`"
+          @click="selectTab(tab.id)"
+        >
+          <component :is="tab.icon" class="tab-icon" />
+          <span>{{ isEn ? tab.nameEn : tab.nameZh }}</span>
+        </button>
+      </div>
+
+      <!-- Right Gradient Overflow Indicator -->
+      <div v-show="canScrollRight" class="scroll-shadow shadow-right" aria-hidden="true"></div>
+
+      <!-- Right Scroll Button -->
+      <button
+        v-show="canScrollRight"
+        type="button"
+        class="tabs-scroll-btn btn-right"
+        :aria-label="isEn ? 'Scroll Right' : '向右滑动'"
+        @click="scrollTabs('right')"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
 
@@ -29,7 +71,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, defineAsyncComponent, h } from 'vue';
+import { ref, computed, onMounted, onUnmounted, nextTick, defineAsyncComponent, h } from 'vue';
 
 const props = defineProps({
   lang: {
@@ -119,36 +161,140 @@ const tabs = [
 ];
 
 const currentTab = ref('markdown');
+const tabsBarRef = ref(null);
+const canScrollLeft = ref(false);
+const canScrollRight = ref(false);
 
 const activeComponent = computed(() => {
   const match = tabs.find(t => t.id === currentTab.value);
   return match ? match.comp : MarkdownStudio;
 });
 
-function selectTab(tabId, updateHash = true) {
-  currentTab.value = tabId;
-  if (updateHash) {
-    history.replaceState(null, '', `#${tabId}`);
+// Scroll state checker
+function updateScrollState() {
+  if (!tabsBarRef.value) return;
+  const { scrollLeft, scrollWidth, clientWidth } = tabsBarRef.value;
+  canScrollLeft.value = scrollLeft > 4;
+  canScrollRight.value = scrollLeft + clientWidth < scrollWidth - 6;
+}
+
+// Arrow Button Scroll
+function scrollTabs(direction) {
+  if (!tabsBarRef.value) return;
+  const delta = direction === 'left' ? -280 : 280;
+  tabsBarRef.value.scrollBy({ left: delta, behavior: 'smooth' });
+  setTimeout(updateScrollState, 350);
+}
+
+// Mouse Wheel Conversion (Y -> X)
+function handleWheel(e) {
+  if (!tabsBarRef.value) return;
+  if (e.deltaY !== 0) {
+    e.preventDefault();
+    tabsBarRef.value.scrollLeft += e.deltaY;
+    updateScrollState();
   }
 }
 
+// Mouse Drag to Scroll
+let isMouseDown = false;
+let startX = 0;
+let startScrollLeft = 0;
+let draggedDistance = 0;
+const isDragging = ref(false);
+
+function handleMouseDown(e) {
+  if (!tabsBarRef.value) return;
+  isMouseDown = true;
+  draggedDistance = 0;
+  startX = e.pageX - tabsBarRef.value.offsetLeft;
+  startScrollLeft = tabsBarRef.value.scrollLeft;
+}
+
+function handleMouseMove(e) {
+  if (!isMouseDown || !tabsBarRef.value) return;
+  const x = e.pageX - tabsBarRef.value.offsetLeft;
+  const walk = x - startX;
+  draggedDistance = Math.abs(walk);
+  if (draggedDistance > 5) {
+    isDragging.value = true;
+    tabsBarRef.value.scrollLeft = startScrollLeft - walk;
+    updateScrollState();
+  }
+}
+
+function handleMouseUp() {
+  isMouseDown = false;
+  setTimeout(() => {
+    isDragging.value = false;
+    draggedDistance = 0;
+  }, 60);
+}
+
+function handleMouseLeave() {
+  isMouseDown = false;
+  isDragging.value = false;
+}
+
+function centerActiveTab(tabId) {
+  if (typeof document === 'undefined') return;
+  const el = document.getElementById(`tab-nav-${tabId}`);
+  if (el && tabsBarRef.value) {
+    el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    setTimeout(updateScrollState, 350);
+  }
+}
+
+function selectTab(tabId, updateHash = true) {
+  if (isDragging.value || draggedDistance > 5) return;
+  currentTab.value = tabId;
+  if (updateHash && typeof history !== 'undefined') {
+    history.replaceState(null, '', `#${tabId}`);
+  }
+  nextTick(() => {
+    centerActiveTab(tabId);
+  });
+}
+
 function handleHashChange() {
+  if (typeof window === 'undefined') return;
   const hash = window.location.hash.replace(/^#/, '');
   if (hash && tabs.some(t => t.id === hash)) {
     currentTab.value = hash;
+    nextTick(() => {
+      centerActiveTab(hash);
+    });
   }
 }
 
 onMounted(() => {
-  const initialHash = window.location.hash.replace(/^#/, '');
-  if (initialHash && tabs.some(t => t.id === initialHash)) {
-    currentTab.value = initialHash;
+  if (typeof window !== 'undefined') {
+    const initialHash = window.location.hash.replace(/^#/, '');
+    if (initialHash && tabs.some(t => t.id === initialHash)) {
+      currentTab.value = initialHash;
+    }
+    window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener('resize', updateScrollState);
+
+    if (tabsBarRef.value) {
+      tabsBarRef.value.addEventListener('wheel', handleWheel, { passive: false });
+    }
+
+    nextTick(() => {
+      updateScrollState();
+      centerActiveTab(currentTab.value);
+    });
   }
-  window.addEventListener('hashchange', handleHashChange);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('hashchange', handleHashChange);
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('hashchange', handleHashChange);
+    window.removeEventListener('resize', updateScrollState);
+    if (tabsBarRef.value) {
+      tabsBarRef.value.removeEventListener('wheel', handleWheel);
+    }
+  }
 });
 </script>
 
@@ -158,26 +304,130 @@ onUnmounted(() => {
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.toolbox-tabs-nav-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
 }
 
 .toolbox-tabs-bar {
-  display: flex;
-  overflow-x: auto;
-  white-space: nowrap;
-  max-width: 100%;
+  display: flex !important;
+  align-items: center;
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  white-space: nowrap !important;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  background: rgba(18, 20, 30, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 4px;
-  gap: 6px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  padding: 6px 12px;
+  gap: 8px;
+  border-radius: 12px;
+  background: rgba(14, 17, 26, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.5) rgba(255, 255, 255, 0.04);
+  cursor: grab;
+  user-select: none;
+}
+
+.toolbox-tabs-bar.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto !important;
 }
 
 .toolbox-tabs-bar::-webkit-scrollbar {
-  display: none;
+  height: 5px;
+  display: block !important;
+}
+
+.toolbox-tabs-bar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 999px;
+}
+
+.toolbox-tabs-bar::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.5);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.toolbox-tabs-bar::-webkit-scrollbar-thumb:hover {
+  background: #818cf8;
+}
+
+.tabs-scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(99, 102, 241, 0.5);
+  color: #c7d2fe;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), 0 0 12px rgba(99, 102, 241, 0.35);
+  transition: all 0.2s ease;
+}
+
+.tabs-scroll-btn:hover {
+  background: #6366f1;
+  color: #ffffff;
+  border-color: #a5b4fc;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.tabs-scroll-btn.btn-left {
+  left: -14px;
+}
+
+.tabs-scroll-btn.btn-right {
+  right: -14px;
+}
+
+@media (max-width: 768px) {
+  .tabs-scroll-btn.btn-left {
+    left: 4px;
+  }
+  .tabs-scroll-btn.btn-right {
+    right: 4px;
+  }
+}
+
+.scroll-shadow {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  width: 36px;
+  pointer-events: none;
+  z-index: 5;
+  border-radius: 12px;
+}
+
+.scroll-shadow.shadow-left {
+  left: 0;
+  background: linear-gradient(to right, rgba(14, 17, 26, 0.95), transparent);
+}
+
+.scroll-shadow.shadow-right {
+  right: 0;
+  background: linear-gradient(to left, rgba(14, 17, 26, 0.95), transparent);
 }
 
 .tool-tab-btn {
@@ -187,8 +437,8 @@ onUnmounted(() => {
   gap: 8px;
   background: transparent;
   color: var(--text-muted, #94a3b8);
-  border: none;
-  border-radius: 7px;
+  border: 1px solid transparent;
+  border-radius: 8px;
   padding: 8px 16px;
   font-size: 0.88rem;
   font-weight: 500;
@@ -199,14 +449,15 @@ onUnmounted(() => {
 
 .tool-tab-btn:hover {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .tool-tab-btn.active {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.25) 100%);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
   color: #ffffff;
-  border: 1px solid rgba(99, 102, 241, 0.45);
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.55);
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.25);
 }
 
 .tab-icon {

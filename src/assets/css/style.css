@@ -6802,7 +6802,12 @@ h1, h2, h3, .glitch-title { text-wrap: balance; }
 }
 
 .toolbox-tabs-bar {
-  display: inline-flex;
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
   background: rgba(18, 20, 30, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
@@ -6810,6 +6815,7 @@ h1, h2, h3, .glitch-title { text-wrap: balance; }
   gap: 6px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  box-sizing: border-box;
 }
 
 .tool-tab-btn {
