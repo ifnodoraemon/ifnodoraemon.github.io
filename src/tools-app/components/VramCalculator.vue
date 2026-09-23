@@ -290,7 +290,7 @@
         <!-- 6. GPU Hardware Filter Search -->
         <div class="form-group">
           <label class="field-label">{{ isEn ? "Filter GPU Hardware Models:" : "过滤计算卡硬件型号：" }}</label>
-          <input v-model="gpuSearchQuery" type="text" :placeholder="isEn ? 'Search RTX 5090, 昇腾, H200, B200...' : '搜索 4090, 5090, 昇腾, H200, B200, L40S...'" class="cyber-input">
+          <input v-model="gpuSearchQuery" type="text" :placeholder="isEn ? 'Search RTX 5090, PPU 810E, 昇腾, H200, B200, MI300X...' : '搜索 4090, 5090, 平头哥 PPU 810E, 昇腾, 昆仑芯, 海光, H200, B200, MI300X...'" class="cyber-input">
         </div>
       </div>
 
@@ -1122,18 +1122,24 @@ async function syncOnlineModel(targetId) {
   }
 }
 
-// 10 GPU Accelerator Models
+// 16 Enterprise & Domestic AI Accelerator Models
 const ALL_GPUS = [
   { id: 'rtx-4090', name: 'NVIDIA RTX 4090', category: '消费级旗舰', vramGb: 24, memType: 'GDDR6X', bandwidth: '1.0 TB/s', bus: 'PCIe 4.0' },
   { id: 'rtx-5090', name: 'NVIDIA RTX 5090', category: 'Blackwell 消费旗舰', vramGb: 32, memType: 'GDDR7', bandwidth: '1.79 TB/s', bus: 'PCIe 5.0' },
+  { id: 'mtt-s4000', name: '摩尔线程 MTT S4000', category: '国产全功能 GPU', vramGb: 48, memType: 'GDDR6', bandwidth: '768 GB/s', bus: 'MT-Link / PCIe 5.0' },
+  { id: 'rtx-6000-ada', name: 'NVIDIA RTX 6000 Ada', category: '专业工作站旗舰', vramGb: 48, memType: 'GDDR6', bandwidth: '960 GB/s', bus: 'PCIe 4.0' },
   { id: 'l40s', name: 'NVIDIA L40S', category: '通用数据中心', vramGb: 48, memType: 'GDDR6', bandwidth: '864 GB/s', bus: 'PCIe 4.0' },
   { id: 'ascend-910b', name: '华为昇腾 Ascend 910B', category: '国产信创主力', vramGb: 64, memType: 'HBM2e', bandwidth: '819 GB/s', bus: 'HCCS' },
+  { id: 'hygon-k100', name: '海光 DCU K100-AI', category: '国产 GPGPU (深算二号)', vramGb: 64, memType: 'HBM2e', bandwidth: '1.2 TB/s', bus: 'PCIe 4.0' },
   { id: 'a100-80', name: 'NVIDIA A100 SXM4', category: '企业级主力', vramGb: 80, memType: 'HBM2e', bandwidth: '2.04 TB/s', bus: 'NVLink 3' },
   { id: 'h100-80', name: 'NVIDIA H100 SXM5', category: 'Hopper 旗舰', vramGb: 80, memType: 'HBM3', bandwidth: '3.35 TB/s', bus: 'NVLink 4' },
+  { id: 'ppu-810e', name: '阿里平头哥 PPU 810E (真武)', category: '阿里自研信创主力', vramGb: 96, memType: 'HBM2e', bandwidth: '1.6 TB/s', bus: 'ICN / OAM' },
+  { id: 'kunlun-p800', name: '百度昆仑芯 P800', category: '百度信创旗舰', vramGb: 96, memType: 'HBM3', bandwidth: '2.4 TB/s', bus: 'PCIe 5.0 / OAM' },
   { id: 'h20-96', name: 'NVIDIA H20 SXM', category: '合规大显存卡', vramGb: 96, memType: 'HBM3', bandwidth: '4.0 TB/s', bus: 'NVLink 4' },
   { id: 'ascend-910c', name: '华为昇腾 Ascend 910C', category: '国产双芯旗舰', vramGb: 128, memType: 'HBM2e', bandwidth: '3.2 TB/s', bus: 'HCCS' },
   { id: 'h200-141', name: 'NVIDIA H200 SXM', category: '超大显存 Hopper', vramGb: 141, memType: 'HBM3e', bandwidth: '4.8 TB/s', bus: 'NVLink 4' },
-  { id: 'b200-192', name: 'NVIDIA B200 SXM', category: 'Blackwell 顶配', vramGb: 192, memType: 'HBM3e', bandwidth: '8.0 TB/s', bus: 'NVLink 5' }
+  { id: 'b200-192', name: 'NVIDIA B200 SXM', category: 'Blackwell 顶配', vramGb: 192, memType: 'HBM3e', bandwidth: '8.0 TB/s', bus: 'NVLink 5' },
+  { id: 'mi300x', name: 'AMD Instinct MI300X', category: 'AMD 旗舰加速卡', vramGb: 192, memType: 'HBM3', bandwidth: '5.3 TB/s', bus: 'Infinity Fabric' }
 ];
 
 // Formula 1: Model Static Weights (GiB)
@@ -1202,11 +1208,12 @@ const recommendationText = computed(() => {
   const v = totalVramGb.value;
   if (props.isEn) {
     if (v <= 22) return 'Optimal Fit: 1x RTX 4090 24GB or RTX 5090 32GB can run single-card full speed (TP=1).';
-    if (v <= 44) return 'Optimal Fit: 2x RTX 4090 24GB (TP=2) or 1x L40S 48GB (TP=1).';
+    if (v <= 44) return 'Optimal Fit: 2x RTX 4090 24GB (TP=2) or 1x L40S / RTX 6000 Ada 48GB (TP=1).';
     if (v <= 75) return 'Optimal Fit: 1x NVIDIA A100 / H100 80GB SXM (TP=1).';
-    if (v <= 135) return 'Optimal Fit: 1x NVIDIA H200 141GB or 2x 80GB SXM (TP=2) / 1x Ascend 910C.';
-    if (v <= 180) return 'Optimal Fit: 1x NVIDIA B200 192GB (TP=1) or 4x 80GB SXM (TP=4).';
-    if (v <= 360) return 'Optimal Fit: 2x B200 192GB (TP=2) or 8x 80GB SXM Server (TP=8 full chassis).';
+    if (v <= 88) return 'Optimal Fit: 1x T-Head PPU 810E (96GB) / Kunlunxin P800 / NVIDIA H20 96GB (TP=1).';
+    if (v <= 135) return 'Optimal Fit: 1x NVIDIA H200 141GB or 2x 80GB SXM (TP=2) / 1x Ascend 910C 128GB.';
+    if (v <= 180) return 'Optimal Fit: 1x NVIDIA B200 192GB / AMD MI300X (TP=1) or 4x 80GB SXM (TP=4).';
+    if (v <= 360) return 'Optimal Fit: 2x B200 192GB / MI300X (TP=2) or 8x 80GB SXM Server (TP=8 full chassis).';
     if (v <= 720) return 'Enterprise Fit: 4x B200 192GB (TP=4) or 16x 80GB SXM (2-Node Cluster, TP=8 EP=2).';
     if (v <= 1400) return 'Hyperscale Topology: 8x B200 192GB (1-Node TP=8 full chassis) or 16x 80GB SXM (2-Node Cluster, TP=8 EP=2).';
     const num80G = Math.ceil(v / (80 * 0.92 * 8)) * 8;
@@ -1214,11 +1221,12 @@ const recommendationText = computed(() => {
     return `Enterprise Topology: ${num80G}x 80GB GPUs (${num80G / 8} Nodes, TP=8) or ${numB200}x B200 GPUs (${numB200 / 8} Nodes, TP=8).`;
   } else {
     if (v <= 22) return '最佳适配方案：单张 RTX 4090 24G 或 RTX 5090 32G 即可全速单卡部署 (TP=1)。';
-    if (v <= 44) return '最佳适配方案：2 张 RTX 4090 (TP=2) 或单张 L40S 48G (TP=1)。';
+    if (v <= 44) return '最佳适配方案：2 张 RTX 4090 (TP=2) 或单张 L40S / RTX 6000 Ada 48G (TP=1)。';
     if (v <= 75) return '最佳适配方案：单张 A100 / H100 80G SXM (TP=1)。';
-    if (v <= 135) return '最佳适配方案：单张 H200 141G 独占，或双卡 80G (TP=2) / 单张昇腾 910C。';
-    if (v <= 180) return '最佳适配方案：单张 B200 192G 独占，或 4 卡 80G SXM (TP=4)。';
-    if (v <= 360) return '最佳适配方案：双卡 B200 (TP=2) 或 8 卡 80G 整机满配 (TP=8)。';
+    if (v <= 88) return '最佳适配方案：单张阿里平头哥 PPU 810E (96G) / 百度昆仑芯 P800 / NVIDIA H20 (96G) 独占 (TP=1)。';
+    if (v <= 135) return '最佳适配方案：单张 H200 141G 独占，或双卡 80G (TP=2) / 单张昇腾 910C (128G)。';
+    if (v <= 180) return '最佳适配方案：单张 B200 192G / AMD MI300X 独占，或 4 卡 80G SXM (TP=4)。';
+    if (v <= 360) return '最佳适配方案：双卡 B200 / MI300X (TP=2) 或 8 卡 80G 整机满配 (TP=8)。';
     if (v <= 720) return '企业级拓扑：4 卡 B200 (TP=4) 或 16 卡 80G (2 节点集群, TP=8 EP=2)。';
     if (v <= 1400) return '超大规模集群：单台 8 卡 B200 (单机满配, TP=8) 或 16 卡 80G (2 节点集群, TP=8 EP=2)。';
     const num80G = Math.ceil(v / (80 * 0.92 * 8)) * 8;
