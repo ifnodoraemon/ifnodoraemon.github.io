@@ -514,11 +514,7 @@ const sliderMin = computed(() => {
 });
 
 const sliderStep = computed(() => {
-  if (effectiveMaxContext.value <= 8192) return 512;
-  if (effectiveMaxContext.value <= 32768) return 1024;
-  if (effectiveMaxContext.value <= 131072) return 2048;
-  if (effectiveMaxContext.value <= 262144) return 4096;
-  return 8192;
+  return 512;
 });
 
 const contextPresets = computed(() => {
@@ -760,14 +756,17 @@ async function syncOnlineModel(targetId) {
     let exactParams = null;
 
     if (modelSource.value === 'hf') {
-      // 1. Try Hugging Face API for exact safetensors parameter count
+      // 1. Try Hugging Face API for exact safetensors parameter count (sum across all tensor formats)
       try {
         const apiRes = await fetch(`https://huggingface.co/api/models/${modelId}`);
         if (apiRes.ok) {
           const apiJson = await apiRes.json();
-          const p = apiJson.safetensors?.parameters;
-          if (p) {
-            exactParams = p.BF16 || p.F16 || p.F8_E4M3 || p.F32 || Object.values(p)[0];
+          if (apiJson.safetensors?.parameters) {
+            const p = apiJson.safetensors.parameters;
+            const sumParams = Object.values(p).reduce((acc, v) => acc + (typeof v === 'number' ? v : 0), 0);
+            if (sumParams > 0) exactParams = sumParams;
+          } else if (typeof apiJson.safetensors?.total === 'number' && apiJson.safetensors.total > 0) {
+            exactParams = apiJson.safetensors.total;
           }
         }
       } catch (e) {}
@@ -790,7 +789,39 @@ async function syncOnlineModel(targetId) {
 
     } else {
       // ModelScope
-      // 1. Fetch raw config.json (CORS open)
+      // 1. Try ModelScope API for exact verified safetensor model_size
+      try {
+        const msApiRes = await fetch(`https://www.modelscope.cn/api/v1/models/${modelId}`);
+        if (msApiRes.ok) {
+          const msApiJson = await msApiRes.json();
+          const dInfo = msApiJson.Data || {};
+          const pSize = dInfo.ModelInfos?.safetensor?.model_size;
+          if (typeof pSize === 'number' && pSize > 0) {
+            exactParams = pSize;
+          } else if (typeof dInfo.StorageSize === 'number' && dInfo.StorageSize > 0) {
+            exactParams = dInfo.StorageSize;
+          }
+        }
+      } catch (e) {}
+
+      // Fallback: Query Hugging Face open CORS API with mapped ID if ModelScope API was CORS-blocked in browser
+      if (!exactParams) {
+        try {
+          const hfEquivalentId = modelId
+            .replace(/^ZhipuAI\//, 'zai-org/')
+            .replace(/^qwen\//, 'Qwen/');
+          const hfRes = await fetch(`https://huggingface.co/api/models/${hfEquivalentId}`);
+          if (hfRes.ok) {
+            const hfJson = await hfRes.json();
+            if (hfJson.safetensors?.parameters) {
+              const sumP = Object.values(hfJson.safetensors.parameters).reduce((acc, v) => acc + (typeof v === 'number' ? v : 0), 0);
+              if (sumP > 0) exactParams = sumP;
+            }
+          }
+        } catch (e) {}
+      }
+
+      // 2. Fetch raw config.json (CORS open)
       const msUrl = `https://modelscope.cn/models/${modelId}/resolve/master/config.json`;
       const configRes = await fetch(msUrl);
       if (!configRes.ok) {
@@ -798,7 +829,7 @@ async function syncOnlineModel(targetId) {
       }
       configData = await configRes.json();
 
-      // 2. Optional tokenizer_config.json
+      // 3. Optional tokenizer_config.json
       try {
         const msTokUrl = `https://modelscope.cn/models/${modelId}/resolve/master/tokenizer_config.json`;
         const tokRes = await fetch(msTokUrl);
@@ -806,20 +837,23 @@ async function syncOnlineModel(targetId) {
       } catch (e) {}
     }
 
+    // Flatten nested text_config if present (multimodal/VL models like GLM-5.3-Flash, Qwen-VL)
+    const rawConfig = { ...configData, ...(configData.text_config || {}) };
+
     // Auto-parse Model Architecture
-    const hiddenSize = configData.hidden_size || configData.d_model || 4096;
-    const layers = configData.num_hidden_layers || configData.n_layer || configData.num_layers || 32;
-    const qHeads = configData.num_attention_heads || configData.n_head || 32;
-    const kvHeads = configData.num_key_value_heads || configData.num_kv_heads || configData.n_head_kv || qHeads;
-    const intermediateSize = configData.intermediate_size || (hiddenSize * 4);
-    const vocabSize = configData.vocab_size || 32000;
-    const modelType = configData.model_type || configData.architectures?.[0] || 'transformer';
+    const hiddenSize = rawConfig.hidden_size || rawConfig.d_model || 4096;
+    const layers = rawConfig.num_hidden_layers || rawConfig.n_layer || rawConfig.num_layers || 32;
+    const qHeads = rawConfig.num_attention_heads || rawConfig.n_head || 32;
+    const kvHeads = rawConfig.num_key_value_heads || rawConfig.num_kv_heads || rawConfig.n_head_kv || qHeads;
+    const intermediateSize = rawConfig.intermediate_size || (hiddenSize * 4);
+    const vocabSize = rawConfig.vocab_size || 32000;
+    const modelType = rawConfig.model_type || rawConfig.architectures?.[0] || 'transformer';
 
     // KV Cache & Attention Mechanism Detection (MHA / GQA / MQA / MLA)
-    const isMla = !!(configData.kv_lora_rank);
-    const kvLoraRank = configData.kv_lora_rank || 0;
-    const qkRopeDim = configData.qk_rope_head_dim || 64;
-    const headDim = configData.head_dim || configData.v_head_dim || Math.floor(hiddenSize / qHeads);
+    const isMla = !!(rawConfig.kv_lora_rank);
+    const kvLoraRank = rawConfig.kv_lora_rank || 0;
+    const qkRopeDim = rawConfig.qk_rope_head_dim || 64;
+    const headDim = rawConfig.head_dim || rawConfig.v_head_dim || Math.floor(hiddenSize / qHeads);
 
     isMlaActive.value = isMla;
     mlaKvLoraRank.value = kvLoraRank;
@@ -842,8 +876,8 @@ async function syncOnlineModel(targetId) {
     }
 
     // Sliding Window Detection
-    const slidingWindow = typeof configData.sliding_window === 'number' && configData.sliding_window > 0
-      ? configData.sliding_window
+    const slidingWindow = typeof rawConfig.sliding_window === 'number' && rawConfig.sliding_window > 0
+      ? rawConfig.sliding_window
       : null;
     modelSlidingWindow.value = slidingWindow;
     useSlidingWindowEviction.value = false;
@@ -862,7 +896,7 @@ async function syncOnlineModel(targetId) {
       'max_target_positions'
     ];
     for (const k of contextKeys) {
-      const v = configData[k];
+      const v = rawConfig[k];
       if (typeof v === 'number' && v >= 512 && v <= 10000000) {
         contextCandidates.push(v);
       }
@@ -875,16 +909,16 @@ async function syncOnlineModel(targetId) {
       }
     }
 
-    if (configData.rope_scaling && typeof configData.rope_scaling === 'object') {
-      const factor = configData.rope_scaling.factor;
-      const orig = configData.rope_scaling.original_max_position_embeddings;
+    if (rawConfig.rope_scaling && typeof rawConfig.rope_scaling === 'object') {
+      const factor = rawConfig.rope_scaling.factor;
+      const orig = rawConfig.rope_scaling.original_max_position_embeddings;
       if (typeof factor === 'number' && factor > 1) {
-        const base = orig || configData.max_position_embeddings || 4096;
+        const base = orig || rawConfig.max_position_embeddings || 4096;
         contextCandidates.push(Math.round(base * factor));
       }
     }
 
-    let baseCtx = configData.max_position_embeddings || configData.seq_length || configData.n_positions || 8192;
+    let baseCtx = rawConfig.max_position_embeddings || rawConfig.seq_length || rawConfig.n_positions || 8192;
     let maxCtx = baseCtx;
     if (contextCandidates.length > 0) {
       maxCtx = Math.max(...contextCandidates);
@@ -905,8 +939,8 @@ async function syncOnlineModel(targetId) {
     let detectedQuant = 'BF16 / FP16';
     let suggestedWeightPrec = 2.0;
 
-    if (configData.quantization_config) {
-      const qCfg = configData.quantization_config;
+    if (rawConfig.quantization_config || configData.quantization_config) {
+      const qCfg = rawConfig.quantization_config || configData.quantization_config;
       const method = (qCfg.quant_method || qCfg.quant_type || '').toLowerCase();
       const bits = qCfg.bits || (qCfg.load_in_4bit ? 4 : (qCfg.load_in_8bit ? 8 : null));
 
@@ -917,21 +951,21 @@ async function syncOnlineModel(targetId) {
         detectedQuant = 'FP8 (8-bit)';
         suggestedWeightPrec = 1.0;
       }
-    } else if (configData.torch_dtype === 'float32') {
+    } else if (rawConfig.torch_dtype === 'float32' || rawConfig.dtype === 'float32') {
       detectedQuant = 'FP32 (32-bit)';
       suggestedWeightPrec = 4.0;
-    } else if (configData.torch_dtype || configData.dtype) {
-      detectedQuant = (configData.torch_dtype || configData.dtype).toUpperCase();
+    } else if (rawConfig.torch_dtype || rawConfig.dtype) {
+      detectedQuant = (rawConfig.torch_dtype || rawConfig.dtype).toUpperCase();
       suggestedWeightPrec = 2.0;
     }
     weightPrecBytes.value = suggestedWeightPrec;
 
     // MoE Architecture Extraction
-    const isMoe = !!(configData.n_routed_experts || configData.num_local_experts);
-    const routedExperts = configData.n_routed_experts || configData.num_local_experts || 1;
-    const expertsPerTok = configData.num_experts_per_tok || configData.num_experts_per_token || 1;
-    const moeIntermediate = configData.moe_intermediate_size || intermediateSize;
-    const sharedExperts = configData.n_shared_experts || 0;
+    const isMoe = !!(rawConfig.n_routed_experts || rawConfig.num_local_experts);
+    const routedExperts = rawConfig.n_routed_experts || rawConfig.num_local_experts || 1;
+    const expertsPerTok = rawConfig.num_experts_per_tok || rawConfig.num_experts_per_token || 1;
+    const moeIntermediate = rawConfig.moe_intermediate_size || intermediateSize;
+    const sharedExperts = rawConfig.n_shared_experts || 0;
 
     let moeInfo = '稠密架构 (Dense Transformer)';
     if (isMoe) {
@@ -942,28 +976,40 @@ async function syncOnlineModel(targetId) {
     let calculatedParamsB = 0;
     let activeParamsB = 0;
 
-    if (exactParams && typeof exactParams === 'number') {
+    // MoE Architecture with dense layer replacement (first_k_dense_replace)
+    const firstKDenseReplace = rawConfig.first_k_dense_replace || 0;
+    const moeLayers = Math.max(0, layers - firstKDenseReplace);
+    const denseLayers = Math.min(layers, firstKDenseReplace);
+
+    // Analytical Layer Architecture Weights
+    const attnParams = isMla
+      ? (hiddenSize * (rawConfig.q_lora_rank || hiddenSize) + (rawConfig.q_lora_rank || hiddenSize) * (qHeads * qkRopeDim) + hiddenSize * (kvLoraRank + qkRopeDim) + kvLoraRank * (qHeads * headDim) + (qHeads * headDim) * hiddenSize)
+      : (hiddenSize * (hiddenSize * (1 + 2 * (kvHeads / qHeads))));
+
+    const denseMlpParams = 3 * hiddenSize * intermediateSize;
+    const moeMlpParams = isMoe
+      ? (routedExperts * 3 * hiddenSize * moeIntermediate) + (sharedExperts * 3 * hiddenSize * intermediateSize)
+      : denseMlpParams;
+
+    const activeMoeMlpParams = isMoe
+      ? (expertsPerTok * 3 * hiddenSize * moeIntermediate) + (sharedExperts * 3 * hiddenSize * intermediateSize)
+      : denseMlpParams;
+
+    const perLayerDenseTotal = attnParams + denseMlpParams + (4 * hiddenSize);
+    const perLayerMoeTotal = attnParams + moeMlpParams + (4 * hiddenSize);
+    const perLayerMoeActive = attnParams + activeMoeMlpParams + (4 * hiddenSize);
+
+    if (exactParams && typeof exactParams === 'number' && exactParams > 0) {
       calculatedParamsB = exactParams / 1e9;
-      activeParamsB = calculatedParamsB;
+      if (isMoe && routedExperts > 1) {
+        const activeRatio = ((moeLayers * perLayerMoeActive) + (denseLayers * perLayerDenseTotal)) / ((moeLayers * perLayerMoeTotal) + (denseLayers * perLayerDenseTotal));
+        activeParamsB = Math.max(0.1, parseFloat((calculatedParamsB * activeRatio).toFixed(1)));
+      } else {
+        activeParamsB = calculatedParamsB;
+      }
     } else {
-      // Rigorous Analytical Weight Estimation
-      const attnParams = isMla
-        ? (hiddenSize * (configData.q_lora_rank || hiddenSize) + (configData.q_lora_rank || hiddenSize) * (qHeads * qkRopeDim) + hiddenSize * (kvLoraRank + qkRopeDim) + kvLoraRank * (qHeads * headDim) + (qHeads * headDim) * hiddenSize)
-        : (hiddenSize * (hiddenSize * (1 + 2 * (kvHeads / qHeads))));
-
-      const mlpParams = isMoe
-        ? (routedExperts * 3 * hiddenSize * moeIntermediate) + (sharedExperts * 3 * hiddenSize * intermediateSize)
-        : (3 * hiddenSize * intermediateSize);
-
-      const activeMlpParams = isMoe
-        ? (expertsPerTok * 3 * hiddenSize * moeIntermediate) + (sharedExperts * 3 * hiddenSize * intermediateSize)
-        : mlpParams;
-
-      const perLayerTotal = attnParams + mlpParams + (4 * hiddenSize);
-      const perLayerActive = attnParams + activeMlpParams + (4 * hiddenSize);
-
-      const totalEstimated = (layers * perLayerTotal) + (2 * vocabSize * hiddenSize);
-      const activeEstimated = (layers * perLayerActive) + (2 * vocabSize * hiddenSize);
+      const totalEstimated = (moeLayers * perLayerMoeTotal) + (denseLayers * perLayerDenseTotal) + (2 * vocabSize * hiddenSize);
+      const activeEstimated = (moeLayers * perLayerMoeActive) + (denseLayers * perLayerDenseTotal) + (2 * vocabSize * hiddenSize);
 
       calculatedParamsB = totalEstimated / 1e9;
       activeParamsB = activeEstimated / 1e9;
