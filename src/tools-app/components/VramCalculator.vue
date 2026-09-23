@@ -357,6 +357,74 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Multi-GPU Parallelism Topology Constraints Notice -->
+        <div class="parallelism-info-banner">
+          <div class="topology-header">
+            <div class="info-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 6px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              {{ isEn ? "Multi-GPU Parallelism Topology & Sizing Rules" : "多卡并行拓扑与卡数约束规范" }}
+            </div>
+            <div class="model-tp-tags">
+              <span class="tp-model-tag">
+                {{ isEn ? "Model KV Heads:" : "当前模型 KV 头数:" }} <strong>{{ modelKvHeads }}</strong>
+              </span>
+              <span class="tp-support-tag">
+                {{ isEn ? "Supported Single-Node TP:" : "单机有效 TP 档位:" }}
+                <strong>TP={{ supportedSingleNodeTp.join(' / ') }}</strong>
+              </span>
+              <span class="tp-badge-power2" :class="{ highlight: isStrictPowerOfTwoModel }">
+                {{ isStrictPowerOfTwoModel ? (isEn ? "Strict 2^k Required" : "强约束 2 的幂次方") : (isEn ? "Flexible Divisibility" : "支持特定偶数整除") }}
+              </span>
+            </div>
+          </div>
+          <div class="topology-rules-grid">
+            <div class="rule-card">
+              <div class="rule-title">
+                <span class="rule-num">1</span>
+                {{ isEn ? "Why Odd Cards (3, 5, 7) are Prohibited" : "为什么奇数卡 (3、5、7 卡) 不可行？" }}
+              </div>
+              <div class="rule-desc" v-if="isEn">
+                • <strong>Ring Topology Break:</strong> NVLink / All-Reduce ring communication requires symmetric pairs. Odd ranks break the ring and cause severe bus contention.<br>
+                • <strong>Attention Head Indivisibility:</strong> Tensor Parallelism requires KV Heads % TP == 0. Standard 8 or 4 KV heads cannot be divided by 3, 5, or 7.<br>
+                • <strong>Chassis &amp; NUMA Affinity:</strong> Standard server mainboards provide 1, 2, 4, or 8 PCIe/SXM slots. Odd counts break dual-socket CPU bus symmetry.
+              </div>
+              <div class="rule-desc" v-else>
+                • <strong>通信环拓扑断裂：</strong>NVLink / All-Reduce 双向环依赖对称配对，奇数卡会导致环路断开与严重木桶延迟。<br>
+                • <strong>注意力头数无法整除：</strong>张量并行要求 KV Heads % TP == 0，主流 8 或 4 个 KV 头无法对 3、5、7 对称切分。<br>
+                • <strong>物理机箱与 NUMA 限制：</strong>工业级服务器均为 1、2、4、8 卡插槽，奇数卡会破坏双路 CPU 的 PCIe 通道对称性。
+              </div>
+            </div>
+            <div class="rule-card">
+              <div class="rule-title">
+                <span class="rule-num">2</span>
+                {{ isEn ? "Why Most Models Strictly Require 2^k Cards" : "为什么大部分模型必须为 2 的幂次方 (2^k)？" }}
+              </div>
+              <div class="rule-desc" v-if="isEn">
+                • <strong>GQA Divisibility:</strong> In Llama 3 (8 KV heads), factors of 8 are strictly {1, 2, 4, 8}. Running TP=6 triggers: <code>ValueError: Total number of KV heads (8) must be divisible by tensor parallel size (6)</code>.<br>
+                • <strong>NCCL Binary Tree:</strong> All-reduce collective algorithms form balanced binary trees under power-of-2 ranks for peak throughput.
+              </div>
+              <div class="rule-desc" v-else>
+                • <strong>GQA 分组查询注意力限制：</strong>以 Llama 3 (8 个 KV 头) 为例，8 的因数仅有 1、2、4、8 卡。若在 vLLM 中配置 6 卡 (TP=6) 将直接报错终止！Qwen 2.5 7B (4 个 KV 头) 单机更是严格限制为 1、2、4 卡。<br>
+                • <strong>NCCL 二叉树规约通信：</strong>通信底层以 2 的幂次方构建双二叉树，计算与通信效率达到全局最优。
+              </div>
+            </div>
+            <div class="rule-card">
+              <div class="rule-title">
+                <span class="rule-num">3</span>
+                {{ isEn ? "When Even Non-Power-of-2 Cards (6, 12, 24, 48) Work" : "什么时候可以使用偶数卡 (如 6 卡、12 卡、24 卡、48 卡)？" }}
+              </div>
+              <div class="rule-desc" v-if="isEn">
+                • <strong>Pipeline Parallelism (PP):</strong> Layers are partitioned across GPUs (e.g. 36 or 48 layers can be split across 6 cards with PP=6 or TP=2 x PP=3).<br>
+                • <strong>Multi-Node Clusters:</strong> Enterprise data centers scale in 8-card server chassis. 24 cards (3 nodes) and 48 cards (6 nodes) run TP=8 locally and PP/EP across nodes.
+              </div>
+              <div class="rule-desc" v-else>
+                • <strong>流水线并行 (Pipeline Parallelism, PP)：</strong>按 Transformer 隐藏层划分。如 36 或 48 层模型可切分为 6 级流水线 (PP=6) 或 2xTP + 3xPP (共 6 卡)。<br>
+                • <strong>跨机集群交付：</strong>数据中心以 8 卡整机为标准交付单元，集群规模为 8 的倍数 (16 卡、24 卡、32 卡、48 卡、64 卡)。24 卡 (3 节点) 与 48 卡 (6 节点) 节点内执行满速 TP=8，跨节点执行 PP/EP！
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1107,22 +1175,55 @@ const totalVramGb = computed(() => {
   return weightsGb.value + kvGb.value + cudaBufferGb.value;
 });
 
+const supportedSingleNodeTp = computed(() => {
+  const kvH = modelKvHeads.value || 8;
+  const isMla = isMlaActive.value;
+
+  if (isMla) {
+    return [1, 2, 4, 8];
+  }
+
+  // Divisors of kvHeads within [1, 2, 4, 8]
+  const valid = [];
+  for (const tp of [1, 2, 4, 8]) {
+    if (kvH % tp === 0) {
+      valid.push(tp);
+    }
+  }
+  return valid.length > 0 ? valid : [1];
+});
+
+const isStrictPowerOfTwoModel = computed(() => {
+  const kvH = modelKvHeads.value || 8;
+  return [2, 4, 8, 16, 32, 64, 128].includes(kvH);
+});
+
 const recommendationText = computed(() => {
   const v = totalVramGb.value;
   if (props.isEn) {
-    if (v <= 22) return 'Optimal Fit: 1x RTX 4090 24GB or RTX 5090 32GB can run single-card full speed.';
-    if (v <= 44) return 'Optimal Fit: 2x RTX 4090 24GB (TP=2) or 1x L40S 48GB.';
-    if (v <= 75) return 'Optimal Fit: 1x NVIDIA A100 / H100 80GB SXM.';
-    if (v <= 135) return 'Optimal Fit: 1x NVIDIA H200 141GB or 2x 80GB GPUs (TP=2) / Ascend 910C.';
-    if (v <= 185) return 'Optimal Fit: 1x NVIDIA B200 192GB or 4x 80GB GPUs (TP=4).';
-    return `Enterprise Topology: Multi-GPU Cluster needed (${Math.ceil(v / 75)}x 80GB or ${Math.ceil(v / 180)}x B200 GPUs).`;
+    if (v <= 22) return 'Optimal Fit: 1x RTX 4090 24GB or RTX 5090 32GB can run single-card full speed (TP=1).';
+    if (v <= 44) return 'Optimal Fit: 2x RTX 4090 24GB (TP=2) or 1x L40S 48GB (TP=1).';
+    if (v <= 75) return 'Optimal Fit: 1x NVIDIA A100 / H100 80GB SXM (TP=1).';
+    if (v <= 135) return 'Optimal Fit: 1x NVIDIA H200 141GB or 2x 80GB SXM (TP=2) / 1x Ascend 910C.';
+    if (v <= 180) return 'Optimal Fit: 1x NVIDIA B200 192GB (TP=1) or 4x 80GB SXM (TP=4).';
+    if (v <= 360) return 'Optimal Fit: 2x B200 192GB (TP=2) or 8x 80GB SXM Server (TP=8 full chassis).';
+    if (v <= 720) return 'Enterprise Fit: 4x B200 192GB (TP=4) or 16x 80GB SXM (2-Node Cluster, TP=8 EP=2).';
+    if (v <= 1400) return 'Hyperscale Topology: 8x B200 192GB (1-Node TP=8 full chassis) or 16x 80GB SXM (2-Node Cluster, TP=8 EP=2).';
+    const num80G = Math.ceil(v / (80 * 0.92 * 8)) * 8;
+    const numB200 = Math.ceil(v / (192 * 0.92 * 8)) * 8;
+    return `Enterprise Topology: ${num80G}x 80GB GPUs (${num80G / 8} Nodes, TP=8) or ${numB200}x B200 GPUs (${numB200 / 8} Nodes, TP=8).`;
   } else {
-    if (v <= 22) return '最佳适配方案：单张 RTX 4090 24G 或 RTX 5090 32G 即可全速单卡部署。';
-    if (v <= 44) return '最佳适配方案：2 张 RTX 4090 (TP=2) 或单张 L40S 48G。';
-    if (v <= 75) return '最佳适配方案：单张 A100 / H100 80G SXM。';
-    if (v <= 135) return '最佳适配方案：单张 H200 141G 独占，或双卡 80G (TP=2) / 昇腾 910C。';
-    if (v <= 185) return '最佳适配方案：单张 B200 192G，或 4 卡 80G (TP=4) 组网。';
-    return `超大规模模型：需 ${Math.ceil(v / 75)} 张 80G 或 ${Math.ceil(v / 180)} 张 B200 加速卡集群并行部署。`;
+    if (v <= 22) return '最佳适配方案：单张 RTX 4090 24G 或 RTX 5090 32G 即可全速单卡部署 (TP=1)。';
+    if (v <= 44) return '最佳适配方案：2 张 RTX 4090 (TP=2) 或单张 L40S 48G (TP=1)。';
+    if (v <= 75) return '最佳适配方案：单张 A100 / H100 80G SXM (TP=1)。';
+    if (v <= 135) return '最佳适配方案：单张 H200 141G 独占，或双卡 80G (TP=2) / 单张昇腾 910C。';
+    if (v <= 180) return '最佳适配方案：单张 B200 192G 独占，或 4 卡 80G SXM (TP=4)。';
+    if (v <= 360) return '最佳适配方案：双卡 B200 (TP=2) 或 8 卡 80G 整机满配 (TP=8)。';
+    if (v <= 720) return '企业级拓扑：4 卡 B200 (TP=4) 或 16 卡 80G (2 节点集群, TP=8 EP=2)。';
+    if (v <= 1400) return '超大规模集群：单台 8 卡 B200 (单机满配, TP=8) 或 16 卡 80G (2 节点集群, TP=8 EP=2)。';
+    const num80G = Math.ceil(v / (80 * 0.92 * 8)) * 8;
+    const numB200 = Math.ceil(v / (192 * 0.92 * 8)) * 8;
+    return `超大规模拓扑：需 ${num80G} 张 80G (${num80G / 8} 节点整机, TP=8) 或 ${numB200} 张 B200 (${numB200 / 8} 节点整机, TP=8) 组网。`;
   }
 });
 
@@ -1138,30 +1239,51 @@ const filteredGpus = computed(() => {
            g.bus.toLowerCase().includes(query);
   }).map(gpu => {
     const usableVram = gpu.vramGb * 0.92;
-    const cardsNeeded = Math.ceil(v / usableVram);
-    let tp = 1;
-    if (cardsNeeded > 1) {
-      tp = Math.min(8, Math.pow(2, Math.ceil(Math.log2(cardsNeeded))));
-    }
+    const rawCards = v / usableVram;
 
-    const isSingle = gpu.vramGb * 0.92 >= v;
+    // Strict Parallelism Constraint:
+    // 1. Single card: rawCards <= 1 (TP=1)
+    // 2. Single node: strictly power of 2 (2, 4, 8). Never odd cards (3, 5, 7)!
+    // 3. Multi-node cluster: standard 8-GPU chassis multiples (16, 24, 32, 48, 64). Never odd cards!
+    let allocatedCards = 1;
     let statusClass = 'fit-success';
     let statusText = '';
 
-    if (isSingle) {
+    if (rawCards <= 1.0) {
+      allocatedCards = 1;
       statusClass = 'fit-success';
       statusText = props.isEn ? '1 Card (Single GPU TP=1)' : '单卡可用 (TP=1)';
-    } else if (cardsNeeded <= 8) {
+    } else if (rawCards <= 2.0) {
+      allocatedCards = 2;
       statusClass = 'fit-cluster';
-      statusText = props.isEn ? `${cardsNeeded} Cards (TP=${tp})` : `${cardsNeeded} 卡并行 (TP=${tp})`;
+      statusText = props.isEn ? '2 Cards (TP=2, 2^k)' : '2 卡并行 (TP=2, 2^k 约束)';
+    } else if (rawCards <= 4.0) {
+      allocatedCards = 4;
+      statusClass = 'fit-cluster';
+      statusText = props.isEn ? '4 Cards (TP=4, 2^k)' : '4 卡并行 (TP=4, 2^k 约束)';
+    } else if (rawCards <= 8.0) {
+      allocatedCards = 8;
+      statusClass = 'fit-cluster';
+      statusText = props.isEn ? '8 Cards (Full Chassis TP=8)' : '8 卡整机 (单机满配 TP=8)';
     } else {
+      // Multi-node cluster: standard 8-GPU node chassis multiples
+      const rawNodes = rawCards / 8;
+      let targetNodes = Math.ceil(rawNodes);
+      // Standard cluster scaling: avoid awkward odd node counts (e.g. 5 nodes -> 6 nodes, 7 nodes -> 8 nodes)
+      if (targetNodes === 5) targetNodes = 6;
+      else if (targetNodes === 7) targetNodes = 8;
+
+      allocatedCards = targetNodes * 8;
       statusClass = 'fit-exceeded';
-      statusText = props.isEn ? `${cardsNeeded} Cards (Multi-Node)` : `跨节点集群 (${cardsNeeded} 卡)`;
+      const ppOrEp = `TP=8 + PP/EP=${targetNodes}`;
+      statusText = props.isEn
+        ? `${allocatedCards} Cards (${targetNodes}-Node Cluster, ${ppOrEp})`
+        : `${allocatedCards} 卡集群 (${targetNodes} 节点整机, ${ppOrEp})`;
     }
 
     return {
       ...gpu,
-      cardsNeeded,
+      cardsNeeded: allocatedCards,
       statusClass,
       statusText
     };
@@ -1969,6 +2091,123 @@ onUnmounted(() => {
 
 .cyber-range::-webkit-slider-thumb:hover {
   transform: scale(1.15);
+}
+
+.parallelism-info-banner {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-top: 14px;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: #94a3b8;
+}
+
+.topology-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 10px;
+}
+
+.topology-header .info-title {
+  font-weight: 700;
+  color: #c7d2fe;
+  display: flex;
+  align-items: center;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+
+.model-tp-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tp-model-tag, .tp-support-tag {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+}
+
+.tp-model-tag strong, .tp-support-tag strong {
+  color: #38bdf8;
+}
+
+.tp-badge-power2 {
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  color: #fbbf24;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.7rem;
+}
+
+.tp-badge-power2.highlight {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #a5b4fc;
+}
+
+.topology-rules-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.rule-card {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.rule-title {
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+}
+
+.rule-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: rgba(99, 102, 241, 0.3);
+  color: #a5b4fc;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.rule-desc {
+  white-space: pre-line;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .topology-rules-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 1024px) {
