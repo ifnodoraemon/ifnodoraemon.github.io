@@ -5,7 +5,6 @@ date: 2026-09-18
 tag: 强化学习
 tagClass: tag-emerald
 category: 模型工程
-series: llm-engineering
 description: "深入剖析从预训练 Scaling Law 向推理时算力扩展 (Test-Time Scaling) 的范式转移。全面拆解 DeepSeek-R1 核心的 GRPO 组相对策略优化数学推导、无 Critic 架构优势、长思维链自我反思涌现机制，并提供完整的极简实战代码。"
 featured: true
 featuredStats:

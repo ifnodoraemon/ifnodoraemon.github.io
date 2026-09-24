@@ -5,7 +5,6 @@ date: 2026-09-18
 tag: Speculative Decoding
 tagClass: tag-cyan
 category: Inference Systems
-series: llm-inference
 description: "Why is autoregressive LLM decoding fundamentally bottlenecked by memory bandwidth? We dissect the mathematical proof of lossless distribution invariance in speculative decoding, trace its evolution from dual-model drafts to EAGLE-2/3 dynamic draft trees, and provide production configurations in vLLM and SGLang."
 featured: true
 featuredStats:

@@ -5,14 +5,14 @@ date: 2026-06-15
 tag: Observability
 tagClass: tag-purple
 category: AI Agent
+series: ai-agent
+seriesOrder: 9
 description: AI Agents are not traditional software; we are debugging the reasoning process rather than the code itself. This article explores Trajectory Evaluation, LLM-as-a-Judge, and practical applications of mainstream Agent observability tools like LangSmith and Langfuse.
 extraTags:
   - Observability
   - Debugging
   - Trajectory Evaluation
   - LangSmith
-series: ai-agent
-seriesOrder: 9
 ---
 
 In 2026, if you are still using `print()` statements or scrolling through simple flat text logs to debug your AI Agent, you've likely experienced pure despair. You know the feeling: the Agent gets stuck in an infinite tool-calling loop, or inexplicably "forgets" the very first instruction by step four.

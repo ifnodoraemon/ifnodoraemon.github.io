@@ -5,7 +5,6 @@ date: 2026-09-07
 tag: 架构演进
 tagClass: tag-cyan
 category: 推理系统
-series: llm-inference
 description: "在百万级长上下文与数万亿 MoE 时代，KV Cache 显存暴涨如何成为推理核心瓶颈？硬核剖析月之暗面 Kimi Delta Attention (KDA) 的增量状态演进与 DeepSeek 多头潜变量注意力 (MLA) 的低秩投影数学原理。"
 ---
 

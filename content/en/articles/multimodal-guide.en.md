@@ -5,7 +5,6 @@ date: 2026-02-28
 tag: Multimodal LLMs
 tagClass: tag-emerald
 category: Model Engineering
-series: llm-engineering
 description: Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.
 ---
 

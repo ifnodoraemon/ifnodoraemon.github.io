@@ -5,7 +5,6 @@ date: 2026-04-05
 tag: 硬件驱动
 tagClass: tag-cyan
 category: 推理系统
-series: llm-inference
 description: 深度拆解 Linux 下 NVIDIA GPU 烦杂的驱动包结构。本文为您详解 nvidia-dkms、libnvidia、nvidia-utils 与 driver metapackage 之间的五层架构，并按「Docker 模型服务器」、「个人桌面」、「DGX 算力集群」等核心场景提供企业级安装最佳实践和避坑指南。
 featured: true
 featuredStats:

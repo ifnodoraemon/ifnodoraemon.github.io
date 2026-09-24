@@ -5,7 +5,6 @@ date: 2026-02-25
 tag: Fine-Tuning
 tagClass: tag-emerald
 category: Model Engineering
-series: llm-engineering
 description: "Discover how LLM fine-tuning works under the hood, explore proven enterprise use cases (LoRA, QLoRA, Full Fine-Tuning), and learn end-to-end workflows from data preparation to vLLM serving." 
 ---
 

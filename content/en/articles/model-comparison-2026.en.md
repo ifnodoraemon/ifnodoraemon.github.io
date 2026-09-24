@@ -5,7 +5,6 @@ date: 2026-03-01
 tag: Model Benchmark
 tagClass: tag-amber
 category: Evaluation & Trends
-series: llm-engineering
 description: A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.
 featured: true
 featuredStats:

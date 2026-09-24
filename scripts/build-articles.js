@@ -53,8 +53,6 @@ const SERIES_DEFINITIONS = {
     articles: [
       'agent-loop-state-machine',
       'build-ai-agent',
-      'loop-engineering',
-      'context-engineering-guide',
       'agent-runtime-practices',
       'mcp-guide',
       'skills-guide',
@@ -64,7 +62,6 @@ const SERIES_DEFINITIONS = {
       'agent-observability-debugging',
       'environment-scaling-agent-guide',
       'agent-memory-architecture',
-      'ai-coding-mastery',
     ],
   },
   'llm-inference': {
@@ -83,35 +80,6 @@ const SERIES_DEFINITIONS = {
       'flashattention-flashinfer-kernel-evolution',
       'mha-gqa-mla-matrix-absorption-inference-engine',
       'moe-expert-parallelism-inference-engine',
-      'kimi-kda-deepseek-mla-architecture',
-      'speculative-decoding-eagle-guide',
-      'quantization-precision-guide',
-      'quantization-hands-on-guide',
-      'sglang-vs-vllm-architecture',
-      'vllm-serving-guide',
-      'deepseek-v4-kimi-k3-deployment-guide',
-      'nvidia-gpu-package-architecture',
-    ],
-  },
-  'llm-engineering': {
-    id: 'llm-engineering',
-    titleZh: '《现代大模型实战工程与技术选型手册》',
-    titleEn: 'Modern Applied LLM Engineering & Selection Guide',
-    badgeZh: '模型工程专栏',
-    badgeEn: 'LLM Engineering Series',
-    descZh: '系统剖析 2026 前沿大模型落地方法论：企业级 RAG、模型全流程微调、Test-Time Compute 扩展与 GRPO 强化学习、拒绝榜单刷分的 Eval 体系以及主流模型横评。',
-    descEn: 'Master state-of-the-art LLM engineering practices: Enterprise RAG pipelines, fine-tuning workflows, Test-Time Compute & GRPO reinforcement learning, business-aligned evaluation suites, and multi-model benchmark selections.',
-    articles: [
-      'prompt-engineering-guide',
-      'rag-in-practice',
-      'fine-tuning-guide',
-      'test-time-compute-grpo',
-      'llm-evaluation-guide',
-      'multimodal-guide',
-      'domestic-llm-comparison-2026',
-      'model-comparison-2026',
-      'ai-trends-2026',
-      'ai-history-choices',
     ],
   },
 };
@@ -442,7 +410,7 @@ function writeArticles(list, isEn) {
     const seriesCardTop = buildSeriesCardTop(article, list, isEn);
     const seriesCardBottom = buildSeriesCardBottom(article, list, isEn);
 
-    const seriesId = article.series || Object.keys(SERIES_DEFINITIONS).find(id => SERIES_DEFINITIONS[id].articles.includes(article.slug));
+    const seriesId = (article.series && SERIES_DEFINITIONS[article.series] && SERIES_DEFINITIONS[article.series].articles.includes(article.slug)) ? article.series : null;
     const seriesDef = seriesId ? SERIES_DEFINITIONS[seriesId] : null;
     const seriesPartOfJson = seriesDef ? `,
       {
@@ -625,7 +593,7 @@ ${cardsHtml}
 }
 
 function buildSeriesCardTop(article, allArticlesInLang, isEn) {
-  const seriesId = article.series || Object.keys(SERIES_DEFINITIONS).find(id => SERIES_DEFINITIONS[id].articles.includes(article.slug));
+  const seriesId = (article.series && SERIES_DEFINITIONS[article.series] && SERIES_DEFINITIONS[article.series].articles.includes(article.slug)) ? article.series : null;
   if (!seriesId || !SERIES_DEFINITIONS[seriesId]) return '';
 
   const seriesDef = SERIES_DEFINITIONS[seriesId];
@@ -707,7 +675,7 @@ ${chapterItemsHtml}
 }
 
 function buildSeriesCardBottom(article, allArticlesInLang, isEn) {
-  const seriesId = article.series || Object.keys(SERIES_DEFINITIONS).find(id => SERIES_DEFINITIONS[id].articles.includes(article.slug));
+  const seriesId = (article.series && SERIES_DEFINITIONS[article.series] && SERIES_DEFINITIONS[article.series].articles.includes(article.slug)) ? article.series : null;
   if (!seriesId || !SERIES_DEFINITIONS[seriesId]) return '';
 
   const seriesDef = SERIES_DEFINITIONS[seriesId];
@@ -776,7 +744,7 @@ function generateListingPage(articlesList, isEn = false) {
   const listItems = articlesList.map((article, index) => {
     const isFeatured = index === 0;
     const pinText = isEn ? '📌 Pinned' : '📌 置顶';
-    const seriesId = article.series || Object.keys(SERIES_DEFINITIONS).find(id => SERIES_DEFINITIONS[id].articles.includes(article.slug));
+    const seriesId = (article.series && SERIES_DEFINITIONS[article.series] && SERIES_DEFINITIONS[article.series].articles.includes(article.slug)) ? article.series : null;
     const seriesDef = seriesId ? SERIES_DEFINITIONS[seriesId] : null;
     const seriesBadgeHtml = seriesDef
       ? `<span class="tag tag-series">📚 ${isEn ? seriesDef.badgeEn : seriesDef.badgeZh}</span>`
@@ -1035,6 +1003,12 @@ function generateLlmsTxt(articlesZh, articlesEn) {
     `- [${s.titleEn}](${SITE_URL}/en/articles/): ${s.descEn} (${s.articles.length} articles)`
   ).join('\n');
 
+  const extraSeriesZh = `- [《现代大模型实战工程与技术选型手册》](${SITE_URL}/articles/): 系统剖析前沿大模型落地方法论：企业级 RAG、模型全流程微调、Test-Time Compute 扩展与 GRPO 强化学习、拒绝榜单刷分的 Eval 体系以及主流模型横评。`;
+  const extraSeriesEn = `- [Modern Applied LLM Engineering & Selection Guide](${SITE_URL}/en/articles/): Enterprise RAG pipelines, fine-tuning workflows, Test-Time Compute & GRPO, evaluation suites, and multi-model benchmark selections.`;
+
+  const fullSeriesZhList = [seriesZhList, extraSeriesZh].filter(Boolean).join('\n');
+  const fullSeriesEnList = [seriesEnList, extraSeriesEn].filter(Boolean).join('\n');
+
   const articlesZhList = articlesZh.map(a => 
     `- [${a.title}](${SITE_URL}/articles/${a.slug}/): ${a.description}`
   ).join('\n');
@@ -1057,10 +1031,10 @@ function generateLlmsTxt(articlesZh, articlesEn) {
 ## 核心专栏体系 / Topic Series & Clusters
 
 ### 中文专栏 (Chinese Series)
-${seriesZhList}
+${fullSeriesZhList}
 
 ### 英文专栏 (English Series)
-${seriesEnList}
+${fullSeriesEnList}
 
 ## 中文文章索引 / Chinese Technical Articles (${articlesZh.length} 篇)
 

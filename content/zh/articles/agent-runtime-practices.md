@@ -5,14 +5,14 @@ date: 2026-03-15
 tag: 运行时规范
 tagClass: tag-purple
 category: AI Agent
+series: ai-agent
+seriesOrder: 3
 description: 基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。
 extraTags:
   - Agent Runtime
   - Tool Calling
   - Guardrail
   - Trace
-series: ai-agent
-seriesOrder: 3
 ---
 
 很多 AI Agent 项目做着做着，最后都会变成一种熟悉的形态：表面上支持自主决策，实际内部已经被写成了一条隐藏工作流。模型看起来在“思考”，但真正决定顺序、阶段和收尾时机的，往往还是后端代码。

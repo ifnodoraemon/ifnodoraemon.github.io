@@ -5,7 +5,6 @@ date: 2026-04-22
 tag: LLM Evaluation
 tagClass: tag-amber
 category: Evaluation & Trends
-series: llm-engineering
 description: Cease the obsession with writing more code; shift focus to deep evaluation thinking. We deconstruct LLM-as-a-Judge biases, the mathematics behind metrics, and reshaping CI/CD defenses for probabilistic systems.
 ---
 

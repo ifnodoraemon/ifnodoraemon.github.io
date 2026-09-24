@@ -5,7 +5,6 @@ date: 2026-03-31
 tag: 量化理论
 tagClass: tag-cyan
 category: 推理系统
-series: llm-inference
 description: 全面对比 FP32、BF16、FP16、FP8、INT8、INT4、NF4、FP4、1.58-bit 等所有主流量化精度格式，用真实 Benchmark 数据告诉你：每降低一级精度，模型到底会“变蠢”多少。含 FP8 vs INT8 深度技术对比。
 featured: true
 featuredStats:

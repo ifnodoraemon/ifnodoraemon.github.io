@@ -5,7 +5,6 @@ date: 2026-03-07
 tag: 前沿趋势
 tagClass: tag-amber
 category: 评测与趋势
-series: llm-engineering
 description: 从 Thinking 推理模式到 Agent 化应用，深度剖析 2026 年 AI 大模型领域最值得关注的十一大核心发展趋势。
 ---
 

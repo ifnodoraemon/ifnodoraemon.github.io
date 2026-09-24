@@ -5,7 +5,6 @@ date: 2026-09-07
 tag: Architecture Evolution
 tagClass: tag-cyan
 category: Inference Systems
-series: llm-inference
 description: "In the era of million-token context windows and trillion-parameter MoE, how KV Cache memory saturation became the core bottleneck. Deep mathematical and architectural breakdown of Moonshot's KDA and DeepSeek's MLA low-rank projections."
 ---
 

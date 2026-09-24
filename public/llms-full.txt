@@ -12,14 +12,14 @@
 ## 核心专栏体系 / Topic Series & Clusters
 
 ### 中文专栏 (Chinese Series)
-- [《AI Agent 生产级架构师手册》](https://blog.llmgo.top/articles/): 系统化掌握 2026 生产级 AI Agent 核心架构：从执行循环、状态机控制流，到 MCP 协议、Skills 扩展、多智能体协作与全链路可观测性。 (14 篇文章)
-- [《大模型推理引擎：从模型演进、内核架构到未来终局》](https://blog.llmgo.top/articles/): 以第一性原理贯穿大模型推理系统：从 Prefill/Decode 物理撕裂与 Roofline 模型推导、KV Cache 与 MLA 显存突围，到 PagedAttention、Continuous Batching、P/D 解耦、四大引擎 (vLLM / SGLang / TRT-LLM / llama.cpp) 源码解密与长思考链调度终局。 (15 篇文章)
-- [《现代大模型实战工程与技术选型手册》](https://blog.llmgo.top/articles/): 系统剖析 2026 前沿大模型落地方法论：企业级 RAG、模型全流程微调、Test-Time Compute 扩展与 GRPO 强化学习、拒绝榜单刷分的 Eval 体系以及主流模型横评。 (10 篇文章)
+- [《AI Agent 生产级架构师手册》](https://blog.llmgo.top/articles/): 系统化掌握 2026 生产级 AI Agent 核心架构：从执行循环、状态机控制流，到 MCP 协议、Skills 扩展、多智能体协作与全链路可观测性。 (11 篇文章)
+- [《大模型推理引擎：从模型演进、内核架构到未来终局》](https://blog.llmgo.top/articles/): 以第一性原理贯穿大模型推理系统：从 Prefill/Decode 物理撕裂与 Roofline 模型推导、KV Cache 与 MLA 显存突围，到 PagedAttention、Continuous Batching、P/D 解耦、四大引擎 (vLLM / SGLang / TRT-LLM / llama.cpp) 源码解密与长思考链调度终局。 (7 篇文章)
+- [《现代大模型实战工程与技术选型手册》](https://blog.llmgo.top/articles/): 系统剖析前沿大模型落地方法论：企业级 RAG、模型全流程微调、Test-Time Compute 扩展与 GRPO 强化学习、拒绝榜单刷分的 Eval 体系以及主流模型横评。
 
 ### 英文专栏 (English Series)
-- [The Production AI Agent Architect Handbook](https://blog.llmgo.top/en/articles/): Master production-grade AI Agent architectures in 2026: from execution loops and state machines to MCP, skills, multi-agent orchestration, and observability. (14 articles)
-- [Production LLM Inference Engines: Evolution, Architecture, and Future](https://blog.llmgo.top/en/articles/): Master LLM inference systems from first principles: Roofline modeling of Prefill/Decode, KV Cache & MLA memory optimization, PagedAttention, Continuous Batching, P/D disaggregation, and in-depth engine architectures across vLLM, SGLang, TensorRT-LLM, and llama.cpp. (15 articles)
-- [Modern Applied LLM Engineering & Selection Guide](https://blog.llmgo.top/en/articles/): Master state-of-the-art LLM engineering practices: Enterprise RAG pipelines, fine-tuning workflows, Test-Time Compute & GRPO reinforcement learning, business-aligned evaluation suites, and multi-model benchmark selections. (10 articles)
+- [The Production AI Agent Architect Handbook](https://blog.llmgo.top/en/articles/): Master production-grade AI Agent architectures in 2026: from execution loops and state machines to MCP, skills, multi-agent orchestration, and observability. (11 articles)
+- [Production LLM Inference Engines: Evolution, Architecture, and Future](https://blog.llmgo.top/en/articles/): Master LLM inference systems from first principles: Roofline modeling of Prefill/Decode, KV Cache & MLA memory optimization, PagedAttention, Continuous Batching, P/D disaggregation, and in-depth engine architectures across vLLM, SGLang, TensorRT-LLM, and llama.cpp. (7 articles)
+- [Modern Applied LLM Engineering & Selection Guide](https://blog.llmgo.top/en/articles/): Enterprise RAG pipelines, fine-tuning workflows, Test-Time Compute & GRPO, evaluation suites, and multi-model benchmark selections.
 
 ## 中文文章索引 / Chinese Technical Articles (39 篇)
 

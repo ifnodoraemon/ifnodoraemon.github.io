@@ -5,7 +5,6 @@ date: 2026-03-03
 tag: RAG Architecture
 tagClass: tag-emerald
 category: Model Engineering
-series: llm-engineering
 description: "A complete guide on how to use retrieval-augmented generation strategies and production best practices. Covers vector databases, semantic chunking, ColBERT reranking, GraphRAG, and automated Ragas evaluation." 
 ---
 

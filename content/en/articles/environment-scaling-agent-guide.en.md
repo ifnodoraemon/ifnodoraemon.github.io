@@ -5,9 +5,9 @@ date: 2026-09-07
 tag: Environment Scaling
 tagClass: tag-purple
 category: AI Agent
-description: "Analyzing the major post-training paradigm shift of 2026: from text autoregression to multi-environment sandboxed RL. Deep dive into GLM-5.3's Terminal-Bench 3.0 breakthrough, Linux container orchestration, MCP protocol integration, and sandboxed agent engineering."
 series: ai-agent
 seriesOrder: 10
+description: "Analyzing the major post-training paradigm shift of 2026: from text autoregression to multi-environment sandboxed RL. Deep dive into GLM-5.3's Terminal-Bench 3.0 breakthrough, Linux container orchestration, MCP protocol integration, and sandboxed agent engineering."
 ---
 
 If 2024 was the zenith of Prompt Engineering and 2025 normalized Context Engineering, then in **2026**, the definitive dividing line in intelligent agent development is **Environment Scaling**.

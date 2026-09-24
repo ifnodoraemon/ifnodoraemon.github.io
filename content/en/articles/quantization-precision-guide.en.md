@@ -5,7 +5,6 @@ date: 2026-03-31
 tag: Quantization Precision
 tagClass: tag-cyan
 category: Inference Systems
-series: llm-inference
 description: A comprehensive comparison of FP32, BF16, FP16, FP8, INT8, INT4, NF4, FP4, 1.58-bit and all major quantization formats — with real benchmark data and an in-depth FP8 vs INT8 technical analysis.
 featured: true
 featuredStats:

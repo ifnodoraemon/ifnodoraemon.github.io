@@ -5,7 +5,6 @@ date: 2026-09-07
 tag: Cluster Deployment
 tagClass: tag-cyan
 category: Inference Systems
-series: llm-inference
 description: "Complete enterprise on-premise deployment guide for 1.6T - 2.8T MoE open-weight models: Hardware planning across GPU clusters, vLLM / SGLang distributed TP/PP configuration, FP8 dynamic quantization, and high-concurrency API gateway production setups."
 ---
 

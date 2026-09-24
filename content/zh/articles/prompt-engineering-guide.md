@@ -5,7 +5,6 @@ date: 2026-03-09
 tag: 提示工程
 tagClass: tag-emerald
 category: 模型工程
-series: llm-engineering
 description: 深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。
 extraTags:
   - GPT-5.4

@@ -5,7 +5,6 @@ date: 2026-06-28
 tag: 循环工程
 tagClass: tag-purple
 category: AI Agent
-series: ai-agent
 description: 深度解析 AI Agent 架构演进，探讨从 Prompt、Context、Harness 到 Loop 工程的四层控制面外推，以及 ReAct 架构的四大顽疾。
 ---
 

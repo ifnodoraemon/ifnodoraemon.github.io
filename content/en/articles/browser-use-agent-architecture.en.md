@@ -5,6 +5,8 @@ date: 2026-09-18
 tag: Browser Agents
 tagClass: tag-purple
 category: AI Agent
+series: ai-agent
+seriesOrder: 6
 description: "Why do traditional Selenium and Playwright scripts constantly break against modern web frontends? We dissect the architecture of Browser-use, the breakout open-source project with over 100k GitHub stars: DOM tree pruning, Set-of-Mark (SoM) visual coordinate grounding, state machine resilience, and end-to-end production recipes."
 featured: true
 featuredStats:
@@ -14,8 +16,6 @@ featuredStats:
     value: Dual-Modal Vision+DOM
   - label: Implementation
     value: Production Ready
-series: ai-agent
-seriesOrder: 6
 ---
 
 ## Introduction: The Death of Fragile RPA and Selector-Based Automation

@@ -5,14 +5,14 @@ date: 2026-03-15
 tag: Runtime Practices
 tagClass: tag-purple
 category: AI Agent
+series: ai-agent
+seriesOrder: 3
 description: Based on a real data analysis agent project, this article distills 7 reusable Agent Runtime practices covering state exposure, tool design, context control, guardrails, delegation, and trace-driven iteration.
 extraTags:
   - Agent Runtime
   - Tool Calling
   - Guardrail
   - Trace
-series: ai-agent
-seriesOrder: 3
 ---
 
 Many AI Agent projects eventually drift into a familiar shape: they appear autonomous on the surface, but internally they have already become hidden workflows. The model seems to be "thinking," yet the real decisions about order, phases, and when to finish are still encoded in backend logic.

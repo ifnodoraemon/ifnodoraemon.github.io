@@ -5,7 +5,6 @@ date: 2026-09-07
 tag: 集群部署
 tagClass: tag-cyan
 category: 推理系统
-series: llm-inference
 description: "这不是一篇官方文档的搬运，而是我们烧了上百万 GPU 租金换来的排障血泪史。实战拆解如何在 4 节点（32 卡）H100 裸金属集群上，通过 vLLM 0.29.0 的混合并行（TP8+PP2+EP2）与 Triton 算子优化，成功压榨 1.6T 级 MoE 模型的每一滴极限吞吐量。"
 ---
 

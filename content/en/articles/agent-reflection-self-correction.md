@@ -5,9 +5,9 @@ date: 2026-07-16
 tag: Self-Correction
 tagClass: tag-purple
 category: AI Agent
-description: "The potential of LLMs extends beyond pre-trained parameters. We dive deep into the frontier of Test-Time Compute: from Actor-Critic architecture to leveraging Monte Carlo Tree Search (MCTS) to decode the limits of Agent self-correction."
 series: ai-agent
 seriesOrder: 7
+description: "The potential of LLMs extends beyond pre-trained parameters. We dive deep into the frontier of Test-Time Compute: from Actor-Critic architecture to leveraging Monte Carlo Tree Search (MCTS) to decode the limits of Agent self-correction."
 ---
 
 ## Prologue: Why Do Models Need "Time to Think"?

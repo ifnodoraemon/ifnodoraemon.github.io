@@ -5,7 +5,6 @@ date: 2026-03-03
 tag: RAG 检索
 tagClass: tag-emerald
 category: 模型工程
-series: llm-engineering
 description: "从向量数据库选型到 Embedding 策略，深度剖析 Naive RAG、混合检索、HyDE 与 GraphRAG 架构选型矩阵，总结 7 大企业级检索增强生成最佳实践，含 Pinecone 与 Weaviate 性能实测。" 
 ---
 

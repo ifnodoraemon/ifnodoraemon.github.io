@@ -5,14 +5,14 @@ date: 2026-03-12
 tag: Agent Skills
 tagClass: tag-purple
 category: AI Agent
+series: ai-agent
+seriesOrder: 5
 description: From core principles to cross-platform practice, a complete guide to the AI coding assistant Skills system. Covers SKILL.md mechanics, six-platform comparison, hands-on writing guide, and best practices.
 extraTags:
   - Claude Code
   - Cursor
   - GitHub Copilot
   - OpenAI Codex
-series: ai-agent
-seriesOrder: 5
 ---
 
 ## What Are Skills?

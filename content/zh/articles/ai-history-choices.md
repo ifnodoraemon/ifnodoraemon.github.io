@@ -5,7 +5,6 @@ date: 2026-04-15
 tag: 技术史抉择
 tagClass: tag-amber
 category: 评测与趋势
-series: llm-engineering
 description: 回顾 AI 七十年发展史上的六次关键技术岔路口，剖析每一次「历史选择」背后的算力约束、数据红利与可扩展性逻辑。
 ---
 

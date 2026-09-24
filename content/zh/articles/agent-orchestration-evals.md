@@ -5,9 +5,9 @@ date: 2026-07-15
 tag: 编排评测
 tagClass: tag-purple
 category: AI Agent
-description: 当大模型走向复杂的企业级落地，如何通过分布式编排对抗链路误差复合？如何构建具有统计学置信度的 Evals 评估体系？本文带你从基础概念直击硬核底座。
 series: ai-agent
 seriesOrder: 8
+description: 当大模型走向复杂的企业级落地，如何通过分布式编排对抗链路误差复合？如何构建具有统计学置信度的 Evals 评估体系？本文带你从基础概念直击硬核底座。
 ---
 
 ## 引子：为什么 Prompt Engineering 走到了尽头？

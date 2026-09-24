@@ -5,6 +5,8 @@ date: 2026-09-18
 tag: 浏览器智能体
 tagClass: tag-purple
 category: AI Agent
+series: ai-agent
+seriesOrder: 6
 description: "为什么传统 Selenium/Playwright 脚本在动态前端下频频崩溃？深度拆解斩获 10 万+ GitHub Star 的现象级项目 Browser-use 的底层架构：DOM 树智能提纯降噪、Set-of-Mark (SoM) 视觉坐标定位、状态机闭环容错，并手把手构建一个可生产落地的企业级网页自动化智能体。"
 featured: true
 featuredStats:
@@ -14,8 +16,6 @@ featuredStats:
     value: 视觉+DOM双模态
   - label: 生产实践
     value: 完整可用代码
-series: ai-agent
-seriesOrder: 6
 ---
 
 ## 引言：传统 RPA 与脆弱自动化脚本的终结

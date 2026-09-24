@@ -5,7 +5,6 @@ date: 2026-02-25
 tag: 全流程微调
 tagClass: tag-emerald
 category: 模型工程
-series: llm-engineering
 description: "深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。" 
 ---
 

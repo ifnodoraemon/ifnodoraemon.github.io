@@ -5,7 +5,6 @@ date: 2026-06-28
 tag: Loop Engineering
 tagClass: tag-purple
 category: AI Agent
-series: ai-agent
 description: A deep dive into the evolution of AI Agent architectures, exploring the 4-layer control plane extrapolation from Prompt, Context, Harness to Loop Engineering, and the 4 diseases of the ReAct architecture.
 ---
 
