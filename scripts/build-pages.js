@@ -92,33 +92,68 @@ function generateBlogJsonLd(articles, isEn) {
     headline: a.title,
     datePublished: a.isoDate,
     description: a.description,
-    author: { '@type': 'Person', name: 'ifnodoraemon' }
+    url: `https://blog.llmgo.top${isEn ? '/en' : ''}/articles/${a.slug}/`,
+    author: { '@type': 'Person', name: 'ifnodoraemon', url: `https://blog.llmgo.top${isEn ? '/en' : ''}/about/` }
   }));
 
   return JSON.stringify({
     '@context': 'https://schema.org',
-    '@type': 'Blog',
-    name: siteName,
-    description: siteDesc,
-    url: siteUrl,
-    image: 'https://blog.llmgo.top/og-image.png',
-    author: {
-      '@type': 'Person',
-      name: 'ifnodoraemon',
-      url: 'https://github.com/ifnodoraemon'
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: siteName,
-      url: 'https://blog.llmgo.top',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://blog.llmgo.top/favicon.svg'
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}#website`,
+        name: siteName,
+        alternateName: ['Nobita Talks AI', '大雄话AI', 'llmgo.top', 'ifnodoraemon'],
+        url: siteUrl,
+        description: siteDesc,
+        inLanguage: lang,
+        publisher: {
+          '@type': 'Organization',
+          name: siteName,
+          url: 'https://blog.llmgo.top/',
+          logo: {
+            '@type': 'ImageObject',
+            url: 'https://blog.llmgo.top/og-image.png',
+            width: 1200,
+            height: 630
+          }
+        },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: `https://blog.llmgo.top${isEn ? '/en' : ''}/articles/?q={search_term_string}`
+          },
+          'query-input': 'required name=search_term_string'
+        }
+      },
+      {
+        '@type': 'Blog',
+        '@id': `${siteUrl}#blog`,
+        name: siteName,
+        description: siteDesc,
+        url: siteUrl,
+        image: 'https://blog.llmgo.top/og-image.png',
+        author: {
+          '@type': 'Person',
+          name: 'ifnodoraemon',
+          url: `https://blog.llmgo.top${isEn ? '/en' : ''}/about/`,
+          sameAs: ['https://github.com/ifnodoraemon']
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: siteName,
+          url: 'https://blog.llmgo.top',
+          logo: {
+            '@type': 'ImageObject',
+            url: 'https://blog.llmgo.top/favicon.svg'
+          }
+        },
+        inLanguage: lang,
+        dateCreated: '2026-03-05',
+        blogPost: blogPosts
       }
-    },
-    inLanguage: lang,
-    dateCreated: '2026-03-05',
-    blogPost: blogPosts
+    ]
   }, null, 4);
 }
 

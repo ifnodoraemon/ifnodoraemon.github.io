@@ -21,18 +21,26 @@
   <meta property="og:url" content="https://blog.llmgo.top{{articles_prefix}}/articles/{{slug}}/">
   <meta property="og:title" content="{{title}} — {{meta.siteName}}">
   <meta property="og:description" content="{{description}}">
-  <meta property="og:image" content="{{image}}">
+  <meta property="og:image" content="{{ogImage}}">
+  <meta property="og:image:secure_url" content="{{ogImage}}">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{title}}">
   <meta property="og:locale" content="{{ogLocale}}">
   <meta property="og:site_name" content="{{meta.siteName}}">
   <meta property="article:published_time" content="{{isoDate}}">
-  <meta property="article:author" content="ifnodoraemon">
+  <meta property="article:modified_time" content="{{isoDate}}">
+  <meta property="article:author" content="https://blog.llmgo.top{{articles_prefix}}/about/">
   <meta property="article:section" content="{{tag}}">
+  <link rel="alternate" type="image/svg+xml" href="{{image}}">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{title}} — {{meta.siteName}}">
   <meta name="twitter:description" content="{{description}}">
-  <meta name="twitter:image" content="{{image}}">
+  <meta name="twitter:image" content="{{ogImage}}">
+  <meta name="twitter:image:alt" content="{{title}}">
 
   <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-5078775507335151">
@@ -80,11 +88,17 @@
     "description": {{jsonDescription}},
     "datePublished": "{{isoDate}}",
     "dateModified": "{{isoDate}}",
-    "image": "{{image}}",
+    "image": [
+      "{{ogImage}}",
+      "{{image}}"
+    ],
     "author": {
       "@type": "Person",
       "name": "ifnodoraemon",
-      "url": "https://github.com/ifnodoraemon"
+      "url": "https://blog.llmgo.top{{articles_prefix}}/about/",
+      "sameAs": [
+        "https://github.com/ifnodoraemon"
+      ]
     },
     "publisher": {
       "@type": "Organization",
@@ -100,7 +114,15 @@
       "@id": "https://blog.llmgo.top{{articles_prefix}}/articles/{{slug}}/"
     },
     "articleSection": "{{tag}}",
-    "inLanguage": "{{lang}}"
+    "keywords": "{{keywords}}",
+    "wordCount": {{wordCountNumber}},
+    "timeRequired": "PT{{readingTimeNumber}}M",
+    "inLanguage": "{{lang}}",
+    "isPartOf": {
+      "@type": "Blog",
+      "name": "{{meta.siteName}}",
+      "url": "https://blog.llmgo.top{{articles_prefix}}/"
+    }
   }
   </script>
   <script type="application/ld+json">

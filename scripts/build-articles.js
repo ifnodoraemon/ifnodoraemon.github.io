@@ -345,6 +345,9 @@ function prepareArticles(list, isEn) {
     const readingTime = Math.max(1, Math.ceil(wordCount / 250));
 
     const faqSchema = generateFaqSchema(mdContent, fm.faq);
+    const ogImageUrl = (fm.image && !fm.image.endsWith('.svg'))
+      ? toSiteUrl(fm.image)
+      : `${SITE_URL}/og-image.png`;
 
     return {
       ...fm,
@@ -356,7 +359,10 @@ function prepareArticles(list, isEn) {
       tocHtml: buildTocHtml(currentToc, isEn),
       imagePath,
       imageUrl: toSiteUrl(imagePath),
+      ogImageUrl,
       keywords: [fm.tag, ...(fm.extraTags || []), isEn ? 'AI Agent' : 'AI智能体', fm.slug.replace(/-/g, ' ')].filter(Boolean).join(','),
+      wordCountNumber: wordCount,
+      readingTimeNumber: readingTime,
       wordCountText: isEn ? `${wordCount} words` : `约 ${wordCount} 字`,
       readingTimeText: isEn ? `${readingTime} min read` : `预计阅读 ${readingTime} 分钟`,
       meta: isEn ? enLocales.meta : zhLocales.meta,
@@ -412,6 +418,9 @@ function writeArticles(list, isEn) {
       tagClass: article.tagClass || '',
       keywords: article.keywords,
       image: article.imageUrl,
+      ogImage: article.ogImageUrl,
+      wordCountNumber: article.wordCountNumber,
+      readingTimeNumber: article.readingTimeNumber,
       toc: article.tocHtml,
       content: article.htmlContent,
       wordCountText: article.wordCountText,
@@ -772,12 +781,18 @@ function generateListingPage(articlesList, isEn = false) {
   <meta property="og:title" content="${pageTitle}">
   <meta property="og:description" content="${pageDesc}">
   <meta property="og:image" content="${SITE_URL}/og-image.png">
+  <meta property="og:image:secure_url" content="${SITE_URL}/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="${pageTitle}">
   <meta property="og:locale" content="${isEn ? 'en_US' : 'zh_CN'}">
   <meta property="og:site_name" content="${escapeHtml(siteName)}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${pageTitle}">
   <meta name="twitter:description" content="${pageDesc}">
   <meta name="twitter:image" content="${SITE_URL}/og-image.png">
+  <meta name="twitter:image:alt" content="${pageTitle}">
   <meta name="google-adsense-account" content="ca-pub-5078775507335151">
   <script>
     const loadGA = () => {
@@ -811,6 +826,16 @@ function generateListingPage(articlesList, isEn = false) {
     "description": "${pageDesc}",
     "url": "${canonicalUrl}",
     "numberOfItems": ${articlesList.length}
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "${escapeHtml(siteName)}", "item": "${SITE_URL}${isEn ? '/en/' : '/'}" },
+      { "@type": "ListItem", "position": 2, "name": "${heroTitle}", "item": "${canonicalUrl}" }
+    ]
   }
   </script>
 </head>
@@ -884,30 +909,42 @@ function generateSearchIndex(articlesZh, articlesEn) {
 
 function generateSitemap(articlesList) {
   const today = new Date().toISOString().split('T')[0];
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
 
   STATIC_ROUTES.forEach(route => {
+    const isEn = route.startsWith('/en/');
+    const zhRoute = isEn ? (route.replace(/^\/en/, '') || '/') : route;
+    const enRoute = isEn ? route : ('/en' + (route === '/' ? '/' : route));
     const isHome = route === '/' || route === '/en/';
     const isArticles = route === '/articles/' || route === '/en/articles/';
+    const isTools = route === '/tools/' || route === '/en/tools/';
+    const isModels = route === '/models/' || route === '/en/models/';
 
     xml += `  <url>
-    <loc>${SITE_URL}${route === '/' ? '' : route}</loc>
+    <loc>${SITE_URL}${route === '/' ? '/' : route}</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="${SITE_URL}${zhRoute}" />
+    <xhtml:link rel="alternate" hreflang="en" href="${SITE_URL}${enRoute}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${zhRoute}" />
     <lastmod>${today}</lastmod>
-    <changefreq>${isHome || isArticles ? 'weekly' : 'monthly'}</changefreq>
-    <priority>${isHome ? '1.0' : isArticles ? '0.9' : '0.7'}</priority>
-  </url>
-`;
+    <changefreq>${isHome || isArticles ? 'daily' : (isTools || isModels ? 'weekly' : 'monthly')}</changefreq>
+    <priority>${isHome ? '1.0' : (isArticles || isTools ? '0.9' : (isModels ? '0.8' : '0.7'))}</priority>
+  </url>\n`;
   });
 
   articlesList.forEach(article => {
-    const slugPrefix = article.isEn ? '/en/articles/' : '/articles/';
+    const zhRoute = `/articles/${article.slug}/`;
+    const enRoute = `/en/articles/${article.slug}/`;
+    const selfRoute = article.isEn ? enRoute : zhRoute;
+
     xml += `  <url>
-    <loc>${SITE_URL}${slugPrefix}${article.slug}/</loc>
+    <loc>${SITE_URL}${selfRoute}</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="${SITE_URL}${zhRoute}" />
+    <xhtml:link rel="alternate" hreflang="en" href="${SITE_URL}${enRoute}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${zhRoute}" />
     <lastmod>${article.isoDate}</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-`;
+    <priority>0.8</priority>
+  </url>\n`;
   });
 
   xml += '</urlset>\n';

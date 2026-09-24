@@ -20,6 +20,11 @@
   <meta property="og:title" content="{{meta.projects.title}}">
   <meta property="og:description" content="{{meta.projects.desc}}">
   <meta property="og:image" content="https://blog.llmgo.top/og-image.png">
+  <meta property="og:image:secure_url" content="https://blog.llmgo.top/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{meta.projects.title}}">
   <meta property="og:locale" content="{{#if isEn}}en_US{{else}}zh_CN{{/if}}">
   <meta property="og:site_name" content="{{meta.siteName}}">
 
@@ -28,6 +33,7 @@
   <meta name="twitter:title" content="{{meta.projects.title}}">
   <meta name="twitter:description" content="{{meta.projects.desc}}">
   <meta name="twitter:image" content="https://blog.llmgo.top/og-image.png">
+  <meta name="twitter:image:alt" content="{{meta.projects.title}}">
 
   <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-5078775507335151">
@@ -61,6 +67,16 @@
     "name": "{{meta.projects.title}}",
     "description": "{{meta.projects.desc}}",
     "url": "https://blog.llmgo.top{{linkPrefix}}/projects/"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "{{meta.siteName}}", "item": "https://blog.llmgo.top{{linkPrefix}}/" },
+      { "@type": "ListItem", "position": 2, "name": "{{meta.projects.title}}", "item": "https://blog.llmgo.top{{linkPrefix}}/projects/" }
+    ]
   }
   </script>
 

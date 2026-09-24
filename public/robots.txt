@@ -4,11 +4,24 @@ Allow: /
 # Sitemaps
 Sitemap: https://blog.llmgo.top/sitemap.xml
 
-# Crawl-delay
+# Crawl-delay for polite scrapers
 Crawl-delay: 1
 
-# Generative Engine Optimization (GEO) Bot Policies
-# Explicitly allowing AI Search & Training bots to digest our content
+# Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Yandex
+Allow: /
+
+# Generative Engine Optimization (GEO) & AI Crawlers
+# Explicitly allowing AI Search, Reasoning & Training bots to digest our content
 User-agent: GPTBot
 Allow: /
 
@@ -28,6 +41,27 @@ User-agent: anthropic-ai
 Allow: /
 
 User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Cohere-ai
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: meta-externalagent
 Allow: /
 
 User-agent: CCBot

@@ -5,14 +5,15 @@
  * Usage: node scripts/audit-seo.js [--remote]
  * 
  * Verifies:
- * 1. Sitemap integrity (valid routes, no malformed .html/ or verification tokens)
+ * 1. Sitemap integrity (valid routes, lastmod, xhtml:link alternates)
  * 2. Canonical tag accuracy (exact URL match, trailing slash consistency)
  * 3. Robots meta directive (no accidental noindex/nofollow)
  * 4. Bilingual hreflang symmetry (zh, en, x-default)
  * 5. Title & Meta Description presence and length
- * 6. Structured data (JSON-LD syntax, schema types: FAQPage, TechArticle, etc.)
- * 7. OpenGraph and Twitter cards
+ * 6. Structured data (JSON-LD syntax, schema types: FAQPage, TechArticle, BreadcrumbList, etc.)
+ * 7. OpenGraph and Twitter cards (including raster format enforcement for og:image)
  * 8. Clean heading hierarchy (H1 presence)
+ * 9. Robots.txt linking to sitemap and crawler allowances
  */
 
 import fs from 'fs';
@@ -39,12 +40,21 @@ if (!fs.existsSync(sitemapPath)) {
 
 const sitemapContent = fs.readFileSync(sitemapPath, 'utf-8');
 const locMatches = [...sitemapContent.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1]);
+const lastmodMatches = [...sitemapContent.matchAll(/<lastmod>(.*?)<\/lastmod>/g)].map(m => m[1]);
+const xhtmlMatches = [...sitemapContent.matchAll(/<xhtml:link[^>]+>/g)];
 
-console.log(`📄 Found ${locMatches.length} URLs in sitemap.xml\n`);
+console.log(`📄 Found ${locMatches.length} URLs in sitemap.xml`);
+console.log(`🕒 Found ${lastmodMatches.length} <lastmod> timestamps in sitemap.xml`);
+console.log(`🌐 Found ${xhtmlMatches.length} <xhtml:link> alternates in sitemap.xml\n`);
 
 let passedChecks = 0;
 let warnings = 0;
 let errors = 0;
+
+if (lastmodMatches.length !== locMatches.length) {
+  console.warn(`⚠️  [Sitemap Warning] ${locMatches.length - lastmodMatches.length} URLs are missing <lastmod> tags in sitemap.xml`);
+  warnings++;
+}
 
 for (const url of locMatches) {
   const urlObj = new URL(url);
@@ -62,7 +72,6 @@ for (const url of locMatches) {
   if (route === '/') {
     localHtmlPath = path.join(DIST, 'index.html');
   } else {
-    // Route like /articles/ai-coding-mastery/ -> dist/articles/ai-coding-mastery/index.html
     const trimmed = route.replace(/^\/|\/$/g, '');
     localHtmlPath = path.join(DIST, trimmed, 'index.html');
   }
@@ -115,36 +124,58 @@ for (const url of locMatches) {
     warnings++;
   }
 
-  // 7. OpenGraph Checks
+  // 7. OpenGraph Checks (Including raster image enforcement)
   const ogTitle = html.match(/<meta[^>]*property=["']og:title["']/i);
-  const ogImage = html.match(/<meta[^>]*property=["']og:image["']/i);
-  if (!ogTitle || !ogImage) {
+  const ogImageMatch = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']*)["'][^>]*>/i);
+  if (!ogTitle || !ogImageMatch) {
     console.warn(`⚠️  [Incomplete OpenGraph] Missing og:title or og:image in ${url}`);
     warnings++;
-  }
-
-  // 8. Bilingual Hreflang reciprocity
-  const hreflangs = [...html.matchAll(/<link[^>]*hreflang=["']([^"']*)["'][^>]*href=["']([^"']*)["'][^>]*>/gi)];
-  if (route.startsWith('/articles/') || route.startsWith('/en/articles/')) {
-    if (hreflangs.length < 2) {
-      console.warn(`⚠️  [Missing Hreflang] Article page has fewer than 2 alternate links: ${url}`);
+  } else {
+    const ogImgUrl = ogImageMatch[1];
+    if (ogImgUrl.endsWith('.svg')) {
+      console.warn(`⚠️  [Non-raster og:image] Social platforms and Google require raster images (PNG/JPG/WebP). Found SVG in ${url}: ${ogImgUrl}`);
       warnings++;
     }
   }
 
+  // 8. Bilingual Hreflang reciprocity
+  const hreflangs = [...html.matchAll(/<link[^>]*hreflang=["']([^"']*)["'][^>]*href=["']([^"']*)["'][^>]*>/gi)];
+  if (hreflangs.length < 2) {
+    console.warn(`⚠️  [Missing Hreflang] Page has fewer than 2 alternate links: ${url}`);
+    warnings++;
+  }
+
   // 9. Structured Data (JSON-LD) Validation
   const jsonLdScripts = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/gi)];
+  let hasBreadcrumbs = false;
+  let hasValidSchema = false;
+
   for (const script of jsonLdScripts) {
     try {
       const parsed = JSON.parse(script[1]);
-      if (!parsed['@context'] || !parsed['@type']) {
-        console.warn(`⚠️  [Invalid JSON-LD schema] Missing @context or @type in ${url}`);
-        warnings++;
+      if (parsed['@graph'] && Array.isArray(parsed['@graph'])) {
+        hasValidSchema = true;
+      } else if (parsed['@context'] && parsed['@type']) {
+        hasValidSchema = true;
+        if (parsed['@type'] === 'BreadcrumbList') {
+          hasBreadcrumbs = true;
+        }
       }
     } catch (e) {
       console.error(`❌ [JSON-LD Parse Error] Broken schema in ${url}: ${e.message}`);
       errors++;
     }
+  }
+
+  if (!hasValidSchema) {
+    console.warn(`⚠️  [Missing Structured Data] No valid JSON-LD found in ${url}`);
+    warnings++;
+  }
+
+  // Root homepage can use WebSite + Blog instead of Breadcrumbs
+  if (!hasBreadcrumbs && route !== '/' && route !== '/en/') {
+    console.warn(`⚠️  [Missing Breadcrumbs Schema] Page lacks BreadcrumbList JSON-LD: ${url}`);
+    warnings++;
   }
 
   // 10. H1 tag check

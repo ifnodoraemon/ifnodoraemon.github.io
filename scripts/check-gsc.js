@@ -21,14 +21,16 @@ const ROOT = path.resolve(__dirname, '..');
 const DEFAULT_SITE_URL = 'https://blog.llmgo.top/';
 
 const DEFAULT_INSPECT_URLS = [
+  'https://blog.llmgo.top/',
   'https://blog.llmgo.top/about/',
   'https://blog.llmgo.top/articles/',
+  'https://blog.llmgo.top/tools/',
+  'https://blog.llmgo.top/models/',
   'https://blog.llmgo.top/articles/ai-coding-mastery/',
-  'https://blog.llmgo.top/en/articles/prompt-engineering-guide/',
-  'https://blog.llmgo.top/en/models/',
-  'https://blog.llmgo.top/en/projects/',
   'https://blog.llmgo.top/articles/test-time-compute-grpo/',
-  'https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/'
+  'https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/',
+  'https://blog.llmgo.top/en/articles/prompt-engineering-guide/',
+  'https://blog.llmgo.top/en/models/'
 ];
 
 // Helper: base64url encoding
@@ -46,7 +48,7 @@ async function getAccessToken(credentials) {
   const header = { alg: 'RS256', typ: 'JWT' };
   const claim = {
     iss: credentials.client_email,
-    scope: 'https://www.googleapis.com/auth/webmasters.readonly',
+    scope: 'https://www.googleapis.com/auth/webmasters',
     aud: 'https://oauth2.googleapis.com/token',
     exp: now + 3600,
     iat: now
@@ -94,6 +96,56 @@ async function getAuthorizedSites(accessToken) {
   return data.siteEntry || [];
 }
 
+// Query Google Search Console Sitemaps status
+async function getSitemaps(accessToken, siteUrl) {
+  const encodedSiteUrl = encodeURIComponent(siteUrl);
+  const res = await fetch(`https://www.googleapis.com/webmasters/v3/sites/${encodedSiteUrl}/sitemaps`, {
+    headers: { 'Authorization': `Bearer ${accessToken}` }
+  });
+  if (!res.ok) return [];
+  const data = await res.json();
+  return data.sitemap || [];
+}
+
+// Submit sitemap directly to Google Search Console
+async function submitSitemap(accessToken, siteUrl, sitemapUrl) {
+  const encodedSiteUrl = encodeURIComponent(siteUrl);
+  const encodedFeedPath = encodeURIComponent(sitemapUrl);
+  const res = await fetch(`https://www.googleapis.com/webmasters/v3/sites/${encodedSiteUrl}/sitemaps/${encodedFeedPath}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${accessToken}` }
+  });
+  return res.status === 204 || res.ok;
+}
+
+// Query Search Analytics performance (last 28 days)
+async function getSearchAnalytics(accessToken, siteUrl, dimension = 'query', limit = 10) {
+  const encodedSiteUrl = encodeURIComponent(siteUrl);
+  const today = new Date();
+  const endDate = today.toISOString().split('T')[0];
+  const startDateObj = new Date();
+  startDateObj.setDate(today.getDate() - 28);
+  const startDate = startDateObj.toISOString().split('T')[0];
+
+  const res = await fetch(`https://www.googleapis.com/webmasters/v3/sites/${encodedSiteUrl}/searchAnalytics/query`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      startDate,
+      endDate,
+      dimensions: [dimension],
+      rowLimit: limit
+    })
+  });
+
+  if (!res.ok) return [];
+  const data = await res.json();
+  return data.rows || [];
+}
+
 // Call Google Search Console URL Inspection API
 async function inspectUrl(accessToken, siteUrl, inspectionUrl) {
   const res = await fetch('https://searchconsole.googleapis.com/v1/urlInspection/index:inspect', {
@@ -123,7 +175,6 @@ function findCredentialsFile() {
   const defaultNamed = path.join(ROOT, 'gsc-credentials.json');
   if (fs.existsSync(defaultNamed)) return defaultNamed;
 
-  // Search for gen-lang-client or service account json in ROOT
   const files = fs.readdirSync(ROOT);
   for (const f of files) {
     if (f.endsWith('.json') && (f.startsWith('gen-lang-client') || f.includes('credentials'))) {
@@ -141,7 +192,7 @@ function findCredentialsFile() {
 
 async function main() {
   console.log('================================================================');
-  console.log('🤖 Google Search Console 自动化索引与收录巡检器');
+  console.log('🤖 Google Search Console 自动化索引与收录巡检器 (Enhanced)');
   console.log('================================================================\n');
 
   const credPath = findCredentialsFile();
@@ -187,15 +238,6 @@ async function main() {
 
   if (authorizedSites.length === 0) {
     console.log('   ⚠️  【尚未授权任何站点】\n');
-    console.log('================================================================');
-    console.log('👉 只需要最后一步即可启用自动巡检：');
-    console.log('1. 打开 Google Search Console: https://search.google.com/search-console');
-    console.log('2. 点击左侧底部的「设置 (Settings)」->「用户和权限 (Users and permissions)」');
-    console.log('3. 点击右上角「添加用户 (Add user)」');
-    console.log(`4. 填入邮箱地址:`);
-    console.log(`   👉 \x1b[32m${credentials.client_email}\x1b[0m 👈`);
-    console.log('5. 权限请选择:「完整 (Full)」或「所有者 (Owner)」并保存');
-    console.log('================================================================\n');
     return;
   }
 
@@ -204,15 +246,56 @@ async function main() {
   });
   console.log('');
 
-  // Auto-detect matching site URL
   const match = authorizedSites.find(s => s.siteUrl.includes('llmgo.top'));
   if (match) {
     targetSiteUrl = match.siteUrl;
     console.log(`🎯 自动匹配到博客资源属性: ${targetSiteUrl}\n`);
   }
 
-  const urlsToInspect = process.argv.slice(2).length > 0 ? process.argv.slice(2) : DEFAULT_INSPECT_URLS;
+  // 1. Check and submit Sitemap
+  console.log('📡 正在检查 GSC Sitemap 提交状态与最新抓取反馈...');
+  const sitemaps = await getSitemaps(token, targetSiteUrl);
+  if (sitemaps.length > 0) {
+    for (const sm of sitemaps) {
+      console.log(`   📄 路径:         ${sm.path}`);
+      console.log(`   🕒 上次抓取时间: ${sm.lastDownloaded || '等待抓取'}`);
+      console.log(`   📊 提交 URL 数:  ${sm.contents?.[0]?.submitted || 0}`);
+      console.log(`   ✅ 状态:         ${sm.errors === '0' ? '正常无错误' : '⚠️ 存在 ' + sm.errors + ' 个错误'}`);
+    }
+  } else {
+    console.log('   ℹ️  暂无已记录的 Sitemap，正在主动向 GSC 提交最新 sitemap.xml...');
+  }
 
+  const sitemapUrl = `${targetSiteUrl.replace(/\/$/, '')}/sitemap.xml`;
+  const submitSuccess = await submitSitemap(token, targetSiteUrl, sitemapUrl);
+  if (submitSuccess) {
+    console.log(`   🚀 已向 Google 成功发送最新站点地图推送: ${sitemapUrl}\n`);
+  }
+
+  // 2. Search Analytics: Recent search queries & impressions
+  console.log('📊 正在查询过去 28 天真实搜索展现关键词与热点文章...');
+  const topQueries = await getSearchAnalytics(token, targetSiteUrl, 'query', 10);
+  if (topQueries.length > 0) {
+    console.log('   🔍 搜索词展现排行 Top 10:');
+    topQueries.forEach((q, i) => {
+      console.log(`      ${i + 1}. "${q.keys[0]}" — 展现量: ${q.impressions}, 点击量: ${q.clicks}, 平均排名: ${q.position?.toFixed(1)}`);
+    });
+    console.log('');
+  } else {
+    console.log('   ℹ️  过去 28 天暂无搜索词数据');
+  }
+
+  const topPages = await getSearchAnalytics(token, targetSiteUrl, 'page', 5);
+  if (topPages.length > 0) {
+    console.log('   📄 搜索展现最高页面 Top 5:');
+    topPages.forEach((p, i) => {
+      console.log(`      ${i + 1}. ${p.keys[0]} — 展现量: ${p.impressions}, 点击量: ${p.clicks}, 平均排名: ${p.position?.toFixed(1)}`);
+    });
+    console.log('');
+  }
+
+  // 3. URL Inspection
+  const urlsToInspect = process.argv.slice(2).length > 0 ? process.argv.slice(2) : DEFAULT_INSPECT_URLS;
   console.log(`📡 开始向 Google URL Inspection API 发起实时收录检测 (${urlsToInspect.length} 个 URL)...\n`);
 
   for (const url of urlsToInspect) {
@@ -241,7 +324,6 @@ async function main() {
       console.log(`   🏷️  用户声明的规范网址:      ${idx.userCanonical || '不适用'}`);
       console.log(`   🔍 Google 选择的规范网址:    ${idx.googleCanonical || '不适用'}`);
 
-      // Rich results (schema)
       const rich = result.inspectionResult?.richResultsResult;
       if (rich?.detectedItems && rich.detectedItems.length > 0) {
         console.log(`   ✨ 结构化数据 (Rich Results):`);

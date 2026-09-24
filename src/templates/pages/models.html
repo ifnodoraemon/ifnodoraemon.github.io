@@ -20,6 +20,11 @@
   <meta property="og:title" content="{{meta.models.title}}">
   <meta property="og:description" content="{{meta.models.desc}}">
   <meta property="og:image" content="https://blog.llmgo.top/og-image.png">
+  <meta property="og:image:secure_url" content="https://blog.llmgo.top/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{meta.models.title}}">
   <meta property="og:locale" content="{{#if isEn}}en_US{{else}}zh_CN{{/if}}">
   <meta property="og:site_name" content="{{meta.siteName}}">
 
@@ -28,6 +33,7 @@
   <meta name="twitter:title" content="{{meta.models.title}}">
   <meta name="twitter:description" content="{{meta.models.desc}}">
   <meta name="twitter:image" content="https://blog.llmgo.top/og-image.png">
+  <meta name="twitter:image:alt" content="{{meta.models.title}}">
 
   <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-5078775507335151">
@@ -57,10 +63,20 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebPage",
+    "@type": "CollectionPage",
     "name": "{{meta.models.title}}",
     "description": "{{meta.models.desc}}",
     "url": "https://blog.llmgo.top{{linkPrefix}}/models/"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "{{meta.siteName}}", "item": "https://blog.llmgo.top{{linkPrefix}}/" },
+      { "@type": "ListItem", "position": 2, "name": "{{meta.models.title}}", "item": "https://blog.llmgo.top{{linkPrefix}}/models/" }
+    ]
   }
   </script>
 
