@@ -75,7 +75,7 @@ flowchart TD
     subgraph Decode["Phase 2: Decode (Token-by-Token Generation)"]
         D1["Input: Exactly 1 new token from preceding step (T_new)"] --> D2["Vector-matrix multiplications (GEMV): low compute intensity"]
         D2 --> D3["Stream entire model weights + historical KV Cache from HBM"]
-        D3 --> D4["Loop iteratively until <EOS> or max token budget"]
+        D3 --> D4["Loop iteratively until [EOS] or max token budget"]
     end
 
     Prefill --> Decode

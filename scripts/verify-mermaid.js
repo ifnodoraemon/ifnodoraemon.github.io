@@ -65,6 +65,22 @@ async function verifyAllMermaid() {
           totalDiagrams++;
           const code = blockLines.join('\n').trim();
 
+          // Detect unescaped HTML-like tags (e.g. <EOS>, <pad>) that break browser DOM parsing
+          const htmlTags = code.match(/<[a-zA-Z][^>]*>/g) || [];
+          const allowedTags = new Set(['<br/>', '<br>', '<b>', '</b>', '<i>', '</i>', '<strong>', '</strong>', '<em>', '</em>', '<sub>', '</sub>', '<sup>', '</sup>']);
+          const forbiddenTags = htmlTags.filter(t => !allowedTags.has(t.toLowerCase()));
+
+          if (forbiddenTags.length > 0) {
+            failures.push({
+              file: relPath,
+              line: startLine,
+              diagramIndex,
+              error: `Unescaped HTML tag(s) ${JSON.stringify(forbiddenTags)} detected! Browser DOM parsing treats these as HTML elements, causing 'Syntax error in text' in client-side Mermaid. Use [TAG] or &lt;TAG&gt; instead.`,
+              snippet: code.slice(0, 160) + (code.length > 160 ? '...' : '')
+            });
+            continue;
+          }
+
           try {
             await mermaid.parse(code);
           } catch (err) {

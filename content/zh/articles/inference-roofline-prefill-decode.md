@@ -75,7 +75,7 @@ flowchart TD
     subgraph Decode["阶段二：逐字生成 (Decode / Token 阶段)"]
         D1["输入: 仅前一个步骤产生的单个 Token (T_new)"] --> D2["向量矩阵乘法 GEMV: 极低计算密度"]
         D2 --> D3["被迫从 HBM 完整加载全部模型权重 + 全部历史 KV Cache"]
-        D3 --> D4["循环迭代: 直至命中 <EOS> 终止符"]
+        D3 --> D4["循环迭代: 直至命中 [EOS] 终止符"]
     end
 
     Prefill --> Decode

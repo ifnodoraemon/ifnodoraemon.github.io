@@ -148,7 +148,7 @@ sequenceDiagram
         end
     end
 
-    Client->>Scheduler: 命中 <EOS>，请求结束
+    Client->>Scheduler: 命中 [EOS]，请求结束
     Scheduler->>BM: 释放该请求全部物理块 [7, 3, 12, 25]
     BM->>BM: 物理块还回 Free List，引用计数清零
 ```

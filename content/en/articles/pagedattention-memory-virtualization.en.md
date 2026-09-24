@@ -148,7 +148,7 @@ sequenceDiagram
         end
     end
 
-    Client->>Scheduler: Emits <EOS>, request terminates
+    Client->>Scheduler: Emits [EOS], request terminates
     Scheduler->>BM: Releases physical blocks [7, 3, 12, 25]
     BM->>BM: Returns blocks to Free List, resets ref_count
 ```
