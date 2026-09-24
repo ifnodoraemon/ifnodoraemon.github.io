@@ -77,6 +77,7 @@ const SERIES_DEFINITIONS = {
     descEn: 'Master LLM inference systems from first principles: Roofline modeling of Prefill/Decode, KV Cache & MLA memory optimization, PagedAttention, Continuous Batching, P/D disaggregation, and in-depth engine architectures across vLLM, SGLang, TensorRT-LLM, and llama.cpp.',
     articles: [
       'inference-roofline-prefill-decode',
+      'pagedattention-memory-virtualization',
       'kimi-kda-deepseek-mla-architecture',
       'sglang-vs-vllm-architecture',
       'speculative-decoding-eagle-guide',

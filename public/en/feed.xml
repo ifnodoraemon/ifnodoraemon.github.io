@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Thu, 24 Sep 2026 06:32:24 GMT</pubDate>
+  <pubDate>Thu, 24 Sep 2026 06:37:23 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence</title>
@@ -16,6 +16,16 @@
     <category>Inference Systems</category>
     <description>Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode.</description>
     <enclosure url="https://blog.llmgo.top/og/en/inference-roofline-prefill-decode.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Memory Virtualization in Inference Engines: PagedAttention and the Elimination of Memory Fragmentation</title>
+    <link>https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/</link>
+    <guid>https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Inference Systems</category>
+    <description>Why did early LLM serving systems waste 60% to 80% of GPU memory? A deep architectural exploration of vLLM's PagedAttention, logical-to-physical block mapping, zero-copy Copy-on-Write sharing, and non-contiguous CUDA attention kernels.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/pagedattention-memory-virtualization.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>AI Agent Memory Architecture: From Working Memory to Episodic Memory &amp; Hierarchical Graph RAG</title>
