@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Thu, 24 Sep 2026 07:03:29 GMT</pubDate>
+  <pubDate>Thu, 24 Sep 2026 07:06:50 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking</title>
@@ -16,6 +16,16 @@
     <category>Inference Systems</category>
     <description>Why does high-concurrency LLM serving suffer from severe latency spikes (TPOT jitter) even after eliminating memory fragmentation? A deep dive into the evolution from static batching to Orca's iteration-level continuous batching, the physical mechanics of head-of-line (HoL) blocking caused by long prefill bursts, and how Sarathi-Serve and vLLM leverage Chunked Prefill and decode piggybacking to flatten latency SLAs.</description>
     <enclosure url="https://blog.llmgo.top/og/en/continuous-batching-chunked-prefill-guide.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Evolution of Attention Kernels: From FlashAttention-1/2/3 SRAM Tiling to FlashInfer Unified Heterogeneous Serving</title>
+    <link>https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/</link>
+    <guid>https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Inference Systems</category>
+    <description>Why does standard self-attention trigger explosive HBM bandwidth bottlenecks as context scales? A comprehensive deep dive into the evolution of attention kernels: from FlashAttention-1's SRAM tiling and online softmax rescaling, to FlashAttention-2's loop inversion and warp-level zero-communication scheduling, to FlashAttention-3's Hopper TMA asynchronous copies and WGMMA warpgroups. Finally, we explore FlashInfer, the purpose-built LLM serving kernel library, revealing how native Paged KV cache indexing and Split-K parallel decoding rescue memory-bound decodes.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/flashattention-flashinfer-kernel-evolution.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence</title>
