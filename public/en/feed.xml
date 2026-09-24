@@ -5,8 +5,18 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Thu, 24 Sep 2026 06:46:20 GMT</pubDate>
+  <pubDate>Thu, 24 Sep 2026 06:49:13 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking</title>
+    <link>https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/</link>
+    <guid>https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Inference Systems</category>
+    <description>Why does high-concurrency LLM serving suffer from severe latency spikes (TPOT jitter) even after eliminating memory fragmentation? A deep dive into the evolution from static batching to Orca's iteration-level continuous batching, the physical mechanics of head-of-line (HoL) blocking caused by long prefill bursts, and how Sarathi-Serve and vLLM leverage Chunked Prefill and decode piggybacking to flatten latency SLAs.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/continuous-batching-chunked-prefill-guide.png" length="150000" type="image/png" />
+  </item>
   <item>
     <title>From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence</title>
     <link>https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/</link>
