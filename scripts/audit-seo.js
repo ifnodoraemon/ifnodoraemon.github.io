@@ -42,10 +42,12 @@ const sitemapContent = fs.readFileSync(sitemapPath, 'utf-8');
 const locMatches = [...sitemapContent.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1]);
 const lastmodMatches = [...sitemapContent.matchAll(/<lastmod>(.*?)<\/lastmod>/g)].map(m => m[1]);
 const xhtmlMatches = [...sitemapContent.matchAll(/<xhtml:link[^>]+>/g)];
+const imageMatches = [...sitemapContent.matchAll(/<image:loc>(.*?)<\/image:loc>/g)].map(m => m[1]);
 
 console.log(`📄 Found ${locMatches.length} URLs in sitemap.xml`);
 console.log(`🕒 Found ${lastmodMatches.length} <lastmod> timestamps in sitemap.xml`);
-console.log(`🌐 Found ${xhtmlMatches.length} <xhtml:link> alternates in sitemap.xml\n`);
+console.log(`🌐 Found ${xhtmlMatches.length} <xhtml:link> alternates in sitemap.xml`);
+console.log(`🖼️  Found ${imageMatches.length} <image:loc> image entries in sitemap.xml\n`);
 
 let passedChecks = 0;
 let warnings = 0;
@@ -124,7 +126,7 @@ for (const url of locMatches) {
     warnings++;
   }
 
-  // 7. OpenGraph Checks (Including raster image enforcement)
+  // 7. OpenGraph & Twitter Checks (Including raster image and author attribution)
   const ogTitle = html.match(/<meta[^>]*property=["']og:title["']/i);
   const ogImageMatch = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']*)["'][^>]*>/i);
   if (!ogTitle || !ogImageMatch) {
@@ -136,6 +138,13 @@ for (const url of locMatches) {
       console.warn(`⚠️  [Non-raster og:image] Social platforms and Google require raster images (PNG/JPG/WebP). Found SVG in ${url}: ${ogImgUrl}`);
       warnings++;
     }
+  }
+
+  const twitterCard = html.match(/<meta[^>]*name=["']twitter:card["']/i);
+  const twitterSite = html.match(/<meta[^>]*name=["']twitter:site["']/i);
+  if (!twitterCard || !twitterSite) {
+    console.warn(`⚠️  [Incomplete Twitter Card] Missing twitter:card or twitter:site in ${url}`);
+    warnings++;
   }
 
   // 8. Bilingual Hreflang reciprocity

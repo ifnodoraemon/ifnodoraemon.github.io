@@ -470,6 +470,13 @@ function writeArticles(list, isEn) {
     });
   </script>` : '';
 
+    const tagList = [article.tag, ...(article.extraTags || []), isEn ? 'AI Agent' : 'AI智能体', article.slug.replace(/-/g, ' ')]
+      .filter(Boolean);
+    const uniqueTags = [...new Set(tagList)];
+    const articleTagsMeta = uniqueTags
+      .map(t => `  <meta property="article:tag" content="${escapeHtml(t)}">`)
+      .join('\n');
+
     const html = applyTemplate(template, {
       title: article.title,
       jsonTitle: JSON.stringify(article.title),
@@ -499,6 +506,8 @@ function writeArticles(list, isEn) {
       mermaidScript,
       rssFeedPath: isEn ? '/en/feed.xml' : '/feed.xml',
       lang: isEn ? 'en' : 'zh-CN',
+      home_link: isEn ? '/en/' : '/',
+      home_text: isEn ? 'Home' : '首页',
       articles_link: isEn ? '/en/articles/' : '/articles/',
       articles_prefix: isEn ? '/en' : '',
       encodedTitle: encodeURIComponent(article.title),
@@ -506,6 +515,7 @@ function writeArticles(list, isEn) {
       breadcrumb_articles: isEn ? 'Articles' : '文章',
       return_text: isEn ? '← Back to Articles' : '← 返回文章列表',
       ogLocale: isEn ? 'en_US' : 'zh_CN',
+      articleTagsMeta,
       'meta.siteName': isEn ? enLocales.meta.siteName : zhLocales.meta.siteName,
     });
 
@@ -857,6 +867,8 @@ function generateListingPage(articlesList, isEn = false) {
   <meta property="og:locale" content="${isEn ? 'en_US' : 'zh_CN'}">
   <meta property="og:site_name" content="${escapeHtml(siteName)}">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@ifnodoraemon">
+  <meta name="twitter:creator" content="@ifnodoraemon">
   <meta name="twitter:title" content="${pageTitle}">
   <meta name="twitter:description" content="${pageDesc}">
   <meta name="twitter:image" content="${SITE_URL}/og-image.png">
@@ -1113,7 +1125,7 @@ ${articlesEnList}
 
 function generateSitemap(articlesList) {
   const today = new Date().toISOString().split('T')[0];
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n        xmlns:xhtml="http://www.w3.org/1999/xhtml"\n        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`;
 
   STATIC_ROUTES.forEach(route => {
     const isEn = route.startsWith('/en/');
@@ -1148,6 +1160,11 @@ function generateSitemap(articlesList) {
     <lastmod>${article.isoDate}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>${article.ogImageUrl}</image:loc>
+      <image:title>${escapeHtml(article.title)}</image:title>
+      <image:caption>${escapeHtml(article.description)}</image:caption>
+    </image:image>
   </url>\n`;
   });
 
@@ -1179,7 +1196,7 @@ function generateRssFeed(articlesList, isEn = false) {
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.mkdirSync(path.dirname(repoOutPath), { recursive: true });
 
-  let xml = `<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n<channel>\n  <title>${escapeHtml(title)}</title>\n  <link>${channelLink}</link>\n  <description>${escapeHtml(desc)}</description>\n  <language>${lang}</language>\n  <pubDate>${pubDate}</pubDate>\n  <atom:link href="${SITE_URL}${feedPath}" rel="self" type="application/rss+xml" />\n`;
+  let xml = `<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">\n<channel>\n  <title>${escapeHtml(title)}</title>\n  <link>${channelLink}</link>\n  <description>${escapeHtml(desc)}</description>\n  <language>${lang}</language>\n  <pubDate>${pubDate}</pubDate>\n  <atom:link href="${SITE_URL}${feedPath}" rel="self" type="application/rss+xml" />\n`;
 
   articlesList.forEach(article => {
     const slugPrefix = article.isEn ? '/en/articles/' : '/articles/';
@@ -1188,7 +1205,10 @@ function generateRssFeed(articlesList, isEn = false) {
     <link>${SITE_URL}${slugPrefix}${article.slug}/</link>
     <guid>${SITE_URL}${slugPrefix}${article.slug}/</guid>
     <pubDate>${new Date(article.isoDate).toUTCString()}</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>${escapeHtml(article.tag)}</category>
     <description>${escapeHtml(article.description)}</description>
+    <enclosure url="${article.ogImageUrl}" length="150000" type="image/png" />
   </item>
 `;
   });

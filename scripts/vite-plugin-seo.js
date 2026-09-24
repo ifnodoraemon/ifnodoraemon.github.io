@@ -74,6 +74,7 @@ export default function seoPlugin({ hostname }) {
         let changefreq = 'monthly';
         let priority = '0.7';
 
+        let imageXml = '';
         if (url === '/' || url === '/en/') {
           priority = '1.0';
           changefreq = 'daily';
@@ -96,6 +97,8 @@ export default function seoPlugin({ hostname }) {
           const slug = url.replace(/^\/en\/articles\/|^\/articles\/|\/$/g, '');
           const articleDate = getArticleDate(slug, rootDir);
           if (articleDate) lastmod = articleDate;
+          const langSegment = isEn ? 'en' : 'zh';
+          imageXml = `\n    <image:image>\n      <image:loc>${hostname}/og/${langSegment}/${slug}.png</image:loc>\n    </image:image>`;
         } else if (url === '/about/' || url === '/en/about/' || url === '/projects/' || url === '/en/projects/') {
           priority = '0.7';
           changefreq = 'monthly';
@@ -109,13 +112,14 @@ export default function seoPlugin({ hostname }) {
     <xhtml:link rel="alternate" hreflang="x-default" href="${hostname}${xDefault}" />
     <lastmod>${lastmod}</lastmod>
     <changefreq>${changefreq}</changefreq>
-    <priority>${priority}</priority>
+    <priority>${priority}</priority>${imageXml}
   </url>`;
       });
 
       const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${urlEntries.join('\n')}
 </urlset>`;
 

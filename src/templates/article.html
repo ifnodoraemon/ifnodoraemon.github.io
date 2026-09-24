@@ -34,10 +34,13 @@
   <meta property="article:modified_time" content="{{isoDate}}">
   <meta property="article:author" content="https://blog.llmgo.top{{articles_prefix}}/about/">
   <meta property="article:section" content="{{tag}}">
+{{articleTagsMeta}}
   <link rel="alternate" type="image/svg+xml" href="{{image}}">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@ifnodoraemon">
+  <meta name="twitter:creator" content="@ifnodoraemon">
   <meta name="twitter:title" content="{{title}} — {{meta.siteName}}">
   <meta name="twitter:description" content="{{description}}">
   <meta name="twitter:image" content="{{ogImage}}">
@@ -131,6 +134,14 @@
     "timeRequired": "PT{{readingTimeNumber}}M",
     "inLanguage": "{{lang}}",
     "isAccessibleForFree": true,
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": [
+        ".article-detail-header h1",
+        ".article-detail-desc",
+        ".article-detail-content h2"
+      ]
+    },
     "isPartOf": [
       {
         "@type": "Blog",
@@ -163,7 +174,25 @@
     <article class="article-detail">
       <div class="container">
         <div class="article-detail-header">
-          <a href="{{articles_link}}" class="back-link">{{return_text}}</a>
+          <nav class="breadcrumb-trail" aria-label="Breadcrumb">
+            <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+              <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="{{home_link}}" itemprop="item"><span itemprop="name">{{home_text}}</span></a>
+                <meta itemprop="position" content="1" />
+              </li>
+              <li class="breadcrumb-sep" aria-hidden="true">/</li>
+              <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="{{articles_link}}" itemprop="item"><span itemprop="name">{{breadcrumb_articles}}</span></a>
+                <meta itemprop="position" content="2" />
+              </li>
+              <li class="breadcrumb-sep" aria-hidden="true">/</li>
+              <li class="breadcrumb-item current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+                <span itemprop="name">{{title}}</span>
+                <meta itemprop="position" content="3" />
+              </li>
+            </ol>
+            <a href="{{articles_link}}" class="back-link">{{return_text}}</a>
+          </nav>
           <div class="card-meta">
             <span class="tag {{tagClass}}">{{tag}}</span>
             <time datetime="{{date}}">{{dateFormatted}}</time>

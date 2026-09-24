@@ -433,5 +433,25 @@ test('build outputs include valid llms.txt, enriched ItemList schema, and author
   assert.match(zhArticleHtml, /"isAccessibleForFree":\s*true/);
 });
 
+test('build outputs include visible breadcrumbs, twitter card attribution, speakable schema, image sitemaps, and rich RSS enclosures', () => {
+  const zhArticleHtml = fs.readFileSync(path.join(ROOT, 'dist', 'articles', 'agent-runtime-practices', 'index.html'), 'utf-8');
+  assert.match(zhArticleHtml, /class="breadcrumb-trail"/);
+  assert.match(zhArticleHtml, /itemscope itemtype="https:\/\/schema\.org\/BreadcrumbList"/);
+  assert.match(zhArticleHtml, /name="twitter:site" content="@ifnodoraemon"/);
+  assert.match(zhArticleHtml, /name="twitter:creator" content="@ifnodoraemon"/);
+  assert.match(zhArticleHtml, /"SpeakableSpecification"/);
+  assert.match(zhArticleHtml, /property="article:tag"/);
+
+  const sitemap = fs.readFileSync(path.join(ROOT, 'dist', 'sitemap.xml'), 'utf-8');
+  assert.match(sitemap, /xmlns:image="http:\/\/www\.google\.com\/schemas\/sitemap-image\/1\.1"/);
+  assert.match(sitemap, /<image:image>/);
+  assert.match(sitemap, /<image:loc>https:\/\/blog\.llmgo\.top\/og\/zh\//);
+
+  const feedZh = fs.readFileSync(path.join(ROOT, 'dist', 'feed.xml'), 'utf-8');
+  assert.match(feedZh, /xmlns:dc="http:\/\/purl\.org\/dc\/elements\/1\.1\/"/);
+  assert.match(feedZh, /<dc:creator>ifnodoraemon<\/dc:creator>/);
+  assert.match(feedZh, /<enclosure url="https:\/\/blog\.llmgo\.top\/og\//);
+});
+
 
 
