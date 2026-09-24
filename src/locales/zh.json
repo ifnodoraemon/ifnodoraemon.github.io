@@ -230,17 +230,17 @@
         "defaultActive": false
       },
       {
-        "label": "GPT-5.6 Sol",
+        "label": "GPT-6 Sol",
         "provider": "OpenAI",
-        "type": "2026.05 商业 / Agentic Coding",
-        "color": "#64748b",
+        "type": "2026.09.22 商业 / Agentic 编程与1.1M长文",
+        "color": "#0d9488",
         "data": [
-          95,
+          97,
+          98,
+          97,
           96,
-          96,
-          95,
-          94,
-          86
+          98,
+          90
         ],
         "defaultActive": false
       }
@@ -371,14 +371,14 @@
         "$0.50 / $2.00"
       ],
       [
-        "GPT-5.6 Sol",
-        "2026.05 OpenAI",
-        "分级高效工业级智能体",
-        "1509 (#3)",
-        "64.2",
-        "86.4%",
-        "110 t/s",
-        "$1.80 / $7.20"
+        "GPT-6 Sol",
+        "2026.09.22 OpenAI",
+        "均衡生产级智能体 / 1.1M 窗口 (降本50%)",
+        "1512",
+        "64.9",
+        "87.6%",
+        "115 t/s",
+        "$2.00 / $10.00"
       ],
       [
         "Qwen3.8-Max",
@@ -419,8 +419,8 @@
       {
         "title": "端到端软件工程与大型代码库重构",
         "desc": "真实大型 GitHub 仓库复杂 Bug 修复、自动化跨微服务重构与架构重写",
-        "badge": "首选: DeepSeek-V4-Pro / Claude Fable 5.1",
-        "reason": "DeepSeek-V4-Pro 在 2026 SWE-bench 上表现惊艳且支持私有化部署，Claude Fable 5.1 则在复杂环境沙箱中的 Agentic 规划最稳定。"
+        "badge": "首选: Claude Opus 5.5 / GPT-6 Sol / DeepSeek-V4-Pro",
+        "reason": "Anthropic 最新发布的 Claude Opus 5.5 在 SWE-bench 达 91.2% 领跑全球；OpenAI 9月22日最新发布的 GPT-6 Sol 以更低成本带来 1.1M 窗口的生产级多步编程验证；DeepSeek-V4-Pro 则支持纯本地私有化部署。"
       },
       {
         "title": "极限数理逻辑推导与算法形式化验证",

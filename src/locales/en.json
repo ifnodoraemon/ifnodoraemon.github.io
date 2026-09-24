@@ -230,17 +230,17 @@
         "defaultActive": false
       },
       {
-        "label": "GPT-5.6 Sol",
+        "label": "GPT-6 Sol",
         "provider": "OpenAI",
-        "type": "2026.05 Tiered / Agentic Coding",
-        "color": "#64748b",
+        "type": "2026.09.22 Commercial / Agentic Coding & 1.1M Context",
+        "color": "#0d9488",
         "data": [
-          95,
+          97,
+          98,
+          97,
           96,
-          96,
-          95,
-          94,
-          86
+          98,
+          90
         ],
         "defaultActive": false
       }
@@ -371,14 +371,14 @@
         "$0.50 / $2.00"
       ],
       [
-        "GPT-5.6 Sol",
-        "2026.05 OpenAI",
-        "Tiered High-Efficiency Agentic",
-        "1509 (#3)",
-        "64.2",
-        "86.4%",
-        "110 t/s",
-        "$1.80 / $7.20"
+        "GPT-6 Sol",
+        "2026.09.22 OpenAI",
+        "Balanced Agentic Workhorse / 1.1M Context (50% Cost Cut)",
+        "1512",
+        "64.9",
+        "87.6%",
+        "115 t/s",
+        "$2.00 / $10.00"
       ],
       [
         "Qwen3.8-Max",
@@ -419,8 +419,8 @@
       {
         "title": "End-to-End Software Engineering",
         "desc": "Large repository debugging, automated microservice refactoring, and multi-file code synthesis",
-        "badge": "Top Pick: DeepSeek-V4-Pro / Claude Fable 5.1",
-        "reason": "DeepSeek-V4-Pro excels on 2026 SWE-bench with private self-hosting capability, while Claude Fable 5.1 offers unmatched multi-step agentic planning."
+        "badge": "Top Pick: Claude Opus 5.5 / GPT-6 Sol / DeepSeek-V4-Pro",
+        "reason": "Anthropic's newly released Claude Opus 5.5 leads global SWE-bench at 91.2%; OpenAI's GPT-6 Sol delivers 1.1M-context multistep coding verification at half the previous cost; DeepSeek-V4-Pro enables sovereign on-premise deployments."
       },
       {
         "title": "Advanced Math & Scientific Deduction",
