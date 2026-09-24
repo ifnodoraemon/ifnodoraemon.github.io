@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Thu, 24 Sep 2026 06:49:13 GMT</pubDate>
+  <pubDate>Thu, 24 Sep 2026 06:58:38 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞</title>
@@ -36,6 +36,16 @@
     <category>推理系统</category>
     <description>为什么传统大模型推理会浪费 60%~80% 的 GPU 显存？深度剖析 vLLM 开创的 PagedAttention 核心机制，解构逻辑块到物理块映射、动态显存池生命周期、Copy-on-Write 分叉复用与 CUDA 非连续访存内核，彻底终结显存碎片化顽疾。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/pagedattention-memory-virtualization.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>前缀缓存架构演进：从 Hash 块级寻址到 SGLang RadixAttention 树状缓存与动态驱逐</title>
+    <link>https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/</link>
+    <guid>https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>推理系统</category>
+    <description>为什么每次多轮对话或 Agent 交互，GPU 都要重复做成千上万次无意义的长文本前向计算？深度剖析前缀缓存（Prefix Caching）的核心原理，从 vLLM 的链式 Hash 块级寻址与边界惩罚，到 SGLang 独创的 RadixAttention 树状动态匹配、节点分裂与 LRU 叶子驱逐机制，彻底看透大模型状态复用的底层工程极限。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/prefix-caching-radix-attention-internals.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>AI Agent 记忆系统设计：从工作记忆、情景记忆到分层 Graph RAG</title>

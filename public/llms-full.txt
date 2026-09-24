@@ -21,11 +21,12 @@
 - [Production LLM Inference Engines: Evolution, Architecture, and Future](https://blog.llmgo.top/en/articles/): Master LLM inference systems from first principles: Roofline modeling of Prefill/Decode, KV Cache & MLA memory optimization, PagedAttention, Continuous Batching, P/D disaggregation, and in-depth engine architectures across vLLM, SGLang, TensorRT-LLM, and llama.cpp. (10 articles)
 - [Modern Applied LLM Engineering & Selection Guide](https://blog.llmgo.top/en/articles/): Master state-of-the-art LLM engineering practices: Enterprise RAG pipelines, fine-tuning workflows, Test-Time Compute & GRPO reinforcement learning, business-aligned evaluation suites, and multi-model benchmark selections. (10 articles)
 
-## 中文文章索引 / Chinese Technical Articles (35 篇)
+## 中文文章索引 / Chinese Technical Articles (36 篇)
 
 - [高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞](https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/): 为什么在消除显存碎片后，高并发大模型服务依然会遭遇严重的单字时延（TPOT）剧烈抖动？深度解构从传统静态批处理到 Orca 迭代级连续批处理的状态机演进，揭秘超长 Prefill 霸占 GPU 引发排头阻塞（HoL Blocking）的物理根源，以及 Sarathi-Serve 和 vLLM 借助 Chunked Prefill 实现算力与访存动态拼车（Piggybacking）的底层机制。
 - [从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的物理撕裂](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/): 为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。
 - [显存虚拟化革命：PagedAttention 内存池管理与显存碎片终结](https://blog.llmgo.top/articles/pagedattention-memory-virtualization/): 为什么传统大模型推理会浪费 60%~80% 的 GPU 显存？深度剖析 vLLM 开创的 PagedAttention 核心机制，解构逻辑块到物理块映射、动态显存池生命周期、Copy-on-Write 分叉复用与 CUDA 非连续访存内核，彻底终结显存碎片化顽疾。
+- [前缀缓存架构演进：从 Hash 块级寻址到 SGLang RadixAttention 树状缓存与动态驱逐](https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/): 为什么每次多轮对话或 Agent 交互，GPU 都要重复做成千上万次无意义的长文本前向计算？深度剖析前缀缓存（Prefix Caching）的核心原理，从 vLLM 的链式 Hash 块级寻址与边界惩罚，到 SGLang 独创的 RadixAttention 树状动态匹配、节点分裂与 LRU 叶子驱逐机制，彻底看透大模型状态复用的底层工程极限。
 - [AI Agent 记忆系统设计：从工作记忆、情景记忆到分层 Graph RAG](https://blog.llmgo.top/articles/agent-memory-architecture/): 为什么数百万 Token 的上下文窗口依然无法解决智能体的失忆症？深入剖析从工作记忆、情景记忆到长期语义记忆的三层金字塔模型，详解 Stanford Generative Agents 与 Letta (MemGPT) 的记忆沉淀机制，并提供生产级混合检索与遗忘衰减实战代码。
 - [Agent 执行循环与状态机设计：从 ReAct 到确定性控制流](https://blog.llmgo.top/articles/agent-loop-state-machine/): 为什么单纯的 Prompt 链与自由 ReAct 无法支撑生产级系统？深度拆解 Agent 执行循环的四大失效模式、基于有限状态机 (FSM) 的图控流设计、Tool Calling 容错降级与熔断器机制，并提供生产级状态机实战代码。
 - [突破 10 万 Star 的 Browser-use 架构深度剖析：DOM 树提纯、视觉定位与生产级网页 Agent 实战](https://blog.llmgo.top/articles/browser-use-agent-architecture/): 为什么传统 Selenium/Playwright 脚本在动态前端下频频崩溃？深度拆解斩获 10 万+ GitHub Star 的现象级项目 Browser-use 的底层架构：DOM 树智能提纯降噪、Set-of-Mark (SoM) 视觉坐标定位、状态机闭环容错，并手把手构建一个可生产落地的企业级网页自动化智能体。
@@ -59,11 +60,12 @@
 - [多模态大模型入门指南](https://blog.llmgo.top/articles/multimodal-guide/): 探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。
 - [大模型微调全流程指南：底层工作原理、高价值落地用例与生产实战](https://blog.llmgo.top/articles/fine-tuning-guide/): 深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。
 
-## 英文文章索引 / English Technical Articles (35 Articles)
+## 英文文章索引 / English Technical Articles (36 Articles)
 
 - [Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking](https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/): Why does high-concurrency LLM serving suffer from severe latency spikes (TPOT jitter) even after eliminating memory fragmentation? A deep dive into the evolution from static batching to Orca's iteration-level continuous batching, the physical mechanics of head-of-line (HoL) blocking caused by long prefill bursts, and how Sarathi-Serve and vLLM leverage Chunked Prefill and decode piggybacking to flatten latency SLAs.
 - [From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence](https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/): Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode.
 - [Memory Virtualization in Inference Engines: PagedAttention and the Elimination of Memory Fragmentation](https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/): Why did early LLM serving systems waste 60% to 80% of GPU memory? A deep architectural exploration of vLLM's PagedAttention, logical-to-physical block mapping, zero-copy Copy-on-Write sharing, and non-contiguous CUDA attention kernels.
+- [Prefix Caching and State Reuse: From Hash Block Addressing to SGLang RadixAttention and Dynamic Tree Eviction](https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/): Why do inference engines repeatedly execute thousands of redundant prompt forward passes across multi-turn conversations and agent loops? A comprehensive dissection of Prefix Caching internals: from vLLM's hash-chained block indexing and boundary penalty, to SGLang's pioneering RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction mechanics.
 - [AI Agent Memory Architecture: From Working Memory to Episodic Memory & Hierarchical Graph RAG](https://blog.llmgo.top/en/articles/agent-memory-architecture/): Why multi-million token context windows still fail to solve agent amnesia. A deep architectural dissection of the three-tier memory pyramid (Working, Episodic, and Long-Term Semantic Memory), Stanford Generative Agents reflection cycles, Letta (MemGPT) virtual paging, and runnable code with decay curves and hybrid retrieval.
 - [Agentic Loops & State Machine Design: From ReAct to Deterministic Control Flows](https://blog.llmgo.top/en/articles/agent-loop-state-machine/): Why prompt chaining and unconstrained ReAct loops fail in production AI systems. A deep architectural dissection of agent failure modes, Finite State Machine (FSM) graph flows, tool-calling resilience, and circuit breakers with runnable code.
 - [Under the Hood of Browser-use (100k+ Stars): DOM Tree Distillation, Vision Grounding, and Production Web Agents](https://blog.llmgo.top/en/articles/browser-use-agent-architecture/): Why do traditional Selenium and Playwright scripts constantly break against modern web frontends? We dissect the architecture of Browser-use, the breakout open-source project with over 100k GitHub stars: DOM tree pruning, Set-of-Mark (SoM) visual coordinate grounding, state machine resilience, and end-to-end production recipes.
@@ -141,6 +143,17 @@
     A: PagedAttention 解决的是“碎片导致的显存虚假耗尽”，但无法突破“物理显存总量的绝对上限”。 在实际高并发场景下，如果涌入的并发请求数量过多，且每个请求都在持续吐字（KV Cache 持续线性膨胀），当整个 GPU 物理池中预先开辟的所有物理块（Physical Blocks）被完全借调一空时，系统依然会面临显存枯竭危机。 此时现代引擎会启动请求抢占机制（Preemption）： 1. Swap（换出机制）：将处于低优先级的长请求的物理块通过 PCIe 总线换出到 CPU 主机内存（Host DRAM）中，腾出物理块供给活跃请求； 2. Recompute（重算机制）：直接中断并释...
   * Q: Q3: PagedAttention 和模型层面的 GQA / MLA 压缩机制有冲突吗？
     A: 完全没有冲突，两者是底层显存管理与上层算子维度的完美互补：  [Kimi KDA 与 DeepSeek MLA](/articles/kimi-kda-deepseek-mla-architecture/) 是在算法数学层面，将原本庞大的 KV 向量投影压缩成极小的潜在向量（Latent Vector），从而在源头上将每个 Token 所需的显存字节数砍掉数倍；  PagedAttention 是在系统存储层面，负责为这些被压缩后的向量提供无碎片的虚拟分页管理。两者的结合使得 2026 年单台 8 卡服务器并发支撑数十万乃至百万长文本交互成为工程现实。...
+
+### [前缀缓存架构演进：从 Hash 块级寻址到 SGLang RadixAttention 树状缓存与动态驱逐](https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/)
+- 发布日期: 2026-09-24 | 标签: 推理系统 | 预计阅读: 预计阅读 23 分钟 | 字数: 约 5520 字
+- 概述: 为什么每次多轮对话或 Agent 交互，GPU 都要重复做成千上万次无意义的长文本前向计算？深度剖析前缀缓存（Prefix Caching）的核心原理，从 vLLM 的链式 Hash 块级寻址与边界惩罚，到 SGLang 独创的 RadixAttention 树状动态匹配、节点分裂与 LRU 叶子驱逐机制，彻底看透大模型状态复用的底层工程极限。
+- 核心 FAQ 解答:
+  * Q: Q1: 前缀缓存大幅降低了 Prefill 阶段的计算量，为什么有时反而会导致 GPU 显存占用过高甚至引发 OOM？
+    A: 前缀缓存的本质是“用显存空间换计算时间”。 在未开启前缀缓存时，请求一结束，其所有的 KV Cache 物理块会立刻被 100% 释放归还给系统。而在开启前缀缓存（如 RadixAttention）后，为了供后续可能到来的请求复用，已结束请求的物理块依然会继续驻留在显存池中，直到系统遭遇内存压力才被动触发 LRU 驱逐。 这就意味着，在监控面板上，开启前缀缓存的 GPU 显存使用率会常年处于 90% 以上的高位饱和状态。很多初学者会误以为这是内存泄漏（Memory Leak）。 真正的风险发生在突发高并发新请求涌入时：如果驱逐器（Eviction Engine）在短时间内来不及释放足够多的无用...
+  * Q: Q2: 如果 Prompt 中存在极微小的动态变量（如动态时间戳、随机生成的 Request ID），会不会导致前缀缓存完全失效？工程上该如何规避？
+    A: 会，这会导致极其惨烈的“前缀雪崩”！ 在大模型自回归计算中，自注意力机制会强制依赖当前 Token 之前的所有内容。如果你的 Prompt 模板是这样设计的：  [Request ID: 9845123] [Current Time: 2026-09-24 14:30:02] [System Prompt: You are an enterprise database expert with 20 tools...] (4,000 tokens)  由于动态变量位于 Prompt 的最前端（Root 路径），新请求在第 1 个 Token 处就与 RadixTree 中的任何历史分支产生分歧。...
+  * Q: Q3: 跨多机部署（分布式集群）时，节点重启或者动态扩缩容，RadixTree 缓存丢失了怎么办？业界目前有什么应对方案？
+    A: 在单机模式下，节点一旦重启，GPU HBM 中的 RadixTree 便化为乌有，必须经历一段冷启动阶段重新积累前缀。但在大规模企业级集群中，业界已经发展出成熟的多级缓存应对方案： 1. 分层分级存储（Tiered Memory Hierarchy）：    当 GPU 显存紧张需要驱逐时，并不直接 Drop 掉物理块，而是将高频公共前缀的 KV Cache 通过高带宽 PCIe 异步换出（Offload）到主机 CPU 内存（Host RAM），甚至下刷到本地高速 NVMe SSD。当请求再次命中该前缀时，直接通过 CUDA 异步内存拷贝搬回 GPU，耗时依然远低于重新跑一次 GPU Pre...
 
 ### [AI Agent 记忆系统设计：从工作记忆、情景记忆到分层 Graph RAG](https://blog.llmgo.top/articles/agent-memory-architecture/)
 - 发布日期: 2026-09-21 | 标签: AI Agent | 预计阅读: 预计阅读 22 分钟 | 字数: 约 5395 字
@@ -514,6 +527,17 @@
     A: PagedAttention eliminates fragmentation-induced OOMs, but cannot exceed the physical capacity limits of device memory. Under heavy concurrent load, as active requests generate tokens and expand their KV caches, the pool of available physical blocks can become fully depleted. When the physical block ...
   * Q: Q3: How does PagedAttention interact with model-level attention optimizations like GQA or MLA?
     A: PagedAttention operates orthogonally to architectural optimizations like GQA and MLA:  Architectural innovations like [Kimi KDA and DeepSeek MLA](/en/articles/kimi-kda-deepseek-mla-architecture/) compress the dimension of the key-value representation mathematically, reducing the byte size of each to...
+
+### [Prefix Caching and State Reuse: From Hash Block Addressing to SGLang RadixAttention and Dynamic Tree Eviction](https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/)
+- Date: 2026-09-24 | Tag: Inference Systems | Read: 11 min read | Words: 2729 words
+- Summary: Why do inference engines repeatedly execute thousands of redundant prompt forward passes across multi-turn conversations and agent loops? A comprehensive dissection of Prefix Caching internals: from vLLM's hash-chained block indexing and boundary penalty, to SGLang's pioneering RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction mechanics.
+- Key FAQ Insights:
+  * Q: Q1: Since Prefix Caching significantly reduces prefill computation, why does it sometimes lead to high GPU memory utilization or Out-Of-Memory (OOM) errors?
+    A: Prefix caching fundamentally trades memory capacity for compute savings. Without prefix caching, an engine frees 100% of an executed request's KV cache blocks immediately upon completion. With prefix caching enabled (e.g., RadixAttention), completed request blocks remain resident in GPU memory to se...
+  * Q: Q2: If prompts contain dynamic variables (such as timestamps or request IDs), does this invalidate prefix caching? How is this resolved in engineering?
+    A: Yes. Placing dynamic variables at the start of a prompt causes an immediate "cache avalanche." Because causal self-attention conditions every token on all preceding tokens, a prompt structured like:  [Request ID: 9845123] [Current Time: 2026-09-24 14:30:02] [System Prompt: You are an enterprise data...
+  * Q: Q3: When scaling across nodes in a distributed cluster, what happens to the RadixTree cache during node restarts or auto-scaling?
+    A: In a single-node configuration, restarting a worker clears its GPU HBM cache, forcing a cold-start recomputation phase. Modern distributed systems mitigate this through multi-tiered architectures: 1. Tiered Memory Hierarchy:    When GPU memory is reclaimed, high-frequency prefix blocks can be offloa...
 
 ### [AI Agent Memory Architecture: From Working Memory to Episodic Memory & Hierarchical Graph RAG](https://blog.llmgo.top/en/articles/agent-memory-architecture/)
 - Date: 2026-09-21 | Tag: AI Agent | Read: 11 min read | Words: 2609 words

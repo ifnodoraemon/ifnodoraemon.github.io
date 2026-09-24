@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Thu, 24 Sep 2026 06:49:13 GMT</pubDate>
+  <pubDate>Thu, 24 Sep 2026 06:58:38 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking</title>
@@ -36,6 +36,16 @@
     <category>Inference Systems</category>
     <description>Why did early LLM serving systems waste 60% to 80% of GPU memory? A deep architectural exploration of vLLM's PagedAttention, logical-to-physical block mapping, zero-copy Copy-on-Write sharing, and non-contiguous CUDA attention kernels.</description>
     <enclosure url="https://blog.llmgo.top/og/en/pagedattention-memory-virtualization.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Prefix Caching and State Reuse: From Hash Block Addressing to SGLang RadixAttention and Dynamic Tree Eviction</title>
+    <link>https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/</link>
+    <guid>https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Inference Systems</category>
+    <description>Why do inference engines repeatedly execute thousands of redundant prompt forward passes across multi-turn conversations and agent loops? A comprehensive dissection of Prefix Caching internals: from vLLM's hash-chained block indexing and boundary penalty, to SGLang's pioneering RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction mechanics.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/prefix-caching-radix-attention-internals.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>AI Agent Memory Architecture: From Working Memory to Episodic Memory &amp; Hierarchical Graph RAG</title>
