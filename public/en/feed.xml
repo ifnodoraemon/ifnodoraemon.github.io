@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Thu, 24 Sep 2026 07:06:50 GMT</pubDate>
+  <pubDate>Thu, 24 Sep 2026 07:13:26 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking</title>
@@ -36,6 +36,16 @@
     <category>Inference Systems</category>
     <description>Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode.</description>
     <enclosure url="https://blog.llmgo.top/og/en/inference-roofline-prefill-decode.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Model Architecture Driving Inference Systems: From MHA/GQA to DeepSeek MLA Matrix Absorption and Memory Minimalism</title>
+    <link>https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/</link>
+    <guid>https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Inference Systems</category>
+    <description>Why does long-context inference hit an insurmountable wall despite aggressive software kernel and scheduling optimizations? A deep architectural exploration from classical MHA to GQA grouping compromises, culminating in DeepSeek's revolutionary Multi-Head Latent Attention (MLA). We mathematically deconstruct low-rank latent projections, Decoupled RoPE, and the Matrix Absorption trick that allows serving engines to erase over 90% of multi-head Key-Value tensors from physical HBM during decode.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/mha-gqa-mla-matrix-absorption-inference-engine.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>Memory Virtualization in Inference Engines: PagedAttention and the Elimination of Memory Fragmentation</title>

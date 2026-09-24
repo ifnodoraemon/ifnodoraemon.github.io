@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Thu, 24 Sep 2026 07:06:50 GMT</pubDate>
+  <pubDate>Thu, 24 Sep 2026 07:13:26 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞</title>
@@ -36,6 +36,16 @@
     <category>推理系统</category>
     <description>为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/inference-roofline-prefill-decode.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>模型架构反哺推理系统：从 MHA/GQA 到 DeepSeek MLA 矩阵吸收与显存极简主义</title>
+    <link>https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/</link>
+    <guid>https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>推理系统</category>
+    <description>为什么无论工程系统如何优化，长上下文推理依然会被海量 KV Cache 逼入绝境？深度解构从传统 MHA 到 GQA 分组折中，再到 DeepSeek 开创性 MLA（多头潜变量注意力）的技术演进。全面剖析低秩潜变量投影、解耦 RoPE 旋转位置编码，以及推理引擎在自回归 Decode 阶段借助矩阵吸收（Matrix Absorption）将 90% 以上多头张量物理凭空抹除的底层数学机理与 FlashMLA 工程落地。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/mha-gqa-mla-matrix-absorption-inference-engine.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>显存虚拟化革命：PagedAttention 内存池管理与显存碎片终结</title>
