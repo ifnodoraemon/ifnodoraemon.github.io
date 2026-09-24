@@ -811,9 +811,7 @@ function generateListingPage(articlesList, isEn = false) {
   const canonicalUrl = isEn ? `${SITE_URL}/en/articles/` : `${SITE_URL}/articles/`;
   const heroTag = 'ALL ARTICLES';
   const heroTitle = isEn ? 'All Articles' : '全部文章';
-  const heroDesc = isEn
-    ? `Discover ${articlesList.length} in-depth articles on AI`
-    : `探索 AI 大模型领域的 ${articlesList.length} 篇技术文章与深度解析`;
+  const heroDesc = '';
   const filterAllBtn = isEn ? `All (${articlesList.length})` : `全部 (${articlesList.length})`;
   const searchPlaceholder = locales.models.listingSearchPlaceholder || (isEn ? 'Search articles...' : '搜索文章...');
 
@@ -945,7 +943,7 @@ ${articlesList.map((a, idx) => `        {
         <div class="page-hero-content fade-in">
           <div class="section-tag">${heroTag}</div>
           <h1>${heroTitle}</h1>
-          <p class="page-hero-desc">${heroDesc}</p>
+          ${heroDesc ? `<p class="page-hero-desc">${heroDesc}</p>` : ''}
         </div>
       </div>
     </section>
