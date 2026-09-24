@@ -2,8 +2,9 @@
 title: "Agentic Loops & State Machine Design: From ReAct to Deterministic Control Flows"
 slug: agent-loop-state-machine
 date: 2026-09-20
-tag: AI Agent
-tagClass: tag-emerald
+tag: State Machine
+tagClass: tag-purple
+category: AI Agent
 series: ai-agent
 seriesOrder: 1
 description: "Why prompt chaining and unconstrained ReAct loops fail in production AI systems. A deep architectural dissection of agent failure modes, Finite State Machine (FSM) graph flows, tool-calling resilience, and circuit breakers with runnable code."

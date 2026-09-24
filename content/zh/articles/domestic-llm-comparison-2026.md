@@ -2,8 +2,10 @@
 title: "2026 国产大模型巅峰决选：Kimi K3 vs GLM-5.3 vs DeepSeek-V4 实测与工程选型指南"
 slug: domestic-llm-comparison-2026
 date: 2026-09-07
-tag: 评测与趋势
+tag: 国产大模型
 tagClass: tag-amber
+category: 评测与趋势
+series: llm-engineering
 description: "深度实测 2026 年三大国产顶流大模型：从 Kimi K3 的 2.8T KDA 注意力、GLM-5.3 的环境缩放 Terminal 领跑，到 DeepSeek-V4-Pro 的 1.6T MoE 软件工程突破，全方位剖析架构、成本与工程落地场景。"
 ---
 

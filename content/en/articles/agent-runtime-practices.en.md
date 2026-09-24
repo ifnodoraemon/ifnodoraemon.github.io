@@ -2,8 +2,9 @@
 title: "7 Runtime Practices for Building AI Agents"
 slug: agent-runtime-practices
 date: 2026-03-15
-tag: AI Agent
-tagClass: tag-emerald
+tag: Runtime Practices
+tagClass: tag-purple
+category: AI Agent
 description: Based on a real data analysis agent project, this article distills 7 reusable Agent Runtime practices covering state exposure, tool design, context control, guardrails, delegation, and trace-driven iteration.
 extraTags:
   - Agent Runtime

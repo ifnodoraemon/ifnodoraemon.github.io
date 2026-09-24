@@ -2,8 +2,9 @@
 title: "模型架构反哺推理系统：从 MHA/GQA 到 DeepSeek MLA 矩阵吸收与显存极简主义"
 slug: mha-gqa-mla-matrix-absorption-inference-engine
 date: 2026-09-24
-tag: 推理系统
+tag: 注意力架构
 tagClass: tag-cyan
+category: 推理系统
 series: llm-inference
 seriesOrder: 6
 description: "为什么无论工程系统如何优化，长上下文推理依然会被海量 KV Cache 逼入绝境？深度解构从传统 MHA 到 GQA 分组折中，再到 DeepSeek 开创性 MLA（多头潜变量注意力）的技术演进。全面剖析低秩潜变量投影、解耦 RoPE 旋转位置编码，以及推理引擎在自回归 Decode 阶段借助矩阵吸收（Matrix Absorption）将 90% 以上多头张量物理凭空抹除的底层数学机理与 FlashMLA 工程落地。"

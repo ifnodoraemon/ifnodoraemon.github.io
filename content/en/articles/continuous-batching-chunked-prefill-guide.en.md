@@ -2,8 +2,9 @@
 title: "Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking"
 slug: continuous-batching-chunked-prefill-guide
 date: 2026-09-24
-tag: Inference Systems
+tag: Batching & Scheduling
 tagClass: tag-cyan
+category: Inference Systems
 series: llm-inference
 seriesOrder: 3
 description: "Why does high-concurrency LLM serving suffer from severe latency spikes (TPOT jitter) even after eliminating memory fragmentation? A deep dive into the evolution from static batching to Orca's iteration-level continuous batching, the physical mechanics of head-of-line (HoL) blocking caused by long prefill bursts, and how Sarathi-Serve and vLLM leverage Chunked Prefill and decode piggybacking to flatten latency SLAs."

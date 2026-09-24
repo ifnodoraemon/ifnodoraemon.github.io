@@ -2,8 +2,10 @@
 title: AI 关键技术的历史抉择：为什么每次都选了「那一个」？
 slug: ai-history-choices
 date: 2026-04-15
-tag: 评测与趋势
+tag: 技术史抉择
 tagClass: tag-amber
+category: 评测与趋势
+series: llm-engineering
 description: 回顾 AI 七十年发展史上的六次关键技术岔路口，剖析每一次「历史选择」背后的算力约束、数据红利与可扩展性逻辑。
 ---
 

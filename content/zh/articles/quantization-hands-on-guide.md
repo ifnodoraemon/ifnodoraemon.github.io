@@ -2,8 +2,10 @@
 title: 大模型量化实战手册：从零开始，四条路线全覆盖
 slug: quantization-hands-on-guide
 date: 2026-04-22
-tag: 推理系统
+tag: 量化实战
 tagClass: tag-cyan
+category: 推理系统
+series: llm-inference
 description: 告别理论焦虑，手把手教你大模型量化全流程实操：涵盖 GGUF 本地运行（Qwen3-8B-Q4_K_M.gguf、llama.cpp、Ollama）、AWQ 与 GPTQ 动手压缩，以及 vLLM FP8 生产部署与 QLoRA 微调，每条路线均附完整代码。
 featured: true
 featuredStats:

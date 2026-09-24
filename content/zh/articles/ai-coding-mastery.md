@@ -2,8 +2,10 @@
 title: AI 编程驾驭指南：从「帮我写个 XX」到架构编排者
 slug: ai-coding-mastery
 date: 2026-05-04
-tag: AI Agent
-tagClass: tag-emerald
+tag: AI 编程
+tagClass: tag-purple
+category: AI Agent
+series: ai-agent
 description: 工具再多也没用——决定 AI 编程质量的是驾驭方法论。本文深入拆解六大核心方法（Spec-Driven、上下文工程、TDD 验证环、多 Agent 编排、高级 Prompt、会话卫生），附 20+ 工具矩阵、五大反模式避坑指南和完整实战工作流。
 featured: true
 featuredStats:

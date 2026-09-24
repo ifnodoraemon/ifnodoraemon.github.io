@@ -2,8 +2,10 @@
 title: Prompt Engineering Practice Guide
 slug: prompt-engineering-guide
 date: 2026-03-09
-tag: LLM Engineering
-tagClass: tag-purple
+tag: Prompt Engineering
+tagClass: tag-emerald
+category: Model Engineering
+series: llm-engineering
 description: An in-depth exploration of designing effective prompts to improve model output quality. Covers core techniques like Few-Shot, Chain-of-Thought, and ReAct with practical examples.
 extraTags:
   - GPT-5.4

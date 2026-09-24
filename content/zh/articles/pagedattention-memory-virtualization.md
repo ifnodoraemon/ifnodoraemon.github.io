@@ -2,8 +2,9 @@
 title: "显存虚拟化革命：PagedAttention 内存池管理与显存碎片终结"
 slug: pagedattention-memory-virtualization
 date: 2026-09-24
-tag: 推理系统
+tag: 显存虚拟化
 tagClass: tag-cyan
+category: 推理系统
 series: llm-inference
 seriesOrder: 2
 description: "为什么传统大模型推理会浪费 60%~80% 的 GPU 显存？深度剖析 vLLM 开创的 PagedAttention 核心机制，解构逻辑块到物理块映射、动态显存池生命周期、Copy-on-Write 分叉复用与 CUDA 非连续访存内核，彻底终结显存碎片化顽疾。"

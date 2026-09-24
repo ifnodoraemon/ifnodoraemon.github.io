@@ -2,8 +2,9 @@
 title: "前缀缓存架构演进：从 Hash 块级寻址到 SGLang RadixAttention 树状缓存与动态驱逐"
 slug: prefix-caching-radix-attention-internals
 date: 2026-09-24
-tag: 推理系统
+tag: 前缀缓存
 tagClass: tag-cyan
+category: 推理系统
 series: llm-inference
 seriesOrder: 4
 description: "为什么每次多轮对话或 Agent 交互，GPU 都要重复做成千上万次无意义的长文本前向计算？深度剖析前缀缓存（Prefix Caching）的核心原理，从 vLLM 的链式 Hash 块级寻址与边界惩罚，到 SGLang 独创的 RadixAttention 树状动态匹配、节点分裂与 LRU 叶子驱逐机制，彻底看透大模型状态复用的底层工程极限。"

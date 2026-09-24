@@ -2,8 +2,9 @@
 title: "Skills Deep Dive: Give Your AI Coding Assistant a Professional Brain"
 slug: skills-guide
 date: 2026-03-12
-tag: AI Agent
-tagClass: tag-emerald
+tag: Agent Skills
+tagClass: tag-purple
+category: AI Agent
 description: From core principles to cross-platform practice, a complete guide to the AI coding assistant Skills system. Covers SKILL.md mechanics, six-platform comparison, hands-on writing guide, and best practices.
 extraTags:
   - Claude Code

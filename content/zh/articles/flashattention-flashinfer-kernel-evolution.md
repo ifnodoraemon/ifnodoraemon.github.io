@@ -2,8 +2,9 @@
 title: "Attention 算子加速史：从 FlashAttention-1/2/3 的 SRAM Tiling 到 FlashInfer 统一异构核心"
 slug: flashattention-flashinfer-kernel-evolution
 date: 2026-09-24
-tag: 推理系统
+tag: 算子优化
 tagClass: tag-cyan
+category: 推理系统
 series: llm-inference
 seriesOrder: 5
 description: "为什么标准自注意力计算会随序列长度呈平方级拖垮显存带宽？深度解析现代 Attention 算子加速史：从 FlashAttention-1 的 SRAM 分块分片（Tiling）与 Online Softmax 动态局部重规约，到 FlashAttention-2 循环重构与 Warp 零通信调度，再到 FlashAttention-3 独占 Hopper 架构的 TMA 硬件异步搬运与 WGMMA 异步流水线。最后全面剖析专为大模型在线服务而生的 FlashInfer，揭秘其如何凭借 Paged KV Cache 原生寻址与 Split-K 解码并行，终结长文本 Decode 算力饥饿。"

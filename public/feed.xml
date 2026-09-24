@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Thu, 24 Sep 2026 07:13:26 GMT</pubDate>
+  <pubDate>Thu, 24 Sep 2026 07:37:08 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞</title>
@@ -13,7 +13,7 @@
     <guid>https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>并发调度</category>
     <description>为什么在消除显存碎片后，高并发大模型服务依然会遭遇严重的单字时延（TPOT）剧烈抖动？深度解构从传统静态批处理到 Orca 迭代级连续批处理的状态机演进，揭秘超长 Prefill 霸占 GPU 引发排头阻塞（HoL Blocking）的物理根源，以及 Sarathi-Serve 和 vLLM 借助 Chunked Prefill 实现算力与访存动态拼车（Piggybacking）的底层机制。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/continuous-batching-chunked-prefill-guide.png" length="150000" type="image/png" />
   </item>
@@ -23,7 +23,7 @@
     <guid>https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>算子优化</category>
     <description>为什么标准自注意力计算会随序列长度呈平方级拖垮显存带宽？深度解析现代 Attention 算子加速史：从 FlashAttention-1 的 SRAM 分块分片（Tiling）与 Online Softmax 动态局部重规约，到 FlashAttention-2 循环重构与 Warp 零通信调度，再到 FlashAttention-3 独占 Hopper 架构的 TMA 硬件异步搬运与 WGMMA 异步流水线。最后全面剖析专为大模型在线服务而生的 FlashInfer，揭秘其如何凭借 Paged KV Cache 原生寻址与 Split-K 解码并行，终结长文本 Decode 算力饥饿。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/flashattention-flashinfer-kernel-evolution.png" length="150000" type="image/png" />
   </item>
@@ -33,7 +33,7 @@
     <guid>https://blog.llmgo.top/articles/inference-roofline-prefill-decode/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>算力建模</category>
     <description>为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/inference-roofline-prefill-decode.png" length="150000" type="image/png" />
   </item>
@@ -43,9 +43,19 @@
     <guid>https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>注意力架构</category>
     <description>为什么无论工程系统如何优化，长上下文推理依然会被海量 KV Cache 逼入绝境？深度解构从传统 MHA 到 GQA 分组折中，再到 DeepSeek 开创性 MLA（多头潜变量注意力）的技术演进。全面剖析低秩潜变量投影、解耦 RoPE 旋转位置编码，以及推理引擎在自回归 Decode 阶段借助矩阵吸收（Matrix Absorption）将 90% 以上多头张量物理凭空抹除的底层数学机理与 FlashMLA 工程落地。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/mha-gqa-mla-matrix-absorption-inference-engine.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>稀疏大模型 MoE 推理内核：专家并行 (EP)、动态路由门控与 All-to-All 通信重叠</title>
+    <link>https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/</link>
+    <guid>https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>稀疏计算</category>
+    <description>为什么 671B 参数的 DeepSeek-V3 每次解码仅激活 37B 参数，吞吐却常受制于跨节点网络？深度剖析稀疏大模型 MoE 推理内核：从动态门控与无辅助损失负载均衡，到专家并行 (EP) All-to-Allv 通信瓶颈，再到 CUTLASS Grouped GEMM 算子融合与 DualPipe 通信计算重叠终极优化。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/moe-expert-parallelism-inference-engine.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>显存虚拟化革命：PagedAttention 内存池管理与显存碎片终结</title>
@@ -53,7 +63,7 @@
     <guid>https://blog.llmgo.top/articles/pagedattention-memory-virtualization/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>显存虚拟化</category>
     <description>为什么传统大模型推理会浪费 60%~80% 的 GPU 显存？深度剖析 vLLM 开创的 PagedAttention 核心机制，解构逻辑块到物理块映射、动态显存池生命周期、Copy-on-Write 分叉复用与 CUDA 非连续访存内核，彻底终结显存碎片化顽疾。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/pagedattention-memory-virtualization.png" length="150000" type="image/png" />
   </item>
@@ -63,7 +73,7 @@
     <guid>https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>前缀缓存</category>
     <description>为什么每次多轮对话或 Agent 交互，GPU 都要重复做成千上万次无意义的长文本前向计算？深度剖析前缀缓存（Prefix Caching）的核心原理，从 vLLM 的链式 Hash 块级寻址与边界惩罚，到 SGLang 独创的 RadixAttention 树状动态匹配、节点分裂与 LRU 叶子驱逐机制，彻底看透大模型状态复用的底层工程极限。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/prefix-caching-radix-attention-internals.png" length="150000" type="image/png" />
   </item>
@@ -73,7 +83,7 @@
     <guid>https://blog.llmgo.top/articles/agent-memory-architecture/</guid>
     <pubDate>Mon, 21 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>记忆架构</category>
     <description>为什么数百万 Token 的上下文窗口依然无法解决智能体的失忆症？深入剖析从工作记忆、情景记忆到长期语义记忆的三层金字塔模型，详解 Stanford Generative Agents 与 Letta (MemGPT) 的记忆沉淀机制，并提供生产级混合检索与遗忘衰减实战代码。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/agent-memory-architecture.png" length="150000" type="image/png" />
   </item>
@@ -83,7 +93,7 @@
     <guid>https://blog.llmgo.top/articles/agent-loop-state-machine/</guid>
     <pubDate>Sun, 20 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>状态机设计</category>
     <description>为什么单纯的 Prompt 链与自由 ReAct 无法支撑生产级系统？深度拆解 Agent 执行循环的四大失效模式、基于有限状态机 (FSM) 的图控流设计、Tool Calling 容错降级与熔断器机制，并提供生产级状态机实战代码。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/agent-loop-state-machine.png" length="150000" type="image/png" />
   </item>
@@ -93,7 +103,7 @@
     <guid>https://blog.llmgo.top/articles/browser-use-agent-architecture/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>浏览器智能体</category>
     <description>为什么传统 Selenium/Playwright 脚本在动态前端下频频崩溃？深度拆解斩获 10 万+ GitHub Star 的现象级项目 Browser-use 的底层架构：DOM 树智能提纯降噪、Set-of-Mark (SoM) 视觉坐标定位、状态机闭环容错，并手把手构建一个可生产落地的企业级网页自动化智能体。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/browser-use-agent-architecture.png" length="150000" type="image/png" />
   </item>
@@ -103,7 +113,7 @@
     <guid>https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>引擎架构</category>
     <description>深度剖析 2026 年两大顶级开源推理引擎 vLLM 与 SGLang 的底层内核差异。全面对比 PagedAttention 块级分页与 RadixAttention 基数树前缀缓存机制、调度层结构化输出（JSON Schema）实现原理，并基于 8x H100 集群提供严苛的多场景基准压测与工程选型决策树。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/sglang-vs-vllm-architecture.png" length="150000" type="image/png" />
   </item>
@@ -113,7 +123,7 @@
     <guid>https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>投机采样</category>
     <description>大模型解码阶段的核心物理瓶颈是什么？全面解密投机采样（Speculative Decoding）的数学无损证明、拒绝采样检验机制，深入剖析从双模型投机、Medusa 到清华开源爆款 EAGLE-2/3 动态自适应推测树的架构演进，并提供在 vLLM 与 SGLang 中开启生产级 3x~5x 加速的实操配置。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/speculative-decoding-eagle-guide.png" length="150000" type="image/png" />
   </item>
@@ -123,7 +133,7 @@
     <guid>https://blog.llmgo.top/articles/test-time-compute-grpo/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>模型工程</category>
+    <category>强化学习</category>
     <description>深入剖析从预训练 Scaling Law 向推理时算力扩展 (Test-Time Scaling) 的范式转移。全面拆解 DeepSeek-R1 核心的 GRPO 组相对策略优化数学推导、无 Critic 架构优势、长思维链自我反思涌现机制，并提供完整的极简实战代码。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/test-time-compute-grpo.png" length="150000" type="image/png" />
   </item>
@@ -133,7 +143,7 @@
     <guid>https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>集群部署</category>
     <description>这不是一篇官方文档的搬运，而是我们烧了上百万 GPU 租金换来的排障血泪史。实战拆解如何在 4 节点（32 卡）H100 裸金属集群上，通过 vLLM 0.29.0 的混合并行（TP8+PP2+EP2）与 Triton 算子优化，成功压榨 1.6T 级 MoE 模型的每一滴极限吞吐量。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/deepseek-v4-kimi-k3-deployment-guide.png" length="150000" type="image/png" />
   </item>
@@ -143,7 +153,7 @@
     <guid>https://blog.llmgo.top/articles/domestic-llm-comparison-2026/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>评测与趋势</category>
+    <category>国产大模型</category>
     <description>深度实测 2026 年三大国产顶流大模型：从 Kimi K3 的 2.8T KDA 注意力、GLM-5.3 的环境缩放 Terminal 领跑，到 DeepSeek-V4-Pro 的 1.6T MoE 软件工程突破，全方位剖析架构、成本与工程落地场景。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/domestic-llm-comparison-2026.png" length="150000" type="image/png" />
   </item>
@@ -153,7 +163,7 @@
     <guid>https://blog.llmgo.top/articles/environment-scaling-agent-guide/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>环境缩放</category>
     <description>剖析 2026 年大模型后训练的重大范式跃迁：为什么从文本自回归走向多任务环境沙箱博弈？结合 GLM-5.3 在 Terminal-Bench 3.0 的登顶实践，详解 Linux 容器编排、MCP 协议集成与零逃逸安全沙箱工程实战。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/environment-scaling-agent-guide.png" length="150000" type="image/png" />
   </item>
@@ -163,7 +173,7 @@
     <guid>https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>架构演进</category>
     <description>在百万级长上下文与数万亿 MoE 时代，KV Cache 显存暴涨如何成为推理核心瓶颈？硬核剖析月之暗面 Kimi Delta Attention (KDA) 的增量状态演进与 DeepSeek 多头潜变量注意力 (MLA) 的低秩投影数学原理。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/kimi-kda-deepseek-mla-architecture.png" length="150000" type="image/png" />
   </item>
@@ -173,7 +183,7 @@
     <guid>https://blog.llmgo.top/articles/agent-reflection-self-correction/</guid>
     <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>自省演进</category>
     <description>大语言模型的潜力不止于预训练参数。本文带你深入探讨 Test-Time Compute 的前沿：从 Actor-Critic 双边架构，一路深入到利用蒙特卡洛树搜索（MCTS）解码 Agent 的自我纠错极限。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/agent-reflection-self-correction.png" length="150000" type="image/png" />
   </item>
@@ -183,7 +193,7 @@
     <guid>https://blog.llmgo.top/articles/agent-orchestration-evals/</guid>
     <pubDate>Wed, 15 Jul 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>编排评测</category>
     <description>当大模型走向复杂的企业级落地，如何通过分布式编排对抗链路误差复合？如何构建具有统计学置信度的 Evals 评估体系？本文带你从基础概念直击硬核底座。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/agent-orchestration-evals.png" length="150000" type="image/png" />
   </item>
@@ -193,7 +203,7 @@
     <guid>https://blog.llmgo.top/articles/loop-engineering/</guid>
     <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>循环工程</category>
     <description>深度解析 AI Agent 架构演进，探讨从 Prompt、Context、Harness 到 Loop 工程的四层控制面外推，以及 ReAct 架构的四大顽疾。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/loop-engineering.png" length="150000" type="image/png" />
   </item>
@@ -203,7 +213,7 @@
     <guid>https://blog.llmgo.top/articles/agent-observability-debugging/</guid>
     <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>可观测性</category>
     <description>AI Agent 不再是传统软件，调试的是推理过程而非代码。本文详细探讨 Trajectory Evaluation、LLM-as-a-Judge 和主流 Agent 观测工具（LangSmith, Langfuse 等）的实战应用。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/agent-observability-debugging.png" length="150000" type="image/png" />
   </item>
@@ -213,7 +223,7 @@
     <guid>https://blog.llmgo.top/articles/context-engineering-guide/</guid>
     <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>上下文工程</category>
     <description>2026 年最火的新概念，从 Prompt Engineering 进化到 Context Engineering。详解如何通过 Write/Select/Compress/Isolate 四大策略管理上下文窗口，解决长对话遗忘、幻觉与上下文污染。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/context-engineering-guide.png" length="150000" type="image/png" />
   </item>
@@ -223,7 +233,7 @@
     <guid>https://blog.llmgo.top/articles/ai-coding-mastery/</guid>
     <pubDate>Mon, 04 May 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>AI 编程</category>
     <description>工具再多也没用——决定 AI 编程质量的是驾驭方法论。本文深入拆解六大核心方法（Spec-Driven、上下文工程、TDD 验证环、多 Agent 编排、高级 Prompt、会话卫生），附 20+ 工具矩阵、五大反模式避坑指南和完整实战工作流。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/ai-coding-mastery.png" length="150000" type="image/png" />
   </item>
@@ -233,7 +243,7 @@
     <guid>https://blog.llmgo.top/articles/llm-evaluation-guide/</guid>
     <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>评测与趋势</category>
+    <category>业务评测</category>
     <description>不再迷恋堆砌代码，建立大模型评估思维才是核心。本文深度剖析 LLM-as-a-Judge 的底层偏差、Ragas 算分的数学机制，以及如何用概率思维重塑 CI/CD 防线。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/llm-evaluation-guide.png" length="150000" type="image/png" />
   </item>
@@ -243,7 +253,7 @@
     <guid>https://blog.llmgo.top/articles/quantization-hands-on-guide/</guid>
     <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>量化实战</category>
     <description>告别理论焦虑，手把手教你大模型量化全流程实操：涵盖 GGUF 本地运行（Qwen3-8B-Q4_K_M.gguf、llama.cpp、Ollama）、AWQ 与 GPTQ 动手压缩，以及 vLLM FP8 生产部署与 QLoRA 微调，每条路线均附完整代码。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/quantization-hands-on-guide.png" length="150000" type="image/png" />
   </item>
@@ -253,7 +263,7 @@
     <guid>https://blog.llmgo.top/articles/ai-history-choices/</guid>
     <pubDate>Wed, 15 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>评测与趋势</category>
+    <category>技术史抉择</category>
     <description>回顾 AI 七十年发展史上的六次关键技术岔路口，剖析每一次「历史选择」背后的算力约束、数据红利与可扩展性逻辑。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/ai-history-choices.png" length="150000" type="image/png" />
   </item>
@@ -263,7 +273,7 @@
     <guid>https://blog.llmgo.top/articles/vllm-serving-guide/</guid>
     <pubDate>Tue, 14 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>服务部署</category>
     <description>深入浅出解析 vLLM 核心架构（PagedAttention、连续批处理、APC 前缀缓存、推测解码），面向在线推理服务场景，手把手教你搭建 OpenAI 兼容 API、调优性能参数、搭建 Token 计费体系。附完整 Docker 部署方案与 Prometheus 监控配置。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/vllm-serving-guide.png" length="150000" type="image/png" />
   </item>
@@ -273,7 +283,7 @@
     <guid>https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/</guid>
     <pubDate>Sun, 05 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>硬件驱动</category>
     <description>深度拆解 Linux 下 NVIDIA GPU 烦杂的驱动包结构。本文为您详解 nvidia-dkms、libnvidia、nvidia-utils 与 driver metapackage 之间的五层架构，并按「Docker 模型服务器」、「个人桌面」、「DGX 算力集群」等核心场景提供企业级安装最佳实践和避坑指南。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/nvidia-gpu-package-architecture.png" length="150000" type="image/png" />
   </item>
@@ -283,7 +293,7 @@
     <guid>https://blog.llmgo.top/articles/quantization-precision-guide/</guid>
     <pubDate>Tue, 31 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>推理系统</category>
+    <category>量化理论</category>
     <description>全面对比 FP32、BF16、FP16、FP8、INT8、INT4、NF4、FP4、1.58-bit 等所有主流量化精度格式，用真实 Benchmark 数据告诉你：每降低一级精度，模型到底会“变蠢”多少。含 FP8 vs INT8 深度技术对比。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/quantization-precision-guide.png" length="150000" type="image/png" />
   </item>
@@ -293,7 +303,7 @@
     <guid>https://blog.llmgo.top/articles/agent-runtime-practices/</guid>
     <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>运行时规范</category>
     <description>基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/agent-runtime-practices.png" length="150000" type="image/png" />
   </item>
@@ -303,7 +313,7 @@
     <guid>https://blog.llmgo.top/articles/mcp-guide/</guid>
     <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>MCP 协议</category>
     <description>从架构原理到实战开发，完整解析 Model Context Protocol。含 Python SDK 实战、安全机制、生态对比。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/mcp-guide.png" length="150000" type="image/png" />
   </item>
@@ -313,7 +323,7 @@
     <guid>https://blog.llmgo.top/articles/skills-guide/</guid>
     <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>Skills 体系</category>
     <description>从核心原理到跨平台实战，完整解析 AI 编程助手的 Skills 系统。涵盖 SKILL.md 机制、六大平台对比、实战编写指南与最佳实践。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/skills-guide.png" length="150000" type="image/png" />
   </item>
@@ -323,7 +333,7 @@
     <guid>https://blog.llmgo.top/articles/prompt-engineering-guide/</guid>
     <pubDate>Mon, 09 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>模型工程</category>
+    <category>提示工程</category>
     <description>深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/prompt-engineering-guide.png" length="150000" type="image/png" />
   </item>
@@ -333,7 +343,7 @@
     <guid>https://blog.llmgo.top/articles/ai-trends-2026/</guid>
     <pubDate>Sat, 07 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>评测与趋势</category>
+    <category>前沿趋势</category>
     <description>从 Thinking 推理模式到 Agent 化应用，深度剖析 2026 年 AI 大模型领域最值得关注的十一大核心发展趋势。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/ai-trends-2026.png" length="150000" type="image/png" />
   </item>
@@ -343,7 +353,7 @@
     <guid>https://blog.llmgo.top/articles/build-ai-agent/</guid>
     <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>智能体构建</category>
     <description>手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/build-ai-agent.png" length="150000" type="image/png" />
   </item>
@@ -353,7 +363,7 @@
     <guid>https://blog.llmgo.top/articles/rag-in-practice/</guid>
     <pubDate>Tue, 03 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>模型工程</category>
+    <category>RAG 检索</category>
     <description>从向量数据库选型到 Embedding 策略，深度剖析 Naive RAG、混合检索、HyDE 与 GraphRAG 架构选型矩阵，总结 7 大企业级检索增强生成最佳实践，含 Pinecone 与 Weaviate 性能实测。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/rag-in-practice.png" length="150000" type="image/png" />
   </item>
@@ -363,7 +373,7 @@
     <guid>https://blog.llmgo.top/articles/model-comparison-2026/</guid>
     <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>评测与趋势</category>
+    <category>模型横评</category>
     <description>从推理能力、编码水平、上下文窗口到 API 定价，全方位对比 2026 年三大主流大模型的实际表现与选型策略。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/model-comparison-2026.png" length="150000" type="image/png" />
   </item>
@@ -373,7 +383,7 @@
     <guid>https://blog.llmgo.top/articles/multimodal-guide/</guid>
     <pubDate>Sat, 28 Feb 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>模型工程</category>
+    <category>多模态架构</category>
     <description>探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/multimodal-guide.png" length="150000" type="image/png" />
   </item>
@@ -383,7 +393,7 @@
     <guid>https://blog.llmgo.top/articles/fine-tuning-guide/</guid>
     <pubDate>Wed, 25 Feb 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>模型工程</category>
+    <category>全流程微调</category>
     <description>深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/fine-tuning-guide.png" length="150000" type="image/png" />
   </item>

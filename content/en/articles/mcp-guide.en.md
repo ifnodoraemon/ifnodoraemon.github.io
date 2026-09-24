@@ -2,8 +2,9 @@
 title: "MCP Deep Dive: The USB-C Port for AI"
 slug: mcp-guide
 date: 2026-03-12
-tag: AI Agent
-tagClass: tag-emerald
+tag: MCP Protocol
+tagClass: tag-purple
+category: AI Agent
 description: From architecture to hands-on development, a complete guide to the Model Context Protocol. Includes Python SDK tutorial, security mechanisms, and ecosystem comparison.
 series: ai-agent
 seriesOrder: 4

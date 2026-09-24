@@ -2,8 +2,10 @@
 title: "LLM Quantization Hands-On Guide: Four Routes from Zero to Production"
 slug: quantization-hands-on-guide
 date: 2026-04-22
-tag: Inference Systems
+tag: Quantization Hands-on
 tagClass: tag-cyan
+category: Inference Systems
+series: llm-inference
 description: "Hands-on LLM quantization guide: download and run GGUF models (Qwen3-8B-Q4_K_M.gguf, llama.cpp, Ollama), quantize with AWQ/GPTQ, and deploy vLLM FP8 in production with copy-paste code."
 featured: true
 featuredStats:

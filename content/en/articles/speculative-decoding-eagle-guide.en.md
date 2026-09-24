@@ -2,8 +2,10 @@
 title: "Speculative Decoding in Production: From Draft Models to EAGLE-3 Dynamic Trees for 3x-5x Lossless Acceleration"
 slug: speculative-decoding-eagle-guide
 date: 2026-09-18
-tag: Inference Systems
+tag: Speculative Decoding
 tagClass: tag-cyan
+category: Inference Systems
+series: llm-inference
 description: "Why is autoregressive LLM decoding fundamentally bottlenecked by memory bandwidth? We dissect the mathematical proof of lossless distribution invariance in speculative decoding, trace its evolution from dual-model drafts to EAGLE-2/3 dynamic draft trees, and provide production configurations in vLLM and SGLang."
 featured: true
 featuredStats:

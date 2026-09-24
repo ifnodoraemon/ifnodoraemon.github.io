@@ -2,8 +2,9 @@
 title: "AI Agent Memory Architecture: From Working Memory to Episodic Memory & Hierarchical Graph RAG"
 slug: agent-memory-architecture
 date: 2026-09-21
-tag: AI Agent
-tagClass: tag-emerald
+tag: Agent Memory
+tagClass: tag-purple
+category: AI Agent
 series: ai-agent
 seriesOrder: 11
 description: "Why multi-million token context windows still fail to solve agent amnesia. A deep architectural dissection of the three-tier memory pyramid (Working, Episodic, and Long-Term Semantic Memory), Stanford Generative Agents reflection cycles, Letta (MemGPT) virtual paging, and runnable code with decay curves and hybrid retrieval."

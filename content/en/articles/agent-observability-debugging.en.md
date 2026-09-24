@@ -2,8 +2,9 @@
 title: "Agent Observability & Debugging: The Path from Black Box to White Box"
 slug: agent-observability-debugging
 date: 2026-06-15
-tag: AI Agent
-tagClass: tag-emerald
+tag: Observability
+tagClass: tag-purple
+category: AI Agent
 description: AI Agents are not traditional software; we are debugging the reasoning process rather than the code itself. This article explores Trajectory Evaluation, LLM-as-a-Judge, and practical applications of mainstream Agent observability tools like LangSmith and Langfuse.
 extraTags:
   - Observability

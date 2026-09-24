@@ -2,8 +2,10 @@
 title: "2026 Frontier Chinese LLMs Face-off: Kimi K3 vs GLM-5.3 vs DeepSeek-V4 Practical Benchmark & Architecture Selection"
 slug: domestic-llm-comparison-2026
 date: 2026-09-07
-tag: Evaluation & Trends
+tag: Chinese LLMs
 tagClass: tag-amber
+category: Evaluation & Trends
+series: llm-engineering
 description: "In-depth evaluation of China's top three frontier models in 2026: Kimi K3's 2.8T KDA attention, GLM-5.3's environment-scaled terminal execution, and DeepSeek-V4-Pro's 1.6T MoE software engineering prowess."
 ---
 

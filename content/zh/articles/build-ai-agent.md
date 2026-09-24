@@ -2,8 +2,9 @@
 title: 从零搭建 AI Agent 应用
 slug: build-ai-agent
 date: 2026-03-05
-tag: AI Agent
-tagClass: tag-emerald
+tag: 智能体构建
+tagClass: tag-purple
+category: AI Agent
 description: 手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。
 series: ai-agent
 seriesOrder: 2

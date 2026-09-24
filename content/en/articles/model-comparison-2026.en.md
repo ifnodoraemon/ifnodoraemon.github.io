@@ -2,8 +2,10 @@
 title: "2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro"
 slug: model-comparison-2026
 date: 2026-03-01
-tag: Evaluation & Trends
+tag: Model Benchmark
 tagClass: tag-amber
+category: Evaluation & Trends
+series: llm-engineering
 description: A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.
 featured: true
 featuredStats:

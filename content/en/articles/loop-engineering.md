@@ -2,8 +2,10 @@
 title: "Deep Dive into AI Agent Architecture Evolution: From Prompt to Loop Engineering"
 slug: loop-engineering
 date: 2026-06-28
-tag: AI Agent
-tagClass: tag-emerald
+tag: Loop Engineering
+tagClass: tag-purple
+category: AI Agent
+series: ai-agent
 description: A deep dive into the evolution of AI Agent architectures, exploring the 4-layer control plane extrapolation from Prompt, Context, Harness to Loop Engineering, and the 4 diseases of the ReAct architecture.
 ---
 

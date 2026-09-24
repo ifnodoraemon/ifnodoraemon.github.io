@@ -2,8 +2,10 @@
 title: "vLLM Online Inference in Production: From Architecture to Token Billing"
 slug: vllm-serving-guide
 date: 2026-04-14
-tag: Inference Systems
+tag: Serving & Deployment
 tagClass: tag-cyan
+category: Inference Systems
+series: llm-inference
 description: A deep dive into vLLM's core architecture (PagedAttention, continuous batching, APC prefix caching, speculative decoding) for online serving. Covers OpenAI-compatible API setup, performance tuning, token billing systems, and complete Docker deployment with Prometheus monitoring.
 featured: true
 featuredStats:

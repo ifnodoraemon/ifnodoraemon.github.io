@@ -2,8 +2,9 @@
 title: "Agent 执行循环与状态机设计：从 ReAct 到确定性控制流"
 slug: agent-loop-state-machine
 date: 2026-09-20
-tag: AI Agent
-tagClass: tag-emerald
+tag: 状态机设计
+tagClass: tag-purple
+category: AI Agent
 series: ai-agent
 seriesOrder: 1
 description: "为什么单纯的 Prompt 链与自由 ReAct 无法支撑生产级系统？深度拆解 Agent 执行循环的四大失效模式、基于有限状态机 (FSM) 的图控流设计、Tool Calling 容错降级与熔断器机制，并提供生产级状态机实战代码。"

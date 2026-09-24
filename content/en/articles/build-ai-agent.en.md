@@ -2,8 +2,9 @@
 title: Building AI Agent Applications from Scratch
 slug: build-ai-agent
 date: 2026-03-05
-tag: AI Agent
-tagClass: tag-emerald
+tag: Agent Building
+tagClass: tag-purple
+category: AI Agent
 description: A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.
 series: ai-agent
 seriesOrder: 2

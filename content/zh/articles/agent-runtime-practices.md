@@ -2,8 +2,9 @@
 title: 做 AI Agent 的 7 条运行时实践
 slug: agent-runtime-practices
 date: 2026-03-15
-tag: AI Agent
-tagClass: tag-emerald
+tag: 运行时规范
+tagClass: tag-purple
+category: AI Agent
 description: 基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。
 extraTags:
   - Agent Runtime

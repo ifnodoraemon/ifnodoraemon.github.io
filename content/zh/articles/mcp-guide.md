@@ -2,8 +2,9 @@
 title: MCP 协议深度解析：AI 的「USB-C 接口」
 slug: mcp-guide
 date: 2026-03-12
-tag: AI Agent
-tagClass: tag-emerald
+tag: MCP 协议
+tagClass: tag-purple
+category: AI Agent
 description: 从架构原理到实战开发，完整解析 Model Context Protocol。含 Python SDK 实战、安全机制、生态对比。
 series: ai-agent
 seriesOrder: 4

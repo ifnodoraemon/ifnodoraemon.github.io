@@ -2,8 +2,9 @@
 title: "2026 AI Paradigm Shift: Distributed Agent Orchestration & Evals to Combat Error Compounding"
 slug: agent-orchestration-evals
 date: 2026-07-15
-tag: AI Agent
-tagClass: tag-emerald
+tag: Orchestration & Evals
+tagClass: tag-purple
+category: AI Agent
 description: As LLMs move into complex enterprise production, how do we use distributed orchestration to combat error compounding? How do we build a statistically significant Evals system?
 series: ai-agent
 seriesOrder: 8

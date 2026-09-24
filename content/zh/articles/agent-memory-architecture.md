@@ -2,8 +2,9 @@
 title: "AI Agent 记忆系统设计：从工作记忆、情景记忆到分层 Graph RAG"
 slug: agent-memory-architecture
 date: 2026-09-21
-tag: AI Agent
-tagClass: tag-emerald
+tag: 记忆架构
+tagClass: tag-purple
+category: AI Agent
 series: ai-agent
 seriesOrder: 11
 description: "为什么数百万 Token 的上下文窗口依然无法解决智能体的失忆症？深入剖析从工作记忆、情景记忆到长期语义记忆的三层金字塔模型，详解 Stanford Generative Agents 与 Letta (MemGPT) 的记忆沉淀机制，并提供生产级混合检索与遗忘衰减实战代码。"

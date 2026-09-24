@@ -2,8 +2,9 @@
 title: "Memory Virtualization in Inference Engines: PagedAttention and the Elimination of Memory Fragmentation"
 slug: pagedattention-memory-virtualization
 date: 2026-09-24
-tag: Inference Systems
+tag: Memory Virtualization
 tagClass: tag-cyan
+category: Inference Systems
 series: llm-inference
 seriesOrder: 2
 description: "Why did early LLM serving systems waste 60% to 80% of GPU memory? A deep architectural exploration of vLLM's PagedAttention, logical-to-physical block mapping, zero-copy Copy-on-Write sharing, and non-contiguous CUDA attention kernels."

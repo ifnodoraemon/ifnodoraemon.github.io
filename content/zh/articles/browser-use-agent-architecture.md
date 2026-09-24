@@ -2,8 +2,9 @@
 title: "突破 10 万 Star 的 Browser-use 架构深度剖析：DOM 树提纯、视觉定位与生产级网页 Agent 实战"
 slug: browser-use-agent-architecture
 date: 2026-09-18
-tag: AI Agent
-tagClass: tag-emerald
+tag: 浏览器智能体
+tagClass: tag-purple
+category: AI Agent
 description: "为什么传统 Selenium/Playwright 脚本在动态前端下频频崩溃？深度拆解斩获 10 万+ GitHub Star 的现象级项目 Browser-use 的底层架构：DOM 树智能提纯降噪、Set-of-Mark (SoM) 视觉坐标定位、状态机闭环容错，并手把手构建一个可生产落地的企业级网页自动化智能体。"
 featured: true
 featuredStats:

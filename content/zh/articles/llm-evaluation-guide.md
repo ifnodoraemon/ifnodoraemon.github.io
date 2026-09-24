@@ -2,8 +2,10 @@
 title: 拒绝榜单刷分：如何构筑契合业务的 LLM 评估体系
 slug: llm-evaluation-guide
 date: 2026-04-22
-tag: 评测与趋势
+tag: 业务评测
 tagClass: tag-amber
+category: 评测与趋势
+series: llm-engineering
 description: 不再迷恋堆砌代码，建立大模型评估思维才是核心。本文深度剖析 LLM-as-a-Judge 的底层偏差、Ragas 算分的数学机制，以及如何用概率思维重塑 CI/CD 防线。
 ---
 

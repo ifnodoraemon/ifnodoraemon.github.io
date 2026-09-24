@@ -2,8 +2,10 @@
 title: "Test-Time Compute and GRPO in Practice: From PPO to Critic-Free Reinforcement Learning"
 slug: test-time-compute-grpo
 date: 2026-09-18
-tag: LLM Engineering
-tagClass: tag-purple
+tag: RL & Reasoning
+tagClass: tag-emerald
+category: Model Engineering
+series: llm-engineering
 description: "A deep dive into the paradigm shift from pre-training scaling laws to test-time compute. We deconstruct the mathematical derivation of DeepSeek-R1's Group Relative Policy Optimization (GRPO), critic-free architecture advantages, emergent self-reflection in long reasoning traces, and a complete, reproducible hands-on implementation."
 featured: true
 featuredStats:

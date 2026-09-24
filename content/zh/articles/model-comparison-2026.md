@@ -2,8 +2,10 @@
 title: 2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro
 slug: model-comparison-2026
 date: 2026-03-01
-tag: 评测与趋势
+tag: 模型横评
 tagClass: tag-amber
+category: 评测与趋势
+series: llm-engineering
 description: 从推理能力、编码水平、上下文窗口到 API 定价，全方位对比 2026 年三大主流大模型的实际表现与选型策略。
 featured: true
 featuredStats:

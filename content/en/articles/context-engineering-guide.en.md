@@ -2,8 +2,10 @@
 title: "Context Engineering Guide: Managing Context Window like RAM"
 slug: context-engineering-guide
 date: 2026-06-15
-tag: AI Agent
-tagClass: tag-emerald
+tag: Context Engineering
+tagClass: tag-purple
+category: AI Agent
+series: ai-agent
 description: The hottest concept in 2026, evolving from Prompt Engineering to Context Engineering. A deep dive into managing the context window through Write, Select, Compress, and Isolate strategies to solve long-context amnesia, hallucinations, and context poisoning.
 extraTags:
   - Context Engineering

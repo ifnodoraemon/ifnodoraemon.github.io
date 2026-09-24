@@ -2,8 +2,10 @@
 title: Deep Dive into 11 AI Foundation Model Trends in 2026
 slug: ai-trends-2026
 date: 2026-03-07
-tag: Evaluation & Trends
+tag: Tech Trends
 tagClass: tag-amber
+category: Evaluation & Trends
+series: llm-engineering
 description: From Thinking reasoning modes to Agentic applications, a deep dive into the top 11 trends in AI foundation models for 2026.
 ---
 

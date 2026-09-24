@@ -2,8 +2,10 @@
 title: "SGLang vs vLLM 架构对决：RadixAttention 树状缓存、结构化输出与高并发基准实测"
 slug: sglang-vs-vllm-architecture
 date: 2026-09-18
-tag: 推理系统
+tag: 引擎架构
 tagClass: tag-cyan
+category: 推理系统
+series: llm-inference
 description: "深度剖析 2026 年两大顶级开源推理引擎 vLLM 与 SGLang 的底层内核差异。全面对比 PagedAttention 块级分页与 RadixAttention 基数树前缀缓存机制、调度层结构化输出（JSON Schema）实现原理，并基于 8x H100 集群提供严苛的多场景基准压测与工程选型决策树。"
 featured: true
 featuredStats:

@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Thu, 24 Sep 2026 07:13:26 GMT</pubDate>
+  <pubDate>Thu, 24 Sep 2026 07:37:08 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking</title>
@@ -13,7 +13,7 @@
     <guid>https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Batching &amp; Scheduling</category>
     <description>Why does high-concurrency LLM serving suffer from severe latency spikes (TPOT jitter) even after eliminating memory fragmentation? A deep dive into the evolution from static batching to Orca's iteration-level continuous batching, the physical mechanics of head-of-line (HoL) blocking caused by long prefill bursts, and how Sarathi-Serve and vLLM leverage Chunked Prefill and decode piggybacking to flatten latency SLAs.</description>
     <enclosure url="https://blog.llmgo.top/og/en/continuous-batching-chunked-prefill-guide.png" length="150000" type="image/png" />
   </item>
@@ -23,7 +23,7 @@
     <guid>https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Kernel Optimization</category>
     <description>Why does standard self-attention trigger explosive HBM bandwidth bottlenecks as context scales? A comprehensive deep dive into the evolution of attention kernels: from FlashAttention-1's SRAM tiling and online softmax rescaling, to FlashAttention-2's loop inversion and warp-level zero-communication scheduling, to FlashAttention-3's Hopper TMA asynchronous copies and WGMMA warpgroups. Finally, we explore FlashInfer, the purpose-built LLM serving kernel library, revealing how native Paged KV cache indexing and Split-K parallel decoding rescue memory-bound decodes.</description>
     <enclosure url="https://blog.llmgo.top/og/en/flashattention-flashinfer-kernel-evolution.png" length="150000" type="image/png" />
   </item>
@@ -33,7 +33,7 @@
     <guid>https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Roofline Modeling</category>
     <description>Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode.</description>
     <enclosure url="https://blog.llmgo.top/og/en/inference-roofline-prefill-decode.png" length="150000" type="image/png" />
   </item>
@@ -43,9 +43,19 @@
     <guid>https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Attention Architecture</category>
     <description>Why does long-context inference hit an insurmountable wall despite aggressive software kernel and scheduling optimizations? A deep architectural exploration from classical MHA to GQA grouping compromises, culminating in DeepSeek's revolutionary Multi-Head Latent Attention (MLA). We mathematically deconstruct low-rank latent projections, Decoupled RoPE, and the Matrix Absorption trick that allows serving engines to erase over 90% of multi-head Key-Value tensors from physical HBM during decode.</description>
     <enclosure url="https://blog.llmgo.top/og/en/mha-gqa-mla-matrix-absorption-inference-engine.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>MoE Inference Internals: Expert Parallelism (EP), Dynamic Routing Gating, and All-to-All Overlapping</title>
+    <link>https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/</link>
+    <guid>https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>MoE &amp; Sparsity</category>
+    <description>Why does the 671B DeepSeek-V3 activate only 37B parameters per token yet hit severe network latency walls during decode? A comprehensive deep dive into MoE inference internals: dynamic routing gating, auxiliary-loss-free balancing, Expert Parallelism (EP) All-to-Allv communication patterns, CUTLASS Grouped GEMM kernels, and DualPipe computation-communication overlapping.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/moe-expert-parallelism-inference-engine.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>Memory Virtualization in Inference Engines: PagedAttention and the Elimination of Memory Fragmentation</title>
@@ -53,7 +63,7 @@
     <guid>https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Memory Virtualization</category>
     <description>Why did early LLM serving systems waste 60% to 80% of GPU memory? A deep architectural exploration of vLLM's PagedAttention, logical-to-physical block mapping, zero-copy Copy-on-Write sharing, and non-contiguous CUDA attention kernels.</description>
     <enclosure url="https://blog.llmgo.top/og/en/pagedattention-memory-virtualization.png" length="150000" type="image/png" />
   </item>
@@ -63,7 +73,7 @@
     <guid>https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Prefix Caching</category>
     <description>Why do inference engines repeatedly execute thousands of redundant prompt forward passes across multi-turn conversations and agent loops? A comprehensive dissection of Prefix Caching internals: from vLLM's hash-chained block indexing and boundary penalty, to SGLang's pioneering RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction mechanics.</description>
     <enclosure url="https://blog.llmgo.top/og/en/prefix-caching-radix-attention-internals.png" length="150000" type="image/png" />
   </item>
@@ -73,7 +83,7 @@
     <guid>https://blog.llmgo.top/en/articles/agent-memory-architecture/</guid>
     <pubDate>Mon, 21 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>Agent Memory</category>
     <description>Why multi-million token context windows still fail to solve agent amnesia. A deep architectural dissection of the three-tier memory pyramid (Working, Episodic, and Long-Term Semantic Memory), Stanford Generative Agents reflection cycles, Letta (MemGPT) virtual paging, and runnable code with decay curves and hybrid retrieval.</description>
     <enclosure url="https://blog.llmgo.top/og/en/agent-memory-architecture.png" length="150000" type="image/png" />
   </item>
@@ -83,7 +93,7 @@
     <guid>https://blog.llmgo.top/en/articles/agent-loop-state-machine/</guid>
     <pubDate>Sun, 20 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>State Machine</category>
     <description>Why prompt chaining and unconstrained ReAct loops fail in production AI systems. A deep architectural dissection of agent failure modes, Finite State Machine (FSM) graph flows, tool-calling resilience, and circuit breakers with runnable code.</description>
     <enclosure url="https://blog.llmgo.top/og/en/agent-loop-state-machine.png" length="150000" type="image/png" />
   </item>
@@ -93,7 +103,7 @@
     <guid>https://blog.llmgo.top/en/articles/browser-use-agent-architecture/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>Browser Agents</category>
     <description>Why do traditional Selenium and Playwright scripts constantly break against modern web frontends? We dissect the architecture of Browser-use, the breakout open-source project with over 100k GitHub stars: DOM tree pruning, Set-of-Mark (SoM) visual coordinate grounding, state machine resilience, and end-to-end production recipes.</description>
     <enclosure url="https://blog.llmgo.top/og/en/browser-use-agent-architecture.png" length="150000" type="image/png" />
   </item>
@@ -103,7 +113,7 @@
     <guid>https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Engine Architecture</category>
     <description>A deep architectural breakdown between the dual titans of 2026 LLM inference: vLLM and SGLang. We dissect PagedAttention block paging versus RadixAttention tree-based prefix caching, compare scheduler-level structured decoding (JSON Schema) mechanics, and deliver rigorous benchmarks on an 8x H100 cluster alongside an enterprise decision framework.</description>
     <enclosure url="https://blog.llmgo.top/og/en/sglang-vs-vllm-architecture.png" length="150000" type="image/png" />
   </item>
@@ -113,7 +123,7 @@
     <guid>https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Speculative Decoding</category>
     <description>Why is autoregressive LLM decoding fundamentally bottlenecked by memory bandwidth? We dissect the mathematical proof of lossless distribution invariance in speculative decoding, trace its evolution from dual-model drafts to EAGLE-2/3 dynamic draft trees, and provide production configurations in vLLM and SGLang.</description>
     <enclosure url="https://blog.llmgo.top/og/en/speculative-decoding-eagle-guide.png" length="150000" type="image/png" />
   </item>
@@ -123,7 +133,7 @@
     <guid>https://blog.llmgo.top/en/articles/test-time-compute-grpo/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>LLM Engineering</category>
+    <category>RL &amp; Reasoning</category>
     <description>A deep dive into the paradigm shift from pre-training scaling laws to test-time compute. We deconstruct the mathematical derivation of DeepSeek-R1's Group Relative Policy Optimization (GRPO), critic-free architecture advantages, emergent self-reflection in long reasoning traces, and a complete, reproducible hands-on implementation.</description>
     <enclosure url="https://blog.llmgo.top/og/en/test-time-compute-grpo.png" length="150000" type="image/png" />
   </item>
@@ -133,7 +143,7 @@
     <guid>https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Cluster Deployment</category>
     <description>Complete enterprise on-premise deployment guide for 1.6T - 2.8T MoE open-weight models: Hardware planning across GPU clusters, vLLM / SGLang distributed TP/PP configuration, FP8 dynamic quantization, and high-concurrency API gateway production setups.</description>
     <enclosure url="https://blog.llmgo.top/og/en/deepseek-v4-kimi-k3-deployment-guide.png" length="150000" type="image/png" />
   </item>
@@ -143,7 +153,7 @@
     <guid>https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Evaluation &amp; Trends</category>
+    <category>Chinese LLMs</category>
     <description>In-depth evaluation of China's top three frontier models in 2026: Kimi K3's 2.8T KDA attention, GLM-5.3's environment-scaled terminal execution, and DeepSeek-V4-Pro's 1.6T MoE software engineering prowess.</description>
     <enclosure url="https://blog.llmgo.top/og/en/domestic-llm-comparison-2026.png" length="150000" type="image/png" />
   </item>
@@ -153,7 +163,7 @@
     <guid>https://blog.llmgo.top/en/articles/environment-scaling-agent-guide/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>Environment Scaling</category>
     <description>Analyzing the major post-training paradigm shift of 2026: from text autoregression to multi-environment sandboxed RL. Deep dive into GLM-5.3's Terminal-Bench 3.0 breakthrough, Linux container orchestration, MCP protocol integration, and sandboxed agent engineering.</description>
     <enclosure url="https://blog.llmgo.top/og/en/environment-scaling-agent-guide.png" length="150000" type="image/png" />
   </item>
@@ -163,7 +173,7 @@
     <guid>https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Architecture Evolution</category>
     <description>In the era of million-token context windows and trillion-parameter MoE, how KV Cache memory saturation became the core bottleneck. Deep mathematical and architectural breakdown of Moonshot's KDA and DeepSeek's MLA low-rank projections.</description>
     <enclosure url="https://blog.llmgo.top/og/en/kimi-kda-deepseek-mla-architecture.png" length="150000" type="image/png" />
   </item>
@@ -173,7 +183,7 @@
     <guid>https://blog.llmgo.top/en/articles/agent-reflection-self-correction/</guid>
     <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>Self-Correction</category>
     <description>The potential of LLMs extends beyond pre-trained parameters. We dive deep into the frontier of Test-Time Compute: from Actor-Critic architecture to leveraging Monte Carlo Tree Search (MCTS) to decode the limits of Agent self-correction.</description>
     <enclosure url="https://blog.llmgo.top/og/en/agent-reflection-self-correction.png" length="150000" type="image/png" />
   </item>
@@ -183,7 +193,7 @@
     <guid>https://blog.llmgo.top/en/articles/agent-orchestration-evals/</guid>
     <pubDate>Wed, 15 Jul 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>Orchestration &amp; Evals</category>
     <description>As LLMs move into complex enterprise production, how do we use distributed orchestration to combat error compounding? How do we build a statistically significant Evals system?</description>
     <enclosure url="https://blog.llmgo.top/og/en/agent-orchestration-evals.png" length="150000" type="image/png" />
   </item>
@@ -193,7 +203,7 @@
     <guid>https://blog.llmgo.top/en/articles/loop-engineering/</guid>
     <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>Loop Engineering</category>
     <description>A deep dive into the evolution of AI Agent architectures, exploring the 4-layer control plane extrapolation from Prompt, Context, Harness to Loop Engineering, and the 4 diseases of the ReAct architecture.</description>
     <enclosure url="https://blog.llmgo.top/og/en/loop-engineering.png" length="150000" type="image/png" />
   </item>
@@ -203,7 +213,7 @@
     <guid>https://blog.llmgo.top/en/articles/agent-observability-debugging/</guid>
     <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>Observability</category>
     <description>AI Agents are not traditional software; we are debugging the reasoning process rather than the code itself. This article explores Trajectory Evaluation, LLM-as-a-Judge, and practical applications of mainstream Agent observability tools like LangSmith and Langfuse.</description>
     <enclosure url="https://blog.llmgo.top/og/en/agent-observability-debugging.png" length="150000" type="image/png" />
   </item>
@@ -213,7 +223,7 @@
     <guid>https://blog.llmgo.top/en/articles/context-engineering-guide/</guid>
     <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>Context Engineering</category>
     <description>The hottest concept in 2026, evolving from Prompt Engineering to Context Engineering. A deep dive into managing the context window through Write, Select, Compress, and Isolate strategies to solve long-context amnesia, hallucinations, and context poisoning.</description>
     <enclosure url="https://blog.llmgo.top/og/en/context-engineering-guide.png" length="150000" type="image/png" />
   </item>
@@ -223,7 +233,7 @@
     <guid>https://blog.llmgo.top/en/articles/ai-coding-mastery/</guid>
     <pubDate>Mon, 04 May 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>AI Coding</category>
     <description>Tools don't matter — methodology does. A deep dive into six core methods for mastering AI coding: Spec-Driven Development, Context Engineering, TDD Verification Loops, Multi-Agent Orchestration, Advanced Prompting, and Session Hygiene. Plus a 20+ tool matrix and five anti-patterns to avoid.</description>
     <enclosure url="https://blog.llmgo.top/og/en/ai-coding-mastery.png" length="150000" type="image/png" />
   </item>
@@ -233,7 +243,7 @@
     <guid>https://blog.llmgo.top/en/articles/llm-evaluation-guide/</guid>
     <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Evaluation &amp; Trends</category>
+    <category>LLM Evaluation</category>
     <description>Cease the obsession with writing more code; shift focus to deep evaluation thinking. We deconstruct LLM-as-a-Judge biases, the mathematics behind metrics, and reshaping CI/CD defenses for probabilistic systems.</description>
     <enclosure url="https://blog.llmgo.top/og/en/llm-evaluation-guide.png" length="150000" type="image/png" />
   </item>
@@ -243,7 +253,7 @@
     <guid>https://blog.llmgo.top/en/articles/quantization-hands-on-guide/</guid>
     <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Quantization Hands-on</category>
     <description>Hands-on LLM quantization guide: download and run GGUF models (Qwen3-8B-Q4_K_M.gguf, llama.cpp, Ollama), quantize with AWQ/GPTQ, and deploy vLLM FP8 in production with copy-paste code.</description>
     <enclosure url="https://blog.llmgo.top/og/en/quantization-hands-on-guide.png" length="150000" type="image/png" />
   </item>
@@ -253,7 +263,7 @@
     <guid>https://blog.llmgo.top/en/articles/ai-history-choices/</guid>
     <pubDate>Wed, 15 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Evaluation &amp; Trends</category>
+    <category>Tech Evolution</category>
     <description>A retrospective of six pivotal technology crossroads in AI's seventy-year history, dissecting the compute constraints, data dividends, and scalability logic behind each historical choice.</description>
     <enclosure url="https://blog.llmgo.top/og/en/ai-history-choices.png" length="150000" type="image/png" />
   </item>
@@ -263,7 +273,7 @@
     <guid>https://blog.llmgo.top/en/articles/vllm-serving-guide/</guid>
     <pubDate>Tue, 14 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Serving &amp; Deployment</category>
     <description>A deep dive into vLLM's core architecture (PagedAttention, continuous batching, APC prefix caching, speculative decoding) for online serving. Covers OpenAI-compatible API setup, performance tuning, token billing systems, and complete Docker deployment with Prometheus monitoring.</description>
     <enclosure url="https://blog.llmgo.top/og/en/vllm-serving-guide.png" length="150000" type="image/png" />
   </item>
@@ -273,7 +283,7 @@
     <guid>https://blog.llmgo.top/en/articles/nvidia-gpu-package-architecture/</guid>
     <pubDate>Sun, 05 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>GPU &amp; Driver Stack</category>
     <description>A deep dive into the complex Linux NVIDIA GPU driver package structures. Understand the 5-layer architecture bridging nvidia-dkms, libnvidia, nvidia-utils, and driver metapackages. Plus, discover enterprise best practices and troubleshooting guides for 4 core deployment scenarios, including Docker model servers and DGX clusters.</description>
     <enclosure url="https://blog.llmgo.top/og/en/nvidia-gpu-package-architecture.png" length="150000" type="image/png" />
   </item>
@@ -283,7 +293,7 @@
     <guid>https://blog.llmgo.top/en/articles/quantization-precision-guide/</guid>
     <pubDate>Tue, 31 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Inference Systems</category>
+    <category>Quantization Precision</category>
     <description>A comprehensive comparison of FP32, BF16, FP16, FP8, INT8, INT4, NF4, FP4, 1.58-bit and all major quantization formats — with real benchmark data and an in-depth FP8 vs INT8 technical analysis.</description>
     <enclosure url="https://blog.llmgo.top/og/en/quantization-precision-guide.png" length="150000" type="image/png" />
   </item>
@@ -293,7 +303,7 @@
     <guid>https://blog.llmgo.top/en/articles/agent-runtime-practices/</guid>
     <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>Runtime Practices</category>
     <description>Based on a real data analysis agent project, this article distills 7 reusable Agent Runtime practices covering state exposure, tool design, context control, guardrails, delegation, and trace-driven iteration.</description>
     <enclosure url="https://blog.llmgo.top/og/en/agent-runtime-practices.png" length="150000" type="image/png" />
   </item>
@@ -303,7 +313,7 @@
     <guid>https://blog.llmgo.top/en/articles/mcp-guide/</guid>
     <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>MCP Protocol</category>
     <description>From architecture to hands-on development, a complete guide to the Model Context Protocol. Includes Python SDK tutorial, security mechanisms, and ecosystem comparison.</description>
     <enclosure url="https://blog.llmgo.top/og/en/mcp-guide.png" length="150000" type="image/png" />
   </item>
@@ -313,7 +323,7 @@
     <guid>https://blog.llmgo.top/en/articles/skills-guide/</guid>
     <pubDate>Thu, 12 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>Agent Skills</category>
     <description>From core principles to cross-platform practice, a complete guide to the AI coding assistant Skills system. Covers SKILL.md mechanics, six-platform comparison, hands-on writing guide, and best practices.</description>
     <enclosure url="https://blog.llmgo.top/og/en/skills-guide.png" length="150000" type="image/png" />
   </item>
@@ -323,7 +333,7 @@
     <guid>https://blog.llmgo.top/en/articles/prompt-engineering-guide/</guid>
     <pubDate>Mon, 09 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>LLM Engineering</category>
+    <category>Prompt Engineering</category>
     <description>An in-depth exploration of designing effective prompts to improve model output quality. Covers core techniques like Few-Shot, Chain-of-Thought, and ReAct with practical examples.</description>
     <enclosure url="https://blog.llmgo.top/og/en/prompt-engineering-guide.png" length="150000" type="image/png" />
   </item>
@@ -333,7 +343,7 @@
     <guid>https://blog.llmgo.top/en/articles/ai-trends-2026/</guid>
     <pubDate>Sat, 07 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Evaluation &amp; Trends</category>
+    <category>Tech Trends</category>
     <description>From Thinking reasoning modes to Agentic applications, a deep dive into the top 11 trends in AI foundation models for 2026.</description>
     <enclosure url="https://blog.llmgo.top/og/en/ai-trends-2026.png" length="150000" type="image/png" />
   </item>
@@ -343,7 +353,7 @@
     <guid>https://blog.llmgo.top/en/articles/build-ai-agent/</guid>
     <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>AI Agent</category>
+    <category>Agent Building</category>
     <description>A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.</description>
     <enclosure url="https://blog.llmgo.top/og/en/build-ai-agent.png" length="150000" type="image/png" />
   </item>
@@ -353,7 +363,7 @@
     <guid>https://blog.llmgo.top/en/articles/rag-in-practice/</guid>
     <pubDate>Tue, 03 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>LLM Engineering</category>
+    <category>RAG Architecture</category>
     <description>A complete guide on how to use retrieval-augmented generation strategies and production best practices. Covers vector databases, semantic chunking, ColBERT reranking, GraphRAG, and automated Ragas evaluation.</description>
     <enclosure url="https://blog.llmgo.top/og/en/rag-in-practice.png" length="150000" type="image/png" />
   </item>
@@ -363,7 +373,7 @@
     <guid>https://blog.llmgo.top/en/articles/model-comparison-2026/</guid>
     <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Evaluation &amp; Trends</category>
+    <category>Model Benchmark</category>
     <description>A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.</description>
     <enclosure url="https://blog.llmgo.top/og/en/model-comparison-2026.png" length="150000" type="image/png" />
   </item>
@@ -373,7 +383,7 @@
     <guid>https://blog.llmgo.top/en/articles/multimodal-guide/</guid>
     <pubDate>Sat, 28 Feb 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>LLM Engineering</category>
+    <category>Multimodal LLMs</category>
     <description>Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.</description>
     <enclosure url="https://blog.llmgo.top/og/en/multimodal-guide.png" length="150000" type="image/png" />
   </item>
@@ -383,7 +393,7 @@
     <guid>https://blog.llmgo.top/en/articles/fine-tuning-guide/</guid>
     <pubDate>Wed, 25 Feb 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>LLM Engineering</category>
+    <category>Fine-Tuning</category>
     <description>Discover how LLM fine-tuning works under the hood, explore proven enterprise use cases (LoRA, QLoRA, Full Fine-Tuning), and learn end-to-end workflows from data preparation to vLLM serving.</description>
     <enclosure url="https://blog.llmgo.top/og/en/fine-tuning-guide.png" length="150000" type="image/png" />
   </item>

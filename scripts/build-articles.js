@@ -78,11 +78,16 @@ const SERIES_DEFINITIONS = {
     articles: [
       'inference-roofline-prefill-decode',
       'pagedattention-memory-virtualization',
+      'continuous-batching-chunked-prefill-guide',
+      'prefix-caching-radix-attention-internals',
+      'flashattention-flashinfer-kernel-evolution',
+      'mha-gqa-mla-matrix-absorption-inference-engine',
+      'moe-expert-parallelism-inference-engine',
       'kimi-kda-deepseek-mla-architecture',
-      'sglang-vs-vllm-architecture',
       'speculative-decoding-eagle-guide',
       'quantization-precision-guide',
       'quantization-hands-on-guide',
+      'sglang-vs-vllm-architecture',
       'vllm-serving-guide',
       'deepseek-v4-kimi-k3-deployment-guide',
       'nvidia-gpu-package-architecture',
@@ -418,6 +423,7 @@ function prepareArticles(list, isEn) {
       imageUrl: toSiteUrl(imagePath),
       ogImageUrl,
       keywords: [fm.tag, ...(fm.extraTags || []), isEn ? 'AI Agent' : 'AI智能体', fm.slug.replace(/-/g, ' ')].filter(Boolean).join(','),
+      category: fm.category || (isEn ? 'Evaluation & Trends' : '评测与趋势'),
       wordCountNumber: wordCount,
       readingTimeNumber: readingTime,
       wordCountText: isEn ? `${wordCount} words` : `约 ${wordCount} 字`,
@@ -780,7 +786,7 @@ function generateListingPage(articlesList, isEn = false) {
       : '';
 
     return `
-          <div class="unified-article-row article-list-item-wrapper" data-tag="${escapeHtml(article.tag)}">
+          <div class="unified-article-row article-list-item-wrapper" data-tag="${escapeHtml(article.category)}" data-category="${escapeHtml(article.category)}" data-subtag="${escapeHtml(article.tag)}">
             <div class="unified-timeline-left">
               <div class="unified-timeline-date">${article.dateFormatted}</div>
             </div>
@@ -800,9 +806,18 @@ function generateListingPage(articlesList, isEn = false) {
           </div>`;
   }).join('\n');
 
-  const tags = [...new Set(articlesList.map(article => article.tag))];
-  const filterBtns = tags
-    .map(tag => `          <button class="filter-btn" data-filter="${escapeHtml(tag)}">${escapeHtml(tag)}</button>`)
+  const categories = isEn
+    ? ['Inference Systems', 'AI Agent', 'Model Engineering', 'Evaluation & Trends']
+    : ['推理系统', 'AI Agent', '模型工程', '评测与趋势'];
+
+  const categoryCounts = {};
+  categories.forEach(cat => {
+    categoryCounts[cat] = articlesList.filter(article => article.category === cat).length;
+  });
+
+  const filterBtns = categories
+    .filter(cat => (categoryCounts[cat] || 0) > 0)
+    .map(cat => `          <button class="filter-btn" data-filter="${escapeHtml(cat)}">${escapeHtml(cat)} (${categoryCounts[cat]})</button>`)
     .join('\n');
 
   const lang = isEn ? 'en' : 'zh-CN';
@@ -812,7 +827,9 @@ function generateListingPage(articlesList, isEn = false) {
   const canonicalUrl = isEn ? `${SITE_URL}/en/articles/` : `${SITE_URL}/articles/`;
   const heroTag = 'ALL ARTICLES';
   const heroTitle = isEn ? 'All Articles' : '全部文章';
-  const heroDesc = '';
+  const heroDesc = isEn
+    ? 'Deep dives into LLM system architectures, inference engine internals, AI Agents, and production engineering practices.'
+    : '深入大模型底层物理极限、推理引擎内核演进、AI Agent 架构与前沿工程深度实践';
   const filterAllBtn = isEn ? `All (${articlesList.length})` : `全部 (${articlesList.length})`;
   const searchPlaceholder = locales.models.listingSearchPlaceholder || (isEn ? 'Search articles...' : '搜索文章...');
 
