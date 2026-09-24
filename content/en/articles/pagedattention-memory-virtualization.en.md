@@ -3,7 +3,7 @@ title: "Memory Virtualization in Inference Engines: PagedAttention and the Elimi
 slug: pagedattention-memory-virtualization
 date: 2026-09-24
 tag: Inference Systems
-tagClass: tag-green
+tagClass: tag-cyan
 series: llm-inference
 seriesOrder: 2
 description: "Why did early LLM serving systems waste 60% to 80% of GPU memory? A deep architectural exploration of vLLM's PagedAttention, logical-to-physical block mapping, zero-copy Copy-on-Write sharing, and non-contiguous CUDA attention kernels."
@@ -138,7 +138,7 @@ sequenceDiagram
     
     loop Autoregressive Decode Steps
         Scheduler->>GPU: Execute forward step to emit next token
-        alt Active block has capacity (filled < 16)
+        alt Active block has capacity (filled under 16)
             GPU->>GPU: Write to offset inside physical block #12
         else Active block is full (filled == 16)
             Scheduler->>BM: Requests new physical block

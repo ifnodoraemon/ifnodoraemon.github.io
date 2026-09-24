@@ -2,8 +2,8 @@
 title: "Reject Benchmark Hacking: How to Build an LLM Evaluation System for Your Business (LLM-as-a-Judge)"
 slug: llm-evaluation-guide
 date: 2026-04-22
-tag: Evaluation
-tagClass: tag-blue
+tag: Evaluation & Trends
+tagClass: tag-amber
 description: Cease the obsession with writing more code; shift focus to deep evaluation thinking. We deconstruct LLM-as-a-Judge biases, the mathematics behind metrics, and reshaping CI/CD defenses for probabilistic systems.
 ---
 

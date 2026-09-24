@@ -3,7 +3,7 @@ title: "SGLang vs vLLM 架构对决：RadixAttention 树状缓存、结构化输
 slug: sglang-vs-vllm-architecture
 date: 2026-09-18
 tag: 推理系统
-tagClass: tag-green
+tagClass: tag-cyan
 description: "深度剖析 2026 年两大顶级开源推理引擎 vLLM 与 SGLang 的底层内核差异。全面对比 PagedAttention 块级分页与 RadixAttention 基数树前缀缓存机制、调度层结构化输出（JSON Schema）实现原理，并基于 8x H100 集群提供严苛的多场景基准压测与工程选型决策树。"
 featured: true
 featuredStats:
@@ -36,12 +36,12 @@ featuredStats:
 
 ```mermaid
 graph TD
-    subgraph vLLM: PagedAttention (块级分页与扁平前缀匹配)
+    subgraph SubVLLM["vLLM: PagedAttention (块级分页与扁平前缀匹配)"]
         V1["请求 Prompt Token 流"] --> V2["按固定 Block 大小 (如 16) 分页"]
         V2 --> V3["散列哈希表 (Hash Map) 进行前缀查找"]
         V3 --> V4["物理显存块离散映射 (类似 OS 虚拟内存分页)"]
     end
-    subgraph SGLang: RadixAttention (树状层次化动态缓存)
+    subgraph SubSGLang["SGLang: RadixAttention (树状层次化动态缓存)"]
         S1["请求 Prompt Token 流"] --> S2["在 Radix Tree (基数树) 中自顶向下前缀匹配"]
         S2 --> S3{"匹配到共享分支？"}
         S3 -->|"完全命中"| S4["零开销复用已生成 KV 节点"]

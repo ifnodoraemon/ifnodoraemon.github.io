@@ -2,8 +2,8 @@
 title: "Under the Hood of Browser-use (100k+ Stars): DOM Tree Distillation, Vision Grounding, and Production Web Agents"
 slug: browser-use-agent-architecture
 date: 2026-09-18
-tag: Autonomous Agents
-tagClass: tag-orange
+tag: AI Agent
+tagClass: tag-emerald
 description: "Why do traditional Selenium and Playwright scripts constantly break against modern web frontends? We dissect the architecture of Browser-use, the breakout open-source project with over 100k GitHub stars: DOM tree pruning, Set-of-Mark (SoM) visual coordinate grounding, state machine resilience, and end-to-end production recipes."
 featured: true
 featuredStats:
@@ -49,14 +49,14 @@ Browser-use resolves this with an efficient **dual-modal perception pipeline**:
 graph TD
     A["Webpage Rendering (Playwright Chromium)"] --> B["Dual Extraction: DOM Snapshot + High-Res Viewport Screenshot"]
     
-    subgraph Text Modality: Heuristic DOM Tree Distillation
+    subgraph SubText["Text Modality: Heuristic DOM Tree Distillation"]
         B --> C1["Strip scripts, styles, SVGs, and hidden elements"]
         C1 --> C2["Extract interactive nodes (button, input, a, select)"]
         C2 --> C3["Compute element BoundingBoxes & viewport visibility"]
         C3 --> C4["Distill into lightweight semantic tree (~5KB - 15KB)"]
     end
     
-    subgraph Vision Modality: Set-of-Mark (SoM) Coordinate Grounding
+    subgraph SubVision["Vision Modality: Set-of-Mark (SoM) Coordinate Grounding"]
         B --> D1["Render bounding boxes on high-res screenshot"]
         D1 --> D2["Assign unique numerical badge IDs to interactive elements"]
         D2 --> D3["Generate Set-of-Mark (SoM) visual screenshot"]

@@ -2,8 +2,8 @@
 title: "突破 10 万 Star 的 Browser-use 架构深度剖析：DOM 树提纯、视觉定位与生产级网页 Agent 实战"
 slug: browser-use-agent-architecture
 date: 2026-09-18
-tag: Agent 实战
-tagClass: tag-orange
+tag: AI Agent
+tagClass: tag-emerald
 description: "为什么传统 Selenium/Playwright 脚本在动态前端下频频崩溃？深度拆解斩获 10 万+ GitHub Star 的现象级项目 Browser-use 的底层架构：DOM 树智能提纯降噪、Set-of-Mark (SoM) 视觉坐标定位、状态机闭环容错，并手把手构建一个可生产落地的企业级网页自动化智能体。"
 featured: true
 featuredStats:
@@ -49,14 +49,14 @@ Browser-use 的第一大核心架构壁垒，在于其**极具艺术感的双模
 graph TD
     A["原始网页渲染 (Playwright Chromium)"] --> B["并行提取: DOM 语义快照 + 高清页面截图"]
     
-    subgraph 文本模态管道: 启发式 DOM 树提纯
+    subgraph SubText["文本模态管道: 启发式 DOM 树提纯"]
         B --> C1["剥离 script, style, svg, 隐藏元素"]
         C1 --> C2["提取可交互元素 (Button, Input, A, Select)"]
         C2 --> C3["计算元素边界框 (BoundingBox) 与可见性"]
         C3 --> C4["压缩为极简轻量级交互树 (~5KB~15KB)"]
     end
     
-    subgraph 视觉模态管道: 坐标映射与 SoM 增强
+    subgraph SubVision["视觉模态管道: 坐标映射与 SoM 增强"]
         B --> D1["依据 BoundingBox 物理渲染矩形框"]
         D1 --> D2["为每个交互元素打上唯一数字标签 (Badge ID)"]
         D2 --> D3["合成带标记的交互态截图 (Set-of-Mark Screenshot)"]

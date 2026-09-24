@@ -2,8 +2,8 @@
 title: "Beyond Simple Prompts: How Environment Scaling Is Reshaping Autonomous Agents in 2026"
 slug: environment-scaling-agent-guide
 date: 2026-09-07
-tag: Agent Architecture
-tagClass: tag-green
+tag: AI Agent
+tagClass: tag-emerald
 description: "Analyzing the major post-training paradigm shift of 2026: from text autoregression to multi-environment sandboxed RL. Deep dive into GLM-5.3's Terminal-Bench 3.0 breakthrough, Linux container orchestration, MCP protocol integration, and sandboxed agent engineering."
 series: ai-agent
 seriesOrder: 10

@@ -2,8 +2,8 @@
 title: "Evolving Models at Runtime: From Basic Reflection to MCTS-based Test-Time Compute"
 slug: agent-reflection-self-correction
 date: 2026-07-16
-tag: Agentic
-tagClass: tag-purple
+tag: AI Agent
+tagClass: tag-emerald
 description: "The potential of LLMs extends beyond pre-trained parameters. We dive deep into the frontier of Test-Time Compute: from Actor-Critic architecture to leveraging Monte Carlo Tree Search (MCTS) to decode the limits of Agent self-correction."
 series: ai-agent
 seriesOrder: 7

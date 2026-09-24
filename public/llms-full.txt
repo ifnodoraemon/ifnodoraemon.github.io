@@ -119,7 +119,7 @@
     A: FlashAttention 的核心收益在于通过 Tiling 分块将 $O(N^2)$ 的 Attention 中间结果留在 SRAM（片上高速缓存）中，避免向 HBM 频繁换入换出。  在 Prefill 阶段，序列长度 $N$ 很大，$N \times N$ 的 Attention Map 非常巨大，FlashAttention 能砍掉数十倍的 HBM 显存读写，收益极其恐怖；  在 Decode 阶段，Query 长度仅仅为 ${1}$，计算实质上是 ${1} \times N$ 的向量矩阵乘法（GEMV），根本不存在庞大的 $N \times N$ 矩阵。Decode 阶段的核心开销...
 
 ### [显存虚拟化革命：PagedAttention 内存池管理与显存碎片终结](https://blog.llmgo.top/articles/pagedattention-memory-virtualization/)
-- 发布日期: 2026-09-24 | 标签: 推理系统 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4933 字
+- 发布日期: 2026-09-24 | 标签: 推理系统 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4935 字
 - 概述: 为什么传统大模型推理会浪费 60%~80% 的 GPU 显存？深度剖析 vLLM 开创的 PagedAttention 核心机制，解构逻辑块到物理块映射、动态显存池生命周期、Copy-on-Write 分叉复用与 CUDA 非连续访存内核，彻底终结显存碎片化顽疾。
 - 核心 FAQ 解答:
   * Q: Q1: 块大小（Block Size）设为 16 还是 32 更好？为什么各大引擎不推荐设为 1 或 128？
@@ -152,7 +152,7 @@
     A: 基于“持久化检查点（Persistent Checkpoint）+ 异步事件驱动”设计。当状态机路由至 HumanInTheLoop 节点时，引擎将当前的 AgentState 进行 JSON 序列化并写入持久化数据库（如 PostgreSQL / Redis），记录对应的 session_id 与 checkpoint_id，随后立即将 Worker 线程/协程释放回进程池，避免产生挂起阻塞。系统向管理员端（如企业微信、Slack 或内部审批系统）推送带回调 Webhook 的审批卡片。当人工点击“批准”或“驳回”时，Webhook 接收服务根据 checkpoint_id 反序列化取出完整...
 
 ### [突破 10 万 Star 的 Browser-use 架构深度剖析：DOM 树提纯、视觉定位与生产级网页 Agent 实战](https://blog.llmgo.top/articles/browser-use-agent-architecture/)
-- 发布日期: 2026-09-18 | 标签: Agent 实战 | 预计阅读: 预计阅读 14 分钟 | 字数: 约 3488 字
+- 发布日期: 2026-09-18 | 标签: AI Agent | 预计阅读: 预计阅读 14 分钟 | 字数: 约 3488 字
 - 概述: 为什么传统 Selenium/Playwright 脚本在动态前端下频频崩溃？深度拆解斩获 10 万+ GitHub Star 的现象级项目 Browser-use 的底层架构：DOM 树智能提纯降噪、Set-of-Mark (SoM) 视觉坐标定位、状态机闭环容错，并手把手构建一个可生产落地的企业级网页自动化智能体。
 - 核心 FAQ 解答:
   * Q: Q1: Browser-use 每步都需要上传截图，会不会导致 Token 费用失控？
@@ -174,7 +174,7 @@
     A: 完全支持。SGLang 原生支持 FP8、AWQ、GPTQ 以及基于 Marlin 算子加速的各种量化格式（详细量化对比请参阅 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 与 [量化精度无损选型手册](/articles/quantization-precision-guide/)），并且在最新版本中集成了对 EAGLE 动态树投机采样的原生加速支持。...
 
 ### [投机采样 (Speculative Decoding) 生产实操：从 Draft Model 到 EAGLE-3 动态推测树实现 3x~5x 无损加速](https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/)
-- 发布日期: 2026-09-18 | 标签: 性能加速 | 预计阅读: 预计阅读 14 分钟 | 字数: 约 3305 字
+- 发布日期: 2026-09-18 | 标签: 推理系统 | 预计阅读: 预计阅读 14 分钟 | 字数: 约 3305 字
 - 概述: 大模型解码阶段的核心物理瓶颈是什么？全面解密投机采样（Speculative Decoding）的数学无损证明、拒绝采样检验机制，深入剖析从双模型投机、Medusa 到清华开源爆款 EAGLE-2/3 动态自适应推测树的架构演进，并提供在 vLLM 与 SGLang 中开启生产级 3x~5x 加速的实操配置。
 - 核心 FAQ 解答:
   * Q: Q1: 投机采样是否需要重新训练原始大模型？
@@ -185,7 +185,7 @@
     A: 实际加速比严格取决于当前业务 Prompt 的接受率 $\alpha$。在编程语言生成（Python/Java 具有极强的语法结构规律）和结构化 JSON 提取中，接受率通常高达 85% 以上，加速可达 4x 甚至更高；但在文学创作、高温度（Temperature $\ge 1.0$）的开放式对话中，文本熵极高，接受率可能跌至 50% 甚至更低，此时实际加速比通常在 1.8x~2.2x 之间。...
 
 ### [推理时扩展 (Test-Time Compute) 与 GRPO 强化学习实战：从 PPO 到无 Critic 策略优化](https://blog.llmgo.top/articles/test-time-compute-grpo/)
-- 发布日期: 2026-09-18 | 标签: 强化学习 | 预计阅读: 预计阅读 16 分钟 | 字数: 约 3959 字
+- 发布日期: 2026-09-18 | 标签: 模型工程 | 预计阅读: 预计阅读 16 分钟 | 字数: 约 3959 字
 - 概述: 深入剖析从预训练 Scaling Law 向推理时算力扩展 (Test-Time Scaling) 的范式转移。全面拆解 DeepSeek-R1 核心的 GRPO 组相对策略优化数学推导、无 Critic 架构优势、长思维链自我反思涌现机制，并提供完整的极简实战代码。
 - 核心 FAQ 解答:
   * Q: Q1: 为什么 GRPO 在没有 Critic 模型的情况下依然能够收敛？
@@ -196,7 +196,7 @@
     A: DPO 属于离线监督式偏好学习（Offline），依赖预先收集固定的正负样本对 $(y_w, y_l)$，模型无法在探索过程中发现超出静态数据集以外的全新推理路径；而 GRPO 属于在线强化学习（Online Exploration），每一轮更新都由模型实时生成候选采样并由规则环境即时打分，因而能够探索并演化出自发反思与自我纠错的新策略。...
 
 ### [2026 血泪踩坑实录：在物理机群跑通 DeepSeek-V4 与 Kimi K3 的硬核部署指南](https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/)
-- 发布日期: 2026-09-07 | 标签: 部署实战 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1905 字
+- 发布日期: 2026-09-07 | 标签: 推理系统 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1905 字
 - 概述: 这不是一篇官方文档的搬运，而是我们烧了上百万 GPU 租金换来的排障血泪史。实战拆解如何在 4 节点（32 卡）H100 裸金属集群上，通过 vLLM 0.29.0 的混合并行（TP8+PP2+EP2）与 Triton 算子优化，成功压榨 1.6T 级 MoE 模型的每一滴极限吞吐量。
 - 核心 FAQ 解答:
   * Q: Q1: 部署 DeepSeek-V4-Pro 时频繁遇到跨节点通信死锁或 All-to-All 挂起，该如何排查？
@@ -207,7 +207,7 @@
     A: Chunked Prefill 的核心原理是将长序列 Prefill 切片为较小的 Token 块，穿插在 Decode 周期中调度，从而牺牲了极低负载下单一长请求的绝对抢占优先级，换取整个集群的 P99 尾部延迟稳定与整体吞吐量成倍提升；对于高并发生产网关而言，这是保障服务 SLA 的标准工业实践。...
 
 ### [2026 国产大模型巅峰决选：Kimi K3 vs GLM-5.3 vs DeepSeek-V4 实测与工程选型指南](https://blog.llmgo.top/articles/domestic-llm-comparison-2026/)
-- 发布日期: 2026-09-07 | 标签: 模型横评 | 预计阅读: 预计阅读 11 分钟 | 字数: 约 2540 字
+- 发布日期: 2026-09-07 | 标签: 评测与趋势 | 预计阅读: 预计阅读 11 分钟 | 字数: 约 2540 字
 - 概述: 深度实测 2026 年三大国产顶流大模型：从 Kimi K3 的 2.8T KDA 注意力、GLM-5.3 的环境缩放 Terminal 领跑，到 DeepSeek-V4-Pro 的 1.6T MoE 软件工程突破，全方位剖析架构、成本与工程落地场景。
 - 核心 FAQ 解答:
   * Q: Q1: 私有化部署 DeepSeek-V4 与 Kimi K3 对硬件基础设施有哪些硬性门槛？
@@ -218,7 +218,7 @@
     A: 对于超长中文政企公文研读、金融财报深层审计及百万级多轮长记忆 Agent，优先选用 Kimi K3；对于企业级自动化 Linux 运维、终端指令生成及安全攻防测试，首选经环境缩放锤炼的 GLM-5.3；而对于全生命周期软件开发、代码库重构、SQL/函数调用以及需要极低 Token 成本的大规模私有化集群，DeepSeek-V4-Pro 是综合投资回报率最高的选择。...
 
 ### [告别单纯 Prompt：2026 年“环境缩放 (Environment Scaling)”如何重塑自主 Agent](https://blog.llmgo.top/articles/environment-scaling-agent-guide/)
-- 发布日期: 2026-09-07 | 标签: Agent架构 | 预计阅读: 预计阅读 10 分钟 | 字数: 约 2261 字
+- 发布日期: 2026-09-07 | 标签: AI Agent | 预计阅读: 预计阅读 10 分钟 | 字数: 约 2261 字
 - 概述: 剖析 2026 年大模型后训练的重大范式跃迁：为什么从文本自回归走向多任务环境沙箱博弈？结合 GLM-5.3 在 Terminal-Bench 3.0 的登顶实践，详解 Linux 容器编排、MCP 协议集成与零逃逸安全沙箱工程实战。
 - 核心 FAQ 解答:
   * Q: Q1: 环境缩放（Environment Scaling）与传统的强化学习（RLHF）在训练本质上有何不同？
@@ -229,7 +229,7 @@
     A: 这是由于缺乏显式的状态跟踪和失败归因机制。若仅将原始报错追加在上下文末尾，长文本累积会导致模型注意力稀释并重复无效尝试；应在运行时设计结构化的状态快照、差异对比（Diffing）与回溯逻辑，强制模型在连续多次失败后切换解题策略。 ---...
 
 ### [解密 2026 架构创新：Kimi Delta Attention 与 DeepSeek MLA 是如何干掉显存墙的？](https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/)
-- 发布日期: 2026-09-07 | 标签: 架构解密 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1881 字
+- 发布日期: 2026-09-07 | 标签: 推理系统 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1881 字
 - 概述: 在百万级长上下文与数万亿 MoE 时代，KV Cache 显存暴涨如何成为推理核心瓶颈？硬核剖析月之暗面 Kimi Delta Attention (KDA) 的增量状态演进与 DeepSeek 多头潜变量注意力 (MLA) 的低秩投影数学原理。
 - 核心 FAQ 解答:
   * Q: Q1: DeepSeek MLA 在部署时是否可以直接与 FP8 或 4-bit 量化叠加使用？
@@ -238,7 +238,7 @@
     A: 纯 SSM 架构在长程精确信息检索上容易产生退化。KDA 创新地保留了注意力机制的高保真查询通道，仅对背景语境冗余进行增量 Delta 递归更新，从而保持了极高的大海捞针召回率。...
 
 ### [让模型在运行中进化：从基础反思到基于 MCTS 的 Test-Time Compute 搜索](https://blog.llmgo.top/articles/agent-reflection-self-correction/)
-- 发布日期: 2026-07-16 | 标签: Agentic | 预计阅读: 预计阅读 7 分钟 | 字数: 约 1644 字
+- 发布日期: 2026-07-16 | 标签: AI Agent | 预计阅读: 预计阅读 7 分钟 | 字数: 约 1644 字
 - 概述: 大语言模型的潜力不止于预训练参数。本文带你深入探讨 Test-Time Compute 的前沿：从 Actor-Critic 双边架构，一路深入到利用蒙特卡洛树搜索（MCTS）解码 Agent 的自我纠错极限。
 - 核心 FAQ 解答:
   * Q: Q1: 为什么简单的“请检查上述回答并指出错误”往往会导致模型盲目反思甚至把对的改错？
@@ -249,7 +249,7 @@
     A: 业界成熟方案通常采用“小模型生成 (Actor) + 大模型裁决 (Critic)”的非对称组合：使用吞吐高、成本低的轻量模型负责代码初稿生成与局部修补，仅在节点终验和关键分支评估时唤醒大参数模型担任 Critic；或者在离线阶段用大模型蒸馏出专用的轻量级验证器，兼顾搜索广度与计算成本。...
 
 ### [2026 AI 开发范式：对抗复合误差的分布式 Agent 编排与量化 Evals 体系](https://blog.llmgo.top/articles/agent-orchestration-evals/)
-- 发布日期: 2026-07-15 | 标签: AI Engineering | 预计阅读: 预计阅读 9 分钟 | 字数: 约 2087 字
+- 发布日期: 2026-07-15 | 标签: AI Agent | 预计阅读: 预计阅读 9 分钟 | 字数: 约 2087 字
 - 概述: 当大模型走向复杂的企业级落地，如何通过分布式编排对抗链路误差复合？如何构建具有统计学置信度的 Evals 评估体系？本文带你从基础概念直击硬核底座。
 - 核心 FAQ 解答:
   * Q: Q1: 当多 Agent 协同任务链路很长时，如何从架构上防止“步步衰减”导致的整体崩塌？
@@ -269,7 +269,7 @@
     A: 因为每一次失败尝试都会被追加到上下文中，导致上下文污染并放大模型的错误偏见。通过Loop工程的独立裁判(Checker)机制隔离上下文，并设置安全闸门，可以有效阻断死循环。...
 
 ### [Agent 可观测性与调试：从黑盒到白盒的进阶之路](https://blog.llmgo.top/articles/agent-observability-debugging/)
-- 发布日期: 2026-06-15 | 标签: Evaluation | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1819 字
+- 发布日期: 2026-06-15 | 标签: AI Agent | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1819 字
 - 概述: AI Agent 不再是传统软件，调试的是推理过程而非代码。本文详细探讨 Trajectory Evaluation、LLM-as-a-Judge 和主流 Agent 观测工具（LangSmith, Langfuse 等）的实战应用。
 - 核心 FAQ 解答:
   * Q: Q1: 引入全链路 Trace 追踪后，海量 Token 和 Payload 导致存储成本剧增，该如何治理？
@@ -289,7 +289,7 @@
     A: 不能盲目依赖模型标称的百万 Token 窗口，应严格遵循 W-S-C-I 框架中的写入与检索策略。将长文本和中间执行产物交由外部存储与 [RAG 检索增强架构](/articles/rag-in-practice/) 按需切片拉取，同时限制单次加载的上下文长度，彻底规避“迷失在中间（Lost in the Middle）”与上下文污染。...
 
 ### [AI 编程驾驭指南：从「帮我写个 XX」到架构编排者](https://blog.llmgo.top/articles/ai-coding-mastery/)
-- 发布日期: 2026-05-04 | 标签: AI 工程 | 预计阅读: 预计阅读 25 分钟 | 字数: 约 6219 字
+- 发布日期: 2026-05-04 | 标签: AI Agent | 预计阅读: 预计阅读 25 分钟 | 字数: 约 6219 字
 - 概述: 工具再多也没用——决定 AI 编程质量的是驾驭方法论。本文深入拆解六大核心方法（Spec-Driven、上下文工程、TDD 验证环、多 Agent 编排、高级 Prompt、会话卫生），附 20+ 工具矩阵、五大反模式避坑指南和完整实战工作流。
 - 核心 FAQ 解答:
   * Q: Q1: 项目中的 `AGENTS.md` 规则文件与模块化 `Skills` 应该如何协同配合？
@@ -300,7 +300,7 @@
     A: 首要原则是“先写测试再写实现（TDD）”并强制执行“只读规划（Plan Mode）”。在第一轮提示中明确禁止 AI 生成任何实现代码，仅要求其产出包含修改文件清单与依赖分析的 PLAN.md；待人工审查确认边界后，再启动独立会话分块执行代码修改并运行测试，避免大范围无约束扩散。...
 
 ### [拒绝榜单刷分：如何构筑契合业务的 LLM 评估体系](https://blog.llmgo.top/articles/llm-evaluation-guide/)
-- 发布日期: 2026-04-22 | 标签: Evaluation | 预计阅读: 预计阅读 12 分钟 | 字数: 约 2933 字
+- 发布日期: 2026-04-22 | 标签: 评测与趋势 | 预计阅读: 预计阅读 12 分钟 | 字数: 约 2933 字
 - 概述: 不再迷恋堆砌代码，建立大模型评估思维才是核心。本文深度剖析 LLM-as-a-Judge 的底层偏差、Ragas 算分的数学机制，以及如何用概率思维重塑 CI/CD 防线。
 - 核心 FAQ 解答:
   * Q: Q1: 通用榜单（如 MMLU、GSM8k）高分在企业垂直业务落地中有多大参考价值？
@@ -311,7 +311,7 @@
     A: 自动化 LLM 裁判的核心优势是高吞吐、低成本与毫秒级反馈，非常适合嵌入 CI/CD 自动化流水线用于拦截明显的幻觉与格式破坏。人工评测则应聚焦于 5% 的高风险边界安全、主观体验与模糊语义裁决，并作为终审元标尺（Ground Truth）定期校验和修正自动化评委池的打分偏差。 ---...
 
 ### [大模型量化实战手册：从零开始，四条路线全覆盖](https://blog.llmgo.top/articles/quantization-hands-on-guide/)
-- 发布日期: 2026-04-22 | 标签: 量化部署 | 预计阅读: 预计阅读 22 分钟 | 字数: 约 5299 字
+- 发布日期: 2026-04-22 | 标签: 推理系统 | 预计阅读: 预计阅读 22 分钟 | 字数: 约 5299 字
 - 概述: 告别理论焦虑，手把手教你大模型量化全流程实操：涵盖 GGUF 本地运行（Qwen3-8B-Q4_K_M.gguf、llama.cpp、Ollama）、AWQ 与 GPTQ 动手压缩，以及 vLLM FP8 生产部署与 QLoRA 微调，每条路线均附完整代码。
 - 核心 FAQ 解答:
   * Q: Q1: AWQ、GPTQ 与 GGUF 在工程落地中应该如何选型？
@@ -322,7 +322,7 @@
     A: 标准工程评测分为三步：第一步运行 PPL（Perplexity 困惑度测试，如 WikiText-2），若困惑度增量在 0.2 以内属于安全范围；第二步运行通用评测集（如 MMLU、GSM8k）；第三步必须在具体业务 Prompt 测试集中进行回归校验，防范代码与 JSON 格式化输出崩坏。更多评测工具配置可参考 [大模型系统化评测指南](/articles/llm-evaluation-guide/)。...
 
 ### [AI 关键技术的历史抉择：为什么每次都选了「那一个」？](https://blog.llmgo.top/articles/ai-history-choices/)
-- 发布日期: 2026-04-15 | 标签: 行业趋势 | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4570 字
+- 发布日期: 2026-04-15 | 标签: 评测与趋势 | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4570 字
 - 概述: 回顾 AI 七十年发展史上的六次关键技术岔路口，剖析每一次「历史选择」背后的算力约束、数据红利与可扩展性逻辑。
 - 核心 FAQ 解答:
   * Q: Q1: 为什么 Transformer 能够彻底取代在自然语言领域统治多年的 RNN/LSTM 架构？
@@ -333,7 +333,7 @@
     A: 短期内全盘替代的可能性极低，但混合架构（Hybrid Attention-SSM）已在长文本与端侧领域形成实质性突破。Transformer 凭借强大的 KV Cache 生态与成熟的底层算子库占据坚固的工业生态位，而新架构主要解决超长序列的 $O(1)$ 推理显存瓶颈；关注前沿落地表现可参考 [2026 年主流大模型横评](/articles/model-comparison-2026/) 中的实际工程选型建议。 ---...
 
 ### [vLLM 在线推理服务实战：从架构原理到 Token 计费，一文搞定生产部署](https://blog.llmgo.top/articles/vllm-serving-guide/)
-- 发布日期: 2026-04-14 | 标签: 推理部署 | 预计阅读: 预计阅读 41 分钟 | 字数: 约 10146 字
+- 发布日期: 2026-04-14 | 标签: 推理系统 | 预计阅读: 预计阅读 41 分钟 | 字数: 约 10146 字
 - 概述: 深入浅出解析 vLLM 核心架构（PagedAttention、连续批处理、APC 前缀缓存、推测解码），面向在线推理服务场景，手把手教你搭建 OpenAI 兼容 API、调优性能参数、搭建 Token 计费体系。附完整 Docker 部署方案与 Prometheus 监控配置。
 - 核心 FAQ 解答:
   * Q: Q1: vLLM 启动时报错 CUDA out of memory (OOM) 怎么排查？
@@ -344,7 +344,7 @@
     A: vLLM 的核心优势在于高并发生产级吞吐，依托 PagedAttention、连续批处理（Continuous Batching）和自动前缀缓存（APC），在高并发与长文本混合请求下的吞吐量是轻量级本地引擎的 3~5 倍，且天然兼容 OpenAI 完整 API 协议。更多底层显卡架构可参考 [NVIDIA GPU 封装架构演进](/articles/nvidia-gpu-package-architecture/)。...
 
 ### [NVIDIA GPU 驱动栈全视野解析：从内核模块到容器运行时的包关系图谱](https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/)
-- 发布日期: 2026-04-05 | 标签: GPU架构 | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4475 字
+- 发布日期: 2026-04-05 | 标签: 推理系统 | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4475 字
 - 概述: 深度拆解 Linux 下 NVIDIA GPU 烦杂的驱动包结构。本文为您详解 nvidia-dkms、libnvidia、nvidia-utils 与 driver metapackage 之间的五层架构，并按「Docker 模型服务器」、「个人桌面」、「DGX 算力集群」等核心场景提供企业级安装最佳实践和避坑指南。
 - 核心 FAQ 解答:
   * Q: Q1: nvidia-smi 能够正常显示，但运行 PyTorch 或 CUDA 程序却报错 "CUDA error: no kernel image is available" 或 "No CUDA GPUs are available"，该如何排查？
@@ -355,7 +355,7 @@
     A: 此类错误绝大多数发生在系统执行自动补丁更新之后。核心排查顺序为：先验证宿主机 nvidia-container-toolkit 是否已通过 nvidia-ctk runtime configure --runtime=docker 注入 Docker 守护进程配置并重启服务；再确认宿主机 Linux 内核是否发生静默升级，导致旧内核下的预编译驱动模块无法被新内核加载。如果显卡显存处于极限吃紧状态，也可参考 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 压缩模型显存，避免容器初始化分配显存失败。 ---...
 
 ### [大模型量化精度全景图：从 FP32 到 1-bit，精度损失到底有多大？](https://blog.llmgo.top/articles/quantization-precision-guide/)
-- 发布日期: 2026-03-31 | 标签: 量化部署 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4920 字
+- 发布日期: 2026-03-31 | 标签: 推理系统 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4920 字
 - 概述: 全面对比 FP32、BF16、FP16、FP8、INT8、INT4、NF4、FP4、1.58-bit 等所有主流量化精度格式，用真实 Benchmark 数据告诉你：每降低一级精度，模型到底会“变蠢”多少。含 FP8 vs INT8 深度技术对比。
 - 核心 FAQ 解答:
   * Q: Q1: 在大模型训练与推理中，FP16 与 BF16 该如何抉择？
@@ -377,7 +377,7 @@
     A: 严禁采用简单的全量历史滑动窗口截断，这会导致关键系统指令或早期事实丢失。推荐采用分级治理：工具调用结果及时摘要化、利用 Working Memory 显式沉淀已验证结论、对早期非核心轮次进行周期性压缩归纳（Digest）。更系统化的上下文治理方案可参阅 [上下文工程全指南](/articles/context-engineering-guide/)。 ---...
 
 ### [MCP 协议深度解析：AI 的「USB-C 接口」](https://blog.llmgo.top/articles/mcp-guide/)
-- 发布日期: 2026-03-12 | 标签: MCP | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4609 字
+- 发布日期: 2026-03-12 | 标签: AI Agent | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4609 字
 - 概述: 从架构原理到实战开发，完整解析 Model Context Protocol。含 Python SDK 实战、安全机制、生态对比。
 - 核心 FAQ 解答:
   * Q: Q1: MCP 和传统 API 有什么本质区别？
@@ -388,7 +388,7 @@
     A: MCP 规范原生内置了严格的安全与权限控制体系（如 OAuth 2.0 授权、增量权限范围协商和高危操作用户强制确认机制）。但在生产落地时，必须在操作系统层实现沙盒隔离（如 Docker/gVisor），严格审计 Tool 的执行白名单与参数边界，防范提示词注入引发的未授权数据泄露。...
 
 ### [Skills 深度解析：给 AI 编程助手装上「专业大脑」](https://blog.llmgo.top/articles/skills-guide/)
-- 发布日期: 2026-03-12 | 标签: Skills | 预计阅读: 预计阅读 25 分钟 | 字数: 约 6221 字
+- 发布日期: 2026-03-12 | 标签: AI Agent | 预计阅读: 预计阅读 25 分钟 | 字数: 约 6221 字
 - 概述: 从核心原理到跨平台实战，完整解析 AI 编程助手的 Skills 系统。涵盖 SKILL.md 机制、六大平台对比、实战编写指南与最佳实践。
 - 核心 FAQ 解答:
   * Q: Q1: Skills 与传统 System Prompt 的本质区别是什么？
@@ -399,7 +399,7 @@
     A: 两者的角色完全互补：Skills 负责教大模型如何正确思考与执行流程（即最佳实践、规范清单、架构约束和代码模板）；而 [MCP（Model Context Protocol）](/articles/mcp-guide/) 负责为大模型提供与外部世界交互的实际工具（如操作数据库客户端、调用外部 API、读取沙箱环境）。Skills 指导大模型何时以及如何以合规参数调用对应的 MCP 工具。...
 
 ### [大模型提示工程实践指南](https://blog.llmgo.top/articles/prompt-engineering-guide/)
-- 发布日期: 2026-03-09 | 标签: 提示工程 | 预计阅读: 预计阅读 12 分钟 | 字数: 约 2769 字
+- 发布日期: 2026-03-09 | 标签: 模型工程 | 预计阅读: 预计阅读 12 分钟 | 字数: 约 2769 字
 - 概述: 深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。
 - 核心 FAQ 解答:
   * Q: Q1: Few-shot 和 Zero-shot 的工程权衡是什么？
@@ -408,7 +408,7 @@
     A: System Prompt 应该设定明确的角色、职责边界和约束条件。不要在系统提示词中硬编码过多的背景知识，而是应该使用系统化的 [上下文工程](/articles/context-engineering-guide/) 来按需提供背景信息。同时，使用 Markdown 结构化你的 System Prompt 可以帮助模型更好地理解指令层级。...
 
 ### [2026 年 AI 大模型十一大趋势深度解析](https://blog.llmgo.top/articles/ai-trends-2026/)
-- 发布日期: 2026-03-07 | 标签: 行业趋势 | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4369 字
+- 发布日期: 2026-03-07 | 标签: 评测与趋势 | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4369 字
 - 概述: 从 Thinking 推理模式到 Agent 化应用，深度剖析 2026 年 AI 大模型领域最值得关注的十一大核心发展趋势。
 - 核心 FAQ 解答:
   * Q: Q1: 面对 2026 年的技术演进，初学者应该优先学习 AI Agent 架构还是模型微调（Fine-tuning）？
@@ -428,7 +428,7 @@
     A: 通过结合 Redis持久化机制与分布式的任务编排引擎（如 Temporal），可以使 Agent 具备极强的并发处理能力和容灾恢复能力。这比传统的单体同步架构更稳定。...
 
 ### [RAG 检索增强生成实战：企业级检索策略与高并发工程最佳实践](https://blog.llmgo.top/articles/rag-in-practice/)
-- 发布日期: 2026-03-03 | 标签: RAG | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4406 字
+- 发布日期: 2026-03-03 | 标签: 模型工程 | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4406 字
 - 概述: 从向量数据库选型到 Embedding 策略，深度剖析 Naive RAG、混合检索、HyDE 与 GraphRAG 架构选型矩阵，总结 7 大企业级检索增强生成最佳实践，含 Pinecone 与 Weaviate 性能实测。
 - 核心 FAQ 解答:
   * Q: Q1: 如何科学选型和使用检索增强生成策略？
@@ -439,7 +439,7 @@
     A: 遇到检索不准确的情况，应优先检查文本切分策略与 Embedding 模型的匹配性。对于复杂的企业级数据，引入多向量检索和基于 RRF 算法的混合搜索能显著提升最终的召回率。...
 
 ### [2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro](https://blog.llmgo.top/articles/model-comparison-2026/)
-- 发布日期: 2026-03-01 | 标签: 模型评测 | 预计阅读: 预计阅读 11 分钟 | 字数: 约 2628 字
+- 发布日期: 2026-03-01 | 标签: 评测与趋势 | 预计阅读: 预计阅读 11 分钟 | 字数: 约 2628 字
 - 概述: 从推理能力、编码水平、上下文窗口到 API 定价，全方位对比 2026 年三大主流大模型的实际表现与选型策略。
 - 核心 FAQ 解答:
   * Q: Q1: 在选择 GPT-5.4、Claude 4.6 系列和 Gemini 3.1 Pro 时，核心决策逻辑是什么？
@@ -448,7 +448,7 @@
     A: 并非必须。当前国内头部大模型在中文语义理解和本地化合规方面已经具备明显优势，且在API定价层级（API pricing tiers）上更具性价比。对于对通用推理能力要求极高的场景，海外模型仍是首选。关于国产模型的详细对比，请查阅[国产大模型对比评测](/articles/domestic-llm-comparison-2026/)。...
 
 ### [多模态大模型入门指南](https://blog.llmgo.top/articles/multimodal-guide/)
-- 发布日期: 2026-02-28 | 标签: 多模态 | 预计阅读: 预计阅读 10 分钟 | 字数: 约 2337 字
+- 发布日期: 2026-02-28 | 标签: 模型工程 | 预计阅读: 预计阅读 10 分钟 | 字数: 约 2337 字
 - 概述: 探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。
 - 核心 FAQ 解答:
   * Q: Q1: 多模态大模型如何处理长视频输入？
@@ -457,7 +457,7 @@
     A: 多模态模型通常基于 Vision Transformer (ViT) 将图片切割为 Patch。高分辨率图像会导致 Token 消耗成倍增加，因此建议在后端执行降采样，以平衡成本和解析精度。...
 
 ### [大模型微调全流程指南：底层工作原理、高价值落地用例与生产实战](https://blog.llmgo.top/articles/fine-tuning-guide/)
-- 发布日期: 2026-02-25 | 标签: 微调 | 预计阅读: 预计阅读 16 分钟 | 字数: 约 3874 字
+- 发布日期: 2026-02-25 | 标签: 模型工程 | 预计阅读: 预计阅读 16 分钟 | 字数: 约 3874 字
 - 概述: 深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。
 - 核心 FAQ 解答:
   * Q: Q1: 通俗解释大模型微调的底层工作机制是什么？
@@ -514,7 +514,7 @@
     A: Through persistent checkpointer serialization coupled with asynchronous event webhooks. When an FSM routes to a HumanInTheLoop node for high-risk approvals, the engine serializes the complete AgentState snapshot to a persistent store (e.g., PostgreSQL or Redis) tagged with a session_id and checkpoin...
 
 ### [Under the Hood of Browser-use (100k+ Stars): DOM Tree Distillation, Vision Grounding, and Production Web Agents](https://blog.llmgo.top/en/articles/browser-use-agent-architecture/)
-- Date: 2026-09-18 | Tag: Autonomous Agents | Read: 7 min read | Words: 1581 words
+- Date: 2026-09-18 | Tag: AI Agent | Read: 7 min read | Words: 1581 words
 - Summary: Why do traditional Selenium and Playwright scripts constantly break against modern web frontends? We dissect the architecture of Browser-use, the breakout open-source project with over 100k GitHub stars: DOM tree pruning, Set-of-Mark (SoM) visual coordinate grounding, state machine resilience, and end-to-end production recipes.
 - Key FAQ Insights:
   * Q: Q1: Does capturing screenshots on every step cause token costs to explode?
@@ -536,7 +536,7 @@
     A: Yes. SGLang natively supports FP8, AWQ, GPTQ, and Marlin kernels (for quantization trade-offs, review our [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/) and [Quantization Precision Guide](/en/articles/quantization-precision-guide/)). Furthermore, SGLang natively integrates...
 
 ### [Speculative Decoding in Production: From Draft Models to EAGLE-3 Dynamic Trees for 3x-5x Lossless Acceleration](https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/)
-- Date: 2026-09-18 | Tag: Performance Acceleration | Read: 6 min read | Words: 1438 words
+- Date: 2026-09-18 | Tag: Inference Systems | Read: 6 min read | Words: 1438 words
 - Summary: Why is autoregressive LLM decoding fundamentally bottlenecked by memory bandwidth? We dissect the mathematical proof of lossless distribution invariance in speculative decoding, trace its evolution from dual-model drafts to EAGLE-2/3 dynamic draft trees, and provide production configurations in vLLM and SGLang.
 - Key FAQ Insights:
   * Q: Q1: Does speculative decoding require retraining the base model?
@@ -547,7 +547,7 @@
     A: Realized acceleration is strictly bounded by the empirical acceptance rate $\alpha$. In programming languages (Python/Java) and JSON extraction where syntax is highly structured, acceptance rates exceed 85%, yielding 4x+ speedups. In open-ended conversational domains with high sampling temperatures ...
 
 ### [Test-Time Compute and GRPO in Practice: From PPO to Critic-Free Reinforcement Learning](https://blog.llmgo.top/en/articles/test-time-compute-grpo/)
-- Date: 2026-09-18 | Tag: Reinforcement Learning | Read: 8 min read | Words: 1851 words
+- Date: 2026-09-18 | Tag: LLM Engineering | Read: 8 min read | Words: 1851 words
 - Summary: A deep dive into the paradigm shift from pre-training scaling laws to test-time compute. We deconstruct the mathematical derivation of DeepSeek-R1's Group Relative Policy Optimization (GRPO), critic-free architecture advantages, emergent self-reflection in long reasoning traces, and a complete, reproducible hands-on implementation.
 - Key FAQ Insights:
   * Q: Q1: How does GRPO converge reliably without an explicit Critic network?
@@ -558,7 +558,7 @@
     A: DPO (Direct Preference Optimization) is an offline supervised preference algorithm operating on static pairs of chosen and rejected responses $(y_w, y_l)$. It cannot discover novel reasoning pathways absent from the static dataset. GRPO is an active, online reinforcement learning algorithm where the...
 
 ### [Deploying 2026 Frontier Open Models On-Premise: Running DeepSeek-V4 and Kimi K3 on Multi-Node GPU Clusters](https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/)
-- Date: 2026-09-07 | Tag: Deployment Guide | Read: 3 min read | Words: 627 words
+- Date: 2026-09-07 | Tag: Inference Systems | Read: 3 min read | Words: 627 words
 - Summary: Complete enterprise on-premise deployment guide for 1.6T - 2.8T MoE open-weight models: Hardware planning across GPU clusters, vLLM / SGLang distributed TP/PP configuration, FP8 dynamic quantization, and high-concurrency API gateway production setups.
 - Key FAQ Insights:
   * Q: Q1: How do we diagnose cross-node NCCL timeouts or All-to-All hangs when deploying DeepSeek-V4?
@@ -569,7 +569,7 @@
     A: Chunked Prefill breaks large context prompts into uniform token chunks that are co-scheduled alongside decoding steps. This deliberately prevents a single long-context prompt from monopolizing all GPU compute cores, drastically improving P99 tail latency and overall system concurrency at the cost of...
 
 ### [2026 Frontier Chinese LLMs Face-off: Kimi K3 vs GLM-5.3 vs DeepSeek-V4 Practical Benchmark & Architecture Selection](https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/)
-- Date: 2026-09-07 | Tag: Model Benchmark | Read: 4 min read | Words: 900 words
+- Date: 2026-09-07 | Tag: Evaluation & Trends | Read: 4 min read | Words: 900 words
 - Summary: In-depth evaluation of China's top three frontier models in 2026: Kimi K3's 2.8T KDA attention, GLM-5.3's environment-scaled terminal execution, and DeepSeek-V4-Pro's 1.6T MoE software engineering prowess.
 - Key FAQ Insights:
   * Q: Q1: What are the specific hardware prerequisites for self-hosting DeepSeek-V4 or Kimi K3?
@@ -580,7 +580,7 @@
     A: For nuanced Chinese legal documents, annual financial disclosures, and multi-turn conversational agents with ultra-long memory, Kimi K3 delivers superior fidelity and context retention. For enterprise Linux DevOps orchestration, terminal automation, and security sandboxes, GLM-5.3 dominates. For ent...
 
 ### [Beyond Simple Prompts: How Environment Scaling Is Reshaping Autonomous Agents in 2026](https://blog.llmgo.top/en/articles/environment-scaling-agent-guide/)
-- Date: 2026-09-07 | Tag: Agent Architecture | Read: 5 min read | Words: 1020 words
+- Date: 2026-09-07 | Tag: AI Agent | Read: 5 min read | Words: 1020 words
 - Summary: Analyzing the major post-training paradigm shift of 2026: from text autoregression to multi-environment sandboxed RL. Deep dive into GLM-5.3's Terminal-Bench 3.0 breakthrough, Linux container orchestration, MCP protocol integration, and sandboxed agent engineering.
 - Key FAQ Insights:
   * Q: Q1: How does Environment Scaling differ fundamentally from traditional RLHF?
@@ -591,7 +591,7 @@
     A: Infinite loops typically occur when error messages simply append to an ever-growing prompt context, causing attention degradation where the model repeats failing commands. Production runtimes must implement structured state diffing, explicit trajectory memory, and backtracking mechanisms that interr...
 
 ### [Demystifying 2026 Architecture Breakthroughs: How Kimi Delta Attention and DeepSeek MLA Conquered the Memory Wall](https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/)
-- Date: 2026-09-07 | Tag: Deep Architecture | Read: 3 min read | Words: 609 words
+- Date: 2026-09-07 | Tag: Inference Systems | Read: 3 min read | Words: 609 words
 - Summary: In the era of million-token context windows and trillion-parameter MoE, how KV Cache memory saturation became the core bottleneck. Deep mathematical and architectural breakdown of Moonshot's KDA and DeepSeek's MLA low-rank projections.
 - Key FAQ Insights:
   * Q: Q1: Can DeepSeek MLA be stacked with FP8 or INT4 quantization?
@@ -600,7 +600,7 @@
     A: Pure SSMs frequently suffer from information decay on exact multi-hop recall benchmarks. KDA resolves this by retaining a direct attention query mechanism while compressing contextual background token redundancy into an incremental recurrent delta state....
 
 ### [Evolving Models at Runtime: From Basic Reflection to MCTS-based Test-Time Compute](https://blog.llmgo.top/en/articles/agent-reflection-self-correction/)
-- Date: 2026-07-16 | Tag: Agentic | Read: 4 min read | Words: 903 words
+- Date: 2026-07-16 | Tag: AI Agent | Read: 4 min read | Words: 903 words
 - Summary: The potential of LLMs extends beyond pre-trained parameters. We dive deep into the frontier of Test-Time Compute: from Actor-Critic architecture to leveraging Monte Carlo Tree Search (MCTS) to decode the limits of Agent self-correction.
 - Key FAQ Insights:
   * Q: Q1: Why does a generic "Please review your previous answer and fix bugs" prompt frequently degrade correct answers?
@@ -611,7 +611,7 @@
     A: A proven industry pattern pairs an agile, low-cost model as the Actor (generating rapid implementation drafts) with a frontier reasoning model acting strictly as the Critic (evaluating state quality and verifying execution artifacts). This asymmetrical architecture captures over 90% of frontier mode...
 
 ### [2026 AI Paradigm Shift: Distributed Agent Orchestration & Evals to Combat Error Compounding](https://blog.llmgo.top/en/articles/agent-orchestration-evals/)
-- Date: 2026-07-15 | Tag: AI Engineering | Read: 5 min read | Words: 1098 words
+- Date: 2026-07-15 | Tag: AI Agent | Read: 5 min read | Words: 1098 words
 - Summary: As LLMs move into complex enterprise production, how do we use distributed orchestration to combat error compounding? How do we build a statistically significant Evals system?
 - Key FAQ Insights:
   * Q: Q1: How can multi-agent systems mathematically prevent error compounding across long execution graphs?
@@ -631,7 +631,7 @@
     A: Because every failed attempt is appended to the context, causing context pollution and amplifying the model's error bias. By isolating the context with Loop Engineering's independent referee (Checker) mechanism and setting safety gates, doom-loops can be effectively blocked....
 
 ### [Agent Observability & Debugging: The Path from Black Box to White Box](https://blog.llmgo.top/en/articles/agent-observability-debugging/)
-- Date: 2026-06-15 | Tag: Evaluation | Read: 5 min read | Words: 1018 words
+- Date: 2026-06-15 | Tag: AI Agent | Read: 5 min read | Words: 1018 words
 - Summary: AI Agents are not traditional software; we are debugging the reasoning process rather than the code itself. This article explores Trajectory Evaluation, LLM-as-a-Judge, and practical applications of mainstream Agent observability tools like LangSmith and Langfuse.
 - Key FAQ Insights:
   * Q: Q1: How do we mitigate explosive storage costs when logging full-fidelity multi-span agent traces?
@@ -651,7 +651,7 @@
     A: Rather than naively relying on million-token nominal limits, developers must enforce the Write and Select strategies within the W-S-C-I framework. Offload intermediate step outputs and raw document dumps into external storage and selectively pull high-SNR snippets on demand via [retrieval-augmented ...
 
 ### [AI Coding Mastery: From 'Build Me an X' to Architecture Orchestrator](https://blog.llmgo.top/en/articles/ai-coding-mastery/)
-- Date: 2026-05-04 | Tag: AI Engineering | Read: 15 min read | Words: 3682 words
+- Date: 2026-05-04 | Tag: AI Agent | Read: 15 min read | Words: 3682 words
 - Summary: Tools don't matter — methodology does. A deep dive into six core methods for mastering AI coding: Spec-Driven Development, Context Engineering, TDD Verification Loops, Multi-Agent Orchestration, Advanced Prompting, and Session Hygiene. Plus a 20+ tool matrix and five anti-patterns to avoid.
 - Key FAQ Insights:
   * Q: Q1: How should project-level `AGENTS.md` rules coordinate with modular `Skills`?
@@ -662,7 +662,7 @@
     A: Enforce a strict two-stage protocol: mandate a read-only "Plan Mode" where the assistant first generates a PLAN.md detailing affected files and dependency risks without touching source code. Once you review and approve the plan, execute changes incrementally in isolated sessions verified by determin...
 
 ### [Reject Benchmark Hacking: How to Build an LLM Evaluation System for Your Business (LLM-as-a-Judge)](https://blog.llmgo.top/en/articles/llm-evaluation-guide/)
-- Date: 2026-04-22 | Tag: Evaluation | Read: 7 min read | Words: 1643 words
+- Date: 2026-04-22 | Tag: Evaluation & Trends | Read: 7 min read | Words: 1643 words
 - Summary: Cease the obsession with writing more code; shift focus to deep evaluation thinking. We deconstruct LLM-as-a-Judge biases, the mathematics behind metrics, and reshaping CI/CD defenses for probabilistic systems.
 - Key FAQ Insights:
   * Q: Q1: Are high benchmark scores like MMLU meaningful for enterprise business scenarios?
@@ -673,7 +673,7 @@
     A: Automated judges are essential for continuous integration (CI/CD) and regression suites, delivering rapid, cost-effective detection of hallucination and schema violations across large batches. Human evaluation should be reserved for high-stakes edge cases, compliance verification, and periodic meta-...
 
 ### [LLM Quantization Hands-On Guide: Four Routes from Zero to Production](https://blog.llmgo.top/en/articles/quantization-hands-on-guide/)
-- Date: 2026-04-22 | Tag: Quantization | Read: 10 min read | Words: 2472 words
+- Date: 2026-04-22 | Tag: Inference Systems | Read: 10 min read | Words: 2472 words
 - Summary: Hands-on LLM quantization guide: download and run GGUF models (Qwen3-8B-Q4_K_M.gguf, llama.cpp, Ollama), quantize with AWQ/GPTQ, and deploy vLLM FP8 in production with copy-paste code.
 - Key FAQ Insights:
   * Q: Q1: How should I choose between AWQ, GPTQ, and GGUF in production?
@@ -684,7 +684,7 @@
     A: Follow a three-stage validation pipeline: first, measure PPL (Perplexity) on a clean benchmark such as WikiText-2 (a degradation delta under 0.2 is standard); second, run generic benchmark evaluations (e.g. MMLU, GSM8k); third, execute automated regression tests on domain-specific prompts to prevent...
 
 ### [The Critical Crossroads in AI History: Why Was *That One* Chosen Every Time?](https://blog.llmgo.top/en/articles/ai-history-choices/)
-- Date: 2026-04-15 | Tag: Industry Trends | Read: 10 min read | Words: 2356 words
+- Date: 2026-04-15 | Tag: Evaluation & Trends | Read: 10 min read | Words: 2356 words
 - Summary: A retrospective of six pivotal technology crossroads in AI's seventy-year history, dissecting the compute constraints, data dividends, and scalability logic behind each historical choice.
 - Key FAQ Insights:
   * Q: Q1: Why did the Transformer architecture decisively eclipse RNN/LSTM in sequence modeling?
@@ -695,7 +695,7 @@
     A: An outright replacement is unlikely in the immediate term, but hybrid architectures (combining Attention with State Space Models) are already capturing critical niches. Transformers enjoy a deeply entrenched ecosystem of hardware-optimized kernels and KV Cache infrastructure, whereas SSMs specifical...
 
 ### [vLLM Online Inference in Production: From Architecture to Token Billing](https://blog.llmgo.top/en/articles/vllm-serving-guide/)
-- Date: 2026-04-14 | Tag: Inference Deployment | Read: 14 min read | Words: 3369 words
+- Date: 2026-04-14 | Tag: Inference Systems | Read: 14 min read | Words: 3369 words
 - Summary: A deep dive into vLLM's core architecture (PagedAttention, continuous batching, APC prefix caching, speculative decoding) for online serving. Covers OpenAI-compatible API setup, performance tuning, token billing systems, and complete Docker deployment with Prometheus monitoring.
 - Key FAQ Insights:
   * Q: Q1: How to troubleshoot CUDA out of memory (OOM) when launching vLLM?
@@ -706,7 +706,7 @@
     A: vLLM is specifically engineered for high-concurrency enterprise throughput. Utilizing PagedAttention, Continuous Batching, and Chunked Prefill with Automatic Prefix Caching (APC), vLLM achieves 3x to 5x higher sustained throughput under variable batch requests while exposing a native OpenAI-compatib...
 
 ### [Mapping the NVIDIA GPU Driver Stack: From Kernel Modules to Container Runtimes](https://blog.llmgo.top/en/articles/nvidia-gpu-package-architecture/)
-- Date: 2026-04-05 | Tag: GPU Architecture | Read: 11 min read | Words: 2564 words
+- Date: 2026-04-05 | Tag: Inference Systems | Read: 11 min read | Words: 2564 words
 - Summary: A deep dive into the complex Linux NVIDIA GPU driver package structures. Understand the 5-layer architecture bridging nvidia-dkms, libnvidia, nvidia-utils, and driver metapackages. Plus, discover enterprise best practices and troubleshooting guides for 4 core deployment scenarios, including Docker model servers and DGX clusters.
 - Key FAQ Insights:
   * Q: Q1: How do GPU host driver versions (Driver API) interact with application CUDA Toolkit versions (Runtime API)?
@@ -717,7 +717,7 @@
     A: These errors most commonly arise following an automatic host Linux kernel update that disconnects pre-compiled kernel modules from userspace libraries. First, verify that nvidia-ctk runtime configure --runtime=docker has configured the Docker daemon and restart the Docker service. If the host kernel...
 
 ### [LLM Quantization Precision Guide: From FP32 to 1-bit, How Much Quality Do You Actually Lose?](https://blog.llmgo.top/en/articles/quantization-precision-guide/)
-- Date: 2026-03-31 | Tag: Quantization | Read: 12 min read | Words: 2813 words
+- Date: 2026-03-31 | Tag: Inference Systems | Read: 12 min read | Words: 2813 words
 - Summary: A comprehensive comparison of FP32, BF16, FP16, FP8, INT8, INT4, NF4, FP4, 1.58-bit and all major quantization formats — with real benchmark data and an in-depth FP8 vs INT8 technical analysis.
 - Key FAQ Insights:
   * Q: Q1: How should I choose between FP16 and BF16 for LLM training and inference?
@@ -739,7 +739,7 @@
     A: Avoid naive sliding-window truncations that discard foundational system instructions or critical historical constraints. Instead, employ hierarchical context hygiene: prune verbose raw tool outputs into compact summaries, persist stable conclusions into dedicated working memory structures, and perio...
 
 ### [MCP Deep Dive: The USB-C Port for AI](https://blog.llmgo.top/en/articles/mcp-guide/)
-- Date: 2026-03-12 | Tag: MCP | Read: 11 min read | Words: 2635 words
+- Date: 2026-03-12 | Tag: AI Agent | Read: 11 min read | Words: 2635 words
 - Summary: From architecture to hands-on development, a complete guide to the Model Context Protocol. Includes Python SDK tutorial, security mechanisms, and ecosystem comparison.
 - Key FAQ Insights:
   * Q: Q1: How does MCP fundamentally differ from traditional APIs?
@@ -750,7 +750,7 @@
     A: MCP incorporates robust native security primitives, including OAuth 2.0 authorization, incremental scope negotiation, and human-in-the-loop confirmation prompts for high-impact actions. In enterprise production deployments, teams should enforce containerized sandbox isolation (via Docker or gVisor) ...
 
 ### [Skills Deep Dive: Give Your AI Coding Assistant a Professional Brain](https://blog.llmgo.top/en/articles/skills-guide/)
-- Date: 2026-03-12 | Tag: Skills | Read: 15 min read | Words: 3559 words
+- Date: 2026-03-12 | Tag: AI Agent | Read: 15 min read | Words: 3559 words
 - Summary: From core principles to cross-platform practice, a complete guide to the AI coding assistant Skills system. Covers SKILL.md mechanics, six-platform comparison, hands-on writing guide, and best practices.
 - Key FAQ Insights:
   * Q: Q1: What is the fundamental difference between Skills and System Prompts?
@@ -761,7 +761,7 @@
     A: Skills and MCP are complementary layers of the AI developer stack: Skills define how the agent reasons and executes (standards, decision heuristics, lint constraints, and style templates), while [MCP (Model Context Protocol)](/en/articles/mcp-guide/) provides the physical hands to interact with syst...
 
 ### [Prompt Engineering Practice Guide](https://blog.llmgo.top/en/articles/prompt-engineering-guide/)
-- Date: 2026-03-09 | Tag: Prompt Engineering | Read: 7 min read | Words: 1711 words
+- Date: 2026-03-09 | Tag: LLM Engineering | Read: 7 min read | Words: 1711 words
 - Summary: An in-depth exploration of designing effective prompts to improve model output quality. Covers core techniques like Few-Shot, Chain-of-Thought, and ReAct with practical examples.
 - Key FAQ Insights:
   * Q: Q1: What are the engineering tradeoffs between Few-shot and Zero-shot?
@@ -770,7 +770,7 @@
     A: A System Prompt should establish a clear persona, boundaries, and strict constraints. Avoid hardcoding extensive background knowledge directly; instead, rely on [context engineering](/en/articles/context-engineering-guide/) to supply information on demand. Structuring your System Prompt with Markdow...
 
 ### [Deep Dive into 11 AI Foundation Model Trends in 2026](https://blog.llmgo.top/en/articles/ai-trends-2026/)
-- Date: 2026-03-07 | Tag: Industry Trends | Read: 11 min read | Words: 2614 words
+- Date: 2026-03-07 | Tag: Evaluation & Trends | Read: 11 min read | Words: 2614 words
 - Summary: From Thinking reasoning modes to Agentic applications, a deep dive into the top 11 trends in AI foundation models for 2026.
 - Key FAQ Insights:
   * Q: Q1: In 2026, should software engineers prioritize learning AI Agent architectures or model fine-tuning?
@@ -790,7 +790,7 @@
     A: By combining Redis persistence mechanisms with distributed task orchestration engines (such as Temporal), Agents can achieve extremely strong concurrent processing and disaster recovery capabilities. This is much more stable than traditional monolithic synchronous architectures....
 
 ### [Retrieval-Augmented Generation (RAG) in Practice: Strategies & Production Best Practices](https://blog.llmgo.top/en/articles/rag-in-practice/)
-- Date: 2026-03-03 | Tag: RAG | Read: 10 min read | Words: 2326 words
+- Date: 2026-03-03 | Tag: LLM Engineering | Read: 10 min read | Words: 2326 words
 - Summary: A complete guide on how to use retrieval-augmented generation strategies and production best practices. Covers vector databases, semantic chunking, ColBERT reranking, GraphRAG, and automated Ragas evaluation.
 - Key FAQ Insights:
   * Q: Q1: How do I choose and use retrieval-augmented generation strategies effectively?
@@ -801,7 +801,7 @@
     A: First, verify the alignment between your semantic chunking strategy and the Embedding model you are using. For complex scenarios, adopting multi-vector retrieval or hybrid search pipelines with Reciprocal Rank Fusion can significantly improve precision....
 
 ### [2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro](https://blog.llmgo.top/en/articles/model-comparison-2026/)
-- Date: 2026-03-01 | Tag: Model Review | Read: 7 min read | Words: 1634 words
+- Date: 2026-03-01 | Tag: Evaluation & Trends | Read: 7 min read | Words: 1634 words
 - Summary: A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.
 - Key FAQ Insights:
   * Q: Q1: What is the core decision logic when choosing between GPT-5.4, Claude 4.6, and Gemini 3.1 Pro?
@@ -810,7 +810,7 @@
     A: Not necessarily. Leading domestic LLMs have developed distinct advantages in Chinese semantic understanding and regulatory compliance, alongside more cost-effective API pricing tiers. However, for highly advanced general reasoning or global expansion use cases, international models are still preferr...
 
 ### [Multimodal AI Models Starter Guide](https://blog.llmgo.top/en/articles/multimodal-guide/)
-- Date: 2026-02-28 | Tag: Multimodal | Read: 6 min read | Words: 1386 words
+- Date: 2026-02-28 | Tag: LLM Engineering | Read: 6 min read | Words: 1386 words
 - Summary: Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.
 - Key FAQ Insights:
   * Q: Q1: How do multimodal models handle long video inputs?
@@ -819,7 +819,7 @@
     A: Multimodal models typically split images into Patches based on Vision Transformers (ViT). High-resolution images lead to massive token consumption, so performing downsampling in the backend is recommended to balance costs and parsing precision....
 
 ### [LLM Fine-Tuning Guide: How It Works, Real-World Use Cases, and Workflows](https://blog.llmgo.top/en/articles/fine-tuning-guide/)
-- Date: 2026-02-25 | Tag: Fine-Tuning | Read: 9 min read | Words: 2120 words
+- Date: 2026-02-25 | Tag: LLM Engineering | Read: 9 min read | Words: 2120 words
 - Summary: Discover how LLM fine-tuning works under the hood, explore proven enterprise use cases (LoRA, QLoRA, Full Fine-Tuning), and learn end-to-end workflows from data preparation to vLLM serving.
 - Key FAQ Insights:
   * Q: Q1: How does LLM fine-tuning work in simple terms?

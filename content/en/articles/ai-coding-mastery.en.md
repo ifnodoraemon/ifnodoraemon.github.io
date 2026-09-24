@@ -2,7 +2,7 @@
 title: "AI Coding Mastery: From 'Build Me an X' to Architecture Orchestrator"
 slug: ai-coding-mastery
 date: 2026-05-04
-tag: AI Engineering
+tag: AI Agent
 tagClass: tag-emerald
 description: "Tools don't matter — methodology does. A deep dive into six core methods for mastering AI coding: Spec-Driven Development, Context Engineering, TDD Verification Loops, Multi-Agent Orchestration, Advanced Prompting, and Session Hygiene. Plus a 20+ tool matrix and five anti-patterns to avoid."
 featured: true

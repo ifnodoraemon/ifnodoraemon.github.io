@@ -2,8 +2,8 @@
 title: 多模态大模型入门指南
 slug: multimodal-guide
 date: 2026-02-28
-tag: 多模态
-tagClass: tag-rose
+tag: 模型工程
+tagClass: tag-purple
 description: 探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。
 ---
 

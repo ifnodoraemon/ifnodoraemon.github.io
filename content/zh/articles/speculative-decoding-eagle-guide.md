@@ -2,8 +2,8 @@
 title: "投机采样 (Speculative Decoding) 生产实操：从 Draft Model 到 EAGLE-3 动态推测树实现 3x~5x 无损加速"
 slug: speculative-decoding-eagle-guide
 date: 2026-09-18
-tag: 性能加速
-tagClass: tag-blue
+tag: 推理系统
+tagClass: tag-cyan
 description: "大模型解码阶段的核心物理瓶颈是什么？全面解密投机采样（Speculative Decoding）的数学无损证明、拒绝采样检验机制，深入剖析从双模型投机、Medusa 到清华开源爆款 EAGLE-2/3 动态自适应推测树的架构演进，并提供在 vLLM 与 SGLang 中开启生产级 3x~5x 加速的实操配置。"
 featured: true
 featuredStats:
@@ -93,12 +93,12 @@ graph LR
 
 ```mermaid
 graph TD
-    subgraph 传统线性推测 (链式作废)
+    subgraph SubLinear["传统线性推测 (链式作废)"]
         L1["Token A (置信度 95% - 命中)"] --> L2["Token B (置信度 40% - 拒绝!)"]
         L2 -.->|后续全部作废| L3["Token C (原本正确)"]
         L3 -.->|后续全部作废| L4["Token D (原本正确)"]
     end
-    subgraph EAGLE-2/3: 上下文动态推测树 (Tree Attention)
+    subgraph SubEAGLE["EAGLE-2/3: 上下文动态推测树 (Tree Attention)"]
         T0["根节点上下文"] --> T1["候选 Token A (95%)"]
         T1 --> T2["分支 B1 (45%)"]
         T1 --> T3["分支 B2 (40%)"]

@@ -2,8 +2,8 @@
 title: "解密 2026 架构创新：Kimi Delta Attention 与 DeepSeek MLA 是如何干掉显存墙的？"
 slug: kimi-kda-deepseek-mla-architecture
 date: 2026-09-07
-tag: 架构解密
-tagClass: tag-blue
+tag: 推理系统
+tagClass: tag-cyan
 description: "在百万级长上下文与数万亿 MoE 时代，KV Cache 显存暴涨如何成为推理核心瓶颈？硬核剖析月之暗面 Kimi Delta Attention (KDA) 的增量状态演进与 DeepSeek 多头潜变量注意力 (MLA) 的低秩投影数学原理。"
 ---
 

@@ -2,8 +2,8 @@
 title: "LLM Quantization Precision Guide: From FP32 to 1-bit, How Much Quality Do You Actually Lose?"
 slug: quantization-precision-guide
 date: 2026-03-31
-tag: Quantization
-tagClass: tag-blue
+tag: Inference Systems
+tagClass: tag-cyan
 description: A comprehensive comparison of FP32, BF16, FP16, FP8, INT8, INT4, NF4, FP4, 1.58-bit and all major quantization formats — with real benchmark data and an in-depth FP8 vs INT8 technical analysis.
 featured: true
 featuredStats:

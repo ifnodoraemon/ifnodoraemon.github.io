@@ -3,7 +3,7 @@ title: "From model.generate() to the Roofline Model: The Physics of Prefill and 
 slug: inference-roofline-prefill-decode
 date: 2026-09-24
 tag: Inference Systems
-tagClass: tag-green
+tagClass: tag-cyan
 series: llm-inference
 seriesOrder: 1
 description: "Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode."

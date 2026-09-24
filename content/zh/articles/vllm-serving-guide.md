@@ -2,8 +2,8 @@
 title: vLLM 在线推理服务实战：从架构原理到 Token 计费，一文搞定生产部署
 slug: vllm-serving-guide
 date: 2026-04-14
-tag: 推理部署
-tagClass: tag-green
+tag: 推理系统
+tagClass: tag-cyan
 description: 深入浅出解析 vLLM 核心架构（PagedAttention、连续批处理、APC 前缀缓存、推测解码），面向在线推理服务场景，手把手教你搭建 OpenAI 兼容 API、调优性能参数、搭建 Token 计费体系。附完整 Docker 部署方案与 Prometheus 监控配置。
 featured: true
 featuredStats:

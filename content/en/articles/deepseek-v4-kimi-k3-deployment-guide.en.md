@@ -2,8 +2,8 @@
 title: "Deploying 2026 Frontier Open Models On-Premise: Running DeepSeek-V4 and Kimi K3 on Multi-Node GPU Clusters"
 slug: deepseek-v4-kimi-k3-deployment-guide
 date: 2026-09-07
-tag: Deployment Guide
-tagClass: tag-orange
+tag: Inference Systems
+tagClass: tag-cyan
 description: "Complete enterprise on-premise deployment guide for 1.6T - 2.8T MoE open-weight models: Hardware planning across GPU clusters, vLLM / SGLang distributed TP/PP configuration, FP8 dynamic quantization, and high-concurrency API gateway production setups."
 ---
 

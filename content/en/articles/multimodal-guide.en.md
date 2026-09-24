@@ -2,8 +2,8 @@
 title: Multimodal AI Models Starter Guide
 slug: multimodal-guide
 date: 2026-02-28
-tag: Multimodal
-tagClass: tag-rose
+tag: LLM Engineering
+tagClass: tag-purple
 description: Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.
 ---
 

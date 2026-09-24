@@ -3,7 +3,7 @@ title: Context Engineering 实战指南：把上下文窗口当 RAM 管理
 slug: context-engineering-guide
 date: 2026-06-15
 tag: AI Agent
-tagClass: tag-purple
+tagClass: tag-emerald
 description: 2026 年最火的新概念，从 Prompt Engineering 进化到 Context Engineering。详解如何通过 Write/Select/Compress/Isolate 四大策略管理上下文窗口，解决长对话遗忘、幻觉与上下文污染。
 extraTags:
   - Context Engineering

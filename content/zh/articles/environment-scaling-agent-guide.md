@@ -2,8 +2,8 @@
 title: "告别单纯 Prompt：2026 年“环境缩放 (Environment Scaling)”如何重塑自主 Agent"
 slug: environment-scaling-agent-guide
 date: 2026-09-07
-tag: Agent架构
-tagClass: tag-green
+tag: AI Agent
+tagClass: tag-emerald
 description: "剖析 2026 年大模型后训练的重大范式跃迁：为什么从文本自回归走向多任务环境沙箱博弈？结合 GLM-5.3 在 Terminal-Bench 3.0 的登顶实践，详解 Linux 容器编排、MCP 协议集成与零逃逸安全沙箱工程实战。"
 series: ai-agent
 seriesOrder: 10

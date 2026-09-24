@@ -2,8 +2,8 @@
 title: "Retrieval-Augmented Generation (RAG) in Practice: Strategies & Production Best Practices"
 slug: rag-in-practice
 date: 2026-03-03
-tag: RAG
-tagClass: tag-cyan
+tag: LLM Engineering
+tagClass: tag-purple
 description: "A complete guide on how to use retrieval-augmented generation strategies and production best practices. Covers vector databases, semantic chunking, ColBERT reranking, GraphRAG, and automated Ragas evaluation." 
 ---
 

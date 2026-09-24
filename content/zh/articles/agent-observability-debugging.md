@@ -2,8 +2,8 @@
 title: Agent 可观测性与调试：从黑盒到白盒的进阶之路
 slug: agent-observability-debugging
 date: 2026-06-15
-tag: Evaluation
-tagClass: tag-orange
+tag: AI Agent
+tagClass: tag-emerald
 description: AI Agent 不再是传统软件，调试的是推理过程而非代码。本文详细探讨 Trajectory Evaluation、LLM-as-a-Judge 和主流 Agent 观测工具（LangSmith, Langfuse 等）的实战应用。
 extraTags:
   - Observability

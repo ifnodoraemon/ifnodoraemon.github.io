@@ -3,7 +3,7 @@ title: "显存虚拟化革命：PagedAttention 内存池管理与显存碎片终
 slug: pagedattention-memory-virtualization
 date: 2026-09-24
 tag: 推理系统
-tagClass: tag-green
+tagClass: tag-cyan
 series: llm-inference
 seriesOrder: 2
 description: "为什么传统大模型推理会浪费 60%~80% 的 GPU 显存？深度剖析 vLLM 开创的 PagedAttention 核心机制，解构逻辑块到物理块映射、动态显存池生命周期、Copy-on-Write 分叉复用与 CUDA 非连续访存内核，彻底终结显存碎片化顽疾。"
@@ -138,7 +138,7 @@ sequenceDiagram
     
     loop 自回归生成循环 (Decode Steps)
         Scheduler->>GPU: 执行 step 生成新 Token
-        alt 当前物理块未满 (filled < 16)
+        alt 当前物理块未满 (filled 未达 16)
             GPU->>GPU: 写入当前物理块对应 offset (如槽12第 7 格)
         else 当前物理块已满 (filled == 16)
             Scheduler->>BM: 申请新块

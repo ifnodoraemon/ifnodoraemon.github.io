@@ -3,7 +3,7 @@ title: "SGLang vs vLLM Architecture Showdown: RadixAttention, Structured Decodin
 slug: sglang-vs-vllm-architecture
 date: 2026-09-18
 tag: Inference Systems
-tagClass: tag-green
+tagClass: tag-cyan
 description: "A deep architectural breakdown between the dual titans of 2026 LLM inference: vLLM and SGLang. We dissect PagedAttention block paging versus RadixAttention tree-based prefix caching, compare scheduler-level structured decoding (JSON Schema) mechanics, and deliver rigorous benchmarks on an 8x H100 cluster alongside an enterprise decision framework."
 featured: true
 featuredStats:
@@ -36,12 +36,12 @@ Because autoregressive generation is fundamentally memory-bandwidth bound, the c
 
 ```mermaid
 graph TD
-    subgraph vLLM: PagedAttention (Block Paging & Flat Matching)
+    subgraph SubVLLM["vLLM: PagedAttention (Block Paging & Flat Matching)"]
         V1["Incoming Prompt Tokens"] --> V2["Slice into Fixed Blocks (e.g. 16 Tokens)"]
         V2 --> V3["Hash Map Lookup for Matching Block Sequences"]
         V3 --> V4["Discrete Memory Mapping (Similar to OS Virtual Memory)"]
     end
-    subgraph SGLang: RadixAttention (Dynamic Tree-Structured Caching)
+    subgraph SubSGLang["SGLang: RadixAttention (Dynamic Tree-Structured Caching)"]
         S1["Incoming Prompt Tokens"] --> S2["Traverse Radix Tree Top-Down"]
         S2 --> S3{"Shared Sub-tree Match?"}
         S3 -->|"Full Match"| S4["Zero-Overhead Pointer Reuse to KV Pages"]

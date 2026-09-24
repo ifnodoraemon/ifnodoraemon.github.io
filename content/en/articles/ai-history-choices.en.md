@@ -2,8 +2,8 @@
 title: "The Critical Crossroads in AI History: Why Was *That One* Chosen Every Time?"
 slug: ai-history-choices
 date: 2026-04-15
-tag: Industry Trends
-tagClass: tag-green
+tag: Evaluation & Trends
+tagClass: tag-amber
 description: A retrospective of six pivotal technology crossroads in AI's seventy-year history, dissecting the compute constraints, data dividends, and scalability logic behind each historical choice.
 ---
 

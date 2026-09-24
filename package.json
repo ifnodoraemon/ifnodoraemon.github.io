@@ -8,7 +8,8 @@
     "pages": "node scripts/build-pages.js",
     "dev": "npm run pages && npm run articles && vite",
     "build": "npm run pages && npm run articles && vite build",
-    "test:smoke": "node --test tests/site.test.js && node scripts/audit-seo.js",
+    "test:smoke": "node --test tests/site.test.js && node scripts/verify-mermaid.js && node scripts/audit-seo.js",
+    "verify:mermaid": "node scripts/verify-mermaid.js",
     "seo:audit": "node scripts/audit-seo.js",
     "gsc:check": "node scripts/check-gsc.js",
     "publish:devto": "node scripts/publish-devto.js",
@@ -27,6 +28,7 @@
     "highlight.js": "^11.12.0",
     "html-minifier-terser": "^7.2.0",
     "marked": "^17.0.4",
+    "mermaid": "^12.0.0",
     "vite": "^7.3.1",
     "vue": "^3.5.43"
   },

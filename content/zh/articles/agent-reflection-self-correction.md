@@ -2,8 +2,8 @@
 title: 让模型在运行中进化：从基础反思到基于 MCTS 的 Test-Time Compute 搜索
 slug: agent-reflection-self-correction
 date: 2026-07-16
-tag: Agentic
-tagClass: tag-purple
+tag: AI Agent
+tagClass: tag-emerald
 description: 大语言模型的潜力不止于预训练参数。本文带你深入探讨 Test-Time Compute 的前沿：从 Actor-Critic 双边架构，一路深入到利用蒙特卡洛树搜索（MCTS）解码 Agent 的自我纠错极限。
 series: ai-agent
 seriesOrder: 7

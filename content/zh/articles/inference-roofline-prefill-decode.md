@@ -3,7 +3,7 @@ title: "从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的�
 slug: inference-roofline-prefill-decode
 date: 2026-09-24
 tag: 推理系统
-tagClass: tag-green
+tagClass: tag-cyan
 series: llm-inference
 seriesOrder: 1
 description: "为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。"

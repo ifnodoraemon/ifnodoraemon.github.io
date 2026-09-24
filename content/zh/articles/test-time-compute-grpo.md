@@ -2,7 +2,7 @@
 title: "推理时扩展 (Test-Time Compute) 与 GRPO 强化学习实战：从 PPO 到无 Critic 策略优化"
 slug: test-time-compute-grpo
 date: 2026-09-18
-tag: 强化学习
+tag: 模型工程
 tagClass: tag-purple
 description: "深入剖析从预训练 Scaling Law 向推理时算力扩展 (Test-Time Scaling) 的范式转移。全面拆解 DeepSeek-R1 核心的 GRPO 组相对策略优化数学推导、无 Critic 架构优势、长思维链自我反思涌现机制，并提供完整的极简实战代码。"
 featured: true

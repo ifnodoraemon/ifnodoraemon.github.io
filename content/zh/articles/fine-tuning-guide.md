@@ -2,7 +2,7 @@
 title: "大模型微调全流程指南：底层工作原理、高价值落地用例与生产实战"
 slug: fine-tuning-guide
 date: 2026-02-25
-tag: 微调
+tag: 模型工程
 tagClass: tag-purple
 description: "深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。" 
 ---

@@ -2,7 +2,7 @@
 title: "LLM Fine-Tuning Guide: How It Works, Real-World Use Cases, and Workflows"
 slug: fine-tuning-guide
 date: 2026-02-25
-tag: Fine-Tuning
+tag: LLM Engineering
 tagClass: tag-purple
 description: "Discover how LLM fine-tuning works under the hood, explore proven enterprise use cases (LoRA, QLoRA, Full Fine-Tuning), and learn end-to-end workflows from data preparation to vLLM serving." 
 ---

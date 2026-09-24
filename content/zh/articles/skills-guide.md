@@ -2,8 +2,8 @@
 title: Skills 深度解析：给 AI 编程助手装上「专业大脑」
 slug: skills-guide
 date: 2026-03-12
-tag: Skills
-tagClass: tag-cyan
+tag: AI Agent
+tagClass: tag-emerald
 description: 从核心原理到跨平台实战，完整解析 AI 编程助手的 Skills 系统。涵盖 SKILL.md 机制、六大平台对比、实战编写指南与最佳实践。
 extraTags:
   - Claude Code
