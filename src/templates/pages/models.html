@@ -12,6 +12,7 @@
   <link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/models/" />
   <link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/models/" />
   <link rel="alternate" type="application/rss+xml" title="{{meta.siteName}} RSS Feed" href="{{#if isEn}}/en/feed.xml{{else}}/feed.xml{{/if}}" />
+  <link rel="alternate" type="text/plain" href="https://blog.llmgo.top/llms.txt" title="LLM Context" />
   <meta name="theme-color" content="#090a0f">
 
   <!-- Open Graph -->
@@ -431,28 +432,28 @@
     const presetTop = document.getElementById('presetTop');
     if (presetTop) {
       presetTop.addEventListener('click', () => {
-        setVisibility(ds => ['Claude Fable 5.1', 'GPT-6 Astra', 'Kimi K3', 'DeepSeek-V4-Pro'].includes(ds.label));
+        setVisibility(ds => ['Claude Opus 5.5', 'Claude Fable 5.1', 'GPT-6 Astra', 'Grok 4.7', 'Kimi K3'].includes(ds.label));
       });
     }
 
     const presetChina = document.getElementById('presetChina');
     if (presetChina) {
       presetChina.addEventListener('click', () => {
-        setVisibility(ds => ['Kimi K3', 'DeepSeek-V4-Pro', 'GLM-5.3', 'Qwen3.8-Max'].includes(ds.label));
+        setVisibility(ds => ['Kimi K3', 'DeepSeek-V4-Pro', 'DeepSeek-V4.1-Flash', 'GLM-5.3', 'Qwen3.8-Max'].includes(ds.label));
       });
     }
 
     const presetOpen = document.getElementById('presetOpen');
     if (presetOpen) {
       presetOpen.addEventListener('click', () => {
-        setVisibility(ds => ['Kimi K3', 'DeepSeek-V4-Pro', 'GLM-5.3'].includes(ds.label));
+        setVisibility(ds => ['DeepSeek-V4.1-Flash', 'DeepSeek-V4-Pro', 'Kimi K3', 'GLM-5.3'].includes(ds.label));
       });
     }
 
     const presetSpeed = document.getElementById('presetSpeed');
     if (presetSpeed) {
       presetSpeed.addEventListener('click', () => {
-        setVisibility(ds => ['Gemini 3.8 Flash', 'GLM-5.3', 'DeepSeek-V4-Pro'].includes(ds.label));
+        setVisibility(ds => ['DeepSeek-V4.1-Flash', 'Gemini 3.8 Flash', 'GLM-5.3'].includes(ds.label));
       });
     }
 

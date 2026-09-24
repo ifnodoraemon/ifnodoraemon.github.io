@@ -1,8 +1,11 @@
 User-agent: *
 Allow: /
 
-# Sitemaps
+# Sitemaps & Machine-Readable Context (GEO)
 Sitemap: https://blog.llmgo.top/sitemap.xml
+# https://llmstxt.org/
+llms.txt: https://blog.llmgo.top/llms.txt
+llms-full.txt: https://blog.llmgo.top/llms-full.txt
 
 # Crawl-delay for polite scrapers
 Crawl-delay: 1

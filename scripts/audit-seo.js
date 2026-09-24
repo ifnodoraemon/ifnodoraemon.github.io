@@ -201,6 +201,24 @@ if (fs.existsSync(robotsDistPath)) {
   errors++;
 }
 
+// Check Generative Engine Optimization (GEO) context
+const llmsDistPath = path.join(DIST, 'llms.txt');
+const llmsFullDistPath = path.join(DIST, 'llms-full.txt');
+if (!fs.existsSync(llmsDistPath)) {
+  console.error('❌ dist/llms.txt missing for AI engine discovery');
+  errors++;
+} else {
+  const llmsText = fs.readFileSync(llmsDistPath, 'utf-8');
+  if (llmsText.length < 100) {
+    console.error('❌ dist/llms.txt is too short');
+    errors++;
+  }
+}
+if (!fs.existsSync(llmsFullDistPath)) {
+  console.warn('⚠️  dist/llms-full.txt missing');
+  warnings++;
+}
+
 console.log('================================================================');
 console.log(`📊 Audit Summary:`);
 console.log(`   Total URLs Audited: ${locMatches.length}`);

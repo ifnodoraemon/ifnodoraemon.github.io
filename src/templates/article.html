@@ -14,6 +14,7 @@
   <link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/{{slug}}/" />
   <link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/{{slug}}/" />
   <link rel="alternate" type="application/rss+xml" title="{{meta.siteName}} RSS Feed" href="{{rssFeedPath}}" />
+  <link rel="alternate" type="text/plain" href="https://blog.llmgo.top/llms.txt" title="LLM Context" />
   <meta name="theme-color" content="#090a0f">
 
   <!-- Open Graph / Article -->
@@ -95,9 +96,20 @@
     "author": {
       "@type": "Person",
       "name": "ifnodoraemon",
+      "jobTitle": "LLM Systems Architect",
       "url": "https://blog.llmgo.top{{articles_prefix}}/about/",
       "sameAs": [
-        "https://github.com/ifnodoraemon"
+        "https://github.com/ifnodoraemon",
+        "https://x.com/ifnodoraemon"
+      ],
+      "knowsAbout": [
+        "Artificial Intelligence",
+        "Large Language Models",
+        "AI Agents",
+        "vLLM",
+        "High-Concurrency Inference",
+        "Prompt Engineering",
+        "Retrieval-Augmented Generation (RAG)"
       ]
     },
     "publisher": {
@@ -118,11 +130,14 @@
     "wordCount": {{wordCountNumber}},
     "timeRequired": "PT{{readingTimeNumber}}M",
     "inLanguage": "{{lang}}",
-    "isPartOf": {
-      "@type": "Blog",
-      "name": "{{meta.siteName}}",
-      "url": "https://blog.llmgo.top{{articles_prefix}}/"
-    }
+    "isAccessibleForFree": true,
+    "isPartOf": [
+      {
+        "@type": "Blog",
+        "name": "{{meta.siteName}}",
+        "url": "https://blog.llmgo.top{{articles_prefix}}/"
+      }{{seriesPartOfJson}}
+    ]
   }
   </script>
   <script type="application/ld+json">

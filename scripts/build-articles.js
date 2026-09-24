@@ -10,6 +10,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { marked } from 'marked';
 import matter from 'gray-matter';
@@ -19,6 +20,7 @@ import hljs from 'highlight.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const BUILD_OUT_DIR = path.join(ROOT, '.temp_build');
+const PUBLIC_DIR = path.join(ROOT, 'public');
 const SITE_URL = 'https://blog.llmgo.top';
 const REQUIRED_FRONTMATTER = ['title', 'slug', 'date', 'tag', 'description'];
 const STATIC_ROUTES = new Set([
@@ -51,6 +53,8 @@ const SERIES_DEFINITIONS = {
     articles: [
       'agent-loop-state-machine',
       'build-ai-agent',
+      'loop-engineering',
+      'context-engineering-guide',
       'agent-runtime-practices',
       'mcp-guide',
       'skills-guide',
@@ -60,6 +64,47 @@ const SERIES_DEFINITIONS = {
       'agent-observability-debugging',
       'environment-scaling-agent-guide',
       'agent-memory-architecture',
+      'ai-coding-mastery',
+    ],
+  },
+  'llm-inference': {
+    id: 'llm-inference',
+    titleZh: '《大模型高并发推理与底层架构》',
+    titleEn: 'High-Throughput LLM Inference & Systems Architecture',
+    badgeZh: '推理架构专栏',
+    badgeEn: 'LLM Inference Series',
+    descZh: '从底层系统视角攻克大模型在线推理：vLLM 与 SGLang 架构对决、EAGLE-3 投机采样加速、量化精度损耗实测、KDA/MLA 突破显存墙与 GPU 驱动包拓扑。',
+    descEn: 'Conquer production LLM inference systems: vLLM vs SGLang runtime comparisons, EAGLE-3 speculative decoding, quantization precision benchmarks, KDA/MLA attention memory optimization, and NVIDIA GPU driver package architectures.',
+    articles: [
+      'vllm-serving-guide',
+      'sglang-vs-vllm-architecture',
+      'speculative-decoding-eagle-guide',
+      'quantization-precision-guide',
+      'quantization-hands-on-guide',
+      'kimi-kda-deepseek-mla-architecture',
+      'deepseek-v4-kimi-k3-deployment-guide',
+      'nvidia-gpu-package-architecture',
+    ],
+  },
+  'llm-engineering': {
+    id: 'llm-engineering',
+    titleZh: '《现代大模型实战工程与技术选型手册》',
+    titleEn: 'Modern Applied LLM Engineering & Selection Guide',
+    badgeZh: '模型工程专栏',
+    badgeEn: 'LLM Engineering Series',
+    descZh: '系统剖析 2026 前沿大模型落地方法论：企业级 RAG、模型全流程微调、Test-Time Compute 扩展与 GRPO 强化学习、拒绝榜单刷分的 Eval 体系以及主流模型横评。',
+    descEn: 'Master state-of-the-art LLM engineering practices: Enterprise RAG pipelines, fine-tuning workflows, Test-Time Compute & GRPO reinforcement learning, business-aligned evaluation suites, and multi-model benchmark selections.',
+    articles: [
+      'prompt-engineering-guide',
+      'rag-in-practice',
+      'fine-tuning-guide',
+      'test-time-compute-grpo',
+      'llm-evaluation-guide',
+      'multimodal-guide',
+      'domestic-llm-comparison-2026',
+      'model-comparison-2026',
+      'ai-trends-2026',
+      'ai-history-choices',
     ],
   },
 };
@@ -130,6 +175,13 @@ console.log(`📝 Found ${rawArticles.length} articles\n`);
 
 validateArticlesOrExit(rawArticles);
 
+try {
+  console.log('🎨 Generating per-article raster OG images (1200x630)...');
+  execSync('python3 ' + path.join(__dirname, 'generate-article-og.py'), { stdio: 'inherit' });
+} catch (e) {
+  console.warn('⚠️ Could not run generate-article-og.py:', e.message);
+}
+
 const zhRawArticles = rawArticles
   .filter(article => !article.isEn)
   .sort((a, b) => new Date(b.fm.date) - new Date(a.fm.date));
@@ -149,6 +201,7 @@ generateSitemap([...articles, ...articlesEn]);
 generateRssFeed(articles, false);
 generateRssFeed(articlesEn, true);
 generateSearchIndex(articles, articlesEn);
+generateLlmsTxt(articles, articlesEn);
 
 console.log(`\n✅ Done! Generated ${articles.length} zh articles, ${articlesEn.length} en articles`);
 
@@ -345,9 +398,11 @@ function prepareArticles(list, isEn) {
     const readingTime = Math.max(1, Math.ceil(wordCount / 250));
 
     const faqSchema = generateFaqSchema(mdContent, fm.faq);
+    const langSegment = isEn ? 'en' : 'zh';
+    const ogPngPath = `/og/${langSegment}/${fm.slug}.png`;
     const ogImageUrl = (fm.image && !fm.image.endsWith('.svg'))
       ? toSiteUrl(fm.image)
-      : `${SITE_URL}/og-image.png`;
+      : `${SITE_URL}${ogPngPath}`;
 
     return {
       ...fm,
@@ -367,6 +422,7 @@ function prepareArticles(list, isEn) {
       readingTimeText: isEn ? `${readingTime} min read` : `预计阅读 ${readingTime} 分钟`,
       meta: isEn ? enLocales.meta : zhLocales.meta,
       faqSchema,
+      rawContent: mdContent,
     };
   });
 }
@@ -377,6 +433,15 @@ function writeArticles(list, isEn) {
     const relatedArticlesHtml = buildRelatedArticlesHtml(article, list, isEn);
     const seriesCardTop = buildSeriesCardTop(article, list, isEn);
     const seriesCardBottom = buildSeriesCardBottom(article, list, isEn);
+
+    const seriesId = article.series || Object.keys(SERIES_DEFINITIONS).find(id => SERIES_DEFINITIONS[id].articles.includes(article.slug));
+    const seriesDef = seriesId ? SERIES_DEFINITIONS[seriesId] : null;
+    const seriesPartOfJson = seriesDef ? `,
+      {
+        "@type": "CreativeWorkSeries",
+        "name": ${JSON.stringify(isEn ? seriesDef.titleEn : seriesDef.titleZh)},
+        "url": "${SITE_URL}${isEn ? '/en' : ''}/articles/"
+      }` : '';
 
     const hasMermaid = article.htmlContent.includes('class="mermaid"');
     const mermaidScript = hasMermaid ? `  <script type="module">
@@ -427,6 +492,7 @@ function writeArticles(list, isEn) {
       readingTimeText: article.readingTimeText,
       seriesCardTop,
       seriesCardBottom,
+      seriesPartOfJson,
       prevNextHtml,
       faqSchema: article.faqSchema || "",
       relatedArticlesHtml,
@@ -692,9 +758,10 @@ function generateListingPage(articlesList, isEn = false) {
   const listItems = articlesList.map((article, index) => {
     const isFeatured = index === 0;
     const pinText = isEn ? '📌 Pinned' : '📌 置顶';
-    const isSeries = article.series === 'ai-agent' || (SERIES_DEFINITIONS['ai-agent'] && SERIES_DEFINITIONS['ai-agent'].articles.includes(article.slug));
-    const seriesBadgeHtml = isSeries
-      ? `<span class="tag tag-series">📚 ${isEn ? 'Agent Series' : 'Agent 专栏'}</span>`
+    const seriesId = article.series || Object.keys(SERIES_DEFINITIONS).find(id => SERIES_DEFINITIONS[id].articles.includes(article.slug));
+    const seriesDef = seriesId ? SERIES_DEFINITIONS[seriesId] : null;
+    const seriesBadgeHtml = seriesDef
+      ? `<span class="tag tag-series">📚 ${isEn ? seriesDef.badgeEn : seriesDef.badgeZh}</span>`
       : '';
     const tagsHtml = article.extraTags
       ? article.extraTags.map(tag => `<span class="mini-tag">${escapeHtml(tag)}</span>`).join('\n              ')
@@ -775,6 +842,7 @@ function generateListingPage(articlesList, isEn = false) {
   <link rel="alternate" hreflang="en" href="${SITE_URL}/en/articles/" />
   <link rel="alternate" hreflang="x-default" href="${SITE_URL}/articles/" />
   <link rel="alternate" type="application/rss+xml" title="${escapeHtml(siteName)} RSS Feed" href="${isEn ? '/en/feed.xml' : '/feed.xml'}" />
+  <link rel="alternate" type="text/plain" href="${SITE_URL}/llms.txt" title="LLM Context" />
   <meta name="theme-color" content="#090a0f">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${canonicalUrl}">
@@ -816,7 +884,11 @@ function generateListingPage(articlesList, isEn = false) {
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
   <link rel="stylesheet" href="/src/assets/css/style.css">
   <script type="application/ld+json">
   {
@@ -825,7 +897,19 @@ function generateListingPage(articlesList, isEn = false) {
     "name": "${heroTitle}",
     "description": "${pageDesc}",
     "url": "${canonicalUrl}",
-    "numberOfItems": ${articlesList.length}
+    "numberOfItems": ${articlesList.length},
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": ${articlesList.length},
+      "itemListElement": [
+${articlesList.map((a, idx) => `        {
+          "@type": "ListItem",
+          "position": ${idx + 1},
+          "name": ${JSON.stringify(a.title)},
+          "url": "${SITE_URL}${articlesLinkPrefix}${a.slug}/"
+        }`).join(',\n')}
+      ]
+    }
   }
   </script>
   <script type="application/ld+json">
@@ -905,6 +989,126 @@ function generateSearchIndex(articlesZh, articlesEn) {
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, JSON.stringify(searchData), 'utf-8');
   console.log(`  ✓ public/search-index.json (${searchData.length} items)`);
+}
+
+function generateLlmsTxt(articlesZh, articlesEn) {
+  console.log('🤖 Generating /llms.txt and /llms-full.txt for AI engines & GEO...');
+
+  const siteSummaryZh = '专注 AI 大模型系统架构、高并发推理调优、生产级 AI Agent 与前沿工程落地技术博客。';
+  const siteSummaryEn = 'Technical deep dives into LLM systems architecture, high-throughput inference optimization, production AI agents, and enterprise AI engineering.';
+
+  // 1. Core llms.txt (Concise Markdown Index)
+  const seriesZhList = Object.values(SERIES_DEFINITIONS).map(s => 
+    `- [${s.titleZh}](${SITE_URL}/articles/): ${s.descZh} (${s.articles.length} 篇文章)`
+  ).join('\n');
+
+  const seriesEnList = Object.values(SERIES_DEFINITIONS).map(s => 
+    `- [${s.titleEn}](${SITE_URL}/en/articles/): ${s.descEn} (${s.articles.length} articles)`
+  ).join('\n');
+
+  const articlesZhList = articlesZh.map(a => 
+    `- [${a.title}](${SITE_URL}/articles/${a.slug}/): ${a.description}`
+  ).join('\n');
+
+  const articlesEnList = articlesEn.map(a => 
+    `- [${a.title}](${SITE_URL}/en/articles/${a.slug}/): ${a.description}`
+  ).join('\n');
+
+  const llmsContent = `# 大雄话AI / Nobita Talks AI
+
+> ${siteSummaryZh}
+> ${siteSummaryEn}
+
+- Site URL: ${SITE_URL}
+- Author: ifnodoraemon (LLM Systems Architect)
+- GitHub: https://github.com/ifnodoraemon
+- Full Knowledge Base: ${SITE_URL}/llms-full.txt
+- Core Focus: AI Agent Architectures, vLLM / SGLang High-Concurrency Inference, PagedAttention, KV Cache Optimization, Speculative Decoding, RAG Systems, Enterprise Model Fine-Tuning & GRPO.
+
+## 核心专栏体系 / Topic Series & Clusters
+
+### 中文专栏 (Chinese Series)
+${seriesZhList}
+
+### 英文专栏 (English Series)
+${seriesEnList}
+
+## 中文文章索引 / Chinese Technical Articles (${articlesZh.length} 篇)
+
+${articlesZhList}
+
+## 英文文章索引 / English Technical Articles (${articlesEn.length} Articles)
+
+${articlesEnList}
+
+## 开发者效率工具箱 / Developer Tools
+
+- [AI 与开发者全能效率工具箱](${SITE_URL}/tools/): 9 大专业开箱即用工具，包含大模型显存估算器 (LLM VRAM Calculator)、Token 计数器 (Token Counter)、Markdown 在线编辑器、Base64 编解码、JSON 格式化、JWT 解码、Cron 表达式解析器、URL 参数解析与代码卡片生成器。
+- [AI & Developer All-in-One Toolbox](${SITE_URL}/en/tools/): 9 built-in developer productivity tools for AI engineers and developers.
+`;
+
+  // 2. llms-full.txt (Expanded Knowledge Base with FAQ Q&As for each article)
+  let fullContent = `${llmsContent}
+
+---
+
+# 深度知识库与问答全文 / Full Knowledge Base & Technical FAQ Details
+
+`;
+
+  fullContent += `## 中文文章深度 FAQ 与要点汇总\n\n`;
+  for (const a of articlesZh) {
+    fullContent += `### [${a.title}](${SITE_URL}/articles/${a.slug}/)\n`;
+    fullContent += `- 发布日期: ${a.isoDate} | 标签: ${a.tag} | 预计阅读: ${a.readingTimeText} | 字数: ${a.wordCountText}\n`;
+    fullContent += `- 概述: ${a.description}\n`;
+    if (a.rawContent) {
+      const faqSection = a.rawContent.match(/## 常见问题[^\n]*\n([\s\S]*?)(?=\n## |$)/);
+      if (faqSection) {
+        fullContent += `- 核心 FAQ 解答:\n`;
+        const qas = [...faqSection[1].matchAll(/###+\s*([^\n]+)\n([\s\S]*?)(?=\n###+|$)/g)];
+        for (const qa of qas.slice(0, 3)) {
+          const q = qa[1].trim();
+          const ans = qa[2].replace(/\n+/g, ' ').replace(/[#*`]/g, '').trim().slice(0, 300);
+          fullContent += `  * Q: ${q}\n    A: ${ans}...\n`;
+        }
+      }
+    }
+    fullContent += `\n`;
+  }
+
+  fullContent += `## English Articles Technical FAQ & Key Takeaways\n\n`;
+  for (const a of articlesEn) {
+    fullContent += `### [${a.title}](${SITE_URL}/en/articles/${a.slug}/)\n`;
+    fullContent += `- Date: ${a.isoDate} | Tag: ${a.tag} | Read: ${a.readingTimeText} | Words: ${a.wordCountText}\n`;
+    fullContent += `- Summary: ${a.description}\n`;
+    if (a.rawContent) {
+      const faqSection = a.rawContent.match(/## (?:Frequently Asked Questions|FAQ)[^\n]*\n([\s\S]*?)(?=\n## |$)/i);
+      if (faqSection) {
+        fullContent += `- Key FAQ Insights:\n`;
+        const qas = [...faqSection[1].matchAll(/###+\s*([^\n]+)\n([\s\S]*?)(?=\n###+|$)/g)];
+        for (const qa of qas.slice(0, 3)) {
+          const q = qa[1].trim();
+          const ans = qa[2].replace(/\n+/g, ' ').replace(/[#*`]/g, '').trim().slice(0, 300);
+          fullContent += `  * Q: ${q}\n    A: ${ans}...\n`;
+        }
+      }
+    }
+    fullContent += `\n`;
+  }
+
+  // Ensure directories exist
+  [PUBLIC_DIR, BUILD_OUT_DIR, path.join(BUILD_OUT_DIR, 'public')].forEach(dir => {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  });
+
+  fs.writeFileSync(path.join(PUBLIC_DIR, 'llms.txt'), llmsContent, 'utf-8');
+  fs.writeFileSync(path.join(PUBLIC_DIR, 'llms-full.txt'), fullContent, 'utf-8');
+  fs.writeFileSync(path.join(BUILD_OUT_DIR, 'llms.txt'), llmsContent, 'utf-8');
+  fs.writeFileSync(path.join(BUILD_OUT_DIR, 'llms-full.txt'), fullContent, 'utf-8');
+  fs.writeFileSync(path.join(BUILD_OUT_DIR, 'public', 'llms.txt'), llmsContent, 'utf-8');
+  fs.writeFileSync(path.join(BUILD_OUT_DIR, 'public', 'llms-full.txt'), fullContent, 'utf-8');
+
+  console.log(`  ✓ llms.txt & llms-full.txt generated in public/ and .temp_build/`);
 }
 
 function generateSitemap(articlesList) {

@@ -34,34 +34,34 @@
     "leaderboardBadges": [
       {
         "icon": "👑",
-        "board": "LMSYS / LMArena Human Blind Test (2026)",
-        "champion": "Claude Fable 5.1 / GPT-6 Astra / Kimi K3",
-        "score": "Elo 1520+",
-        "desc": "Kimi K3 (2.8T KDA) reaches 1512 Elo, marking one of the strongest open-weights arena debuts in history",
+        "board": "LMSYS / LMArena Human Blind Test (2026.09)",
+        "champion": "Claude Opus 5.5 / GPT-6 Astra",
+        "score": "Elo 1524 / 1518",
+        "desc": "Anthropic's newly released Claude Opus 5.5 (Sept 22) takes #1 on the leaderboard, closely followed by GPT-6 Astra",
         "url": "https://chat.lmsys.org/?leaderboard"
       },
       {
         "icon": "💻",
-        "board": "SWE-bench & Terminal-Bench (2026)",
-        "champion": "DeepSeek-V4-Pro / GLM-5.3",
-        "score": "80.6% - 95.2%",
-        "desc": "GLM-5.3 takes #1 globally on Terminal-Bench for agentic bash execution; DeepSeek dominates SWE-bench",
+        "board": "SWE-bench & Terminal-Bench (2026.09)",
+        "champion": "Claude Opus 5.5 / DeepSeek-V4-Pro",
+        "score": "91.2% / 80.6%",
+        "desc": "Claude Opus 5.5 establishes a new high-water mark for real SWE issues; DeepSeek leads open-weight code models",
         "url": "https://www.swebench.com/"
       },
       {
         "icon": "🧮",
         "board": "AIME 2026 / Olympiad Mathematics",
-        "champion": "GPT-6 Astra / Kimi K3",
-        "score": "92.5% / 99.1%",
-        "desc": "Massive scale and long-horizon self-reflection models approach theoretical maximums on advanced mathematical deduction",
+        "champion": "GPT-6 Astra / Grok 4.7",
+        "score": "92.5% / 91.8%",
+        "desc": "xAI's Grok 4.7 (Sept 21) leverages autonomous long-horizon self-verification to join top-tier competition math deduction",
         "url": "https://artificialanalysis.ai/evaluations/aime-2024"
       },
       {
         "icon": "⚡",
         "board": "Artificial Analysis (AA) 2026 Value Index",
-        "champion": "GLM-5.3-Flash / Gemini 3.8 Flash",
-        "score": "Value 99",
-        "desc": "GLM hybrid sparse attention and Gemini Flash slash enterprise multi-agent costs down to $0.10 - $0.15/1M tokens",
+        "champion": "DeepSeek-V4.1-Flash / Gemini 3.8 Flash",
+        "score": "Value 99+",
+        "desc": "DeepSeek-V4.1-Flash (552B MoE) and Gemini 3.8 Flash set new peaks for ultra-fast high-value multimodal agent workflows",
         "url": "https://artificialanalysis.ai/"
       }
     ],
@@ -80,6 +80,21 @@
     ],
     "radarDatasets": [
       {
+        "label": "Claude Opus 5.5",
+        "provider": "Anthropic",
+        "type": "2026.09 Proprietary / Agentic Coding & Knowledge",
+        "color": "#ea580c",
+        "data": [
+          99,
+          99,
+          99,
+          98,
+          97,
+          88
+        ],
+        "defaultActive": true
+      },
+      {
         "label": "Claude Fable 5.1",
         "provider": "Anthropic",
         "type": "2026.09 Proprietary / Autonomous Agent",
@@ -92,7 +107,7 @@
           98,
           76
         ],
-        "defaultActive": true
+        "defaultActive": false
       },
       {
         "label": "GPT-6 Astra",
@@ -106,6 +121,36 @@
           99,
           96,
           75
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "Grok 4.7",
+        "provider": "xAI",
+        "type": "2026.09 Proprietary / RL Long-Horizon Self-Verification",
+        "color": "#8b5cf6",
+        "data": [
+          98,
+          96,
+          97,
+          96,
+          95,
+          84
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "DeepSeek-V4.1-Flash",
+        "provider": "DeepSeek",
+        "type": "2026.09 Open-Weights / 552B MoE Multimodal Ultra-fast",
+        "color": "#2563eb",
+        "data": [
+          96,
+          96,
+          96,
+          95,
+          98,
+          99
         ],
         "defaultActive": true
       },
@@ -246,11 +291,21 @@
     ],
     "tableRows": [
       [
+        "Claude Opus 5.5",
+        "2026.09.22 Anthropic",
+        "Agentic Coding Flagship / 40% Cost Cut vs Opus 5",
+        "1524 (#1)",
+        "66.8 (#1)",
+        "91.2%",
+        "92 t/s",
+        "$9.00 / $36.00"
+      ],
+      [
         "Claude Fable 5.1",
         "2026.09 Anthropic",
         "Autonomous Agentic / Reasoning Control",
-        "1520 (#1)",
-        "66.0 (#1)",
+        "1520 (#2)",
+        "66.0 (#2)",
         "88.5%",
         "85 t/s",
         "$4.00 / $16.00"
@@ -259,11 +314,31 @@
         "GPT-6 Astra",
         "2026.09 OpenAI",
         "Long-Horizon Reasoning Flagship",
-        "1518 (#2)",
-        "65.5 (#2)",
+        "1518 (#3)",
+        "65.5 (#3)",
         "89.2%",
         "75 t/s",
         "$3.50 / $14.00"
+      ],
+      [
+        "Grok 4.7",
+        "2026.09.21 xAI",
+        "Expanded Base MoE / Autonomous RL Verification",
+        "1515",
+        "65.2",
+        "86.8%",
+        "88 t/s",
+        "$3.00 / $12.00"
+      ],
+      [
+        "DeepSeek-V4.1-Flash",
+        "2026.09.10 DeepSeek",
+        "552B MoE (16B Active Out) / Native Multimodal",
+        "1492",
+        "62.4",
+        "81.5%",
+        "210 t/s",
+        "$0.12 / $0.48 (Self-Hostable)"
       ],
       [
         "Kimi K3",

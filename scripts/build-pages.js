@@ -137,8 +137,21 @@ function generateBlogJsonLd(articles, isEn) {
         author: {
           '@type': 'Person',
           name: 'ifnodoraemon',
+          jobTitle: 'LLM Systems Architect',
           url: `https://blog.llmgo.top${isEn ? '/en' : ''}/about/`,
-          sameAs: ['https://github.com/ifnodoraemon']
+          sameAs: [
+            'https://github.com/ifnodoraemon',
+            'https://x.com/ifnodoraemon'
+          ],
+          knowsAbout: [
+            'Artificial Intelligence',
+            'Large Language Models',
+            'High-Concurrency LLM Inference',
+            'vLLM',
+            'AI Agents',
+            'Retrieval-Augmented Generation (RAG)',
+            'Prompt Engineering'
+          ]
         },
         publisher: {
           '@type': 'Organization',
@@ -179,7 +192,12 @@ function generateToolsAppJsonLd(toolsData, isEn) {
     author: {
       '@type': 'Person',
       name: 'ifnodoraemon',
-      url: 'https://github.com/ifnodoraemon'
+      jobTitle: 'LLM Systems Architect',
+      url: `https://blog.llmgo.top${isEn ? '/en' : ''}/about/`,
+      sameAs: [
+        'https://github.com/ifnodoraemon',
+        'https://x.com/ifnodoraemon'
+      ]
     }
   }, null, 4);
 }

@@ -504,6 +504,10 @@ const syncedModelMeta = ref({
 
 // Top Popular Hugging Face Models
 const POPULAR_HF_MODELS = [
+  { id: 'deepseek-ai/DeepSeek-V4.1-Flash', name: 'DeepSeek V4.1 Flash (MoE 552B)', org: 'deepseek-ai', params: '552B', downloads: '1.4M', likes: 4520 },
+  { id: 'Qwen/Qwen-Image-2.1', name: 'Qwen-Image-2.1 (7B Multimodal)', org: 'Qwen', params: '7.3B', downloads: '850K', likes: 2130 },
+  { id: 'Qwen/Qwen3.8-Omni-Flash', name: 'Qwen3.8 Omni Flash', org: 'Qwen', params: '180B', downloads: '920K', likes: 2680 },
+  { id: 'moonshotai/Kimi-K2.8-Preview', name: 'Kimi K2.8 Preview (Vision)', org: 'moonshotai', params: 'MoE', downloads: '410K', likes: 1850 },
   { id: 'zai-org/GLM-5.3', name: 'GLM-5.3', org: 'zai-org', params: '753B', downloads: '24.1K', likes: 1120 },
   { id: 'zai-org/GLM-5.3-Flash', name: 'GLM-5.3-Flash', org: 'zai-org', params: 'Flash', downloads: '89.5K', likes: 1840 },
   { id: 'Qwen/Qwen2.5-7B-Instruct', name: 'Qwen 2.5 7B Instruct', org: 'Qwen', params: '7.6B', downloads: '9.6M', likes: 2219 },
@@ -521,6 +525,10 @@ const POPULAR_HF_MODELS = [
 
 // Top Curated ModelScope (魔搭社区) Models
 const POPULAR_MS_MODELS = [
+  { id: 'deepseek-ai/DeepSeek-V4.1-Flash', name: 'DeepSeek-V4.1-Flash', nameZh: '深度求索 V4.1 Flash (552B MoE)', org: 'deepseek-ai', params: '552B', downloads: '48.5K', stars: 890 },
+  { id: 'qwen/Qwen-Image-2.1', name: 'Qwen-Image-2.1', nameZh: '通义千问 图像生成与编辑 2.1 (7B)', org: 'qwen', params: '7.3B', downloads: '65.2K', stars: 740 },
+  { id: 'qwen/Qwen3.8-Omni-Flash', name: 'Qwen3.8-Omni-Flash', nameZh: '通义千问 3.8 全模态极速版', org: 'qwen', params: '180B', downloads: '88.1K', stars: 1420 },
+  { id: 'moonshotai/Kimi-K2.8-Preview', name: 'Kimi-K2.8-Preview', nameZh: '月之暗面 Kimi K2.8 视觉推理', org: 'moonshotai', params: 'MoE', downloads: '52.3K', stars: 620 },
   { id: 'ZhipuAI/GLM-5.3', name: 'GLM-5.3', nameZh: '智谱 GLM-5.3 (753B 双稀疏MoE)', org: 'ZhipuAI', params: '753B', downloads: '16.6K', stars: 287 },
   { id: 'ZhipuAI/GLM-5.3-Flash', name: 'GLM-5.3-Flash', nameZh: '智谱 GLM-5.3 Flash 轻量极速版', org: 'ZhipuAI', params: 'Flash', downloads: '73.9K', stars: 214 },
   { id: 'ZhipuAI/GLM-4-9B-Chat', name: 'GLM-4-9B-Chat', nameZh: '智谱 GLM-4 9B 对话', org: 'ZhipuAI', params: '9.4B', downloads: '154K', stars: 620 },

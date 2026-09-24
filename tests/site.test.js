@@ -402,5 +402,36 @@ test('sitemap excludes verification tokens and preserves valid directory routes 
   assert.ok(robots.includes('Sitemap: https://blog.llmgo.top/sitemap.xml'), 'robots.txt must contain sitemap link');
 });
 
+test('build outputs include valid llms.txt, enriched ItemList schema, and author E-E-A-T metadata', () => {
+  const llmsPath = path.join(ROOT, 'dist', 'llms.txt');
+  const llmsFullPath = path.join(ROOT, 'dist', 'llms-full.txt');
+
+  assert.ok(fs.existsSync(llmsPath), 'expected dist/llms.txt');
+  assert.ok(fs.existsSync(llmsFullPath), 'expected dist/llms-full.txt');
+
+  const llmsContent = fs.readFileSync(llmsPath, 'utf-8');
+  assert.match(llmsContent, /# 大雄话AI \/ Nobita Talks AI/);
+  assert.match(llmsContent, /AI Agent 生产级架构师手册/);
+  assert.match(llmsContent, /大模型高并发推理与底层架构/);
+  assert.match(llmsContent, /现代大模型实战工程与技术选型手册/);
+  assert.match(llmsContent, /\/articles\/vllm-serving-guide\//);
+  assert.match(llmsContent, /\/en\/articles\/vllm-serving-guide\//);
+
+  const fullContent = fs.readFileSync(llmsFullPath, 'utf-8');
+  assert.ok(fullContent.length > llmsContent.length, 'llms-full.txt should contain comprehensive details');
+  assert.match(fullContent, /核心 FAQ 解答/);
+
+  // Check ItemList schema on /articles/
+  const zhArticlesListing = fs.readFileSync(path.join(ROOT, 'dist', 'articles', 'index.html'), 'utf-8');
+  assert.match(zhArticlesListing, /"@type":\s*"ItemList"/);
+  assert.match(zhArticlesListing, /"numberOfItems":\s*32/);
+
+  // Check author authority on article
+  const zhArticleHtml = fs.readFileSync(path.join(ROOT, 'dist', 'articles', 'agent-runtime-practices', 'index.html'), 'utf-8');
+  assert.match(zhArticleHtml, /"jobTitle":\s*"LLM Systems Architect"/);
+  assert.match(zhArticleHtml, /"knowsAbout"/);
+  assert.match(zhArticleHtml, /"isAccessibleForFree":\s*true/);
+});
+
 
 

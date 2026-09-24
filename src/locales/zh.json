@@ -34,34 +34,34 @@
     "leaderboardBadges": [
       {
         "icon": "👑",
-        "board": "LMSYS / LMArena 盲测竞技场 (2026)",
-        "champion": "Claude Fable 5.1 / GPT-6 Astra / Kimi K3",
-        "score": "Elo 1520+",
-        "desc": "Kimi K3 (2.8T KDA) 成为盲测史上表现最强的开源架构之一，直逼欧美顶尖闭源",
+        "board": "LMSYS / LMArena 盲测竞技场 (2026.09)",
+        "champion": "Claude Opus 5.5 / GPT-6 Astra",
+        "score": "Elo 1524 / 1518",
+        "desc": "Anthropic 9月22日最新发布的 Claude Opus 5.5 登顶竞技场，GPT-6 Astra 紧随其后",
         "url": "https://chat.lmsys.org/?leaderboard"
       },
       {
         "icon": "💻",
-        "board": "SWE-bench & Terminal-Bench (2026)",
-        "champion": "DeepSeek-V4-Pro / GLM-5.3",
-        "score": "80.6% - 95.2%",
-        "desc": "GLM-5.3 在 Terminal-Bench 终端任务与系统攻防拔得头筹，DeepSeek 代码修复破纪录",
+        "board": "SWE-bench & Terminal-Bench (2026.09)",
+        "champion": "Claude Opus 5.5 / DeepSeek-V4-Pro",
+        "score": "91.2% / 80.6%",
+        "desc": "Claude Opus 5.5 刷新真实工程 Issue 解决率纪录，DeepSeek-V4 领跑开源代码模型",
         "url": "https://www.swebench.com/"
       },
       {
         "icon": "🧮",
         "board": "AIME 2026 / 极限数学推理",
-        "champion": "GPT-6 Astra / Kimi K3",
-        "score": "92.5% / 99.1%",
-        "desc": "大规模长程思考与注意力缩放模型在竞赛数学与博士级科学推导上逼近理论上限",
+        "champion": "GPT-6 Astra / Grok 4.7",
+        "score": "92.5% / 91.8%",
+        "desc": "xAI 9月21日发布的 Grok 4.7 凭借自主长程自验证机制跃升至数学评测第一梯队",
         "url": "https://artificialanalysis.ai/evaluations/aime-2024"
       },
       {
         "icon": "⚡",
         "board": "Artificial Analysis (AA) 2026 质价比",
-        "champion": "GLM-5.3-Flash / Gemini 3.8 Flash",
-        "score": "Value 99",
-        "desc": "GLM 混合稀疏注意力和 Gemini Flash 将企业级 Agent 推理成本拉低至 $0.10-$0.15",
+        "champion": "DeepSeek-V4.1-Flash / Gemini 3.8 Flash",
+        "score": "Value 99+",
+        "desc": "DeepSeek-V4.1-Flash (552B MoE) 搭配 Gemini 3.8 Flash 创下极速多模态性价比新巅峰",
         "url": "https://artificialanalysis.ai/"
       }
     ],
@@ -80,6 +80,21 @@
     ],
     "radarDatasets": [
       {
+        "label": "Claude Opus 5.5",
+        "provider": "Anthropic",
+        "type": "2026.09 闭源 / Agentic 代码与知识工程",
+        "color": "#ea580c",
+        "data": [
+          99,
+          99,
+          99,
+          98,
+          97,
+          88
+        ],
+        "defaultActive": true
+      },
+      {
         "label": "Claude Fable 5.1",
         "provider": "Anthropic",
         "type": "2026.09 闭源 / 自主智能体",
@@ -92,7 +107,7 @@
           98,
           76
         ],
-        "defaultActive": true
+        "defaultActive": false
       },
       {
         "label": "GPT-6 Astra",
@@ -106,6 +121,36 @@
           99,
           96,
           75
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "Grok 4.7",
+        "provider": "xAI",
+        "type": "2026.09 闭源 / 自主长程推理与自验证",
+        "color": "#8b5cf6",
+        "data": [
+          98,
+          96,
+          97,
+          96,
+          95,
+          84
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "DeepSeek-V4.1-Flash",
+        "provider": "DeepSeek",
+        "type": "2026.09 开放权重 / 552B MoE 多模态极速",
+        "color": "#2563eb",
+        "data": [
+          96,
+          96,
+          96,
+          95,
+          98,
+          99
         ],
         "defaultActive": true
       },
@@ -246,11 +291,21 @@
     ],
     "tableRows": [
       [
+        "Claude Opus 5.5",
+        "2026.09.22 Anthropic",
+        "Agentic 编程旗舰 / 较 Opus 5 降本40%",
+        "1524 (#1)",
+        "66.8 (#1)",
+        "91.2%",
+        "92 t/s",
+        "$9.00 / $36.00"
+      ],
+      [
         "Claude Fable 5.1",
         "2026.09 Anthropic",
         "自主智能体 / 思考时长自控",
-        "1520 (#1)",
-        "66.0 (#1)",
+        "1520 (#2)",
+        "66.0 (#2)",
         "88.5%",
         "85 t/s",
         "$4.00 / $16.00"
@@ -259,11 +314,31 @@
         "GPT-6 Astra",
         "2026.09 OpenAI",
         "全自主长链博弈推理旗舰",
-        "1518 (#2)",
-        "65.5 (#2)",
+        "1518 (#3)",
+        "65.5 (#3)",
         "89.2%",
         "75 t/s",
         "$3.50 / $14.00"
+      ],
+      [
+        "Grok 4.7",
+        "2026.09.21 xAI",
+        "超大基座强化推理 / 强化学习自主自验证",
+        "1515",
+        "65.2",
+        "86.8%",
+        "88 t/s",
+        "$3.00 / $12.00"
+      ],
+      [
+        "DeepSeek-V4.1-Flash",
+        "2026.09.10 DeepSeek",
+        "552B MoE (16B输出激活) / 原生多模态极速",
+        "1492",
+        "62.4",
+        "81.5%",
+        "210 t/s",
+        "$0.12 / $0.48 (开源可自建)"
       ],
       [
         "Kimi K3",
