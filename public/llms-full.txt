@@ -13,16 +13,17 @@
 
 ### 中文专栏 (Chinese Series)
 - [《AI Agent 生产级架构师手册》](https://blog.llmgo.top/articles/): 系统化掌握 2026 生产级 AI Agent 核心架构：从执行循环、状态机控制流，到 MCP 协议、Skills 扩展、多智能体协作与全链路可观测性。 (14 篇文章)
-- [《大模型高并发推理与底层架构》](https://blog.llmgo.top/articles/): 从底层系统视角攻克大模型在线推理：vLLM 与 SGLang 架构对决、EAGLE-3 投机采样加速、量化精度损耗实测、KDA/MLA 突破显存墙与 GPU 驱动包拓扑。 (8 篇文章)
+- [《大模型推理引擎：从模型演进、内核架构到未来终局》](https://blog.llmgo.top/articles/): 以第一性原理贯穿大模型推理系统：从 Prefill/Decode 物理撕裂与 Roofline 模型推导、KV Cache 与 MLA 显存突围，到 PagedAttention、Continuous Batching、P/D 解耦、四大引擎 (vLLM / SGLang / TRT-LLM / llama.cpp) 源码解密与长思考链调度终局。 (9 篇文章)
 - [《现代大模型实战工程与技术选型手册》](https://blog.llmgo.top/articles/): 系统剖析 2026 前沿大模型落地方法论：企业级 RAG、模型全流程微调、Test-Time Compute 扩展与 GRPO 强化学习、拒绝榜单刷分的 Eval 体系以及主流模型横评。 (10 篇文章)
 
 ### 英文专栏 (English Series)
 - [The Production AI Agent Architect Handbook](https://blog.llmgo.top/en/articles/): Master production-grade AI Agent architectures in 2026: from execution loops and state machines to MCP, skills, multi-agent orchestration, and observability. (14 articles)
-- [High-Throughput LLM Inference & Systems Architecture](https://blog.llmgo.top/en/articles/): Conquer production LLM inference systems: vLLM vs SGLang runtime comparisons, EAGLE-3 speculative decoding, quantization precision benchmarks, KDA/MLA attention memory optimization, and NVIDIA GPU driver package architectures. (8 articles)
+- [Production LLM Inference Engines: Evolution, Architecture, and Future](https://blog.llmgo.top/en/articles/): Master LLM inference systems from first principles: Roofline modeling of Prefill/Decode, KV Cache & MLA memory optimization, PagedAttention, Continuous Batching, P/D disaggregation, and in-depth engine architectures across vLLM, SGLang, TensorRT-LLM, and llama.cpp. (9 articles)
 - [Modern Applied LLM Engineering & Selection Guide](https://blog.llmgo.top/en/articles/): Master state-of-the-art LLM engineering practices: Enterprise RAG pipelines, fine-tuning workflows, Test-Time Compute & GRPO reinforcement learning, business-aligned evaluation suites, and multi-model benchmark selections. (10 articles)
 
-## 中文文章索引 / Chinese Technical Articles (32 篇)
+## 中文文章索引 / Chinese Technical Articles (33 篇)
 
+- [从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的物理撕裂](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/): 为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。
 - [AI Agent 记忆系统设计：从工作记忆、情景记忆到分层 Graph RAG](https://blog.llmgo.top/articles/agent-memory-architecture/): 为什么数百万 Token 的上下文窗口依然无法解决智能体的失忆症？深入剖析从工作记忆、情景记忆到长期语义记忆的三层金字塔模型，详解 Stanford Generative Agents 与 Letta (MemGPT) 的记忆沉淀机制，并提供生产级混合检索与遗忘衰减实战代码。
 - [Agent 执行循环与状态机设计：从 ReAct 到确定性控制流](https://blog.llmgo.top/articles/agent-loop-state-machine/): 为什么单纯的 Prompt 链与自由 ReAct 无法支撑生产级系统？深度拆解 Agent 执行循环的四大失效模式、基于有限状态机 (FSM) 的图控流设计、Tool Calling 容错降级与熔断器机制，并提供生产级状态机实战代码。
 - [突破 10 万 Star 的 Browser-use 架构深度剖析：DOM 树提纯、视觉定位与生产级网页 Agent 实战](https://blog.llmgo.top/articles/browser-use-agent-architecture/): 为什么传统 Selenium/Playwright 脚本在动态前端下频频崩溃？深度拆解斩获 10 万+ GitHub Star 的现象级项目 Browser-use 的底层架构：DOM 树智能提纯降噪、Set-of-Mark (SoM) 视觉坐标定位、状态机闭环容错，并手把手构建一个可生产落地的企业级网页自动化智能体。
@@ -56,8 +57,9 @@
 - [多模态大模型入门指南](https://blog.llmgo.top/articles/multimodal-guide/): 探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。
 - [大模型微调全流程指南：底层工作原理、高价值落地用例与生产实战](https://blog.llmgo.top/articles/fine-tuning-guide/): 深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。
 
-## 英文文章索引 / English Technical Articles (32 Articles)
+## 英文文章索引 / English Technical Articles (33 Articles)
 
+- [From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence](https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/): Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode.
 - [AI Agent Memory Architecture: From Working Memory to Episodic Memory & Hierarchical Graph RAG](https://blog.llmgo.top/en/articles/agent-memory-architecture/): Why multi-million token context windows still fail to solve agent amnesia. A deep architectural dissection of the three-tier memory pyramid (Working, Episodic, and Long-Term Semantic Memory), Stanford Generative Agents reflection cycles, Letta (MemGPT) virtual paging, and runnable code with decay curves and hybrid retrieval.
 - [Agentic Loops & State Machine Design: From ReAct to Deterministic Control Flows](https://blog.llmgo.top/en/articles/agent-loop-state-machine/): Why prompt chaining and unconstrained ReAct loops fail in production AI systems. A deep architectural dissection of agent failure modes, Finite State Machine (FSM) graph flows, tool-calling resilience, and circuit breakers with runnable code.
 - [Under the Hood of Browser-use (100k+ Stars): DOM Tree Distillation, Vision Grounding, and Production Web Agents](https://blog.llmgo.top/en/articles/browser-use-agent-architecture/): Why do traditional Selenium and Playwright scripts constantly break against modern web frontends? We dissect the architecture of Browser-use, the breakout open-source project with over 100k GitHub stars: DOM tree pruning, Set-of-Mark (SoM) visual coordinate grounding, state machine resilience, and end-to-end production recipes.
@@ -102,6 +104,17 @@
 # 深度知识库与问答全文 / Full Knowledge Base & Technical FAQ Details
 
 ## 中文文章深度 FAQ 与要点汇总
+
+### [从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的物理撕裂](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/)
+- 发布日期: 2026-09-24 | 标签: 推理系统 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5043 字
+- 概述: 为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。
+- 核心 FAQ 解答:
+  * Q: Q1: 既然 Decode 阶段是显存带宽受限，为什么不无限增大 Batch Size 把算力跑满？
+    A: 理论上，当 Batch Size 增大到突破硬件拐点 $I_{\text{ridge}}$（例如在 H100 上 $B \ge 295$）时，Decode 确实会转变为算力受限（Compute-bound），Tensor Core 也会被榨干。 但在生产实际中，这面临两座不可逾越的大山： 1. 显存物理容量爆炸（OOM）：当并发数达到数百时，每个请求所持有的 KV Cache 随着生成长度线性膨胀，80GB 显存会在极短时间内被吃光，根本没有空间容纳超大 Batch； 2. 单请求 SLA（TPOT）急剧劣化：显存带宽总量是固定的。当并发数从 1 暴增到 256 时，虽然整个集群总吞吐（Tok...
+  * Q: Q2: 为什么在 Hopper / Blackwell 架构上，FP8 量化对 Prefill 和 Decode 的提速机制完全不同？
+    A: 这两者的加速机制遵循完全不同的物理通道：  对 Prefill 阶段：加速主要源于 FP8 Tensor Core 计算吞吐翻倍（例如 H100 上 FP8 稠密算力为 1978.9 TFLOPS，是 BF16 的 2 倍）。矩阵乘法以两倍的物理速度直接执行完毕；  对 Decode 阶段：加速主要源于 显存读取字节数减半。Decode 并不缺算力，瓶颈在于从 HBM 把模型权重和 KV Cache 搬进芯片。FP8 让权重体积减少 50%，在显存带宽固定的情况下，搬运耗时直接缩短约一半，从而显著压低 TPOT。 详细实测对比请参阅 [大模型量化精度无损选型手册](/articles/quan...
+  * Q: Q3: 为什么使用 FlashAttention-3 后，Decode 阶段的延迟下降远不如 Prefill 阶段显著？
+    A: FlashAttention 的核心收益在于通过 Tiling 分块将 $O(N^2)$ 的 Attention 中间结果留在 SRAM（片上高速缓存）中，避免向 HBM 频繁换入换出。  在 Prefill 阶段，序列长度 $N$ 很大，$N \times N$ 的 Attention Map 非常巨大，FlashAttention 能砍掉数十倍的 HBM 显存读写，收益极其恐怖；  在 Decode 阶段，Query 长度仅仅为 ${1}$，计算实质上是 ${1} \times N$ 的向量矩阵乘法（GEMV），根本不存在庞大的 $N \times N$ 矩阵。Decode 阶段的核心开销...
 
 ### [AI Agent 记忆系统设计：从工作记忆、情景记忆到分层 Graph RAG](https://blog.llmgo.top/articles/agent-memory-architecture/)
 - 发布日期: 2026-09-21 | 标签: AI Agent | 预计阅读: 预计阅读 22 分钟 | 字数: 约 5395 字
@@ -442,6 +455,17 @@
     A: 工业界普遍以 LoRA 为默认首选，它能在保留基础通用知识的同时节省 80% 以上的显存和算力开销。若本地硬件处于极限受限状态，建议直接采用基于 4-bit 权重的 QLoRA（详见[大模型量化实战指南](/articles/quantization-hands-on-guide/)）。只有在需要重训全新基础底座语言或发生颠覆性结构范式迁移时，才建议启动昂贵的全参数微调。...
 
 ## English Articles Technical FAQ & Key Takeaways
+
+### [From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence](https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/)
+- Date: 2026-09-24 | Tag: Inference Systems | Read: 11 min read | Words: 2643 words
+- Summary: Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode.
+- Key FAQ Insights:
+  * Q: Q1: If decode is memory-bandwidth bound, why not increase batch size indefinitely to saturate the compute units?
+    A: While scaling batch size theoretically pushes arithmetic intensity past the hardware ridge point ($B \ge 295$ on an H100), production workloads face two practical barriers: 1. Out-of-Memory (OOM) Ceilings: As concurrency reaches hundreds of concurrent streams, the aggregate KV Cache scales linearly ...
+  * Q: Q2: Why does FP8 quantization impact Prefill and Decode through entirely different physical mechanisms on Hopper and Blackwell?
+    A: The speedup mechanisms operate along separate hardware paths:  For Prefill: Acceleration is driven by higher Tensor Core compute throughput (FP8 dense math reaches 1,978.9 TFLOPS on H100, exactly 2x that of BF16). Dense GEMMs execute in roughly half the clock cycles.  For Decode: Acceleration is dri...
+  * Q: Q3: Why does FlashAttention-3 produce dramatic speedups for Prefill but only marginal improvements for Decode?
+    A: FlashAttention's primary innovation is tiling the attention computation to keep intermediate activations ($S, P$) in fast on-chip SRAM, avoiding $O(N^2)$ reads and writes to slow HBM.  In Prefill, sequence length $N$ is large, resulting in massive $N \times N$ attention matrices. Eliminating quadrat...
 
 ### [AI Agent Memory Architecture: From Working Memory to Episodic Memory & Hierarchical Graph RAG](https://blog.llmgo.top/en/articles/agent-memory-architecture/)
 - Date: 2026-09-21 | Tag: AI Agent | Read: 11 min read | Words: 2609 words

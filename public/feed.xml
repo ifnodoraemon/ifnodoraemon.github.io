@@ -5,8 +5,18 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Thu, 24 Sep 2026 05:16:11 GMT</pubDate>
+  <pubDate>Thu, 24 Sep 2026 06:20:56 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的物理撕裂</title>
+    <link>https://blog.llmgo.top/articles/inference-roofline-prefill-decode/</link>
+    <guid>https://blog.llmgo.top/articles/inference-roofline-prefill-decode/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>推理系统</category>
+    <description>为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/inference-roofline-prefill-decode.png" length="150000" type="image/png" />
+  </item>
   <item>
     <title>AI Agent 记忆系统设计：从工作记忆、情景记忆到分层 Graph RAG</title>
     <link>https://blog.llmgo.top/articles/agent-memory-architecture/</link>

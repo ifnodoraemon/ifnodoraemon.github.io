@@ -5,8 +5,18 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Thu, 24 Sep 2026 05:16:11 GMT</pubDate>
+  <pubDate>Thu, 24 Sep 2026 06:20:56 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence</title>
+    <link>https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/</link>
+    <guid>https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Inference Systems</category>
+    <description>Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/inference-roofline-prefill-decode.png" length="150000" type="image/png" />
+  </item>
   <item>
     <title>AI Agent Memory Architecture: From Working Memory to Episodic Memory &amp; Hierarchical Graph RAG</title>
     <link>https://blog.llmgo.top/en/articles/agent-memory-architecture/</link>
