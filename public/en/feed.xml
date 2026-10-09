@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Thu, 24 Sep 2026 07:58:36 GMT</pubDate>
+  <pubDate>Fri, 09 Oct 2026 01:00:31 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking</title>
@@ -66,6 +66,16 @@
     <category>Memory Virtualization</category>
     <description>Why did early LLM serving systems waste 60% to 80% of GPU memory? A deep architectural exploration of vLLM's PagedAttention, logical-to-physical block mapping, zero-copy Copy-on-Write sharing, and non-contiguous CUDA attention kernels.</description>
     <enclosure url="https://blog.llmgo.top/og/en/pagedattention-memory-virtualization.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Prefill-Decode (P/D) Disaggregation Architecture: Compute-Memory Decoupling, RDMA Distributed KV Cache Transfer, and Cluster-Scale Pooling</title>
+    <link>https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/</link>
+    <guid>https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Inference Systems</category>
+    <description>Why does colocating Prefill and Decode on identical GPUs inevitably collapse performance under 128k long contexts and reasoning workloads? An in-depth architectural breakdown of Prefill-Decode (P/D) Disaggregation: compute vs. memory spatial isolation, GQA vs. DeepSeek MLA cross-node bandwidth modeling, GPUDirect RDMA zero-copy transfers, global KV pooling, and optimal P:D node ratio queuing theory.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/pd-disaggregation-distributed-kv-cache.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>Prefix Caching and State Reuse: From Hash Block Addressing to SGLang RadixAttention and Dynamic Tree Eviction</title>

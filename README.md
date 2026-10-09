@@ -8,62 +8,47 @@ Welcome to **Nobita Talks AI**, a technical experimental node observing the rapi
 
 ---
 
-## 📚 Featured Technical Articles & Research (精选技术长文)
+## 📚 Featured Technical Series & Research (精选体系专栏与深度长文)
 
-### 🤖 AI Engineering & Autonomous Agents (智能体编排与工程实践)
-* **[AI 编程驾驭指南：从「帮我写个 XX」到架构编排者](https://blog.llmgo.top/articles/ai-coding-mastery/)**  
-  *深入拆解六大核心驾驭方法论（Spec-Driven、上下文工程、TDD 验证环、多 Agent 编排、会话卫生），附 20+ 工具矩阵与避坑指南。*  
-  👉 English Edition: [AI Coding Mastery Guide](https://blog.llmgo.top/en/articles/ai-coding-mastery/)
+### ⚡ 旗舰专栏：《大模型推理引擎：从模型演进、内核架构到未来终局》
+*以底层硬件第一性原理贯穿现代大模型推理系统：从 Roofline 模型推导、算子加速，到 PagedAttention、MLA、MoE 并行与 P/D 解耦池化。*
 
-* **[突破 10 万 Star 的 Browser-use 架构深度剖析：DOM 树提纯、视觉定位与生产级网页 Agent 实战](https://blog.llmgo.top/articles/browser-use-agent-architecture/)**  
-  *解析网页 Agent 如何处理超长上下文窗口、多模态坐标映射与反爬绕过。*  
-  👉 English Edition: [Browser-use Agent Architecture Deep Dive](https://blog.llmgo.top/en/articles/browser-use-agent-architecture/)
-
-* **[自主 Agent 搭建实战：从零构建具备自省与记忆的多智能体协作系统](https://blog.llmgo.top/articles/build-ai-agent/)**  
-  *探讨 Agentic Loop、ReAct 规划机制以及工具调用安全沙盒架构。*  
-  👉 English Edition: [Building Production AI Agents](https://blog.llmgo.top/en/articles/build-ai-agent/)
-
-* **[MCP 协议完全指南：连接 LLM 与本地世界的统一标准](https://blog.llmgo.top/articles/mcp-guide/)**  
-  *Model Context Protocol 规范拆解，本地资源、Prompt 模板与 Tools 工业级集成。*  
-  👉 English Edition: [Model Context Protocol (MCP) Guide](https://blog.llmgo.top/en/articles/mcp-guide/)
-
----
-
-### ⚡ Inference Optimization & Serving (推理加速与高并发 Serving)
-* **[Test-Time Compute 与 GRPO 强化学习全景拆解：从自我反思到长思维链落地](https://blog.llmgo.top/articles/test-time-compute-grpo/)**  
-  *深入剖析 OpenAI o-series、DeepSeek-R1 与 GRPO（Group Relative Policy Optimization）数学本质与显存优化。*  
-  👉 English Edition: [Test-Time Compute & GRPO Guide](https://blog.llmgo.top/en/articles/test-time-compute-grpo/)
-
-* **[SGLang vs vLLM 架构全景深度对比：RadixAttention、PageAttention 与吞吐极限评测](https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/)**  
-  *核心 KV Cache 复用架构对比、多轮对话场景下的吞吐量评测与生产选型基准。*  
-  👉 English Edition: [SGLang vs vLLM Architecture Benchmark](https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/)
-
-* **[投机解码 (Speculative Decoding) 与 EAGLE 工业级落地实践](https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/)**  
-  *草稿模型验证机制、树状投机解码（Tree Speculation）与首字延迟降低技巧。*  
-  👉 English Edition: [Speculative Decoding & EAGLE Guide](https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/)
-
-* **[生产级 vLLM 高并发模型服务化落地指南](https://blog.llmgo.top/articles/vllm-serving-guide/)**  
-  *流水线并行 (PP)、张量并行 (TP)、Continuous Batching 与 CUDA Graph 调优手册。*  
-  👉 English Edition: [Production vLLM Serving Guide](https://blog.llmgo.top/en/articles/vllm-serving-guide/)
+* **[Chapter 01 · Roofline 模型与 Prefill/Decode 物理撕裂](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/)**  
+  👉 English: [Roofline Modeling of Prefill vs. Decode Disruption](https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/)
+* **[Chapter 02 · PagedAttention 显存池管理与分页虚拟化](https://blog.llmgo.top/articles/pagedattention-memory-virtualization/)**  
+  👉 English: [PagedAttention Memory Virtualization & Block Management](https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/)
+* **[Chapter 03 · Continuous Batching 与 Chunked Prefill 消除排头阻塞](https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/)**  
+  👉 English: [Continuous Batching & Chunked Prefill Deep Dive](https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/)
+* **[Chapter 04 · 前缀缓存演进：从 Hash 寻址到 SGLang RadixAttention 树状缓存](https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/)**  
+  👉 English: [Prefix Caching & RadixAttention Internals](https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/)
+* **[Chapter 05 · Attention 算子加速史：FlashAttention-1/2/3 到 FlashInfer 统一异构核心](https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/)**  
+  👉 English: [FlashAttention to FlashInfer Kernel Evolution](https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/)
+* **[Chapter 06 · 模型架构反哺推理系统：MHA/GQA 到 DeepSeek MLA 矩阵吸收](https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/)**  
+  👉 English: [MHA/GQA to DeepSeek MLA Matrix Absorption](https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/)
+* **[Chapter 07 · 稀疏大模型 MoE 推理内核：专家并行 (EP) 与 All-to-All 通信重叠](https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/)**  
+  👉 English: [MoE Expert Parallelism & All-to-All Overlap](https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/)
+* **[Chapter 08 · P/D 分离架构：计算与访存解耦、RDMA 分布式 KV Cache 传输与集群池化](https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/)**  
+  👉 English: [Prefill-Decode Disaggregation Architecture & RDMA KV Cache](https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/)
 
 ---
 
-### 🔬 Quantization, Fine-Tuning & Prompt Engineering (量化、微调与上下文)
-* **[大模型量化实战：从 GPTQ、AWQ 到 SmoothQuant 工业化部署](https://blog.llmgo.top/articles/quantization-hands-on-guide/)**  
-  *权重量化与激活值量化技术演进，FP8/INT4 推理精度对齐实战。*  
-  👉 English Edition: [LLM Quantization Hands-on Guide](https://blog.llmgo.top/en/articles/quantization-hands-on-guide/)
+### 🤖 旗舰专栏：《AI Agent 生产级架构师手册》
+*系统掌握 2026 生产级 AI Agent 核心架构：从执行循环、状态机，到 MCP 协议、Skills 扩展、多智能体协作与全链路可观测性。*
 
-* **[企业级大模型微调全流程实战：从 LoRA、QLoRA 到领域知识对齐](https://blog.llmgo.top/articles/fine-tuning-guide/)**  
-  *低秩自适应微调机制、数据配比策略与灾难性遗忘防护方案。*  
-  👉 English Edition: [Enterprise LLM Fine-Tuning Guide](https://blog.llmgo.top/en/articles/fine-tuning-guide/)
+* **[Agent 执行循环与状态机设计：从 ReAct 到确定性控制流](https://blog.llmgo.top/articles/agent-loop-state-machine/)** (👉 [English](https://blog.llmgo.top/en/articles/agent-loop-state-machine/))
+* **[MCP 协议完全指南：连接 LLM 与本地世界的统一标准](https://blog.llmgo.top/articles/mcp-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/mcp-guide/))
+* **[突破 10 万 Star 的 Browser-use 架构深度剖析](https://blog.llmgo.top/articles/browser-use-agent-architecture/)** (👉 [English](https://blog.llmgo.top/en/articles/browser-use-agent-architecture/))
+* **[AI Agent 记忆系统设计：从工作记忆到分层 Graph RAG](https://blog.llmgo.top/articles/agent-memory-architecture/)** (👉 [English](https://blog.llmgo.top/en/articles/agent-memory-architecture/))
+* **[对抗复合误差的分布式 Agent 编排与量化 Evals 体系](https://blog.llmgo.top/articles/agent-orchestration-evals/)** (👉 [English](https://blog.llmgo.top/en/articles/agent-orchestration-evals/))
+* **[AI 编程驾驭指南：从「帮我写个 XX」到架构编排者](https://blog.llmgo.top/articles/ai-coding-mastery/)** (👉 [English](https://blog.llmgo.top/en/articles/ai-coding-mastery/))
 
-* **[结构化 Prompt 工程高阶实战：从零到系统化设计指南](https://blog.llmgo.top/articles/prompt-engineering-guide/)**  
-  *Few-shot 策略、思维链引导与生产环境复杂任务输出格式锁定。*  
-  👉 English Edition: [Advanced Prompt Engineering Practice Guide](https://blog.llmgo.top/en/articles/prompt-engineering-guide/)
+---
 
-* **[生产级 RAG 检索增强全景演进：向量数据库、混合检索与重排序优化](https://blog.llmgo.top/articles/rag-in-practice/)**  
-  *Chunk 切分策略、Dense/Sparse 混合检索与 Cross-Encoder Rerank 生产落地。*  
-  👉 English Edition: [Production RAG Architecture in Practice](https://blog.llmgo.top/en/articles/rag-in-practice/)
+### 🔬 更多前沿硬核研报 (High-Throughput Serving & Alignment)
+* **[Test-Time Compute 与 GRPO 强化学习全景拆解：从自我反思到长思维链落地](https://blog.llmgo.top/articles/test-time-compute-grpo/)** (👉 [English](https://blog.llmgo.top/en/articles/test-time-compute-grpo/))
+* **[SGLang vs vLLM 架构全景深度对比：RadixAttention、PageAttention 与吞吐极限评测](https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/)** (👉 [English](https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/))
+* **[投机解码 (Speculative Decoding) 与 EAGLE 工业级落地实践](https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/))
+* **[生产级 RAG 检索增强全景演进：向量数据库、混合检索与重排序优化](https://blog.llmgo.top/articles/rag-in-practice/)** (👉 [English](https://blog.llmgo.top/en/articles/rag-in-practice/))
 
 ---
 

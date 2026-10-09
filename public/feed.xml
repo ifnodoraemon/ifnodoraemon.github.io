@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Thu, 24 Sep 2026 07:58:36 GMT</pubDate>
+  <pubDate>Fri, 09 Oct 2026 01:00:31 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞</title>
@@ -66,6 +66,16 @@
     <category>显存虚拟化</category>
     <description>为什么传统大模型推理会浪费 60%~80% 的 GPU 显存？深度剖析 vLLM 开创的 PagedAttention 核心机制，解构逻辑块到物理块映射、动态显存池生命周期、Copy-on-Write 分叉复用与 CUDA 非连续访存内核，彻底终结显存碎片化顽疾。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/pagedattention-memory-virtualization.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>P/D 分离 (Prefill-Decode Disaggregation) 架构：计算与访存解耦、RDMA 分布式 KV Cache 传输与集群池化调度</title>
+    <link>https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/</link>
+    <guid>https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>推理架构</category>
+    <description>为什么在 128k 超长上下文与长思考链时代，单机混合部署 Prefill 与 Decode 必然走向性能崩溃？深度剖析 P/D 分离 (Disaggregated Serving) 架构：从计算密集与访存密集的空间物理隔离、GQA 与 DeepSeek MLA 跨节点传输带宽推导，到 GPUDirect RDMA 单边零拷贝、全局 KV 池化调度与 P:D 节点最优比例数学建模。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/pd-disaggregation-distributed-kv-cache.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>前缀缓存架构演进：从 Hash 块级寻址到 SGLang RadixAttention 树状缓存与动态驱逐</title>

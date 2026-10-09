@@ -80,6 +80,7 @@ const SERIES_DEFINITIONS = {
       'flashattention-flashinfer-kernel-evolution',
       'mha-gqa-mla-matrix-absorption-inference-engine',
       'moe-expert-parallelism-inference-engine',
+      'pd-disaggregation-distributed-kv-cache',
     ],
   },
 };

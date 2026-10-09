@@ -3,9 +3,26 @@ import katex from 'katex';
 /**
  * Client-side KaTeX extension for Marked
  */
+function isCurrencyLike(content, afterClosingChar) {
+  if (afterClosingChar && /[0-9]/.test(afterClosingChar)) {
+    return true;
+  }
+  if (/(?:\/|per|每天成本|vs\s+API|vs\s+OpenAI)\s*(\d+|小时|月|天|hour|month|day|year|M\b|1M|百万)/i.test(content)) {
+    return true;
+  }
+  if (/^\d+[\d\.,]*\s*[kKmMbB]?\s*[-~至到]\s*$/.test(content)) {
+    return true;
+  }
+  if (/^[\d\.,]+\s*\/\s*(?:1M|M|百万)/.test(content) && content.includes("成本")) {
+    return true;
+  }
+  return false;
+}
+
 export default function markedKatex(options = {}) {
   const katexOptions = {
     throwOnError: false,
+    strict: false,
     ...options,
   };
 
@@ -44,7 +61,7 @@ export default function markedKatex(options = {}) {
 
         if (src[index + 1] === '$') {
           const nextTwo = src.indexOf('$$', index + 2);
-          if (nextTwo !== -1 && !src.slice(index + 2, nextTwo).includes('\n')) {
+          if (nextTwo !== -1) {
             return index;
           }
           index++;
@@ -52,15 +69,19 @@ export default function markedKatex(options = {}) {
         }
 
         const next = src[index + 1];
-        if (!next || /[0-9\s\$\n|]/.test(next)) continue;
+        if (!next || /[\s\$\n|]/.test(next)) continue;
 
         let closing = index;
         let found = false;
         while ((closing = src.indexOf('$', closing + 1)) !== -1) {
           if (src[closing - 1] === '\\') continue;
           const between = src.slice(index + 1, closing);
-          if (between.includes('\n') || between.includes('|')) break;
+          if (between.includes('\n')) break;
+          if (between.includes('|') && !between.includes('\\|')) break;
           if (between.endsWith(' ') || between.endsWith('\t')) continue;
+          const afterClosing = src[closing + 1] || '';
+          if (isCurrencyLike(between, afterClosing)) continue;
+
           found = true;
           break;
         }
@@ -71,7 +92,7 @@ export default function markedKatex(options = {}) {
     },
     tokenizer(src) {
       if (src.startsWith('$$')) {
-        const doubleMatch = src.match(/^\$\$([^\$\n]+?)\$\$/);
+        const doubleMatch = src.match(/^\$\$([\s\S]+?)\$\$/);
         if (doubleMatch) {
           return {
             type: 'inlineMath',
@@ -82,13 +103,15 @@ export default function markedKatex(options = {}) {
         }
       }
 
-      if (src.startsWith('$')) {
-        const singleMatch = src.match(/^\$([^\$\n]+?)\$/);
-        if (singleMatch) {
+      const singleMatch = src.match(/^\$((?![ \t\$\n|])(?:\\.|[^\\\$\n|])*?(?<![\s\\]))\$/);
+      if (singleMatch) {
+        const formulaText = singleMatch[1];
+        const afterClosing = src[singleMatch[0].length] || '';
+        if (!isCurrencyLike(formulaText, afterClosing)) {
           return {
             type: 'inlineMath',
             raw: singleMatch[0],
-            text: singleMatch[1].trim(),
+            text: formulaText.trim(),
             displayMode: false,
           };
         }
@@ -96,12 +119,16 @@ export default function markedKatex(options = {}) {
     },
     renderer(token) {
       try {
-        return katex.renderToString(token.text, {
+        const rendered = katex.renderToString(token.text, {
           ...katexOptions,
-          displayMode: token.displayMode ?? false,
+          displayMode: !!token.displayMode,
         });
+        if (token.displayMode) {
+          return `<div class="katex-display">${rendered}</div>`;
+        }
+        return rendered;
       } catch (e) {
-        return `<span class="katex-error">${token.text}</span>`;
+        return token.raw;
       }
     },
   };

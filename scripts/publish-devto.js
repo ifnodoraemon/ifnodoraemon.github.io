@@ -25,6 +25,14 @@ const PUBLISHED_TRACK_FILE = path.join(ROOT, '.devto-published.json');
 
 // Core top-tier engineering & research articles
 const TOP_TIER_SLUGS = [
+  'inference-roofline-prefill-decode',
+  'pagedattention-memory-virtualization',
+  'continuous-batching-chunked-prefill-guide',
+  'prefix-caching-radix-attention-internals',
+  'flashattention-flashinfer-kernel-evolution',
+  'mha-gqa-mla-matrix-absorption-inference-engine',
+  'moe-expert-parallelism-inference-engine',
+  'pd-disaggregation-distributed-kv-cache',
   'agent-loop-state-machine',
   'agent-memory-architecture',
   'test-time-compute-grpo',
