@@ -100,10 +100,21 @@ for (const file of htmlFiles) {
   if (brokenEntities) {
     issues.push({ file: relPath, type: 'Double-Escaped Entity', detail: `${brokenEntities.length} instances` });
   }
+
+  // 10. Check for unparsed markdown strong (**text**) leaking into HTML
+  const cleanWithoutCode = clean.replace(/<code[\s\S]*?<\/code>/gi, '');
+  const rawBold = cleanWithoutCode.match(/([^\n<]{0,40}\*\*[^\n<]{1,60}\*\*[^\n<]{0,40})/g);
+  if (rawBold) {
+    issues.push({ file: relPath, type: 'Unparsed Markdown Bold (**...**)', detail: rawBold.slice(0, 3).map(s => s.trim()).join('; ') });
+  }
 }
 
 console.log(`Audit complete. Found ${issues.length} potential issues:\n`);
 for (const issue of issues) {
   console.log(`❌ [${issue.type}] in ${issue.file}`);
   console.log(`   Details: ${issue.detail}\n`);
+}
+
+if (issues.length > 0) {
+  process.exit(1);
 }

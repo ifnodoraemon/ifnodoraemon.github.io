@@ -132,6 +132,7 @@ import { ref, computed, onMounted } from 'vue';
 import { Marked } from 'marked';
 import hljs from 'highlight.js/lib/common';
 import markedKatex from '../../assets/js/utils/marked-katex.js';
+import markedCjkCompat from '../../assets/js/utils/marked-cjk-compat.js';
 
 const props = defineProps({
   lang: { type: String, default: 'zh' },
@@ -146,6 +147,7 @@ const previewBoxRef = ref(null);
 
 // Initialize Marked with KaTeX & Highlight.js
 const marked = new Marked();
+marked.use(markedCjkCompat());
 marked.use(markedKatex({ throwOnError: false }));
 
 marked.setOptions({

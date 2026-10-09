@@ -15,6 +15,7 @@ import { fileURLToPath } from 'url';
 import { marked } from 'marked';
 import matter from 'gray-matter';
 import markedKatex from './marked-katex.js';
+import markedCjkCompat from './marked-cjk-compat.js';
 import hljs from 'highlight.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -205,6 +206,7 @@ renderer.blockquote = function (token) {
 };
 
 marked.use({ renderer });
+marked.use(markedCjkCompat());
 marked.use(markedKatex({ throwOnError: false }));
 
 const templatePath = path.join(ROOT, 'src', 'templates', 'article.html');
