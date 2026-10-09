@@ -93,7 +93,7 @@ class AgentState(TypedDict):
 
 # 2. Node Logic: The Model Reasoning Node
 def call_model(state: AgentState):
-    llm = ChatAnthropic(model="claude-sonnet-4-6-20260217")
+    llm = ChatAnthropic(model="claude-sonnet-5-5")
     tools = [get_current_time, search_web, execute_python]
     llm_with_tools = llm.bind_tools(tools)
     response = llm_with_tools.invoke(state["messages"])
@@ -127,10 +127,10 @@ for event in app.stream(inputs, stream_mode="values"):
 
 | Requirements | Recommended Model | Reason |
 |------|----------|------|
-| Complex Agent tasks | Claude Opus 4.6 | The strongest Agentic capabilities and Computer Use |
-| Daily Agent development | Claude Sonnet 4.6 | The best balance between speed and intelligence |
-| Agents requiring deep reasoning | GPT-5.4 Thinking | Transparent thought chains, easier to debug |
-| High-volume production environments | Gemini 3.1 Flash-Lite | Best cost-effectiveness |
+| Complex Agent tasks | Claude Opus 5.5 | State-of-the-art autonomous planning, tool orchestration, and Computer Use |
+| Daily Agent development | Claude Sonnet 5.5 | Premier balance between high intelligence, latency, and engineering ergonomics |
+| Agents requiring deep reasoning | OpenAI o3 / GPT-6 | Transparent chain-of-thought, symbolic deduction, and multi-step reasoning |
+| High-volume production environments | Gemini 3.1 Flash-Lite | Ultra-low per-token latency and optimal throughput cost-efficiency |
 
 ## Best Practices
 

@@ -95,11 +95,6 @@ Implement calibrated blind swapping to eliminate position bias, extract token lo
 ### Q3: Why are durable workflow orchestrators like Temporal preferred over native in-memory state machines?
 In-memory state graphs fail during pod restarts, worker preemptions, or third-party API rate limits, risking lost execution state or catastrophic duplicate actions. Durable event-driven orchestrators persist state after each step, providing replayability, deterministic timeouts, and idempotency guarantees required for enterprise SLAs.
 
-
----
-
-## Frequently Asked Questions (FAQ)
-
 ### Q4: How do we solve the high cost problem in model evaluation?
 We recommend using stronger (and more expensive) models for evaluation on critical paths. For standard or secondary paths, you can use distilled smaller models combined with specific [LLM evaluation metrics](/en/articles/llm-evaluation-guide/) for batch automated testing.
 

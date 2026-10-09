@@ -322,7 +322,7 @@
     A: 对于超长中文政企公文研读、金融财报深层审计及百万级多轮长记忆 Agent，优先选用 Kimi K3；对于企业级自动化 Linux 运维、终端指令生成及安全攻防测试，首选经环境缩放锤炼的 GLM-5.3；而对于全生命周期软件开发、代码库重构、SQL/函数调用以及需要极低 Token 成本的大规模私有化集群，DeepSeek-V4-Pro 是综合投资回报率最高的选择。...
 
 ### [告别单纯 Prompt：2026 年“环境缩放 (Environment Scaling)”如何重塑自主 Agent](https://blog.llmgo.top/articles/environment-scaling-agent-guide/)
-- 发布日期: 2026-09-07 | 标签: 环境缩放 | 预计阅读: 预计阅读 10 分钟 | 字数: 约 2261 字
+- 发布日期: 2026-09-07 | 标签: 环境缩放 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1839 字
 - 概述: 剖析 2026 年大模型后训练的重大范式跃迁：为什么从文本自回归走向多任务环境沙箱博弈？结合 GLM-5.3 在 Terminal-Bench 3.0 的登顶实践，详解 Linux 容器编排、MCP 协议集成与零逃逸安全沙箱工程实战。
 - 核心 FAQ 解答:
   * Q: Q1: 环境缩放（Environment Scaling）与传统的强化学习（RLHF）在训练本质上有何不同？
@@ -330,7 +330,7 @@
   * Q: Q2: 允许 Agent 自主执行 Shell 命令时，如何防止容器逃逸和高危破坏？
     A: 必须采用多层纵深防御体系：底层使用轻量级微虚拟机（如 Firecracker、Kata Containers）或用户态沙箱（如 gVisor）实现内核级隔离，应用层剥夺 root 权限并挂载只读根文件系统，网络层实施白名单访问控制并配置严苛的超时与 CPU 配额。构建健壮且可观测的智能体运行环境，建议参考 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/)。...
   * Q: Q3: 为什么引入沙箱交互后，模型依然容易出现死循环或重复犯错？
-    A: 这是由于缺乏显式的状态跟踪和失败归因机制。若仅将原始报错追加在上下文末尾，长文本累积会导致模型注意力稀释并重复无效尝试；应在运行时设计结构化的状态快照、差异对比（Diffing）与回溯逻辑，强制模型在连续多次失败后切换解题策略。 ---...
+    A: 这是由于缺乏显式的状态跟踪和失败归因机制。若仅将原始报错追加在上下文末尾，长文本累积会导致模型注意力稀释并重复无效尝试；应在运行时设计结构化的状态快照、差异对比（Diffing）与回溯逻辑，强制模型在连续多次失败后切换解题策略。...
 
 ### [解密 2026 架构创新：Kimi Delta Attention 与 DeepSeek MLA 是如何干掉显存墙的？](https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/)
 - 发布日期: 2026-09-07 | 标签: 架构演进 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1881 字
@@ -353,7 +353,7 @@
     A: 业界成熟方案通常采用“小模型生成 (Actor) + 大模型裁决 (Critic)”的非对称组合：使用吞吐高、成本低的轻量模型负责代码初稿生成与局部修补，仅在节点终验和关键分支评估时唤醒大参数模型担任 Critic；或者在离线阶段用大模型蒸馏出专用的轻量级验证器，兼顾搜索广度与计算成本。...
 
 ### [2026 AI 开发范式：对抗复合误差的分布式 Agent 编排与量化 Evals 体系](https://blog.llmgo.top/articles/agent-orchestration-evals/)
-- 发布日期: 2026-07-15 | 标签: 编排评测 | 预计阅读: 预计阅读 9 分钟 | 字数: 约 2087 字
+- 发布日期: 2026-07-15 | 标签: 编排评测 | 预计阅读: 预计阅读 9 分钟 | 字数: 约 2080 字
 - 概述: 当大模型走向复杂的企业级落地，如何通过分布式编排对抗链路误差复合？如何构建具有统计学置信度的 Evals 评估体系？本文带你从基础概念直击硬核底座。
 - 核心 FAQ 解答:
   * Q: Q1: 当多 Agent 协同任务链路很长时，如何从架构上防止“步步衰减”导致的整体崩塌？
@@ -361,7 +361,7 @@
   * Q: Q2: 使用 LLM-as-a-Judge 进行回归测试时，如何以最低成本获得高统计置信度？
     A: 优先使用校准后的多轮盲测打分（如交换输入顺序以对消位置偏见），并结合 G-Eval 的 Token Logprob 加权获得平滑连续的浮点评分；对于核心业务场景，定期抽取 5%~10% 的自动评分结果交由领域专家进行混淆矩阵比对与对齐校准。深入了解裁判模型的数学偏差与实操技巧，请参考 [大模型业务评估体系建设指南](/articles/llm-evaluation-guide/)。...
   * Q: Q3: 生产级分布式 Agent 编排为什么普遍选用 Temporal 等外部工作流引擎而非纯内存状态机？
-    A: 纯内存状态机在面对网络波动、Pod 重启或大模型 API 速率限制时缺乏持久化韧性，极易导致正在进行的长流程任务状态丢失或重复扣费。基于事件驱动的外部工作流引擎提供持久化定时器、确定性重试队列与状态序列化机制，能够天然保障分布式任务的幂等性与 Exactly-Once 执行。 ---...
+    A: 纯内存状态机在面对网络波动、Pod 重启或大模型 API 速率限制时缺乏持久化韧性，极易导致正在进行的长流程任务状态丢失或重复扣费。基于事件驱动的外部工作流引擎提供持久化定时器、确定性重试队列与状态序列化机制，能够天然保障分布式任务的幂等性与 Exactly-Once 执行。...
 
 ### [深度解析 AI Agent 架构演进：从 Prompt 到 Loop 工程](https://blog.llmgo.top/articles/loop-engineering/)
 - 发布日期: 2026-06-28 | 标签: 循环工程 | 预计阅读: 预计阅读 10 分钟 | 字数: 约 2253 字
@@ -373,7 +373,7 @@
     A: 因为每一次失败尝试都会被追加到上下文中，导致上下文污染并放大模型的错误偏见。通过Loop工程的独立裁判(Checker)机制隔离上下文，并设置安全闸门，可以有效阻断死循环。...
 
 ### [Agent 可观测性与调试：从黑盒到白盒的进阶之路](https://blog.llmgo.top/articles/agent-observability-debugging/)
-- 发布日期: 2026-06-15 | 标签: 可观测性 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1819 字
+- 发布日期: 2026-06-15 | 标签: 可观测性 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1822 字
 - 概述: AI Agent 不再是传统软件，调试的是推理过程而非代码。本文详细探讨 Trajectory Evaluation、LLM-as-a-Judge 和主流 Agent 观测工具（LangSmith, Langfuse 等）的实战应用。
 - 核心 FAQ 解答:
   * Q: Q1: 引入全链路 Trace 追踪后，海量 Token 和 Payload 导致存储成本剧增，该如何治理？
@@ -470,7 +470,7 @@
     A: 在模型训练、参数高效微调（如 LoRA/QLoRA）以及对数值敏感度极高的端到端生成场景中，混合精度是首选策略。工程上通常将占用参数量与计算量大头的线性投影层压缩至 INT8/FP8 以利用专用 Tensor Core 提速，而将易发生数值溢出的 Embedding 词表层、LayerNorm 层和 Softmax 概率归一化保留在 BF16/FP32，从而在显存与输出稳定性之间取得完美平衡。 ---...
 
 ### [做 AI Agent 的 7 条运行时实践](https://blog.llmgo.top/articles/agent-runtime-practices/)
-- 发布日期: 2026-03-15 | 标签: 运行时规范 | 预计阅读: 预计阅读 13 分钟 | 字数: 约 3206 字
+- 发布日期: 2026-03-15 | 标签: 运行时规范 | 预计阅读: 预计阅读 13 分钟 | 字数: 约 3199 字
 - 概述: 基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。
 - 核心 FAQ 解答:
   * Q: Q1: 生产环境中如何彻底防范 Agent 陷入死循环 (Doom-loop)？
@@ -478,7 +478,7 @@
   * Q: Q2: 工具调用发生超时或第三方 API 熔断时，Runtime 应如何优雅处理？
     A: Runtime 必须为所有工具执行配置严格的异步超时（如 10-30 秒）与熔断机制，避免阻塞 Agent 主线程。当工具超时或报错时，不要将底层堆栈原样抛出，而应将其包装为包含具体失败原因的结构化 Observation 错误信息（例如“查询超时，建议缩小时间范围重试”），让模型具备自主修正或降级切换工具的机会。...
   * Q: Q3: 面对长程任务中的上下文窗口溢出，最佳的治理策略是什么？
-    A: 严禁采用简单的全量历史滑动窗口截断，这会导致关键系统指令或早期事实丢失。推荐采用分级治理：工具调用结果及时摘要化、利用 Working Memory 显式沉淀已验证结论、对早期非核心轮次进行周期性压缩归纳（Digest）。更系统化的上下文治理方案可参阅 [上下文工程全指南](/articles/context-engineering-guide/)。 ---...
+    A: 严禁采用简单的全量历史滑动窗口截断，这会导致关键系统指令或早期事实丢失。推荐采用分级治理：工具调用结果及时摘要化、利用 Working Memory 显式沉淀已验证结论、对早期非核心轮次进行周期性压缩归纳（Digest）。更系统化的上下文治理方案可参阅 [上下文工程全指南](/articles/context-engineering-guide/)。...
 
 ### [MCP 协议深度解析：AI 的「USB-C 接口」](https://blog.llmgo.top/articles/mcp-guide/)
 - 发布日期: 2026-03-12 | 标签: MCP 协议 | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4609 字
@@ -523,7 +523,7 @@
     A: 推荐采用“闭源主力推理 + 开源私有兜底”的分层混合路由架构。对于核心前沿业务与复杂逻辑链条，直接采用高性价比的商业 API 能够大幅降低研发维护成本；而对于有严苛数据合规要求、离线运行需求或超大吞吐量高频基础任务，本地化部署 Llama 或 Qwen 开源模型更具长期确定性，详细选型对比请参考 [2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro](/articles/model-comparison-2026/)。 ---...
 
 ### [从零搭建 AI Agent 应用](https://blog.llmgo.top/articles/build-ai-agent/)
-- 发布日期: 2026-03-05 | 标签: 智能体构建 | 预计阅读: 预计阅读 9 分钟 | 字数: 约 2017 字
+- 发布日期: 2026-03-05 | 标签: 智能体构建 | 预计阅读: 预计阅读 9 分钟 | 字数: 约 2056 字
 - 概述: 手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。
 - 核心 FAQ 解答:
   * Q: Q1: 如何通过外部协议扩展 Agent 的能力？
@@ -772,7 +772,7 @@
     A: For nuanced Chinese legal documents, annual financial disclosures, and multi-turn conversational agents with ultra-long memory, Kimi K3 delivers superior fidelity and context retention. For enterprise Linux DevOps orchestration, terminal automation, and security sandboxes, GLM-5.3 dominates. For ent...
 
 ### [Beyond Simple Prompts: How Environment Scaling Is Reshaping Autonomous Agents in 2026](https://blog.llmgo.top/en/articles/environment-scaling-agent-guide/)
-- Date: 2026-09-07 | Tag: Environment Scaling | Read: 5 min read | Words: 1020 words
+- Date: 2026-09-07 | Tag: Environment Scaling | Read: 4 min read | Words: 834 words
 - Summary: Analyzing the major post-training paradigm shift of 2026: from text autoregression to multi-environment sandboxed RL. Deep dive into GLM-5.3's Terminal-Bench 3.0 breakthrough, Linux container orchestration, MCP protocol integration, and sandboxed agent engineering.
 - Key FAQ Insights:
   * Q: Q1: How does Environment Scaling differ fundamentally from traditional RLHF?
@@ -803,7 +803,7 @@
     A: A proven industry pattern pairs an agile, low-cost model as the Actor (generating rapid implementation drafts) with a frontier reasoning model acting strictly as the Critic (evaluating state quality and verifying execution artifacts). This asymmetrical architecture captures over 90% of frontier mode...
 
 ### [2026 AI Paradigm Shift: Distributed Agent Orchestration & Evals to Combat Error Compounding](https://blog.llmgo.top/en/articles/agent-orchestration-evals/)
-- Date: 2026-07-15 | Tag: Orchestration & Evals | Read: 5 min read | Words: 1098 words
+- Date: 2026-07-15 | Tag: Orchestration & Evals | Read: 5 min read | Words: 1093 words
 - Summary: As LLMs move into complex enterprise production, how do we use distributed orchestration to combat error compounding? How do we build a statistically significant Evals system?
 - Key FAQ Insights:
   * Q: Q1: How can multi-agent systems mathematically prevent error compounding across long execution graphs?
@@ -823,7 +823,7 @@
     A: Because every failed attempt is appended to the context, causing context pollution and amplifying the model's error bias. By isolating the context with Loop Engineering's independent referee (Checker) mechanism and setting safety gates, doom-loops can be effectively blocked....
 
 ### [Agent Observability & Debugging: The Path from Black Box to White Box](https://blog.llmgo.top/en/articles/agent-observability-debugging/)
-- Date: 2026-06-15 | Tag: Observability | Read: 5 min read | Words: 1018 words
+- Date: 2026-06-15 | Tag: Observability | Read: 5 min read | Words: 1020 words
 - Summary: AI Agents are not traditional software; we are debugging the reasoning process rather than the code itself. This article explores Trajectory Evaluation, LLM-as-a-Judge, and practical applications of mainstream Agent observability tools like LangSmith and Langfuse.
 - Key FAQ Insights:
   * Q: Q1: How do we mitigate explosive storage costs when logging full-fidelity multi-span agent traces?
@@ -920,7 +920,7 @@
     A: Mixed precision is essential during model pre-training, fine-tuning (e.g., QLoRA), and inference pipelines where specific layers exhibit high numerical sensitivity. Typically, bulk matrix multiplications in feed-forward layers run on INT8/FP8 Tensor Cores, while fragile operations like token embeddi...
 
 ### [7 Runtime Practices for Building AI Agents](https://blog.llmgo.top/en/articles/agent-runtime-practices/)
-- Date: 2026-03-15 | Tag: Runtime Practices | Read: 8 min read | Words: 1942 words
+- Date: 2026-03-15 | Tag: Runtime Practices | Read: 8 min read | Words: 1937 words
 - Summary: Based on a real data analysis agent project, this article distills 7 reusable Agent Runtime practices covering state exposure, tool design, context control, guardrails, delegation, and trace-driven iteration.
 - Key FAQ Insights:
   * Q: Q1: How can we reliably prevent AI Agents from falling into infinite dead loops (Doom-loops)?
@@ -973,7 +973,7 @@
     A: Industry best practice favors a hybrid semantic routing architecture. Enterprises should leverage commercial APIs for top-tier reasoning, multimodal vision, and complex code generation where development velocity is paramount, while deploying quantized open-source models (such as Llama 4 or Qwen) on-...
 
 ### [Building AI Agent Applications from Scratch](https://blog.llmgo.top/en/articles/build-ai-agent/)
-- Date: 2026-03-05 | Tag: Agent Building | Read: 5 min read | Words: 1246 words
+- Date: 2026-03-05 | Tag: Agent Building | Read: 6 min read | Words: 1257 words
 - Summary: A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.
 - Key FAQ Insights:
   * Q: Q1: How can we extend an Agent's capabilities through external protocols?

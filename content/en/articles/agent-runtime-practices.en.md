@@ -198,11 +198,6 @@ Every tool invocation must be governed by asynchronous timeout budgets (typicall
 
 ### Q3: What is the recommended strategy when dealing with context window overflow in long-horizon agent tasks?
 Avoid naive sliding-window truncations that discard foundational system instructions or critical historical constraints. Instead, employ hierarchical context hygiene: prune verbose raw tool outputs into compact summaries, persist stable conclusions into dedicated working memory structures, and periodically synthesize older conversational turns into rolling digests. For implementation details, refer to our [Context Engineering Guide](/en/articles/context-engineering-guide/).
-
----
-
-## Frequently Asked Questions (FAQ)
-
 ### Q4: How should Agent Runtime handle exception flows?
 Instead of crashing, the Runtime should catch errors and return them to the model as state or observations. This allows the model to autonomously decide the next action, and you can also refer to [loop engineering](/en/articles/loop-engineering/) for optimization.
 

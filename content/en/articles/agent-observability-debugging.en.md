@@ -55,7 +55,7 @@ Trajectory Evaluation looks not just at the result, but at the process. For exam
 
 Given the massive volume of Trace data, manual inspection is unrealistic. In 2026, the standard approach is to use **LLM-as-a-Judge**.
 
-We configure a background Judge Agent (typically using a more powerful, albeit more expensive model like Claude Opus 4.8). When a business Agent completes a task and generates a Trace tree, the Judge Agent analyzes this tree and tags specific spans:
+We configure a background Judge Agent (typically using a more powerful, albeit more expensive model like Claude Opus 5.5 or GPT-6). When a business Agent completes a task and generates a Trace tree, the Judge Agent analyzes this tree and tags specific spans:
 - `hallucination=True` (Hallucination detected)
 - `tool_efficiency=Low` (Excessive/inefficient tool calls)
 - `score=4/5` (Overall quality rating)

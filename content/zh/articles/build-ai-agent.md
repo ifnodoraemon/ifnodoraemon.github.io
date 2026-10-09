@@ -93,7 +93,7 @@ class AgentState(TypedDict):
 
 # 2. 节点逻辑：模型推理节点
 def call_model(state: AgentState):
-    llm = ChatAnthropic(model="claude-sonnet-4-6-20260217")
+    llm = ChatAnthropic(model="claude-sonnet-5-5")
     tools = [get_current_time, search_web, execute_python]
     llm_with_tools = llm.bind_tools(tools)
     response = llm_with_tools.invoke(state["messages"])
@@ -127,10 +127,10 @@ for event in app.stream(inputs, stream_mode="values"):
 
 | 需求 | 推荐模型 | 原因 |
 |------|----------|------|
-| 复杂 Agent 任务 | Claude Opus 4.6 | 最强的 Agentic 能力和 Computer Use |
-| 日常 Agent 开发 | Claude Sonnet 4.6 | 速度与智能的最佳平衡 |
-| 需要深度推理的 Agent | GPT-5.4 Thinking | 推理链透明，便于调试 |
-| 高调用量生产环境 | Gemini 3.1 Flash-Lite | 性价比最优 |
+| 复杂 Agent 任务 | Claude Opus 5.5 | 顶尖的自主规划、多步工具调用与 Computer Use |
+| 日常 Agent 开发 | Claude Sonnet 5.5 | 极高智能度、快速响应与工程落地的最佳平衡 |
+| 需要深度推理的 Agent | OpenAI o3 / GPT-6 | 透明的深度思考链，复杂数理逻辑与符号推演 |
+| 高调用量生产环境 | Gemini 3.1 Flash-Lite | 极低单次延迟与最高性价比的轻量基座 |
 
 ## 最佳实践
 

@@ -55,7 +55,7 @@ AI Agent 与传统软件最大的区别在于它是**非确定性（Non-determin
 
 面对海量的 Trace 数据，人工逐一查看是不现实的。在 2026 年，标准的做法是使用 **LLM-as-a-Judge（把大模型当裁判）**。
 
-我们可以配置一个后台自动运行的 Judge Agent（通常使用更强大但也更贵的模型，如 Claude Opus 4.8）。当业务 Agent 完成一次任务并生成了一棵 Trace 树后，Judge Agent 会分析这棵树，并在特定的 Span 上打标签：
+我们可以配置一个后台自动运行的 Judge Agent（通常使用更强大但也更贵的模型，如 Claude Opus 5.5 或 GPT-6）。当业务 Agent 完成一次任务并生成了一棵 Trace 树后，Judge Agent 会分析这棵树，并在特定的 Span 上打标签：
 - `hallucination=True` （发现幻觉）
 - `tool_efficiency=Low` （工具调用啰嗦）
 - `score=4/5` （总体质量评分）
