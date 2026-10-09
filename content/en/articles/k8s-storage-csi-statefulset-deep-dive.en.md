@@ -212,16 +212,12 @@ Kubernetes storage architecture balances operational automation against data dur
 - **Dynamic Provisioning and the Four-Phase Lifecycle** orchestrate complex Linux block attachments and bind mounts into declarative pipelines;
 - **StatefulSet Invariants** maintain deterministic network identities and storage associations across node migrations.
 
-However, basic StatefulSet primitives cannot handle complex, application-specific lifecycle events:
-- How do MySQL clusters handle automatic failover and replication catch-up?
-- How do Redis clusters execute slot rebalancing and online resharding?
-- How do database systems orchestrate point-in-time backups to object storage without human intervention?
+However, mastering low-level storage and networking abstractions still leaves a significant chasm to running enterprise microservices reliably:
+- Why does standard gRPC connection multiplexing break `kube-proxy` Layer-4 load balancing, driving all traffic into a single Pod?
+- Why do rolling deployments frequently trigger 502 Bad Gateway and connection reset errors on ingress gateways?
+- What subtle, asynchronous race conditions unfold between Pod termination (`preStop` / `SIGTERM`) and Kubernetes EndpointSlice propagation?
 
-Generic controllers cannot understand domain-specific database internals.
-
-To address this challenge, the Kubernetes community established the most powerful extension pattern in the cloud-native ecosystem: **The Operator Pattern**.
-
-In Chapter 07, **[Kubernetes Extensibility: The Operator Pattern, Custom Resource Definitions (CRD), and KubeBuilder in Production](/en/articles/k8s-operator-pattern-kubebuilder-crd/)**, we examine how custom controllers automate complex enterprise workloads!
+In Chapter 07, **[Application Networking on Kubernetes: The gRPC Load Balancing Trap, Service Mesh, and Zero-Downtime Draining Sequences](/en/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/)**, we dive into application-layer communications!
 
 ---
 

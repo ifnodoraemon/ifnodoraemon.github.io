@@ -212,16 +212,12 @@ Kubernetes 存储架构将看似不可调和的矛盾统一在了一起：
 - **动态供给与四阶段挂载**，将复杂的物理硬件挂载、格式化与 Linux Bind-Mount 流程封装为高度可靠的自动化状态流；
 - **StatefulSet** 筑起了坚固的拓扑防线，使得分布式有状态集群能够在云原生动态环境中具备坚如磐石的确定性。
 
-然而，单纯依靠基础的 StatefulSet，仍然无法处理复杂的数据库日常运维：
-- 谁来负责 MySQL 主从节点的自动选举与 Failover？
-- 谁来负责 Redis 集群的槽位（Slot）迁移与自动扩容？
-- 谁来在业务高峰期自动备份数据并安全上传到对象存储？
+然而，单纯掌握了底层的网络与存储抽象，距离成功运行高可用业务系统仍有巨大的鸿沟：
+- 为什么在 K8s 上运行微服务时，传统的 gRPC 长连接会使得 kube-proxy 的四层负载均衡彻底失效？
+- 为什么每次执行滚动发布时，前端网关总会出现短暂的 502 错误或 Connection Reset 报错？
+- 容器内的进程下线与 Kubernetes 的网络 Endpoint 切除之间，究竟存在怎样惊心动魄的时序竞态？
 
-通用控制器（如 StatefulSet）只能保障通用的拓扑顺序，对特定业务软件的内部状态一无所知。
-
-为了解决这一终极痛点，Kubernetes 诞生了整个生态中最强大的扩展设计模式 —— **Operator 模式**。
-
-在接下来的**专栏第七讲**中，我们将全面攻坚云原生扩展的核心技术 —— **[Kubernetes 扩展核心：Operator 模式、CRD 自定义资源与 KubeBuilder 生产级实战](/articles/k8s-operator-pattern-kubebuilder-crd/)**！
+在接下来的**专栏第七讲**中，我们将正式进入真实业务软件的云原生通信深水区 —— **[业务软件在 K8s 上的网络架构实战：gRPC 长连接负载均衡陷阱、Service Mesh 与零停机平滑切流时序](/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/)**！
 
 ---
 

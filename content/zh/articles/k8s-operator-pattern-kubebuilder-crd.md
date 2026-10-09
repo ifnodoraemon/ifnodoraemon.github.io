@@ -6,7 +6,7 @@ tag: Operator 模式
 tagClass: tag-blue
 category: 云原生
 series: container-k8s
-seriesOrder: 7
+seriesOrder: 12
 description: "为什么说 Operator 模式是 Kubernetes 能够统治整个现代基础架构软件生态的终极杀手锏？深度拆解 Operator 模式的核心哲学：如何将资深 SRE 的运维专家经验编码为代码；解密 CRD（自定义资源定义）在 apiextensions-apiserver 中的注册机理与 Status/Scale 子资源隔离；深入剖析 Controller-Runtime 与 KubeBuilder 生产级脚手架架构（Manager、Cache、Split Client、Reconcile 调谐与 Finalizer 安全清理机制），并通过完整的 Go 代码实现一个高可用分布式中间件 Operator。"
 extraTags:
   - Kubernetes
@@ -54,7 +54,7 @@ flowchart LR
     Client -.->|"执行业务级操作<br/>(执行 Redis 命令 / 选主)"| Cluster["底层分布式业务实例"]
 ```
 
-本文作为**《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》**的第七篇，将带你深入 Kubernetes 扩展性设计的皇冠明珠：剖析 CRD 底层模型、精解 Controller-Runtime 与 KubeBuilder 架构，并通过实战代码掌握生产级 Operator 的编写艺术与避坑指南。
+本文作为**《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》**的第十二篇，将带你深入 Kubernetes 扩展性设计的皇冠明珠：剖析 CRD 底层模型、精解 Controller-Runtime 与 KubeBuilder 架构，并通过实战代码掌握生产级 Operator 的编写艺术与避坑指南。
 
 ---
 
@@ -304,7 +304,7 @@ Operator 模式赋予了 Kubernetes **无限进化的生命力**：
 - 动态资源分配（DRA）与拓扑感知调度（Topology Manager）如何避免跨 NUMA 内存瓶颈？
 - 像 **vLLM、SGLang** 这样基于 P/D 分离与分布式 KV Cache 的前沿推理集群，又该如何在 Kubernetes 上基于真实缓存负载实现精准的自动弹性扩缩容？
 
-在接下来的**专栏终局篇（第八讲）**中，我们将全面聚焦 2026 云原生最火热的前沿战场 —— **[2026 AI 智算调度终局：Kubernetes GPU Operator、MIG 分割、拓扑感知调度与 vLLM/SGLang 集群弹性扩缩容](/articles/k8s-gpu-operator-ai-inference-scheduling/)**！
+在接下来的**专栏终局篇（第十三讲）**中，我们将全面聚焦 2026 云原生最火热的前沿战场 —— **[2026 AI 智算调度终局：Kubernetes GPU Operator、MIG 分割、拓扑感知调度与 vLLM/SGLang 集群弹性扩缩容](/articles/k8s-gpu-operator-ai-inference-scheduling/)**！
 
 ---
 

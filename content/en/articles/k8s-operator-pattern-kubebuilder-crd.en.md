@@ -6,7 +6,7 @@ tag: Operator Pattern
 tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
-seriesOrder: 7
+seriesOrder: 12
 description: "Why is the Operator pattern universally recognized as the decisive architectural breakthrough that crowned Kubernetes the operating system of the modern cloud? A comprehensive deconstruction of Operator philosophy: codifying senior SRE domain knowledge into software; how CRDs register dynamic endpoints in apiextensions-apiserver with /status and /scale subresource isolation; and an in-depth breakdown of Controller-Runtime and KubeBuilder architecture (Manager, Cache, Split Client, Reconcile, and Finalizers), complete with production Go code for high-availability distributed stateful middleware."
 extraTags:
   - Kubernetes
@@ -54,7 +54,7 @@ flowchart LR
     Client -.->|"Execute Application Ops<br/>(Issue Redis Commands / Failover)"| Cluster["Distributed Workload Pods"]
 ```
 
-As the seventh chapter of **From Docker to Kubernetes: Cloud-Native Container & Cluster Orchestration Handbook**, this guide explores the pinnacle of Kubernetes extensibility: Custom Resource Definitions (CRDs), Controller-Runtime internals, KubeBuilder scaffolding, and production Go implementations for automated middleware management.
+As the twelfth chapter of **From Docker to Kubernetes: Cloud-Native Container & Cluster Orchestration Handbook**, this guide explores the pinnacle of Kubernetes extensibility: Custom Resource Definitions (CRDs), Controller-Runtime internals, KubeBuilder scaffolding, and production Go implementations for automated middleware management.
 
 ---
 
@@ -304,7 +304,7 @@ In modern AI clusters hosting thousands of NVIDIA GPUs connected over high-speed
 - How do Dynamic Resource Allocation (DRA) and the Topology Manager prevent cross-NUMA interconnect bottlenecks?
 - How do distributed LLM serving engines (**vLLM**, **SGLang**) orchestrate Prefix/Decode disaggregation and scale dynamically based on real-time KV cache pressure?
 
-In our series finale, **[2026 AI Computing Infrastructure: Kubernetes GPU Operator, MIG Partitioning, Topology-Aware Scheduling, and Auto-scaling Inference Engines](/en/articles/k8s-gpu-operator-ai-inference-scheduling/)**, we examine cloud-native infrastructure at the AI frontier!
+In our series finale (Chapter 13), **[2026 AI Computing Infrastructure: Kubernetes GPU Operator, MIG Partitioning, Topology-Aware Scheduling, and Auto-scaling Inference Engines](/en/articles/k8s-gpu-operator-ai-inference-scheduling/)**, we examine cloud-native infrastructure at the AI frontier!
 
 ---
 

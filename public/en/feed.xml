@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Fri, 09 Oct 2026 01:49:48 GMT</pubDate>
+  <pubDate>Fri, 09 Oct 2026 02:16:27 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Container Networking Deep Dive: veth-pair, Linux Bridge, iptables NAT, and Cross-Host Topology</title>
@@ -38,6 +38,16 @@
     <enclosure url="https://blog.llmgo.top/og/en/docker-swarm-architecture-raft-routing-mesh.png" length="150000" type="image/png" />
   </item>
   <item>
+    <title>Application Networking on Kubernetes: The gRPC Load Balancing Trap, Service Mesh, and Zero-Downtime Draining Sequences</title>
+    <link>https://blog.llmgo.top/en/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/</link>
+    <guid>https://blog.llmgo.top/en/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Application Networking</category>
+    <description>Why do enterprise microservices migrated to Kubernetes frequently suffer from intermittent 502 Bad Gateway errors during rolling updates while gRPC workloads bottleneck onto a single Pod? A deep architectural exploration into application-layer networking on Kubernetes: why HTTP/2 multiplexing breaks Layer-4 ClusterIP load balancing and how Headless Services and Envoy resolve it; MaxConnectionAge, JVM DNS TTL -1 traps, and reconnect storms; the asynchronous race condition between Pod deletion and EndpointSlice propagation; and production zero-downtime draining sequences via preStop hooks, graceful shutdowns, and readinessGates.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/k8s-application-networking-grpc-service-mesh-zero-downtime.png" length="150000" type="image/png" />
+  </item>
+  <item>
     <title>Kubernetes Control Plane Deep Dive: Declarative APIs, etcd Consensus, Scheduler, and Controller Reconciliation Loops</title>
     <link>https://blog.llmgo.top/en/articles/k8s-control-plane-declarative-reconciliation/</link>
     <guid>https://blog.llmgo.top/en/articles/k8s-control-plane-declarative-reconciliation/</guid>
@@ -46,6 +56,26 @@
     <category>K8s Control Plane</category>
     <description>Why have declarative APIs and modern control theory emerged as the definitive standard for cloud infrastructure? A comprehensive architectural deconstruction of the Kubernetes Control Plane: kube-apiserver request admission pipelines (Authentication, RBAC, Mutating and Validating Webhooks), etcd v3 MVCC revisions and Watch streams, kube-scheduler two-phase filter and score algorithms, Informer mechanics (Reflector, DeltaFIFO, Indexer, WorkQueue), and level-triggered controller reconciliation loops.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-control-plane-declarative-reconciliation.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Hacking the Kubernetes Control Plane: WatchCache Internals, Aggregated APIServers, APF Shuffle Sharding, and 10k-Node etcd Sharding</title>
+    <link>https://blog.llmgo.top/en/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/</link>
+    <guid>https://blog.llmgo.top/en/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Control Plane Customization</category>
+    <description>Why do Custom Resource Definitions (CRDs) overwhelm etcd and paralyze Kubernetes when custom object counts breach millions? A deep architectural guide to re-engineering the Kubernetes control plane: dissecting kube-apiserver's in-memory WatchCache ring buffers and the three resourceVersion semantics; implementing standalone Aggregated APIServers for external high-throughput database backends; analyzing the combinatorial mathematics behind API Priority and Fairness (APF) Shuffle Sharding; and deploying physical dual-disk NVMe isolation and event sharding for 10,000-node hyperscale clusters.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Production Databases and Storage on Kubernetes: Local NVMe Passthrough, RocksDB/WAL Tuning, and Fencing Split-Brain Protection</title>
+    <link>https://blog.llmgo.top/en/articles/k8s-database-storage-local-nvme-tuning-fencing/</link>
+    <guid>https://blog.llmgo.top/en/articles/k8s-database-storage-local-nvme-tuning-fencing/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Database Storage</category>
+    <description>Why do enterprise engineering teams migrating databases to Kubernetes abandon cloud network block storage in favor of bare-metal Local NVMe SSDs? A comprehensive exploration of running stateful distributed storage on Kubernetes: overcoming cloud disk multi-hop latency bottlenecks with Local Persistent Volumes; XFS formatting tuning and resolving cgroups v2 OOM cascades caused by Linux page cache dirty page backlogs; RocksDB/MySQL WAL Direct I/O and fdatasync optimizations; and mitigating split-brain dual-primary corruption using hardware IPMI STONITH and lease-based Node Fencing.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/k8s-database-storage-local-nvme-tuning-fencing.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>2026 AI Computing Infrastructure: Kubernetes GPU Operator, MIG Partitioning, Topology-Aware Scheduling, and Auto-scaling Inference Engines</title>
@@ -76,6 +106,26 @@
     <category>Operator Pattern</category>
     <description>Why is the Operator pattern universally recognized as the decisive architectural breakthrough that crowned Kubernetes the operating system of the modern cloud? A comprehensive deconstruction of Operator philosophy: codifying senior SRE domain knowledge into software; how CRDs register dynamic endpoints in apiextensions-apiserver with /status and /scale subresource isolation; and an in-depth breakdown of Controller-Runtime and KubeBuilder architecture (Manager, Cache, Split Client, Reconcile, and Finalizers), complete with production Go code for high-availability distributed stateful middleware.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-operator-pattern-kubebuilder-crd.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Hacking Kubernetes Nodes &amp; Runtimes: Breaking PLEG Bottlenecks, NRI Plugins, Kata/gVisor Sandboxes, and cgroups v2 Tuning</title>
+    <link>https://blog.llmgo.top/en/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/</link>
+    <guid>https://blog.llmgo.top/en/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Node Runtime Customization</category>
+    <description>Why do traditional runc containers sharing the host kernel fail against zero-day escapes, and why do dense worker nodes frequently freeze with 'PLEG is not healthy' errors? A deep architectural exploration of customizing Kubernetes worker nodes and container runtimes: analyzing Kubelet's syncLoop and the Evented PLEG streaming revolution; developing custom Go plugins using the containerd/CRI-O Node Resource Interface (NRI) for dynamic CPU pinning and OCI manipulation; contrasting Kata Containers microVMs against gVisor user-space kernel sandboxes; and mastering fine-grained kernel isolation using RuntimeClass, Sysctls, and cgroups v2 PSI/memory.high.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/k8s-runtime-nri-kata-gvisor-kernel-tuning.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Hacking the Kubernetes Scheduler: Custom Plugins via Scheduling Framework, Volcano DRF Math, and Descheduler Dynamic Rebalancing</title>
+    <link>https://blog.llmgo.top/en/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/</link>
+    <guid>https://blog.llmgo.top/en/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Scheduler Customization</category>
+    <description>Why does the default Kubernetes scheduler deadlock when handling distributed AI model training and batch computing workloads? A deep architectural guide to customizing the scheduling core: exploring the 11 extension points of the official Scheduling Framework and CycleState data caching; dissecting Volcano's Dominant Resource Fairness (DRF) mathematical model and PodGroup state machine; implementing a production-grade Gang Scheduling (All-or-Nothing) plugin in Go with atomic Unreserve rollbacks; and executing safe, telemetry-driven cluster rebalancing using the Descheduler.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/k8s-scheduling-framework-custom-plugin-gang-scheduling.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>Kubernetes Storage Architecture: CSI Specification, Dynamic PV/PVC Provisioning, and StatefulSet Guarantees</title>

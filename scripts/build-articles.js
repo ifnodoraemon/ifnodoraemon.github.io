@@ -91,8 +91,8 @@ const SERIES_DEFINITIONS = {
     titleEn: 'From Docker to Kubernetes: Cloud-Native Container & Cluster Orchestration Handbook',
     badgeZh: '容器与 K8s 专栏',
     badgeEn: 'Container & K8s Series',
-    descZh: '系统化掌握云原生容器与集群编排体系：从 Linux 内核 Namespace、cgroups v2、OverlayFS 隔离本质，到 Docker SwarmKit 轻量集群 Raft 共识与 Routing Mesh，再到 Kubernetes 声明式控制面、Cilium eBPF 网络、CSI 状态化存储、Operator 模式与 2026 AI 大模型 GPU 调度终局。',
-    descEn: 'Master containerization and cluster orchestration from first principles: Linux namespaces, cgroups v2, OverlayFS, Docker SwarmKit Raft consensus, and Kubernetes declarative architecture, Cilium eBPF, CSI storage, Operators, and 2026 AI GPU scheduling.',
+    descZh: '系统化掌握云原生容器与集群编排体系：从 Linux 内核进程隔离、veth 网络、SwarmKit 共识到 K8s 控制面原理；深入业务软件在 K8s 上的网络（gRPC/Mesh/优雅停机）与存储（Local NVMe/RocksDB/Fencing）工程实战；并进阶对 K8s 本身“动刀”：Scheduling Framework 自定义调度器、NRI/Kata 运行时改造、Aggregated APIServer 与 2026 AI GPU 智算终局。',
+    descEn: 'Master containerization and cluster orchestration from first principles: Linux namespaces, cgroups v2, SwarmKit, K8s control plane; real-world software architecture on K8s (gRPC/zero-downtime, Local NVMe/RocksDB/fencing); hacking K8s internals (Scheduling Framework plugins, NRI runtimes, Aggregated APIServer); and 2026 AI GPU scheduling.',
     articles: [
       'docker-internals-namespace-cgroups-overlayfs',
       'container-networking-veth-bridge-iptables',
@@ -100,6 +100,11 @@ const SERIES_DEFINITIONS = {
       'k8s-control-plane-declarative-reconciliation',
       'k8s-networking-cni-cilium-ebpf-gateway-api',
       'k8s-storage-csi-statefulset-deep-dive',
+      'k8s-application-networking-grpc-service-mesh-zero-downtime',
+      'k8s-database-storage-local-nvme-tuning-fencing',
+      'k8s-scheduling-framework-custom-plugin-gang-scheduling',
+      'k8s-runtime-nri-kata-gvisor-kernel-tuning',
+      'k8s-control-plane-hacking-aggregated-apiserver-apf-etcd',
       'k8s-operator-pattern-kubebuilder-crd',
       'k8s-gpu-operator-ai-inference-scheduling',
     ],
@@ -737,8 +742,8 @@ function buildSeriesCardBottom(article, allArticlesInLang, isEn) {
       completeDescZh = '恭喜读完《大模型推理引擎：从模型演进、内核架构到未来终局》全套 10 篇内容！你已建立起从 Roofline 物理撕裂、PagedAttention、算子内核演进到 P/D 分离、四大引擎源码与长思维链分层存储的完整硬核认知。';
       completeDescEn = 'Congratulations on completing all 10 chapters of the Production LLM Inference Engines series! You have mastered inference systems from first-principles Roofline modeling and kernel evolutions to P/D disaggregation and tiered cluster storage.';
     } else if (seriesId === 'container-k8s') {
-      completeDescZh = '恭喜读完《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》专栏内容！你已建立起从 Linux 内核进程隔离、veth-pair 网络、SwarmKit 轻量集群到 Kubernetes 声明式控制面、Cilium eBPF 与 2026 AI GPU 智算调度的完整全景架构。';
-      completeDescEn = 'Congratulations on completing the Cloud-Native Container & Cluster Orchestration series! You have mastered container systems from Linux process isolation and SwarmKit to Kubernetes declarative architecture, Cilium eBPF, and AI GPU scheduling.';
+      completeDescZh = '恭喜读完《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》全套 13 篇硬核内容！你已建立起从 Linux 内核进程隔离、veth 网络、SwarmKit 到 K8s 控制面深水区、业务网络与存储实战、对 K8s 调度器/运行时/控制面深度动刀与 2026 AI GPU 智算调度的完整工业级全景架构。';
+      completeDescEn = 'Congratulations on completing all 13 chapters of the Cloud-Native Container & Cluster Orchestration Handbook! You have mastered container systems from Linux process isolation and K8s control plane to production application networking, storage, hacking K8s scheduling and runtimes, and 2026 AI GPU scheduling.';
     } else {
       completeDescZh = '恭喜读完《AI Agent 生产级架构师手册》全套 11 篇内容！你已建立起从执行循环、状态机控制流到 MCP 协议、Skills 扩展、分布式编排、环境缩放与长程记忆的完整工业级认知。';
       completeDescEn = 'Congratulations on completing all 11 chapters of The Production AI Agent Architect Handbook! You have mastered end-to-end agentic engineering from state machines and MCP to distributed orchestration, environment scaling, and memory systems.';

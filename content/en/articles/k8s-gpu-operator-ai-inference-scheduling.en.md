@@ -6,7 +6,7 @@ tag: AI GPU Scheduling
 tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
-seriesOrder: 8
+seriesOrder: 13
 description: "Why does traditional CPU/memory scalar scheduling fail in the large language model era? A rigorous architectural deconstruction of AI infrastructure on Kubernetes in 2026: automated zero-touch lifecycles via the NVIDIA GPU Operator; hardware-isolated Multi-Instance GPU (MIG) slicing versus time-slicing; overcoming cross-NUMA interconnect bottlenecks with Kubelet Topology Manager and Dynamic Resource Allocation (DRA); and production auto-scaling for vLLM and SGLang inference clusters leveraging KEDA and real-time KV cache saturation metrics."
 extraTags:
   - Kubernetes
@@ -227,7 +227,7 @@ spec:
 
 ## 5. Comprehensive Series Review: Full Curriculum Retrospective
 
-This concludes all eight chapters of **From Docker to Kubernetes: Cloud-Native Container & Cluster Orchestration Handbook**!
+This concludes all 13 chapters of **From Docker to Kubernetes: Cloud-Native Container & Cluster Orchestration Handbook**!
 
 Reviewing the architectural progression across the curriculum:
 
@@ -239,16 +239,21 @@ flowchart TD
     Ch4["<b>Ch 4: Kubernetes Control Plane</b><br/>Declarative control theory, etcd MVCC, two-phase scheduling, and Informer reconcilers"]
     Ch5["<b>Ch 5: Kubernetes Networking</b><br/>The four network axioms, CNI plugins, Calico BGP routing, Cilium eBPF, and Gateway API"]
     Ch6["<b>Ch 6: Kubernetes Storage</b><br/>The CSI four-stage lifecycle, dynamic PV/PVC provisioning, and StatefulSet topology guarantees"]
-    Ch7["<b>Ch 7: The Operator Pattern</b><br/>CRD domain models, KubeBuilder scaffolding, Split Clients, Reconcilers, and Finalizers"]
-    Ch8["<b>Ch 8: 2026 AI Infrastructure</b><br/>NVIDIA GPU Operator, MIG hardware partitioning, Topology Manager, and vLLM/SGLang autoscaling"]
+    Ch7["<b>Ch 7: Application Networking</b><br/>gRPC load balancing trap, Service Mesh, and zero-downtime draining sequences"]
+    Ch8["<b>Ch 8: Production Storage & Databases</b><br/>Local NVMe passthrough, RocksDB/WAL tuning, and Node Fencing split-brain defense"]
+    Ch9["<b>Ch 9: Scheduler Customization</b><br/>Scheduling Framework plugins, Gang Scheduling, and Descheduler rebalancing"]
+    Ch10["<b>Ch 10: Node & Runtime Customization</b><br/>NRI resource plugins, Kata/gVisor sandboxed runtimes, and sysctl isolation"]
+    Ch11["<b>Ch 11: Control Plane Customization</b><br/>Aggregated APIServers, APF traffic control with Shuffle Sharding, and etcd sharding"]
+    Ch12["<b>Ch 12: The Operator Pattern</b><br/>CRD domain models, KubeBuilder scaffolding, Split Clients, Reconcilers, and Finalizers"]
+    Ch13["<b>Ch 13: 2026 AI Infrastructure</b><br/>NVIDIA GPU Operator, MIG hardware partitioning, Topology Manager, and vLLM/SGLang autoscaling"]
 
-    Ch1 --> Ch2 --> Ch3 --> Ch4 --> Ch5 --> Ch6 --> Ch7 --> Ch8
+    Ch1 --> Ch2 --> Ch3 --> Ch4 --> Ch5 --> Ch6 --> Ch7 --> Ch8 --> Ch9 --> Ch10 --> Ch11 --> Ch12 --> Ch13
 ```
 
 - **Linux Kernel Foundations to Single-Host Runtimes (Ch 1–2)**: We deconstructed the abstraction of containers into standard Linux processes bounded by kernel namespaces and cgroups, mapped through virtual bridges and iptables routing rules;
-- **Lightweight Clustering to Declarative Control Planes (Ch 3–4)**: We examined Docker Swarm's embedded Raft consensus, then progressed to Kubernetes declarative control loops and MVCC storage architectures;
-- **Networking, Storage, and Custom Operators (Ch 5–7)**: We explored eBPF programmable datapath alternatives to legacy iptables, CSI lifecycle mechanics for stateful workloads, and Operator automation for complex infrastructure;
-- **The 2026 AI Frontier (Ch 8)**: We synthesized these cloud-native abstractions with modern accelerator architectures, tracing the path from physical NUMA/NVLink alignment to distributed LLM inference scaling.
+- **Lightweight Clustering to Declarative Control Planes (Ch 3–6)**: We examined Docker Swarm's embedded Raft consensus, then progressed to Kubernetes declarative control loops, CNI flat networking, and CSI stateful volume architectures;
+- **Application Engineering & Hacking Kubernetes (Ch 7–11)**: We resolved application-layer gRPC stream pinning, rollout 502 race conditions, Local NVMe direct passthrough, and split-brain fencing; then customized the Kubernetes core via Scheduling Framework plugins, NRI hardware interception, and Aggregated APIServers;
+- **Automation to the 2026 AI Frontier (Ch 12–13)**: We codified operational heuristics into autonomous production Operators, synthesizing modern cloud-native orchestration with hyperscale accelerator topologies from physical NUMA alignment to distributed LLM serving.
 
 ---
 

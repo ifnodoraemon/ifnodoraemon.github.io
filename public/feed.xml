@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Fri, 09 Oct 2026 01:49:48 GMT</pubDate>
+  <pubDate>Fri, 09 Oct 2026 02:16:27 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>容器网络全景解密：veth-pair、Linux Bridge、iptables NAT 与跨主机网络拓扑</title>
@@ -38,6 +38,16 @@
     <enclosure url="https://blog.llmgo.top/og/zh/docker-swarm-architecture-raft-routing-mesh.png" length="150000" type="image/png" />
   </item>
   <item>
+    <title>业务软件在 K8s 上的网络架构实战：gRPC 长连接负载均衡陷阱、Service Mesh 与零停机平滑切流时序</title>
+    <link>https://blog.llmgo.top/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/</link>
+    <guid>https://blog.llmgo.top/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>业务网络实战</category>
+    <description>为什么我们的微服务搬上 Kubernetes 后，滚动发布总会出现偶发 502 报错，gRPC 流量更是死死钉在某一个 Pod 上完全不均衡？深度拆解业务软件在 K8s 上的网络工程实战：HTTP/2 多路复用导致四层 ClusterIP 负载均衡彻底失效的底层根因与 Headless Service / Envoy 网格解法；MaxConnectionAge、JVM DNS TTL 永久缓存与指数退避重连风暴四大生产陷阱；完整复盘 Pod 销毁与 EndpointSlice 异步切流的时序竞态冲突；并给出从 preStop 缓冲、平滑连接排空到 readinessGates 的生产级零停机发布实践。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/k8s-application-networking-grpc-service-mesh-zero-downtime.png" length="150000" type="image/png" />
+  </item>
+  <item>
     <title>Kubernetes 控制平面深度解密：声明式 API、etcd 状态机、调度器与控制器调谐循环 (Reconciliation Loop)</title>
     <link>https://blog.llmgo.top/articles/k8s-control-plane-declarative-reconciliation/</link>
     <guid>https://blog.llmgo.top/articles/k8s-control-plane-declarative-reconciliation/</guid>
@@ -46,6 +56,26 @@
     <category>K8s 控制面</category>
     <description>为什么声明式 API 与控制理论能够成为现代云计算与分布式系统的终极事实标准？深度剖析 Kubernetes 控制平面架构底层：kube-apiserver 请求准入控制流水线（认证、鉴权、双准入 Webhook）、etcd v3 底层 MVCC 与 Watch 机制、kube-scheduler 过滤与打分双阶段调度、Informer 架构（Reflector、DeltaFIFO、Indexer、WorkQueue）与控制器水平触发调谐循环（Reconciliation Loop）工程机理。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-control-plane-declarative-reconciliation.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>对 K8s 控制面动刀：WatchCache 缓存穿透机理、Aggregated APIServer 聚合扩展、APF 洗牌分片流控与万级节点 etcd 调优</title>
+    <link>https://blog.llmgo.top/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/</link>
+    <guid>https://blog.llmgo.top/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>控制面内核定制</category>
+    <description>为什么当自定义资源数量突破数百万级时，CRD 会直接把 etcd 撑爆导致整个 Kubernetes 集群瘫痪？深度拆解对 Kubernetes 控制面中枢的深水区改造：剖析 kube-apiserver 内部 WatchCache 环形缓冲区与 resourceVersion 三大语义机制；构建独立的 Aggregated APIServer（聚合 API 服务器）实现后端存储旁路解耦；深入剖析 API Priority and Fairness（APF）洗牌分片流控数学模型如何化解并发流量雪崩；并全面公开支撑上万节点超大规模集群的 etcd 物理双盘隔离与事件分库极限方案。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>生产级分布式存储与数据库落地：Local NVMe 物理直通、RocksDB/WAL 刷盘调优与 Fencing 防脑裂架构</title>
+    <link>https://blog.llmgo.top/articles/k8s-database-storage-local-nvme-tuning-fencing/</link>
+    <guid>https://blog.llmgo.top/articles/k8s-database-storage-local-nvme-tuning-fencing/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>业务存储实战</category>
+    <description>为什么绝大多数互联网大厂在将核心数据库搬上 Kubernetes 时，坚决抛弃网络云盘而选用 Local NVMe？深度拆解生产级分布式存储与数据库在 K8s 上的工程落地：从云盘网络跳步瓶颈到 Local PV 裸盘物理直通架构；XFS 格式化参数与 Linux Page Cache 脏页积压引发 cgroups v2 OOM 崩溃的底层剖析；RocksDB 与 MySQL WAL Direct I/O、fdatasync 调优；以及分布式数据库最可怕的物理灾难 —— 节点网络分区脑裂与 Node Fencing / IPMI STONITH 隔离防护硬核防线。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/k8s-database-storage-local-nvme-tuning-fencing.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>2026 AI 智算调度终局：Kubernetes GPU Operator、MIG 分割、拓扑感知调度与 vLLM/SGLang 集群弹性扩缩容</title>
@@ -76,6 +106,26 @@
     <category>Operator 模式</category>
     <description>为什么说 Operator 模式是 Kubernetes 能够统治整个现代基础架构软件生态的终极杀手锏？深度拆解 Operator 模式的核心哲学：如何将资深 SRE 的运维专家经验编码为代码；解密 CRD（自定义资源定义）在 apiextensions-apiserver 中的注册机理与 Status/Scale 子资源隔离；深入剖析 Controller-Runtime 与 KubeBuilder 生产级脚手架架构（Manager、Cache、Split Client、Reconcile 调谐与 Finalizer 安全清理机制），并通过完整的 Go 代码实现一个高可用分布式中间件 Operator。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-operator-pattern-kubebuilder-crd.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>对 K8s 节点与运行时动刀：PLEG 瓶颈突破、NRI 节点资源接口插件、Kata/gVisor 多安全沙箱运行时与 cgroups v2 调优</title>
+    <link>https://blog.llmgo.top/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/</link>
+    <guid>https://blog.llmgo.top/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>节点运行时定制</category>
+    <description>为什么共享宿主机内核的传统 runc 容器无法抵御零日漏洞逃逸，物理节点又频频陷入 PLEG is not healthy 假死超时？深度解密对 Kubernetes 工作节点（Worker Node）与容器运行时的深水区内核改造：剖析 Kubelet syncLoop 核心主循环与 Evented PLEG 流式事件驱动革新；深入 containerd/CRI-O 原生 NRI（Node Resource Interface）插件架构并编写 Go 代码实现动态 CPU 绑核与 OCI 拦截；全景对比微虚拟机 Kata Containers 与用户态内核沙箱 gVisor 的底层架构与性能损耗；并掌握通过 RuntimeClass、安全 Sysctl 与 cgroups v2 PSI/memory.high 实施精细化内核防护。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/k8s-runtime-nri-kata-gvisor-kernel-tuning.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>对 K8s 调度器动刀：基于 Scheduling Framework 插件架构定制开发、Gang Scheduling 批处理调度与 Descheduler 重调度</title>
+    <link>https://blog.llmgo.top/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/</link>
+    <guid>https://blog.llmgo.top/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>调度内核定制</category>
+    <description>为什么 Kubernetes 默认调度器在面对大规模 AI 训练与分布式批处理时会陷入资源死锁？深度解密如何对 Kubernetes 调度中枢进行二次开发：剖析官方 Scheduling Framework 调度框架 11 大扩展点内部机理与 CycleState 状态共享；深入拆解 Volcano 核心 DRF（主导资源公平调度）数学模型与 PodGroup 状态机；实战编写一个基于 Go 语言的 Gang Scheduling（成组调度 / All-or-Nothing）自定义调度器插件；并深入解析如何利用 Descheduler 在生产集群中基于真实节点负载实施安全的二次动态重平衡。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/k8s-scheduling-framework-custom-plugin-gang-scheduling.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>Kubernetes 有状态存储中枢：CSI 插件规范、动态 PV/PVC 供给与 StatefulSet 拓扑保证</title>

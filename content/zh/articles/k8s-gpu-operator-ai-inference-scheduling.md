@@ -6,7 +6,7 @@ tag: AI 智算调度
 tagClass: tag-blue
 category: 云原生
 series: container-k8s
-seriesOrder: 8
+seriesOrder: 13
 description: "为什么传统以 CPU/内存为核心的调度体系在大模型时代全面失效？深入拆解 2026 AI 时代 Kubernetes 智算基础设施调度架构：NVIDIA GPU Operator 驱动与运行时全自动纳管链路、MIG（多实例 GPU）硬件物理分割与时间切片方案；Kubelet Topology Manager 与 DRA（动态资源分配）如何解决跨 NUMA 节点与 NVLink 互联性能断崖；并实战构建基于 P/D 分离、KV Cache 负载指标与 KEDA 的生产级 vLLM / SGLang 大模型推理集群弹性扩缩容架构。"
 extraTags:
   - Kubernetes
@@ -229,28 +229,33 @@ spec:
 
 ## 五、 全专栏终局知识体系回顾与全景总结
 
-行文至此，**《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》**全套 8 篇深度技术长文正式完整收官！
+行文至此，**《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》**全套 13 篇深度技术长文正式完整收官！
 
 让我们重新审视这一贯穿整套专栏的系统性认知认知阶梯：
 
 ```mermaid
 flowchart TD
-    Ch1["<b>第 1 讲：Docker 内核第一性原理</b><br/>Namespace 视界隔离、cgroups v2 统一树、OverlayFS 写时复制与 runc 链路"]
+    Ch1["<b>第 1 讲：Docker 内核第一性原理</b><br/>Namespace 视界隔离、cgroups v2 单根树、OverlayFS 写时复制与 runc 链路"]
     Ch2["<b>第 2 讲：容器网络全景解密</b><br/>veth-pair 穿透、Linux Bridge docker0、iptables NAT 与跨机拓扑"]
     Ch3["<b>第 3 讲：轻量级集群编排 Docker Swarm</b><br/>SwarmKit 架构、内置 Raft 状态机、VXLAN 覆盖网络与 IPVS Routing Mesh"]
     Ch4["<b>第 4 讲：Kubernetes 控制平面深度解密</b><br/>声明式控制理论、etcd MVCC 状态机、调度器双阶段决策、Informer 与调谐循环"]
     Ch5["<b>第 5 讲：Kubernetes 网络模型全景</b><br/>四大网络公理、CNI 规范、Calico BGP 直连、Cilium eBPF 与 Gateway API 架构"]
     Ch6["<b>第 6 讲：Kubernetes 有状态存储中枢</b><br/>CSI 存储插件四阶段调用链、PV/PVC 动态供给与 StatefulSet 拓扑铁律保证"]
-    Ch7["<b>第 7 讲：Kubernetes 扩展核心 Operator 模式</b><br/>CRD 数据模型扩展、KubeBuilder 生产脚手架、Split Client、Reconcile 与 Finalizer"]
-    Ch8["<b>第 8 讲：2026 AI 智算调度终局</b><br/>GPU Operator 零接触运维、MIG 硬件切片、Topology Manager 与 vLLM/SGLang 弹性伸缩"]
+    Ch7["<b>第 7 讲：业务网络实战</b><br/>gRPC 长连接负载均衡陷阱、Service Mesh 与零停机平滑切流时序"]
+    Ch8["<b>第 8 讲：业务存储实战</b><br/>Local NVMe 物理直通、RocksDB/WAL 刷盘调优与 Fencing 防脑裂架构"]
+    Ch9["<b>第 9 讲：调度内核定制</b><br/>Scheduling Framework 插件架构、Gang Scheduling 批处理调度与 Descheduler"]
+    Ch10["<b>第 10 讲：节点与运行时定制</b><br/>NRI 节点资源接口插件、Kata/gVisor 多安全沙箱运行时与 Sysctl 参数隔离"]
+    Ch11["<b>第 11 讲：控制面内核定制</b><br/>Aggregated APIServer 独立扩展、APF 流量优先级洗牌分片与 etcd 分库调优"]
+    Ch12["<b>第 12 讲：Kubernetes 扩展核心 Operator 模式</b><br/>CRD 数据模型扩展、KubeBuilder 生产脚手架、Split Client、Reconcile 与 Finalizer"]
+    Ch13["<b>第 13 讲：2026 AI 智算调度终局</b><br/>GPU Operator 零接触运维、MIG 硬件切片、Topology Manager 与 vLLM/SGLang 弹性伸缩"]
 
-    Ch1 --> Ch2 --> Ch3 --> Ch4 --> Ch5 --> Ch6 --> Ch7 --> Ch8
+    Ch1 --> Ch2 --> Ch3 --> Ch4 --> Ch5 --> Ch6 --> Ch7 --> Ch8 --> Ch9 --> Ch10 --> Ch11 --> Ch12 --> Ch13
 ```
 
 - **从底层内核到单机容器（第 1~2 讲）**：我们打破了“容器是虚拟机”的幻觉，看清了它只是一个被 Linux 系统调用限制了视界与资源的普通进程，并通过网络设备对和路由规则实现了单机互联；
-- **从轻量集群到工业级声明式中枢（第 3~4 讲）**：我们体验了 Docker Swarm 开箱即用的 Raft 优雅极简，随后跨入 Kubernetes 的宏大殿堂，领悟了如何用负反馈控制理论与不可变 MVCC 掌控大规模集群的自愈；
-- **从网络、存储到企业级扩展生态（第 5~7 讲）**：我们见证了 eBPF 对传统内核协议栈的彻底颠覆、CSI 对有状态分布式存储的绝对秩序捍卫，以及 Operator 模式如何将资深架构师的经验固化为自动化工业软件；
-- **最终落地于 2026 AI 智算之巅（第 8 讲）**：我们将现代云原生操作系统与大规模 GPU 算力拓扑完美融合，建立起从底层硬件 NUMA 对齐到上层大语言模型分布式弹性伸缩的完整工程闭环。
+- **从轻量集群到工业级声明式中枢（第 3~6 讲）**：我们体验了 Docker Swarm 开箱即用的 Raft 优雅极简，随后跨入 Kubernetes 的宏大殿堂，领悟了如何用负反馈控制理论、CNI/eBPF 扁平网络与 CSI 有状态持久化掌控大规模集群；
+- **从业务软件实战到对 K8s 核心动刀（第 7~11 讲）**：我们解决了真实业务落地中的 gRPC 长连接倾斜、零停机发布 502 竞态、Local NVMe 裸盘直接挂载与 Fencing 防脑裂；并深入 K8s 内核，完成了 Scheduling Framework 插件定制、NRI 容器硬件拦截与 Aggregated APIServer 聚合存储扩展；
+- **从自动化 Operator 到 2026 AI 智算之巅（第 12~13 讲）**：我们将资深架构师的经验固化为自主运行的工业级软件，并最终将现代云原生操作系统与大规模 GPU 算力拓扑完美融合，建立起从底层硬件 NUMA 对齐到上层大语言模型分布式弹性伸缩的完整工程闭环。
 
 ---
 
