@@ -5,8 +5,88 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Fri, 09 Oct 2026 02:34:10 GMT</pubDate>
+  <pubDate>Fri, 09 Oct 2026 03:02:07 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA</title>
+    <link>https://blog.llmgo.top/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/</link>
+    <guid>https://blog.llmgo.top/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/</guid>
+    <pubDate>Mon, 05 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Production Ops &amp; NCCL Tuning</category>
+    <description>What bare-metal operational challenges arise when translating network architecture into physical 10,000-GPU AI data centers? A comprehensive guide to production InfiniBand operations: installing and managing Mellanox OFED / DOCA driver stacks and firmware tools (flint/mlxlink); configuring high-availability Master/Standby Subnet Manager topologies with OpenSM; auditing fabric health and diagnosing dirty optical links (Symbol Errors) and speed renegotiation drops using ibdiagnet; and diving into the GPU communication layer to configure GPUDirect RDMA (nvidia-peermem) and tune mission-critical NCCL parameters (NCCL_IB_HCA, NCCL_NET_GDR_LEVEL=5) for wire-speed All-Reduce performance.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/infiniband-production-deployment-opensm-ofed-nccl-tuning.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>InfiniBand AI Cluster Networking in Practice: Fat-Tree Topologies, Rail-Optimized Architecture, Adaptive Routing (AR), and In-Network Reduction (SHARP)</title>
+    <link>https://blog.llmgo.top/en/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/</link>
+    <guid>https://blog.llmgo.top/en/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/</guid>
+    <pubDate>Sun, 04 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Fat-Tree &amp; Adaptive Routing</category>
+    <description>How can thousands of 8-GPU servers be interconnected with tens of thousands of optical links into a non-blocking, deadlock-free high-performance fabric? Deconstruct modern AI supercluster topologies: from Charles Leiserson's 1985 Fat-Tree mathematical model and port count k derivations for 2-Tier and 3-Tier non-blocking ceilings to the 8-plane Rail-Optimized architecture tailored for DGX H100/H200/B200 clusters; analyze how FTree and Up/Down routing engines forbid 'Down-then-Up' turns to eliminate credit loop deadlocks; and discover how hardware Adaptive Routing (AR) and SHARP in-network aggregation achieve a 2x throughput boost during GPU All-Reduce operations.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>InfiniBand Architecture First Principles: Physical Link Rates, Credit-Based Link Flow Control, and Subnet Manager Fabric Orchestration</title>
+    <link>https://blog.llmgo.top/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/</link>
+    <guid>https://blog.llmgo.top/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/</guid>
+    <pubDate>Sat, 03 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>InfiniBand &amp; Subnet Manager</category>
+    <description>Why does native InfiniBand remain the dominant fabric for 10,000-GPU AI compute clusters and top-tier supercomputers in 2026? Deconstruct the layered InfiniBand protocol stack and physical link evolution: from EDR 100G, HDR 200G, and NDR 400G (Quantum-2) to the 2026 mass production of XDR 800G (Quantum-X800/ConnectX-8); analyze link-layer first principles: Flit-level Credit-Based hardware flow control and sub-100ns Cut-Through switching mechanics; and explore the control engine: Subnet Manager (OpenSM) fabric discovery, dynamic GUID/LID/LMC allocation, and Linear Forwarding Table (LFT) hardware orchestration.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/infiniband-architecture-hardware-rates-credit-flow-subnet-manager.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>RDMA High-Performance Networking Foundations: Kernel Bypass, Zero-Copy, Queue Pairs, and Lossless RoCEv2 (PFC/ECN) Architecture</title>
+    <link>https://blog.llmgo.top/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</link>
+    <guid>https://blog.llmgo.top/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</guid>
+    <pubDate>Fri, 02 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>RDMA &amp; RoCEv2</category>
+    <description>Why does the traditional TCP/IP stack become a compute black hole in 400G and 800G networks? Deconstruct RDMA (Remote Direct Memory Access) first principles: Kernel Bypass, hardware-level Zero-Copy, and Memory Registration (MR/L_Key/R_Key); dissect core ibverbs primitives: Queue Pairs (SQ/RQ), Completion Queues (CQ), and microsecond-level mechanics of Two-Sided (Send/Recv) vs One-Sided (RDMA Read/Write/Atomic) operations; and uncover how Lossless RoCEv2 (UDP port 4791) leverages 802.1Qbb Priority Flow Control (PFC) backpressure and ECN/DCQCN closed-loop congestion control to resolve packet loss collapse and deadlock.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Modern Data Center Network Architecture First Principles: Clos Topologies, Leaf-Spine Fabrics, BGP Underlay, and EVPN-VXLAN Large Layer-2 Virtualization</title>
+    <link>https://blog.llmgo.top/en/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/</link>
+    <guid>https://blog.llmgo.top/en/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/</guid>
+    <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Datacenter &amp; Leaf-Spine</category>
+    <description>Why can't traditional three-tier architectures and Spanning Tree Protocol (STP) handle modern cloud computing and large-scale AI clusters? Deconstruct the evolution of data center networking: from Charles Clos's 1953 telephone switching theory to modern non-blocking 2-Tier / 3-Tier Leaf-Spine mathematical modeling and oversubscription ratios; analyze RFC 7938 eBGP Underlay routing designs, ECMP 5-tuple hash polarization hazards and ASIC-level solutions; and dissect large Layer-2 Overlay mechanics: VXLAN MAC-in-UDP encapsulation (24-bit VNI, 9000 MTU Jumbo Frames) and MP-BGP EVPN Type-2/Type-3/Type-5 control plane route signaling.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>TCP Congestion Control Evolution &amp; High-Performance Transport: From Reno and Cubic to BBR Mathematical Models, and HTTP/2 to HTTP/3 (QUIC)</title>
+    <link>https://blog.llmgo.top/en/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/</link>
+    <guid>https://blog.llmgo.top/en/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/</guid>
+    <pubDate>Wed, 30 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Congestion Control &amp; QUIC</category>
+    <description>Why can sliding windows prevent buffer overflow at the peer receiver but fail to stop Internet backbone routers from collapsing? Deconstruct thirty years of congestion control evolution: from loss-based AIMD, Reno state machines, and Bufferbloat to the cubic polynomial mathematics of Linux's default Cubic algorithm; dissect Google BBR's physical modeling of maximum delivery rate and minimum round-trip propagation time (BtlBw/RTprop/Pacing Rate); and analyze the transport revolution from HTTP/1.1 and HTTP/2 Head-of-Line (HoL) blocking to UDP-based HTTP/3 (QUIC) 0-RTT handshakes and seamless connection migration.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/tcp-congestion-control-reno-cubic-bbr-quic-http3.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Network &amp; Transport Layers in Depth: IP Routing, CIDR, TCP 11-State Machine, and Sliding Window First Principles</title>
+    <link>https://blog.llmgo.top/en/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</link>
+    <guid>https://blog.llmgo.top/en/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</guid>
+    <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>IP Routing &amp; TCP State Machine</category>
+    <description>How can an absolutely reliable, ordered stream of data be built on top of an unreliable physical network? Deconstruct core Layer 3 and Layer 4 mechanics: from IPv4/IPv6 packet structures and CIDR subnets to Linux kernel Longest Prefix Match (LPM) and FIB/RIB table lookups; dissect the classic 11 TCP state transitions, 3-way handshake mechanics, SYN Flood &amp; SYN Cookies defense, 4-way teardown with TIME_WAIT rationale; and derive sliding window flow control, zero-window probing, and TCP_NODELAY production tuning from first principles.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/network-layer-transport-layer-ip-routing-tcp-state-machine.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Computer Networking First Principles: Physical Layer, Ethernet, MAC/ARP, and the Linux Kernel NAPI Packet Path</title>
+    <link>https://blog.llmgo.top/en/articles/network-fundamentals-ethernet-mac-arp-linux-packet-path/</link>
+    <guid>https://blog.llmgo.top/en/articles/network-fundamentals-ethernet-mac-arp-linux-packet-path/</guid>
+    <pubDate>Mon, 28 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Ethernet &amp; Linux Packet Path</category>
+    <description>From electromagnetic waves and optical fiber pulses to packet lifecycle pipelines in the Linux kernel: a deep architectural demystification of foundational computer networking. Analyzing Ethernet II framing, MAC addressing, and ARP cache dynamics; tracing the nanosecond-level packet traversal through PCIe DMA, RX Ring Buffers, hard IRQs, NAPI softirq polling, and sk_buff dispatch; and presenting production-grade kernel tuning across ethtool ring buffers, IRQ smp_affinity, and network sysctls under high throughput.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/network-fundamentals-ethernet-mac-arp-linux-packet-path.png" length="150000" type="image/png" />
+  </item>
   <item>
     <title>Container Networking Deep Dive: veth-pair, Linux Bridge, iptables NAT, and Cross-Host Topology</title>
     <link>https://blog.llmgo.top/en/articles/container-networking-veth-bridge-iptables/</link>

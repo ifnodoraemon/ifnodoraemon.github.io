@@ -5,8 +5,88 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Fri, 09 Oct 2026 02:34:10 GMT</pubDate>
+  <pubDate>Fri, 09 Oct 2026 03:02:07 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战</title>
+    <link>https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/</link>
+    <guid>https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/</guid>
+    <pubDate>Mon, 05 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>生产落地与NCCL调优</category>
+    <description>从网络架构设计到万卡 AI 智算中心裸金属物理落地，工程师必须攻克哪些工程深水区？全景拆解 InfiniBand 生产落地实战：Mellanox OFED / DOCA 驱动栈与固件管理工具（flint/mlxlink）；搭建基于 OpenSM 的 Master/Standby 主备高可用子网管理架构；深入实战 ibdiagnet 全网巡检，秒级定位物理层 Symbol Error 脏光纤与降速协商链路；并深入 GPU 通信最底层，实战验证 GPUDirect RDMA（nvidia-peermem 驱动）与 NCCL 核心环境变量（NCCL_IB_HCA / NCCL_NET_GDR_LEVEL=5）极限压测调优。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/infiniband-production-deployment-opensm-ofed-nccl-tuning.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>InfiniBand 智算集群组网实战：Fat-Tree 胖树拓扑、Rail-Optimized 轨道优化设计、自适应路由 (AR) 与 SHARP 网内计算</title>
+    <link>https://blog.llmgo.top/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/</link>
+    <guid>https://blog.llmgo.top/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/</guid>
+    <pubDate>Sun, 04 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>胖树拓扑与自适应路由</category>
+    <description>如何将成千上万台配备 8 卡 GPU 的服务器用万根光纤编织成一张无阻塞、零死锁的高性能互联网络？深入剖析万卡 AI 智算中心核心拓扑：从 1985 年 Leiserson 胖树（Fat-Tree）数学模型、端口数 k 与 2-Tier/3-Tier 最大节点数严格推导，到专为 DGX H100/H200/B200 量身定制的 Rail-Optimized（轨道优化）八独立平面物理组网；深入解析 FTree 与 Up/Down 算法如何通过禁止“先下后上”破除信用死锁环路；并解密自适应路由（Adaptive Routing）与 SHARP 交换机网内规约计算如何将 All-Reduce 集合通信带宽效率提升 2 倍。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>InfiniBand 架构第一性原理：物理链路速率演进、Credit-Based 链路级流控与子网管理器 (Subnet Manager) 全局编排</title>
+    <link>https://blog.llmgo.top/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/</link>
+    <guid>https://blog.llmgo.top/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/</guid>
+    <pubDate>Sat, 03 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>InfiniBand体系与SM</category>
+    <description>为什么在 2026 年全球顶尖的万卡 AI 算力集群与前沿超算中，原生 InfiniBand 依然牢牢统治着智算中心的核心动脉？深度拆解 InfiniBand 分层协议栈与物理层演进史：从 EDR 100G、HDR 200G、NDR 400G（Quantum-2）到 2026 规模量产的 XDR 800G（Quantum-X800/ConnectX-8）；剖析链路层第一性原理：基于 Flit 的 Credit-Based 信用度硬件级流控与 Cut-Through 直通交换纳秒级低时延机理；解密控制中枢子网管理器（Subnet Manager, OpenSM）全网拓扑发现、GUID/LID/LMC 动态编排与 LFT 线性转发表下发控制全流程。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/infiniband-architecture-hardware-rates-credit-flow-subnet-manager.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>RDMA 高性能通信基石：Kernel Bypass、Zero-Copy、Queue Pair 机制与无损以太网 RoCEv2 (PFC/ECN) 全景透视</title>
+    <link>https://blog.llmgo.top/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</link>
+    <guid>https://blog.llmgo.top/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</guid>
+    <pubDate>Fri, 02 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>RDMA与RoCEv2</category>
+    <description>为什么在 400G/800G 网络时代，传统的 TCP/IP 协议栈彻底沦为算力黑洞？深度拆解 RDMA（远程直接内存访问）第一性原理：Kernel Bypass（内核旁路）、Zero-Copy（硬件级零拷贝）与内存注册（Memory Registration/L_Key/R_Key）；剖析 ibverbs 核心架构：Queue Pair（SQ/RQ）、完成队列（CQ）以及双边操作（Send/Recv）与单边操作（RDMA Read/Write/Atomic）的微秒级机理；解密无损以太网 RoCEv2（UDP 端口 4791）如何通过 PFC 802.1Qbb 八优先级流控反压与 ECN/DCQCN 拥塞控制闭环解决丢包崩溃与死锁难题。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>现代数据中心网络架构第一性原理：Clos 拓扑、Leaf-Spine 组网、BGP Underlay 与 EVPN-VXLAN 大二层虚拟化</title>
+    <link>https://blog.llmgo.top/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/</link>
+    <guid>https://blog.llmgo.top/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/</guid>
+    <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>数据中心与Leaf-Spine</category>
+    <description>为什么传统三层网络与 STP 生成树无法承载现代云计算与 AI 大规模算力集群？深度拆解数据中心网络演进史：从 1953 年 Charles Clos 电话交换理论到现代无阻塞 2-Tier / 3-Tier Leaf-Spine 拓扑数学建模与收敛比计算；详解基于 RFC 7938 的 eBGP Underlay 路由设计、ECMP 等价多路径五元组哈希极化（Hash Polarization）破除方案；全面剖析大二层 Overlay 核心技术：VXLAN 报文 MAC-in-UDP 封装（VNI 24-bit/Jumbo Frame 9000 MTU）与 MP-BGP EVPN 控制平面 Type-2/Type-3/Type-5 路由交换机理。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>TCP 拥塞控制演进史与高性能传输：从 Reno、Cubic 到 BBR 数学模型，以及 HTTP/2 到 HTTP/3 (QUIC) 协议栈革命</title>
+    <link>https://blog.llmgo.top/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/</link>
+    <guid>https://blog.llmgo.top/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/</guid>
+    <pubDate>Wed, 30 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>拥塞控制与QUIC</category>
+    <description>为什么滑动窗口能防冲垮对端内存，却防不住互联网骨干路由器的崩溃？深度剖析拥塞控制三十年演进史：从基于丢包的经典 AIMD、Reno 状态机、Bufferbloat（缓冲区膨胀）到 Linux 默认 Cubic 的三次多项式数学推导；深入解密 Google BBR 基于最大交付率与最小往返时延的瓶颈物理建模（BtlBw/RTprop/Pacing Rate）；并对比分析从 HTTP/1.1、HTTP/2 多路复用线头阻塞（HoL Blocking）到基于 UDP 的 HTTP/3 (QUIC) 零 RTT 握手与连接迁移协议栈大一统革命。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/tcp-congestion-control-reno-cubic-bbr-quic-http3.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>网络层与传输层精解：IP 路由选路、CIDR、TCP 三次握手/四次挥手状态机与滑动窗口第一性原理</title>
+    <link>https://blog.llmgo.top/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</link>
+    <guid>https://blog.llmgo.top/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</guid>
+    <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>IP路由与TCP状态机</category>
+    <description>为什么在不可靠的不可信物理网络上，能够构建出绝对可靠、按序到达的数据流？深度拆解网络层与传输层核心机理：从 IPv4/IPv6 报文结构、CIDR 掩码划分到 Linux 内核最长前缀匹配（LPM）与 FIB/RIB 路由表查找；全景剖析 TCP 经典的 11 种状态变迁机理，深入解析三次握手防串包原理、SYN Flood 与 SYN Cookies 防御、四次挥手与 TIME_WAIT 状态设计哲学；并从第一性原理推导滑动窗口流量控制、零窗口探测与 TCP_NODELAY 生产级网络调优。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/network-layer-transport-layer-ip-routing-tcp-state-machine.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>计算机网络第一性原理：物理层与以太网、MAC 帧寻址、ARP 协议与 Linux 网卡收发包 NAPI 链路</title>
+    <link>https://blog.llmgo.top/articles/network-fundamentals-ethernet-mac-arp-linux-packet-path/</link>
+    <guid>https://blog.llmgo.top/articles/network-fundamentals-ethernet-mac-arp-linux-packet-path/</guid>
+    <pubDate>Mon, 28 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>以太网底层与Linux收发包</category>
+    <description>从物理世界的电磁波与光纤脉冲，到操作系统内核的数据包流动：深度解密现代计算机网络底层基石。剖析以太网帧结构、MAC 寻址与 ARP 协议缓存机理；深入 Linux 内核网络子系统，完整追踪从物理网卡 DMA 拷贝、环形缓冲区（Ring Buffer）、硬中断上半部到 NAPI 软中断轮询处理及 sk_buff 流转的纳秒级微观全过程；并提供高并发场景下网卡中断亲和性、队列溢出与 ethtool/sysctl 内核参数极限调优方案。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/network-fundamentals-ethernet-mac-arp-linux-packet-path.png" length="150000" type="image/png" />
+  </item>
   <item>
     <title>容器网络全景解密：veth-pair、Linux Bridge、iptables NAT 与跨主机网络拓扑</title>
     <link>https://blog.llmgo.top/articles/container-networking-veth-bridge-iptables/</link>

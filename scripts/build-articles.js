@@ -109,6 +109,25 @@ const SERIES_DEFINITIONS = {
       'k8s-gpu-operator-ai-inference-scheduling',
     ],
   },
+  'computer-networking': {
+    id: 'computer-networking',
+    titleZh: '《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 架构实战》',
+    titleEn: 'Computer Networking Masterclass: From Ethernet Principles to Hyperscale InfiniBand Architecture',
+    badgeZh: '计算机网络专栏',
+    badgeEn: 'Networking Series',
+    descZh: '从第一性原理贯穿计算机网络全栈：从以太网物理层、MAC/ARP 寻址、Linux 内核收发包 NAPI 链路，到 TCP 三次握手状态机、滑动窗口与 BBR 拥塞控制；跨入现代数据中心 Leaf-Spine 架构、BGP EVPN 与 RoCEv2 无损网络；并最终杀入 AI 智算通信殿堂：InfiniBand 物理架构、信元流控、Subnet Manager、Rail-Optimized 万卡无阻塞 Fat-Tree 拓扑、SHARP 网络计算与生产级 OFED/NCCL 部署调优。',
+    descEn: 'A comprehensive first-principles guide through the entire networking stack: Ethernet physical layer, MAC/ARP, Linux kernel NAPI packet path; TCP state machines, sliding windows, and BBR congestion control; modern datacenter Clos/Leaf-Spine, BGP EVPN, and lossless RoCEv2; and ultimately hyperscale AI networking: InfiniBand hardware, credit-based flow control, Subnet Manager, Rail-Optimized Fat-Tree topologies, SHARP in-network reduction, and hands-on OFED/NCCL configuration.',
+    articles: [
+      'network-fundamentals-ethernet-mac-arp-linux-packet-path',
+      'network-layer-transport-layer-ip-routing-tcp-state-machine',
+      'tcp-congestion-control-reno-cubic-bbr-quic-http3',
+      'datacenter-network-clos-leaf-spine-bgp-evpn-vxlan',
+      'rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless',
+      'infiniband-architecture-hardware-rates-credit-flow-subnet-manager',
+      'infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp',
+      'infiniband-production-deployment-opensm-ofed-nccl-tuning',
+    ],
+  },
 };
 
 marked.setOptions({
