@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Fri, 09 Oct 2026 01:00:31 GMT</pubDate>
+  <pubDate>Fri, 09 Oct 2026 01:08:52 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞</title>
@@ -26,6 +26,16 @@
     <category>算子优化</category>
     <description>为什么标准自注意力计算会随序列长度呈平方级拖垮显存带宽？深度解析现代 Attention 算子加速史：从 FlashAttention-1 的 SRAM 分块分片（Tiling）与 Online Softmax 动态局部重规约，到 FlashAttention-2 循环重构与 Warp 零通信调度，再到 FlashAttention-3 独占 Hopper 架构的 TMA 硬件异步搬运与 WGMMA 异步流水线。最后全面剖析专为大模型在线服务而生的 FlashInfer，揭秘其如何凭借 Paged KV Cache 原生寻址与 Split-K 解码并行，终结长文本 Decode 算力饥饿。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/flashattention-flashinfer-kernel-evolution.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>四大主流生产级推理引擎架构横评与调度器源码解密：vLLM v1 vs SGLang vs TensorRT-LLM vs llama.cpp</title>
+    <link>https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/</link>
+    <guid>https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>推理引擎</category>
+    <description>从 Python 运行时到 C++/Rust 异步执行引擎：深度拆解开源世界四大顶级推理底座的源码设计哲学。对比 vLLM v1 零开销调度器与多步执行、SGLang RadixAttention 树状层级执行环、TensorRT-LLM 原生算子深度融合与 In-Flight Batching，以及 llama.cpp 端侧无依赖极限定量化运行时，奉上生产级全景技术选型指南。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/inference-engines-core-architecture-internals.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的物理撕裂</title>
@@ -86,6 +96,16 @@
     <category>前缀缓存</category>
     <description>为什么每次多轮对话或 Agent 交互，GPU 都要重复做成千上万次无意义的长文本前向计算？深度剖析前缀缓存（Prefix Caching）的核心原理，从 vLLM 的链式 Hash 块级寻址与边界惩罚，到 SGLang 独创的 RadixAttention 树状动态匹配、节点分裂与 LRU 叶子驱逐机制，彻底看透大模型状态复用的底层工程极限。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/prefix-caching-radix-attention-internals.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>长思维链 (Reasoning / Test-Time Compute) 与大集群推理系统的未来终局</title>
+    <link>https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/</link>
+    <guid>https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>终局前瞻</category>
+    <description>当自回归思考步长从数百 Token 飙升至 128k 深度反思，大模型推理系统迎来了颠覆性的物理拐点。深度探讨长思考链 (Test-Time Compute) 时代的系统级重构：KV Cache 爆炸式显存雪崩对抗、树状搜索 (MCTS) 与投机解码协同调度、基于强化学习的动态思考预算治理，以及跨介质多级分层 (SRAM/HBM/CXL/NVMe-oF) 全球 KV 存储池的未来终局。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/reasoning-test-time-compute-inference-future.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>AI Agent 记忆系统设计：从工作记忆、情景记忆到分层 Graph RAG</title>

@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Fri, 09 Oct 2026 01:00:31 GMT</pubDate>
+  <pubDate>Fri, 09 Oct 2026 01:08:52 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking</title>
@@ -26,6 +26,16 @@
     <category>Kernel Optimization</category>
     <description>Why does standard self-attention trigger explosive HBM bandwidth bottlenecks as context scales? A comprehensive deep dive into the evolution of attention kernels: from FlashAttention-1's SRAM tiling and online softmax rescaling, to FlashAttention-2's loop inversion and warp-level zero-communication scheduling, to FlashAttention-3's Hopper TMA asynchronous copies and WGMMA warpgroups. Finally, we explore FlashInfer, the purpose-built LLM serving kernel library, revealing how native Paged KV cache indexing and Split-K parallel decoding rescue memory-bound decodes.</description>
     <enclosure url="https://blog.llmgo.top/og/en/flashattention-flashinfer-kernel-evolution.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Production LLM Inference Engines Teardown: vLLM v1 vs. SGLang vs. TensorRT-LLM vs. llama.cpp Internals</title>
+    <link>https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/</link>
+    <guid>https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Inference Engines</category>
+    <description>From Python scheduling to asynchronous C++/Rust execution engines: an in-depth codebase teardown of the open-source world's top four inference engines. Comparing vLLM v1 zero-overhead multi-step scheduling, SGLang RadixAttention tree-based execution loops, TensorRT-LLM fused kernel pipelines with in-flight batching, and llama.cpp zero-dependency edge quantization, with an enterprise engineering decision matrix.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/inference-engines-core-architecture-internals.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence</title>
@@ -86,6 +96,16 @@
     <category>Prefix Caching</category>
     <description>Why do inference engines repeatedly execute thousands of redundant prompt forward passes across multi-turn conversations and agent loops? A comprehensive dissection of Prefix Caching internals: from vLLM's hash-chained block indexing and boundary penalty, to SGLang's pioneering RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction mechanics.</description>
     <enclosure url="https://blog.llmgo.top/og/en/prefix-caching-radix-attention-internals.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>The Future of LLM Inference: Test-Time Compute, Reasoning Scheduling, and Tiered Cluster Storage</title>
+    <link>https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/</link>
+    <guid>https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Future Architectures</category>
+    <description>When autoregressive thinking tokens explode from hundreds to 128k in deep reasoning models, inference systems reach an epochal architectural inflection point. An in-depth investigation into Test-Time Compute infrastructure: mitigating KV Cache memory avalanches, tree-search (MCTS) speculative scheduling, reinforcement-learning-guided thinking budget governors, and cross-tier (SRAM/HBM/CXL/NVMe-oF) global KV pools.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/reasoning-test-time-compute-inference-future.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>AI Agent Memory Architecture: From Working Memory to Episodic Memory &amp; Hierarchical Graph RAG</title>

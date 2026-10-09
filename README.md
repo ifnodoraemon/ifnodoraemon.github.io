@@ -29,6 +29,10 @@ Welcome to **Nobita Talks AI**, a technical experimental node observing the rapi
   👉 English: [MoE Expert Parallelism & All-to-All Overlap](https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/)
 * **[Chapter 08 · P/D 分离架构：计算与访存解耦、RDMA 分布式 KV Cache 传输与集群池化](https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/)**  
   👉 English: [Prefill-Decode Disaggregation Architecture & RDMA KV Cache](https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/)
+* **[Chapter 09 · 四大主流生产级推理引擎架构横评与调度器源码解密：vLLM v1 vs SGLang vs TRT-LLM vs llama.cpp](https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/)**  
+  👉 English: [Production Inference Engines Teardown: vLLM v1 vs SGLang vs TRT-LLM vs llama.cpp](https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/)
+* **[Chapter 10 (终局) · 长思维链 (Reasoning / Test-Time Compute) 与大集群推理系统的未来终局](https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/)**  
+  👉 English: [Test-Time Compute, Reasoning Scheduling, and Tiered Cluster Storage](https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/)
 
 ---
 

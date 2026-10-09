@@ -81,6 +81,8 @@ const SERIES_DEFINITIONS = {
       'mha-gqa-mla-matrix-absorption-inference-engine',
       'moe-expert-parallelism-inference-engine',
       'pd-disaggregation-distributed-kv-cache',
+      'inference-engines-core-architecture-internals',
+      'reasoning-test-time-compute-inference-future',
     ],
   },
 };

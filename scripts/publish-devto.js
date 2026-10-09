@@ -33,6 +33,8 @@ const TOP_TIER_SLUGS = [
   'mha-gqa-mla-matrix-absorption-inference-engine',
   'moe-expert-parallelism-inference-engine',
   'pd-disaggregation-distributed-kv-cache',
+  'inference-engines-core-architecture-internals',
+  'reasoning-test-time-compute-inference-future',
   'agent-loop-state-machine',
   'agent-memory-architecture',
   'test-time-compute-grpo',
