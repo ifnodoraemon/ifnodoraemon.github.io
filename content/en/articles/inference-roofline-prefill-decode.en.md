@@ -289,13 +289,13 @@ graph TD
     M4 --> D7["Disaggregated Prefill & Decode (P/D):<br/>Separate compute from bandwidth"]
 ```
 
-1. **Memory Virtualization**: Since decode is bandwidth- and capacity-constrained, eliminating memory waste is critical. **[PagedAttention](/en/articles/sglang-vs-vllm-architecture/)** applies virtual memory concepts to eliminate the internal fragmentation of static buffer pre-allocation.
-2. **Prefix Tree Caching**: Multi-turn agents and structured prompts reuse common prefixes. **RadixAttention** enables instant KV cache reuse without redundant prefills.
-3. **Chunked Scheduling**: **Chunked Prefill** slices massive prompts into smaller chunks, interleaving them smoothly with decode steps to prevent HoL blocking.
+1. **Memory Virtualization**: Since decode is bandwidth- and capacity-constrained, eliminating memory waste is critical. Chapter 02's **[PagedAttention Memory Virtualization](/en/articles/pagedattention-memory-virtualization/)** applies virtual memory concepts to eliminate internal fragmentation.
+2. **Chunked Scheduling**: Chapter 03's **[Continuous Batching & Chunked Prefill](/en/articles/continuous-batching-chunked-prefill-guide/)** slices massive prompts into smaller chunks, interleaving them smoothly with decode steps to prevent HoL blocking.
+3. **Prefix Tree Caching**: Multi-turn agents and structured prompts reuse common prefixes. Chapter 04's **[RadixAttention Prefix Caching](/en/articles/prefix-caching-radix-attention-internals/)** enables instant KV cache reuse without redundant prefills.
 4. **Algorithmic Intensity Boosts**: **[EAGLE-3 Speculative Decoding](/en/articles/speculative-decoding-eagle-guide/)** leverages idle Tensor Cores during decode to predict multiple tokens per memory load, trading surplus compute for scarce memory bandwidth.
-5. **Physical Disaggregation**: Architectures like DistServe and Mooncake decouple prefill and decode entirely, routing prefill to compute-heavy clusters and decode to bandwidth-optimized nodes across low-latency RDMA networks.
+5. **Physical Disaggregation**: Chapter 08's **[P/D Disaggregation and Distributed KV Cache](/en/articles/pd-disaggregation-distributed-kv-cache/)** (e.g., Mooncake, DistServe) decouples prefill and decode entirely, routing prefill to compute-heavy clusters and decode to bandwidth-optimized nodes across low-latency RDMA networks.
 
-In the chapters that follow, we will walk through each of these systems layers to trace how modern inference engines break the physical constraints of hardware.
+In the chapters that follow, we will walk through each of these systems layers, starting with Chapter 02's **[PagedAttention Memory Virtualization](/en/articles/pagedattention-memory-virtualization/)**, to trace how modern inference engines systematically break the physical constraints of hardware.
 
 ---
 

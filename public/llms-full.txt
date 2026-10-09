@@ -157,7 +157,7 @@
     A: 在配备 M 系列芯片的苹果设备（如 Mac Studio / MacBook Pro）上，CPU 与 GPU 共享同一组高带宽物理 LPDDR 内存条（统一内存架构，带宽可达 400~800 GB/s）。 在传统 PC 或数据中心服务器中，模型必须从宿主机内存（Host RAM）经过漫长的 PCIe 总线拷贝到独立的显存（GPU HBM）中才能计算。而在统一内存架构下，llama.cpp 借助操作系统的 mmap() 系统调用，直接让 GPU 核心就地读取内存中的模型权重，完全省去了漫长的加载显存搬运过程，且能直接加载超过单卡独立显存上限（如 128GB 内存跑 70B 模型）的庞大参数。但在...
 
 ### [从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的物理撕裂](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/)
-- 发布日期: 2026-09-24 | 标签: 算力建模 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5043 字
+- 发布日期: 2026-09-24 | 标签: 算力建模 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5102 字
 - 概述: 为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。
 - 核心 FAQ 解答:
   * Q: Q1: 既然 Decode 阶段是显存带宽受限，为什么不无限增大 Batch Size 把算力跑满？
@@ -607,7 +607,7 @@
     A: On Apple Silicon devices (e.g., Mac Studio with M-series chips), the CPU and GPU share a unified pool of high-bandwidth LPDDR memory (achieving 400~800 GB/s bandwidth). In standard PC or data center servers, model weights must be copied from host system RAM across the PCIe bus into discrete GPU HBM ...
 
 ### [From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence](https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/)
-- Date: 2026-09-24 | Tag: Roofline Modeling | Read: 11 min read | Words: 2643 words
+- Date: 2026-09-24 | Tag: Roofline Modeling | Read: 11 min read | Words: 2665 words
 - Summary: Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode.
 - Key FAQ Insights:
   * Q: Q1: If decode is memory-bandwidth bound, why not increase batch size indefinitely to saturate the compute units?

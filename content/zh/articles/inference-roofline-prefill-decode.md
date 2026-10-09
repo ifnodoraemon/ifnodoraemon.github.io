@@ -295,13 +295,13 @@ graph TD
     M4 --> D7["P/D 分离架构 (Disaggregated Serving):<br/>算力卡与显存卡物理解耦"]
 ```
 
-1. **显存碎片治理**：既然 Decode 阶段主要卡在显存带宽与容量上，就绝不能浪费任何一兆 HBM。**[PagedAttention](/articles/sglang-vs-vllm-architecture/)** 借鉴操作系统的虚拟内存分页机制，彻底消除了预分配带来的内部碎片；
-2. **多轮前缀复用**：Agent 和多轮对话中大量的 Prompt 是完全重复的。**RadixAttention（基数树缓存）** 让系统无需再次执行 Prefill，直接在微秒级找回历史 KV Cache；
-3. **调度切片**：**Chunked Prefill** 将庞大的 Prefill 矩阵乘切成碎片，与 Decode 算子交替推进，斩断排头阻塞；
-4. **算法换带宽**：**[EAGLE-3 动态投机采样](/articles/speculative-decoding-eagle-guide/)** 敏锐地抓住了 Decode 阶段 Tensor Core 空转 95% 的特点，用一个小草稿头在单步内推测验证多个 Token，用冗余的算力换取宝贵的显存带宽；
-5. **计算解耦终局**：既然 Prefill 和 Decode 的物理需求水火不容，未来的系统（如 Mooncake、DistServe）索性将两者拆开，让 Prefill 运行在高算力集群，Decode 运行在高带宽集群，通过超高速 RDMA 网络实时传输 KV Cache。
+1. **显存碎片治理**：既然 Decode 阶段主要卡在显存带宽与容量上，就绝不能浪费任何一兆 HBM。专栏第二讲 **[PagedAttention 内存虚拟化](/articles/pagedattention-memory-virtualization/)** 借鉴操作系统的虚拟分页机制，彻底消除了预分配带来的内部碎片；
+2. **调度切片与流式平滑**：专栏第三讲 **[Continuous Batching 与 Chunked Prefill](/articles/continuous-batching-chunked-prefill-guide/)** 将庞大的 Prefill 矩阵乘切成碎片，与 Decode 算子交替推进，斩断排头阻塞；
+3. **多轮前缀复用**：Agent 和多轮对话中大量的 Prompt 是完全重复的。专栏第四讲 **[RadixAttention 树状缓存](/articles/prefix-caching-radix-attention-internals/)** 让系统无需再次执行 Prefill，直接在微秒级找回历史 KV Cache；
+4. **算法换带宽**：**[EAGLE-3 动态投机采样](/articles/speculative-decoding-eagle-guide/)** 敏锐地抓住了 Decode 阶段 Tensor Core 空转 95% 的特点，用小草稿头在单步内推测验证多个 Token，用冗余算力换取宝贵显存带宽；
+5. **计算解耦终局**：既然 Prefill 和 Decode 的物理需求水火不容，专栏第八讲 **[P/D 分离架构与分布式 KV Cache 传输](/articles/pd-disaggregation-distributed-kv-cache/)**（如 Mooncake、DistServe）索性将两者拆开，让 Prefill 运行在高算力集群，Decode 运行在高带宽集群，通过超高速 RDMA 网络实时传输 KV Cache。
 
-在接下来的篇章中，我们将顺着这条充满因果推演的工程主线，逐一拆解现代推理引擎如何一步步冲破硬件枷锁。
+在接下来的篇章中，我们将顺着这条充满第一性原理的工程主线，从第二讲 **[PagedAttention 内存虚拟化](/articles/pagedattention-memory-virtualization/)** 开始，逐一拆解现代推理引擎如何一步步冲破硬件物理枷锁。
 
 ---
 

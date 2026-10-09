@@ -712,10 +712,17 @@ function buildSeriesCardBottom(article, allArticlesInLang, isEn) {
         </a>
       </div>`;
   } else {
+    const completeDescZh = seriesId === 'llm-inference'
+      ? '恭喜读完《大模型推理引擎：从模型演进、内核架构到未来终局》全套 10 篇内容！你已建立起从 Roofline 物理撕裂、PagedAttention、算子内核演进到 P/D 分离、四大引擎源码与长思维链分层存储的完整硬核认知。'
+      : '恭喜读完《AI Agent 生产级架构师手册》全套 11 篇内容！你已建立起从执行循环、状态机控制流到 MCP 协议、Skills 扩展、分布式编排、环境缩放与长程记忆的完整工业级认知。';
+    const completeDescEn = seriesId === 'llm-inference'
+      ? 'Congratulations on completing all 10 chapters of the Production LLM Inference Engines series! You have mastered inference systems from first-principles Roofline modeling and kernel evolutions to P/D disaggregation and tiered cluster storage.'
+      : 'Congratulations on completing all 11 chapters of The Production AI Agent Architect Handbook! You have mastered end-to-end agentic engineering from state machines and MCP to distributed orchestration, environment scaling, and memory systems.';
+
     bodyHtml = `
       <div class="series-footer-complete-box">
         <div class="series-complete-title">🎉 ${isEn ? 'Series Completed!' : '已读完专栏全部章节！'}</div>
-        <p class="series-complete-desc">${isEn ? 'You have completed all chapters in this handbook. Review earlier chapters or explore our other deep dives.' : '恭喜读完《AI Agent 生产级架构师手册》全套内容！你已建立起从执行循环、状态机到 MCP、Skills 与多智能体编排的完整认知。'}</p>
+        <p class="series-complete-desc">${isEn ? completeDescEn : completeDescZh}</p>
         <div class="series-complete-actions">
           <a href="${prefix}${firstArticle.slug}/" class="btn-ghost series-nav-btn">${isEn ? '← Revisit Chapter 1' : '← 重温第一章'}</a>
           <a href="${isEn ? '/en/articles/' : '/articles/'}" class="btn-primary series-nav-btn">${isEn ? 'All Articles →' : '浏览全部文章 →'}</a>
