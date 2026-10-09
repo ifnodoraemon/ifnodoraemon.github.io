@@ -14,15 +14,25 @@
 ### 中文专栏 (Chinese Series)
 - [《AI Agent 生产级架构师手册》](https://blog.llmgo.top/articles/): 系统化掌握 2026 生产级 AI Agent 核心架构：从执行循环、状态机控制流，到 MCP 协议、Skills 扩展、多智能体协作与全链路可观测性。 (11 篇文章)
 - [《大模型推理引擎：从模型演进、内核架构到未来终局》](https://blog.llmgo.top/articles/): 以第一性原理贯穿大模型推理系统：从 Prefill/Decode 物理撕裂与 Roofline 模型推导、KV Cache 与 MLA 显存突围，到 PagedAttention、Continuous Batching、P/D 解耦、四大引擎 (vLLM / SGLang / TRT-LLM / llama.cpp) 源码解密与长思考链调度终局。 (10 篇文章)
+- [《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》](https://blog.llmgo.top/articles/): 系统化掌握云原生容器与集群编排体系：从 Linux 内核 Namespace、cgroups v2、OverlayFS 隔离本质，到 Docker SwarmKit 轻量集群 Raft 共识与 Routing Mesh，再到 Kubernetes 声明式控制面、Cilium eBPF 网络、CSI 状态化存储、Operator 模式与 2026 AI 大模型 GPU 调度终局。 (8 篇文章)
 - [《现代大模型实战工程与技术选型手册》](https://blog.llmgo.top/articles/): 系统剖析前沿大模型落地方法论：企业级 RAG、模型全流程微调、Test-Time Compute 扩展与 GRPO 强化学习、拒绝榜单刷分的 Eval 体系以及主流模型横评。
 
 ### 英文专栏 (English Series)
 - [The Production AI Agent Architect Handbook](https://blog.llmgo.top/en/articles/): Master production-grade AI Agent architectures in 2026: from execution loops and state machines to MCP, skills, multi-agent orchestration, and observability. (11 articles)
 - [Production LLM Inference Engines: Evolution, Architecture, and Future](https://blog.llmgo.top/en/articles/): Master LLM inference systems from first principles: Roofline modeling of Prefill/Decode, KV Cache & MLA memory optimization, PagedAttention, Continuous Batching, P/D disaggregation, and in-depth engine architectures across vLLM, SGLang, TensorRT-LLM, and llama.cpp. (10 articles)
+- [From Docker to Kubernetes: Cloud-Native Container & Cluster Orchestration Handbook](https://blog.llmgo.top/en/articles/): Master containerization and cluster orchestration from first principles: Linux namespaces, cgroups v2, OverlayFS, Docker SwarmKit Raft consensus, and Kubernetes declarative architecture, Cilium eBPF, CSI storage, Operators, and 2026 AI GPU scheduling. (8 articles)
 - [Modern Applied LLM Engineering & Selection Guide](https://blog.llmgo.top/en/articles/): Enterprise RAG pipelines, fine-tuning workflows, Test-Time Compute & GRPO, evaluation suites, and multi-model benchmark selections.
 
-## 中文文章索引 / Chinese Technical Articles (42 篇)
+## 中文文章索引 / Chinese Technical Articles (50 篇)
 
+- [容器网络全景解密：veth-pair、Linux Bridge、iptables NAT 与跨主机网络拓扑](https://blog.llmgo.top/articles/container-networking-veth-bridge-iptables/): 为什么隔离在独立 Network Namespace 中的容器能够与外界顺畅通信？深度拆解容器网络协议栈的底层传输机理：veth-pair 虚拟以太网对穿透隔离墙、Linux Bridge (docker0) 二层 MAC 学习与广播域隔离、iptables PREROUTING/POSTROUTING 端口映射与 MASQUERADE 动态源地址转换，全面对比 Host、Bridge、Macvlan 与 Overlay 跨主机网络拓扑性能与开销。
+- [Docker 内核第一性原理：Namespace 进程隔离、cgroups v2 资源配额与 OverlayFS 联合文件系统底层解密](https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/): 为什么说容器根本不是轻量级虚拟机，而是一个被限制了视界与资源的普通 Linux 进程？从第一性原理深度拆解 Docker 底层三大支柱：C 语言系统调用 clone() 与六大 Linux Namespace 进程视界隔离、cgroups v2 单根树统一资源配额与 OOM 机制、OverlayFS 联合挂载分层镜像与写时复制（CoW），并剖析 OCI、containerd 与 runc 调用链路。
+- [轻量级集群编排：Docker SwarmKit 架构、Raft 分布式共识与 Ingress Routing Mesh 服务发现](https://blog.llmgo.top/articles/docker-swarm-architecture-raft-routing-mesh/): 为什么在 Kubernetes 一统天下的今天，中小团队依然视 Docker Swarm 为最高效的生产利器？深度拆解 SwarmKit 的架构哲学：Manager 与 Worker 节点拓扑、内置 Raft 协议的分布式强一致状态机、VXLAN 驱动的跨主机 Overlay 覆盖网络，以及基于 IPVS 的 Ingress Routing Mesh 负载均衡与服务发现，全面剖析 Swarm 与 K8s 的工程权衡分水岭。
+- [Kubernetes 控制平面深度解密：声明式 API、etcd 状态机、调度器与控制器调谐循环 (Reconciliation Loop)](https://blog.llmgo.top/articles/k8s-control-plane-declarative-reconciliation/): 为什么声明式 API 与控制理论能够成为现代云计算与分布式系统的终极事实标准？深度剖析 Kubernetes 控制平面架构底层：kube-apiserver 请求准入控制流水线（认证、鉴权、双准入 Webhook）、etcd v3 底层 MVCC 与 Watch 机制、kube-scheduler 过滤与打分双阶段调度、Informer 架构（Reflector、DeltaFIFO、Indexer、WorkQueue）与控制器水平触发调谐循环（Reconciliation Loop）工程机理。
+- [2026 AI 智算调度终局：Kubernetes GPU Operator、MIG 分割、拓扑感知调度与 vLLM/SGLang 集群弹性扩缩容](https://blog.llmgo.top/articles/k8s-gpu-operator-ai-inference-scheduling/): 为什么传统以 CPU/内存为核心的调度体系在大模型时代全面失效？深入拆解 2026 AI 时代 Kubernetes 智算基础设施调度架构：NVIDIA GPU Operator 驱动与运行时全自动纳管链路、MIG（多实例 GPU）硬件物理分割与时间切片方案；Kubelet Topology Manager 与 DRA（动态资源分配）如何解决跨 NUMA 节点与 NVLink 互联性能断崖；并实战构建基于 P/D 分离、KV Cache 负载指标与 KEDA 的生产级 vLLM / SGLang 大模型推理集群弹性扩缩容架构。
+- [Kubernetes 网络模型全景：CNI 规范演进、Calico BGP、Cilium eBPF 与 Gateway API 架构解密](https://blog.llmgo.top/articles/k8s-networking-cni-cilium-ebpf-gateway-api/): 为什么说容器网络是 Kubernetes 中最复杂、最容易踩坑的深水区？深度拆解云原生网络四大公理与 CNI（Container Network Interface）插件规范底层执行机理；全面对比 Flannel VXLAN 覆盖网络与 Calico BGP 纯二层路由性能与开销；深入解密 Cilium 如何利用 Linux 内核 eBPF 与 sockops 套接字重定向彻底革新 kube-proxy 与 iptables 性能瓶颈；并剖析面向未来的 Gateway API 角色分离与流量治理架构。
+- [Kubernetes 扩展核心：Operator 模式、CRD 自定义资源与 KubeBuilder 生产级实战](https://blog.llmgo.top/articles/k8s-operator-pattern-kubebuilder-crd/): 为什么说 Operator 模式是 Kubernetes 能够统治整个现代基础架构软件生态的终极杀手锏？深度拆解 Operator 模式的核心哲学：如何将资深 SRE 的运维专家经验编码为代码；解密 CRD（自定义资源定义）在 apiextensions-apiserver 中的注册机理与 Status/Scale 子资源隔离；深入剖析 Controller-Runtime 与 KubeBuilder 生产级脚手架架构（Manager、Cache、Split Client、Reconcile 调谐与 Finalizer 安全清理机制），并通过完整的 Go 代码实现一个高可用分布式中间件 Operator。
+- [Kubernetes 有状态存储中枢：CSI 插件规范、动态 PV/PVC 供给与 StatefulSet 拓扑保证](https://blog.llmgo.top/articles/k8s-storage-csi-statefulset-deep-dive/): 为什么在 Kubernetes 上运行有状态数据库曾被视为运维禁区？深度拆解云原生存储体系的底层设计：StorageClass、PV 与 PVC 三层解耦模型与动态存储供给机制；CSI（Container Storage Interface）插件架构四阶段生命周期（Provision、Attach、Stage、Mount）与底层 Linux 挂载机理；StatefulSet 如何通过 Headless Service 确定性 DNS 与 volumeClaimTemplates 保证分布式数据库的拓扑唯一性与数据持久性。
 - [高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞](https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/): 为什么在消除显存碎片后，高并发大模型服务依然会遭遇严重的单字时延（TPOT）剧烈抖动？深度解构从传统静态批处理到 Orca 迭代级连续批处理的状态机演进，揭秘超长 Prefill 霸占 GPU 引发排头阻塞（HoL Blocking）的物理根源，以及 Sarathi-Serve 和 vLLM 借助 Chunked Prefill 实现算力与访存动态拼车（Piggybacking）的底层机制。
 - [Attention 算子加速史：从 FlashAttention-1/2/3 的 SRAM Tiling 到 FlashInfer 统一异构核心](https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/): 为什么标准自注意力计算会随序列长度呈平方级拖垮显存带宽？深度解析现代 Attention 算子加速史：从 FlashAttention-1 的 SRAM 分块分片（Tiling）与 Online Softmax 动态局部重规约，到 FlashAttention-2 循环重构与 Warp 零通信调度，再到 FlashAttention-3 独占 Hopper 架构的 TMA 硬件异步搬运与 WGMMA 异步流水线。最后全面剖析专为大模型在线服务而生的 FlashInfer，揭秘其如何凭借 Paged KV Cache 原生寻址与 Split-K 解码并行，终结长文本 Decode 算力饥饿。
 - [四大主流生产级推理引擎架构横评与调度器源码解密：vLLM v1 vs SGLang vs TensorRT-LLM vs llama.cpp](https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/): 从 Python 运行时到 C++/Rust 异步执行引擎：深度拆解开源世界四大顶级推理底座的源码设计哲学。对比 vLLM v1 零开销调度器与多步执行、SGLang RadixAttention 树状层级执行环、TensorRT-LLM 原生算子深度融合与 In-Flight Batching，以及 llama.cpp 端侧无依赖极限定量化运行时，奉上生产级全景技术选型指南。
@@ -66,8 +76,16 @@
 - [多模态大模型入门指南](https://blog.llmgo.top/articles/multimodal-guide/): 探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。
 - [大模型微调全流程指南：底层工作原理、高价值落地用例与生产实战](https://blog.llmgo.top/articles/fine-tuning-guide/): 深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。
 
-## 英文文章索引 / English Technical Articles (42 Articles)
+## 英文文章索引 / English Technical Articles (50 Articles)
 
+- [Container Networking Deep Dive: veth-pair, Linux Bridge, iptables NAT, and Cross-Host Topology](https://blog.llmgo.top/en/articles/container-networking-veth-bridge-iptables/): How do processes isolated within private Network Namespaces communicate with host networks and the external Internet? An in-depth teardown of container network packet forwarding: veth-pair virtual ethernet pipes, Linux Bridge (docker0) Layer-2 forwarding, iptables PREROUTING/POSTROUTING DNAT port forwarding and MASQUERADE SNAT, alongside a performance and architectural comparison across Host, Bridge, Macvlan, and Overlay cross-host topologies.
+- [Docker Internals from First Principles: Linux Namespaces, cgroups v2, and OverlayFS Union Mounts Deep Dive](https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/): Why are containers not lightweight virtual machines, but ordinary Linux processes constrained by kernel views and resource quotas? An in-depth first-principles exploration of Docker's three core pillars: clone() system calls with the six Linux Namespaces, cgroups v2 single-hierarchy unified resource limits, and OverlayFS layered union mounts with Copy-on-Write (CoW), alongside the OCI, containerd, and runc execution chain.
+- [Lightweight Cluster Orchestration: Docker SwarmKit Architecture, Raft Consensus, and Ingress Routing Mesh](https://blog.llmgo.top/en/articles/docker-swarm-architecture-raft-routing-mesh/): Why do engineering teams still leverage Docker Swarm in the cloud-native era dominated by Kubernetes? An architectural deep dive into SwarmKit internals: Manager and Worker node topologies, built-in Raft consensus state machine, VXLAN-powered cross-host overlay networking, and kernel-level IPVS Ingress Routing Mesh service discovery, complete with production trade-offs between Swarm and Kubernetes.
+- [Kubernetes Control Plane Deep Dive: Declarative APIs, etcd Consensus, Scheduler, and Controller Reconciliation Loops](https://blog.llmgo.top/en/articles/k8s-control-plane-declarative-reconciliation/): Why have declarative APIs and modern control theory emerged as the definitive standard for cloud infrastructure? A comprehensive architectural deconstruction of the Kubernetes Control Plane: kube-apiserver request admission pipelines (Authentication, RBAC, Mutating and Validating Webhooks), etcd v3 MVCC revisions and Watch streams, kube-scheduler two-phase filter and score algorithms, Informer mechanics (Reflector, DeltaFIFO, Indexer, WorkQueue), and level-triggered controller reconciliation loops.
+- [2026 AI Computing Infrastructure: Kubernetes GPU Operator, MIG Partitioning, Topology-Aware Scheduling, and Auto-scaling Inference Engines](https://blog.llmgo.top/en/articles/k8s-gpu-operator-ai-inference-scheduling/): Why does traditional CPU/memory scalar scheduling fail in the large language model era? A rigorous architectural deconstruction of AI infrastructure on Kubernetes in 2026: automated zero-touch lifecycles via the NVIDIA GPU Operator; hardware-isolated Multi-Instance GPU (MIG) slicing versus time-slicing; overcoming cross-NUMA interconnect bottlenecks with Kubelet Topology Manager and Dynamic Resource Allocation (DRA); and production auto-scaling for vLLM and SGLang inference clusters leveraging KEDA and real-time KV cache saturation metrics.
+- [Kubernetes Networking Panorama: CNI Specification, Calico BGP, Cilium eBPF, and Gateway API Architecture](https://blog.llmgo.top/en/articles/k8s-networking-cni-cilium-ebpf-gateway-api/): Why is container networking widely regarded as the most intricate subsystem of Kubernetes? A deep architectural exploration into Kubernetes networking axioms and CNI (Container Network Interface) plugin execution lifecycles; rigorous comparisons between Flannel VXLAN overlays and Calico BGP underlay routing; how Cilium leverages Linux kernel eBPF and sockops socket redirection to bypass kube-proxy and iptables bottlenecks; and the role-oriented traffic governance of the modern Gateway API.
+- [Kubernetes Extensibility: The Operator Pattern, Custom Resource Definitions (CRD), and KubeBuilder in Production](https://blog.llmgo.top/en/articles/k8s-operator-pattern-kubebuilder-crd/): Why is the Operator pattern universally recognized as the decisive architectural breakthrough that crowned Kubernetes the operating system of the modern cloud? A comprehensive deconstruction of Operator philosophy: codifying senior SRE domain knowledge into software; how CRDs register dynamic endpoints in apiextensions-apiserver with /status and /scale subresource isolation; and an in-depth breakdown of Controller-Runtime and KubeBuilder architecture (Manager, Cache, Split Client, Reconcile, and Finalizers), complete with production Go code for high-availability distributed stateful middleware.
+- [Kubernetes Storage Architecture: CSI Specification, Dynamic PV/PVC Provisioning, and StatefulSet Guarantees](https://blog.llmgo.top/en/articles/k8s-storage-csi-statefulset-deep-dive/): Why was executing stateful databases on Kubernetes once treated as an operational taboo? A detailed architectural exploration of the cloud-native storage stack: the three-tier decoupling of StorageClass, PersistentVolume (PV), and PersistentVolumeClaim (PVC); the four lifecycle stages of the Container Storage Interface (CSI) specification (Provision, Attach, Stage, and Mount); and how StatefulSets leverage Headless Services and volumeClaimTemplates to maintain strict topological ordering and immutable data persistence.
 - [Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking](https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/): Why does high-concurrency LLM serving suffer from severe latency spikes (TPOT jitter) even after eliminating memory fragmentation? A deep dive into the evolution from static batching to Orca's iteration-level continuous batching, the physical mechanics of head-of-line (HoL) blocking caused by long prefill bursts, and how Sarathi-Serve and vLLM leverage Chunked Prefill and decode piggybacking to flatten latency SLAs.
 - [Evolution of Attention Kernels: From FlashAttention-1/2/3 SRAM Tiling to FlashInfer Unified Heterogeneous Serving](https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/): Why does standard self-attention trigger explosive HBM bandwidth bottlenecks as context scales? A comprehensive deep dive into the evolution of attention kernels: from FlashAttention-1's SRAM tiling and online softmax rescaling, to FlashAttention-2's loop inversion and warp-level zero-communication scheduling, to FlashAttention-3's Hopper TMA asynchronous copies and WGMMA warpgroups. Finally, we explore FlashInfer, the purpose-built LLM serving kernel library, revealing how native Paged KV cache indexing and Split-K parallel decoding rescue memory-bound decodes.
 - [Production LLM Inference Engines Teardown: vLLM v1 vs. SGLang vs. TensorRT-LLM vs. llama.cpp Internals](https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/): From Python scheduling to asynchronous C++/Rust execution engines: an in-depth codebase teardown of the open-source world's top four inference engines. Comparing vLLM v1 zero-overhead multi-step scheduling, SGLang RadixAttention tree-based execution loops, TensorRT-LLM fused kernel pipelines with in-flight batching, and llama.cpp zero-dependency edge quantization, with an enterprise engineering decision matrix.
@@ -122,6 +140,94 @@
 # 深度知识库与问答全文 / Full Knowledge Base & Technical FAQ Details
 
 ## 中文文章深度 FAQ 与要点汇总
+
+### [容器网络全景解密：veth-pair、Linux Bridge、iptables NAT 与跨主机网络拓扑](https://blog.llmgo.top/articles/container-networking-veth-bridge-iptables/)
+- 发布日期: 2026-09-25 | 标签: 容器网络 | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4703 字
+- 概述: 为什么隔离在独立 Network Namespace 中的容器能够与外界顺畅通信？深度拆解容器网络协议栈的底层传输机理：veth-pair 虚拟以太网对穿透隔离墙、Linux Bridge (docker0) 二层 MAC 学习与广播域隔离、iptables PREROUTING/POSTROUTING 端口映射与 MASQUERADE 动态源地址转换，全面对比 Host、Bridge、Macvlan 与 Overlay 跨主机网络拓扑性能与开销。
+- 核心 FAQ 解答:
+  * Q: Q1: 在高并发 API 场景下，为什么基于 iptables 端口映射的 Bridge 模式容器会出现明显的延迟抖动与吞吐瓶颈？
+    A: 主要原因在于 Linux 内核连接跟踪（Netfilter Conntrack）表的容量上限与锁竞争： 每个经过 NAT 改写的 TCP 连接都必须在宿主机内核的 Conntrack 表中建立追踪记录。当每秒瞬时并发突增（例如数万短连接涌入）时，Conntrack 表会被迅速填满，触发 nf_conntrack: table full, dropping packet 导致大量网络包直接被丢弃。此外，每一个连接建立和关闭都需要竞争更新连接表哈希桶的自旋锁，在大规模多核服务器上会引发严重的 CPU 软中断争抢。 解决方案：在高吞吐在线服务中，可改用 --net=host 模式彻底绕过 Bridg...
+  * Q: Q2: 为什么两台容器都在同一个宿主机上，即使各自加入了默认的 bridge 网络，它们之间却无法通过容器名（Container Name）直接 Ping 通？
+    A: 这是 Docker 历史设计的安全权衡： 在默认的全局 bridge（即 docker0）网络中，Docker 出于安全考虑默认禁用了内置的自动 DNS 服务发现，容器之间只能通过彼此的原始 IP 进行通信。 如果需要实现容器名互访，必须通过 docker network create my-custom-net 创建一个自定义用户桥接网络（User-defined Bridge）并将容器挂入其中。在自定义桥接网络中，Docker 会在后台为每个容器自动配置一个内建的 DNS 解析服务器（监听在 127.0.0.11:53），从而实现容器名到动态 IP 的零配置自动解析。...
+  * Q: Q3: Macvlan 模式性能既然无限逼近物理裸金属，为什么在企业云原生和公有云环境中应用并不广泛？
+    A: Macvlan 是通过物理网卡衍生出带有不同 MAC 地址的虚拟子接口直接连入物理二层网络。其局限性主要表现在： 1. 物理网络基础设施限制：交换机物理端口有 MAC 学习表容量上限，一旦单台服务器运行上百个 Macvlan 容器，物理交换机可能由于 MAC 地址表爆满而瘫痪； 2. 公有云安全限制：AWS、阿里云等公有云的虚拟私有云（VPC）出于防网络欺骗（Anti-Spoofing）考量，强制要求虚拟机的弹性网卡只能使用其分配的合法 MAC，会直接在底层丢弃所有非法的 Macvlan 数据包； 3. 宿主机与容器互访死锁：出于内核安全设计，默认情况下宿主机自身无法直接通过自身物理 IP 访...
+
+### [Docker 内核第一性原理：Namespace 进程隔离、cgroups v2 资源配额与 OverlayFS 联合文件系统底层解密](https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/)
+- 发布日期: 2026-09-25 | 标签: 容器内核 | 预计阅读: 预计阅读 24 分钟 | 字数: 约 5826 字
+- 概述: 为什么说容器根本不是轻量级虚拟机，而是一个被限制了视界与资源的普通 Linux 进程？从第一性原理深度拆解 Docker 底层三大支柱：C 语言系统调用 clone() 与六大 Linux Namespace 进程视界隔离、cgroups v2 单根树统一资源配额与 OOM 机制、OverlayFS 联合挂载分层镜像与写时复制（CoW），并剖析 OCI、containerd 与 runc 调用链路。
+- 核心 FAQ 解答:
+  * Q: Q1: 为什么在容器内部执行 `top` 或 `free -m` 时，看到的依然是宿主机的整机 CPU 核心数和总内存大小？
+    A: 这是由 Linux 内核的历史设计决定的： top、htop 与 free 命令底层并不是通过特定的系统调用读取数据，而是直接读取 /proc 伪文件系统下的 /proc/meminfo 与 /proc/stat。而在 Linux 内核中，/proc 文件系统中的大部分硬件指标属于全局共享视图，并不受容器 cgroups 配额的自动映射拦截。 如果容器被 cgroups 限制使用 2GB 内存，但宿主机拥有 128GB 内存，容器内的 Java/JVM 或 Node.js 运行时如果不加干预，会误以为自己可用 128GB 内存并据此按比例预分配堆空间，从而瞬间打爆 2GB 的 cgroups ...
+  * Q: Q2: 为什么生产环境中必须坚决废弃 `--privileged`（特权模式）？
+    A: 当给容器赋予 --privileged 标志时，Docker 会关闭几乎所有的内核安全防护： 1. 容器能够直接绕过 Device 白名单，访问宿主机的所有物理硬件设备节点（如 /dev/sda、物理网卡等）； 2. 容器内部的 root 用户拥有真实的 CAP_SYS_ADMIN 等全部 Linux Capabilities 特权； 3. 容器内部进程可以随意挂载宿主机的真实文件系统并注入内核模块，这等同于容器逃逸的零门槛开放。 生产级安全最佳实践应当是遵循“最小特权原则”：永远禁用特权模式，仅通过 --cap-add 精确授予业务所需的特定能力（例如网络抓包仅赋予 NET_ADMIN），并...
+  * Q: Q3: 容器镜像的只读层如果在底层发生物理损坏，会不会扩散波及到所有正在运行的容器？
+    A: 会受到影响，因为所有基于该镜像的容器在 LowerDir 物理上都直接只读映射到宿主机存储路径下的同一组文件块（如 /var/lib/docker/overlay2/<layer_id>）。 如果宿主机底层的 NVMe/SSD 产生物理坏道导致特定只读层文件损坏，所有尝试从该层读取该文件的容器进程都会抛出 IO Error。 然而，由于容器的任何修改操作都会强制先将副本写时复制（CoW）到各自独立的 UpperDir，一个容器被破坏或写脏的数据在物理机制上绝对不可能反向渗透污染到共享的底层镜像层，因此一个容器逻辑上的崩溃不会污染其他容器的只读数据。...
+
+### [轻量级集群编排：Docker SwarmKit 架构、Raft 分布式共识与 Ingress Routing Mesh 服务发现](https://blog.llmgo.top/articles/docker-swarm-architecture-raft-routing-mesh/)
+- 发布日期: 2026-09-25 | 标签: 集群编排 | 预计阅读: 预计阅读 17 分钟 | 字数: 约 4137 字
+- 概述: 为什么在 Kubernetes 一统天下的今天，中小团队依然视 Docker Swarm 为最高效的生产利器？深度拆解 SwarmKit 的架构哲学：Manager 与 Worker 节点拓扑、内置 Raft 协议的分布式强一致状态机、VXLAN 驱动的跨主机 Overlay 覆盖网络，以及基于 IPVS 的 Ingress Routing Mesh 负载均衡与服务发现，全面剖析 Swarm 与 K8s 的工程权衡分水岭。
+- 核心 FAQ 解答:
+  * Q: Q1: 在生产环境搭建 Docker Swarm 集群时，网络防火墙需要放行哪些关键端口？
+    A: 必须严格确保物理节点之间放行以下核心端口： 1. TCP 2377：Swarm 集群管理通信端口（用于 Manager 节点之间的控制面 Raft 共识复制与 Worker 节点纳管）； 2. TCP 与 UDP 7946：节点之间的 Gossip 协议发现与健康检查心跳广播； 3. UDP 4789：Overlay 网络的数据平面 VXLAN 报文封装传输端口（必须确保 UDP 放行，否则跨主机的容器网络将完全无法互通！）； 4. IP 协议 50 (ESP)：如果为 Overlay 网络启用了数据包加密（--opt encrypted），还必须放行 IPsec ESP 协议流量。...
+  * Q: Q2: 为什么有时外部请求访问 Swarm Routing Mesh 时，后端的真实客户端 IP 会“丢失”，变成了 10.255.x.x？如何获取真实的 Client IP？
+    A: 这是由 Routing Mesh 的二层反向转发机制导致的： 当请求打到物理机 A，而运行该容器的实际实例在物理机 B 上时，Node A 的 Ingress 路由网络会通过 SNAT 将源地址改写为内网的 Ingress 虚拟 IP，从而确保回包能够安全原路返回。 解决方案： 1. 在服务端口映射时配置 mode=host（例如 published=80,target=80,mode=host），绕过 Ingress Mesh，直接将端口绑定在实际运行该容器的主机网络上，保留原汁原味的 Client IP； 2. 在集群前端挂载标准的反向代理（如 Traefik 或 Nginx），通过 X-...
+  * Q: Q3: 当 Swarm 集群发生网络分区（Network Partition）导致 Split-Brain 时，Manager 节点会如何表现？
+    A: Swarm 的 Raft 协议在底层天然免疫脑裂风险： 如果 5 个 Manager 节点由于机柜网络中断被切分为 2 个节点区（少数派）与 3 个节点区（多数派）： - 多数派分区（3 节点）：仍然满足 Quorum（$\ge 3$），能够正常选出 Leader，集群继续对外提供服务的更新、调度和弹性伸缩能力； - 少数派分区（2 节点）：由于无法凑齐多数票，其内部的所有 Manager 会立刻拒绝所有管理写操作（直接向管理员报错），自动降级为只读模式； - 既有业务不受影响：各节点上已经正常运行的业务容器不会被立刻杀死，依然保持数据面的平稳运行；待物理网络恢复后，少数派会自动拉取最新的 R...
+
+### [Kubernetes 控制平面深度解密：声明式 API、etcd 状态机、调度器与控制器调谐循环 (Reconciliation Loop)](https://blog.llmgo.top/articles/k8s-control-plane-declarative-reconciliation/)
+- 发布日期: 2026-09-25 | 标签: K8s 控制面 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4919 字
+- 概述: 为什么声明式 API 与控制理论能够成为现代云计算与分布式系统的终极事实标准？深度剖析 Kubernetes 控制平面架构底层：kube-apiserver 请求准入控制流水线（认证、鉴权、双准入 Webhook）、etcd v3 底层 MVCC 与 Watch 机制、kube-scheduler 过滤与打分双阶段调度、Informer 架构（Reflector、DeltaFIFO、Indexer、WorkQueue）与控制器水平触发调谐循环（Reconciliation Loop）工程机理。
+- 核心 FAQ 解答:
+  * Q: Q1: 如果 etcd 集群遭遇网络分区丧失 Quorum 多数派，物理节点上正在运行的业务 Pod 会立刻停止提供服务吗？
+    A: 不会。 这是很多初学者的误区。必须明确区分 Kubernetes 的控制平面（Control Plane）与数据平面（Data Plane）： - 当 etcd 丧失 Quorum 时，受影响的仅仅是控制平面：apiserver 会转为只读或拒绝写请求，导致无法执行新的 Deployment 部署、扩缩容、Pod 创建或自愈调度； - 但是在 数据平面，各个 Worker 节点上的操作系统内核、Kubelet、容器运行时（containerd）以及 CNI 路由转发规则依然在正常运转。已经拉起并处于监听状态的业务容器不会被杀掉，现有的网络数据流与服务通信依然完全顺畅； - 一旦 etcd 节点...
+  * Q: Q2: 为什么 Kubernetes 严格禁止任何外部组件或控制器直接读取写入 etcd，而必须强制全部经过 kube-apiserver？
+    A: 这种中心化单一入口设计带来了无可替代的架构价值： 1. 统一的安全治理屏障：所有的 API 访问必须在此处经过统一的 TLS 认证、RBAC 细粒度权限管控、审计日志（Audit Logging）记录以及准入 Webhook 拦截； 2. 状态校验与数据一致性：apiserver 负责维护所有资源对象的 Schema 合法性校验，防止格式不正确的脏数据破坏底层存储； 3. 架构解耦与平滑迁移：各控制器和外部客户端仅感知统一的 RESTful API 规范，对底层究竟使用的是 etcd v3、或者未来的替代存储引擎完全无感；同时屏蔽了复杂的底层分布式事务细节。...
+  * Q: Q3: 在编写自定义控制器或操作 CRD 时，遭遇 `409 Conflict: Operation cannot be fulfilled on ... the object has been modified` 的本质原因是什么？该如何优雅处理？
+    A: 本质原因： 这是 Kubernetes 基于 etcd resourceVersion 实现的乐观并发控制（Optimistic Concurrency Control）安全机制。 当你的控制器从本地缓存 Indexer 读取了一个对象（例如带有 resourceVersion: 100），在执行本地计算的这几毫秒内，另一个控制器（例如 Kubelet 或 HPA）抢先一步向 apiserver 提交了更新，导致该对象在 etcd 中的版本提升为了 101。此时你的控制器再拿着 100 去提交写操作，apiserver 就会果断拒绝并返回 409 冲突，防止你用过期的旧数据覆盖掉别人的最新修改...
+
+### [2026 AI 智算调度终局：Kubernetes GPU Operator、MIG 分割、拓扑感知调度与 vLLM/SGLang 集群弹性扩缩容](https://blog.llmgo.top/articles/k8s-gpu-operator-ai-inference-scheduling/)
+- 发布日期: 2026-09-25 | 标签: AI 智算调度 | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4651 字
+- 概述: 为什么传统以 CPU/内存为核心的调度体系在大模型时代全面失效？深入拆解 2026 AI 时代 Kubernetes 智算基础设施调度架构：NVIDIA GPU Operator 驱动与运行时全自动纳管链路、MIG（多实例 GPU）硬件物理分割与时间切片方案；Kubelet Topology Manager 与 DRA（动态资源分配）如何解决跨 NUMA 节点与 NVLink 互联性能断崖；并实战构建基于 P/D 分离、KV Cache 负载指标与 KEDA 的生产级 vLLM / SGLang 大模型推理集群弹性扩缩容架构。
+- 核心 FAQ 解答:
+  * Q: Q1: 为什么 vLLM / SGLang Pod 刚拉起完成，Prometheus 就报告其 GPU 显存利用率（`memory.used`）达到了 90% 以上？这会导致 Kubernetes 判定 OOM 吗？
+    A: 不会。 这是由于 vLLM 的 PagedAttention 显存预分配机制（KV Cache Pre-allocation） 导致的： - 启动时，vLLM 会首先加载模型权重参数（例如 Qwen-72B 占用约 144GB 显存，分摊在两张 80GB 卡上）； - 加载完成后，vLLM 会默认将剩余所有可用物理显存的 90%（由 --gpu-memory-utilization=0.9 参数控制）全部预先申请并锁定，用于构建高效的逻辑内存块分页表； - Kubernetes 视角的区别：Kubernetes 的 OOMKiller 监控的是系统物理主机内存（RAM），而不是 GPU 显存（...
+  * Q: Q2: 在 8 卡 GPU 宿主机中，为什么任意分配 4 张 GPU 给 Tensor Parallelism (TP=4) 的大模型推理会引发灾难性延迟？Topology Manager 如何避免该问题？
+    A: 根本原因：NVLink 拓扑不对称性。 在现代 HGX/MGX 架构服务器中，8 张 GPU 并不是任意两两全互联的。它们通常被组织在特定的一组 NVSwitch 交换矩阵下，每 4 张 GPU（如 GPU 0~3，或者 GPU 4~7）形成一个极速的全互联闭环（双向带宽达 900 GB/s）。 如果调度器随意挑选中了 GPU 0、1、4、5： - GPU 0 与 GPU 1 之间走极速 NVLink； - 但 GPU 1 与 GPU 4 之间的数据交换将被迫绕行低速的 PCIe 总线甚至是跨 CPU 插槽的 UPI 总线（带宽骤降至数十 GB/s）； - 张量并行要求每一层注意力计算后必须执...
+  * Q: Q3: 为什么说 2026 年主流的动态资源分配（DRA）相比传统的 Device Plugin 是云原生智算调度的革命性跃升？
+    A: 传统 Device Plugin 的致命短板： 它只能向 Kubernetes 报告简单的标量整数（如 nvidia.com/gpu: 4）。调度器在决策时完全是“抓瞎”的，根本不知道它挑选出来的这 4 张卡是否属于同一个 NUMA 节点、相互之间是否有 NVLink 连接、或者是否直连了特定的 RoCE 智算网卡。 DRA（Dynamic Resource Allocation）的革命性突破： 1. 参数化与 Claim 模式：Pod 不再申请抽象数字，而是提交一个 ResourceClaim，可以像写 SQL 一样声明复杂的硬件参数； 2. 结构化参数与拓扑感知：DRA 允许厂商驱动将硬件...
+
+### [Kubernetes 网络模型全景：CNI 规范演进、Calico BGP、Cilium eBPF 与 Gateway API 架构解密](https://blog.llmgo.top/articles/k8s-networking-cni-cilium-ebpf-gateway-api/)
+- 发布日期: 2026-09-25 | 标签: K8s 网络 | 预计阅读: 预计阅读 17 分钟 | 字数: 约 4184 字
+- 概述: 为什么说容器网络是 Kubernetes 中最复杂、最容易踩坑的深水区？深度拆解云原生网络四大公理与 CNI（Container Network Interface）插件规范底层执行机理；全面对比 Flannel VXLAN 覆盖网络与 Calico BGP 纯二层路由性能与开销；深入解密 Cilium 如何利用 Linux 内核 eBPF 与 sockops 套接字重定向彻底革新 kube-proxy 与 iptables 性能瓶颈；并剖析面向未来的 Gateway API 角色分离与流量治理架构。
+- 核心 FAQ 解答:
+  * Q: Q1: 为什么使用 VXLAN Overlay 网络时，部分大包请求（如大文件上传或 TLS 握手）会发生偶发性超时甚至静默丢包？
+    A: 根本原因：MTU（最大传输单元）配置失配。 标准以太网物理网卡的 MTU 通常为 1500 字节。而 VXLAN 报文在封装时，必须额外添加外层 IP 头（20B）+ UDP 头（8B）+ VXLAN 头（8B）+ 内层以太头（14B），总计 50 字节的封装损耗。 如果容器内的虚拟网卡（eth0）MTU 依然保持为默认的 1500，当应用发送 1500 字节的 TCP 包且设置了 DF（Don't Fragment，禁止分片）标志时，外层封包后将达到 1550 字节，超过物理网络 MTU，导致数据包在物理交换机处被直接丢弃！ 解决方案： 必须确保 CNI 插件（如 Flannel 或 Cil...
+  * Q: Q2: Cilium 在完全替代 kube-proxy（`kube-proxy-replacement=strict`）后，底层究竟是如何处理 NodePort 流量的？
+    A: Cilium 在底层依靠 eBPF XDP (eXpress Data Path) 与 tc (Traffic Control) 子系统： 1. 当外部客户端访问宿主机的 NodePort（如 30080）时，网卡驱动刚收到数据包，挂载在网络驱动最底层的 XDP eBPF 程序便在内核分配 sk_buff 之前极速捕获该包； 2. Cilium 在内核 BPF Map 中执行 $O(1)$ 查找，确定该 NodePort 对应的健康后备 Pod IP； 3. 如果目标 Pod 在本机，eBPF 直接修改目标 IP 并通过 sockops 重定向交付；如果目标 Pod 在远端节点，Cilium ...
+  * Q: Q3: 生产集群何时应当从传统的 Ingress 全面迁移到 Gateway API？
+    A: 如果你的业务满足以下任意一个场景，应尽早规划迁移： 1. 多团队/多租户协作冲突：研发团队需要自主管理路由规则、重写路径与灰度策略，但运维团队希望严格管控入口证书与端口权限； 2. 需要跨命名空间路由或高级流量分流：例如 Ingress 原生无法做到“将 5% 的请求按自定义 HTTP Header（如 User-Group: Beta）精准导入金丝雀服务”； 3. 消除供应商绑定：厌倦了不同网关供应商（如 Nginx Ingress Controller 与 Envoy）之间完全不通用的海量 annotations，希望利用标准的 Kubernetes 原生 API 实现网关层面的无缝平滑替...
+
+### [Kubernetes 扩展核心：Operator 模式、CRD 自定义资源与 KubeBuilder 生产级实战](https://blog.llmgo.top/articles/k8s-operator-pattern-kubebuilder-crd/)
+- 发布日期: 2026-09-25 | 标签: Operator 模式 | 预计阅读: 预计阅读 16 分钟 | 字数: 约 3836 字
+- 概述: 为什么说 Operator 模式是 Kubernetes 能够统治整个现代基础架构软件生态的终极杀手锏？深度拆解 Operator 模式的核心哲学：如何将资深 SRE 的运维专家经验编码为代码；解密 CRD（自定义资源定义）在 apiextensions-apiserver 中的注册机理与 Status/Scale 子资源隔离；深入剖析 Controller-Runtime 与 KubeBuilder 生产级脚手架架构（Manager、Cache、Split Client、Reconcile 调谐与 Finalizer 安全清理机制），并通过完整的 Go 代码实现一个高可用分布式中间件 Operator。
+- 核心 FAQ 解答:
+  * Q: Q1: Helm Chart 与 Operator 有何本质区别？Operator 可以完全替代 Helm 吗？
+    A: 本质区别： - Helm 是“安装配置模板工具（Package Manager）”：它的生命周期通常仅在 helm install 或 helm upgrade 的瞬间生效，本质上是把参数动态渲染成 YAML 清单并提交给 apiserver。一旦安装完成，Helm 对应用运行期间发生的内部拓扑异常（如 MySQL 从库复制中断）完全无感知，更无法进行自动运维。 - Operator 是“永不停歇的智能常驻机器人（Active Controller）”：它不仅负责初始部署，更在应用的整个生命周期中（Day-2 Operations）以 7x24 小时的方式持续监听内部状态，执行自动故障转移、平...
+  * Q: Q2: 为什么自定义资源有时会无限期卡在 `Terminating` 状态无法删除？如何彻底排查与修复？
+    A: 根本原因：Finalizer（终结器）锁死。 当资源的 metadata.finalizers 列表中包含未完成的字符串锁时，Kubernetes 会阻止物理删除该对象，仅打上 deletionTimestamp 时间戳，等待 Operator 执行清理。 如果此时该 Operator 进程已经崩溃停机、或者 Operator 在执行外部资源销毁（如清理云厂商存储）时持续报错，Finalizer 就永远无法被移除，导致对象永久卡在 Terminating。 排查与恢复方法： 1. 查看 Operator 容器日志，定位清理逻辑的具体报错； 2. 如果确认为废弃资源且外部资产已确认安全手动释放，...
+  * Q: Q3: 为什么在 Controller 调谐逻辑中，强制要求将对 Status 的更新使用 `r.Status().Update()` 而不是普通的 `r.Update()`？
+    A: 两大关键原因： 1. 防止乐观并发冲突（409 Conflict）死循环：普通的 r.Update() 会同时提交对象的 Spec 与元数据。如果此时用户恰好修改了 YAML 中的期望副本数，Operator 盲目调用 r.Update() 就会产生版本冲突；使用专门的 r.Status().Update() 仅更新状态字段，减少并发锁冲突； 2. 遵循权限最小化与 RBAC 安全规范：在企业集群中，业务开发团队通常被赋予修改 CRD spec 的权限，但被严厉禁止修改 status；而 Operator 拥有访问 /status 子资源的特权。将两者在代码层面严格解耦，是构建工业级安全 Op...
+
+### [Kubernetes 有状态存储中枢：CSI 插件规范、动态 PV/PVC 供给与 StatefulSet 拓扑保证](https://blog.llmgo.top/articles/k8s-storage-csi-statefulset-deep-dive/)
+- 发布日期: 2026-09-25 | 标签: K8s 存储 | 预计阅读: 预计阅读 17 分钟 | 字数: 约 4163 字
+- 概述: 为什么在 Kubernetes 上运行有状态数据库曾被视为运维禁区？深度拆解云原生存储体系的底层设计：StorageClass、PV 与 PVC 三层解耦模型与动态存储供给机制；CSI（Container Storage Interface）插件架构四阶段生命周期（Provision、Attach、Stage、Mount）与底层 Linux 挂载机理；StatefulSet 如何通过 Headless Service 确定性 DNS 与 volumeClaimTemplates 保证分布式数据库的拓扑唯一性与数据持久性。
+- 核心 FAQ 解答:
+  * Q: Q1: 当一个节点发生硬件故障断电后，为什么 StatefulSet 上的 Pod 不会自动在其他节点重建？为什么会处于 Terminating 状态卡死？
+    A: 根本原因：防止分布式脑裂（Split-Brain）与数据静默破坏。 如果 Kubernetes 在节点失联后立刻在其他节点启动带有相同身份的 redis-0，而原节点可能只是短暂网络分区（它上面的进程还在继续写入磁盘），就会产生两个 redis-0 同时对外写入的严重灾难！ 因此，Kubernetes 默认采用保守的安全设计：当节点未被显式确认死亡前，系统绝不会自动漂移有状态 Pod。 处理方式：运维人员在物理层面确认故障节点彻底关机或下线后，通过安全节点排空（kubectl drain）或手动移除故障节点对象，控制平面才会安全地在健康节点上重新拉起有状态 Pod。...
+  * Q: Q2: 为什么在删除一个 StatefulSet 及其 Pod 时，Kubernetes 会故意保留其关联的 PVC 和 PV，而不是随之一同删除？
+    A: 这是 Kubernetes 刻意为之的最高级别数据安全防护。 Pod 是计算实例，销毁代价极低；但 PVC 中存放的是极其宝贵的企业生产数据。 如果允许 kubectl delete statefulset 级联删除底层的数据卷，操作人员的一次手滑输入就可能导致数百 GB 甚至数 TB 的生产核心数据库物理灭失，且无法撤销！ 因此，Kubernetes 强制要求：PVC 的生命周期必须与 StatefulSet 解耦。若确实需要清理数据，必须由管理员显式、独立地执行 kubectl delete pvc <pvc-name>。...
+  * Q: Q3: PersistentVolume 的 `persistentVolumeReclaimPolicy` 设置为 `Retain` 和 `Delete` 有何本质区别？生产中如何选择？
+    A: - Delete 模式：当对应的 PVC 被物理删除后，绑定的 PV 会被自动删除，且底层云厂商的物理块设备（如云盘）也会被立刻物理销毁。 - Retain 模式：当 PVC 被删除后，底层 PV 不会被销毁，而是转为 Released（已释放）保留状态，底层的物理磁盘数据毫发无损，防止误删。但此时其他 PVC 也无法直接复用该卷，需要管理员手动提取数据或格式化后重新标记可用。 - 生产推荐：对于重要的生产核心数据库（MySQL, Mongo, PG），强烈建议将 StorageClass 的回收策略配置为 Retain，作为防止误操作导致物理数据灭失的最后一道安全护城河。...
 
 ### [高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞](https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/)
 - 发布日期: 2026-09-24 | 标签: 并发调度 | 预计阅读: 预计阅读 28 分钟 | 字数: 约 6754 字
@@ -572,6 +678,94 @@
     A: 工业界普遍以 LoRA 为默认首选，它能在保留基础通用知识的同时节省 80% 以上的显存和算力开销。若本地硬件处于极限受限状态，建议直接采用基于 4-bit 权重的 QLoRA（详见[大模型量化实战指南](/articles/quantization-hands-on-guide/)）。只有在需要重训全新基础底座语言或发生颠覆性结构范式迁移时，才建议启动昂贵的全参数微调。...
 
 ## English Articles Technical FAQ & Key Takeaways
+
+### [Container Networking Deep Dive: veth-pair, Linux Bridge, iptables NAT, and Cross-Host Topology](https://blog.llmgo.top/en/articles/container-networking-veth-bridge-iptables/)
+- Date: 2026-09-25 | Tag: Container Networking | Read: 9 min read | Words: 2075 words
+- Summary: How do processes isolated within private Network Namespaces communicate with host networks and the external Internet? An in-depth teardown of container network packet forwarding: veth-pair virtual ethernet pipes, Linux Bridge (docker0) Layer-2 forwarding, iptables PREROUTING/POSTROUTING DNAT port forwarding and MASQUERADE SNAT, alongside a performance and architectural comparison across Host, Bridge, Macvlan, and Overlay cross-host topologies.
+- Key FAQ Insights:
+  * Q: Q1: Why does bridge-mode networking with iptables NAT experience latency spikes under high-throughput API workloads?
+    A: This bottleneck stems from Linux Netfilter connection tracking (conntrack) table limits and lock contention: Every NAT-translated flow creates an entry in the kernel's conntrack table. Under heavy connection rates, this table can exhaust its allocation, logging nf_conntrack: table full, dropping pac...
+  * Q: Q2: Why can containers on the default bridge network ping each other via IP, but not by container name?
+    A: This behavior is an intentional security design in Docker: The default global bridge (docker0) disables automatic container name resolution to prevent unwanted inter-container service discovery by default. To enable name-based service resolution, provision a user-defined bridge network using docker ...
+  * Q: Q3: Why is Macvlan rarely used in public cloud environments despite its near-bare-metal network performance?
+    A: While Macvlan delivers low latency by binding virtual MAC addresses directly to physical switch ports, it faces practical operational limitations: 1. Switch MAC Table Exhaustion: Physical top-of-rack switches have finite CAM table capacity. Running hundreds of Macvlan containers on a host can satura...
+
+### [Docker Internals from First Principles: Linux Namespaces, cgroups v2, and OverlayFS Union Mounts Deep Dive](https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/)
+- Date: 2026-09-25 | Tag: Container Internals | Read: 11 min read | Words: 2676 words
+- Summary: Why are containers not lightweight virtual machines, but ordinary Linux processes constrained by kernel views and resource quotas? An in-depth first-principles exploration of Docker's three core pillars: clone() system calls with the six Linux Namespaces, cgroups v2 single-hierarchy unified resource limits, and OverlayFS layered union mounts with Copy-on-Write (CoW), alongside the OCI, containerd, and runc execution chain.
+- Key FAQ Insights:
+  * Q: Q1: Why do `top` and `free -m` run inside a container display the host's total CPU count and RAM?
+    A: This occurs because utilities like top, htop, and free read directly from the host's virtual /proc filesystem (specifically /proc/meminfo and /proc/stat). These files reflect global kernel states and are not automatically filtered by container cgroups boundaries. If a container is capped at 2GB of R...
+  * Q: Q2: Why is the `--privileged` flag strictly forbidden in production container deployments?
+    A: Enabling --privileged removes virtually all Linux kernel security controls: 1. The container bypasses the device cgroup whitelist, gaining direct read/write access to host hardware (e.g., /dev/sda); 2. The internal root user receives unmasked Linux Capabilities, including CAP_SYS_ADMIN; 3. The proce...
+  * Q: Q3: If an immutable image layer incurs physical corruption on disk, are all running containers affected?
+    A: Yes. Because running containers share immutable LowerDir storage layers by reference (e.g., under /var/lib/docker/overlay2/<layer_id>), underlying physical disk corruption affects all containers reading those blocks. However, because all writes are redirected to private UpperDir instances via Copy-o...
+
+### [Lightweight Cluster Orchestration: Docker SwarmKit Architecture, Raft Consensus, and Ingress Routing Mesh](https://blog.llmgo.top/en/articles/docker-swarm-architecture-raft-routing-mesh/)
+- Date: 2026-09-25 | Tag: Cluster Orchestration | Read: 9 min read | Words: 2082 words
+- Summary: Why do engineering teams still leverage Docker Swarm in the cloud-native era dominated by Kubernetes? An architectural deep dive into SwarmKit internals: Manager and Worker node topologies, built-in Raft consensus state machine, VXLAN-powered cross-host overlay networking, and kernel-level IPVS Ingress Routing Mesh service discovery, complete with production trade-offs between Swarm and Kubernetes.
+- Key FAQ Insights:
+  * Q: Q1: What critical network firewall ports must be open between nodes in a production Docker Swarm cluster?
+    A: Nodes in a Swarm cluster require the following firewall rules: 1. TCP Port 2377: Swarm cluster management communication (used for Raft log consensus replication among Managers and Worker registration); 2. TCP & UDP Port 7946: Inter-node Gossip protocol for node discovery and health status heartbeats...
+  * Q: Q2: Why does the original client IP address appear as an internal 10.255.x.x IP when accessing services through the Ingress Routing Mesh, and how can we preserve it?
+    A: This occurs because Swarm's Ingress Routing Mesh performs Source Network Address Translation (SNAT) when proxying incoming packets across hosts, replacing the original client IP with the internal ingress VIP to ensure response packets route symmetrically back. Workarounds: 1. Use Host Port Publishin...
+  * Q: Q3: How does a Docker Swarm cluster behave during a network partition (Split-Brain scenario)?
+    A: Swarm's embedded Raft consensus guarantees strong consistency and prevents split-brain state mutations: If a 5-Manager cluster is partitioned into a minority partition (2 nodes) and a majority partition (3 nodes): - Majority Partition (3 nodes): Satisfies quorum ($\ge 3$), retains leader authority, ...
+
+### [Kubernetes Control Plane Deep Dive: Declarative APIs, etcd Consensus, Scheduler, and Controller Reconciliation Loops](https://blog.llmgo.top/en/articles/k8s-control-plane-declarative-reconciliation/)
+- Date: 2026-09-25 | Tag: K8s Control Plane | Read: 10 min read | Words: 2272 words
+- Summary: Why have declarative APIs and modern control theory emerged as the definitive standard for cloud infrastructure? A comprehensive architectural deconstruction of the Kubernetes Control Plane: kube-apiserver request admission pipelines (Authentication, RBAC, Mutating and Validating Webhooks), etcd v3 MVCC revisions and Watch streams, kube-scheduler two-phase filter and score algorithms, Informer mechanics (Reflector, DeltaFIFO, Indexer, WorkQueue), and level-triggered controller reconciliation loops.
+- Key FAQ Insights:
+  * Q: Q1: If etcd loses its Raft Quorum during a network partition, do running application Pods immediately stop serving traffic?
+    A: No. It is vital to distinguish between the Control Plane and the Data Plane: - When etcd loses quorum, only the Control Plane stalls: kube-apiserver rejects mutating writes, preventing deployments, scaling, pod creation, or self-healing reschedule events; - On the Data Plane, physical host Linux ker...
+  * Q: Q2: Why does Kubernetes strictly forbid controllers and external clients from accessing etcd directly?
+    A: Centralizing all mutations through kube-apiserver provides critical architectural guarantees: 1. Unified Security & Governance: Enforces mandatory TLS authentication, granular RBAC authorization, audit logging, and webhook validation policies; 2. Schema Integrity: The apiserver validates OpenAPI sch...
+  * Q: Q3: What is the root cause of "409 Conflict: Operation cannot be fulfilled on ... the object has been modified", and how should controllers resolve it?
+    A: Root Cause: This error is triggered by Kubernetes' Optimistic Concurrency Control (OCC) based on etcd resourceVersion. When a controller fetches an object with revision 100 and prepares a mutation, another agent (e.g., Kubelet or HPA) may commit an intermediate mutation updating the revision to 101....
+
+### [2026 AI Computing Infrastructure: Kubernetes GPU Operator, MIG Partitioning, Topology-Aware Scheduling, and Auto-scaling Inference Engines](https://blog.llmgo.top/en/articles/k8s-gpu-operator-ai-inference-scheduling/)
+- Date: 2026-09-25 | Tag: AI GPU Scheduling | Read: 9 min read | Words: 2092 words
+- Summary: Why does traditional CPU/memory scalar scheduling fail in the large language model era? A rigorous architectural deconstruction of AI infrastructure on Kubernetes in 2026: automated zero-touch lifecycles via the NVIDIA GPU Operator; hardware-isolated Multi-Instance GPU (MIG) slicing versus time-slicing; overcoming cross-NUMA interconnect bottlenecks with Kubelet Topology Manager and Dynamic Resource Allocation (DRA); and production auto-scaling for vLLM and SGLang inference clusters leveraging KEDA and real-time KV cache saturation metrics.
+- Key FAQ Insights:
+  * Q: Q1: Why does vLLM report GPU VRAM allocation above 90% immediately after booting, and will this trigger Kubernetes OOMKills?
+    A: No. This is an intentional design pattern of PagedAttention KV Cache pre-allocation: - During startup, vLLM loads model weights (e.g., Qwen-72B requires ~144GB across multiple cards); - Following model initialization, vLLM pre-allocates 90% of remaining physical VRAM (--gpu-memory-utilization=0.9) t...
+  * Q: Q2: On an 8-GPU node, why does distributing a Tensor Parallel (TP=4) model across arbitrary GPUs introduce severe latency, and how does the Topology Manager resolve it?
+    A: Root Cause: Asymmetric Interconnect Topologies. In HGX architectures, GPUs communicate in distinct sub-clusters via high-bandwidth NVSwitch fabrics (up to 900 GB/s bidirectional bandwidth per card). If the scheduler places a TP=4 workload across non-co-located GPUs (e.g., GPUs 0, 1, 4, and 5): - GPU...
+  * Q: Q3: What is the primary operational advantage of Kubernetes Dynamic Resource Allocation (DRA) over traditional Device Plugins for AI workloads?
+    A: Limitations of Traditional Device Plugins: Device Plugins advertise resources as scalar integers (e.g., nvidia.com/gpu: 4). The scheduler cannot evaluate whether the assigned GPUs share an NVLink fabric, connect to the same NUMA socket, or align with local InfiniBand NICs. Capabilities of Dynamic Re...
+
+### [Kubernetes Networking Panorama: CNI Specification, Calico BGP, Cilium eBPF, and Gateway API Architecture](https://blog.llmgo.top/en/articles/k8s-networking-cni-cilium-ebpf-gateway-api/)
+- Date: 2026-09-25 | Tag: K8s Networking | Read: 9 min read | Words: 2061 words
+- Summary: Why is container networking widely regarded as the most intricate subsystem of Kubernetes? A deep architectural exploration into Kubernetes networking axioms and CNI (Container Network Interface) plugin execution lifecycles; rigorous comparisons between Flannel VXLAN overlays and Calico BGP underlay routing; how Cilium leverages Linux kernel eBPF and sockops socket redirection to bypass kube-proxy and iptables bottlenecks; and the role-oriented traffic governance of the modern Gateway API.
+- Key FAQ Insights:
+  * Q: Q1: Why do large packets (such as TLS handshakes or bulk uploads) experience intermittent timeouts or silent drops on VXLAN Overlay networks?
+    A: Root Cause: MTU (Maximum Transmission Unit) Misconfiguration. Standard Ethernet physical interfaces operate with a 1500-byte MTU. VXLAN encapsulation adds an outer IP header (20B), outer UDP header (8B), VXLAN header (8B), and inner Ethernet header (14B), creating a 50-byte encapsulation penalty. If...
+  * Q: Q2: How does Cilium handle NodePort traffic without running kube-proxy or iptables?
+    A: Cilium utilizes eBPF XDP (eXpress Data Path) and tc (Traffic Control) hooks: 1. When ingress traffic hits a host NodePort (e.g., port 30080), the attached XDP eBPF program captures the frame at the network card driver level before allocating a sk_buff buffer; 2. Cilium performs an $O(1)$ lookup in i...
+  * Q: Q3: When should engineering teams transition from classic Ingress to the Gateway API?
+    A: Organizations should consider migrating when encountering these operational requirements: 1. Cross-Team Role Friction: Application teams require autonomy over routing paths, URL rewrites, and canary splits, while SRE teams need centralized governance over TLS certificates and port configurations; 2....
+
+### [Kubernetes Extensibility: The Operator Pattern, Custom Resource Definitions (CRD), and KubeBuilder in Production](https://blog.llmgo.top/en/articles/k8s-operator-pattern-kubebuilder-crd/)
+- Date: 2026-09-25 | Tag: Operator Pattern | Read: 8 min read | Words: 1864 words
+- Summary: Why is the Operator pattern universally recognized as the decisive architectural breakthrough that crowned Kubernetes the operating system of the modern cloud? A comprehensive deconstruction of Operator philosophy: codifying senior SRE domain knowledge into software; how CRDs register dynamic endpoints in apiextensions-apiserver with /status and /scale subresource isolation; and an in-depth breakdown of Controller-Runtime and KubeBuilder architecture (Manager, Cache, Split Client, Reconcile, and Finalizers), complete with production Go code for high-availability distributed stateful middleware.
+- Key FAQ Insights:
+  * Q: Q1: What is the fundamental difference between a Helm Chart and an Operator? Can an Operator replace Helm?
+    A: Core Distinction: - Helm is a Packaging and Templating Manager: Its lifecycle is transactional—it renders parameter values into static YAML manifests and submits them via helm install or helm upgrade. Once applied, Helm is blind to runtime application anomalies (such as MySQL replication lag or Redi...
+  * Q: Q2: Why do custom resources occasionally become stuck indefinitely in Terminating, and how do we resolve it?
+    A: Root Cause: Deadlocked Finalizers. When a custom resource's metadata.finalizers slice contains registered strings, Kubernetes sets deletionTimestamp and defers physical deletion until controllers complete cleanup. If the Operator process crashes, is uninstalled prematurely, or fails to contact exter...
+  * Q: Q3: Why does Controller-Runtime mandate updating status fields via `r.Status().Update()` instead of generic `r.Update()`?
+    A: Key Reasons: 1. Minimizes 409 Conflict Errors: Generic r.Update() commits both spec and metadata fields. If a user modifies the spec concurrently, the controller hits an optimistic locking conflict. Calling r.Status().Update() targets only status subresource paths, drastically reducing collision pro...
+
+### [Kubernetes Storage Architecture: CSI Specification, Dynamic PV/PVC Provisioning, and StatefulSet Guarantees](https://blog.llmgo.top/en/articles/k8s-storage-csi-statefulset-deep-dive/)
+- Date: 2026-09-25 | Tag: K8s Storage | Read: 8 min read | Words: 1906 words
+- Summary: Why was executing stateful databases on Kubernetes once treated as an operational taboo? A detailed architectural exploration of the cloud-native storage stack: the three-tier decoupling of StorageClass, PersistentVolume (PV), and PersistentVolumeClaim (PVC); the four lifecycle stages of the Container Storage Interface (CSI) specification (Provision, Attach, Stage, and Mount); and how StatefulSets leverage Headless Services and volumeClaimTemplates to maintain strict topological ordering and immutable data persistence.
+- Key FAQ Insights:
+  * Q: Q1: When a physical node crashes abruptly, why does a StatefulSet Pod remain trapped in Terminating rather than rescheduling immediately?
+    A: Root Cause: Split-Brain and Data Corruption Prevention. If Kubernetes immediately instantiated a replacement redis-0 on another node while the original node experienced a temporary network partition, two active instances of redis-0 would write to storage simultaneously, corrupting database logs. Kub...
+  * Q: Q2: Why does Kubernetes retain PersistentVolumeClaims (PVCs) when a StatefulSet or Pod is deleted?
+    A: Data Durability Protection. Compute instances can be recreated trivially, but persistent volumes store critical enterprise data. If kubectl delete statefulset cascaded deletions down to attached disks, a typo could permanently destroy terabytes of production data. Kubernetes decouples PVC lifecycles...
+  * Q: Q3: What is the architectural difference between `persistentVolumeReclaimPolicy: Retain` and `Delete`?
+    A: - Delete Policy: When a PVC is deleted, the bound PV and the underlying cloud disk asset are automatically destroyed. - Retain Policy: When a PVC is deleted, the underlying PV transitions to the Released state without deleting the physical disk, preserving data. The volume cannot be rebound until an...
 
 ### [Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking](https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/)
 - Date: 2026-09-24 | Tag: Batching & Scheduling | Read: 15 min read | Words: 3531 words

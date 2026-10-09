@@ -5,8 +5,88 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Fri, 09 Oct 2026 01:27:25 GMT</pubDate>
+  <pubDate>Fri, 09 Oct 2026 01:49:48 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Container Networking Deep Dive: veth-pair, Linux Bridge, iptables NAT, and Cross-Host Topology</title>
+    <link>https://blog.llmgo.top/en/articles/container-networking-veth-bridge-iptables/</link>
+    <guid>https://blog.llmgo.top/en/articles/container-networking-veth-bridge-iptables/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Container Networking</category>
+    <description>How do processes isolated within private Network Namespaces communicate with host networks and the external Internet? An in-depth teardown of container network packet forwarding: veth-pair virtual ethernet pipes, Linux Bridge (docker0) Layer-2 forwarding, iptables PREROUTING/POSTROUTING DNAT port forwarding and MASQUERADE SNAT, alongside a performance and architectural comparison across Host, Bridge, Macvlan, and Overlay cross-host topologies.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/container-networking-veth-bridge-iptables.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Docker Internals from First Principles: Linux Namespaces, cgroups v2, and OverlayFS Union Mounts Deep Dive</title>
+    <link>https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/</link>
+    <guid>https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Container Internals</category>
+    <description>Why are containers not lightweight virtual machines, but ordinary Linux processes constrained by kernel views and resource quotas? An in-depth first-principles exploration of Docker's three core pillars: clone() system calls with the six Linux Namespaces, cgroups v2 single-hierarchy unified resource limits, and OverlayFS layered union mounts with Copy-on-Write (CoW), alongside the OCI, containerd, and runc execution chain.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/docker-internals-namespace-cgroups-overlayfs.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Lightweight Cluster Orchestration: Docker SwarmKit Architecture, Raft Consensus, and Ingress Routing Mesh</title>
+    <link>https://blog.llmgo.top/en/articles/docker-swarm-architecture-raft-routing-mesh/</link>
+    <guid>https://blog.llmgo.top/en/articles/docker-swarm-architecture-raft-routing-mesh/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Cluster Orchestration</category>
+    <description>Why do engineering teams still leverage Docker Swarm in the cloud-native era dominated by Kubernetes? An architectural deep dive into SwarmKit internals: Manager and Worker node topologies, built-in Raft consensus state machine, VXLAN-powered cross-host overlay networking, and kernel-level IPVS Ingress Routing Mesh service discovery, complete with production trade-offs between Swarm and Kubernetes.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/docker-swarm-architecture-raft-routing-mesh.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Kubernetes Control Plane Deep Dive: Declarative APIs, etcd Consensus, Scheduler, and Controller Reconciliation Loops</title>
+    <link>https://blog.llmgo.top/en/articles/k8s-control-plane-declarative-reconciliation/</link>
+    <guid>https://blog.llmgo.top/en/articles/k8s-control-plane-declarative-reconciliation/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>K8s Control Plane</category>
+    <description>Why have declarative APIs and modern control theory emerged as the definitive standard for cloud infrastructure? A comprehensive architectural deconstruction of the Kubernetes Control Plane: kube-apiserver request admission pipelines (Authentication, RBAC, Mutating and Validating Webhooks), etcd v3 MVCC revisions and Watch streams, kube-scheduler two-phase filter and score algorithms, Informer mechanics (Reflector, DeltaFIFO, Indexer, WorkQueue), and level-triggered controller reconciliation loops.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/k8s-control-plane-declarative-reconciliation.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>2026 AI Computing Infrastructure: Kubernetes GPU Operator, MIG Partitioning, Topology-Aware Scheduling, and Auto-scaling Inference Engines</title>
+    <link>https://blog.llmgo.top/en/articles/k8s-gpu-operator-ai-inference-scheduling/</link>
+    <guid>https://blog.llmgo.top/en/articles/k8s-gpu-operator-ai-inference-scheduling/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>AI GPU Scheduling</category>
+    <description>Why does traditional CPU/memory scalar scheduling fail in the large language model era? A rigorous architectural deconstruction of AI infrastructure on Kubernetes in 2026: automated zero-touch lifecycles via the NVIDIA GPU Operator; hardware-isolated Multi-Instance GPU (MIG) slicing versus time-slicing; overcoming cross-NUMA interconnect bottlenecks with Kubelet Topology Manager and Dynamic Resource Allocation (DRA); and production auto-scaling for vLLM and SGLang inference clusters leveraging KEDA and real-time KV cache saturation metrics.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/k8s-gpu-operator-ai-inference-scheduling.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Kubernetes Networking Panorama: CNI Specification, Calico BGP, Cilium eBPF, and Gateway API Architecture</title>
+    <link>https://blog.llmgo.top/en/articles/k8s-networking-cni-cilium-ebpf-gateway-api/</link>
+    <guid>https://blog.llmgo.top/en/articles/k8s-networking-cni-cilium-ebpf-gateway-api/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>K8s Networking</category>
+    <description>Why is container networking widely regarded as the most intricate subsystem of Kubernetes? A deep architectural exploration into Kubernetes networking axioms and CNI (Container Network Interface) plugin execution lifecycles; rigorous comparisons between Flannel VXLAN overlays and Calico BGP underlay routing; how Cilium leverages Linux kernel eBPF and sockops socket redirection to bypass kube-proxy and iptables bottlenecks; and the role-oriented traffic governance of the modern Gateway API.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/k8s-networking-cni-cilium-ebpf-gateway-api.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Kubernetes Extensibility: The Operator Pattern, Custom Resource Definitions (CRD), and KubeBuilder in Production</title>
+    <link>https://blog.llmgo.top/en/articles/k8s-operator-pattern-kubebuilder-crd/</link>
+    <guid>https://blog.llmgo.top/en/articles/k8s-operator-pattern-kubebuilder-crd/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Operator Pattern</category>
+    <description>Why is the Operator pattern universally recognized as the decisive architectural breakthrough that crowned Kubernetes the operating system of the modern cloud? A comprehensive deconstruction of Operator philosophy: codifying senior SRE domain knowledge into software; how CRDs register dynamic endpoints in apiextensions-apiserver with /status and /scale subresource isolation; and an in-depth breakdown of Controller-Runtime and KubeBuilder architecture (Manager, Cache, Split Client, Reconcile, and Finalizers), complete with production Go code for high-availability distributed stateful middleware.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/k8s-operator-pattern-kubebuilder-crd.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Kubernetes Storage Architecture: CSI Specification, Dynamic PV/PVC Provisioning, and StatefulSet Guarantees</title>
+    <link>https://blog.llmgo.top/en/articles/k8s-storage-csi-statefulset-deep-dive/</link>
+    <guid>https://blog.llmgo.top/en/articles/k8s-storage-csi-statefulset-deep-dive/</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>K8s Storage</category>
+    <description>Why was executing stateful databases on Kubernetes once treated as an operational taboo? A detailed architectural exploration of the cloud-native storage stack: the three-tier decoupling of StorageClass, PersistentVolume (PV), and PersistentVolumeClaim (PVC); the four lifecycle stages of the Container Storage Interface (CSI) specification (Provision, Attach, Stage, and Mount); and how StatefulSets leverage Headless Services and volumeClaimTemplates to maintain strict topological ordering and immutable data persistence.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/k8s-storage-csi-statefulset-deep-dive.png" length="150000" type="image/png" />
+  </item>
   <item>
     <title>Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking</title>
     <link>https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/</link>

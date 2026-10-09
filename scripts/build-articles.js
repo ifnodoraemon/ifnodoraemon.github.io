@@ -85,6 +85,25 @@ const SERIES_DEFINITIONS = {
       'reasoning-test-time-compute-inference-future',
     ],
   },
+  'container-k8s': {
+    id: 'container-k8s',
+    titleZh: '《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》',
+    titleEn: 'From Docker to Kubernetes: Cloud-Native Container & Cluster Orchestration Handbook',
+    badgeZh: '容器与 K8s 专栏',
+    badgeEn: 'Container & K8s Series',
+    descZh: '系统化掌握云原生容器与集群编排体系：从 Linux 内核 Namespace、cgroups v2、OverlayFS 隔离本质，到 Docker SwarmKit 轻量集群 Raft 共识与 Routing Mesh，再到 Kubernetes 声明式控制面、Cilium eBPF 网络、CSI 状态化存储、Operator 模式与 2026 AI 大模型 GPU 调度终局。',
+    descEn: 'Master containerization and cluster orchestration from first principles: Linux namespaces, cgroups v2, OverlayFS, Docker SwarmKit Raft consensus, and Kubernetes declarative architecture, Cilium eBPF, CSI storage, Operators, and 2026 AI GPU scheduling.',
+    articles: [
+      'docker-internals-namespace-cgroups-overlayfs',
+      'container-networking-veth-bridge-iptables',
+      'docker-swarm-architecture-raft-routing-mesh',
+      'k8s-control-plane-declarative-reconciliation',
+      'k8s-networking-cni-cilium-ebpf-gateway-api',
+      'k8s-storage-csi-statefulset-deep-dive',
+      'k8s-operator-pattern-kubebuilder-crd',
+      'k8s-gpu-operator-ai-inference-scheduling',
+    ],
+  },
 };
 
 marked.setOptions({
@@ -712,12 +731,18 @@ function buildSeriesCardBottom(article, allArticlesInLang, isEn) {
         </a>
       </div>`;
   } else {
-    const completeDescZh = seriesId === 'llm-inference'
-      ? '恭喜读完《大模型推理引擎：从模型演进、内核架构到未来终局》全套 10 篇内容！你已建立起从 Roofline 物理撕裂、PagedAttention、算子内核演进到 P/D 分离、四大引擎源码与长思维链分层存储的完整硬核认知。'
-      : '恭喜读完《AI Agent 生产级架构师手册》全套 11 篇内容！你已建立起从执行循环、状态机控制流到 MCP 协议、Skills 扩展、分布式编排、环境缩放与长程记忆的完整工业级认知。';
-    const completeDescEn = seriesId === 'llm-inference'
-      ? 'Congratulations on completing all 10 chapters of the Production LLM Inference Engines series! You have mastered inference systems from first-principles Roofline modeling and kernel evolutions to P/D disaggregation and tiered cluster storage.'
-      : 'Congratulations on completing all 11 chapters of The Production AI Agent Architect Handbook! You have mastered end-to-end agentic engineering from state machines and MCP to distributed orchestration, environment scaling, and memory systems.';
+    let completeDescZh = '';
+    let completeDescEn = '';
+    if (seriesId === 'llm-inference') {
+      completeDescZh = '恭喜读完《大模型推理引擎：从模型演进、内核架构到未来终局》全套 10 篇内容！你已建立起从 Roofline 物理撕裂、PagedAttention、算子内核演进到 P/D 分离、四大引擎源码与长思维链分层存储的完整硬核认知。';
+      completeDescEn = 'Congratulations on completing all 10 chapters of the Production LLM Inference Engines series! You have mastered inference systems from first-principles Roofline modeling and kernel evolutions to P/D disaggregation and tiered cluster storage.';
+    } else if (seriesId === 'container-k8s') {
+      completeDescZh = '恭喜读完《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》专栏内容！你已建立起从 Linux 内核进程隔离、veth-pair 网络、SwarmKit 轻量集群到 Kubernetes 声明式控制面、Cilium eBPF 与 2026 AI GPU 智算调度的完整全景架构。';
+      completeDescEn = 'Congratulations on completing the Cloud-Native Container & Cluster Orchestration series! You have mastered container systems from Linux process isolation and SwarmKit to Kubernetes declarative architecture, Cilium eBPF, and AI GPU scheduling.';
+    } else {
+      completeDescZh = '恭喜读完《AI Agent 生产级架构师手册》全套 11 篇内容！你已建立起从执行循环、状态机控制流到 MCP 协议、Skills 扩展、分布式编排、环境缩放与长程记忆的完整工业级认知。';
+      completeDescEn = 'Congratulations on completing all 11 chapters of The Production AI Agent Architect Handbook! You have mastered end-to-end agentic engineering from state machines and MCP to distributed orchestration, environment scaling, and memory systems.';
+    }
 
     bodyHtml = `
       <div class="series-footer-complete-box">
@@ -785,8 +810,8 @@ function generateListingPage(articlesList, isEn = false) {
   }).join('\n');
 
   const categories = isEn
-    ? ['Inference Systems', 'AI Agent', 'Model Engineering', 'Evaluation & Trends']
-    : ['推理系统', 'AI Agent', '模型工程', '评测与趋势'];
+    ? ['Inference Systems', 'AI Agent', 'Model Engineering', 'Cloud Native', 'Evaluation & Trends']
+    : ['推理系统', 'AI Agent', '模型工程', '云原生', '评测与趋势'];
 
   const categoryCounts = {};
   categories.forEach(cat => {
