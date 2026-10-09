@@ -151,7 +151,8 @@ renderer.image = function ({ href, title, text }) {
 
 let currentToc = [];
 renderer.heading = function ({ text, depth }) {
-  const id = text
+  const plainText = text.replace(/<[^>]+>/g, '');
+  const id = plainText
     .toLowerCase()
     .replace(/[^a-z0-9\u4e00-\u9fa5]+/gi, '-')
     .replace(/(^-|-$)/g, '');
@@ -161,6 +162,23 @@ renderer.heading = function ({ text, depth }) {
   }
 
   return `<h${depth} id="${id}">${text}</h${depth}>\n`;
+};
+
+renderer.blockquote = function (token) {
+  const text = token.text || '';
+  const match = text.match(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\](?:\n|\s*)([\s\S]*)$/i);
+  if (match) {
+    const type = match[1].toLowerCase();
+    const title = match[1].toUpperCase();
+    const bodyText = match[2];
+    const bodyHtml = marked.parse(bodyText);
+    return `<div class="markdown-alert markdown-alert-${type}">
+  <p class="markdown-alert-title">${title}</p>
+  <div class="markdown-alert-content">${bodyHtml}</div>
+</div>\n`;
+  }
+  const bodyHtml = this.parser ? this.parser.parse(token.tokens) : text;
+  return `<blockquote>\n${bodyHtml}\n</blockquote>\n`;
 };
 
 marked.use({ renderer });

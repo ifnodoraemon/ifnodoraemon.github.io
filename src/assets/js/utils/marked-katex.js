@@ -4,18 +4,37 @@ import katex from 'katex';
  * Client-side KaTeX extension for Marked
  */
 function isCurrencyLike(content, afterClosingChar) {
+  // If content contains LaTeX commands, backslashes, or common mathematical operators,
+  // it is definitively a math formula, NOT currency!
+  if (content.includes('\\') || /[\^_{}=<>+*]/.test(content)) {
+    return false;
+  }
+
+  // 1. If closing $ is immediately followed by a digit, it is almost certainly a currency pair
   if (afterClosingChar && /[0-9]/.test(afterClosingChar)) {
     return true;
   }
-  if (/(?:\/|per|每天成本|vs\s+API|vs\s+OpenAI)\s*(\d+|小时|月|天|hour|month|day|year|M\b|1M|百万)/i.test(content)) {
+
+  // 2. Currency rate or timeframe keywords starting with a digit:
+  if (/^\d[\d\.,]*\s*[kKmMbB]?\s*(?:\/|per|每天成本|vs\s+API|vs\s+OpenAI)\s*(?:小时|月|天|年|次|hour|month|day|year|week|step|M\b|1M|百万)/i.test(content)) {
     return true;
   }
+
+  // 3. Numbers followed by currency range dashes
   if (/^\d+[\d\.,]*\s*[kKmMbB]?\s*[-~至到]\s*$/.test(content)) {
     return true;
   }
-  if (/^[\d\.,]+\s*\/\s*(?:1M|M|百万)/.test(content) && content.includes("成本")) {
+
+  // 4. Currency token with cost description
+  if (/^\d[\d\.,]*\s*(?:\/\s*(?:1M|M|百万)|Tokens?|百万|成本)/i.test(content) && (content.includes("成本") || /tokens?/i.test(content) || /^\d+[\d\.,]*\s*\/[mM1]/.test(content))) {
     return true;
   }
+
+  // 5. Standalone currency with slash
+  if (/^\d[\d\.,]*\s*\/$/.test(content)) {
+    return true;
+  }
+
   return false;
 }
 

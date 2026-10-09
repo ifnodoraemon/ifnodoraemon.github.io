@@ -250,6 +250,16 @@ test('math formulas are rendered with KaTeX without unparsed delimiters', () => 
   assert.ok(grpoHtml.includes('class="katex-display"'), 'expected KaTeX display elements');
   assert.ok(!grpoHtml.includes('$A_i$'), 'raw $A_i$ should not remain unparsed');
   assert.ok(!grpoHtml.includes('$$D_{KL}'), 'raw $$D_{KL} should not remain unparsed');
+
+  // Verify complex division/fraction formula in tables
+  const flashHtml = fs.readFileSync(path.join(ROOT, 'dist', 'articles', 'flashattention-flashinfer-kernel-evolution', 'index.html'), 'utf-8');
+  assert.ok(!flashHtml.includes('$O(N^2 d / M)$'), 'complex formula $O(N^2 d / M)$ should be parsed into KaTeX');
+
+  // Verify GitHub-style markdown alerts
+  const overlayHtml = fs.readFileSync(path.join(ROOT, 'dist', 'articles', 'docker-internals-namespace-cgroups-overlayfs', 'index.html'), 'utf-8');
+  assert.ok(overlayHtml.includes('class="markdown-alert markdown-alert-warning"'), 'expected rendered markdown-alert');
+  assert.ok(!overlayHtml.includes('[!WARNING]'), 'raw [!WARNING] tag should not remain unparsed');
+
   assert.ok(fs.existsSync(path.join(ROOT, 'dist', 'vendor', 'katex', 'katex.min.css')), 'expected vendor katex css');
 });
 

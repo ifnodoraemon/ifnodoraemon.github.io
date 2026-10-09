@@ -14,14 +14,21 @@ import katex from 'katex';
  * 8. Robust error recovery: malformed math renders raw text instead of throwing.
  */
 function isCurrencyLike(content, afterClosingChar) {
+  // If content contains LaTeX commands, backslashes, or common mathematical operators,
+  // it is definitively a math formula, NOT currency!
+  if (content.includes('\\') || /[\^_{}=<>+*]/.test(content)) {
+    return false;
+  }
+
   // 1. If closing $ is immediately followed by a digit, it is almost certainly a currency pair
   // e.g. "$7/小时 = $168/天", "$0.01~$0.05", "$3/$15", "$2.50 | $10.00", "$36K - $50K"
   if (afterClosingChar && /[0-9]/.test(afterClosingChar)) {
     return true;
   }
 
-  // 2. Currency rate or timeframe keywords
-  if (/(?:\/|per|每天成本|vs\s+API|vs\s+OpenAI)\s*(\d+|小时|月|天|hour|month|day|year|M\b|1M|百万)/i.test(content)) {
+  // 2. Currency rate or timeframe keywords starting with a digit:
+  // e.g. "20/月", "0.25 / 1M", "1,500/day", "7/小时", "0.05 per step"
+  if (/^\d[\d\.,]*\s*[kKmMbB]?\s*(?:\/|per|每天成本|vs\s+API|vs\s+OpenAI)\s*(?:小时|月|天|年|次|hour|month|day|year|week|step|M\b|1M|百万)/i.test(content)) {
     return true;
   }
 
@@ -30,8 +37,13 @@ function isCurrencyLike(content, afterClosingChar) {
     return true;
   }
 
-  // 4. Currency token with cost description
-  if (/^[\d\.,]+\s*\/\s*(?:1M|M|百万)/.test(content) && content.includes("成本")) {
+  // 4. Currency token with cost description, e.g. "0.25 / 1M Tokens", "0.25/M"
+  if (/^\d[\d\.,]*\s*(?:\/\s*(?:1M|M|百万)|Tokens?|百万|成本)/i.test(content) && (content.includes("成本") || /tokens?/i.test(content) || /^\d+[\d\.,]*\s*\/[mM1]/.test(content))) {
+    return true;
+  }
+
+  // 5. Standalone currency with slash like "3/" in "$3/$15" or "0.25/"
+  if (/^\d[\d\.,]*\s*\/$/.test(content)) {
     return true;
   }
 
