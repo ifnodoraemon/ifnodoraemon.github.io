@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Fri, 09 Oct 2026 03:02:07 GMT</pubDate>
+  <pubDate>Fri, 09 Oct 2026 03:26:24 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA</title>
@@ -38,6 +38,16 @@
     <enclosure url="https://blog.llmgo.top/og/en/infiniband-architecture-hardware-rates-credit-flow-subnet-manager.png" length="150000" type="image/png" />
   </item>
   <item>
+    <title>Linux Kernel Networking Subsystem in Depth: From NIC Drivers, NAPI, and Ring Buffers to eBPF XDP Wire-Speed Forwarding</title>
+    <link>https://blog.llmgo.top/en/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/</link>
+    <guid>https://blog.llmgo.top/en/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/</guid>
+    <pubDate>Fri, 02 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Linux Kernel &amp; eBPF Networking</category>
+    <description>How does an electrical pulse on an Ethernet cable transform into data inside application memory? Deconstruct the entire Linux operating system network protocol stack: from hardware NIC RX Ring Buffer descriptors and PCIe DMA zero-copy transfers to hardware interrupt handling, NAPI hybrid polling, and ksoftirqd softirq execution; analyze the pointer architecture and zero-copy lifecycle of Linux's core sk_buff data structure; optimize multi-core NICs via RSS hardware queues and RPS/RFS CPU affinity; and explore cutting-edge eBPF XDP (eXpress Data Path) mechanics for multi-million PPS wire-speed packet filtering and DDoS mitigation.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/linux-kernel-networking-napi-ring-buffer-skbuff-xdp.png" length="150000" type="image/png" />
+  </item>
+  <item>
     <title>RDMA High-Performance Networking Foundations: Kernel Bypass, Zero-Copy, Queue Pairs, and Lossless RoCEv2 (PFC/ECN) Architecture</title>
     <link>https://blog.llmgo.top/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</link>
     <guid>https://blog.llmgo.top/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</guid>
@@ -54,8 +64,28 @@
     <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Datacenter &amp; Leaf-Spine</category>
-    <description>Why can't traditional three-tier architectures and Spanning Tree Protocol (STP) handle modern cloud computing and large-scale AI clusters? Deconstruct the evolution of data center networking: from Charles Clos's 1953 telephone switching theory to modern non-blocking 2-Tier / 3-Tier Leaf-Spine mathematical modeling and oversubscription ratios; analyze RFC 7938 eBGP Underlay routing designs, ECMP 5-tuple hash polarization hazards and ASIC-level solutions; and dissect large Layer-2 Overlay mechanics: VXLAN MAC-in-UDP encapsulation (24-bit VNI, 9000 MTU Jumbo Frames) and MP-BGP EVPN Type-2/Type-3/Type-5 control plane route signaling.</description>
+    <description>Why can't traditional three-tier architectures and Spanning Tree Protocol (STP) handle modern cloud computing and large-scale AI clusters? Deconstruct the evolution of data center networking: from classical 3-tier bottlenecks (Access, Aggregation, Core) with STP link blocking and oversubscription, to Charles Clos's 1953 telephone switching theory and modern non-blocking 2-Tier / 3-Tier Leaf-Spine mathematical modeling; analyze RFC 7938 eBGP Underlay routing designs, ECMP 5-tuple hash polarization hazards and ASIC-level solutions; and dissect large Layer-2 Overlay mechanics: VXLAN MAC-in-UDP encapsulation (24-bit VNI, 9000 MTU Jumbo Frames) and MP-BGP EVPN Type-2/Type-3/Type-5 control plane route signaling.</description>
     <enclosure url="https://blog.llmgo.top/og/en/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Application &amp; Transport Layer Bridges: DNS Resolution, Sockets, Ports, and UDP vs TCP Foundations</title>
+    <link>https://blog.llmgo.top/en/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/</link>
+    <guid>https://blog.llmgo.top/en/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/</guid>
+    <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Transport Layer Bridge &amp; DNS</category>
+    <description>When you type a web URL into a browser and press Enter, how do packets locate the target server across continents and enter the exact destination application process? Deconstruct the bridge connecting applications to the transport layer: explore the global DNS hierarchy (13 logical Root Server clusters with Anycast scaling, TLD registries, authoritative name servers, recursive vs iterative querying); derive the fundamentals of Ports and OS Sockets, explaining how a single server port 80 sustains one million concurrent connections via 5-tuples; and compare the core design trade-offs of the transport layer's twin pillars: lightweight 8-byte UDP datagrams vs connection-oriented 20-byte TCP byte streams.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/transport-bridge-dns-sockets-ports-udp-vs-tcp.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Enterprise LAN Infrastructure: VLAN Segmentation (802.1Q), Dynamic DHCP, and NAT Port Forwarding</title>
+    <link>https://blog.llmgo.top/en/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/</link>
+    <guid>https://blog.llmgo.top/en/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/</guid>
+    <pubDate>Wed, 30 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>LAN &amp; VLAN Infrastructure</category>
+    <description>Why can a single physical network switch be carved into dozens of isolated virtual local networks? Deconstruct three core pillars of enterprise LAN engineering: from broadcast storm hazards to IEEE 802.1Q frame tagging (4-byte tag, 12-bit VID, PCP QoS priority); the operational differences between Access ports, Trunk ports, and PVID tag stripping/insertion; comparing router-on-a-stick sub-interfaces with Layer 3 Switch Virtual Interfaces (SVI); dissecting DHCP's 4-step DORA handshake and cross-subnet relay agents; and demystifying NAPT (Port Address Translation), SNAT, DNAT, and Linux kernel conntrack state tables.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>TCP Congestion Control Evolution &amp; High-Performance Transport: From Reno and Cubic to BBR Mathematical Models, and HTTP/2 to HTTP/3 (QUIC)</title>
@@ -68,6 +98,16 @@
     <enclosure url="https://blog.llmgo.top/og/en/tcp-congestion-control-reno-cubic-bbr-quic-http3.png" length="150000" type="image/png" />
   </item>
   <item>
+    <title>IP Addressing and Subnetting First Principles: Binary Arithmetic, Subnet Masks, CIDR, and Default Gateway Routing</title>
+    <link>https://blog.llmgo.top/en/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/</link>
+    <guid>https://blog.llmgo.top/en/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/</guid>
+    <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>IP Addressing &amp; Subnet Mask</category>
+    <description>Why must computers worldwide rely on IP addresses even though every network interface card already has a unique physical MAC address? Deconstruct network layer first principles from scratch: the binary structure and dotted-decimal notation of IPv4; the mathematical mechanics of Subnet Masks and step-by-step bitwise AND derivations, using 192.168.1.130/26 to compute network ID, broadcast address, and usable host capacity (the 2^H - 2 rule); examine the limitations of legacy Classful addressing, CIDR prefixes, and RFC 1918 private scopes; and demystify how the Default Gateway strips and rewrites Layer 2 headers when routing packets across subnets.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/ip-addressing-subnet-mask-cidr-default-gateway-routing.png" length="150000" type="image/png" />
+  </item>
+  <item>
     <title>Network &amp; Transport Layers in Depth: IP Routing, CIDR, TCP 11-State Machine, and Sliding Window First Principles</title>
     <link>https://blog.llmgo.top/en/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</link>
     <guid>https://blog.llmgo.top/en/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</guid>
@@ -78,14 +118,14 @@
     <enclosure url="https://blog.llmgo.top/og/en/network-layer-transport-layer-ip-routing-tcp-state-machine.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Computer Networking First Principles: Physical Layer, Ethernet, MAC/ARP, and the Linux Kernel NAPI Packet Path</title>
-    <link>https://blog.llmgo.top/en/articles/network-fundamentals-ethernet-mac-arp-linux-packet-path/</link>
-    <guid>https://blog.llmgo.top/en/articles/network-fundamentals-ethernet-mac-arp-linux-packet-path/</guid>
+    <title>Computer Networking from Scratch: Bits, Physical Media, Hub Collision Domains, and Switch MAC Addressing First Principles</title>
+    <link>https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/</link>
+    <guid>https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/</guid>
     <pubDate>Mon, 28 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>Ethernet &amp; Linux Packet Path</category>
-    <description>From electromagnetic waves and optical fiber pulses to packet lifecycle pipelines in the Linux kernel: a deep architectural demystification of foundational computer networking. Analyzing Ethernet II framing, MAC addressing, and ARP cache dynamics; tracing the nanosecond-level packet traversal through PCIe DMA, RX Ring Buffers, hard IRQs, NAPI softirq polling, and sk_buff dispatch; and presenting production-grade kernel tuning across ethtool ring buffers, IRQ smp_affinity, and network sysctls under high throughput.</description>
-    <enclosure url="https://blog.llmgo.top/og/en/network-fundamentals-ethernet-mac-arp-linux-packet-path.png" length="150000" type="image/png" />
+    <category>Zero-Foundation Networking &amp; Layer 2</category>
+    <description>If you know nothing about computer networking, how can you build an intuitive, solid first-principles foundation? Deconstruct network communication from absolute zero: how computers represent 0 and 1 via voltages and light pulses; why twisted pair copper cables are spiraled to cancel noise; single-mode vs multi-mode optical fiber physics; the legacy Hub era, shared media, collision domains, and CSMA/CD exponential backoff; how Layer 2 switches eliminate collisions using MAC address tables (CAM) and Ethernet frames; and dissect ARP broadcast requests, unicast replies, gratuitous ARP, and spoofing mitigation.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/network-fundamentals-bits-cables-hubs-switches-mac-arp.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>Container Networking Deep Dive: veth-pair, Linux Bridge, iptables NAT, and Cross-Host Topology</title>

@@ -6,7 +6,7 @@ tag: InfiniBand & Subnet Manager
 tagClass: tag-indigo
 category: Computer Networking
 series: computer-networking
-seriesOrder: 6
+seriesOrder: 10
 description: "Why does native InfiniBand remain the dominant fabric for 10,000-GPU AI compute clusters and top-tier supercomputers in 2026? Deconstruct the layered InfiniBand protocol stack and physical link evolution: from EDR 100G, HDR 200G, and NDR 400G (Quantum-2) to the 2026 mass production of XDR 800G (Quantum-X800/ConnectX-8); analyze link-layer first principles: Flit-level Credit-Based hardware flow control and sub-100ns Cut-Through switching mechanics; and explore the control engine: Subnet Manager (OpenSM) fabric discovery, dynamic GUID/LID/LMC allocation, and Linear Forwarding Table (LFT) hardware orchestration."
 extraTags:
   - Computer Networking
@@ -22,7 +22,7 @@ extraTags:
 
 ## Introduction: The Dedicated Arteries of Supercomputing — Native InfiniBand
 
-In Chapter 5 of our series, [RDMA High-Performance Networking Foundations: Kernel Bypass, Zero-Copy, Queue Pairs, and Lossless RoCEv2 Architecture](/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/), we examined the trade-offs involved in retrofitting Ethernet for RDMA—relying on reactive PFC pause frames and DCQCN congestion tuning to manufacture a pseudo-lossless environment.
+In Chapter 9 of our series, [RDMA High-Performance Networking Foundations: Kernel Bypass, Zero-Copy, Queue Pairs, and Lossless RoCEv2 Architecture](/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/), we examined the trade-offs involved in retrofitting Ethernet for RDMA—relying on reactive PFC pause frames and DCQCN congestion tuning to manufacture a pseudo-lossless environment.
 
 However, high-performance computing pursued a radically different path: **abandon backward compatibility with legacy Ethernet and design a purpose-built network for supercomputing and large-scale AI from scratch—InfiniBand (IB)**.
 
@@ -222,7 +222,7 @@ However, once individual switches and links are understood, **how do you cable t
 - Why do InfiniBand fabrics rely on **FTree and Up/Down** algorithms to guarantee deadlock-free routing mathematically?
 - How do NVIDIA's **Adaptive Routing (AR)** and **SHARP (Scalable Hierarchical Aggregation and Reduction Protocol)** offload All-Reduce operations directly into switch ASICs?
 
-In Chapter 7 of our masterclass, we explore large-scale AI cluster networking: **[InfiniBand AI Cluster Networking in Practice: Fat-Tree Topologies, Rail-Optimized Architecture, Adaptive Routing (AR), and In-Network Reduction (SHARP)](/en/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/)**!
+In Chapter 11 of our masterclass, we explore large-scale AI cluster networking: **[InfiniBand AI Cluster Networking in Practice: Fat-Tree Topologies, Rail-Optimized Architecture, Adaptive Routing (AR), and In-Network Reduction (SHARP)](/en/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/)**!
 
 ---
 

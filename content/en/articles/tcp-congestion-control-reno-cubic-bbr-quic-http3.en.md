@@ -6,7 +6,7 @@ tag: Congestion Control & QUIC
 tagClass: tag-blue
 category: Computer Networking
 series: computer-networking
-seriesOrder: 3
+seriesOrder: 6
 description: "Why can sliding windows prevent buffer overflow at the peer receiver but fail to stop Internet backbone routers from collapsing? Deconstruct thirty years of congestion control evolution: from loss-based AIMD, Reno state machines, and Bufferbloat to the cubic polynomial mathematics of Linux's default Cubic algorithm; dissect Google BBR's physical modeling of maximum delivery rate and minimum round-trip propagation time (BtlBw/RTprop/Pacing Rate); and analyze the transport revolution from HTTP/1.1 and HTTP/2 Head-of-Line (HoL) blocking to UDP-based HTTP/3 (QUIC) 0-RTT handshakes and seamless connection migration."
 extraTags:
   - Computer Networking
@@ -22,7 +22,7 @@ extraTags:
 
 ## Introduction: The Fundamental Division Between Flow Control and Congestion Control
 
-In Chapter 2 of our series, [Network & Transport Layers in Depth: IP Routing, CIDR, TCP 11-State Machine, and Sliding Window First Principles](/en/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/), we saw how TCP's sliding window uses the Advertised Window (`rwnd`) to protect the receiver's socket buffer.
+In Chapter 5 of our series, [Network & Transport Layers in Depth: IP Routing, CIDR, TCP 11-State Machine, and Sliding Window First Principles](/en/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/), we saw how TCP's sliding window uses the Advertised Window (`rwnd`) to protect the receiver's socket buffer.
 
 However, network communications do not travel through an isolated two-party pipe; they traverse complex mesh fabrics composed of hundreds of physical switches and routers:
 - **Flow Control**: An **end-to-end** local contract designed to prevent a fast sender from overrunning a slow receiver's application memory buffer;
@@ -232,12 +232,12 @@ lsmod | grep bbr
 
 From physical links to IP routing, TCP state machines, sliding windows, and the transition from Reno/Cubic to BBR and HTTP/3 QUIC, we have surveyed how modern Internet communication guarantees reliability across wide-area networks.
 
-However, as computing entered the era of **large-scale AI training, 10,000-GPU clusters, and PB-scale distributed storage in 2026**, the demands on network infrastructure underwent a radical transformation:
-- Traditional three-tier networks with Spanning Tree Protocol (STP) bottleneck east-west GPU traffic;
-- How do data center fabrics use **Clos architectures and 2-Tier / 3-Tier Leaf-Spine topologies** to achieve non-blocking bisection bandwidth?
-- How do **BGP Underlays, VXLAN encapsulation, and EVPN control planes** collaborate to deliver multi-tenant cloud-native network virtualization?
+However, we have yet to open one critical black box: **when an electrical or optical pulse arrives at a Linux server's network adapter, how does the operating system kernel retrieve bytes in nanoseconds, schedule multi-core CPUs, and deliver payloads into socket buffers?**
+- Why did early hardware-interrupt-only designs trigger fatal interrupt storms, and how did NAPI hybrid polling resolve them?
+- How does Linux's core `sk_buff` data structure use pointer arithmetic to achieve zero-copy protocol traversals?
+- Why do standard kernel stacks become bottlenecks on 100 Gbps interfaces, and how does **eBPF XDP** achieve 20M+ PPS wire-speed packet processing inside the network driver?
 
-In Chapter 4 of our masterclass, we step inside modern AI data centers: **[Modern Data Center Network Architecture First Principles: Clos Topologies, Leaf-Spine Fabrics, BGP Underlay, and EVPN-VXLAN Large Layer-2 Virtualization](/en/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/)**!
+In Chapter 7 of our masterclass, we dive straight into the Linux networking subsystem: **[Linux Kernel Networking Subsystem in Depth: From NIC Drivers, NAPI, and Ring Buffers to eBPF XDP Wire-Speed Forwarding](/en/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/)**!
 
 ---
 

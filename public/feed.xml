@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Fri, 09 Oct 2026 03:02:07 GMT</pubDate>
+  <pubDate>Fri, 09 Oct 2026 03:26:24 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战</title>
@@ -38,6 +38,16 @@
     <enclosure url="https://blog.llmgo.top/og/zh/infiniband-architecture-hardware-rates-credit-flow-subnet-manager.png" length="150000" type="image/png" />
   </item>
   <item>
+    <title>Linux 内核网络子系统硬核剖析：从网卡驱动、NAPI 机制、Ring Buffer 到 eBPF XDP 极速转发</title>
+    <link>https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/</link>
+    <guid>https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/</guid>
+    <pubDate>Fri, 02 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Linux网络与eBPF</category>
+    <description>一个以太网电脉冲是如何最终变成应用程序内存中的数据的？深度剖析 Linux 操作系统内核网络协议栈全流程：从硬件网卡 RX Ring Buffer 描述符、PCIe DMA 零 CPU 搬运，到硬中断触发、NAPI 混合轮询机制与 ksoftirqd 软中断调度；全景透视 Linux 内核最核心的数据结构 sk_buff 指针拓扑与零拷贝内存流转；详解多核网卡 RSS 多队列与 RPS/RFS CPU 亲和性调优；并深入技术最前沿，剖析 eBPF XDP（eXpress Data Path）如何在网卡驱动层实现千万级 PPS 极速包转发与防 DDoS 机制。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/linux-kernel-networking-napi-ring-buffer-skbuff-xdp.png" length="150000" type="image/png" />
+  </item>
+  <item>
     <title>RDMA 高性能通信基石：Kernel Bypass、Zero-Copy、Queue Pair 机制与无损以太网 RoCEv2 (PFC/ECN) 全景透视</title>
     <link>https://blog.llmgo.top/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</link>
     <guid>https://blog.llmgo.top/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</guid>
@@ -54,8 +64,28 @@
     <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>数据中心与Leaf-Spine</category>
-    <description>为什么传统三层网络与 STP 生成树无法承载现代云计算与 AI 大规模算力集群？深度拆解数据中心网络演进史：从 1953 年 Charles Clos 电话交换理论到现代无阻塞 2-Tier / 3-Tier Leaf-Spine 拓扑数学建模与收敛比计算；详解基于 RFC 7938 的 eBGP Underlay 路由设计、ECMP 等价多路径五元组哈希极化（Hash Polarization）破除方案；全面剖析大二层 Overlay 核心技术：VXLAN 报文 MAC-in-UDP 封装（VNI 24-bit/Jumbo Frame 9000 MTU）与 MP-BGP EVPN 控制平面 Type-2/Type-3/Type-5 路由交换机理。</description>
+    <description>为什么传统三层网络与 STP 生成树无法承载现代云计算与 AI 大规模算力集群？深度拆解数据中心网络演进史：从经典三层架构（接入 Access/汇聚 Aggregation/核心 Core）的 STP 阻塞与收敛比失衡痛点，到 1953 年 Charles Clos 电话交换理论与现代无阻塞 2-Tier / 3-Tier Leaf-Spine 拓扑数学建模；详解基于 RFC 7938 的 eBGP Underlay 路由设计、ECMP 等价多路径五元组哈希极化（Hash Polarization）破除方案；全面剖析大二层 Overlay 核心技术：VXLAN 报文 MAC-in-UDP 封装（VNI 24-bit/Jumbo Frame 9000 MTU）与 MP-BGP EVPN 控制平面 Type-2/Type-3/Type-5 路由交换机理。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>应用层与传输层枢纽：DNS 解析全流程、Socket 套接字本质与 TCP/UDP 核心对比</title>
+    <link>https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/</link>
+    <guid>https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/</guid>
+    <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>传输层纽带与DNS</category>
+    <description>当你在浏览器敲下网址并回车时，数据到底是如何精准找到目标机器并钻进指定应用程序的？深度拆解应用层与传输层的衔接纽带：全景透视 DNS 树状解析体系（全球 13 组逻辑根域名服务器 Anycast 任播、TLD 顶级域、权威解析与递归/迭代查询机理）；从第一性原理推导端口（Port）与操作系统 Socket（套接字）本质，解密单台服务器单个 80 端口如何依靠五元组轻松承载百万并发长连接；并全面对比传输层双子星：UDP 8 字节极简报头与 TCP 20 字节可靠字节流的设计哲学分野。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/transport-bridge-dns-sockets-ports-udp-vs-tcp.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>局域网企业级基建：VLAN 划分 (802.1Q)、DHCP 动态分配与 NAT 端口映射机制</title>
+    <link>https://blog.llmgo.top/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/</link>
+    <guid>https://blog.llmgo.top/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/</guid>
+    <pubDate>Wed, 30 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>局域网基建与VLAN</category>
+    <description>为什么一台物理交换机能够切分成几十个互不干扰的虚拟局域网？深度拆解现代企业局域网三大核心基建：从广播风暴危害到 IEEE 802.1Q 帧标签结构（4 字节 Tag、12 位 VID、PCP 优先级）；全面理清 Access 口、Trunk 口与 PVID 剥离/插入全流程，对比单臂路由与三层交换机 SVI 虚接口；深入剖析 DHCP 动态主机配置协议 DORA 四步握手与跨网段 Relay 中继机理；并手把手揭秘 NAPT（网络地址端口转换）、SNAT、DNAT 端口映射与 Linux conntrack 连接跟踪表物理运转真相。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>TCP 拥塞控制演进史与高性能传输：从 Reno、Cubic 到 BBR 数学模型，以及 HTTP/2 到 HTTP/3 (QUIC) 协议栈革命</title>
@@ -68,6 +98,16 @@
     <enclosure url="https://blog.llmgo.top/og/zh/tcp-congestion-control-reno-cubic-bbr-quic-http3.png" length="150000" type="image/png" />
   </item>
   <item>
+    <title>IP 寻址全景数学推导：十进制/二进制转换、子网掩码 (Subnet Mask) 计算、CIDR 划分与默认网关第一性原理</title>
+    <link>https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/</link>
+    <guid>https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/</guid>
+    <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>IP寻址与子网掩码</category>
+    <description>为什么有了物理 MAC 地址，全世界的计算机依然必须依赖 IP 地址通信？从零基础透视网络层第一性原理：IPv4 32 位二进制与点分十进制的数学本质；深度剖析子网掩码（Subnet Mask）核心机理，手把手推导二进制按位与（Bitwise AND）运算，以 192.168.1.130/26 为例推演网络地址、广播地址与有效主机 IP 范围（2^H - 2 减二真相）；详解 A/B/C 类地址历史缺陷、CIDR 无类别域间路由与私有保留网段；并彻底揭秘跨网段通信时默认网关（Default Gateway）的‘解封换壳’运转本质。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/ip-addressing-subnet-mask-cidr-default-gateway-routing.png" length="150000" type="image/png" />
+  </item>
+  <item>
     <title>网络层与传输层精解：IP 路由选路、CIDR、TCP 三次握手/四次挥手状态机与滑动窗口第一性原理</title>
     <link>https://blog.llmgo.top/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</link>
     <guid>https://blog.llmgo.top/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</guid>
@@ -78,14 +118,14 @@
     <enclosure url="https://blog.llmgo.top/og/zh/network-layer-transport-layer-ip-routing-tcp-state-machine.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>计算机网络第一性原理：物理层与以太网、MAC 帧寻址、ARP 协议与 Linux 网卡收发包 NAPI 链路</title>
-    <link>https://blog.llmgo.top/articles/network-fundamentals-ethernet-mac-arp-linux-packet-path/</link>
-    <guid>https://blog.llmgo.top/articles/network-fundamentals-ethernet-mac-arp-linux-packet-path/</guid>
+    <title>从零认识计算机网络：比特信号、网线介质、集线器冲突域到交换机 MAC 寻址第一性原理</title>
+    <link>https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/</link>
+    <guid>https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/</guid>
     <pubDate>Mon, 28 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
-    <category>以太网底层与Linux收发包</category>
-    <description>从物理世界的电磁波与光纤脉冲，到操作系统内核的数据包流动：深度解密现代计算机网络底层基石。剖析以太网帧结构、MAC 寻址与 ARP 协议缓存机理；深入 Linux 内核网络子系统，完整追踪从物理网卡 DMA 拷贝、环形缓冲区（Ring Buffer）、硬中断上半部到 NAPI 软中断轮询处理及 sk_buff 流转的纳秒级微观全过程；并提供高并发场景下网卡中断亲和性、队列溢出与 ethtool/sysctl 内核参数极限调优方案。</description>
-    <enclosure url="https://blog.llmgo.top/og/zh/network-fundamentals-ethernet-mac-arp-linux-packet-path.png" length="150000" type="image/png" />
+    <category>零基础网络与二层交换</category>
+    <description>如果对计算机网络一无所知，该如何建立最直观、最坚实的底层认知？从零剖析网络通信第一性原理：计算机如何通过高低电平与光脉冲表示 0 和 1；双绞线为什么要‘拧成麻花’抗干扰、单模光纤与多模光纤的物理特性；集线器（Hub）时代全网共享信道、冲突域（Collision Domain）与 CSMA/CD 载波侦听退避算法；深度揭秘二层交换机（Switch）如何通过 MAC 地址表（CAM）自学习与以太网帧（Frame）彻底消灭冲突域；并详述 ARP 广播请求、单播应答、免费 ARP 与 ARP 欺骗防御机制。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/network-fundamentals-bits-cables-hubs-switches-mac-arp.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>容器网络全景解密：veth-pair、Linux Bridge、iptables NAT 与跨主机网络拓扑</title>

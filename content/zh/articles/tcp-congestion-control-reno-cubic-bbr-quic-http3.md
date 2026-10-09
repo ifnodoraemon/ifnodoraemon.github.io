@@ -6,7 +6,7 @@ tag: 拥塞控制与QUIC
 tagClass: tag-blue
 category: 计算机网络
 series: computer-networking
-seriesOrder: 3
+seriesOrder: 6
 description: "为什么滑动窗口能防冲垮对端内存，却防不住互联网骨干路由器的崩溃？深度剖析拥塞控制三十年演进史：从基于丢包的经典 AIMD、Reno 状态机、Bufferbloat（缓冲区膨胀）到 Linux 默认 Cubic 的三次多项式数学推导；深入解密 Google BBR 基于最大交付率与最小往返时延的瓶颈物理建模（BtlBw/RTprop/Pacing Rate）；并对比分析从 HTTP/1.1、HTTP/2 多路复用线头阻塞（HoL Blocking）到基于 UDP 的 HTTP/3 (QUIC) 零 RTT 握手与连接迁移协议栈大一统革命。"
 extraTags:
   - Computer Networking
@@ -22,7 +22,7 @@ extraTags:
 
 ## 引言：流量控制与拥塞控制的本质分野
 
-在专栏第二讲 [网络层与传输层精解：IP 路由选路、CIDR、TCP 三次握手/四次挥手状态机与滑动窗口第一性原理](/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/) 中，我们剖析了 TCP 滑动窗口如何通过通告窗口（Advertised Window, `rwnd`）精确保护接收端的缓冲区内存。
+在专栏第五讲 [网络层与传输层精解：IP 路由选路、CIDR、TCP 三次握手/四次挥手状态机与滑动窗口第一性原理](/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/) 中，我们剖析了 TCP 滑动窗口如何通过通告窗口（Advertised Window, `rwnd`）精确保护接收端的缓冲区内存。
 
 然而，网络通信并非两点之间的理想直连管道，而是跨越成百上千台交换机与路由器的复杂网状拓扑：
 - **流量控制（Flow Control）**：是**端到端（End-to-End）**的局部契约，解决的是“发送端发得太快，接收端应用程序读得太慢导致其内存溢出”的问题；
@@ -234,12 +234,12 @@ lsmod | grep bbr
 
 从以太网数据链路、IP LPM 路由选路，到 TCP 状态机、滑动窗口、Cubic 与 BBR 拥塞控制，再到基于 UDP 的 HTTP/3 QUIC 传输革命，我们完整绘制了传统互联网跨主机通信的宏伟图卷。
 
-然而，当人类科技文明在 2026 年大步迈入 **AI 大模型、万卡 GPU 并行训练与 PB 级大规模分布式存储时代** 时，网络世界的游戏规则发生了天翻地覆的剧变：
-- 传统的以太网基于生成树协议（STP）与层级汇聚，东西向流量（East-West Traffic）带宽瞬间被汇聚层掐死；
-- 数据中心机房如何通过 **Clos 架构与 2-Tier / 3-Tier Leaf-Spine** 拓扑，实现任意服务器之间的全无阻塞（Non-blocking）高吞吐传输？
-- 在云原生多租户大二层网络中，**BGP Underlay、VXLAN 报文封装与 EVPN 控制平面** 究竟是如何协作编排网络虚拟化的？
+然而，我们始终没有看清一个终极黑盒：**当一个光电脉冲冲入 Linux 宿主机的网卡后，操作系统内核底层究竟是如何在纳秒级把字节数据捞取出来、调度多核 CPU 并送入应用程序 Socket 缓冲区的？**
+- 为什么早期的纯硬件中断会导致“中断风暴”雪崩？NAPI 混合轮询是如何拯救高并发 CPU 的？
+- Linux 内核最核心的数据结构 `sk_buff` 是如何凭借神奇的指针移动实现零内存拷贝协议栈穿越的？
+- 为什么在 100Gbps 满线速下，甚至连内核协议栈都会成为瓶颈？**eBPF XDP** 是如何在网卡驱动最底层实现 2000 万+ PPS 极速包转发与防 DDoS 的？
 
-在接下来的**专栏第四讲**中，我们将踏入数据中心物理机房的机柜深处 —— **[现代数据中心网络架构第一性原理：Clos 拓扑、Leaf-Spine 组网、BGP Underlay 与 EVPN-VXLAN 大二层虚拟化](/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/)**！
+在接下来的**专栏第七讲**中，我们将全面攻入 Linux 操作系统的网络深水区 —— **[Linux 内核网络子系统硬核剖析：从网卡驱动、NAPI 机制、Ring Buffer 到 eBPF XDP 极速转发](/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/)**！
 
 ---
 

@@ -6,7 +6,7 @@ tag: Fat-Tree & Adaptive Routing
 tagClass: tag-pink
 category: Computer Networking
 series: computer-networking
-seriesOrder: 7
+seriesOrder: 11
 description: "How can thousands of 8-GPU servers be interconnected with tens of thousands of optical links into a non-blocking, deadlock-free high-performance fabric? Deconstruct modern AI supercluster topologies: from Charles Leiserson's 1985 Fat-Tree mathematical model and port count k derivations for 2-Tier and 3-Tier non-blocking ceilings to the 8-plane Rail-Optimized architecture tailored for DGX H100/H200/B200 clusters; analyze how FTree and Up/Down routing engines forbid 'Down-then-Up' turns to eliminate credit loop deadlocks; and discover how hardware Adaptive Routing (AR) and SHARP in-network aggregation achieve a 2x throughput boost during GPU All-Reduce operations."
 extraTags:
   - Computer Networking
@@ -22,7 +22,7 @@ extraTags:
 
 ## Introduction: When 10,000-GPU Distributed Training Hits the "Communication Wall"
 
-In the 2026 era of frontier trillion-parameter Large Language Models (LLMs) and multi-modal architectures, 10,000-GPU clusters represent the baseline infrastructure for AI labs.
+In Chapter 10 of our masterclass, [InfiniBand Architecture First Principles: Physical Link Rates, Credit-Based Link Flow Control, and Subnet Manager Fabric Orchestration](/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/), we deconstructed physical link speeds, hardware credit flow control, and the centralized Subnet Manager. In the 2026 era of frontier trillion-parameter Large Language Models (LLMs) and multi-modal architectures, 10,000-GPU clusters represent the baseline infrastructure for AI labs.
 
 Training models of this scale requires combining **Tensor Parallelism (TP)**, **Pipeline Parallelism (PP)**, and **Data Parallelism (DP / ZeRO-3)**:
 - **Intra-Node**: 8 GPUs communicate over high-speed NVSwitch interconnects delivering 900 GB/s to 1.8 TB/s of bi-directional bandwidth;
@@ -257,7 +257,7 @@ With the architectural theory complete, **how do you deploy, diagnose, and optim
 - How do you use `ibdiagnet`, `iblinkinfo`, and `flint` to locate degraded optical links and transceiver errors across tens of thousands of connections?
 - At the application layer, how do you verify **GPUDirect RDMA (`nvidia-peermem`)** and tune critical NCCL environment variables (`NCCL_IB_HCA`, `NCCL_NET_GDR_LEVEL=5`)?
 
-In the final chapter of our masterclass, we cover bare-metal operations: **[Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA](/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/)**!
+In the final Chapter 12 of our masterclass, we cover bare-metal operations: **[Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA](/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/)**!
 
 ---
 

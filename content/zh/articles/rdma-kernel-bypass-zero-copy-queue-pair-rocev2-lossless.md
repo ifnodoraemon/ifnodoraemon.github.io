@@ -6,7 +6,7 @@ tag: RDMA与RoCEv2
 tagClass: tag-emerald
 category: 计算机网络
 series: computer-networking
-seriesOrder: 5
+seriesOrder: 9
 description: "为什么在 400G/800G 网络时代，传统的 TCP/IP 协议栈彻底沦为算力黑洞？深度拆解 RDMA（远程直接内存访问）第一性原理：Kernel Bypass（内核旁路）、Zero-Copy（硬件级零拷贝）与内存注册（Memory Registration/L_Key/R_Key）；剖析 ibverbs 核心架构：Queue Pair（SQ/RQ）、完成队列（CQ）以及双边操作（Send/Recv）与单边操作（RDMA Read/Write/Atomic）的微秒级机理；解密无损以太网 RoCEv2（UDP 端口 4791）如何通过 PFC 802.1Qbb 八优先级流控反压与 ECN/DCQCN 拥塞控制闭环解决丢包崩溃与死锁难题。"
 extraTags:
   - Computer Networking
@@ -231,7 +231,7 @@ RDMA 以内核旁路、零拷贝与内存注册三大核心支柱，终结了传
   从物理硬件、Credit-based 物理链路流控、切片交换（Cut-Through Switching），到集中式子网管理器（Subnet Manager）全局路径计算，InfiniBand 为何能做到**零死锁、真正的物理级绝对无损与亚微秒级超低时延**？
   从 HDR 200G、NDR 400G 到 2026 年量产的 XDR 800G，InfiniBand 物理信道如何突破极限？
 
-在接下来的**专栏第六讲**中，我们将全面揭开纯血超级算力网络的终极面纱 —— **[InfiniBand 架构第一性原理：物理链路速率演进、Credit-Based 链路级流控与子网管理器 (Subnet Manager) 全局编排](/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/)**！
+在接下来的**专栏第十讲**中，我们将全面揭开纯血超级算力网络的终极面纱 —— **[InfiniBand 架构第一性原理：物理链路速率演进、Credit-Based 链路级流控与子网管理器 (Subnet Manager) 全局编排](/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/)**！
 
 ---
 

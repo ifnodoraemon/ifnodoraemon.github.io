@@ -6,7 +6,7 @@ tag: Production Ops & NCCL Tuning
 tagClass: tag-red
 category: Computer Networking
 series: computer-networking
-seriesOrder: 8
+seriesOrder: 12
 description: "What bare-metal operational challenges arise when translating network architecture into physical 10,000-GPU AI data centers? A comprehensive guide to production InfiniBand operations: installing and managing Mellanox OFED / DOCA driver stacks and firmware tools (flint/mlxlink); configuring high-availability Master/Standby Subnet Manager topologies with OpenSM; auditing fabric health and diagnosing dirty optical links (Symbol Errors) and speed renegotiation drops using ibdiagnet; and diving into the GPU communication layer to configure GPUDirect RDMA (nvidia-peermem) and tune mission-critical NCCL parameters (NCCL_IB_HCA, NCCL_NET_GDR_LEVEL=5) for wire-speed All-Reduce performance."
 extraTags:
   - Computer Networking
@@ -22,7 +22,7 @@ extraTags:
 
 ## Introduction: The Operational Reality of 10,000-GPU AI Data Centers
 
-Across the preceding seven chapters, our masterclass progressed from physical Ethernet signaling and Linux kernel packet paths through Clos Leaf-Spine topologies, RDMA zero-copy primitives, native InfiniBand signaling, and Rail-Optimized Fat-Trees.
+Across the preceding eleven chapters, our masterclass progressed from physical Ethernet signaling and Linux kernel packet paths through Clos Leaf-Spine topologies, RDMA zero-copy primitives, native InfiniBand signaling, and Rail-Optimized Fat-Trees.
 
 Yet, when deploying a production cluster composed of thousands of 8-GPU servers (such as DGX H100, H200, or B200 platforms) connected by tens of thousands of optical links, **architectural designs encounter bare-metal operational realities**:
 - **Degraded Transceivers & Silent Speed Drops**: A speck of dust on an optical connector causes a 400G NDR link to negotiate down to 200G HDR or even 1X width without throwing a fatal system error, creating a bottleneck for the entire All-Reduce collective;
@@ -256,19 +256,23 @@ mpirun -np 16 \
 
 ## 5. Masterclass Summary: The Complete Journey
 
-With this chapter, our eight-part series **Computer Networking: From Ethernet to 10,000-GPU InfiniBand Architectures** reaches its conclusion.
+With this chapter, our twelve-part series **Computer Networking: From Ethernet to 10,000-GPU InfiniBand Architectures** reaches its conclusion.
 
 Let us review the full architectural progression:
 
 ```mermaid
 flowchart TD
-    Ch1["Ch 1: Physical Layer, Ethernet, MAC Addressing & Linux NAPI Kernel Path"] --> Ch2["Ch 2: IP LPM, CIDR, TCP 11-State Machine & Sliding Windows"]
-    Ch2 --> Ch3["Ch 3: Congestion Control Evolution (Reno/Cubic/BBR) & HTTP/3 QUIC"]
-    Ch3 --> Ch4["Ch 4: Clos Fabrics, Leaf-Spine Topologies & EVPN-VXLAN Virtualization"]
-    Ch4 --> Ch5["Ch 5: RDMA First Principles, Queue Pairs & Lossless RoCEv2 (PFC/ECN)"]
-    Ch5 --> Ch6["Ch 6: Native InfiniBand Link Rates, Credit Flow Control & Subnet Manager"]
-    Ch6 --> Ch7["Ch 7: 10,000-GPU Fat-Tree, Rail-Optimized Fabrics, AR & SHARP"]
-    Ch7 --> Ch8["Ch 8: Production OFED Drivers, OpenSM HA, ibdiagnet & NCCL Tuning"]
+    Ch1["Ch 1: Bits, Cables, Hubs, Switches & MAC Learning"] --> Ch2["Ch 2: Subnet Masks, CIDR Math, ARP & Gateways"]
+    Ch2 --> Ch3["Ch 3: Enterprise VLAN 802.1Q, DHCP & NAT/NAPT"]
+    Ch3 --> Ch4["Ch 4: End-to-End Transport, DNS, Sockets & UDP/TCP"]
+    Ch4 --> Ch5["Ch 5: IP Routing, TCP 11-State Machine & Sliding Windows"]
+    Ch5 --> Ch6["Ch 6: Congestion Control (Reno/Cubic/BBR) & HTTP/3 QUIC"]
+    Ch6 --> Ch7["Ch 7: Linux Kernel Stack, NAPI, sk_buff & eBPF XDP"]
+    Ch7 --> Ch8["Ch 8: 3-Tier vs Clos Leaf-Spine Fabrics & EVPN-VXLAN"]
+    Ch8 --> Ch9["Ch 9: RDMA Primitives, Queue Pairs & Lossless RoCEv2"]
+    Ch9 --> Ch10["Ch 10: InfiniBand Rates, Credit Flow Control & OpenSM"]
+    Ch10 --> Ch11["Ch 11: 10,000-GPU Fat-Tree, Rail-Optimized, AR & SHARP"]
+    Ch11 --> Ch12["Ch 12: Production OFED Drivers, OpenSM HA & NCCL Tuning"]
 ```
 
 From raw electrical signaling on copper cables to reliable TCP byte streams across the global Internet; from non-blocking Clos fabrics and overlay virtualization in cloud data centers to RDMA kernel bypass and native InfiniBand architectures powering 10,000-GPU clusters—modern networking balances physical constraints, protocol trade-offs, and operational realities to deliver high-performance distributed systems.

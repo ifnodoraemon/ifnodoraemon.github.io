@@ -6,7 +6,7 @@ tag: IP路由与TCP状态机
 tagClass: tag-purple
 category: 计算机网络
 series: computer-networking
-seriesOrder: 2
+seriesOrder: 5
 description: "为什么在不可靠的不可信物理网络上，能够构建出绝对可靠、按序到达的数据流？深度拆解网络层与传输层核心机理：从 IPv4/IPv6 报文结构、CIDR 掩码划分到 Linux 内核最长前缀匹配（LPM）与 FIB/RIB 路由表查找；全景剖析 TCP 经典的 11 种状态变迁机理，深入解析三次握手防串包原理、SYN Flood 与 SYN Cookies 防御、四次挥手与 TIME_WAIT 状态设计哲学；并从第一性原理推导滑动窗口流量控制、零窗口探测与 TCP_NODELAY 生产级网络调优。"
 extraTags:
   - Computer Networking
@@ -22,9 +22,9 @@ extraTags:
 
 ## 引言：在不可靠的不可信介质上，铸造确定性的基石
 
-在专栏的第一讲 [计算机网络第一性原理：物理层与以太网、MAC 帧寻址与 Linux NAPI 链路](/articles/network-fundamentals-ethernet-mac-arp-linux-packet-path/) 中，我们剖析了局域网内数据帧是如何通过物理电光信号、MAC 地址与网卡 Ring Buffer 传递的。
+在专栏第四讲 [应用层与传输层枢纽：DNS 解析全流程、Socket 套接字本质与 TCP/UDP 核心对比](/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/) 中，我们剖析了 DNS 树状解析、端口门牌号与 Socket 套接字五元组的操作系统内核机理。
 
-然而，真实的互联网是由成千上万个异构的局域网通过路由器交织而成的星型/网状互联体：
+然而，真实的互联网是由成千上万个异构局域网通过路由器交织而成的庞大世界：
 - **物理世界充满不确定性**：跨洲际海底光缆可能被物理切断、中间路由器的硬件队列可能随时因拥塞而爆仓丢包、无线信号可能随时受到强电磁干扰；
 - **无状态的最佳努力交付（Best-Effort）**：IP 协议本身只负责根据地址尽力转发，它不保证数据包是否按序到达、不保证数据包是否在半路丢失，更不保证同一个数据包是否会被网络设备意外复制多份重放。
 
@@ -32,7 +32,7 @@ extraTags:
 
 它以精妙的**序列号（Sequence Number）确认机制、双向滑动窗口（Sliding Window）与严谨的 11 状态机**，在绝对不可靠的 IP 网络上凭空抽象出一条**无差错、不丢失、不重复且按序到达的全双工字节流（Byte Stream）通道**。
 
-本文作为**《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 架构实战》**的第二篇，将带你穿透网络层与传输层：从 **IP 路由选路与 CIDR** 开始，深入剖析 **TCP 三次握手与四次挥手状态机底层原理**，并解密 **滑动窗口与流量控制的核心设计细节**。
+本文作为**《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 架构实战》的第五讲**，将带你穿透网络层与传输层：从 **IP 路由选路与 CIDR** 开始，深入剖析 **TCP 三次握手与四次挥手状态机底层原理**，并解密 **滑动窗口与流量控制的核心设计细节**。
 
 ---
 
@@ -235,7 +235,7 @@ net.ipv4.tcp_keepalive_probes = 3     # 连续 3 次无响应判定断开
 - 从经典的丢包驱动算法（Reno, Cubic），到 Google 颠覆性的瓶颈带宽与往返时延驱动模型 **BBR**，拥塞控制经历了怎样的数学革命？
 - 为什么在 2026 年，甚至连 TCP 协议本身都开始被基于 UDP 的 **HTTP/3 (QUIC)** 所革新？
 
-在接下来的**专栏第三讲**中，我们将全面杀入网络控制理论的最前沿 —— **[TCP 拥塞控制演进史与高性能通信：从 Reno、Cubic 到 BBR 数学模型，以及 HTTP/2 到 HTTP/3 (QUIC) 协议栈革命](/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/)**！
+在接下来的**专栏第六讲**中，我们将全面杀入网络控制理论的最前沿 —— **[TCP 拥塞控制演进史与高性能传输：从 Reno、Cubic 到 BBR 数学模型，以及 HTTP/2 到 HTTP/3 (QUIC) 协议栈革命](/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/)**！
 
 ---
 

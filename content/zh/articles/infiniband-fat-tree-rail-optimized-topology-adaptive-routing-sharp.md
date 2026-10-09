@@ -6,7 +6,7 @@ tag: 胖树拓扑与自适应路由
 tagClass: tag-pink
 category: 计算机网络
 series: computer-networking
-seriesOrder: 7
+seriesOrder: 11
 description: "如何将成千上万台配备 8 卡 GPU 的服务器用万根光纤编织成一张无阻塞、零死锁的高性能互联网络？深入剖析万卡 AI 智算中心核心拓扑：从 1985 年 Leiserson 胖树（Fat-Tree）数学模型、端口数 k 与 2-Tier/3-Tier 最大节点数严格推导，到专为 DGX H100/H200/B200 量身定制的 Rail-Optimized（轨道优化）八独立平面物理组网；深入解析 FTree 与 Up/Down 算法如何通过禁止“先下后上”破除信用死锁环路；并解密自适应路由（Adaptive Routing）与 SHARP 交换机网内规约计算如何将 All-Reduce 集合通信带宽效率提升 2 倍。"
 extraTags:
   - Computer Networking
@@ -22,7 +22,7 @@ extraTags:
 
 ## 引言：当万卡分布式训练遭遇“通信墙”
 
-在 2026 年的前沿大模型（LLM）与多模态万亿参数训练中，万卡级 GPU 集群已成为工业界标准底座。
+在上一讲 [InfiniBand 架构第一性原理：物理链路速率演进、Credit-Based 链路级流控与子网管理器 (Subnet Manager) 全局编排](/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/) 中，我们剖析了单机与交换机端口的硬件流控与控制面原理。而在 2026 年的前沿大模型（LLM）与多模态万亿参数训练中，万卡级 GPU 集群已成为工业界标准底座。
 
 训练这类超级模型必须深度结合**张量并行（Tensor Parallelism, TP）**、**流水线并行（Pipeline Parallelism, PP）**与**数据并行（Data Parallelism, DP / ZeRO-3）**：
 - **节点内部（Intra-Node）**：8 块 GPU 之间依靠第三代/第四代 NVSwitch 物理总线进行 900 GB/s ~ 1.8 TB/s 的超高速全互联；
@@ -257,7 +257,7 @@ sharp_enable 1
 - 面对数万根光纤，如何使用 `ibdiagnet`、`iblinkinfo` 与 `flint` 固件工具在几秒钟内揪出单根掉速的“脏光纤”与“坏模块”？
 - 在 GPU 应用程序层，如何通过 **GPUDirect RDMA (`nvidia-peermem`)** 彻底打通显存与网卡直通？NCCL 的核心环境变量（`NCCL_IB_HCA`, `NCCL_NET_GDR_LEVEL=5`）该如何极限调优？
 
-在专栏的**最终收官第八讲**中，我们将踏入真实的裸金属运维战场 —— **[InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战](/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/)**！
+在专栏的**最终收官第十二讲**中，我们将踏入真实的裸金属运维战场 —— **[InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战](/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/)**！
 
 ---
 

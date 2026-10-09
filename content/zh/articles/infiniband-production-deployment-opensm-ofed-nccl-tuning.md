@@ -6,7 +6,7 @@ tag: 生产落地与NCCL调优
 tagClass: tag-red
 category: 计算机网络
 series: computer-networking
-seriesOrder: 8
+seriesOrder: 12
 description: "从网络架构设计到万卡 AI 智算中心裸金属物理落地，工程师必须攻克哪些工程深水区？全景拆解 InfiniBand 生产落地实战：Mellanox OFED / DOCA 驱动栈与固件管理工具（flint/mlxlink）；搭建基于 OpenSM 的 Master/Standby 主备高可用子网管理架构；深入实战 ibdiagnet 全网巡检，秒级定位物理层 Symbol Error 脏光纤与降速协商链路；并深入 GPU 通信最底层，实战验证 GPUDirect RDMA（nvidia-peermem 驱动）与 NCCL 核心环境变量（NCCL_IB_HCA / NCCL_NET_GDR_LEVEL=5）极限压测调优。"
 extraTags:
   - Computer Networking
@@ -22,7 +22,7 @@ extraTags:
 
 ## 引言：从拓扑图纸到万卡机房运维的“深水区”
 
-在前面的七个章节中，我们从最底层的以太网物理信号与 Linux 内核收发包链路，一路走到了 Clos Leaf-Spine 组网、RDMA 零拷贝、InfiniBand 物理信道与 Rail-Optimized 胖树架构。
+在前面的十一个章节中，我们从最底层的以太网物理信号与 Linux 内核收发包链路，一路走到了 Clos Leaf-Spine 组网、RDMA 零拷贝、InfiniBand 物理信道与 Rail-Optimized 胖树架构。
 
 然而，在真实生产机房中落地一个由数千台 8-GPU 节点（如 DGX H100/H200/B200）、数万根高速光纤组成的超级 InfiniBand 集群时，**理论上的“完美拓扑”往往会撞上残酷的物理现实**：
 - **光模块脏污与降速协商**：某根光纤在插入时沾染微尘，400G NDR 网卡在未经告警的情况下自动降速协商至 200G HDR 甚至 1X 链路，引发全网 All-Reduce 长尾等待；
@@ -256,19 +256,23 @@ mpirun -np 16 \
 
 ## 五、 全专栏终局总结与全景技术版图
 
-行文至此，我们的八讲硬核长文**《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 架构实战》**迎来了最终的圆满收官！
+行文至此，我们的十二讲硬核长文**《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 架构实战》**迎来了最终的圆满收官！
 
 让我们重新回顾这条波澜壮阔的计算机网络登顶之路：
 
 ```mermaid
 flowchart TD
-    Ch1["第 1 讲: 物理层以太网、MAC 寻址与 Linux NAPI 报文链路"] --> Ch2["第 2 讲: IP 路由 LPM、CIDR 与 TCP 11 状态机/滑动窗口"]
-    Ch2 --> Ch3["第 3 讲: 拥塞控制演进 (Reno/Cubic/BBR) 与 HTTP/3 QUIC 革命"]
-    Ch3 --> Ch4["第 4 讲: 数据中心 Clos 拓扑、Leaf-Spine 与 EVPN-VXLAN 虚拟化"]
-    Ch4 --> Ch5["第 5 讲: RDMA 第一性原理、Queue Pair 与无损 RoCEv2 (PFC/ECN)"]
-    Ch5 --> Ch6["第 6 讲: 纯血 InfiniBand 速率、Credit 流控与 Subnet Manager 编排"]
-    Ch6 --> Ch7["第 7 讲: 万卡 Fat-Tree 胖树、Rail-Optimized 组网、AR 与 SHARP"]
-    Ch7 --> Ch8["第 8 讲: 生产级 OFED 驱动、OpenSM 双机 HA、ibdiagnet 与 NCCL 调优"]
+    Ch1["第 1 讲: 物理层与二层以太网、集线器与交换机自学习"] --> Ch2["第 2 讲: IP 寻址数学、子网掩码、CIDR 与默认网关"]
+    Ch2 --> Ch3["第 3 讲: 企业局域网 VLAN 802.1Q、DHCP 与 NAT/NAPT"]
+    Ch3 --> Ch4["第 4 讲: 端到端传输桥梁、DNS、Socket 与 UDP/TCP"]
+    Ch4 --> Ch5["第 5 讲: 网络层选路、TCP 11 状态机与滑动窗口"]
+    Ch5 --> Ch6["第 6 讲: 拥塞控制演进 (Reno/Cubic/BBR) 与 HTTP/3 QUIC"]
+    Ch6 --> Ch7["第 7 讲: Linux 内核网络、NAPI、sk_buff 与 eBPF XDP"]
+    Ch7 --> Ch8["第 8 讲: 传统三层 vs 二层 Clos Leaf-Spine 与 EVPN-VXLAN"]
+    Ch8 --> Ch9["第 9 讲: RDMA 第一性原理、Queue Pair 与无损 RoCEv2"]
+    Ch9 --> Ch10["第 10 讲: 纯血 InfiniBand 速率、Credit 流控与 Subnet Manager"]
+    Ch10 --> Ch11["第 11 讲: 万卡 Fat-Tree 胖树、Rail-Optimized、AR 与 SHARP"]
+    Ch11 --> Ch12["第 12 讲: 生产级 OFED 驱动、OpenSM 双机 HA 与 NCCL 调优"]
 ```
 
 从人类早期在铜线与光纤中对电光信号的朴素调度，到互联网时代在混乱丢包的物理信道上抽象出可靠有序的 TCP 字节流；从数据中心时代打破 STP 枷锁走向全无阻塞的 Leaf-Spine 与 Overlay 虚拟化，再到 AI 算力军备竞赛中粉碎 CPU 拷贝枷锁、依靠 RDMA 与纯血 InfiniBand 在万卡矩阵间以纳秒级时延搬运海量张量 ——

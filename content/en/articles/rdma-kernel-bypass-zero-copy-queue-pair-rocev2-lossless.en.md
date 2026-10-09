@@ -6,7 +6,7 @@ tag: RDMA & RoCEv2
 tagClass: tag-emerald
 category: Computer Networking
 series: computer-networking
-seriesOrder: 5
+seriesOrder: 9
 description: "Why does the traditional TCP/IP stack become a compute black hole in 400G and 800G networks? Deconstruct RDMA (Remote Direct Memory Access) first principles: Kernel Bypass, hardware-level Zero-Copy, and Memory Registration (MR/L_Key/R_Key); dissect core ibverbs primitives: Queue Pairs (SQ/RQ), Completion Queues (CQ), and microsecond-level mechanics of Two-Sided (Send/Recv) vs One-Sided (RDMA Read/Write/Atomic) operations; and uncover how Lossless RoCEv2 (UDP port 4791) leverages 802.1Qbb Priority Flow Control (PFC) backpressure and ECN/DCQCN closed-loop congestion control to resolve packet loss collapse and deadlock."
 extraTags:
   - Computer Networking
@@ -232,7 +232,7 @@ However, in massive 10,000-GPU distributed training environments, RoCEv2 still r
   How does InfiniBand achieve **zero-deadlock, physically guaranteed lossless transport with sub-microsecond latency** using hardware credit-based link flow control and centralized Subnet Managers?
   How do link rates scale from HDR 200G to NDR 400G and the 2026 generation of XDR 800G?
 
-In Chapter 6 of our masterclass, we explore dedicated high-performance fabrics: **[InfiniBand Architecture First Principles: Physical Link Rates, Credit-Based Link Flow Control, and Subnet Manager Fabric Orchestration](/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/)**!
+In Chapter 10 of our masterclass, we explore dedicated high-performance fabrics: **[InfiniBand Architecture First Principles: Physical Link Rates, Credit-Based Link Flow Control, and Subnet Manager Fabric Orchestration](/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/)**!
 
 ---
 

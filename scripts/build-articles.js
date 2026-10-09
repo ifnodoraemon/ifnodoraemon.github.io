@@ -115,12 +115,16 @@ const SERIES_DEFINITIONS = {
     titleEn: 'Computer Networking Masterclass: From Ethernet Principles to Hyperscale InfiniBand Architecture',
     badgeZh: '计算机网络专栏',
     badgeEn: 'Networking Series',
-    descZh: '从第一性原理贯穿计算机网络全栈：从以太网物理层、MAC/ARP 寻址、Linux 内核收发包 NAPI 链路，到 TCP 三次握手状态机、滑动窗口与 BBR 拥塞控制；跨入现代数据中心 Leaf-Spine 架构、BGP EVPN 与 RoCEv2 无损网络；并最终杀入 AI 智算通信殿堂：InfiniBand 物理架构、信元流控、Subnet Manager、Rail-Optimized 万卡无阻塞 Fat-Tree 拓扑、SHARP 网络计算与生产级 OFED/NCCL 部署调优。',
-    descEn: 'A comprehensive first-principles guide through the entire networking stack: Ethernet physical layer, MAC/ARP, Linux kernel NAPI packet path; TCP state machines, sliding windows, and BBR congestion control; modern datacenter Clos/Leaf-Spine, BGP EVPN, and lossless RoCEv2; and ultimately hyperscale AI networking: InfiniBand hardware, credit-based flow control, Subnet Manager, Rail-Optimized Fat-Tree topologies, SHARP in-network reduction, and hands-on OFED/NCCL configuration.',
+    descZh: '零基础直通万卡 AI 智算网络：从电信号高低电平、双绞线与光纤、集线器冲突域到交换机广播域与 MAC/ARP 寻址；手把手深入推导 IP 寻址、二进制按位与子网掩码（Subnet Mask）计算、默认网关与 VLAN/DHCP/NAT 企业级基建；解析 DNS、Socket 套接字五元组、TCP 11 状态机与 BBR 拥塞控制；攻坚 Linux 内核 NAPI、sk_buff 与 eBPF XDP 极速转发；穿透现代数据中心传统三层 vs 两层 Spine-Leaf 架构与 EVPN-VXLAN；并最终登顶智算中心通信之巅：RoCEv2 无损以太网、纯血 InfiniBand NDR/XDR 物理速率与信元流控、Rail-Optimized 胖树拓扑、自适应路由、SHARP 网内计算与生产级 OFED/NCCL 极限调优。',
+    descEn: 'A ground-zero masterclass to 10,000-GPU AI networking: from physical voltages, twisted pairs, and optical fibers to hubs, collision domains, switches, and MAC/ARP; step-by-step binary derivations of IP addressing, subnet masks, default gateways, VLANs, DHCP, and NAT; in-depth DNS, Socket 5-tuples, TCP 11-state machines, and BBR congestion control; Linux kernel NAPI, sk_buff, and eBPF XDP; datacenter traditional 3-tier vs 2-tier Spine-Leaf fabrics and EVPN-VXLAN; leading up to AI supercomputing: lossless RoCEv2, native InfiniBand NDR/XDR link speeds, credit flow control, Rail-Optimized Fat-Trees, Adaptive Routing, SHARP, and bare-metal OFED/NCCL performance tuning.',
     articles: [
-      'network-fundamentals-ethernet-mac-arp-linux-packet-path',
+      'network-fundamentals-bits-cables-hubs-switches-mac-arp',
+      'ip-addressing-subnet-mask-cidr-default-gateway-routing',
+      'enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding',
+      'transport-bridge-dns-sockets-ports-udp-vs-tcp',
       'network-layer-transport-layer-ip-routing-tcp-state-machine',
       'tcp-congestion-control-reno-cubic-bbr-quic-http3',
+      'linux-kernel-networking-napi-ring-buffer-skbuff-xdp',
       'datacenter-network-clos-leaf-spine-bgp-evpn-vxlan',
       'rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless',
       'infiniband-architecture-hardware-rates-credit-flow-subnet-manager',
@@ -230,6 +234,15 @@ const enRawArticles = rawArticles
 
 const articles = prepareArticles(zhRawArticles, false);
 const articlesEn = prepareArticles(enRawArticles, true);
+
+const outZhArticlesDir = path.join(BUILD_OUT_DIR, 'articles');
+const outEnArticlesDir = path.join(BUILD_OUT_DIR, 'en', 'articles');
+if (fs.existsSync(outZhArticlesDir)) {
+  fs.rmSync(outZhArticlesDir, { recursive: true, force: true });
+}
+if (fs.existsSync(outEnArticlesDir)) {
+  fs.rmSync(outEnArticlesDir, { recursive: true, force: true });
+}
 
 writeArticles(articles, false);
 writeArticles(articlesEn, true);
@@ -1473,7 +1486,7 @@ function generateFaqSchema(markdown, frontmatterFaq) {
 
   const targetText = sectionMatch[0];
   const qaPairs = [];
-  const qRegex = /###\s+(?:Q\d*[:：]\s*|问题\d*[:：]\s*)?([^\n?？]+[?？]?)\n+([\s\S]*?)(?=(?:^###\s+)|$)/gm;
+  const qRegex = /###\s+(?:Q\d*[:：]\s*|问题\d*[:：]\s*)?([^\n]+)\n+([\s\S]*?)(?=(?:^###\s+)|$)/gm;
   let match;
   while ((match = qRegex.exec(targetText)) !== null) {
     const question = match[1].trim();

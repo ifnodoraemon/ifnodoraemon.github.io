@@ -6,7 +6,7 @@ tag: IP Routing & TCP State Machine
 tagClass: tag-purple
 category: Computer Networking
 series: computer-networking
-seriesOrder: 2
+seriesOrder: 5
 description: "How can an absolutely reliable, ordered stream of data be built on top of an unreliable physical network? Deconstruct core Layer 3 and Layer 4 mechanics: from IPv4/IPv6 packet structures and CIDR subnets to Linux kernel Longest Prefix Match (LPM) and FIB/RIB table lookups; dissect the classic 11 TCP state transitions, 3-way handshake mechanics, SYN Flood & SYN Cookies defense, 4-way teardown with TIME_WAIT rationale; and derive sliding window flow control, zero-window probing, and TCP_NODELAY production tuning from first principles."
 extraTags:
   - Computer Networking
@@ -22,7 +22,7 @@ extraTags:
 
 ## Introduction: Forging Determinism over an Untrusted Medium
 
-In the first chapter of our masterclass, [Computer Networking First Principles: Physical Layer, Ethernet, MAC Addressing, and Linux NAPI Kernel Path](/en/articles/network-fundamentals-ethernet-mac-arp-linux-packet-path/), we explored how raw frames traverse local physical links, MAC addresses, and NIC Ring Buffers.
+In Chapter 4 of our masterclass, [Application & Transport Layer Bridges: DNS Resolution, Sockets, Ports, and UDP vs TCP Foundations](/en/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/), we examined the global DNS hierarchy, port numbering, and OS socket 5-tuples.
 
 However, the global Internet is a vast, heterogeneous web of millions of local area networks bridged together by intermediate routers:
 - **The physical universe is inherently unreliable**: Transoceanic submarine cables can be severed, router hardware queues frequently experience buffer overflow during traffic spikes, and wireless links suffer severe electromagnetic interference;
@@ -32,7 +32,7 @@ Confronted with this chaotic substrate fraught with packet loss, reordering, dup
 
 Through ingenious **Sequence Number acknowledgments, bidirectional Sliding Windows, and a rigorous 11-state transition machine**, TCP conjures an **error-free, non-lossy, deduplicated, and strictly ordered full-duplex byte stream** out of a fundamentally unreliable IP substrate.
 
-As Part 2 of our masterclass **Computer Networking: From Ethernet to 10,000-GPU InfiniBand Architectures**, this article guides you through Layer 3 and Layer 4: starting from **IP routing lookups and CIDR**, dissecting the **TCP 3-way handshake and 4-way teardown state machines**, and unraveling the **first principles of sliding windows and flow control**.
+As Part 5 of our masterclass **Computer Networking: From Ethernet Principles to Hyperscale InfiniBand Architecture**, this article guides you through Layer 3 and Layer 4: starting from **IP routing lookups and CIDR**, dissecting the **TCP 3-way handshake and 4-way teardown state machines**, and unraveling the **first principles of sliding windows and flow control**.
 
 ---
 
@@ -239,7 +239,7 @@ However, end-to-end flow control only protects the **receiver's memory**—it po
 - How did congestion control evolve from early loss-driven models (Reno, Cubic) to Google's revolutionary delay-bandwidth model **BBR**?
 - Why is the industry moving past TCP toward UDP-based **HTTP/3 (QUIC)** in 2026?
 
-In Chapter 3 of our masterclass, we dive straight into network control theory: **[TCP Congestion Control Evolution & High-Performance Transport: From Reno and Cubic to BBR Mathematical Models, and the HTTP/2 to HTTP/3 (QUIC) Revolution](/en/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/)**!
+In Chapter 6 of our masterclass, we dive straight into network control theory: **[TCP Congestion Control Evolution & High-Performance Transport: From Reno and Cubic to BBR Mathematical Models, and HTTP/2 to HTTP/3 (QUIC)](/en/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/)**!
 
 ---
 

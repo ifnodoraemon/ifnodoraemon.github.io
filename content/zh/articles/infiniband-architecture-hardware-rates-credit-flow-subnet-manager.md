@@ -6,7 +6,7 @@ tag: InfiniBand体系与SM
 tagClass: tag-indigo
 category: 计算机网络
 series: computer-networking
-seriesOrder: 6
+seriesOrder: 10
 description: "为什么在 2026 年全球顶尖的万卡 AI 算力集群与前沿超算中，原生 InfiniBand 依然牢牢统治着智算中心的核心动脉？深度拆解 InfiniBand 分层协议栈与物理层演进史：从 EDR 100G、HDR 200G、NDR 400G（Quantum-2）到 2026 规模量产的 XDR 800G（Quantum-X800/ConnectX-8）；剖析链路层第一性原理：基于 Flit 的 Credit-Based 信用度硬件级流控与 Cut-Through 直通交换纳秒级低时延机理；解密控制中枢子网管理器（Subnet Manager, OpenSM）全网拓扑发现、GUID/LID/LMC 动态编排与 LFT 线性转发表下发控制全流程。"
 extraTags:
   - Computer Networking
@@ -22,7 +22,7 @@ extraTags:
 
 ## 引言：超级算力的专属血管 —— 纯血 InfiniBand
 
-在专栏第五讲 [RDMA 高性能通信基石：Kernel Bypass、Zero-Copy、Queue Pair 机制与无损以太网 RoCEv2 全景透视](/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/) 中，我们见证了以太网为了承载 RDMA 所做的妥协与改造 —— 依靠复杂的 PFC 反压与 DCQCN 拥塞控制在有损介质上拼装“无损环境”。
+在专栏第九讲 [RDMA 高性能通信基石：Kernel Bypass、Zero-Copy、Queue Pair 机制与无损以太网 RoCEv2 全景透视](/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/) 中，我们见证了以太网为了承载 RDMA 所做的妥协与改造 —— 依靠复杂的 PFC 反压与 DCQCN 拥塞控制在有损介质上拼装“无损环境”。
 
 然而，在人类对极限算力的终极追求中，还有一条完全不同的技术道路：**不向历史遗留的以太网兼容性妥协，从物理电气层、链路层到管理平面，从零重新发明一套专为分布式超算与 AI 大模型而生的专用网络 —— InfiniBand（简称 IB）**。
 
@@ -222,7 +222,7 @@ InfiniBand 以专为高性能计算而生的物理架构，构建了与以太网
 - 为什么胖树路由算法必须采用 **FTree 与 Up/Down** 来从数学上严格证明“零信道死锁”？
 - NVIDIA 独家的 **自适应路由（Adaptive Routing, AR）** 与 **网内计算减法器（SHARP）** 是如何在交换机物理芯片内部直接替 GPU 算完 All-Reduce 的？
 
-在接下来的**专栏第七讲**中，我们将全面攻入万卡集群组网的最高技术殿堂 —— **[InfiniBand 智算集群组网实战：Fat-Tree 胖树拓扑、Rail-Optimized 轨道优化设计、自适应路由 (AR) 与 SHARP 网内计算](/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/)**！
+在接下来的**专栏第十一讲**中，我们将全面攻入万卡集群组网的最高技术殿堂 —— **[InfiniBand 智算集群组网实战：Fat-Tree 胖树拓扑、Rail-Optimized 轨道优化设计、自适应路由 (AR) 与 SHARP 网内计算](/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/)**！
 
 ---
 
