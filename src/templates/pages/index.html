@@ -142,11 +142,11 @@
           <!-- Hot Architectural Tags -->
           <div class="hero-hot-tags">
             <span class="hot-label">{{home.hotLabel}}</span>
-            <a href="{{linkPrefix}}/articles/?q=vLLM" class="hot-tag">vLLM 推理部署</a>
+            <a href="{{linkPrefix}}/articles/?q=vLLM" class="hot-tag">{{#if isEn}}vLLM Serving{{else}}vLLM 推理部署{{/if}}</a>
             <a href="{{linkPrefix}}/articles/?q=MLA" class="hot-tag">DeepSeek MLA</a>
-            <a href="{{linkPrefix}}/articles/?q=Agent" class="hot-tag">Agent 运行时</a>
-            <a href="{{linkPrefix}}/models/" class="hot-tag highlight">2026 模型雷达</a>
-            <a href="{{linkPrefix}}/articles/?q=quantization" class="hot-tag">FP8 量化</a>
+            <a href="{{linkPrefix}}/articles/?q=Agent" class="hot-tag">{{#if isEn}}Agent Runtimes{{else}}Agent 运行时{{/if}}</a>
+            <a href="{{linkPrefix}}/models/" class="hot-tag highlight">{{#if isEn}}2026 Model Radar{{else}}2026 模型雷达{{/if}}</a>
+            <a href="{{linkPrefix}}/articles/?q=quantization" class="hot-tag">{{#if isEn}}FP8 Quant{{else}}FP8 量化{{/if}}</a>
           </div>
         </div>
 
@@ -200,7 +200,7 @@
             <div class="llm-card-footer">
               <div class="llm-stats-quick">
                 <div class="quick-stat">
-                  <span class="num">30+</span>
+                  <span class="num">65+</span>
                   <span class="desc">{{#if isEn}}PAPERS{{else}}深度研报{{/if}}</span>
                 </div>
                 <div class="quick-stat">
@@ -486,7 +486,7 @@
 
           <!-- Stats -->
           <div class="bento-card bento-stat">
-            <div class="stat-num">30<span>+</span></div>
+            <div class="stat-num">65<span>+</span></div>
             <div class="stat-label">{{#if isEn}}DEEP WHITEPAPERS{{else}}万字硬核研报{{/if}}</div>
           </div>
           <div class="bento-card bento-stat">
@@ -507,10 +507,10 @@
               <span class="stack-chip">vLLM & SGLang Serving</span>
               <span class="stack-chip">DeepSeek MLA & KDA</span>
               <span class="stack-chip">Model Context Protocol (MCP)</span>
-              <span class="stack-chip">Java & Spring Boot 微服务</span>
+              <span class="stack-chip">{{#if isEn}}Java & Spring Boot Microservices{{else}}Java & Spring Boot 微服务{{/if}}</span>
               <span class="stack-chip">Python 3.13 & FastAPI</span>
               <span class="stack-chip">scikit-learn (SVM / NLP)</span>
-              <span class="stack-chip">C++ / Python Qt 跨平台桌面</span>
+              <span class="stack-chip">{{#if isEn}}C++ / Python Qt Cross-Platform Desktop{{else}}C++ / Python Qt 跨平台桌面{{/if}}</span>
               <span class="stack-chip">React & Next.js</span>
               <span class="stack-chip">Vue 3 & TypeScript</span>
               <span class="stack-chip">PyTorch & Triton</span>

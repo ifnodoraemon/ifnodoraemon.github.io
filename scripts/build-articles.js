@@ -1117,11 +1117,11 @@ function generateLlmsTxt(articlesZh, articlesEn) {
 
   // 1. Core llms.txt (Concise Markdown Index)
   const seriesZhList = Object.values(SERIES_DEFINITIONS).map(s => 
-    `- [${s.titleZh}](${SITE_URL}/articles/): ${s.descZh} (${s.articles.length} 篇文章)`
+    `- [${s.titleZh}](${SITE_URL}/articles/${s.articles[0]}/): ${s.descZh} (${s.articles.length} 篇文章，开篇：[${s.articles[0]}](${SITE_URL}/articles/${s.articles[0]}/))`
   ).join('\n');
 
   const seriesEnList = Object.values(SERIES_DEFINITIONS).map(s => 
-    `- [${s.titleEn}](${SITE_URL}/en/articles/): ${s.descEn} (${s.articles.length} articles)`
+    `- [${s.titleEn}](${SITE_URL}/en/articles/${s.articles[0]}/): ${s.descEn} (${s.articles.length} articles, opening chapter: [${s.articles[0]}](${SITE_URL}/en/articles/${s.articles[0]}/))`
   ).join('\n');
 
   const extraSeriesZh = `- [《现代大模型实战工程与技术选型手册》](${SITE_URL}/articles/): 系统剖析前沿大模型落地方法论：企业级 RAG、模型全流程微调、Test-Time Compute 扩展与 GRPO 强化学习、拒绝榜单刷分的 Eval 体系以及主流模型横评。`;

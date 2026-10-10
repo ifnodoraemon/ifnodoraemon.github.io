@@ -223,16 +223,30 @@ zhData.jsonLd = generateBlogJsonLd(zhArticles, false);
 zhData.toolsAppJsonLd = generateToolsAppJsonLd(zhData.tools, false);
 zhData.toolsFaqJsonLd = generateToolsFaqJsonLd(zhData.tools);
 
-// Inject dynamic relatedArticles for models page
-zhData.models.relatedArticles = zhArticles.slice(0, 3).map(a => ({
-  tag: a.tag || '深度解析',
-  tagClass: a.tagClass || 'tag',
-  datetime: a.isoDate,
-  date: a.dateFormatted,
-  title: a.title,
-  desc: a.description,
-  link: `/articles/${a.slug}/`
-}));
+function getModelsRelatedArticles(articles, isEn) {
+  const preferredSlugs = [
+    'domestic-llm-comparison-2026',
+    'model-comparison-2026',
+    'deepseek-v4-kimi-k3-deployment-guide',
+    'llm-evaluation-guide',
+  ];
+  const matched = preferredSlugs
+    .map(slug => articles.find(a => a.slug === slug))
+    .filter(Boolean);
+  const fallback = articles.filter(a => a.category === (isEn ? 'Evaluation & Trends' : '评测与趋势'));
+  const candidates = [...new Set([...matched, ...fallback, ...articles])].slice(0, 3);
+  return candidates.map(a => ({
+    tag: a.tag || (isEn ? 'Deep Dive' : '深度解析'),
+    tagClass: a.tagClass || 'tag',
+    datetime: a.isoDate,
+    date: a.dateFormatted,
+    title: a.title,
+    desc: a.description,
+    link: `${isEn ? '/en' : ''}/articles/${a.slug}/`,
+  }));
+}
+
+zhData.models.relatedArticles = getModelsRelatedArticles(zhArticles, false);
 
 const enData = {
   ...readLocale('en'),
@@ -245,15 +259,7 @@ enData.jsonLd = generateBlogJsonLd(enArticles, true);
 enData.toolsAppJsonLd = generateToolsAppJsonLd(enData.tools, true);
 enData.toolsFaqJsonLd = generateToolsFaqJsonLd(enData.tools);
 
-enData.models.relatedArticles = enArticles.slice(0, 3).map(a => ({
-  tag: a.tag || 'Deep Dive',
-  tagClass: a.tagClass || 'tag',
-  datetime: a.isoDate,
-  date: a.dateFormatted,
-  title: a.title,
-  desc: a.description,
-  link: `/en/articles/${a.slug}/`
-}));
+enData.models.relatedArticles = getModelsRelatedArticles(enArticles, true);
 
 // 2. Process template
 function processTemplate(templateStr, data, isEn) {
