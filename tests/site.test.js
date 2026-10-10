@@ -282,9 +282,9 @@ test('all pages include valid RSS alternate links and feeds are generated correc
   const zhFeed = fs.readFileSync(path.join(ROOT, 'dist', 'feed.xml'), 'utf-8');
   const enFeed = fs.readFileSync(path.join(ROOT, 'dist', 'en', 'feed.xml'), 'utf-8');
 
-  assert.match(zhFeed, /<title>大雄话AI<\/title>/);
+  assert.match(zhFeed, /<title>智算架构志<\/title>/);
   assert.match(zhFeed, /<link>https:\/\/blog\.llmgo\.top\/<\/link>/);
-  assert.match(enFeed, /<title>Nobita Talks AI<\/title>/);
+  assert.match(enFeed, /<title>LLM Systems Architecture<\/title>/);
   assert.match(enFeed, /<link>https:\/\/blog\.llmgo\.top\/en\/<\/link>/);
 
   const samplePages = [
@@ -376,7 +376,7 @@ test('build outputs include valid site.webmanifest and pages link to manifest an
   assert.ok(fs.existsSync(manifestDist), 'expected dist/site.webmanifest to exist');
 
   const manifestData = JSON.parse(fs.readFileSync(manifestDist, 'utf-8'));
-  assert.ok(manifestData.name.includes('Nobita Talks AI'));
+  assert.ok(manifestData.name.includes('LLM Systems Architecture'));
   assert.equal(manifestData.display, 'standalone');
 
   const samplePages = [
@@ -423,7 +423,7 @@ test('build outputs include valid llms.txt, enriched ItemList schema, and author
   assert.ok(fs.existsSync(llmsFullPath), 'expected dist/llms-full.txt');
 
   const llmsContent = fs.readFileSync(llmsPath, 'utf-8');
-  assert.match(llmsContent, /# 大雄话AI \/ Nobita Talks AI/);
+  assert.match(llmsContent, /# 智算架构志 \/ LLM Systems Architecture/);
   assert.match(llmsContent, /AI Agent 生产级架构师手册/);
   assert.match(llmsContent, /大模型推理引擎/);
   assert.match(llmsContent, /现代大模型实战工程与技术选型手册/);

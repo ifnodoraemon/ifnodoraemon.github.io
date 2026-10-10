@@ -82,8 +82,8 @@ const zhData = {
 
 // Generate dynamic JSON-LD for index page
 function generateBlogJsonLd(articles, isEn) {
-  const siteName = isEn ? 'Nobita Talks AI' : '大雄话AI';
-  const siteDesc = isEn ? 'AI foundation models tech blog' : '专注 AI 大模型技术研究与实践的技术博客';
+  const siteName = isEn ? 'LLM Systems Architecture' : '智算架构志';
+  const siteDesc = isEn ? 'LLM systems architecture and high-concurrency inference engineering blog' : '专注大模型系统架构与高性能推理工程实践的技术博客';
   const siteUrl = isEn ? 'https://blog.llmgo.top/en/' : 'https://blog.llmgo.top/';
   const lang = isEn ? 'en' : 'zh-CN';
 
@@ -103,7 +103,7 @@ function generateBlogJsonLd(articles, isEn) {
         '@type': 'WebSite',
         '@id': `${siteUrl}#website`,
         name: siteName,
-        alternateName: ['Nobita Talks AI', '大雄话AI', 'llmgo.top', 'ifnodoraemon'],
+        alternateName: ['LLM Systems Architecture', '智算架构志', 'llmgo.top', 'ifnodoraemon'],
         url: siteUrl,
         description: siteDesc,
         inLanguage: lang,

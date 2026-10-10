@@ -1,6 +1,6 @@
-# 大雄话AI (Nobita Talks AI)
+# 智算架构志 (LLM Systems Architecture)
 
-Welcome to **Nobita Talks AI**, a technical experimental node observing the rapid evolution of Artificial Intelligence and Large Language Model architectures.
+Welcome to **LLM Systems Architecture**, a technical experimental node observing the rapid evolution of Artificial Intelligence and Large Language Model architectures.
 
 🌐 **Live Blog:** [blog.llmgo.top](https://blog.llmgo.top/)  
 🌐 **English Portal:** [blog.llmgo.top/en/](https://blog.llmgo.top/en/)  

@@ -6,8 +6,8 @@ export function renderFooter(style = 'full') {
 
   const isEn = isEnglishPath(window.location.pathname);
   const langPrefix = isEn ? '/en' : '';
-  const siteTitle = isEn ? 'Nobita Talks AI' : '大雄话AI';
-  const desc = isEn ? 'Focusing on AI foundation models and tech insights.' : '专注 AI 大模型技术研究与实践分享。记录前沿技术的发展脉络。';
+  const siteTitle = isEn ? 'LLM Systems Architecture' : '智算架构志';
+  const desc = isEn ? 'Focusing on LLM systems architecture, inference engines, and production AI engineering.' : '专注大模型系统架构、推理加速内核与工业级智算工程实践。';
   
   const hLinks = isEn ? 'Quick Links' : '快速链接';
   const lHome = isEn ? 'Home' : '首页';

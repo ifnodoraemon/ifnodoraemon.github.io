@@ -1210,7 +1210,7 @@ function generateLlmsTxt(articlesZh, articlesEn) {
     `- [${a.title}](${SITE_URL}/en/articles/${a.slug}/): ${a.description}`
   ).join('\n');
 
-  const llmsContent = `# 大雄话AI / Nobita Talks AI
+  const llmsContent = `# 智算架构志 / LLM Systems Architecture
 
 > ${siteSummaryZh}
 > ${siteSummaryEn}
@@ -1422,7 +1422,7 @@ function generateOgImage(article) {
   )).join('');
 
   const tagWidth = Math.max(160, Math.round(article.tag.length * 14 + 48));
-  const brandText = article.isEn ? 'NOBITA TALKS AI' : '大雄话AI';
+  const brandText = article.isEn ? 'LLM SYSTEMS ARCHITECTURE' : '智算架构志';
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
   <defs>

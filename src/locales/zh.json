@@ -1,8 +1,8 @@
 {
   "meta": {
-    "siteName": "大雄话AI",
+    "siteName": "智算架构志",
     "home": {
-      "title": "大雄话AI — DeepSeek-V4-Pro · Kimi K3 · GPT-6 Astra 技术博客",
+      "title": "智算架构志 — 前沿大模型系统工程与推理架构实战",
       "desc": "专注 AI 大模型技术研究与实践，覆盖 DeepSeek-V4-Pro、Kimi K3、GPT-6 Astra，分享提示工程、AI Agent、RAG 应用等实战经验。"
     },
     "models": {
@@ -10,15 +10,15 @@
       "desc": "汇聚 2026 年最新大模型排行榜与全维星状图：Kimi K3、GLM-5.3、DeepSeek-V4-Pro、Claude Fable 5.1、GPT-6 Astra、Qwen3.8-Max、Gemini 3.8 Flash 等深度对比。"
     },
     "projects": {
-      "title": "作品与系统工程 | 大雄话AI",
+      "title": "作品与系统工程 | 智算架构志",
       "desc": "ifnodoraemon (大雄) 的代表性技术作品与落地系统，涵盖 Navi 本地 Agent OS、牛客企业端后端与 AI 智能简历评分系统、Doraemon Code 代码智能体与高并发服务矩阵。"
     },
     "about": {
-      "title": "关于本站与作者架构师 — 大雄话AI",
-      "desc": "关于大雄话AI站点的缘起、系统架构目标、作者 ifnodoraemon 以及背后运行的软硬件技术细节。"
+      "title": "关于本站与作者架构师 — 智算架构志",
+      "desc": "关于智算架构志站点的缘起、系统架构目标、作者 ifnodoraemon 以及背后运行的软硬件技术细节。"
     },
     "tools": {
-      "title": "AI 与开发者全能效率工具箱 | 大雄话AI",
+      "title": "AI 与开发者全能效率工具箱 | 智算架构志",
       "desc": "100% 纯前端离线沙箱：在线 Markdown 渲染与导出、大模型推理显存与硬件部署计算器、2026 前沿模型 Token 计费对比、JSON 格式化与 TS 推导、Base64 互转、JWT 离线解析、CRON 时间戳及代码卡片生成器。"
     }
   },
@@ -657,7 +657,7 @@
     "p2_title": "🎨 Joyarti 3D Customizer (商业级 AI 定制化生成平台)",
     "p2_desc": "商业闭环落地项目：面向个性化 3D 打印手办与艺术定制礼品的电商与生成式平台。核心负责 AI 图像生成工作流架构搭建，基于 ComfyUI 节点引擎深度编排多阶段生成链路（文生图、LoRA 风格适配、ControlNet 姿态/几何结构约束及人脸面容一致性保持）。设计全链路 Java 后端高并发生成队列，协同 GPU 节点集群实现工业级资产渲染与制造级拓扑输出。",
     "btn_visit": "Visit Site",
-    "p3_title": "⚡ Nobita Talks AI (大雄话AI 站点底层工程)",
+    "p3_title": "⚡ LLM Systems Architecture (智算架构志底层工程)",
     "p3_desc": "本站的开源生产代码库与高并发双语静态站点生成系统。基于轻量级 Vite、Handlebars 模板引擎与 Marked 扩展深度定制，内嵌原生 KaTeX 数学公式排版与语义层级代码高亮。集成零开销客户端全文搜索倒排索引、自动化 OpenGraph 动态矢量图生成、Schema.org (TechArticle / FAQPage) 结构化数据注入，并在部署管线中集成 IndexNow 毫秒级搜索引擎通知协议与严苛自动化冒烟测试。",
     "btn_demo": "[Demo] View Repo",
     "p4_title": "👁️ Edge-AI Vision System (边缘嵌入式实时感知系统)",

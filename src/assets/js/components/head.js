@@ -16,7 +16,7 @@ export function getHeadMeta({ title, description, url, keywords }) {
   <meta property="og:description" content="${description}">
   <meta property="og:image" content="https://blog.llmgo.top/og-image.png">
   <meta property="og:locale" content="zh_CN">
-  <meta property="og:site_name" content="大雄话AI">
+  <meta property="og:site_name" content="智算架构志">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${title}">
   <meta name="twitter:description" content="${description}">

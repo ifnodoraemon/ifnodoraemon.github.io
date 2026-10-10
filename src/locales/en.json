@@ -1,8 +1,8 @@
 {
   "meta": {
-    "siteName": "Nobita Talks AI",
+    "siteName": "LLM Systems Architecture",
     "home": {
-      "title": "Nobita Talks AI — Frontier Tech Insights & Engineering Practices",
+      "title": "LLM Systems Architecture — Frontier AI Engineering & Inference Systems",
       "desc": "Focusing on AI foundation models research and practice, providing frontier tech insights and exclusive engineering notes on DeepSeek-V4-Pro, Kimi K3, and GPT-6 Astra."
     },
     "models": {
@@ -10,15 +10,15 @@
       "desc": "Comprehensive 2026 AI model comparison and capability star chart: Kimi K3, GLM-5.3, DeepSeek-V4-Pro, Claude Fable 5.1, GPT-6 Astra, Qwen3.8-Max, and Gemini 3.8 Flash."
     },
     "projects": {
-      "title": "Projects & Systems Portfolio | Nobita Talks AI",
+      "title": "Projects & Systems Portfolio | LLM Systems Architecture",
       "desc": "Representative engineering systems by ifnodoraemon, featuring Navi Governed Agent OS, Nowcoder Enterprise HR Backend & AI Resume Scoring, Doraemon Code, and high-concurrency platforms."
     },
     "about": {
-      "title": "About This Node — Nobita Talks AI",
+      "title": "About This Node — LLM Systems Architecture",
       "desc": "The origin, goals, and technical details behind this site."
     },
     "tools": {
-      "title": "AI & Developer All-in-One Toolbox | Nobita Talks AI",
+      "title": "AI & Developer All-in-One Toolbox | LLM Systems Architecture",
       "desc": "100% Client-Side Sandbox: Online Markdown studio, LLM VRAM & Serving calculator, 2026 frontier token pricing, JSON to TS interface converter, Base64 codec, JWT debugger, Timestamp & CRON scheduler, and code image generator."
     }
   },
@@ -657,7 +657,7 @@
     "p2_title": "🎨 Joyarti 3D Customizer (Commercial AI Generative Platform)",
     "p2_desc": "Full-cycle commercial product: An e-commerce and generative platform for personalized 3D-printed figurines and custom art gifts. Architected the core AI image generation pipeline, orchestrating multi-stage workflows via ComfyUI (text-to-image, LoRA style adaptation, ControlNet pose/geometry conditioning, and facial identity preservation). Built high-concurrency Java backend task queues and GPU cluster dispatching to deliver industrial-grade assets for 3D manufacturing.",
     "btn_visit": "Visit Site",
-    "p3_title": "⚡ Nobita Talks AI (Static Site Engine & Architecture)",
+    "p3_title": "⚡ LLM Systems Architecture (Static Site Engine & Architecture)",
     "p3_desc": "The open-source production codebase powering this bilingual AI systems engineering hub. Engineered on a custom Vite, Handlebars, and Marked build pipeline featuring native KaTeX mathematical typography and syntax highlighting. Ships with zero-overhead client-side inverted search indexing, automated dynamic SVG OpenGraph generation, Schema.org (TechArticle & FAQPage) JSON-LD injection, and automated IndexNow protocol submission in CI with strict smoke test suites.",
     "btn_demo": "[Demo] View Repo",
     "p4_title": "👁️ Edge-AI Vision System (Edge Real-time Vision Engine)",

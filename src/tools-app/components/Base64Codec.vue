@@ -319,7 +319,7 @@ function loadSampleText() {
   inputMode.value = 'text';
   inputVal.value = props.isEn
     ? `Hello, DeepSeek-V4 & Kimi K3! Pure client-side lossless UTF-8 Base64 Codec.`
-    : `你好，大雄话AI！100% 浏览器客户端纯离线 UTF-8 Base64 极速编解码器。`;
+    : `你好，智算架构志！100% 浏览器客户端纯离线 UTF-8 Base64 极速编解码器。`;
   encodeAction();
 }
 </script>

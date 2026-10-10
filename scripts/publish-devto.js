@@ -117,7 +117,7 @@ function prepareMarkdown(content, slug, title) {
   md = md.replace(/\]\(\/([^\)]+)\)/g, '](https://blog.llmgo.top/$1)');
 
   const canonicalUrl = `${SITE_URL}/en/articles/${slug}/`;
-  const footer = `\n\n---\n\n*Originally published at [Nobita Talks AI](${canonicalUrl}) on blog.llmgo.top.*`;
+  const footer = `\n\n---\n\n*Originally published at [LLM Systems Architecture](${canonicalUrl}) on blog.llmgo.top.*`;
   return md + footer;
 }
 

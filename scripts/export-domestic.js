@@ -40,7 +40,7 @@ function exportOne(file) {
   body = body.replace(/\]\(\/en\/articles\/([a-zA-Z0-9_-]+)\/?\)/g, `](${SITE_URL}/en/articles/$1/)`);
   body = body.replace(/\]\(\/([^\)]+)\)/g, `](${SITE_URL}/$1)`);
 
-  const header = `> **本文首发于作者独立技术博客**：[大雄话AI — ${title}](${originalUrl})\n> 专注前沿大模型架构、智能体工程与高性能推理落地实战。\n\n---\n\n`;
+  const header = `> **本文首发于作者独立技术博客**：[智算架构志 — ${title}](${originalUrl})\n> 专注前沿大模型架构、智能体工程与高性能推理落地实战。\n\n---\n\n`;
   const footer = `\n\n---\n\n> **作者简介**：大雄（ifnodoraemon），大模型工程架构实践者。欢迎访问独立博客 [blog.llmgo.top](${SITE_URL}) 获取更多最新前沿大模型与 Agent 深度研究。`;
 
   const finalMarkdown = header + body + footer;

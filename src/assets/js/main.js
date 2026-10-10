@@ -1,5 +1,5 @@
 // ============================================
-// 大雄话AI — Main Entry Point
+// 智算架构志 (LLM Systems Architecture) — Main Entry Point
 // ============================================
 import { renderNav } from './components/nav.js';
 import { renderFooter } from './components/footer.js';

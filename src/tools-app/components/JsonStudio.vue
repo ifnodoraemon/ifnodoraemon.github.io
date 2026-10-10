@@ -280,7 +280,7 @@ function loadSample() {
     ],
     metadata: {
       author: "ifnodoraemon",
-      organization: "Nobita Talks AI",
+      organization: "LLM Systems Architecture",
       verified: true,
       execution_metrics: {
         p95_latency_ms: 342.8,

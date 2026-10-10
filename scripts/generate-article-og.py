@@ -100,7 +100,7 @@ def render_og_card(title, description, tag, date_str, is_en=False):
     draw.text((104, 126), tag, font=font_tag, fill=(129, 140, 248))
 
     # Brand badge top-right
-    top_brand = 'NOBITA TALKS AI' if is_en else '大雄话AI'
+    top_brand = 'LLM SYSTEMS ARCHITECTURE' if is_en else '智算架构志'
     draw.text((1112, 126), top_brand, font=font_en_mono if is_en else font_zh_brand, fill=(100, 116, 139), anchor='ra')
 
     # Title lines

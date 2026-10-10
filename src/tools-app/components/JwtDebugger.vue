@@ -229,7 +229,7 @@ function loadSample() {
     iss: "https://blog.llmgo.top",
     sub: "developer_67990a",
     aud: "ai-agent-engine",
-    name: "Nobita Talks AI Dev",
+    name: "LLM Systems Architecture Dev",
     roles: ["admin", "architect", "agent_operator"],
     iat: now,
     nbf: now,

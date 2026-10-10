@@ -1,4 +1,4 @@
-# 大雄话AI / Nobita Talks AI
+# 智算架构志 / LLM Systems Architecture
 
 > 专注 AI 大模型系统架构、高并发推理调优、生产级 AI Agent 与前沿工程落地技术博客。
 > Technical deep dives into LLM systems architecture, high-throughput inference optimization, production AI agents, and enterprise AI engineering.

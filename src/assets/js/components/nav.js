@@ -8,7 +8,7 @@ export function renderNav(activePage = '') {
   const isEn = isEnglishPath(currentPath);
   const langPrefix = isEn ? '/en' : '';
 
-  const siteTitle = isEn ? 'Nobita Talks AI' : '大雄话AI';
+  const siteTitle = isEn ? 'LLM Systems Architecture' : '智算架构志';
   
   const navItems = isEn ? [
     { id: 'home', title: 'Home', href: '/en/' },
@@ -49,8 +49,8 @@ export function renderNav(activePage = '') {
           </svg>
         </div>
         <div class="brand-text-wrapper">
-          <span class="brand-text-zh">${isEn ? 'NOBITA TALKS AI' : '大雄话AI'}</span>
-          <span class="brand-text-en">${isEn ? 'AI Architecture & Engineering' : 'AI 架构与技术笔记'}</span>
+          <span class="brand-text-zh">${isEn ? 'LLM SYSTEMS ARCHITECTURE' : '智算架构志'}</span>
+          <span class="brand-text-en">${isEn ? 'AI Systems & Engineering Notes' : 'LLM Systems Architecture'}</span>
         </div>
       </a>
       <div class="nav-links" id="nav-links">
