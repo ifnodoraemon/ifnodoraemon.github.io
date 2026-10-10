@@ -25,7 +25,7 @@
   "models": {
     "pageTag": "2026 FRONTIER LLM MATRIX",
     "pageTitle": "2026 Frontier LLM Capability Matrix & Benchmarks",
-    "pageDesc": "Strictly focused on models released in 2026: Featuring newly minted Chinese frontier flagships Kimi K3 (2.8T) and GLM-5.3 alongside DeepSeek-V4-Pro, Claude Fable 5.1, and GPT-6 Astra. Synchronized with empirical data from LMSYS Arena, Artificial Analysis (AA), Terminal-Bench 3.0, and SWE-bench Verified.",
+    "pageDesc": "Strictly focused on models released in 2026: Featuring Google's new flagship Gemini 4 Argon & Gemini 3.8 series, Anthropic 5.5 generation (Claude Opus 5.5 / Sonnet 5.5 / Haiku 5.5), and OpenAI GPT-6.1 Sol alongside GPT-6 Astra, Kimi K3 (2.8T), and DeepSeek-V4.1-Flash. Synchronized with empirical data from LMSYS Arena, Artificial Analysis (AA), Terminal-Bench 3.0, and SWE-bench Verified.",
     "heroTag": "2026 MODEL DATABASE",
     "heroTitle": "2026 Model Database",
     "heroDesc": "Tracking exclusively frontier AI systems released in 2026, offering rigorous, objective benchmark evaluations across major open-weights and proprietary models.",
@@ -243,6 +243,66 @@
           90
         ],
         "defaultActive": false
+      },
+      {
+        "label": "Gemini 4 Argon",
+        "provider": "Google",
+        "type": "2026.09.30 Proprietary / SOTA Multimodal & Security",
+        "color": "#38bdf8",
+        "data": [
+          98,
+          97,
+          98,
+          99,
+          100,
+          86
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "Claude Sonnet 5.5",
+        "provider": "Anthropic",
+        "type": "2026.09.28 Proprietary / Production Workhorse",
+        "color": "#fb923c",
+        "data": [
+          97,
+          98,
+          98,
+          97,
+          98,
+          94
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "Claude Haiku 5.5",
+        "provider": "Anthropic",
+        "type": "2026.10.07 Proprietary / Adjustable Effort Ultra-Fast",
+        "color": "#f59e0b",
+        "data": [
+          92,
+          93,
+          94,
+          93,
+          96,
+          99
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "GPT-6.1 Sol",
+        "provider": "OpenAI",
+        "type": "2026.09.29 Proprietary / 1.1M Agentic Workhorse",
+        "color": "#14b8a6",
+        "data": [
+          98,
+          98,
+          98,
+          97,
+          99,
+          91
+        ],
+        "defaultActive": false
       }
     ],
     "dimensionGuides": [
@@ -399,6 +459,46 @@
         "78.0%",
         "240 t/s (Ultra)",
         "$0.15 / $0.60"
+      ],
+      [
+        "Gemini 4 Argon",
+        "2026.09.30 Google",
+        "Next-Gen Flagship / Fairwind Security / 2M Zero-Hallucination",
+        "1521 (#2)",
+        "66.4 (#2)",
+        "89.5%",
+        "90 t/s",
+        "$3.00 / $12.00"
+      ],
+      [
+        "Claude Sonnet 5.5",
+        "2026.09.28 Anthropic",
+        "Production SWE Backbone / Balanced Latency & Code Quality",
+        "1516",
+        "65.6",
+        "89.0%",
+        "105 t/s",
+        "$3.00 / $15.00"
+      ],
+      [
+        "Claude Haiku 5.5",
+        "2026.10.07 Anthropic",
+        "Adjustable Effort / High-Throughput Ultra-Low Latency",
+        "1485",
+        "61.0",
+        "76.5%",
+        "220 t/s",
+        "$0.20 / $0.80"
+      ],
+      [
+        "GPT-6.1 Sol",
+        "2026.09.29 OpenAI",
+        "1.1M Long Context Production Workhorse / Optimized Pricing",
+        "1515",
+        "65.4",
+        "88.5%",
+        "110 t/s",
+        "$2.00 / $8.00"
       ]
     ],
     "sceneTitle": "2026 Engineering Scenario Decision Matrix",
@@ -585,6 +685,102 @@
             "value": "$0.15 In / $0.60 Out (per 1M Tokens)"
           }
         ]
+      },
+      {
+        "name": "Gemini 4 Argon",
+        "icon": "🛡️",
+        "meta": "2026.09.30 Release · Google Flagship · Fairwind Cybersecurity Pioneer",
+        "desc": "Google's breakthrough Autumn 2026 flagship unveiled via the Fairwind Program. Engineered for elite defensive software engineering, binary analysis, and enterprise codebase transformation. Operates with near-zero hallucination across a native 2-million token context window with comprehensive multimodal perception.",
+        "specs": [
+          {
+            "label": "Context Window",
+            "value": "2,000,000 Tokens (2M)"
+          },
+          {
+            "label": "Core Architecture",
+            "value": "Sparse Multi-Token Prediction (MTP)"
+          },
+          {
+            "label": "LMSYS Arena",
+            "value": "1521 Elo (Top 2 Worldwide)"
+          },
+          {
+            "label": "Official API",
+            "value": "$3.00 In / $12.00 Out (per 1M Tokens)"
+          }
+        ]
+      },
+      {
+        "name": "Claude Opus 5.5",
+        "icon": "👑",
+        "meta": "2026.09.22 Release · Anthropic Flagship · SWE-bench 91.2% Record",
+        "desc": "The apex model of Anthropic's 5.5 generation. Established an unprecedented world record of 91.2% on SWE-bench Verified and climbed to #1 on the LMSYS Arena with 1524 Elo. Delivers streamlined internal verification with 40% cost reduction and faster token generation than Opus 5.",
+        "specs": [
+          {
+            "label": "Context Window",
+            "value": "1,000,000 Tokens (1M)"
+          },
+          {
+            "label": "SWE-bench Verified",
+            "value": "91.2% (All-Time Record)"
+          },
+          {
+            "label": "LMSYS Arena",
+            "value": "1524 Elo (#1 Worldwide)"
+          },
+          {
+            "label": "Official API",
+            "value": "$9.00 In / $36.00 Out (40% Cost Reduction)"
+          }
+        ]
+      },
+      {
+        "name": "GPT-6.1 Sol",
+        "icon": "☀️",
+        "meta": "2026.09.29 Release · OpenAI Production Workhorse · 1.1M Context",
+        "desc": "OpenAI's enterprise workhorse built on the matured GPT-6 architecture. Specifically tuned for real-world CI/CD automation, heavy code review pipelines, and multi-turn agentic workflows. Features an expansive 1.1M token context with high throughput at half the cost of flagship Astra.",
+        "specs": [
+          {
+            "label": "Context Window",
+            "value": "1,100,000 Tokens (1.1M)"
+          },
+          {
+            "label": "Throughput",
+            "value": "110 Tokens/s (High Concurrency)"
+          },
+          {
+            "label": "LMSYS Arena",
+            "value": "1515 Elo"
+          },
+          {
+            "label": "Official API",
+            "value": "$2.00 In / $8.00 Out (50% Cost Cut)"
+          }
+        ]
+      },
+      {
+        "name": "Claude Haiku 5.5",
+        "icon": "⚡",
+        "meta": "2026.10.07 Release · Anthropic Fast Tier · Adjustable Effort",
+        "desc": "Anthropic's newly released high-throughput model introduced on October 7, 2026. Debuts the 'Adjustable Effort' runtime parameter, allowing developers to dynamically scale reasoning depth while maintaining sub-100ms TTFT and industry-leading pricing ($0.20/M input), ideal for multi-agent swarm routing.",
+        "specs": [
+          {
+            "label": "Context Window",
+            "value": "500,000 Tokens (500K)"
+          },
+          {
+            "label": "Mechanism",
+            "value": "Adjustable Effort Dynamic Compute"
+          },
+          {
+            "label": "Throughput",
+            "value": "220+ Tokens/s"
+          },
+          {
+            "label": "Official API",
+            "value": "$0.20 In / $0.80 Out (per 1M Tokens)"
+          }
+        ]
       }
     ],
     "timelineTag": "2026 MILESTONES",
@@ -626,12 +822,36 @@
         "date": "2026.09",
         "name": "GPT-6 Astra & Claude Fable 5.1",
         "desc": "Anthropic leads AA Intelligence Index while OpenAI establishes the new benchmark for autonomous reasoning",
-        "latest": true
+        "latest": false
       },
       {
         "date": "2026.09",
         "name": "Gemini 3.8 Flash & Qwen3.8-Max",
         "desc": "240 TPS multimodal speed engine and full-stack coding flagship launch concurrently",
+        "latest": false
+      },
+      {
+        "date": "2026.09.22",
+        "name": "Claude Opus 5.5 Sets SWE-bench 91.2% Record",
+        "desc": "Anthropic crowns the 5.5 generation, claiming #1 on LMSYS Arena (1524 Elo) and setting a new high-water mark for SWE agents",
+        "latest": false
+      },
+      {
+        "date": "2026.09.29",
+        "name": "GPT-6.1 Sol General Availability",
+        "desc": "OpenAI ships a 1.1M-context workhorse optimized for production codebases and lower inference cost",
+        "latest": false
+      },
+      {
+        "date": "2026.09.30",
+        "name": "Gemini 4 Argon Unveiled (Fairwind Program)",
+        "desc": "Google debuts next-gen flagship with 2M zero-hallucination context, reverse engineering, and cyber defense",
+        "latest": true
+      },
+      {
+        "date": "2026.10.07",
+        "name": "Claude Haiku 5.5 Debuts with Adjustable Effort",
+        "desc": "Anthropic shatters agent swarm concurrency cost barriers with dynamic compute effort scaling",
         "latest": true
       }
     ],

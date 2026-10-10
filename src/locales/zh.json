@@ -25,7 +25,7 @@
   "models": {
     "pageTag": "2026 FRONTIER LLM MATRIX",
     "pageTitle": "2026 前沿大模型全维评测与选型指南",
-    "pageDesc": "严格聚焦 2026 年度最新发布的顶尖大模型：全网首发覆盖国产领军模型 Kimi K3 (2.8T) 与 GLM-5.3，同步 DeepSeek-V4-Pro、Claude Fable 5.1、GPT-6 Astra 等全球前沿，深度融合 LMSYS、Artificial Analysis (AA) 与 SWE-bench Verified 2026 权威数据。",
+    "pageDesc": "严格聚焦 2026 年度最新发布的顶尖大模型：全面收录 Google 全新旗舰 Gemini 4 Argon 与 Gemini 3.8 系列、Anthropic 5.5 世代（Claude Opus 5.5 / Sonnet 5.5 / Haiku 5.5）、OpenAI GPT-6.1 Sol 与 GPT-6 Astra，同步国产领军模型 Kimi K3 (2.8T)、DeepSeek-V4.1-Flash 与 GLM-5.3，深度融合 LMSYS、Artificial Analysis (AA) 与 SWE-bench Verified 2026 权威数据。",
     "heroTag": "2026 MODEL DATABASE",
     "heroTitle": "2026 年度模型库",
     "heroDesc": "收录 2026 年最新发布的顶尖 AI 系统，包含国内领军（Kimi、智谱 GLM、DeepSeek、阿里通义）与国际旗舰（Anthropic、OpenAI、Google），提供客观权威的横向基准。",
@@ -243,6 +243,66 @@
           90
         ],
         "defaultActive": false
+      },
+      {
+        "label": "Gemini 4 Argon",
+        "provider": "Google",
+        "type": "2026.09.30 商业闭源 / 旗舰全模态与代码安全",
+        "color": "#38bdf8",
+        "data": [
+          98,
+          97,
+          98,
+          99,
+          100,
+          86
+        ],
+        "defaultActive": true
+      },
+      {
+        "label": "Claude Sonnet 5.5",
+        "provider": "Anthropic",
+        "type": "2026.09.28 商业闭源 / 生产级主力编程与长文",
+        "color": "#fb923c",
+        "data": [
+          97,
+          98,
+          98,
+          97,
+          98,
+          94
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "Claude Haiku 5.5",
+        "provider": "Anthropic",
+        "type": "2026.10.07 极速闭源 / 可调思考强度与超低延迟",
+        "color": "#f59e0b",
+        "data": [
+          92,
+          93,
+          94,
+          93,
+          96,
+          99
+        ],
+        "defaultActive": false
+      },
+      {
+        "label": "GPT-6.1 Sol",
+        "provider": "OpenAI",
+        "type": "2026.09.29 商业闭源 / 生产级全域工作流 (降本50%)",
+        "color": "#14b8a6",
+        "data": [
+          98,
+          98,
+          98,
+          97,
+          99,
+          91
+        ],
+        "defaultActive": false
       }
     ],
     "dimensionGuides": [
@@ -399,6 +459,46 @@
         "78.0%",
         "240 t/s (极速)",
         "$0.15 / $0.60"
+      ],
+      [
+        "Gemini 4 Argon",
+        "2026.09.30 Google",
+        "全新旗舰 / Fairwind 网安与代码防御 / 2M 极低幻觉",
+        "1521 (#2)",
+        "66.4 (#2)",
+        "89.5%",
+        "90 t/s",
+        "$3.00 / $12.00"
+      ],
+      [
+        "Claude Sonnet 5.5",
+        "2026.09.28 Anthropic",
+        "生产级编程与文档中坚 / 速度与质量黄金均衡",
+        "1516",
+        "65.6",
+        "89.0%",
+        "105 t/s",
+        "$3.00 / $15.00"
+      ],
+      [
+        "Claude Haiku 5.5",
+        "2026.10.07 Anthropic",
+        "可调思考强度 (Adjustable Effort) / 超高并发低延迟",
+        "1485",
+        "61.0",
+        "76.5%",
+        "220 t/s",
+        "$0.20 / $0.80"
+      ],
+      [
+        "GPT-6.1 Sol",
+        "2026.09.29 OpenAI",
+        "1.1M 超长窗口生产级编程主力 / 综合性价比升级",
+        "1515",
+        "65.4",
+        "88.5%",
+        "110 t/s",
+        "$2.00 / $8.00"
       ]
     ],
     "sceneTitle": "2026 典型工程场景模型选型矩阵",
@@ -585,6 +685,102 @@
             "value": "输入 $0.15 / 输出 $0.60 (每百万Token)"
           }
         ]
+      },
+      {
+        "name": "Gemini 4 Argon",
+        "icon": "🛡️",
+        "meta": "2026.09.30 发布 · Google 全新旗舰 · Fairwind 网安与代码防御先锋",
+        "desc": "Google 于 2026 年 9 月 30 日重磅推出的全新旗舰大模型，率先通过 Fairwind Program 面向全球网络安全与工业级系统研发者开放。在极长上下文（200 万 Token）下保持近乎零幻觉，拥有原生全五模态感知与深度逆向工程能力，在复杂代码库审计与自动化 Agent 任务中与 Claude Opus 5.5 并驾齐驱。",
+        "specs": [
+          {
+            "label": "上下文窗口",
+            "value": "2,000,000 Tokens (2M)"
+          },
+          {
+            "label": "核心技术",
+            "value": "MTP 稀疏路由 + Fairwind 强化防御"
+          },
+          {
+            "label": "LMSYS 盲测",
+            "value": "1521 Elo (全球前二)"
+          },
+          {
+            "label": "官方 API 价格",
+            "value": "输入 $3.00 / 输出 $12.00 (每百万Token)"
+          }
+        ]
+      },
+      {
+        "name": "Claude Opus 5.5",
+        "icon": "👑",
+        "meta": "2026.09.22 发布 · Anthropic 旗舰 · SWE-bench 91.2% 全球登顶",
+        "desc": "Anthropic 5.5 世代的最强王座模型。在权威 SWE-bench Verified 工业级软件工程评测中创下 91.2% 的世界最高纪录，并以 1524 Elo 登顶 LMSYS 盲测竞技场。推理与反思链条全面精简，相比 Opus 5 带来 40% 的成本下降与更快的生成速率，是目前全球顶级复杂的端到端软件系统重构的首选大脑。",
+        "specs": [
+          {
+            "label": "上下文窗口",
+            "value": "1,000,000 Tokens (1M)"
+          },
+          {
+            "label": "SWE-bench Verified",
+            "value": "91.2% (历史最高)"
+          },
+          {
+            "label": "LMSYS 盲测",
+            "value": "1524 Elo (全球第一)"
+          },
+          {
+            "label": "官方 API 价格",
+            "value": "输入 $9.00 / 输出 $36.00 (较上代降本40%)"
+          }
+        ]
+      },
+      {
+        "name": "GPT-6.1 Sol",
+        "icon": "☀️",
+        "meta": "2026.09.29 发布 · OpenAI 生产级主力 · 1.1M 窗口工程重器",
+        "desc": "OpenAI 在 GPT-6 架构成熟后推出的生产级杀手锏。相比 Astra 极端消耗算力的科研推理模式，GPT-6.1 Sol 针对真实开发流（大型代码审查、CI/CD 自动化、多轮长程交互）进行了专项工程优化。支持原生 110 万超长窗口与低延迟流式响应，单价较旗舰 Astra 降低超过 50%。",
+        "specs": [
+          {
+            "label": "上下文窗口",
+            "value": "1,100,000 Tokens (1.1M)"
+          },
+          {
+            "label": "生成吞吐",
+            "value": "110 Tokens/s (高并发优化)"
+          },
+          {
+            "label": "LMSYS 盲测",
+            "value": "1515 Elo"
+          },
+          {
+            "label": "官方 API 价格",
+            "value": "输入 $2.00 / 输出 $8.00 (较Astra降本50%)"
+          }
+        ]
+      },
+      {
+        "name": "Claude Haiku 5.5",
+        "icon": "⚡",
+        "meta": "2026.10.07 发布 · Anthropic 极速先锋 · 可调思考强度",
+        "desc": "Anthropic 于 10 月 7 日最新推向市场的轻量极速模型。首创在 Haiku 级别引入可调节思考强度 (Adjustable Effort)，在保留超低延迟 (220+ t/s) 与超低成本（输入仅 $0.20/M）的同时，让开发者能够随需动态提升推理深度，完美契合多智能体协同流水线中的高频分发与数据过滤任务。",
+        "specs": [
+          {
+            "label": "上下文窗口",
+            "value": "500,000 Tokens (500K)"
+          },
+          {
+            "label": "核心机制",
+            "value": "Adjustable Effort 动态计算"
+          },
+          {
+            "label": "生成速度",
+            "value": "220+ Tokens/s"
+          },
+          {
+            "label": "官方 API 价格",
+            "value": "输入 $0.20 / 输出 $0.80 (每百万Token)"
+          }
+        ]
       }
     ],
     "timelineTag": "2026 MILESTONES",
@@ -626,12 +822,36 @@
         "date": "2026.09",
         "name": "GPT-6 Astra 与 Claude Fable 5.1 双星登顶",
         "desc": "Anthropic 斩获 AA 智能榜首 (66 分)，OpenAI 开启全自主长链推理新时代",
-        "latest": true
+        "latest": false
       },
       {
         "date": "2026.09",
         "name": "Gemini 3.8 Flash & Qwen3.8-Max 同步发布",
         "desc": "240 TPS 极速多模态与阿里通义全栈编程旗舰同日上线",
+        "latest": false
+      },
+      {
+        "date": "2026.09.22",
+        "name": "Claude Opus 5.5 刷新 SWE-bench 91.2%",
+        "desc": "Anthropic 发布 5.5 旗舰王座，登顶 LMSYS Elo 1524，树立软件工程 Agent 新巅峰",
+        "latest": false
+      },
+      {
+        "date": "2026.09.29",
+        "name": "GPT-6.1 Sol 生产级发布",
+        "desc": "OpenAI 推出 1.1M 窗口工程重器，针对高并发与生产代码库专项优化",
+        "latest": false
+      },
+      {
+        "date": "2026.09.30",
+        "name": "Gemini 4 Argon 发布 (Fairwind Program)",
+        "desc": "Google 揭晓下一代旗舰，主打 2M 极低幻觉、代码逆向工程与网络安全防御",
+        "latest": true
+      },
+      {
+        "date": "2026.10.07",
+        "name": "Claude Haiku 5.5 极速登场",
+        "desc": "首创可调思考强度 (Adjustable Effort)，以超低单价打破高并发多智能体成本墙",
         "latest": true
       }
     ],

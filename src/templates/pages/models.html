@@ -434,7 +434,7 @@
     const presetTop = document.getElementById('presetTop');
     if (presetTop) {
       presetTop.addEventListener('click', () => {
-        setVisibility(ds => ['Claude Opus 5.5', 'Claude Fable 5.1', 'GPT-6 Astra', 'GPT-6 Sol', 'Grok 4.7', 'Kimi K3'].includes(ds.label));
+        setVisibility(ds => ['Claude Opus 5.5', 'Gemini 4 Argon', 'GPT-6 Astra', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'Kimi K3'].includes(ds.label));
       });
     }
 
@@ -455,7 +455,7 @@
     const presetSpeed = document.getElementById('presetSpeed');
     if (presetSpeed) {
       presetSpeed.addEventListener('click', () => {
-        setVisibility(ds => ['DeepSeek-V4.1-Flash', 'Gemini 3.8 Flash', 'GLM-5.3'].includes(ds.label));
+        setVisibility(ds => ['Claude Haiku 5.5', 'Gemini 3.8 Flash', 'DeepSeek-V4.1-Flash', 'GLM-5.3'].includes(ds.label));
       });
     }
 
