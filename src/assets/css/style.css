@@ -4086,7 +4086,8 @@ mark {
   margin-top: 2rem;
 }
 
-.toc-container h4 {
+.toc-container h4,
+.toc-container .toc-title {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text);

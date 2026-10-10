@@ -546,18 +546,25 @@ function writeArticles(list, isEn) {
       .map(t => `  <meta property="article:tag" content="${escapeHtml(t)}">`)
       .join('\n');
 
+    const escapedTitle = escapeHtml(article.title);
+    const escapedDescription = escapeHtml(article.description);
+    const escapedKeywords = escapeHtml(article.keywords);
+    const escapedTag = escapeHtml(article.tag);
+
     const html = applyTemplate(template, {
-      title: article.title,
+      title: escapedTitle,
+      rawTitle: article.title,
       jsonTitle: JSON.stringify(article.title),
       slug: article.slug,
-      description: article.description,
+      description: escapedDescription,
+      rawDescription: article.description,
       jsonDescription: JSON.stringify(article.description),
       date: article.isoDate,
       isoDate: article.isoDate,
       dateFormatted: article.dateFormatted,
-      tag: article.tag,
+      tag: escapedTag,
       tagClass: article.tagClass || '',
-      keywords: article.keywords,
+      keywords: escapedKeywords,
       image: article.imageUrl,
       ogImage: article.ogImageUrl,
       wordCountNumber: article.wordCountNumber,
@@ -607,7 +614,7 @@ function buildTocHtml(tocItems, isEn) {
     .map(item => `  <li class="toc-level-${item.depth}"><a href="#${item.id}">${item.text}</a></li>`)
     .join('\n');
 
-  return `<nav class="toc-container" aria-label="Table of Contents"><h4>${tocTitle}</h4><ul class="article-toc-list">\n${itemsHtml}\n</ul></nav>`;
+  return `<nav class="toc-container" aria-label="Table of Contents"><div class="toc-title">${tocTitle}</div><ul class="article-toc-list">\n${itemsHtml}\n</ul></nav>`;
 }
 
 function buildPrevNextHtml(list, index, isEn) {
@@ -772,7 +779,7 @@ function buildSeriesCardTop(article, allArticlesInLang, isEn) {
           ${nextLink}
         </div>
       </div>
-      <h3 class="series-title">${title}</h3>
+      <div class="series-title">${title}</div>
       <p class="series-desc">${desc}</p>
       <details class="series-toc-accordion">
         <summary class="series-toc-trigger">
@@ -817,7 +824,7 @@ function buildSeriesCardBottom(article, allArticlesInLang, isEn) {
         <div class="series-next-hint">${isEn ? 'NEXT IN SERIES' : '下一篇预告'} · ${isEn ? `Part ${currentPartNum + 1}` : `第 ${currentPartNum + 1} 篇`}</div>
         <a href="${prefix}${nextArticle.slug}/" class="series-next-link">
           <div class="series-next-info">
-            <h4 class="series-next-title">${escapeHtml(nextArticle.title)}</h4>
+            <div class="series-next-title">${escapeHtml(nextArticle.title)}</div>
             <p class="series-next-desc">${escapeHtml(nextArticle.description)}</p>
           </div>
           <div class="series-next-action">
@@ -926,7 +933,7 @@ function generateListingPage(articlesList, isEn = false) {
 
   const lang = isEn ? 'en' : 'zh-CN';
   const siteName = isEn ? enLocales.meta.siteName : zhLocales.meta.siteName;
-  const pageTitle = isEn ? `All Articles — ${siteName}` : `全部文章 — ${siteName}`;
+  const pageTitle = isEn ? `All Articles & Architecture Deep Dives — ${siteName}` : `全部文章与系统架构专栏 — ${siteName}`;
   const pageDesc = isEn ? 'All AI technology articles and deep dives.' : `${siteName}全部技术文章列表。涵盖提示工程、AI Agent、RAG、模型微调、多模态等前沿 AI 主题。`;
   const canonicalUrl = isEn ? `${SITE_URL}/en/articles/` : `${SITE_URL}/articles/`;
   const heroTag = 'ALL ARTICLES';
@@ -1081,8 +1088,8 @@ ${articlesList.map((a, idx) => `        {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "${escapeHtml(siteName)}", "item": "${SITE_URL}${isEn ? '/en/' : '/'}" },
-      { "@type": "ListItem", "position": 2, "name": "${heroTitle}", "item": "${canonicalUrl}" }
+      { "@type": "ListItem", "position": 1, "name": ${JSON.stringify(siteName)}, "item": "${SITE_URL}${isEn ? '/en/' : '/'}" },
+      { "@type": "ListItem", "position": 2, "name": ${JSON.stringify(heroTitle)}, "item": "${canonicalUrl}" }
     ]
   }
   </script>

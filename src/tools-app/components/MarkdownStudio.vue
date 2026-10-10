@@ -169,7 +169,7 @@ marked.setOptions({
 
 const PRESETS = {
   zh: {
-    article: `# 《生产级 AI Agent 架构设计与工程实战》
+    article: `## 《生产级 AI Agent 架构设计与工程实战》
 
 > **摘要**：探讨 2026 年企业级 AI Agent 在状态机调度、工具协议（MCP）及长期记忆系统上的架构选型与高并发演进。
 
@@ -297,7 +297,7 @@ $$\\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{Q K^T}{\\sqrt{d_k}}\
 
 $$\\text{Memory}_{\\text{KV}} = 2 \\times b \\times s \\times l \\times h_{\\text{kv}} \\times d_h \\times \\text{precision}$$
 `,
-    wechat: `# 为什么 2026 年自主智能体（Agent）彻底取代了传统工作流？
+    wechat: `## 为什么 2026 年自主智能体（Agent）彻底取代了传统工作流？
 
 过去几年，很多开发者尝试用硬编码的 DAG 工作流来串联 LLM，然而在复杂多变的实际业务中，这种死板的流程频频崩溃。
 
@@ -311,7 +311,7 @@ $$\\text{Memory}_{\\text{KV}} = 2 \\times b \\times s \\times l \\times h_{\\tex
 `
   },
   en: {
-    article: `# Architecture Design of Production-Grade AI Agents
+    article: `## Architecture Design of Production-Grade AI Agents
 
 > **Abstract**: A comprehensive architectural review of 2026 enterprise-grade autonomous agents, focusing on state machines, MCP protocols, and multi-tier memory hierarchies.
 

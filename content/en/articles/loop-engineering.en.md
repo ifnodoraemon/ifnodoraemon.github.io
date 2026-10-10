@@ -8,8 +8,6 @@ category: AI Agent
 description: A deep dive into the evolution of AI Agent architectures, exploring the 4-layer control plane extrapolation from Prompt, Context, Harness to Loop Engineering, and the 4 diseases of the ReAct architecture.
 ---
 
-# Deep Dive into AI Agent Architecture Evolution: From Prompt to Loop Engineering
-
 In today's AI Agent development circle, you must have been bombarded by a sea of jargon: ReAct, Plan-and-Execute, RAG, MCP, Doom-loop, Maker-checker, LangGraph, State Machines... 
 These concepts are often scattered, leading us to blindly tweak Prompts based on intuition when encountering "poor AI performance".
 

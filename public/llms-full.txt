@@ -693,7 +693,7 @@
     A: 纯内存状态机在面对网络波动、Pod 重启或大模型 API 速率限制时缺乏持久化韧性，极易导致正在进行的长流程任务状态丢失或重复扣费。基于事件驱动的外部工作流引擎提供持久化定时器、确定性重试队列与状态序列化机制，能够天然保障分布式任务的幂等性与 Exactly-Once 执行。...
 
 ### [深度解析 AI Agent 架构演进：从 Prompt 到 Loop 工程](https://blog.llmgo.top/articles/loop-engineering/)
-- 发布日期: 2026-06-28 | 标签: 循环工程 | 预计阅读: 预计阅读 10 分钟 | 字数: 约 2253 字
+- 发布日期: 2026-06-28 | 标签: 循环工程 | 预计阅读: 预计阅读 9 分钟 | 字数: 约 2233 字
 - 概述: 深度解析 AI Agent 架构演进，探讨从 Prompt、Context、Harness 到 Loop 工程的四层控制面外推，以及 ReAct 架构的四大顽疾。
 - 核心 FAQ 解答:
   * Q: Q1: Loop工程中的终止条件通常如何设计？
@@ -1418,7 +1418,7 @@
     A: In-memory state graphs fail during pod restarts, worker preemptions, or third-party API rate limits, risking lost execution state or catastrophic duplicate actions. Durable event-driven orchestrators persist state after each step, providing replayability, deterministic timeouts, and idempotency guar...
 
 ### [Deep Dive into AI Agent Architecture Evolution: From Prompt to Loop Engineering](https://blog.llmgo.top/en/articles/loop-engineering/)
-- Date: 2026-06-28 | Tag: Loop Engineering | Read: 6 min read | Words: 1387 words
+- Date: 2026-06-28 | Tag: Loop Engineering | Read: 6 min read | Words: 1375 words
 - Summary: A deep dive into the evolution of AI Agent architectures, exploring the 4-layer control plane extrapolation from Prompt, Context, Harness to Loop Engineering, and the 4 diseases of the ReAct architecture.
 - Key FAQ Insights:
   * Q: Q1: How should termination conditions be designed in Loop Engineering?

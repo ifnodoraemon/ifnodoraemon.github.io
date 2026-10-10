@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Sat, 10 Oct 2026 02:15:13 GMT</pubDate>
+  <pubDate>Sat, 10 Oct 2026 02:30:48 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战</title>

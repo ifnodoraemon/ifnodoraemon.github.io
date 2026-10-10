@@ -8,8 +8,6 @@ category: AI Agent
 description: 深度解析 AI Agent 架构演进，探讨从 Prompt、Context、Harness 到 Loop 工程的四层控制面外推，以及 ReAct 架构的四大顽疾。
 ---
 
-# 深度解析 AI Agent 架构演进：从 Prompt 到 Loop 工程
-
 在当今的 AI Agent 开发圈，你一定被海量的名词轰炸过：ReAct、Plan-and-Execute、RAG、MCP、Doom-loop、Maker-checker、LangGraph、状态图…… 
 这些概念往往是散乱的，导致我们在遇到“AI 表现不好”时，只能凭直觉去盲目修改 Prompt。
 

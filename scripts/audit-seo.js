@@ -187,11 +187,14 @@ for (const url of locMatches) {
     warnings++;
   }
 
-  // 10. H1 tag check
+  // 10. H1 tag check (Strictly single H1 per page)
   const h1Matches = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/gi)];
   if (h1Matches.length === 0) {
-    console.warn(`⚠️  [Missing H1] No <h1> tag found in ${url}`);
-    warnings++;
+    console.error(`❌ [Missing H1] No <h1> tag found in ${url}`);
+    errors++;
+  } else if (h1Matches.length > 1) {
+    console.error(`❌ [Multiple H1] Page has ${h1Matches.length} <h1> tags in ${url}`);
+    errors++;
   }
 
   passedChecks++;
