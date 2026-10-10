@@ -95,6 +95,9 @@ flowchart TD
 ---
 
 ## 2. Deriving the Roofline Model for Modern Accelerators
+> [!TIP]
+> **Interactive Calculator**: To estimate memory footprints and bandwidth saturation across model scales (7B, 70B, 671B), precision formats (FP16, FP8, INT4), and target batch concurrency, explore our interactive [LLM VRAM & Throughput Calculator](/en/tools/).
+
 
 In computer architecture, the **Roofline Model** defines the theoretical performance envelope of an algorithm on a specific hardware platform:
 

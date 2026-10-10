@@ -727,11 +727,20 @@ function initArticlesListing() {
       let score = 0;
       const titleLower = item.title.toLowerCase();
       const descLower = item.description.toLowerCase();
-      const tagLower = item.tag.toLowerCase();
+      const tagLower = (item.tag || '').toLowerCase();
+      const categoryLower = (item.category || '').toLowerCase();
+      const seriesLower = (item.series || '').toLowerCase();
+      const tagsList = Array.isArray(item.tags) ? item.tags.map(t => String(t).toLowerCase()) : [tagLower];
 
       terms.forEach(term => {
-        if (titleLower.includes(term)) score += 10;
-        if (tagLower.includes(term)) score += 5;
+        if (titleLower === term) score += 20;
+        else if (titleLower.includes(term)) score += 12;
+
+        if (seriesLower.includes(term)) score += 8;
+        if (tagsList.some(t => t === term)) score += 8;
+        else if (tagsList.some(t => t.includes(term))) score += 5;
+
+        if (categoryLower.includes(term)) score += 4;
         if (descLower.includes(term)) score += 2;
       });
 
@@ -739,7 +748,7 @@ function initArticlesListing() {
     })
     .filter(res => res.score > 0)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 5);
+    .slice(0, 6);
 
     renderSearchResults(results, query);
   }
@@ -762,9 +771,14 @@ function initArticlesListing() {
         a.setAttribute('role', 'option');
         a.setAttribute('aria-selected', 'false');
 
+        const seriesBadgeHtml = item.seriesBadge
+          ? `<span class="tag tag-series" style="font-size: 0.7rem; padding: 0.1rem 0.4rem;">📚 ${item.seriesBadge}</span>`
+          : '';
+
         a.innerHTML = `
           <div class="search-result-meta">
             <span class="tag">${item.tag}</span>
+            ${seriesBadgeHtml}
             <time>${item.date}</time>
           </div>
           <div class="search-result-title">${highlightSearchMatches(item.title, query)}</div>

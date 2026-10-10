@@ -102,6 +102,9 @@ graph TD
 ---
 
 ## 二、 DeepSeek MLA：低秩潜变量投影与显存极简主义
+> [!TIP]
+> **Attention 架构显存开销测算**：想直观对比 MHA、GQA 与 DeepSeek MLA 在不同并发（如 128、512 并发）及长上下文下的 KV Cache 膨胀倍率？可使用站内交互工具：[大模型显存占用估算器](/tools/) 进行多维度对比。
+
 
 2024 年，深度求索（DeepSeek）团队在 DeepSeek-V2 论文中提出了名震业界的 **MLA（Multi-Head Latent Attention）**，并在 DeepSeek-V3 与 DeepSeek-R1 中进一步奠定了其统治地位。
 

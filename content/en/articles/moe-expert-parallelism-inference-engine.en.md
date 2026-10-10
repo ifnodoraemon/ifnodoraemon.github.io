@@ -121,6 +121,9 @@ MoE Per-Expert Arithmetic Intensity:
 ---
 
 ## 2. Dynamic Routing Gating and Load Balancing
+> [!TIP]
+> **MoE Cluster Planning**: For 671B-scale MoE architectures (37B active), explore our interactive [LLM VRAM & Throughput Calculator](/en/tools/) to project multi-GPU weight sharding (EP/TP) and KV cache headroom in FP8.
+
 
 ### 2.1 Classic Softmax Gating & The Routing Collapse Problem
 

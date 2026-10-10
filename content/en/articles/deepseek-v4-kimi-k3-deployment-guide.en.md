@@ -85,6 +85,9 @@ server {
 ---
 
 ## 4. Enterprise ROI Assessment
+> [!TIP]
+> **On-Premise vs API Cost Calculator**: To calculate the break-even point between dedicated GPU serving clusters and public API calls based on your peak QPS and monthly token volume, check out our [Token Pricing & Throughput Estimator](/en/tools/).
+
 
 For an enterprise processing 5 Billion tokens monthly:
 * **Proprietary API Costs**: Exceeds **$33,000 / month (~$400K annually)**;

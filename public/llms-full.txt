@@ -486,7 +486,7 @@
     A: 在配备 M 系列芯片的苹果设备（如 Mac Studio / MacBook Pro）上，CPU 与 GPU 共享同一组高带宽物理 LPDDR 内存条（统一内存架构，带宽可达 400~800 GB/s）。 在传统 PC 或数据中心服务器中，模型必须从宿主机内存（Host RAM）经过漫长的 PCIe 总线拷贝到独立的显存（GPU HBM）中才能计算。而在统一内存架构下，llama.cpp 借助操作系统的 mmap() 系统调用，直接让 GPU 核心就地读取内存中的模型权重，完全省去了漫长的加载显存搬运过程，且能直接加载超过单卡独立显存上限（如 128GB 内存跑 70B 模型）的庞大参数。但在...
 
 ### [从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的物理撕裂](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/)
-- 发布日期: 2026-09-24 | 标签: 算力建模 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5102 字
+- 发布日期: 2026-09-24 | 标签: 算力建模 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5177 字
 - 概述: 为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。
 - 核心 FAQ 解答:
   * Q: Q1: 既然 Decode 阶段是显存带宽受限，为什么不无限增大 Batch Size 把算力跑满？
@@ -497,7 +497,7 @@
     A: FlashAttention 的核心收益在于通过 Tiling 分块将 $O(N^2)$ 的 Attention 中间结果留在 SRAM（片上高速缓存）中，避免向 HBM 频繁换入换出。  在 Prefill 阶段，序列长度 $N$ 很大，$N \times N$ 的 Attention Map 非常巨大，FlashAttention 能砍掉数十倍的 HBM 显存读写，收益极其恐怖；  在 Decode 阶段，Query 长度仅仅为 ${1}$，计算实质上是 ${1} \times N$ 的向量矩阵乘法（GEMV），根本不存在庞大的 $N \times N$ 矩阵。Decode 阶段的核心开销...
 
 ### [模型架构反哺推理系统：从 MHA/GQA 到 DeepSeek MLA 矩阵吸收与显存极简主义](https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/)
-- 发布日期: 2026-09-24 | 标签: 注意力架构 | 预计阅读: 预计阅读 22 分钟 | 字数: 约 5274 字
+- 发布日期: 2026-09-24 | 标签: 注意力架构 | 预计阅读: 预计阅读 22 分钟 | 字数: 约 5349 字
 - 概述: 为什么无论工程系统如何优化，长上下文推理依然会被海量 KV Cache 逼入绝境？深度解构从传统 MHA 到 GQA 分组折中，再到 DeepSeek 开创性 MLA（多头潜变量注意力）的技术演进。全面剖析低秩潜变量投影、解耦 RoPE 旋转位置编码，以及推理引擎在自回归 Decode 阶段借助矩阵吸收（Matrix Absorption）将 90% 以上多头张量物理凭空抹除的底层数学机理与 FlashMLA 工程落地。
 - 核心 FAQ 解答:
   * Q: Q1: 既然 MLA 效果如此惊艳且能节省 90%+ 显存，为什么在所有开源模型（如 LLaMA-3、Mistral）中没有全面普及？训练 MLA 的代价是什么？
@@ -508,7 +508,7 @@
     A: 尽管 MLA 将每个 Token 的 KV 缓存压缩到了区区 1.15 KB，但随着并发连接数（Concurrency）拉大到几百甚至上千路，系统面临着两个新的物理下限： 1. 静态模型权重的物理常驻：    以 DeepSeek-V3（671B MoE，激活参数 37B）为例，即使采用极限的 FP8 量化，整套静态模型权重的体积依然高达 ~350 GB，必须常年死死驻留在显存中，占据了近一半的集群物理卡容量； 2. 超长长尾（Tail Sequences）并发的算力累积：    当几百个并发请求同时涌入，且每个请求都在执行复杂的思维链推理（DeepSeek-R1 式的长 CoT，动辄输出数千...
 
 ### [稀疏大模型 MoE 推理内核：专家并行 (EP)、动态路由门控与 All-to-All 通信重叠](https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/)
-- 发布日期: 2026-09-24 | 标签: 稀疏计算 | 预计阅读: 预计阅读 28 分钟 | 字数: 约 6755 字
+- 发布日期: 2026-09-24 | 标签: 稀疏计算 | 预计阅读: 预计阅读 28 分钟 | 字数: 约 6824 字
 - 概述: 为什么 671B 参数的 DeepSeek-V3 每次解码仅激活 37B 参数，吞吐却常受制于跨节点网络？深度剖析稀疏大模型 MoE 推理内核：从动态门控与无辅助损失负载均衡，到专家并行 (EP) All-to-Allv 通信瓶颈，再到 CUTLASS Grouped GEMM 算子融合与 DualPipe 通信计算重叠终极优化。
 - 核心 FAQ 解答:
   * Q: Q1: 在 MoE 自回归解码 (Decode) 时，如果某张卡上的专家分配到的 Token 数为 0，这会导致报错或等待死锁吗？
@@ -519,7 +519,7 @@
     A: 必须依据物理网络的互联拓扑（Topology-Aware Hierarchy）来严格决定： - 黄金原则：将通信频次极高的张量并行（TP）锁死在单机内部的 NVLink 高速总线域内（通常单机 8 卡，带宽高达 900GB/s）；将专家并行（EP）放在跨节点的网络拓扑上（InfiniBand / RoCE）。 - 如果你有 4 台 8 卡机器（共 32 卡）：   - 若选择 TP=4 + EP=8：每台机器切分为 2 个独立的 TP=4 组（走片内 NVLink），跨越 8 个节点走 EP。通信量更加分散，是目前多数长序列高并发集群的主流配置；   - 若选择 TP=8 + EP=4：每台机...
 
 ### [显存虚拟化革命：PagedAttention 内存池管理与显存碎片终结](https://blog.llmgo.top/articles/pagedattention-memory-virtualization/)
-- 发布日期: 2026-09-24 | 标签: 显存虚拟化 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4931 字
+- 发布日期: 2026-09-24 | 标签: 显存虚拟化 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5003 字
 - 概述: 为什么传统大模型推理会浪费 60%~80% 的 GPU 显存？深度剖析 vLLM 开创的 PagedAttention 核心机制，解构逻辑块到物理块映射、动态显存池生命周期、Copy-on-Write 分叉复用与 CUDA 非连续访存内核，彻底终结显存碎片化顽疾。
 - 核心 FAQ 解答:
   * Q: Q1: 块大小（Block Size）设为 16 还是 32 更好？为什么各大引擎不推荐设为 1 或 128？
@@ -530,7 +530,7 @@
     A: 完全没有冲突，两者是底层显存管理与上层算子维度的完美互补：  [Kimi KDA 与 DeepSeek MLA](/articles/kimi-kda-deepseek-mla-architecture/) 是在算法数学层面，将原本庞大的 KV 向量投影压缩成极小的潜在向量（Latent Vector），从而在源头上将每个 Token 所需的显存字节数砍掉数倍；  PagedAttention 是在系统存储层面，负责为这些被压缩后的向量提供无碎片的虚拟分页管理。两者的结合使得 2026 年单台 8 卡服务器并发支撑数十万乃至百万长文本交互成为工程现实。...
 
 ### [P/D 分离 (Prefill-Decode Disaggregation) 架构：计算与访存解耦、RDMA 分布式 KV Cache 传输与集群池化调度](https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/)
-- 发布日期: 2026-09-24 | 标签: 推理架构 | 预计阅读: 预计阅读 26 分钟 | 字数: 约 6323 字
+- 发布日期: 2026-09-24 | 标签: 推理架构 | 预计阅读: 预计阅读 26 分钟 | 字数: 约 6393 字
 - 概述: 为什么在 128k 超长上下文与长思考链时代，单机混合部署 Prefill 与 Decode 必然走向性能崩溃？深度剖析 P/D 分离 (Disaggregated Serving) 架构：从计算密集与访存密集的空间物理隔离、GQA 与 DeepSeek MLA 跨节点传输带宽推导，到 GPUDirect RDMA 单边零拷贝、全局 KV 池化调度与 P:D 节点最优比例数学建模。
 - 核心 FAQ 解答:
   * Q: Q1: P/D 分离相比单机混合部署，一定会带来更高的整体吞吐（Throughput）吗？
@@ -607,7 +607,7 @@
     A: 完全支持。SGLang 原生支持 FP8、AWQ、GPTQ 以及基于 Marlin 算子加速的各种量化格式（详细量化对比请参阅 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 与 [量化精度无损选型手册](/articles/quantization-precision-guide/)），并且在最新版本中集成了对 EAGLE 动态树投机采样的原生加速支持。...
 
 ### [投机采样 (Speculative Decoding) 生产实操：从 Draft Model 到 EAGLE-3 动态推测树实现 3x~5x 无损加速](https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/)
-- 发布日期: 2026-09-18 | 标签: 投机采样 | 预计阅读: 预计阅读 14 分钟 | 字数: 约 3305 字
+- 发布日期: 2026-09-18 | 标签: 投机采样 | 预计阅读: 预计阅读 14 分钟 | 字数: 约 3373 字
 - 概述: 大模型解码阶段的核心物理瓶颈是什么？全面解密投机采样（Speculative Decoding）的数学无损证明、拒绝采样检验机制，深入剖析从双模型投机、Medusa 到清华开源爆款 EAGLE-2/3 动态自适应推测树的架构演进，并提供在 vLLM 与 SGLang 中开启生产级 3x~5x 加速的实操配置。
 - 核心 FAQ 解答:
   * Q: Q1: 投机采样是否需要重新训练原始大模型？
@@ -629,7 +629,7 @@
     A: DPO 属于离线监督式偏好学习（Offline），依赖预先收集固定的正负样本对 $(y_w, y_l)$，模型无法在探索过程中发现超出静态数据集以外的全新推理路径；而 GRPO 属于在线强化学习（Online Exploration），每一轮更新都由模型实时生成候选采样并由规则环境即时打分，因而能够探索并演化出自发反思与自我纠错的新策略。...
 
 ### [2026 血泪踩坑实录：在物理机群跑通 DeepSeek-V4 与 Kimi K3 的硬核部署指南](https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/)
-- 发布日期: 2026-09-07 | 标签: 集群部署 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1905 字
+- 发布日期: 2026-09-07 | 标签: 集群部署 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1985 字
 - 概述: 这不是一篇官方文档的搬运，而是我们烧了上百万 GPU 租金换来的排障血泪史。实战拆解如何在 4 节点（32 卡）H100 裸金属集群上，通过 vLLM 0.29.0 的混合并行（TP8+PP2+EP2）与 Triton 算子优化，成功压榨 1.6T 级 MoE 模型的每一滴极限吞吐量。
 - 核心 FAQ 解答:
   * Q: Q1: 部署 DeepSeek-V4-Pro 时频繁遇到跨节点通信死锁或 All-to-All 挂起，该如何排查？
@@ -766,7 +766,7 @@
     A: 短期内全盘替代的可能性极低，但混合架构（Hybrid Attention-SSM）已在长文本与端侧领域形成实质性突破。Transformer 凭借强大的 KV Cache 生态与成熟的底层算子库占据坚固的工业生态位，而新架构主要解决超长序列的 $O(1)$ 推理显存瓶颈；关注前沿落地表现可参考 [2026 年主流大模型横评](/articles/model-comparison-2026/) 中的实际工程选型建议。 ---...
 
 ### [vLLM 在线推理服务实战：从架构原理到 Token 计费，一文搞定生产部署](https://blog.llmgo.top/articles/vllm-serving-guide/)
-- 发布日期: 2026-04-14 | 标签: 服务部署 | 预计阅读: 预计阅读 41 分钟 | 字数: 约 10146 字
+- 发布日期: 2026-04-14 | 标签: 服务部署 | 预计阅读: 预计阅读 41 分钟 | 字数: 约 10221 字
 - 概述: 深入浅出解析 vLLM 核心架构（PagedAttention、连续批处理、APC 前缀缓存、推测解码），面向在线推理服务场景，手把手教你搭建 OpenAI 兼容 API、调优性能参数、搭建 Token 计费体系。附完整 Docker 部署方案与 Prometheus 监控配置。
 - 核心 FAQ 解答:
   * Q: Q1: vLLM 启动时报错 CUDA out of memory (OOM) 怎么排查？
@@ -1211,7 +1211,7 @@
     A: On Apple Silicon devices (e.g., Mac Studio with M-series chips), the CPU and GPU share a unified pool of high-bandwidth LPDDR memory (achieving 400~800 GB/s bandwidth). In standard PC or data center servers, model weights must be copied from host system RAM across the PCIe bus into discrete GPU HBM ...
 
 ### [From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence](https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/)
-- Date: 2026-09-24 | Tag: Roofline Modeling | Read: 11 min read | Words: 2665 words
+- Date: 2026-09-24 | Tag: Roofline Modeling | Read: 11 min read | Words: 2700 words
 - Summary: Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode.
 - Key FAQ Insights:
   * Q: Q1: If decode is memory-bandwidth bound, why not increase batch size indefinitely to saturate the compute units?
@@ -1222,7 +1222,7 @@
     A: FlashAttention's primary innovation is tiling the attention computation to keep intermediate activations ($S, P$) in fast on-chip SRAM, avoiding $O(N^2)$ reads and writes to slow HBM.  In Prefill, sequence length $N$ is large, resulting in massive $N \times N$ attention matrices. Eliminating quadrat...
 
 ### [Model Architecture Driving Inference Systems: From MHA/GQA to DeepSeek MLA Matrix Absorption and Memory Minimalism](https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/)
-- Date: 2026-09-24 | Tag: Attention Architecture | Read: 11 min read | Words: 2540 words
+- Date: 2026-09-24 | Tag: Attention Architecture | Read: 11 min read | Words: 2573 words
 - Summary: Why does long-context inference hit an insurmountable wall despite aggressive software kernel and scheduling optimizations? A deep architectural exploration from classical MHA to GQA grouping compromises, culminating in DeepSeek's revolutionary Multi-Head Latent Attention (MLA). We mathematically deconstruct low-rank latent projections, Decoupled RoPE, and the Matrix Absorption trick that allows serving engines to erase over 90% of multi-head Key-Value tensors from physical HBM during decode.
 - Key FAQ Insights:
   * Q: Q1: Given that MLA reduces KV cache size by over 90% while maintaining accuracy, why hasn't it been universally adopted in models like LLaMA-3 or Mistral? What are the training costs?
@@ -1233,7 +1233,7 @@
     A: While MLA dramatically compresses dynamic KV cache memory, large-scale serving clusters face additional physical baselines: 1. Static Parameter Footprint:    In frontier models like DeepSeek-V3 (671B MoE with 37B active parameters), model weights occupy approximately 350 GB even in FP8 quantization,...
 
 ### [MoE Inference Internals: Expert Parallelism (EP), Dynamic Routing Gating, and All-to-All Overlapping](https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/)
-- Date: 2026-09-24 | Tag: MoE & Sparsity | Read: 14 min read | Words: 3295 words
+- Date: 2026-09-24 | Tag: MoE & Sparsity | Read: 14 min read | Words: 3327 words
 - Summary: Why does the 671B DeepSeek-V3 activate only 37B parameters per token yet hit severe network latency walls during decode? A comprehensive deep dive into MoE inference internals: dynamic routing gating, auxiliary-loss-free balancing, Expert Parallelism (EP) All-to-Allv communication patterns, CUTLASS Grouped GEMM kernels, and DualPipe computation-communication overlapping.
 - Key FAQ Insights:
   * Q: Q1: During MoE decode, what happens if an expert on a GPU receives zero tokens? Does it cause crashes or pipeline deadlocks?
@@ -1244,7 +1244,7 @@
     A: Topology-aware placement dictates this choice: - Golden Rule: Confine high-frequency, latency-sensitive Tensor Parallelism (TP) strictly within single-node NVLink domains (900 GB/s bandwidth); assign Expert Parallelism (EP) to inter-node network fabrics (InfiniBand / RoCE). - Across 4 nodes with 8 G...
 
 ### [Memory Virtualization in Inference Engines: PagedAttention and the Elimination of Memory Fragmentation](https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/)
-- Date: 2026-09-24 | Tag: Memory Virtualization | Read: 10 min read | Words: 2265 words
+- Date: 2026-09-24 | Tag: Memory Virtualization | Read: 10 min read | Words: 2298 words
 - Summary: Why did early LLM serving systems waste 60% to 80% of GPU memory? A deep architectural exploration of vLLM's PagedAttention, logical-to-physical block mapping, zero-copy Copy-on-Write sharing, and non-contiguous CUDA attention kernels.
 - Key FAQ Insights:
   * Q: Q1: Should block size be configured to 16 or 32? Why not 1 or 128?
@@ -1255,7 +1255,7 @@
     A: PagedAttention operates orthogonally to architectural optimizations like GQA and MLA:  Architectural innovations like [Kimi KDA and DeepSeek MLA](/en/articles/kimi-kda-deepseek-mla-architecture/) compress the dimension of the key-value representation mathematically, reducing the byte size of each to...
 
 ### [Prefill-Decode (P/D) Disaggregation Architecture: Compute-Memory Decoupling, RDMA Distributed KV Cache Transfer, and Cluster-Scale Pooling](https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/)
-- Date: 2026-09-24 | Tag: Inference Systems | Read: 12 min read | Words: 2896 words
+- Date: 2026-09-24 | Tag: Inference Systems | Read: 12 min read | Words: 2934 words
 - Summary: Why does colocating Prefill and Decode on identical GPUs inevitably collapse performance under 128k long contexts and reasoning workloads? An in-depth architectural breakdown of Prefill-Decode (P/D) Disaggregation: compute vs. memory spatial isolation, GQA vs. DeepSeek MLA cross-node bandwidth modeling, GPUDirect RDMA zero-copy transfers, global KV pooling, and optimal P:D node ratio queuing theory.
 - Key FAQ Insights:
   * Q: Q1: Does P/D disaggregation guarantee higher overall system throughput in all deployments?
@@ -1332,7 +1332,7 @@
     A: Yes. SGLang natively supports FP8, AWQ, GPTQ, and Marlin kernels (for quantization trade-offs, review our [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/) and [Quantization Precision Guide](/en/articles/quantization-precision-guide/)). Furthermore, SGLang natively integrates...
 
 ### [Speculative Decoding in Production: From Draft Models to EAGLE-3 Dynamic Trees for 3x-5x Lossless Acceleration](https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/)
-- Date: 2026-09-18 | Tag: Speculative Decoding | Read: 6 min read | Words: 1438 words
+- Date: 2026-09-18 | Tag: Speculative Decoding | Read: 6 min read | Words: 1471 words
 - Summary: Why is autoregressive LLM decoding fundamentally bottlenecked by memory bandwidth? We dissect the mathematical proof of lossless distribution invariance in speculative decoding, trace its evolution from dual-model drafts to EAGLE-2/3 dynamic draft trees, and provide production configurations in vLLM and SGLang.
 - Key FAQ Insights:
   * Q: Q1: Does speculative decoding require retraining the base model?
@@ -1354,7 +1354,7 @@
     A: DPO (Direct Preference Optimization) is an offline supervised preference algorithm operating on static pairs of chosen and rejected responses $(y_w, y_l)$. It cannot discover novel reasoning pathways absent from the static dataset. GRPO is an active, online reinforcement learning algorithm where the...
 
 ### [Deploying 2026 Frontier Open Models On-Premise: Running DeepSeek-V4 and Kimi K3 on Multi-Node GPU Clusters](https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/)
-- Date: 2026-09-07 | Tag: Cluster Deployment | Read: 3 min read | Words: 627 words
+- Date: 2026-09-07 | Tag: Cluster Deployment | Read: 3 min read | Words: 666 words
 - Summary: Complete enterprise on-premise deployment guide for 1.6T - 2.8T MoE open-weight models: Hardware planning across GPU clusters, vLLM / SGLang distributed TP/PP configuration, FP8 dynamic quantization, and high-concurrency API gateway production setups.
 - Key FAQ Insights:
   * Q: Q1: How do we diagnose cross-node NCCL timeouts or All-to-All hangs when deploying DeepSeek-V4?
@@ -1491,7 +1491,7 @@
     A: An outright replacement is unlikely in the immediate term, but hybrid architectures (combining Attention with State Space Models) are already capturing critical niches. Transformers enjoy a deeply entrenched ecosystem of hardware-optimized kernels and KV Cache infrastructure, whereas SSMs specifical...
 
 ### [vLLM Online Inference in Production: From Architecture to Token Billing](https://blog.llmgo.top/en/articles/vllm-serving-guide/)
-- Date: 2026-04-14 | Tag: Serving & Deployment | Read: 14 min read | Words: 3369 words
+- Date: 2026-04-14 | Tag: Serving & Deployment | Read: 14 min read | Words: 3402 words
 - Summary: A deep dive into vLLM's core architecture (PagedAttention, continuous batching, APC prefix caching, speculative decoding) for online serving. Covers OpenAI-compatible API setup, performance tuning, token billing systems, and complete Docker deployment with Prometheus monitoring.
 - Key FAQ Insights:
   * Q: Q1: How to troubleshoot CUDA out of memory (OOM) when launching vLLM?

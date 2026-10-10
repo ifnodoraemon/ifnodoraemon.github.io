@@ -64,6 +64,9 @@ Even if 15GB of aggregate memory is available across the GPU, an incoming reques
 ---
 
 ## 2. Virtual Memory Paging: PagedAttention's Core Design
+> [!TIP]
+> **Interactive Calculator**: If you are sizing production KV cache allocations and peak concurrency limits, use our built-in [LLM VRAM Calculator](/en/tools/) to simulate dynamic memory pool behavior under varying context lengths.
+
 
 To eliminate memory fragmentation, computer science had already developed the solution in operating system design: **virtual memory paging**.
 

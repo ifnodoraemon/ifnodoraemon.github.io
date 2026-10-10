@@ -84,6 +84,9 @@ Speculative decoding has evolved through four major architectural generations:
 ---
 
 ## III. Dissecting EAGLE: Why Dynamic Draft Trees Dominate
+> [!TIP]
+> **Throughput & ROI Estimator**: Wondering how much GPU compute cost speculative decoding saves in production? Use our interactive [Token Pricing & Throughput Estimator](/en/tools/) to calculate cost efficiencies and generation gains.
+
 
 Tsinghua University's open-source framework **[EAGLE (SafeAILab/EAGLE)](https://github.com/SafeAILab/EAGLE)** has become the standard speculative backend across both vLLM and SGLang.
 

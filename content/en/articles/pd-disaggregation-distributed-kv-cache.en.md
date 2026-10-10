@@ -97,6 +97,9 @@ The adoption of P/D disaggregation represents a rigorous progression from early 
 ---
 
 ## 2. The Core Technical Bottleneck: Cross-Node Distributed KV Cache Transfers
+> [!TIP]
+> **Interactive Sizing Tool**: Before deciding on the GPU allocation ratio between Prefill and Decode pools, leverage our [LLM VRAM & Throughput Calculator](/en/tools/) to estimate KV cache footprint per request and the required network transport throughput.
+
 
 While the theoretical advantages of P/D disaggregation are clear, systems engineers encounter a brutal physical barrier in practice: the **Network Bandwidth Wall**.
 

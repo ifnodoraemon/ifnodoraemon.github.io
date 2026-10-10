@@ -84,6 +84,9 @@ graph LR
 ---
 
 ## 三、EAGLE 核心架构拆解：动态推测树为什么能封神？
+> [!TIP]
+> **吞吐提升与成本换算**：投机采样加速后能为线上集群节省多少 GPU 资源和 Token 费用？可使用站内 [Token 计费与吞吐换算器](/tools/) 进行即时 ROI 投入产出比核算。
+
 
 在众多开源投机采样方案中，清华大学团队开源的 **[EAGLE (SafeAILab/EAGLE)](https://github.com/SafeAILab/EAGLE)** 凭借无损性与工业级加速比，成为 vLLM 与 SGLang 官方首选的标准配置。其封神的关键在于攻克了传统线性推测的致命痛点。
 

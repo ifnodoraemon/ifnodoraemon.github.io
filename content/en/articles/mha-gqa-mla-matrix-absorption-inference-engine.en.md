@@ -100,6 +100,9 @@ For an enterprise 70B model, single-token KV cache storage still requires roughl
 ---
 
 ## 2. DeepSeek MLA: Low-Rank Latent Compression and Memory Minimalism
+> [!TIP]
+> **Attention Footprint Calculator**: Want to compare the memory explosion rates between MHA, GQA, and DeepSeek MLA under heavy concurrency (128–512 streams)? Use our built-in [LLM VRAM Calculator](/en/tools/) for side-by-side estimations.
+
 
 In 2024, DeepSeek introduced **Multi-Head Latent Attention (MLA)** in the DeepSeek-V2 technical report, establishing it as the core attention architecture for DeepSeek-V3 and DeepSeek-R1.
 

@@ -100,6 +100,9 @@ Round 6: [Req A starts decoding!] + [Req B decode 1 token] + [Req C decode 1 tok
 ---
 
 ## Layer 2 Deep Dive: APC Prefix Caching — Understanding It Pays Off
+> [!TIP]
+> **VRAM Sizing & Throughput Estimator**: Unsure about GPU OOM before launching production servers? Use our interactive [LLM VRAM & Throughput Calculator](/en/tools/) to estimate weights, cache sizes, and optimal `gpu_memory_utilization` parameters.
+
 
 If PagedAttention solves "how to allocate memory," **Automatic Prefix Caching (APC)** solves "how to reuse what's already been computed."
 

@@ -155,7 +155,12 @@ ${text}
     highlighted = hljs.highlight(text, { language: validLang }).value;
   } catch(e) {}
 
+  const langBadgeHtml = (validLang && validLang !== 'plaintext')
+    ? `<span class="code-lang-label">${escapeHtml(validLang.toUpperCase())}</span>`
+    : '';
+
   return `<div class="code-block-wrapper">
+  ${langBadgeHtml}
   <button class="copy-code-btn copy-btn" aria-label="Copy code">
     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
   </button>
@@ -869,7 +874,7 @@ function generateListingPage(articlesList, isEn = false) {
       : '';
 
     return `
-          <div class="unified-article-row article-list-item-wrapper" data-tag="${escapeHtml(article.category)}" data-category="${escapeHtml(article.category)}" data-subtag="${escapeHtml(article.tag)}">
+          <div class="unified-article-row article-list-item-wrapper" data-tag="${escapeHtml(article.category)}" data-category="${escapeHtml(article.category)}" data-subtag="${escapeHtml(article.tag)}" data-series="${escapeHtml(article.series || '')}">
             <div class="unified-timeline-left">
               <div class="unified-timeline-date">${article.dateFormatted}</div>
             </div>
@@ -942,6 +947,36 @@ function generateListingPage(articlesList, isEn = false) {
             </button>
           </div>
           <div class="search-results-dropdown" id="search-results-dropdown" role="listbox"></div>
+        </div>`;
+
+  const seriesShowcaseHtml = `
+        <div class="series-showcase fade-in">
+          <div class="series-showcase-header">
+            <h2 class="series-showcase-title">${isEn ? '📚 Curated Technical Series' : '📚 核心架构体系专栏'}</h2>
+            <p class="series-showcase-desc">${isEn ? 'End-to-end engineered deep dives organized into progressive learning roadmaps.' : '从物理第一性原理到生产级落地的成体系进阶专栏，拒绝碎片化认知。'}</p>
+          </div>
+          <div class="series-showcase-grid">
+${Object.entries(SERIES_DEFINITIONS).map(([id, s]) => {
+  const firstSlug = s.articles[0];
+  const articleCount = s.articles.length;
+  const seriesUrl = `${articlesLinkPrefix}${firstSlug}/`;
+  const title = isEn ? s.titleEn : s.titleZh;
+  const desc = isEn ? s.descEn : s.descZh;
+  const badge = isEn ? s.badgeEn : s.badgeZh;
+  const actionText = isEn ? 'Start Reading →' : '开始阅读 →';
+  return `            <div class="series-showcase-card">
+              <div class="series-showcase-card-header">
+                <span class="tag tag-series">📚 ${escapeHtml(badge)}</span>
+                <span class="series-count-badge">${isEn ? `${articleCount} Articles` : `全套 ${articleCount} 篇`}</span>
+              </div>
+              <h3 class="series-card-name"><a href="${seriesUrl}">${escapeHtml(title)}</a></h3>
+              <p class="series-card-desc">${escapeHtml(desc)}</p>
+              <div class="series-card-footer">
+                <a href="${seriesUrl}" class="series-card-action">${actionText}</a>
+              </div>
+            </div>`;
+}).join('\n')}
+          </div>
         </div>`;
 
   const html = `<!DOCTYPE html>
@@ -1063,6 +1098,7 @@ ${searchHtml}
 
     <section class="section section-tight articles-list-section">
       <div class="container">
+${seriesShowcaseHtml}
         <div class="articles-filter fade-in" id="articles-filter">
           <button class="filter-btn active" data-filter="all">${filterAllBtn}</button>
 ${filterBtns}
@@ -1090,11 +1126,29 @@ function generateSearchIndex(articlesZh, articlesEn) {
 
   const collect = (articlesList, lang) => {
     articlesList.forEach(article => {
+      const isEn = lang === 'en';
+      const seriesId = (article.series && SERIES_DEFINITIONS[article.series] && SERIES_DEFINITIONS[article.series].articles.includes(article.slug)) ? article.series : null;
+      const seriesDef = seriesId ? SERIES_DEFINITIONS[seriesId] : null;
+      const seriesTitle = seriesDef ? (isEn ? seriesDef.titleEn : seriesDef.titleZh) : '';
+      const seriesBadge = seriesDef ? (isEn ? seriesDef.badgeEn : seriesDef.badgeZh) : '';
+
+      const tags = [
+        article.tag,
+        ...(article.extraTags || []),
+        article.category,
+        seriesTitle,
+        seriesBadge,
+      ].filter(Boolean);
+
       searchData.push({
         title: article.title,
         description: article.description,
-        url: lang === 'en' ? `/en/articles/${article.slug}/` : `/articles/${article.slug}/`,
+        url: isEn ? `/en/articles/${article.slug}/` : `/articles/${article.slug}/`,
         tag: article.tag,
+        category: article.category || '',
+        series: seriesTitle,
+        seriesBadge,
+        tags,
         date: article.dateFormatted,
         lang,
       });

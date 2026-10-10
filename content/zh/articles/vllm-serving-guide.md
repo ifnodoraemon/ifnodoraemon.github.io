@@ -107,6 +107,9 @@ vLLM 引入了**连续批处理**（也叫 iteration-level scheduling）：
 ---
 
 ## 第二层深水区：APC 前缀缓存——理解它的人都赚到了
+> [!TIP]
+> **显存容量与吞吐快速核算**：部署前不确定显卡是否会 OOM？可通过站内交互工具：[LLM 显存占用与吞吐估算器](/tools/) 输入模型权重与预期并发数，快速测算最佳 `gpu_memory_utilization` 与最大并发上限。
+
 
 如果说 PagedAttention 解决了"显存怎么分配"的问题，那**自动前缀缓存（Automatic Prefix Caching, APC）** 解决的就是"已经算过的东西怎么复用"。
 
