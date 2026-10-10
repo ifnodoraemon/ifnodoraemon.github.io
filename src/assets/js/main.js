@@ -442,12 +442,14 @@ function initArticlesListing() {
   const rowRecords = rows.map(row => ({
     row,
     tag: row.dataset.tag || 'all',
+    series: row.dataset.series || '',
     searchText: row.textContent.toLowerCase(),
   }));
 
   const ITEMS_PER_PAGE = 8;
   let currentPage = Math.max(1, Number.parseInt(params.get('page') || '1', 10) || 1);
   let selectedTag = params.get('tag') || 'all';
+  let selectedSeries = params.get('series') || 'all';
   let searchQuery = params.get('q')?.trim() || '';
   let filteredRows = [...rows];
   let searchIndex = null;
@@ -474,6 +476,9 @@ function initArticlesListing() {
     if (selectedTag !== 'all') nextUrl.searchParams.set('tag', selectedTag);
     else nextUrl.searchParams.delete('tag');
 
+    if (selectedSeries !== 'all') nextUrl.searchParams.set('series', selectedSeries);
+    else nextUrl.searchParams.delete('series');
+
     if (searchQuery) nextUrl.searchParams.set('q', searchQuery);
     else nextUrl.searchParams.delete('q');
 
@@ -490,7 +495,11 @@ function initArticlesListing() {
 
   function updateFilterButtons() {
     filterBtns.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.filter === selectedTag);
+      btn.classList.toggle('active', selectedSeries === 'all' && btn.dataset.filter === selectedTag);
+    });
+    document.querySelectorAll('.series-showcase-card').forEach(card => {
+      const isMatch = card.dataset.seriesId === selectedSeries;
+      card.classList.toggle('selected-series', isMatch);
     });
   }
 
@@ -569,8 +578,9 @@ function initArticlesListing() {
     filteredRows = rowRecords
       .filter(record => {
         const matchesTag = selectedTag === 'all' || record.tag === selectedTag;
+        const matchesSeries = selectedSeries === 'all' || record.series === selectedSeries;
         const matchesQuery = terms.length === 0 || terms.every(term => record.searchText.includes(term));
-        return matchesTag && matchesQuery;
+        return matchesTag && matchesSeries && matchesQuery;
       })
       .map(record => record.row);
 
@@ -597,6 +607,21 @@ function initArticlesListing() {
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       selectedTag = btn.dataset.filter || 'all';
+      selectedSeries = 'all';
+      applyFilters({ resetPage: true, shouldScroll: true });
+    });
+  });
+
+  document.querySelectorAll('.series-filter-trigger').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const targetSeries = btn.dataset.series;
+      if (selectedSeries === targetSeries) {
+        selectedSeries = 'all';
+      } else {
+        selectedSeries = targetSeries;
+        selectedTag = 'all';
+      }
       applyFilters({ resetPage: true, shouldScroll: true });
     });
   });

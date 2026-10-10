@@ -7488,6 +7488,10 @@ h1, h2, h3, .glitch-title { text-wrap: balance; }
 
 .series-card-footer {
   margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .series-card-action {
@@ -7503,6 +7507,73 @@ h1, h2, h3, .glitch-title { text-wrap: balance; }
 .series-card-action:hover {
   transform: translateX(3px);
   color: var(--accent-hover, #818cf8);
+}
+
+.series-filter-trigger {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.2rem 0.55rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.series-filter-trigger:hover,
+.series-showcase-card.selected-series .series-filter-trigger {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(99, 102, 241, 0.12);
+}
+
+.series-showcase-card.selected-series {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 24px rgba(99, 102, 241, 0.2);
+}
+
+/* ==========================================================================
+   External Link Indicator in Articles
+   ========================================================================== */
+.article-detail-content a.external-link {
+  display: inline;
+}
+
+.article-detail-content a.external-link::after {
+  content: " ↗";
+  font-size: 0.75em;
+  opacity: 0.65;
+  display: inline-block;
+  vertical-align: super;
+  line-height: 0;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.article-detail-content a.external-link:hover::after {
+  opacity: 1;
+  transform: translate(1px, -1px);
+}
+
+/* ==========================================================================
+   Mobile Responsive Adjustments
+   ========================================================================== */
+@media (max-width: 640px) {
+  .series-showcase {
+    padding: 1.15rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .series-showcase-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .code-lang-label {
+    right: 2.5rem;
+    font-size: 0.62rem;
+    padding: 0.1rem 0.35rem;
+  }
 }
 
 

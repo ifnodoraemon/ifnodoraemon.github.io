@@ -169,6 +169,15 @@ ${text}
 `;
 };
 
+renderer.link = function ({ href, title, text }) {
+  const isExternal = /^https?:\/\//i.test(href) && !href.startsWith(SITE_URL) && !href.startsWith('https://blog.llmgo.top');
+  const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
+  if (isExternal) {
+    return `<a href="${href}"${titleAttr} target="_blank" rel="noopener noreferrer" class="external-link">${text}</a>`;
+  }
+  return `<a href="${href}"${titleAttr}>${text}</a>`;
+};
+
 renderer.image = function ({ href, title, text }) {
   let out = `<img src="${href}" alt="${escapeHtml(text || '')}" loading="lazy" decoding="async"`;
   if (title) {
@@ -973,6 +982,7 @@ ${Object.entries(SERIES_DEFINITIONS).map(([id, s]) => {
               <p class="series-card-desc">${escapeHtml(desc)}</p>
               <div class="series-card-footer">
                 <a href="${seriesUrl}" class="series-card-action">${actionText}</a>
+                <button type="button" class="series-filter-trigger" data-series="${escapeHtml(id)}">${isEn ? 'Filter in List' : '筛选本专栏'}</button>
               </div>
             </div>`;
 }).join('\n')}
