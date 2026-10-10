@@ -273,7 +273,7 @@ By implementing virtual memory concepts in GPU software, PagedAttention addresse
 
 However, memory efficiency is only the first piece of the puzzle. Once memory allocation is optimized, the scheduler must manage requests of varying lengths without introducing pipeline stalls.
 
-In our next chapter, we will examine execution scheduling: **《Continuous Batching and Chunked Prefill: Eliminating Head-of-Line Blocking》**.
+In our next chapter, we will examine execution scheduling: [Continuous Batching and Chunked Prefill: Eliminating Head-of-Line Blocking](/en/articles/continuous-batching-chunked-prefill-guide/).
 
 ---
 

@@ -458,6 +458,8 @@ Explore the complete curriculum across the 10 chapters of this handbook:
    *OpenTelemetry, LangSmith, and trajectory replay for complete execution transparency.*
 10. **[Part 10 · How Environment Scaling Reshapes Autonomous Agents: Sandboxing & RL](/en/articles/environment-scaling-agent-guide/)**  
     *Post-training environment exploration, zero-escape container sandboxing, and benchmark dominance.*
+11. **[Part 11 · AI Agent Memory Architecture: Working Memory, Short-Term Buffers, and Long-Term Episodic Storage](/en/articles/agent-memory-architecture/)**  
+    *Deep architectural breakdown of ephemeral scratchpads, checkpointer persistence, and vector/graph episodic memory.*
 
 ---
 

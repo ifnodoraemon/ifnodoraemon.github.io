@@ -226,7 +226,7 @@ if __name__ == "__main__":
     asyncio.run(run_enterprise_workflow())
 ```
 
-*By eliminating hardcoded selectors, the agent remains functional even when frontend teams update layout classes. For debugging and session logging, review our [Agent Observability and Debugging Guide](/en/articles/agent-observability-debugging/).*
+*By eliminating hardcoded selectors, the agent remains functional even when frontend teams update layout classes. For debugging and session logging, review our [Agent Observability and Debugging Guide](/en/articles/agent-observability-debugging/); for vision encoder architectures and cross-modal grounding, see our [Multimodal LLM Architecture Guide](/en/articles/multimodal-guide/).*
 
 ---
 

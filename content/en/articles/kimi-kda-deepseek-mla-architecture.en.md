@@ -67,7 +67,7 @@ Stress testing across 8x 80GB GPU nodes:
 | **Needle in a Haystack** | 100% | 99.8% | 99.7% |
 | **Decoding Speed** | 22 t/s | 95 t/s | **110 t/s** |
 
-Both architectural paradigms prove that mathematical optimization can break physical hardware boundaries, enabling high-concurrency long-context intelligence for production enterprise systems.
+Both architectural paradigms prove that mathematical optimization can break physical hardware boundaries, enabling high-concurrency long-context intelligence for production enterprise systems. For deep-dive implementations of MoE kernels, expert parallelism, and All-to-All communication overlapping, see [MoE Inference Engines: Expert Parallelism, Dynamic Routing & All-to-All Overlap](/en/articles/moe-expert-parallelism-inference-engine/).
 
 ---
 

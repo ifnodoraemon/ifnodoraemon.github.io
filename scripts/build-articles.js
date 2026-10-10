@@ -629,12 +629,35 @@ function buildPrevNextHtml(list, index, isEn) {
 }
 
 function buildRelatedArticlesHtml(article, list, isEn) {
+  const getScore = (candidate) => {
+    let score = 0;
+    // 1. Same series (strongest semantic bond)
+    if (article.series && candidate.series && article.series === candidate.series) {
+      score += 15;
+    }
+    // 2. Same category
+    if (article.category && candidate.category && article.category === candidate.category) {
+      score += 6;
+    }
+    // 3. Shared extra tags
+    if (article.extraTags && candidate.extraTags) {
+      const setA = new Set(article.extraTags);
+      for (const t of candidate.extraTags) {
+        if (setA.has(t)) score += 3;
+      }
+    }
+    // 4. Exact tag match
+    if (article.tag && candidate.tag && article.tag === candidate.tag) {
+      score += 4;
+    }
+    return score;
+  };
+
   const relatedArticles = list
     .filter(candidate => candidate.slug !== article.slug)
     .sort((a, b) => {
-      const sameTagA = a.tag === article.tag ? 1 : 0;
-      const sameTagB = b.tag === article.tag ? 1 : 0;
-      if (sameTagA !== sameTagB) return sameTagB - sameTagA;
+      const scoreDiff = getScore(b) - getScore(a);
+      if (scoreDiff !== 0) return scoreDiff;
       return new Date(b.isoDate) - new Date(a.isoDate);
     })
     .slice(0, 3);
@@ -866,9 +889,15 @@ function generateListingPage(articlesList, isEn = false) {
           </div>`;
   }).join('\n');
 
-  const categories = isEn
-    ? ['Inference Systems', 'AI Agent', 'Model Engineering', 'Cloud Native', 'Evaluation & Trends']
-    : ['推理系统', 'AI Agent', '模型工程', '云原生', '评测与趋势'];
+  const defaultOrder = isEn
+    ? ['Inference Systems', 'AI Agent', 'Cloud Native', 'Computer Networking', 'Model Engineering', 'Evaluation & Trends']
+    : ['推理系统', 'AI Agent', '云原生', '计算机网络', '模型工程', '评测与趋势'];
+
+  const articleCategories = [...new Set(articlesList.map(a => a.category).filter(Boolean))];
+  const categories = [
+    ...defaultOrder.filter(c => articleCategories.includes(c)),
+    ...articleCategories.filter(c => !defaultOrder.includes(c)),
+  ];
 
   const categoryCounts = {};
   categories.forEach(cat => {

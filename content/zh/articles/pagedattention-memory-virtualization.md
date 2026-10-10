@@ -277,7 +277,7 @@ __global__ void paged_attention_kernel(
 
 然而，显存管理只是构建高性能推理系统的第一块基石。当我们拥有了高效的显存池之后，如果调度器依然采用粗暴的整批等待策略，长短文本混合依然会导致严重的“排头阻塞”。
 
-在下一讲中，我们将深入探讨大模型并发调度的灵魂枢纽 —— **《高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞》**，敬请期待。
+在下一讲中，我们将深入探讨大模型并发调度的灵魂枢纽 —— [《高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞》](/articles/continuous-batching-chunked-prefill-guide/)。
 
 ---
 

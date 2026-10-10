@@ -519,7 +519,7 @@
     A: 必须依据物理网络的互联拓扑（Topology-Aware Hierarchy）来严格决定： - 黄金原则：将通信频次极高的张量并行（TP）锁死在单机内部的 NVLink 高速总线域内（通常单机 8 卡，带宽高达 900GB/s）；将专家并行（EP）放在跨节点的网络拓扑上（InfiniBand / RoCE）。 - 如果你有 4 台 8 卡机器（共 32 卡）：   - 若选择 TP=4 + EP=8：每台机器切分为 2 个独立的 TP=4 组（走片内 NVLink），跨越 8 个节点走 EP。通信量更加分散，是目前多数长序列高并发集群的主流配置；   - 若选择 TP=8 + EP=4：每台机...
 
 ### [显存虚拟化革命：PagedAttention 内存池管理与显存碎片终结](https://blog.llmgo.top/articles/pagedattention-memory-virtualization/)
-- 发布日期: 2026-09-24 | 标签: 显存虚拟化 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4935 字
+- 发布日期: 2026-09-24 | 标签: 显存虚拟化 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4931 字
 - 概述: 为什么传统大模型推理会浪费 60%~80% 的 GPU 显存？深度剖析 vLLM 开创的 PagedAttention 核心机制，解构逻辑块到物理块映射、动态显存池生命周期、Copy-on-Write 分叉复用与 CUDA 非连续访存内核，彻底终结显存碎片化顽疾。
 - 核心 FAQ 解答:
   * Q: Q1: 块大小（Block Size）设为 16 还是 32 更好？为什么各大引擎不推荐设为 1 或 128？
@@ -574,7 +574,7 @@
     A: 基于“异步事件队列 + 离线工作池（Worker Pool）”的解耦架构。用户在前台交互时，主线程只负责将原始交互日志以事件形式快速推入消息队列（如 Redis Stream / Kafka），并在本地仅更新轻量级的计数器与短期工作内存，主线程毫秒级响应用户。由独立的后台 Worker 服务负责消费事件队列，在智能体处于空闲间隙（Idle Window）或当累积重要度达到阈值时，在后台启动轻量级高吞吐模型执行反思提纯与知识图谱的合并更新。完成后将生成的结构化记忆原子性写回数据库，实现用户交互与记忆提纯的完全非阻塞解耦。...
 
 ### [Agent 执行循环与状态机设计：从 ReAct 到确定性控制流](https://blog.llmgo.top/articles/agent-loop-state-machine/)
-- 发布日期: 2026-09-20 | 标签: 状态机设计 | 预计阅读: 预计阅读 24 分钟 | 字数: 约 5868 字
+- 发布日期: 2026-09-20 | 标签: 状态机设计 | 预计阅读: 预计阅读 24 分钟 | 字数: 约 5975 字
 - 概述: 为什么单纯的 Prompt 链与自由 ReAct 无法支撑生产级系统？深度拆解 Agent 执行循环的四大失效模式、基于有限状态机 (FSM) 的图控流设计、Tool Calling 容错降级与熔断器机制，并提供生产级状态机实战代码。
 - 核心 FAQ 解答:
   * Q: Q1: 既然大模型已经具备强大的自主推理能力，为什么不在 Agent 中直接使用全自主动态循环（Autonomous Loop），而要用状态机强制限制状态流转？
@@ -585,7 +585,7 @@
     A: 基于“持久化检查点（Persistent Checkpoint）+ 异步事件驱动”设计。当状态机路由至 HumanInTheLoop 节点时，引擎将当前的 AgentState 进行 JSON 序列化并写入持久化数据库（如 PostgreSQL / Redis），记录对应的 session_id 与 checkpoint_id，随后立即将 Worker 线程/协程释放回进程池，避免产生挂起阻塞。系统向管理员端（如企业微信、Slack 或内部审批系统）推送带回调 Webhook 的审批卡片。当人工点击“批准”或“驳回”时，Webhook 接收服务根据 checkpoint_id 反序列化取出完整...
 
 ### [突破 10 万 Star 的 Browser-use 架构深度剖析：DOM 树提纯、视觉定位与生产级网页 Agent 实战](https://blog.llmgo.top/articles/browser-use-agent-architecture/)
-- 发布日期: 2026-09-18 | 标签: 浏览器智能体 | 预计阅读: 预计阅读 14 分钟 | 字数: 约 3488 字
+- 发布日期: 2026-09-18 | 标签: 浏览器智能体 | 预计阅读: 预计阅读 15 分钟 | 字数: 约 3525 字
 - 概述: 为什么传统 Selenium/Playwright 脚本在动态前端下频频崩溃？深度拆解斩获 10 万+ GitHub Star 的现象级项目 Browser-use 的底层架构：DOM 树智能提纯降噪、Set-of-Mark (SoM) 视觉坐标定位、状态机闭环容错，并手把手构建一个可生产落地的企业级网页自动化智能体。
 - 核心 FAQ 解答:
   * Q: Q1: Browser-use 每步都需要上传截图，会不会导致 Token 费用失控？
@@ -618,7 +618,7 @@
     A: 实际加速比严格取决于当前业务 Prompt 的接受率 $\alpha$。在编程语言生成（Python/Java 具有极强的语法结构规律）和结构化 JSON 提取中，接受率通常高达 85% 以上，加速可达 4x 甚至更高；但在文学创作、高温度（Temperature $\ge 1.0$）的开放式对话中，文本熵极高，接受率可能跌至 50% 甚至更低，此时实际加速比通常在 1.8x~2.2x 之间。...
 
 ### [推理时扩展 (Test-Time Compute) 与 GRPO 强化学习实战：从 PPO 到无 Critic 策略优化](https://blog.llmgo.top/articles/test-time-compute-grpo/)
-- 发布日期: 2026-09-18 | 标签: 强化学习 | 预计阅读: 预计阅读 16 分钟 | 字数: 约 3959 字
+- 发布日期: 2026-09-18 | 标签: 强化学习 | 预计阅读: 预计阅读 17 分钟 | 字数: 约 4013 字
 - 概述: 深入剖析从预训练 Scaling Law 向推理时算力扩展 (Test-Time Scaling) 的范式转移。全面拆解 DeepSeek-R1 核心的 GRPO 组相对策略优化数学推导、无 Critic 架构优势、长思维链自我反思涌现机制，并提供完整的极简实战代码。
 - 核心 FAQ 解答:
   * Q: Q1: 为什么 GRPO 在没有 Critic 模型的情况下依然能够收敛？
@@ -662,7 +662,7 @@
     A: 这是由于缺乏显式的状态跟踪和失败归因机制。若仅将原始报错追加在上下文末尾，长文本累积会导致模型注意力稀释并重复无效尝试；应在运行时设计结构化的状态快照、差异对比（Diffing）与回溯逻辑，强制模型在连续多次失败后切换解题策略。...
 
 ### [解密 2026 架构创新：Kimi Delta Attention 与 DeepSeek MLA 是如何干掉显存墙的？](https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/)
-- 发布日期: 2026-09-07 | 标签: 架构演进 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1881 字
+- 发布日期: 2026-09-07 | 标签: 架构演进 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1936 字
 - 概述: 在百万级长上下文与数万亿 MoE 时代，KV Cache 显存暴涨如何成为推理核心瓶颈？硬核剖析月之暗面 Kimi Delta Attention (KDA) 的增量状态演进与 DeepSeek 多头潜变量注意力 (MLA) 的低秩投影数学原理。
 - 核心 FAQ 解答:
   * Q: Q1: DeepSeek MLA 在部署时是否可以直接与 FP8 或 4-bit 量化叠加使用？
@@ -890,7 +890,7 @@
     A: 多模态模型通常基于 Vision Transformer (ViT) 将图片切割为 Patch。高分辨率图像会导致 Token 消耗成倍增加，因此建议在后端执行降采样，以平衡成本和解析精度。...
 
 ### [大模型微调全流程指南：底层工作原理、高价值落地用例与生产实战](https://blog.llmgo.top/articles/fine-tuning-guide/)
-- 发布日期: 2026-02-25 | 标签: 全流程微调 | 预计阅读: 预计阅读 16 分钟 | 字数: 约 3874 字
+- 发布日期: 2026-02-25 | 标签: 全流程微调 | 预计阅读: 预计阅读 16 分钟 | 字数: 约 3931 字
 - 概述: 深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。
 - 核心 FAQ 解答:
   * Q: Q1: 通俗解释大模型微调的底层工作机制是什么？
@@ -898,7 +898,7 @@
   * Q: Q2: 企业应该在哪些高价值场景下优先选择大模型微调？
     A: 最具工程回报率的场景包括：高确定性结构化格式输出（如零报错的 JSON/SQL）、特定垂直行业风格沉淀（医疗/法律文书）、将顶级大模型的复杂思维链推理能力蒸馏至 8B 级边缘小模型以大幅削减 API 成本，以及在金融政务等强监管环境下构建完全离线的自主可控底座。...
   * Q: Q3: 全参数微调与 LoRA 应该如何选择？
-    A: 工业界普遍以 LoRA 为默认首选，它能在保留基础通用知识的同时节省 80% 以上的显存和算力开销。若本地硬件处于极限受限状态，建议直接采用基于 4-bit 权重的 QLoRA（详见[大模型量化实战指南](/articles/quantization-hands-on-guide/)）。只有在需要重训全新基础底座语言或发生颠覆性结构范式迁移时，才建议启动昂贵的全参数微调。...
+    A: 工业界普遍以 LoRA 为默认首选，它能在保留基础通用知识的同时节省 80% 以上的显存和算力开销。若本地硬件处于极限受限状态，建议直接采用基于 4-bit 权重的 QLoRA（详见[大模型量化实战指南](/articles/quantization-hands-on-guide/)）。只有在需要重训全新基础底座语言或发生颠覆性结构范式迁移时，才建议启动昂贵的全参数微调。此外，若追求长推理链与复杂逻辑突破，可在 SFT 后结合基于强化学习的测试时扩展优化，详见 [《推理时扩展 (Test-Time Compute) 与 GRPO 强化学习实战》](/articles/test-time-com...
 
 ## English Articles Technical FAQ & Key Takeaways
 
@@ -1112,7 +1112,7 @@
     A: Liveness probes evaluate process health locally within a node; they cannot distinguish between container failure and an asymmetric network partition. If a primary node becomes isolated from the control plane while remaining reachable by local clients, promoting a secondary node without fencing cause...
 
 ### [2026 AI Computing Infrastructure: Kubernetes GPU Operator, MIG Partitioning, Topology-Aware Scheduling, and Auto-scaling Inference Engines](https://blog.llmgo.top/en/articles/k8s-gpu-operator-ai-inference-scheduling/)
-- Date: 2026-09-25 | Tag: AI GPU Scheduling | Read: 9 min read | Words: 2190 words
+- Date: 2026-09-25 | Tag: AI GPU Scheduling | Read: 9 min read | Words: 2203 words
 - Summary: Why does traditional CPU/memory scalar scheduling fail in the large language model era? A rigorous architectural deconstruction of AI infrastructure on Kubernetes in 2026: automated zero-touch lifecycles via the NVIDIA GPU Operator; hardware-isolated Multi-Instance GPU (MIG) slicing versus time-slicing; overcoming cross-NUMA interconnect bottlenecks with Kubelet Topology Manager and Dynamic Resource Allocation (DRA); and production auto-scaling for vLLM and SGLang inference clusters leveraging KEDA and real-time KV cache saturation metrics.
 - Key FAQ Insights:
   * Q: Q1: Why does vLLM report GPU VRAM allocation above 90% immediately after booting, and will this trigger Kubernetes OOMKills?
@@ -1299,7 +1299,7 @@
     A: Through an asynchronous event queue decoupled from the primary request thread. When a user interacts with the system, the primary application thread publishes the interaction event to a message queue (e.g., Redis Streams or Kafka) and updates local in-memory counters, responding to the client in mil...
 
 ### [Agentic Loops & State Machine Design: From ReAct to Deterministic Control Flows](https://blog.llmgo.top/en/articles/agent-loop-state-machine/)
-- Date: 2026-09-20 | Tag: State Machine | Read: 13 min read | Words: 3072 words
+- Date: 2026-09-20 | Tag: State Machine | Read: 13 min read | Words: 3100 words
 - Summary: Why prompt chaining and unconstrained ReAct loops fail in production AI systems. A deep architectural dissection of agent failure modes, Finite State Machine (FSM) graph flows, tool-calling resilience, and circuit breakers with runnable code.
 - Key FAQ Insights:
   * Q: Q1: Given that modern LLMs exhibit impressive autonomous reasoning, why constrain them with rigid state machines rather than using fully autonomous loops?
@@ -1310,7 +1310,7 @@
     A: Through persistent checkpointer serialization coupled with asynchronous event webhooks. When an FSM routes to a HumanInTheLoop node for high-risk approvals, the engine serializes the complete AgentState snapshot to a persistent store (e.g., PostgreSQL or Redis) tagged with a session_id and checkpoin...
 
 ### [Under the Hood of Browser-use (100k+ Stars): DOM Tree Distillation, Vision Grounding, and Production Web Agents](https://blog.llmgo.top/en/articles/browser-use-agent-architecture/)
-- Date: 2026-09-18 | Tag: Browser Agents | Read: 7 min read | Words: 1581 words
+- Date: 2026-09-18 | Tag: Browser Agents | Read: 7 min read | Words: 1594 words
 - Summary: Why do traditional Selenium and Playwright scripts constantly break against modern web frontends? We dissect the architecture of Browser-use, the breakout open-source project with over 100k GitHub stars: DOM tree pruning, Set-of-Mark (SoM) visual coordinate grounding, state machine resilience, and end-to-end production recipes.
 - Key FAQ Insights:
   * Q: Q1: Does capturing screenshots on every step cause token costs to explode?
@@ -1343,7 +1343,7 @@
     A: Realized acceleration is strictly bounded by the empirical acceptance rate $\alpha$. In programming languages (Python/Java) and JSON extraction where syntax is highly structured, acceptance rates exceed 85%, yielding 4x+ speedups. In open-ended conversational domains with high sampling temperatures ...
 
 ### [Test-Time Compute and GRPO in Practice: From PPO to Critic-Free Reinforcement Learning](https://blog.llmgo.top/en/articles/test-time-compute-grpo/)
-- Date: 2026-09-18 | Tag: RL & Reasoning | Read: 8 min read | Words: 1851 words
+- Date: 2026-09-18 | Tag: RL & Reasoning | Read: 8 min read | Words: 1876 words
 - Summary: A deep dive into the paradigm shift from pre-training scaling laws to test-time compute. We deconstruct the mathematical derivation of DeepSeek-R1's Group Relative Policy Optimization (GRPO), critic-free architecture advantages, emergent self-reflection in long reasoning traces, and a complete, reproducible hands-on implementation.
 - Key FAQ Insights:
   * Q: Q1: How does GRPO converge reliably without an explicit Critic network?
@@ -1387,7 +1387,7 @@
     A: Infinite loops typically occur when error messages simply append to an ever-growing prompt context, causing attention degradation where the model repeats failing commands. Production runtimes must implement structured state diffing, explicit trajectory memory, and backtracking mechanisms that interr...
 
 ### [Demystifying 2026 Architecture Breakthroughs: How Kimi Delta Attention and DeepSeek MLA Conquered the Memory Wall](https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/)
-- Date: 2026-09-07 | Tag: Architecture Evolution | Read: 3 min read | Words: 609 words
+- Date: 2026-09-07 | Tag: Architecture Evolution | Read: 3 min read | Words: 632 words
 - Summary: In the era of million-token context windows and trillion-parameter MoE, how KV Cache memory saturation became the core bottleneck. Deep mathematical and architectural breakdown of Moonshot's KDA and DeepSeek's MLA low-rank projections.
 - Key FAQ Insights:
   * Q: Q1: Can DeepSeek MLA be stacked with FP8 or INT4 quantization?
@@ -1615,7 +1615,7 @@
     A: Multimodal models typically split images into Patches based on Vision Transformers (ViT). High-resolution images lead to massive token consumption, so performing downsampling in the backend is recommended to balance costs and parsing precision....
 
 ### [LLM Fine-Tuning Guide: How It Works, Real-World Use Cases, and Workflows](https://blog.llmgo.top/en/articles/fine-tuning-guide/)
-- Date: 2026-02-25 | Tag: Fine-Tuning | Read: 9 min read | Words: 2120 words
+- Date: 2026-02-25 | Tag: Fine-Tuning | Read: 9 min read | Words: 2143 words
 - Summary: Discover how LLM fine-tuning works under the hood, explore proven enterprise use cases (LoRA, QLoRA, Full Fine-Tuning), and learn end-to-end workflows from data preparation to vLLM serving.
 - Key FAQ Insights:
   * Q: Q1: How does LLM fine-tuning work in simple terms?

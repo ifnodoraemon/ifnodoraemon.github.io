@@ -266,7 +266,7 @@ Deploying reasoning models in production requires addressing these operational c
 1. **The Overthinking Trap**: When asked trivial factual queries ("What is the capital of France?"), models may output 800 tokens of self-questioning, adding seconds of unnecessary Time-To-First-Token (TTFT) latency.
 2. **Two-Stage Routing Architecture**:
    * Direct standard conversational requests and retrieval tasks to lightweight models or [RAG retrieval pipelines](/en/articles/rag-in-practice/).
-   * Reserve thinking endpoints for complex logical synthesis, math, and code generation with bounded token limits (`max_thinking_tokens`). For high-throughput infrastructure setup, refer to our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
+   * Reserve thinking endpoints for complex logical synthesis, math, and code generation with bounded token limits (`max_thinking_tokens`). For high-throughput infrastructure setup, refer to our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/). For architectural implications of dynamic thinking budgets and the final frontier of reasoning systems, see [Reasoning Engines & Test-Time Compute: The Endgame of LLM Serving](/en/articles/reasoning-test-time-compute-inference-future/).
 
 ---
 

@@ -227,7 +227,7 @@ if __name__ == "__main__":
     asyncio.run(run_enterprise_workflow())
 ```
 
-*通过上述代码，智能体摆脱了一切脆弱的硬编码 XPath。即便页面改版升级，多模态大脑凭借文字与视觉标记，依然能如同人类员工一样精准完成复杂交互流转。关于智能体生产环境持久化运行与可观测性，请参阅 [智能体可观测性与生产调试指南](/articles/agent-observability-debugging/)。*
+*通过上述代码，智能体摆脱了一切脆弱的硬编码 XPath。即便页面改版升级，多模态大脑凭借文字与视觉标记，依然能如同人类员工一样精准完成复杂交互流转。关于智能体生产环境持久化运行与可观测性，请参阅 [智能体可观测性与生产调试指南](/articles/agent-observability-debugging/)；关于多模态视觉编码器与跨模态对齐原理，请参阅专题 [《多模态大模型架构与实战指南》](/articles/multimodal-guide/)。*
 
 ---
 

@@ -149,7 +149,7 @@ Under `single-numa-node`:
 
 ## 4. Production AI Serving: Autoscaling vLLM & SGLang on Kubernetes
 
-Operating production inference engines like **vLLM** and **SGLang** on Kubernetes requires accounting for two architectural constraints:
+Operating production inference engines like **vLLM** and **SGLang** (analyzed in our companion deep dive on [Production Inference Engines Core Architecture Internals](/en/articles/inference-engines-core-architecture-internals/)) on Kubernetes requires accounting for two architectural constraints:
 1. **Aggressive VRAM Pre-allocation**: Upon initialization, vLLM allocates up to 90% of available VRAM to establish its PagedAttention KV Cache pool. Consequently, **conventional Kubernetes CPU/Memory HPA policies fail**, as GPU memory utilization remains constant regardless of active traffic;
 2. **Prefill/Decode (P/D) Disaggregation**: Prefill operations are compute-bound, whereas Decode operations are memory-bandwidth-bound.
 

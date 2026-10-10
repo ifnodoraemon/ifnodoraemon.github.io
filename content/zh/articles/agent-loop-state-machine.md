@@ -444,7 +444,7 @@ if __name__ == "__main__":
 | **任务状态快照 (Checkpointer)** | 当前规划树（Plan）、各子任务完成状态（Done/Todo）、结构化关键实体字典 | 任务全生命周期持久化（写入 SQLite / Redis） | 仅在需要重规划（Re-planning）时格式化为摘要注入 |
 | **长期情节记忆 (Episodic Memory)** | 跨任务经验、用户核心画像、已成功沉淀的全局知识库 | 跨会话永久持久化（写入向量库 / 图数据库） | 通过语义检索检索少量 Top-K 项注入 |
 
-关于长期会话与检索增强的落地细节，可以参考我们的实战篇[《企业级 RAG 生产实践指南》](/articles/rag-in-practice/)。
+关于分层工作记忆、状态快照与长程情节记忆的完整实现，详见专栏核心篇[《AI Agent 记忆架构体系：工作记忆、短期会话与长期记忆工程落地》](/articles/agent-memory-architecture/)；底层知识检索策略可参阅[《企业级 RAG 生产实践指南》](/articles/rag-in-practice/)。
 
 ---
 
@@ -474,6 +474,8 @@ if __name__ == "__main__":
    *引入 OpenTelemetry、LangSmith 与 Langfuse，建立全链路 Trajectory 评估与执行回放。*
 10. **[第 10 篇 · 环境缩放 (Environment Scaling) 如何重塑自主 Agent：沙箱博弈与强化学习](/articles/environment-scaling-agent-guide/)**  
     *进阶探索后训练时代的环境交互扩展，掌握零逃逸安全容器沙箱与自主探索智能体。*
+11. **[第 11 篇 · AI Agent 记忆架构体系：工作记忆、短期会话与长期记忆工程落地](/articles/agent-memory-architecture/)**  
+    *深度拆解短期工作记忆 (Scratchpad)、Checkpointer 任务快照持久化与向量/图数据库长程情节记忆。*
 
 ---
 

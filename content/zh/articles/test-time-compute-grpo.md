@@ -272,7 +272,7 @@ trainer.train()
 1. **过度思考（Overthinking）惩罚**：在处理“中国的首都是哪里？”这类常识性检索时，模型可能依然会强制输出 800 字的 `<think>` 自我怀疑与反问，导致吞吐暴跌、首字延迟（TTFT）激增数秒；
 2. **推理预算动态分配（Dynamic Budget Allocation）**：高阶工程落地的最优实践是采用**两阶段路由中枢**：
    * 80% 的日常检索和格式化问答，直接路由给常规轻量级模型或走 [RAG 检索增强架构](/articles/rag-in-practice/)；
-   * 20% 涉及代码生成、复杂数理与多步规划的高难逻辑，才转交至开启了 GRPO 思考链的端点，并设置自适应思考上限（`max_thinking_tokens`）。关于推理集群的高并发吞吐配置，请参阅 [vLLM 生产级部署全指南](/articles/vllm-serving-guide/)。
+   * 20% 涉及代码生成、复杂数理与多步规划的高难逻辑，才转交至开启了 GRPO 思考链的端点，并设置自适应思考上限（`max_thinking_tokens`）。关于推理集群的高并发吞吐配置，请参阅 [vLLM 生产级部署全指南](/articles/vllm-serving-guide/)；关于长思考链、动态计算预算与大模型推理终局的更深入推演，可阅读专栏终局篇 [《长思考链与 Test-Time Compute：大模型推理引擎的终局之战》](/articles/reasoning-test-time-compute-inference-future/)。
 
 ---
 
