@@ -100,7 +100,7 @@ On modern accelerators (e.g., H100/H800), a single autoregressive decoding step 
 The **vLLM v1** redesign migrated the core scheduler and request lifecycle managers into a high-performance C++ async engine, introducing **Multi-Step Scheduling**.
 
 In traditional step-by-step engines, CPU and GPU synchronize after every single generated token:
-```
+```text
 Traditional Step-by-Step Execution:
 [CPU: Schedule Step 1] -> [GPU: Kernel Launch] -> [CPU Wait & Sync] -> [CPU: Schedule Step 2] ...
 ```
@@ -206,7 +206,7 @@ Rather than relying on dynamic graph generation, TensorRT-LLM compiles model arc
 
 TensorRT-LLM achieves peak throughput by eliminating intermediate memory reads and writes:
 
-```
+```text
 Standard Transformer Layer Execution:
 [RMSNorm] --(Write HBM)--> [QKV GEMM] --(Write HBM)--> [RoPE] --(Write HBM)--> [FlashAttention] ...
 
@@ -248,7 +248,7 @@ llama.cpp standardized the universal **GGUF container format**, packaging model 
 
 Furthermore, its custom **k-quants block-quantization algorithms** enable aggressive compression:
 
-```
+```text
 llama.cpp k-quants Precision Hierarchy:
 ┌───────────────────────────────────────────────────────────────┐
 │ Q4_K_M: 4.5-bit attention layers with 4-bit feed-forward grids│

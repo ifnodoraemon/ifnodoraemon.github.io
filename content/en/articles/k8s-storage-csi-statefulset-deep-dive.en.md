@@ -67,7 +67,7 @@ This **In-Tree** approach incurred severe architectural friction:
 
 To establish clean modularity, the community ratified the **CSI (Container Storage Interface)** specification in partnership with Cloud Foundry, Mesos, and Docker. Starting with Kubernetes 1.20+, In-Tree drivers were deprecated in favor of **Out-of-Tree gRPC CSI plugin architectures**:
 
-```
+```text
 CSI Control and Data Plane Architecture:
 ┌──────────────────────────────────────────────────────────────┐
 │ Control Plane Sidecars (CSI Controller Deployment)            │
@@ -154,7 +154,7 @@ If a primary-replica MySQL database or Kafka broker cluster runs on a Deployment
 
 The **`StatefulSet`** controller manages pods as persistent entities, enforcing three structural invariants:
 
-```
+```text
 StatefulSet Structural Invariants:
 1. Deterministic Sequential Identity:
    redis-0 (Ordinal 0) ──► redis-1 (Ordinal 1) ──► redis-2 (Ordinal 2)

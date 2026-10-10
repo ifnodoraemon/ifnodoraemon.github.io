@@ -107,7 +107,7 @@ Traditional Ethernet switches predominantly operate in **Store-and-Forward mode*
 
 InfiniBand switches enforce **Cut-Through Switching**:
 
-```
+```text
 InfiniBand Packet Header:
 +------------------------------------+--------------------------+-----------------------+
 | Local Route Header (LRH)           | Base Transport Hdr (BTH) | Payload Data ...      |
@@ -129,7 +129,7 @@ InfiniBand avoids distributed broadcast discovery. The entire InfiniBand fabric 
 
 ### 3.1 Identifiers: GUID, LID, and LMC
 
-```
+```text
 InfiniBand Identification Hierarchy:
 +--------------------------------------------------------------------------+
 | Global Unique Identifier (Node GUID / Port GUID): 64-bit burned into ROM |

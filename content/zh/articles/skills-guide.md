@@ -87,7 +87,7 @@ description: 代码审查助手，从安全性、性能、类型安全、测试�
 
 Skills 可以包含脚本、参考文档、模板等附属文件，**只有在 SKILL.md 中被引用且确实需要时才会被读取**。
 
-```
+```text
 skills/
 └── code-review/
     ├── SKILL.md           # 必需：核心指令
@@ -511,7 +511,7 @@ graph LR
 
 ### 1. 分层组织策略
 
-```
+```text
 项目根目录/
 ├── AGENTS.md              # 跨平台通用的项目上下文
 ├── CLAUDE.md              # Claude Code 全局配置

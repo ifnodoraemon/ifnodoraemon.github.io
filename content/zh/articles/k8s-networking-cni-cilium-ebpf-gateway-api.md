@@ -56,7 +56,7 @@ Kubernetes 对集群网络施加了非常硬核的“四大网络公理（Axioms
    宿主机上的 Kubelet 和系统 Daemon 可以直接通过 Pod IP 与其顺畅通信，反之亦然。
 4. **处于宿主机网络（HostNetwork）的 Pod 与其它 Pod 免 NAT 通信**。
 
-```
+```text
 经典 Kubernetes 扁平二层网络视界 (Flat Network):
 Node A (192.168.1.10)              Node B (192.168.1.20)
 ┌──────────────────────┐          ┌──────────────────────┐
@@ -108,7 +108,7 @@ CNI 规范极其精简，其二进制仅需实现四个核心指令：
 
 在选择 CNI 插件时，架构师首先面临的是网络底层的架构范式选型：**覆盖网络（Overlay）** 还是 **直连路由（Underlay）**？
 
-```
+```text
 Overlay (VXLAN) 报文封装:
 [物理以太头][物理外层 IP][UDP 4789][VXLAN 头 8B][内层原始 Pod IP 包] -> MTU 需下调 50 字节
 

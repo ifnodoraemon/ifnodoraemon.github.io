@@ -67,7 +67,7 @@ flowchart TD
 
 为了实现彻底的松耦合，Kubernetes 社区联合 Mesos、Cloud Foundry 制定了统一的 **CSI（Container Storage Interface，容器存储接口）** 规范。从 Kubernetes 1.20+ 开始，所有 In-Tree 插件已被全面弃用，全面迁移至基于 gRPC 的 **Out-of-Tree CSI 插件架构**：
 
-```
+```text
 CSI 插件控制与数据面分离架构:
 ┌──────────────────────────────────────────────────────────────┐
 │ 控制平面 (CSI Controller Sidecars - Deployment)               │
@@ -154,7 +154,7 @@ sequenceDiagram
 
 **`StatefulSet`** 专为有状态集群而生，它对待 Pod 的态度是“悉心呵护（Pets）”，并在底层提供三项不可动摇的拓扑铁律：
 
-```
+```text
 StatefulSet 的确定性拓扑保证:
 1. 确定性顺序命名:
    redis-0 (Ordinal 0) ──► redis-1 (Ordinal 1) ──► redis-2 (Ordinal 2)

@@ -157,7 +157,7 @@ cgroups are implemented not as external daemons, but as **hooks directly embedde
 
 Early container deployments historically relied on cgroups v1, which instituted a **multi-hierarchy tree** design:
 
-```
+```text
 cgroups v1 Fragmented Hierarchy:
 /sys/fs/cgroup/
   ├── cpu/docker/<container_id>/      <-- Independent CPU tree
@@ -173,7 +173,7 @@ In production environments, this design caused significant failures:
 
 To resolve these architectural flaws, Linux kernel version 4.5 introduced **cgroups v2**, which has become the mandatory production baseline across contemporary distributions and Kubernetes clusters:
 
-```
+```text
 cgroups v2 Unified Single-Root Hierarchy:
 /sys/fs/cgroup/
   └── docker/

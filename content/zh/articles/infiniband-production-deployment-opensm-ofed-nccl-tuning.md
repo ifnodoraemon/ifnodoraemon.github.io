@@ -37,7 +37,7 @@ extraTags:
 
 在 Linux 宿主机上，InfiniBand 与 RoCE 依赖一套深度的内核与用户态驱动体系 —— **MLNX_OFED（OpenFabrics Enterprise Distribution）** 或集成于 **NVIDIA DOCA** 环境中。
 
-```
+```text
 主机 InfiniBand 驱动分层体系:
 +-------------------------------------------------------------------------+
 | 用户态应用层: PyTorch / NCCL / MPI / ibverbs 测试工具 (ib_write_bw)       |
@@ -168,7 +168,7 @@ ibdiagnet -c 50000 -v -o /var/log/ibdiagnet_report/
 打开 `/var/log/ibdiagnet_report/ibdiagnet2.log`，重点排查三大致命告警：
 
 1. **链路速率降级（Link Speed Degradation）**：
-   ```
+   ```text
    -W- Marked link speed mismatch: Port 12 of Switch GUID 0x... is running at 200G (HDR) instead of 400G (NDR)!
    ```
    **排查**：两端光模块没有插紧，或者线缆存在物理折损，强制重新拔插或更换光纤；

@@ -171,7 +171,7 @@ $$\text{Egress Port} = \text{Hash}(\text{SrcIP, DstIP, Protocol, SrcPort, DstPor
 
 VXLAN（RFC 7348）将虚拟机的二层 MAC 帧直接打包塞入标准物理 UDP 报文中：
 
-```
+```text
 VXLAN 数据包物理层层嵌套结构:
 +-------------------------------------------------------------------------+
 | 外层物理以太网头 (Outer MAC) : Egress NIC MAC -> Next-Hop Switch MAC   | 14B

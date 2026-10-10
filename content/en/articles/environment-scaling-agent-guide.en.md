@@ -22,7 +22,7 @@ Why did **GLM-5.3** capture the world #1 rank on **Terminal-Bench 3.0** with an 
 
 Post-training methodologies have undergone three distinct evolutionary phases:
 
-```
+```text
  [Phase 1: 2023-2024] SFT + RLHF
    Static text annotation -> Preference alignment -> Conversational capability
          │

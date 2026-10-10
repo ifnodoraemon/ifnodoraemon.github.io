@@ -142,7 +142,7 @@ volumeBindingMode: WaitForFirstConsumer
 - 如果数据库写入极快，而物理磁盘一时刷盘不及，Page Cache 会迅速暴涨，直接顶满容器的 `resources.limits.memory`；
 - 此时 Linux 内核为了回收内存会强制触发回写（Direct Reclaim），导致业务线程被强制卡顿数秒甚至直接触发容器 OOMKiller！
 
-```
+```text
 宿主机与容器内核参数黄金调优配置 (/etc/sysctl.conf):
 # 1. 降低脏页触发异步刷盘的阈值 (默认通常为 10%，调低至 5% 保持频繁平滑刷盘)
 vm.dirty_background_ratio = 5

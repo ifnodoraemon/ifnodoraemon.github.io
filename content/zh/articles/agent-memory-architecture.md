@@ -54,7 +54,7 @@ extraTags:
 
 参考认知心理学模型与 UC Berkeley 团队在 **Letta (原 MemGPT)** 论文中提出的“操作系统式内存分层（LLM-OS）”，生产级 Agent 的记忆被解构为以下三层金字塔：
 
-```
+```text
                     ┌─────────────────────────┐
                     │      Core Memory        │
                     │   (人设、用户画像、硬红线)   │  <-- 永久驻留 Prompt (数千 Token)
@@ -160,7 +160,7 @@ $$\text{Final Score}(m) = w_{\text{rel}} \cdot S_{\text{semantic}}(q, m) + w_{\t
 
 ### 状态覆盖与冲突解决示例
 
-```
+```text
 [2026-03-01 记录]
 (User) --[owns_tech_stack {valid_from: "2026-03-01", valid_to: "2026-03-15"}]--> (Python)
 

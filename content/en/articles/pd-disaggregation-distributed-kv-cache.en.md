@@ -138,7 +138,7 @@ $$\text{Bytes}_{\text{MLA}} = 61 \times (576 \times 2) = 70,272 \text{ bytes} \a
 At the same **16,384 (16k)** sequence length, the data transferred drops to:
 $$\text{Size}_{\text{MLA-16k}} = 68.6 \text{ KB} \times 16,384 \approx 1.12 \text{ GB}$$
 
-```
+```text
 16k Context Cross-Node Transfer Volume Comparison:
 ┌─────────────────────────────────────────────────────────────┐
 │ Classical GQA (LLaMA-3-70B):  ████████████████████ 5.24 GB  │

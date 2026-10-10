@@ -40,7 +40,7 @@ As Part 5 of our masterclass **Computer Networking: From Ethernet Principles to 
 
 ### 1.1 Physical Anatomy of the IPv4 Header
 
-```
+```text
 IPv4 Header Structure (Fixed 20 bytes without Options):
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -172,7 +172,7 @@ MSL (Maximum Segment Lifetime) represents the longest duration an IP datagram ca
 
 TCP achieves high network throughput through its **pipelined sliding window mechanism**, abandoning the sluggish stop-and-wait paradigm.
 
-```
+```text
 TCP Sender Sliding Window Model:
           Sent & Acked            Sent & Unacked        Usable Window (Unsent)        Cannot Send Yet
         [ ... 1 2 3 4 ]       [ 5 6 7 8 ]        [ 9 10 11 12 ]       [ 13 14 15 ... ]

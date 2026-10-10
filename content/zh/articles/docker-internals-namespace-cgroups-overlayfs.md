@@ -157,7 +157,7 @@ cgroups 并不是在进程外部运行监控守护进程，而是**直接内嵌�
 
 在早期的 Linux 内核（Linux 4.5 以前）中，工业界广泛使用的是 cgroups v1。v1 采用了**多层级独立树（Multi-hierarchy Tree）**的设计：
 
-```
+```text
 cgroups v1 割裂的独立目录树:
 /sys/fs/cgroup/
   ├── cpu/docker/<container_id>/      <-- CPU 子系统单独一棵树
@@ -175,7 +175,7 @@ cgroups v1 割裂的独立目录树:
 
 cgroups v2 确立了**单一联合层级树（Single Unified Hierarchy）**与**“仅叶子节点可包含进程（No Internal Process Constraint）”**的核心原则：
 
-```
+```text
 cgroups v2 统一单根树架构:
 /sys/fs/cgroup/
   └── docker/

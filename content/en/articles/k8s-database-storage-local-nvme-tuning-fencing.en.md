@@ -139,7 +139,7 @@ Under default Linux kernel settings, file write operations cache within the oper
 - If the database ingests data faster than the physical medium can flush, Page Cache buffers surge, reaching the container's `resources.limits.memory`;
 - The Linux kernel triggers synchronous writeback (Direct Reclaim), freezing worker threads for several seconds or terminating the database process via the OOMKiller!
 
-```
+```text
 Host and Container Kernel Tuning Guidelines (/etc/sysctl.conf):
 # 1. Lower threshold for background asynchronous dirty page flushing (from 10% to 5%)
 vm.dirty_background_ratio = 5

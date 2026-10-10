@@ -95,7 +95,7 @@ $$F = \left\lfloor \frac{N - 1}{2} \right\rfloor$$
 
 而 Docker Swarm 的设计哲学是**“开箱即用（Batteries Included）”**。SwarmKit 直接在其代码库内部内嵌了一个基于 Go 语言实现的完整 **Raft 一致性引擎**：
 
-```
+```text
 SwarmKit 内存状态机存储流水线:
 用户执行: docker service scale web=5
              │

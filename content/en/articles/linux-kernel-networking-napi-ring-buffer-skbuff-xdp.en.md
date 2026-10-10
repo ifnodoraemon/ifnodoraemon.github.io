@@ -71,7 +71,7 @@ In early Linux kernels, each incoming packet generated a dedicated hardware inte
 
 In the Linux network subsystem, **`struct sk_buff` (skb)** is the primary abstraction representing packets as they traverse the stack from device drivers to user-space sockets.
 
-```
+```text
 Pointer Architecture of struct sk_buff:
 +-------------------------------------------------------------+
 | struct sk_buff (Control Metadata Block)                     |

@@ -28,7 +28,7 @@ Each of these techniques pushed dense model compute efficiency and memory utiliz
 - **Active Parameters per Token**: Only ~**37B** (comprising 1 shared expert + 8 dynamically routed experts);
 - **Sparsity Ratio**: Reaching $94.5\%$, meaning $94.5\%$ of FFN parameters remain completely idle for any single token!
 
-```
+```text
 DeepSeek-V3 Compute Sparsity Overview:
 ┌─────────────────────────────────────────────────────────────┐
 │ Total Parameters: 671B (256 Routed Experts + 1 Shared Expert)│
@@ -103,7 +103,7 @@ With $E=256$ total experts:
 
 When an expert processes a single token, the GPU must stream its entire set of weight matrices ($W_{\text{gate}}, W_{\text{up}}, W_{\text{down}}$) from HBM into SRAM, only to execute a single matrix-vector multiplication (GEMV):
 
-```
+```text
 MoE Per-Expert Arithmetic Intensity:
 - Prefill Phase (Long Context S=4096, B=4):
   Total assigned tokens = 4096 * 4 * 8 = 131,072
@@ -189,7 +189,7 @@ Deploying a 671B model requires partitioning across multi-node GPU clusters. Two
 In intra-node TP (e.g., TP=8 on an 8-GPU node):
 Each expert's linear layers are sliced across 8 GPUs (ColumnParallel Linear 1 + RowParallel Linear 2). Every GPU holds a $\frac{1}{8}$ slice of all 256 experts.
 
-```
+```text
 TP Data & Weight Topology (TP=8):
 GPU 0: [E0_slice0, E1_slice0, E2_slice0, ... E255_slice0]
 GPU 1: [E0_slice1, E1_slice1, E2_slice1, ... E255_slice1]

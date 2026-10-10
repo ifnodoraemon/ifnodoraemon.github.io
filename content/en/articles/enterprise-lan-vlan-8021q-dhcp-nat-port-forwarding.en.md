@@ -68,7 +68,7 @@ They use the standard **IEEE 802.1Q frame tagging specification**.
 
 The 802.1Q standard inserts a **4-byte (32-bit) VLAN Tag** between the Source MAC and EtherType fields of a standard Ethernet frame:
 
-```
+```text
 Standard Ethernet Frame with 802.1Q Tag Inserted:
 +-----------+-----------+-------------------------+-----------+---------------+---------+
 | Dest MAC  | Source MAC| 802.1Q Tag Header       | EtherType | Payload Data  | FCS     |
@@ -91,7 +91,7 @@ Standard Ethernet Frame with 802.1Q Tag Inserted:
 
 Switches connect to both end-user devices and upstream network equipment, relying on two distinct port modes:
 
-```
+```text
 +-------------------------------------------------------------------------------+
 | Access Port (Endpoint Links): Connects to PCs, printers, and standard servers |
 |   - Characteristics: Assigned to a single VLAN (e.g., PVID=10)                |

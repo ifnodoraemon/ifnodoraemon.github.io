@@ -38,7 +38,7 @@ output = model.generate(input_ids, max_new_tokens=128)
 
 这段代码直观而优雅，但只要你使用 **Nsight Systems (`nsys`)** 或 **PyTorch Profiler** 对其 GPU 运行状态进行一次微秒级切片采样，就会目睹一个令硬件架构师大跌眼镜的现实：
 
-```
+```text
 [GPU Profiling Snapshot on NVIDIA H100 SXM5 (80GB)]
 --------------------------------------------------------------------------------
 Phase 1: Prompt Processing (Prefill)  -> Duration: ~12.4 ms | Tensor Core: 82.4%

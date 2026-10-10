@@ -102,7 +102,7 @@ Kubernetes 的所有持久化状态全部保存在 **etcd** 中。etcd 是一个
 
 与传统关系型数据库或 Redis 覆盖写模式不同，**etcd v3 采用了极其硬核的 MVCC（Multi-Version Concurrency Control，多版本并发控制）架构**：
 
-```
+```text
 etcd 逻辑存储架构:
 逻辑键空间 (B-Tree 内存索引):
   /registry/pods/default/nginx-pod ──► Revisions: [v3, v8, v15(tombstone)]

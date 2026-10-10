@@ -100,7 +100,7 @@ $$s_i^* = \max_{j=1}^m \{ s_{i,j} \}$$
 
 **Volcano Scheduling Policy**: In every scheduling iteration, the scheduler **always prioritizes dequeuing workloads for the tenant with the lowest dominant share $s_i^*$**!
 
-```
+```text
 DRF Scheduling Example:
 Cluster Total Capacity: 100 CPUs, 100 GPUs
 • Tenant A task: requires 2 CPUs + 1 GPU

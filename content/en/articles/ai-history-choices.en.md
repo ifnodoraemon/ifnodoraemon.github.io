@@ -174,7 +174,7 @@ Across all six crossroads, every winning technology conformed to the same underl
 
 ### Throughline #1: Compute Is the Ultimate Arbiter
 
-```
+```text
 Symbolism won      ← Hardware only supported rule traversal
 SVMs hijacked      ← CPU era favored small models
 Deep Learning rose ← GPU dividend exploded

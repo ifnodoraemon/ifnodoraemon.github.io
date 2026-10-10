@@ -57,7 +57,7 @@ Kubernetes enforces strict network contracts across all certified implementation
 4. **NAT-Free HostNetwork Communication**:
    Pods operating in the host network space (`hostNetwork: true`) communicate with all other Pods without address translation.
 
-```
+```text
 Classic Kubernetes Flat Layer-3 Network Perspective:
 Node A (192.168.1.10)              Node B (192.168.1.20)
 ┌──────────────────────┐          ┌──────────────────────┐
@@ -109,7 +109,7 @@ The CNI specification defines four core verbs:
 
 When selecting a CNI provider, platform architects must choose between two networking approaches: **Overlay (Tunneling)** and **Underlay (Direct Routing)**.
 
-```
+```text
 Overlay (VXLAN) Encapsulation:
 [Outer Eth][Outer IP][UDP 4789][VXLAN 8B][Inner Pod IP Packet] -> MTU reduced by 50 Bytes
 

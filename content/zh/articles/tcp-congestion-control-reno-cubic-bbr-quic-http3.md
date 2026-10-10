@@ -78,7 +78,7 @@ $$W_{cubic}(t) = C \cdot (t - K)^3 + W_{max}$$
 - $K = \sqrt[3]{\frac{W_{max} \cdot \beta}{C}}$，为窗口恢复到 $W_{max}$ 所需的时间常数；
 - $C$ 为算法调优常数（默认约 0.4），$\beta$ 为乘法递减因子（默认约 0.2）。
 
-```
+```text
 Cubic 窗口增长曲线 (凹凸两阶段):
       cwnd ^                                    / (凸阶阶段: 快速试探新带宽)
            |                                  /
@@ -132,7 +132,7 @@ $$BDP = BtlBw \times RTprop$$
 
 BBR 不再单纯依赖 TCP 窗口滑动，而是引入了精准的**起搏速率引擎（Pacing Rate）**，以恒定的纳秒级时间间隔均匀向网卡喷射数据包：
 
-```
+```text
 pacing_rate = pacing_gain * BtlBw
 ```
 

@@ -127,7 +127,7 @@ stateDiagram-v2
 
 In a deterministic architecture, tool invocation is treated not as a trivial `try...except` wrapper, but as a layered defensive perimeter:
 
-```
+```text
                    ┌───────────────────────────────────────────────┐
                    │               LLM Tool Call                   │
                    └───────────────────────┬───────────────────────┘

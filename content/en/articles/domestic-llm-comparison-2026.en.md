@@ -21,7 +21,7 @@ How should enterprise software architects and AI practitioners navigate these di
 
 ## 1. Architectural Philosophies Compared
 
-```
+```text
        ┌────────────────────────────────────────────────────────┐
        │             2026 Frontier Chinese AI Architectures     │
        └────────────────────────────────────────────────────────┘

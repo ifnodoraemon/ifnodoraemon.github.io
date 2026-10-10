@@ -81,7 +81,7 @@ The HCA hardware reads from and writes directly to physical RAM (or GPU High Ban
 
 In RDMA, the core abstraction is not a socket, but a **Queue Pair (QP)**.
 
-```
+```text
 RDMA Core Architecture Abstraction:
 +-------------------------------------------------------------+
 |                     Host Channel Adapter (HCA)              |
@@ -143,7 +143,7 @@ RDMA was originally conceived for native **InfiniBand (IB)** fabrics. To bring R
 - **RoCEv1**: Encapsulated directly within Layer 2 Ethernet frames; incapable of Layer 3 routing, now obsolete;
 - **RoCEv2**: Encapsulates RDMA packets inside standard **UDP datagrams (destination port 4791)**, enabling Layer 3 IP routing.
 
-```
+```text
 RoCEv2 Packet Encapsulation:
 +-------------------+----------------+---------------+--------------------+------------------+
 | Ethernet Header   | IPv4 Header    | UDP Header    | RDMA Transport     | Application Data |

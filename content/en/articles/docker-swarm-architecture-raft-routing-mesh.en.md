@@ -95,7 +95,7 @@ In Kubernetes operations, few components introduce as much administrative toil a
 
 Docker Swarm took a radically different philosophical approach: **"Batteries Included"**. SwarmKit natively embeds a full Go-based **Raft consensus state machine** within the Docker daemon itself:
 
-```
+```text
 SwarmKit In-Memory State Machine Pipeline:
 Admin Command: docker service scale web=5
        │
@@ -151,7 +151,7 @@ sequenceDiagram
 ### 3.1 Packet Encapsulation Structure
 When Container A sends an IP packet to Container B, the Linux kernel network stack wraps the original payload inside an outer transport envelope:
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        Outer Ethernet Header                          │
 ├───────────────────┬───────────────────┬────────────────────────────────┤

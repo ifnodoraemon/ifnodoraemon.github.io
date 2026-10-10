@@ -78,7 +78,7 @@ Where:
 - $K = \sqrt[3]{\frac{W_{max} \cdot \beta}{C}}$ is the time constant required to scale the window back to $W_{max}$;
 - $C$ is a scaling constant (typically ~0.4), and $\beta$ is the multiplicative decrease factor (typically ~0.2).
 
-```
+```text
 Cubic Window Growth Curve (Concave and Convex Phases):
       cwnd ^                                    / (Convex Phase: Probing New Capacity)
            |                                  /
@@ -132,7 +132,7 @@ $$BDP = BtlBw \times RTprop$$
 
 BBR replaces sliding window packet bursts with an autonomous **Pacing Engine**, dispatching individual packets at precise nanosecond intervals:
 
-```
+```text
 pacing_rate = pacing_gain * BtlBw
 ```
 

@@ -28,7 +28,7 @@ extraTags:
 - **每 Token 激活参数量（Active Parameters per Token）**：仅约 **37B**（含 1 个共享专家 + 8 个被动态选中的路由专家）；
 - **稀疏率（Sparsity Ratio）**：高达 $94.5\%$，这意味着 $94.5\%$ 的 FFN 权重在当前 Token 的计算中处于静默状态！
 
-```
+```text
 DeepSeek-V3 计算稀疏度对比：
 ┌─────────────────────────────────────────────────────────────┐
 │ 总参数量: 671B (每个 Layer 拥有 256 路由专家 + 1 共享专家)     │
@@ -103,7 +103,7 @@ $$y = E_{\text{shared}}(x) + \sum_{i \in \text{TopK}(S, K)} s_i E_i(x)$$
 
 当一个 GPU 节点上的专家只分到一个 Token 时，GPU 必须从 HBM 显存完整加载该专家的全部权重矩阵（$W_{\text{gate}}, W_{\text{up}}, W_{\text{down}}$），却只对单向量做了一次矩阵-向量乘法（GEMV）！
 
-```
+```text
 MoE 单专家算术强度对比：
 - Prefill 阶段 (长上下文 S=4096, B=4):
   总分配 Token 数 = 4096 * 4 * 8 = 131,072
@@ -189,7 +189,7 @@ $$b_i \leftarrow b_i + \gamma \cdot \left(\frac{1}{E} \sum_{j=1}^E C_j - C_i\rig
 若将现有的 TP 方案直接套用到 MoE 上（如在 8 卡节点内做 TP=8）：
 每个专家的权重矩阵被纵向或横向切分到 8 张 GPU 上（ColumnParallel Linear 1 + RowParallel Linear 2）。每个 GPU 均驻留全部 256 个专家的 $\frac{1}{8}$ 分片。
 
-```
+```text
 TP 模式下的数据与权重拓扑 (TP=8):
 GPU 0: [E0_slice0, E1_slice0, E2_slice0, ... E255_slice0]
 GPU 1: [E0_slice1, E1_slice1, E2_slice1, ... E255_slice1]

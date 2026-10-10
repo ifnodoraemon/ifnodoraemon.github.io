@@ -41,7 +41,7 @@ This article is **Chapter 1 of our masterclass: Computer Networking: From Ethern
 
 Computers are electronic devices. They cannot directly perceive abstract numbers; they respond only to **voltage shifts** or the **presence/absence of light pulses**:
 
-```
+```text
 NRZ Voltage Encoding of Binary Bits:
    High Voltage (+5V)  -------\       /-------\
                                \     /         \
@@ -56,7 +56,7 @@ NRZ Voltage Encoding of Binary Bits:
 
 A standard RJ45 Ethernet cable (such as Cat5e or Cat6) contains eight thin copper wires twisted into four distinct pairs. **Why twist the wires around each other instead of running them straight and parallel?**
 
-```
+```text
 Differential Signaling and Noise Cancellation:
 Wire 1 (TX+) :  +  +  +  +  +  +  +  +  +  +  (Positive Signal)
 Wire 2 (TX-) :  -  -  -  -  -  -  -  -  -  -  (Inverted Negative Signal)
@@ -154,7 +154,7 @@ A MAC (Media Access Control) address is a globally unique 48-bit hardware identi
 
 At Layer 2, data moves encapsulated within **Frames**:
 
-```
+```text
 Standard Ethernet II Frame (IEEE 802.3):
 +----------------+-----+-------------+-------------+------+---------------+---------+
 | Preamble       | SFD | Dest MAC    | Source MAC  | Type | Payload       | FCS     |

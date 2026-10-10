@@ -102,7 +102,7 @@ All persistent cluster state resides within **etcd**, a strongly consistent, dis
 
 Unlike traditional relational databases or overwrite-based stores like Redis, **etcd v3 implements Multi-Version Concurrency Control (MVCC)**:
 
-```
+```text
 etcd Logical Storage Architecture:
 Key Space (In-Memory B-Tree Index):
   /registry/pods/default/nginx-pod ──► Revisions: [v3, v8, v15(tombstone)]

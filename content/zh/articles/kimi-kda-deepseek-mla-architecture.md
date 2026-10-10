@@ -78,7 +78,7 @@ S_t = S_{t-1} + ΔS_t
 | **首字延迟 (TTFT)** | 极慢 (随序列二次增长) | 快 (受带宽限制小) | **极快 (线性计算增长)** |
 | **解码吞吐 (Tokens/s)** | 22 t/s | 95 t/s | **110 t/s** |
 
-```
+```text
 显存占用对比曲线 (Context Length vs Memory Usage):
 
  显存 (GB)

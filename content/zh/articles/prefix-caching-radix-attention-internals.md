@@ -322,7 +322,7 @@ flowchart TD
 **会，这会导致极其惨烈的“前缀雪崩”！**
 
 在大模型自回归计算中，自注意力机制会强制依赖当前 Token 之前的所有内容。如果你的 Prompt 模板是这样设计的：
-```
+```text
 [Request ID: 9845123] [Current Time: 2026-09-24 14:30:02]
 [System Prompt: You are an enterprise database expert with 20 tools...] (4,000 tokens)
 ```

@@ -37,7 +37,7 @@ As the **concluding chapter of our masterclass Computer Networking: From Etherne
 
 On Linux host systems, InfiniBand and RoCE rely on a coordinated stack of kernel and user-space modules—**MLNX_OFED (OpenFabrics Enterprise Distribution)** or the integrated **NVIDIA DOCA** environment.
 
-```
+```text
 Host InfiniBand Driver Hierarchy:
 +-------------------------------------------------------------------------+
 | User Applications: PyTorch / NCCL / MPI / ibverbs tools (ib_write_bw)   |
@@ -168,7 +168,7 @@ ibdiagnet -c 50000 -v -o /var/log/ibdiagnet_report/
 Inspect `/var/log/ibdiagnet_report/ibdiagnet2.log` for three primary warning categories:
 
 1. **Link Speed Degradation**:
-   ```
+   ```text
    -W- Marked link speed mismatch: Port 12 of Switch GUID 0x... is running at 200G (HDR) instead of 400G (NDR)!
    ```
    **Remedy**: Re-seat the transceiver or replace the degraded optical cable;

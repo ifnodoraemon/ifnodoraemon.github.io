@@ -103,7 +103,7 @@ This architecture provides **strict 1:1 non-blocking bisection bandwidth** acros
 
 High-density AI servers (such as NVIDIA DGX H100, H200, and B200 platforms) house **8 GPUs** and **8 independent high-speed HCAs** (paired 1:1 via PCIe switches and NUMA domains).
 
-```
+```text
 DGX Node Topology and HCA Mapping:
 [ GPU 0 ] <---> [ HCA 0 (mlx5_0) ]
 [ GPU 1 ] <---> [ HCA 1 (mlx5_1) ]
@@ -160,7 +160,7 @@ flowchart TD
 
 Standard shortest-path algorithms (like Dijkstra) are unsuited for credit-based networks. **Arbitrary routing turns create circular buffer dependencies!**
 
-```
+```text
 Credit Loop Deadlock Dependency:
 [Switch A Buffer] ---> Waits for ---> [Switch B Buffer]
        ^                                      |

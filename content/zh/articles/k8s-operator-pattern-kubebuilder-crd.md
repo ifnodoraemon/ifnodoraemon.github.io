@@ -64,7 +64,7 @@ flowchart LR
 
 ### 1.1 apiextensions-apiserver 动态注册
 当管理员向集群提交一个 CRD 资源清单时，内核中的 `apiextensions-apiserver` 会动态拦截并为该类型在 REST 路径上注册全新的端点：
-```
+```text
 /apis/<group>/<version>/namespaces/<namespace>/<plural>
 例如:
 /apis/database.example.com/v1alpha1/namespaces/default/redisclusters

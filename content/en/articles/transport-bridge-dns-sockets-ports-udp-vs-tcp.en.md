@@ -114,7 +114,7 @@ Any network connection is uniquely identified inside the kernel by its **5-Tuple
 
 $$\text{Connection ID} = \{\text{Source IP, Source Port, Dest IP, Dest Port, Transport Protocol}\}$$
 
-```
+```text
 +---------------------------------------------------------------------------------+
 | Linux Kernel TCP Established Connection Hash Table (eHash):                     |
 | Key: Hash(SrcIP, SrcPort, DstIP, DstPort, Protocol)  --->  Value: struct sock * |
@@ -135,7 +135,7 @@ A common misconception is that a server is limited to 65,535 connections because
 
 At Layer 4, applications typically choose between two primary transport protocols: **message-oriented UDP** or **stream-oriented TCP**.
 
-```
+```text
 UDP Header Structure (Fixed 8 Bytes):
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -148,7 +148,7 @@ UDP Header Structure (Fixed 8 Bytes):
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-```
+```text
 TCP Header Structure (Fixed 20 Bytes without Options):
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1

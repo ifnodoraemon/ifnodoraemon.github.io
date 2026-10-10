@@ -54,7 +54,7 @@ Raw operational experience consists of low-level signals. Actionable intelligenc
 
 Borrowing from cognitive science and the "LLM as an Operating System" paradigm pioneered by UC Berkeley's **Letta (formerly MemGPT)** research, production agents decompose memory into three distinct tiers:
 
-```
+```text
                     ┌─────────────────────────┐
                     │      Core Memory        │
                     │ (Persona, User Profile) │  <-- Permanent prompt injection (~few k tokens)
@@ -160,7 +160,7 @@ Pure vector stores lack understanding of **multi-hop entity relationships** and 
 
 ### State Invalidation & Edge Lifecycles
 
-```
+```text
 [2026-03-01 Initial State]
 (User) --[owns_tech_stack {valid_from: "2026-03-01", valid_to: "2026-03-15"}]--> (Python)
 

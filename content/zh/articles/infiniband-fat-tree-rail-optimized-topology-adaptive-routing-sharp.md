@@ -103,7 +103,7 @@ $$N_{3\text{-tier}} = 2 \times \left(\frac{k}{2}\right)^3 = \frac{k^3}{4}$$
 
 在顶尖 AI 智算服务器（如 NVIDIA DGX H100/H200/B200）中，单台服务器内部挂载 **8 块 GPU** 与 **8 块独立的高速 HCA 网卡**（通过 PCIe Switch/CPU NUMA 严格 1:1 亲和绑定）。
 
-```
+```text
 DGX 节点内部拓扑与网卡绑定关系:
 [ GPU 0 ] <---> [ HCA 0 (mlx5_0) ]
 [ GPU 1 ] <---> [ HCA 1 (mlx5_1) ]
@@ -160,7 +160,7 @@ flowchart TD
 
 在传统网络中，Dijkstra 最短路径算法被广泛使用。但在基于 Credit 流控的胖树网络中，**自由寻路是致命的毒药！**
 
-```
+```text
 信用死锁循环依赖图 (Credit Loop Deadlock):
 [Switch A 缓冲区] ---> 等待 ---> [Switch B 缓冲区]
        ^                                |

@@ -27,7 +27,7 @@ The emergence of extended reasoning models — spearheaded by **OpenAI o1/o3/o-s
 
 AI development has officially entered the era of **Test-Time Compute Scaling**:
 
-```
+```text
 The Dual Scaling Laws of Modern AI:
 ┌─────────────────────────────────────────────────────────────┐
 │ 1. Pre-training Scaling Law:                                │
@@ -124,7 +124,7 @@ Consequently, [Speculative Decoding](/en/articles/speculative-decoding-eagle-gui
 1. **Domain-Specific Draft Models**: Using lightweight 1B~3B models fine-tuned on reasoning steps, or draft heads like **EAGLE-3** operating on the base model's internal hidden states;
 2. **Multi-Token Acceptance**: High prediction agreement enables accepting 3~5 tokens per forward pass on deterministic reasoning steps, **compressing lengthy multi-minute thinking latencies by $3\times \sim 4\times$**.
 
-```
+```text
 Standard Autoregressive Reasoning:
 [Decode 1] -> [Decode 2] -> [Decode 3] -> ... -> [Decode 64000] (High Latency)
 

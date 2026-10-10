@@ -101,7 +101,7 @@ flowchart TD
 为了彻底粉碎这一瓶颈，社区推出了全新的 **vLLM v1** 架构。v1 将原本用 Python 编写的调度核心与请求生命周期管理器全量下沉到了高效的 C++ 异步引擎中，并引入了核心杀手锏 —— **多步调度（Multi-Step Scheduling）**。
 
 在传统单步引擎中，CPU 必须与 GPU 在每一个生成的 Token 之间进行一次同步与状态轮询：
-```
+```text
 传统单步调度流 (Step-by-Step):
 [CPU: Schedule Step 1] -> [GPU: Kernel Launch] -> [CPU Wait & Sync] -> [CPU: Schedule Step 2] ...
 ```
@@ -208,7 +208,7 @@ SGLang 摒弃了过重的抽象层，调度器与底层的 **FlashInfer** 和自
 
 TRT-LLM 性能恐怖的核心源泉在于其无所不用其极的算子融合：
 
-```
+```text
 标准 Transformer Layer 内存流:
 [RMSNorm] --(写回HBM)--> [QKV GEMM] --(写回HBM)--> [RoPE] --(写回HBM)--> [FlashAttention] ...
 
@@ -252,7 +252,7 @@ llama.cpp 奠定了开源端侧模型的通用容器标准 —— **GGUF 格式*
 
 更重要的是，llama.cpp 实现了极为夸张的 **k-quants 混合低比特量化**：
 
-```
+```text
 llama.cpp k-quants 精度层级剖析:
 ┌───────────────────────────────────────────────────────────────┐
 │ Q4_K_M: 注意力层核心权重采用 4.5-bit，非关键层采用 4-bit (黄金平衡点)│

@@ -171,7 +171,7 @@ While the physical Underlay provides high-speed Layer 3 transport, multi-tenant 
 
 VXLAN (RFC 7348) encapsulates guest Layer-2 Ethernet frames inside standard physical UDP datagrams:
 
-```
+```text
 VXLAN Packet Encapsulation Hierarchy:
 +-------------------------------------------------------------------------+
 | Outer Ethernet Header (Outer MAC): Egress NIC MAC -> Next-Hop MAC      | 14B

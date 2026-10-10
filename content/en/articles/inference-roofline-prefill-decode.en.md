@@ -38,7 +38,7 @@ output = model.generate(input_ids, max_new_tokens=128)
 
 While clean and idiomatic, profiling this execution loop with **Nsight Systems (`nsys`)** or **PyTorch Profiler** on production hardware reveals a striking paradox:
 
-```
+```text
 [GPU Profiling Snapshot on NVIDIA H100 SXM5 (80GB)]
 --------------------------------------------------------------------------------
 Phase 1: Prompt Processing (Prefill)  -> Duration: ~12.4 ms | Tensor Core: 82.4%

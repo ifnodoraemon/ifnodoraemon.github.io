@@ -43,7 +43,7 @@ To make 32-bit binary strings readable for humans, networking uses **Dotted-Deci
 2. Separate each octet with a period (`.`);
 3. Convert each 8-bit binary octet into its decimal equivalent.
 
-```
+```text
 32-Bit Binary Anatomy of an IPv4 Address:
  Binary:    11000000  .  10101000  .  00000001  .  00000001
  Length:    8 Bits       8 Bits       8 Bits       8 Bits   = 32 Bits (4 Bytes)
@@ -73,7 +73,7 @@ A Subnet Mask is also a 32-bit binary number, governed by a simple rule:
 - **It starts with a contiguous sequence of binary `1`s** (masking the Network ID);
 - **It ends with a contiguous sequence of binary `0`s** (masking the Host ID).
 
-```
+```text
 Standard /24 Subnet Mask (255.255.255.0):
  Decimal:     255    .     255    .     255    .      0
  Binary:   11111111  .  11111111  .  11111111  .  00000000
@@ -93,7 +93,7 @@ In modern CIDR notation, `/26` indicates that **the first 26 bits of the mask ar
 
 Let's compute the subnet parameters manually:
 
-```
+```text
 Step 1: Expand Subnet Mask /26 to binary and decimal
 Mask Binary : 11111111.11111111.11111111.11000000  (26 ones, followed by 6 zeros)
 Octet 4 Val : 128 + 64 = 192

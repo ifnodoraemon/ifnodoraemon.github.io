@@ -64,7 +64,7 @@ By default, Kubernetes recognizes only built-in core resource types: `Pods`, `Se
 
 ### 1.1 Dynamic Registration via apiextensions-apiserver
 When a cluster administrator submits a CRD manifest, the internal `apiextensions-apiserver` intercepts the request and registers new REST endpoints:
-```
+```text
 /apis/<group>/<version>/namespaces/<namespace>/<plural>
 Example:
 /apis/database.example.com/v1alpha1/namespaces/default/redisclusters

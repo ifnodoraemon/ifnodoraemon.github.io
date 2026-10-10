@@ -323,7 +323,7 @@ The operational risk occurs during **abrupt traffic surges**: if incoming reques
 **Yes. Placing dynamic variables at the start of a prompt causes an immediate "cache avalanche."**
 
 Because causal self-attention conditions every token on all preceding tokens, a prompt structured like:
-```
+```text
 [Request ID: 9845123] [Current Time: 2026-09-24 14:30:02]
 [System Prompt: You are an enterprise database expert with 20 tools...] (4,000 tokens)
 ```

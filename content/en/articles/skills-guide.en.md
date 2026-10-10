@@ -87,7 +87,7 @@ When a user's request matches a Skill's `description`, the AI loads that Skill's
 
 Skills can include scripts, reference docs, and templates as supporting files — **only read when referenced in SKILL.md and actually needed**.
 
-```
+```text
 skills/
 └── code-review/
     ├── SKILL.md           # Required: core instructions
@@ -511,7 +511,7 @@ As team size grows, Skills management needs to be elevated to an architectural c
 
 ### 1. Layered Organization Strategy
 
-```
+```text
 project-root/
 ├── AGENTS.md              # Cross-platform universal project context
 ├── CLAUDE.md              # Claude Code global config

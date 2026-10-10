@@ -103,7 +103,7 @@ Not all AI tasks require an entire 80GB or 140GB HBM GPU. To maximize hardware u
 | **MIG (Multi-Instance GPU)** | **Hardware-Level Partitioning**. Divides physical silicon into dedicated Compute Instances (CI) and GPU Instances (GI). | **Strict Physical Isolation**. Dedicated Streaming Multiprocessors, independent memory controllers, and isolated DMA engines. | Enterprise multi-tenancy, inference serving for small models (Embedding, Reranking). |
 | **DRA (Dynamic Resource Allocation)** | Kubernetes 1.30+ claim-based allocation model replacing scalar integer counters. | **Topology-Aware Claims**. Requests specific device pairings (e.g., "Pair 2 GPUs connected via NVLink"). | Large-scale LLM training, disaggregated heterogeneous inference clusters. |
 
-```
+```text
 NVIDIA MIG Physical Partitioning (Example: H100 80GB):
 ┌─────────────────────────────────────────────────────────────┐
 │ Physical NVIDIA H100 80GB HBM3 GPU                          │
