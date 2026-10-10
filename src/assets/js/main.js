@@ -125,6 +125,69 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // — Share: Copy Article Link —
+  document.querySelectorAll('.share-copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const url = btn.dataset.url || window.location.href;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => {
+          const originalHtml = btn.innerHTML;
+          btn.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+          setTimeout(() => {
+            btn.innerHTML = originalHtml;
+          }, 2000);
+        }).catch(err => {
+          console.warn('Copy link failed:', err);
+        });
+      }
+    });
+  });
+
+  // — Native Lightweight Image Lightbox —
+  const articleImgs = document.querySelectorAll('.article-detail-content img:not(.no-lightbox)');
+  if (articleImgs.length > 0) {
+    let lightboxOverlay = document.getElementById('image-lightbox-overlay');
+    if (!lightboxOverlay) {
+      lightboxOverlay = document.createElement('div');
+      lightboxOverlay.id = 'image-lightbox-overlay';
+      lightboxOverlay.className = 'lightbox-overlay';
+      lightboxOverlay.innerHTML = `
+        <div class="lightbox-content">
+          <img class="lightbox-img" src="" alt="">
+          <button class="lightbox-close" aria-label="Close image preview">&times;</button>
+        </div>`;
+      document.body.appendChild(lightboxOverlay);
+
+      const closeLightbox = () => {
+        lightboxOverlay.classList.remove('active');
+        document.body.classList.remove('lightbox-open');
+      };
+
+      lightboxOverlay.addEventListener('click', (e) => {
+        if (e.target === lightboxOverlay || e.target.closest('.lightbox-close')) {
+          closeLightbox();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightboxOverlay.classList.contains('active')) {
+          closeLightbox();
+        }
+      });
+    }
+
+    const lbImg = lightboxOverlay.querySelector('.lightbox-img');
+    articleImgs.forEach(img => {
+      img.classList.add('zoomable-image');
+      img.addEventListener('click', () => {
+        lbImg.src = img.src;
+        lbImg.alt = img.alt || 'Enlarged diagram';
+        lightboxOverlay.classList.add('active');
+        document.body.classList.add('lightbox-open');
+      });
+    });
+  }
+
   // — Table of Contents (TOC) Scroll Spy —
   const tocLinks = document.querySelectorAll('.article-toc-list a');
   if (tocLinks.length > 0 && articleContent) {

@@ -581,6 +581,7 @@ function writeArticles(list, isEn) {
       articles_prefix: isEn ? '/en' : '',
       encodedTitle: encodeURIComponent(article.title),
       encodedUrl: encodeURIComponent(`${SITE_URL}${isEn ? '/en' : ''}/articles/${article.slug}/`),
+      canonicalArticleUrl: `${SITE_URL}${isEn ? '/en' : ''}/articles/${article.slug}/`,
       breadcrumb_articles: isEn ? 'Articles' : '文章',
       return_text: isEn ? '← Back to Articles' : '← 返回文章列表',
       ogLocale: isEn ? 'en_US' : 'zh_CN',
