@@ -294,8 +294,14 @@ async function main() {
     console.log('');
   }
 
+  if (process.argv.includes('--submit-only')) {
+    console.log('✅ Sitemap 提交成功，跳过 URL 单项巡检 (--submit-only)');
+    return;
+  }
+
   // 3. URL Inspection
-  const urlsToInspect = process.argv.slice(2).length > 0 ? process.argv.slice(2) : DEFAULT_INSPECT_URLS;
+  const rawArgs = process.argv.slice(2).filter(a => !a.startsWith('--'));
+  const urlsToInspect = rawArgs.length > 0 ? rawArgs : DEFAULT_INSPECT_URLS;
   console.log(`📡 开始向 Google URL Inspection API 发起实时收录检测 (${urlsToInspect.length} 个 URL)...\n`);
 
   for (const url of urlsToInspect) {

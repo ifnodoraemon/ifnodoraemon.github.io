@@ -17,6 +17,7 @@ import matter from 'gray-matter';
 import markedKatex from './marked-katex.js';
 import markedCjkCompat from './marked-cjk-compat.js';
 import hljs from 'highlight.js';
+import { renderStaticNav, renderStaticFooter } from './render-components.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -248,8 +249,9 @@ const enRawArticles = rawArticles
   .filter(article => article.isEn)
   .sort((a, b) => new Date(b.fm.date) - new Date(a.fm.date));
 
-const articles = prepareArticles(zhRawArticles, false);
-const articlesEn = prepareArticles(enRawArticles, true);
+const gitDates = getArticleGitDates();
+const articles = prepareArticles(zhRawArticles, false, gitDates);
+const articlesEn = prepareArticles(enRawArticles, true, gitDates);
 
 const outZhArticlesDir = path.join(BUILD_OUT_DIR, 'articles');
 const outEnArticlesDir = path.join(BUILD_OUT_DIR, 'en', 'articles');
@@ -444,7 +446,32 @@ function buildKnownRoutes(articleEntries) {
   return knownRoutes;
 }
 
-function prepareArticles(list, isEn) {
+function getArticleGitDates() {
+  const dates = {};
+  try {
+    const zhDir = path.join(ROOT, 'content', 'zh', 'articles');
+    const enDir = path.join(ROOT, 'content', 'en', 'articles');
+    if (fs.existsSync(zhDir)) {
+      for (const f of fs.readdirSync(zhDir).filter(f => f.endsWith('.md'))) {
+        try {
+          const out = execSync(`git log -1 --format=%cI -- content/zh/articles/${f}`, { cwd: ROOT, encoding: 'utf-8' }).trim();
+          if (out) dates[`zh/${f}`] = out.split('T')[0];
+        } catch (_) {}
+      }
+    }
+    if (fs.existsSync(enDir)) {
+      for (const f of fs.readdirSync(enDir).filter(f => f.endsWith('.md'))) {
+        try {
+          const out = execSync(`git log -1 --format=%cI -- content/en/articles/${f}`, { cwd: ROOT, encoding: 'utf-8' }).trim();
+          if (out) dates[`en/${f}`] = out.split('T')[0];
+        } catch (_) {}
+      }
+    }
+  } catch (_) {}
+  return dates;
+}
+
+function prepareArticles(list, isEn, gitDates = {}) {
   return list.map(entry => {
     const { file, fm, mdContent } = entry;
     currentToc = [];
@@ -452,6 +479,9 @@ function prepareArticles(list, isEn) {
     const htmlContent = marked.parse(mdContent);
     const isoDate = new Date(fm.date).toISOString().split('T')[0];
     const dateFormatted = isoDate.replace(/-/g, '.');
+    const gitKey = `${isEn ? 'en' : 'zh'}/${file}`;
+    const gitModifiedDate = gitDates[gitKey];
+    const modifiedIsoDate = fm.lastmod || fm.updated || gitModifiedDate || isoDate;
     const imagePath = fm.image || generateOgImage({
       title: fm.title,
       description: fm.description,
@@ -477,6 +507,7 @@ function prepareArticles(list, isEn) {
       file,
       isEn,
       isoDate,
+      modifiedIsoDate,
       dateFormatted,
       htmlContent,
       tocHtml: buildTocHtml(currentToc, isEn),
@@ -551,6 +582,13 @@ function writeArticles(list, isEn) {
     const escapedKeywords = escapeHtml(article.keywords);
     const escapedTag = escapeHtml(article.tag);
 
+    const navbarHtml = renderStaticNav({
+      isEn,
+      activePage: 'articles',
+      currentRoute: isEn ? `/en/articles/${article.slug}/` : `/articles/${article.slug}/`
+    });
+    const footerHtml = renderStaticFooter({ isEn, style: 'full' });
+
     const html = applyTemplate(template, {
       title: escapedTitle,
       rawTitle: article.title,
@@ -561,6 +599,7 @@ function writeArticles(list, isEn) {
       jsonDescription: JSON.stringify(article.description),
       date: article.isoDate,
       isoDate: article.isoDate,
+      modifiedIsoDate: article.modifiedIsoDate || article.isoDate,
       dateFormatted: article.dateFormatted,
       tag: escapedTag,
       tagClass: article.tagClass || '',
@@ -580,6 +619,8 @@ function writeArticles(list, isEn) {
       faqSchema: article.faqSchema || "",
       relatedArticlesHtml,
       mermaidScript,
+      navbarHtml,
+      footerHtml,
       rssFeedPath: isEn ? '/en/feed.xml' : '/feed.xml',
       lang: isEn ? 'en' : 'zh-CN',
       home_link: isEn ? '/en/' : '/',
@@ -596,12 +637,22 @@ function writeArticles(list, isEn) {
       'meta.siteName': isEn ? enLocales.meta.siteName : zhLocales.meta.siteName,
     });
 
+    let finalHtml = html;
+    finalHtml = finalHtml.replace(
+      /<nav id="navbar" class="navbar"[^>]*>([\s\S]*?)<\/nav>/,
+      `<nav id="navbar" class="navbar" aria-label="${isEn ? 'Main navigation' : '主导航'}">${navbarHtml}</nav>`
+    );
+    finalHtml = finalHtml.replace(
+      /<footer id="site-footer" class="footer"[^>]*>([\s\S]*?)<\/footer>/,
+      `<footer id="site-footer" class="footer">${footerHtml}</footer>`
+    );
+
     const outDirBase = isEn
       ? path.join(BUILD_OUT_DIR, 'en', 'articles', article.slug)
       : path.join(BUILD_OUT_DIR, 'articles', article.slug);
 
     fs.mkdirSync(outDirBase, { recursive: true });
-    fs.writeFileSync(path.join(outDirBase, 'index.html'), html, 'utf-8');
+    fs.writeFileSync(path.join(outDirBase, 'index.html'), finalHtml, 'utf-8');
     console.log(`  ✓ ${article.file} → ${isEn ? 'en/' : ''}articles/${article.slug}/index.html`);
   });
 }
@@ -997,6 +1048,13 @@ ${Object.entries(SERIES_DEFINITIONS).map(([id, s]) => {
           </div>
         </div>`;
 
+  const navbarHtml = renderStaticNav({
+    isEn,
+    activePage: 'articles',
+    currentRoute: isEn ? '/en/articles/' : '/articles/'
+  });
+  const footerHtml = renderStaticFooter({ isEn, style: 'full' });
+
   const html = `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
@@ -1097,6 +1155,7 @@ ${articlesList.map((a, idx) => `        {
 <body>
   <div class="bg-grid" aria-hidden="true"></div>
   <canvas id="particles" aria-hidden="true"></canvas>
+  <nav id="navbar" class="navbar" aria-label="${isEn ? 'Main navigation' : '主导航'}">${navbarHtml}</nav>
   <main class="page-main">
     <section class="page-hero">
       <div class="container">
@@ -1128,6 +1187,7 @@ ${paginationHtml}
       </div>
     </section>
   </main>
+  <footer id="site-footer" class="footer">${footerHtml}</footer>
   <script type="module" src="/src/assets/js/main.js"></script>
 </body>
 </html>`;
@@ -1341,7 +1401,7 @@ function generateSitemap(articlesList) {
     <xhtml:link rel="alternate" hreflang="zh" href="${SITE_URL}${zhRoute}" />
     <xhtml:link rel="alternate" hreflang="en" href="${SITE_URL}${enRoute}" />
     <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${zhRoute}" />
-    <lastmod>${article.isoDate}</lastmod>
+    <lastmod>${article.modifiedIsoDate || article.isoDate}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1355,8 +1415,11 @@ function generateSitemap(articlesList) {
   xml += '</urlset>\n';
 
   const outPath = path.join(BUILD_OUT_DIR, 'public', 'sitemap.xml');
+  const repoOutPath = path.join(PUBLIC_DIR, 'sitemap.xml');
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  fs.mkdirSync(path.dirname(repoOutPath), { recursive: true });
   fs.writeFileSync(outPath, xml, 'utf-8');
+  fs.writeFileSync(repoOutPath, xml, 'utf-8');
   console.log(`  ✓ public/sitemap.xml (${STATIC_ROUTES.size + articlesList.length} URLs)`);
 }
 

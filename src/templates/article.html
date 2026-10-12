@@ -31,7 +31,7 @@
   <meta property="og:locale" content="{{ogLocale}}">
   <meta property="og:site_name" content="{{meta.siteName}}">
   <meta property="article:published_time" content="{{isoDate}}">
-  <meta property="article:modified_time" content="{{isoDate}}">
+  <meta property="article:modified_time" content="{{modifiedIsoDate}}">
   <meta property="article:author" content="https://blog.llmgo.top{{articles_prefix}}/about/">
   <meta property="article:section" content="{{tag}}">
 {{articleTagsMeta}}
@@ -91,7 +91,7 @@
     "headline": {{jsonTitle}},
     "description": {{jsonDescription}},
     "datePublished": "{{isoDate}}",
-    "dateModified": "{{isoDate}}",
+    "dateModified": "{{modifiedIsoDate}}",
     "image": [
       "{{ogImage}}",
       "{{image}}"
@@ -168,7 +168,7 @@
   <div class="bg-grid" aria-hidden="true"></div>
   <canvas id="particles" aria-hidden="true"></canvas>
 
-  <nav id="navbar" class="navbar" aria-label="主导航"></nav>
+  <nav id="navbar" class="navbar" aria-label="{{#if isEn}}Main navigation{{else}}主导航{{/if}}">{{{navbarHtml}}}</nav>
 
   <main class="page-main">
     <article class="article-detail">
@@ -277,7 +277,7 @@
     </svg>
   </button>
 
-  <footer id="site-footer" class="footer"></footer>
+  <footer id="site-footer" class="footer">{{{footerHtml}}}</footer>
 
   <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
   <script type="module" src="/src/assets/js/main.js"></script>

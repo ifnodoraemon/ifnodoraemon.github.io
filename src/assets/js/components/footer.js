@@ -4,6 +4,11 @@ import { isEnglishPath } from '../utils/site.js';
 export function renderFooter(style = 'full') {
   const footer = document.getElementById('site-footer') || createFooterElement();
 
+  // If already pre-rendered by SSG, return early
+  if (footer.querySelector('.footer-grid') || footer.querySelector('.footer-bottom')) {
+    return footer;
+  }
+
   const isEn = isEnglishPath(window.location.pathname);
   const langPrefix = isEn ? '/en' : '';
   const siteTitle = isEn ? 'LLM Systems Architecture' : '智算架构志';

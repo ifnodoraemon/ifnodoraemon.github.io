@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 
 function getAllHtmlFiles(dirPath, arrayOfFiles) {
   const files = fs.readdirSync(dirPath);
@@ -18,17 +19,29 @@ function getAllHtmlFiles(dirPath, arrayOfFiles) {
   return arrayOfFiles;
 }
 
-function getArticleDate(slug, rootDir) {
+function getArticleDate(slug, rootDir, gitDates = {}) {
   const zhPath = path.join(rootDir, 'content', 'zh', 'articles', `${slug}.md`);
   const enPath = path.join(rootDir, 'content', 'en', 'articles', `${slug}.md`);
   const targetPath = fs.existsSync(zhPath) ? zhPath : (fs.existsSync(enPath) ? enPath : null);
-  if (!targetPath) return null;
 
-  try {
-    const content = fs.readFileSync(targetPath, 'utf-8');
-    const match = content.match(/^date:\s*['"]?([0-9]{4}-[0-9]{2}-[0-9]{2})/m);
-    if (match) return match[1];
-  } catch (_) {}
+  if (targetPath) {
+    try {
+      const content = fs.readFileSync(targetPath, 'utf-8');
+      const lastmodMatch = content.match(/^(?:lastmod|updated):\s*['"]?([0-9]{4}-[0-9]{2}-[0-9]{2})/m);
+      if (lastmodMatch) return lastmodMatch[1];
+    } catch (_) {}
+  }
+
+  if (gitDates[slug]) return gitDates[slug];
+
+  if (targetPath) {
+    try {
+      const content = fs.readFileSync(targetPath, 'utf-8');
+      const match = content.match(/^date:\s*['"]?([0-9]{4}-[0-9]{2}-[0-9]{2})/m);
+      if (match) return match[1];
+    } catch (_) {}
+  }
+
   return null;
 }
 
@@ -43,7 +56,33 @@ export default function seoPlugin({ hostname }) {
       if (!fs.existsSync(outDir)) return;
       const rootDir = process.cwd();
       const today = new Date().toISOString().split('T')[0];
-      
+
+      const gitDates = {};
+      try {
+        const zhDir = path.join(rootDir, 'content', 'zh', 'articles');
+        const enDir = path.join(rootDir, 'content', 'en', 'articles');
+        if (fs.existsSync(zhDir)) {
+          for (const f of fs.readdirSync(zhDir).filter(f => f.endsWith('.md'))) {
+            const slug = f.replace(/\.md$/, '');
+            try {
+              const out = execSync(`git log -1 --format=%cI -- content/zh/articles/${f}`, { cwd: rootDir, encoding: 'utf-8' }).trim();
+              if (out) gitDates[slug] = out.split('T')[0];
+            } catch (_) {}
+          }
+        }
+        if (fs.existsSync(enDir)) {
+          for (const f of fs.readdirSync(enDir).filter(f => f.endsWith('.md'))) {
+            const slug = f.replace(/\.en\.md$/, '').replace(/\.md$/, '');
+            if (!gitDates[slug]) {
+              try {
+                const out = execSync(`git log -1 --format=%cI -- content/en/articles/${f}`, { cwd: rootDir, encoding: 'utf-8' }).trim();
+                if (out) gitDates[slug] = out.split('T')[0];
+              } catch (_) {}
+            }
+          }
+        }
+      } catch (_) {}
+
       const htmlFiles = getAllHtmlFiles(outDir);
       const urls = [];
       
@@ -95,7 +134,7 @@ export default function seoPlugin({ hostname }) {
           priority = '0.8';
           changefreq = 'monthly';
           const slug = url.replace(/^\/en\/articles\/|^\/articles\/|\/$/g, '');
-          const articleDate = getArticleDate(slug, rootDir);
+          const articleDate = getArticleDate(slug, rootDir, gitDates);
           if (articleDate) lastmod = articleDate;
           const langSegment = isEn ? 'en' : 'zh';
           imageXml = `\n    <image:image>\n      <image:loc>${hostname}/og/${langSegment}/${slug}.png</image:loc>\n    </image:image>`;
@@ -124,6 +163,8 @@ ${urlEntries.join('\n')}
 </urlset>`;
 
       fs.writeFileSync(path.join(outDir, 'sitemap.xml'), sitemap);
+      const repoSitemapPath = path.join(rootDir, 'public', 'sitemap.xml');
+      fs.writeFileSync(repoSitemapPath, sitemap);
       
       const publicRobotsPath = path.join(rootDir, 'public', 'robots.txt');
       const distRobotsPath = path.join(outDir, 'robots.txt');

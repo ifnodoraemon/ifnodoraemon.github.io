@@ -1,0 +1,1721 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://blog.llmgo.top/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/" />
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/about/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/about/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/about/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/about/" />
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/" />
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/agent-loop-state-machine/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-loop-state-machine/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-loop-state-machine/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-loop-state-machine/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/agent-loop-state-machine.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/agent-memory-architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-memory-architecture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-memory-architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-memory-architecture/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/agent-memory-architecture.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/agent-observability-debugging/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-observability-debugging/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-observability-debugging/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-observability-debugging/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/agent-observability-debugging.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/agent-orchestration-evals/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-orchestration-evals/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-orchestration-evals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-orchestration-evals/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/agent-orchestration-evals.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/agent-reflection-self-correction/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-reflection-self-correction/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-reflection-self-correction/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-reflection-self-correction/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/agent-reflection-self-correction.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/agent-runtime-practices/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-runtime-practices/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-runtime-practices/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-runtime-practices/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/agent-runtime-practices.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/ai-coding-mastery/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/ai-coding-mastery/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/ai-coding-mastery/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/ai-coding-mastery/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/ai-coding-mastery.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/ai-history-choices/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/ai-history-choices/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/ai-history-choices/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/ai-history-choices/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/ai-history-choices.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/ai-trends-2026/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/ai-trends-2026/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/ai-trends-2026/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/ai-trends-2026/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/ai-trends-2026.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/browser-use-agent-architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/browser-use-agent-architecture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/browser-use-agent-architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/browser-use-agent-architecture/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/browser-use-agent-architecture.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/build-ai-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/build-ai-agent/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/build-ai-agent/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/build-ai-agent/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/build-ai-agent.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/container-networking-veth-bridge-iptables/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/container-networking-veth-bridge-iptables/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/container-networking-veth-bridge-iptables/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/container-networking-veth-bridge-iptables/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/container-networking-veth-bridge-iptables.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/context-engineering-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/context-engineering-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/context-engineering-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/context-engineering-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/context-engineering-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/continuous-batching-chunked-prefill-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/deepseek-v4-kimi-k3-deployment-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/docker-internals-namespace-cgroups-overlayfs.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/docker-swarm-architecture-raft-routing-mesh/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/docker-swarm-architecture-raft-routing-mesh/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/docker-swarm-architecture-raft-routing-mesh/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/docker-swarm-architecture-raft-routing-mesh/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/docker-swarm-architecture-raft-routing-mesh.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/domestic-llm-comparison-2026/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/domestic-llm-comparison-2026/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/domestic-llm-comparison-2026/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/domestic-llm-comparison-2026.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/environment-scaling-agent-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/environment-scaling-agent-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/environment-scaling-agent-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/environment-scaling-agent-guide/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/environment-scaling-agent-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/fine-tuning-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/fine-tuning-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/fine-tuning-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/fine-tuning-guide/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/fine-tuning-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/flashattention-flashinfer-kernel-evolution.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/inference-engines-core-architecture-internals.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/inference-roofline-prefill-decode/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/inference-roofline-prefill-decode/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/inference-roofline-prefill-decode/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/inference-roofline-prefill-decode.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/infiniband-architecture-hardware-rates-credit-flow-subnet-manager.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/infiniband-production-deployment-opensm-ofed-nccl-tuning.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/ip-addressing-subnet-mask-cidr-default-gateway-routing.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/k8s-application-networking-grpc-service-mesh-zero-downtime.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/k8s-control-plane-declarative-reconciliation/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-control-plane-declarative-reconciliation/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-control-plane-declarative-reconciliation/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-control-plane-declarative-reconciliation/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/k8s-control-plane-declarative-reconciliation.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/k8s-database-storage-local-nvme-tuning-fencing/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-database-storage-local-nvme-tuning-fencing/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-database-storage-local-nvme-tuning-fencing/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-database-storage-local-nvme-tuning-fencing/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/k8s-database-storage-local-nvme-tuning-fencing.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/k8s-gpu-operator-ai-inference-scheduling/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-gpu-operator-ai-inference-scheduling/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-gpu-operator-ai-inference-scheduling/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-gpu-operator-ai-inference-scheduling/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/k8s-gpu-operator-ai-inference-scheduling.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/k8s-networking-cni-cilium-ebpf-gateway-api/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-networking-cni-cilium-ebpf-gateway-api/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-networking-cni-cilium-ebpf-gateway-api/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-networking-cni-cilium-ebpf-gateway-api/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/k8s-networking-cni-cilium-ebpf-gateway-api.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/k8s-operator-pattern-kubebuilder-crd/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-operator-pattern-kubebuilder-crd/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-operator-pattern-kubebuilder-crd/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-operator-pattern-kubebuilder-crd/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/k8s-operator-pattern-kubebuilder-crd.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/k8s-runtime-nri-kata-gvisor-kernel-tuning.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/k8s-scheduling-framework-custom-plugin-gang-scheduling.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/k8s-storage-csi-statefulset-deep-dive/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-storage-csi-statefulset-deep-dive/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-storage-csi-statefulset-deep-dive/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-storage-csi-statefulset-deep-dive/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/k8s-storage-csi-statefulset-deep-dive.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/kimi-kda-deepseek-mla-architecture.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/linux-kernel-networking-napi-ring-buffer-skbuff-xdp.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/llm-evaluation-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/llm-evaluation-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/llm-evaluation-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/llm-evaluation-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/llm-evaluation-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/loop-engineering/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/loop-engineering/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/loop-engineering/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/loop-engineering/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/loop-engineering.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/mcp-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/mcp-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/mcp-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/mcp-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/mcp-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/mha-gqa-mla-matrix-absorption-inference-engine.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/model-comparison-2026/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/model-comparison-2026/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/model-comparison-2026/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/model-comparison-2026/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/model-comparison-2026.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/moe-expert-parallelism-inference-engine.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/multimodal-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/multimodal-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/multimodal-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/multimodal-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/multimodal-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/network-fundamentals-bits-cables-hubs-switches-mac-arp.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/network-layer-transport-layer-ip-routing-tcp-state-machine.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/nvidia-gpu-package-architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/nvidia-gpu-package-architecture.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/pagedattention-memory-virtualization/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/pagedattention-memory-virtualization/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/pagedattention-memory-virtualization/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/pagedattention-memory-virtualization.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/pd-disaggregation-distributed-kv-cache.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/prefix-caching-radix-attention-internals.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/prompt-engineering-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/prompt-engineering-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/prompt-engineering-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/prompt-engineering-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/prompt-engineering-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/quantization-hands-on-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/quantization-hands-on-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/quantization-hands-on-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/quantization-hands-on-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/quantization-hands-on-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/quantization-precision-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/quantization-precision-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/quantization-precision-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/quantization-precision-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/quantization-precision-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/rag-in-practice/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/rag-in-practice/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/rag-in-practice/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/rag-in-practice/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/rag-in-practice.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/reasoning-test-time-compute-inference-future.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/sglang-vs-vllm-architecture.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/skills-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/skills-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/skills-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/skills-guide/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/skills-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/speculative-decoding-eagle-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/tcp-congestion-control-reno-cubic-bbr-quic-http3.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/test-time-compute-grpo/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/test-time-compute-grpo/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/test-time-compute-grpo/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/test-time-compute-grpo/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/test-time-compute-grpo.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/transport-bridge-dns-sockets-ports-udp-vs-tcp.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/vllm-serving-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/vllm-serving-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/vllm-serving-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/vllm-serving-guide/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/vllm-serving-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/" />
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/about/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/about/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/about/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/about/" />
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/" />
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/agent-loop-state-machine/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-loop-state-machine/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-loop-state-machine/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-loop-state-machine/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/agent-loop-state-machine.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/agent-memory-architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-memory-architecture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-memory-architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-memory-architecture/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/agent-memory-architecture.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/agent-observability-debugging/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-observability-debugging/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-observability-debugging/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-observability-debugging/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/agent-observability-debugging.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/agent-orchestration-evals/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-orchestration-evals/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-orchestration-evals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-orchestration-evals/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/agent-orchestration-evals.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/agent-reflection-self-correction/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-reflection-self-correction/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-reflection-self-correction/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-reflection-self-correction/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/agent-reflection-self-correction.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/agent-runtime-practices/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-runtime-practices/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-runtime-practices/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-runtime-practices/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/agent-runtime-practices.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/ai-coding-mastery/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/ai-coding-mastery/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/ai-coding-mastery/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/ai-coding-mastery/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/ai-coding-mastery.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/ai-history-choices/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/ai-history-choices/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/ai-history-choices/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/ai-history-choices/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/ai-history-choices.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/ai-trends-2026/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/ai-trends-2026/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/ai-trends-2026/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/ai-trends-2026/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/ai-trends-2026.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/browser-use-agent-architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/browser-use-agent-architecture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/browser-use-agent-architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/browser-use-agent-architecture/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/browser-use-agent-architecture.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/build-ai-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/build-ai-agent/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/build-ai-agent/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/build-ai-agent/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/build-ai-agent.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/container-networking-veth-bridge-iptables/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/container-networking-veth-bridge-iptables/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/container-networking-veth-bridge-iptables/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/container-networking-veth-bridge-iptables/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/container-networking-veth-bridge-iptables.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/context-engineering-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/context-engineering-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/context-engineering-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/context-engineering-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/context-engineering-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/continuous-batching-chunked-prefill-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/deepseek-v4-kimi-k3-deployment-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/docker-internals-namespace-cgroups-overlayfs.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/docker-swarm-architecture-raft-routing-mesh/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/docker-swarm-architecture-raft-routing-mesh/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/docker-swarm-architecture-raft-routing-mesh/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/docker-swarm-architecture-raft-routing-mesh/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/docker-swarm-architecture-raft-routing-mesh.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/domestic-llm-comparison-2026/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/domestic-llm-comparison-2026/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/domestic-llm-comparison-2026.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/environment-scaling-agent-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/environment-scaling-agent-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/environment-scaling-agent-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/environment-scaling-agent-guide/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/environment-scaling-agent-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/fine-tuning-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/fine-tuning-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/fine-tuning-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/fine-tuning-guide/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/fine-tuning-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/flashattention-flashinfer-kernel-evolution.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/inference-engines-core-architecture-internals.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/inference-roofline-prefill-decode/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/inference-roofline-prefill-decode/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/inference-roofline-prefill-decode.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/infiniband-architecture-hardware-rates-credit-flow-subnet-manager.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/infiniband-production-deployment-opensm-ofed-nccl-tuning.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/ip-addressing-subnet-mask-cidr-default-gateway-routing.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/k8s-application-networking-grpc-service-mesh-zero-downtime.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/k8s-control-plane-declarative-reconciliation/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-control-plane-declarative-reconciliation/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-control-plane-declarative-reconciliation/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-control-plane-declarative-reconciliation/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/k8s-control-plane-declarative-reconciliation.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/k8s-database-storage-local-nvme-tuning-fencing/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-database-storage-local-nvme-tuning-fencing/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-database-storage-local-nvme-tuning-fencing/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-database-storage-local-nvme-tuning-fencing/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/k8s-database-storage-local-nvme-tuning-fencing.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/k8s-gpu-operator-ai-inference-scheduling/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-gpu-operator-ai-inference-scheduling/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-gpu-operator-ai-inference-scheduling/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-gpu-operator-ai-inference-scheduling/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/k8s-gpu-operator-ai-inference-scheduling.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/k8s-networking-cni-cilium-ebpf-gateway-api/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-networking-cni-cilium-ebpf-gateway-api/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-networking-cni-cilium-ebpf-gateway-api/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-networking-cni-cilium-ebpf-gateway-api/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/k8s-networking-cni-cilium-ebpf-gateway-api.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/k8s-operator-pattern-kubebuilder-crd/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-operator-pattern-kubebuilder-crd/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-operator-pattern-kubebuilder-crd/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-operator-pattern-kubebuilder-crd/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/k8s-operator-pattern-kubebuilder-crd.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/" />
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/k8s-runtime-nri-kata-gvisor-kernel-tuning.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/k8s-scheduling-framework-custom-plugin-gang-scheduling.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/k8s-storage-csi-statefulset-deep-dive/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-storage-csi-statefulset-deep-dive/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-storage-csi-statefulset-deep-dive/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-storage-csi-statefulset-deep-dive/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/k8s-storage-csi-statefulset-deep-dive.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/kimi-kda-deepseek-mla-architecture.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/linux-kernel-networking-napi-ring-buffer-skbuff-xdp.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/llm-evaluation-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/llm-evaluation-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/llm-evaluation-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/llm-evaluation-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/llm-evaluation-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/loop-engineering/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/loop-engineering/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/loop-engineering/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/loop-engineering/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/loop-engineering.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/mcp-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/mcp-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/mcp-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/mcp-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/mcp-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/mha-gqa-mla-matrix-absorption-inference-engine.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/model-comparison-2026/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/model-comparison-2026/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/model-comparison-2026/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/model-comparison-2026/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/model-comparison-2026.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/moe-expert-parallelism-inference-engine.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/multimodal-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/multimodal-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/multimodal-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/multimodal-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/multimodal-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/network-fundamentals-bits-cables-hubs-switches-mac-arp.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/network-layer-transport-layer-ip-routing-tcp-state-machine.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/nvidia-gpu-package-architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/nvidia-gpu-package-architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/nvidia-gpu-package-architecture.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/pagedattention-memory-virtualization/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/pagedattention-memory-virtualization/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/pagedattention-memory-virtualization.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/pd-disaggregation-distributed-kv-cache.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/prefix-caching-radix-attention-internals.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/prompt-engineering-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/prompt-engineering-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/prompt-engineering-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/prompt-engineering-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/prompt-engineering-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/quantization-hands-on-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/quantization-hands-on-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/quantization-hands-on-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/quantization-hands-on-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/quantization-hands-on-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/quantization-precision-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/quantization-precision-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/quantization-precision-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/quantization-precision-guide/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/quantization-precision-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/rag-in-practice/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/rag-in-practice/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/rag-in-practice/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/rag-in-practice/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/rag-in-practice.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/reasoning-test-time-compute-inference-future.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/" />
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/sglang-vs-vllm-architecture.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/skills-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/skills-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/skills-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/skills-guide/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/skills-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/speculative-decoding-eagle-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/tcp-congestion-control-reno-cubic-bbr-quic-http3.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/test-time-compute-grpo/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/test-time-compute-grpo/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/test-time-compute-grpo/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/test-time-compute-grpo/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/test-time-compute-grpo.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/transport-bridge-dns-sockets-ports-udp-vs-tcp.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/vllm-serving-guide/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/vllm-serving-guide/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/vllm-serving-guide/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/vllm-serving-guide/" />
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/vllm-serving-guide.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/models/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/models/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/models/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/models/" />
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/projects/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/projects/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/projects/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/projects/" />
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/tools/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/tools/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/tools/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/tools/" />
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/models/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/models/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/models/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/models/" />
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/projects/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/projects/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/projects/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/projects/" />
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/tools/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/tools/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/tools/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/tools/" />
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+</urlset>

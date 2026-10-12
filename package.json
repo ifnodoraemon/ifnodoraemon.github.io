@@ -13,6 +13,7 @@
     "verify:mermaid": "node scripts/verify-mermaid.js",
     "seo:audit": "node scripts/audit-seo.js",
     "gsc:check": "node scripts/check-gsc.js",
+    "gsc:submit": "node scripts/check-gsc.js --submit-only",
     "publish:devto": "node scripts/publish-devto.js",
     "export:domestic": "node scripts/export-domestic.js",
     "indexnow": "node scripts/submit-indexnow.js",

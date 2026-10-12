@@ -197,6 +197,28 @@ for (const url of locMatches) {
     errors++;
   }
 
+  // 11. Pre-rendered Navigation & Footer checks (SSR Crawlability for GSC)
+  const navMatch = html.match(/<nav id=["']navbar["'][^>]*>([\s\S]*?)<\/nav>/i);
+  if (!navMatch || !navMatch[1].includes('nav-links-main')) {
+    console.error(`❌ [Missing Static Navigation] Page lacks pre-rendered nav links for crawler discovery: ${url}`);
+    errors++;
+  }
+
+  const footerMatch = html.match(/<footer id=["']site-footer["'][^>]*>([\s\S]*?)<\/footer>/i);
+  if (!footerMatch || !footerMatch[1].includes('footer-bottom')) {
+    console.error(`❌ [Missing Static Footer] Page lacks pre-rendered footer: ${url}`);
+    errors++;
+  }
+
+  // 12. Article modified time check
+  if (route.includes('/articles/') && route !== '/articles/' && route !== '/en/articles/') {
+    const modTimeMatch = html.match(/<meta[^>]*property=["']article:modified_time["'][^>]*content=["']([^"']*)["'][^>]*>/i);
+    if (!modTimeMatch || !modTimeMatch[1]) {
+      console.warn(`⚠️  [Missing article:modified_time] ${url}`);
+      warnings++;
+    }
+  }
+
   passedChecks++;
 }
 

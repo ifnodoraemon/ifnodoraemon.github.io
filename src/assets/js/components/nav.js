@@ -1,12 +1,26 @@
 import { isEnglishPath } from '../utils/site.js';
 
-// Shared Navigation Component
 export function renderNav(activePage = '') {
   const nav = document.getElementById('navbar') || createNavElement();
 
   const currentPath = window.location.pathname;
   const isEn = isEnglishPath(currentPath);
   const langPrefix = isEn ? '/en' : '';
+
+  // If already pre-rendered by SSG, attach event listeners and sync dynamic hash/query
+  if (nav.querySelector('.nav-container')) {
+    if (!nav._bound && (!nav.dataset || !nav.dataset.bound)) {
+      bindMenuEvents(nav, isEn);
+      nav._bound = true;
+      if (nav.dataset) nav.dataset.bound = 'true';
+    }
+    const langToggle = nav.querySelector('.lang-toggle');
+    if (langToggle && (window.location.search || window.location.hash)) {
+      const cleanHref = langToggle.getAttribute('href').split(/[?#]/)[0];
+      langToggle.href = cleanHref + window.location.search + window.location.hash;
+    }
+    return nav;
+  }
 
   const siteTitle = isEn ? 'LLM Systems Architecture' : '智算架构志';
   
@@ -77,6 +91,13 @@ export function renderNav(activePage = '') {
     </div>
   `;
 
+  bindMenuEvents(nav, isEn);
+  nav._bound = true;
+  if (nav.dataset) nav.dataset.bound = 'true';
+  return nav;
+}
+
+function bindMenuEvents(nav, isEn) {
   // Mobile menu toggle
   const toggle = nav.querySelector('#menu-toggle');
   const navLinks = nav.querySelector('#nav-links');
@@ -138,8 +159,6 @@ export function renderNav(activePage = '') {
       }
     }, { passive: true });
   }
-
-  return nav;
 }
 
 function createNavElement() {

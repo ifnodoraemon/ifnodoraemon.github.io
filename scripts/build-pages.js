@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import Handlebars from 'handlebars';
 import matter from 'gray-matter';
 import { getToolsSsgHtml } from './prerender-tools.js';
+import { renderStaticNav, renderStaticFooter } from './render-components.js';
 
 Handlebars.registerHelper('json', function(context) {
     return JSON.stringify(context);
@@ -262,16 +263,42 @@ enData.toolsFaqJsonLd = generateToolsFaqJsonLd(enData.tools);
 enData.models.relatedArticles = getModelsRelatedArticles(enArticles, true);
 
 // 2. Process template
-function processTemplate(templateStr, data, isEn) {
+function processTemplate(templateStr, data, isEn, pageName = 'index') {
+  let activePage = pageName === 'index' ? 'home' : pageName;
+  if (pageName === '404') activePage = '';
+
+  const currentRoute = isEn
+    ? (pageName === 'index' ? '/en/' : `/en/${pageName}/`)
+    : (pageName === 'index' ? '/' : `/${pageName}/`);
+
+  const navbarHtml = renderStaticNav({ isEn, activePage, currentRoute });
+  const footerHtml = renderStaticFooter({ isEn, style: pageName === '404' ? 'mini' : 'full' });
+
   // Common global variables
   const globalData = {
     langAttr: isEn ? 'en' : 'zh-CN',
     linkPrefix: isEn ? '/en' : '',
+    navbarHtml,
+    footerHtml,
     ...data
   };
 
   const template = Handlebars.compile(templateStr);
-  return template(globalData);
+  let html = template(globalData);
+
+  // Ensure <nav id="navbar"> contains pre-rendered navbarHtml
+  html = html.replace(
+    /<nav id="navbar" class="navbar"[^>]*>([\s\S]*?)<\/nav>/,
+    `<nav id="navbar" class="navbar" aria-label="${isEn ? 'Main navigation' : '主导航'}">${navbarHtml}</nav>`
+  );
+
+  // Ensure <footer id="site-footer"> contains pre-rendered footerHtml
+  html = html.replace(
+    /<footer id="site-footer" class="footer"[^>]*>([\s\S]*?)<\/footer>/,
+    `<footer id="site-footer" class="footer">${footerHtml}</footer>`
+  );
+
+  return html;
 }
 
 // 3. Main build loop
@@ -297,9 +324,9 @@ async function buildPages() {
     const pageName = templateFile.replace('.html', ''); // e.g., 'index', 'about'
 
     // Build ZH version
-    const zhHtml = processTemplate(templateStr, zhData, false);
+    const zhHtml = processTemplate(templateStr, zhData, false, pageName);
     // Build EN version
-    const enHtml = processTemplate(templateStr, enData, true);
+    const enHtml = processTemplate(templateStr, enData, true, pageName);
 
     // Determine output paths
     let outZhDir = BUILD_OUT_DIR;
