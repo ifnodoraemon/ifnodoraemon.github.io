@@ -222,13 +222,59 @@ for (const url of locMatches) {
   passedChecks++;
 }
 
-// Check robots.txt
+// Check robots.txt (Strict RFC 9309 compliance)
 const robotsDistPath = path.join(DIST, 'robots.txt');
 if (fs.existsSync(robotsDistPath)) {
   const robotsText = fs.readFileSync(robotsDistPath, 'utf-8');
   if (!robotsText.includes('Sitemap:')) {
     console.error('❌ robots.txt does not link to sitemap.xml');
     errors++;
+  }
+
+  const lines = robotsText.split('\n');
+  let currentAgent = null;
+  let currentAgentHasRule = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const rawLine = lines[i].trim();
+    if (!rawLine || rawLine.startsWith('#')) continue;
+
+    const colonIdx = rawLine.indexOf(':');
+    if (colonIdx === -1) {
+      console.error(`❌ [robots.txt Syntax Error] Line ${i + 1}: Missing colon: "${rawLine}"`);
+      errors++;
+      continue;
+    }
+
+    const directive = rawLine.slice(0, colonIdx).trim().toLowerCase();
+    const value = rawLine.slice(colonIdx + 1).trim();
+
+    // Standard RFC 9309 directives
+    if (!['user-agent', 'allow', 'disallow', 'sitemap'].includes(directive)) {
+      console.error(`❌ [robots.txt Syntax Error] Line ${i + 1}: Unrecognized directive "${directive}: ${value}"`);
+      errors++;
+    }
+
+    if (directive === 'crawl-delay') {
+      console.warn(`⚠️  [robots.txt Warning] Line ${i + 1}: Crawl-delay is deprecated/ignored by Googlebot`);
+      warnings++;
+    }
+
+    if (directive === 'user-agent') {
+      if (currentAgent && !currentAgentHasRule) {
+        console.warn(`⚠️  [robots.txt Warning] Line ${i + 1}: Previous User-agent "${currentAgent}" has no Allow or Disallow rule`);
+        warnings++;
+      }
+      currentAgent = value;
+      currentAgentHasRule = false;
+    } else if (directive === 'allow' || directive === 'disallow') {
+      currentAgentHasRule = true;
+    }
+  }
+
+  if (currentAgent && !currentAgentHasRule) {
+    console.warn(`⚠️  [robots.txt Warning] Final User-agent "${currentAgent}" has no Allow or Disallow rule`);
+    warnings++;
   }
 } else {
   console.error('❌ robots.txt missing in dist');

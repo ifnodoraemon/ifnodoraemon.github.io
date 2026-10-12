@@ -413,6 +413,8 @@ test('sitemap excludes verification tokens and preserves valid directory routes 
   assert.ok(robots.includes('GPTBot'), 'robots.txt must preserve GPTBot policy');
   assert.ok(robots.includes('ClaudeBot'), 'robots.txt must preserve ClaudeBot policy');
   assert.ok(robots.includes('Sitemap: https://blog.llmgo.top/sitemap.xml'), 'robots.txt must contain sitemap link');
+  assert.ok(!/^\s*(llms\.txt|llms-full\.txt)\s*:/im.test(robots), 'robots.txt must not contain non-RFC directives');
+  assert.ok(!/^\s*crawl-delay\s*:/im.test(robots), 'robots.txt must not contain deprecated crawl-delay');
 });
 
 test('build outputs include valid llms.txt, enriched ItemList schema, and author E-E-A-T metadata', () => {
