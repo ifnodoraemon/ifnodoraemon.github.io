@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 7
-description: "Why do enterprise microservices migrated to Kubernetes frequently suffer from intermittent 502 Bad Gateway errors during rolling updates while gRPC workloads bottleneck onto a single Pod? A deep architectural exploration into application-layer networking on Kubernetes: why HTTP/2 multiplexing breaks Layer-4 ClusterIP load balancing and how Headless Services and Envoy resolve it; MaxConnectionAge, JVM DNS TTL -1 traps, and reconnect storms; the asynchronous race condition between Pod deletion and EndpointSlice propagation; and production zero-downtime draining sequences via preStop hooks, graceful shutdowns, and readinessGates."
+description: "Kubernetes application networking: HTTP/2 gRPC load balancing, Envoy service mesh architecture, xDS control planes, and zero-downtime rolling deployment strategies."
 extraTags:
   - Kubernetes
   - gRPC

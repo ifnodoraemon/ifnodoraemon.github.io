@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 4
-description: "Why have declarative APIs and modern control theory emerged as the definitive standard for cloud infrastructure? A comprehensive architectural deconstruction of the Kubernetes Control Plane: kube-apiserver request admission pipelines (Authentication, RBAC, Mutating and Validating Webhooks), etcd v3 MVCC revisions and Watch streams, kube-scheduler two-phase filter and score algorithms, Informer mechanics (Reflector, DeltaFIFO, Indexer, WorkQueue), and level-triggered controller reconciliation loops."
+description: "Kubernetes control plane architecture: declarative reconciliation loops, informers, workqueue patterns, and optimistic concurrency control with etcd."
 extraTags:
   - Kubernetes
   - Control Plane

@@ -7,7 +7,7 @@ tagClass: tag-emerald
 category: Inference Systems
 series: llm-inference
 seriesOrder: 9
-description: "From Python scheduling to asynchronous C++/Rust execution engines: an in-depth codebase teardown of the open-source world's top four inference engines. Comparing vLLM v1 zero-overhead multi-step scheduling, SGLang RadixAttention tree-based execution loops, TensorRT-LLM fused kernel pipelines with in-flight batching, and llama.cpp zero-dependency edge quantization, with an enterprise engineering decision matrix."
+description: "Codebase teardown of top LLM inference engines: vLLM multi-step scheduling, SGLang RadixAttention, TensorRT-LLM in-flight batching, and llama.cpp quantization."
 extraTags:
   - vLLM
   - SGLang

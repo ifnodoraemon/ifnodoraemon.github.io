@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 11
-description: "Why do Custom Resource Definitions (CRDs) overwhelm etcd and paralyze Kubernetes when custom object counts breach millions? A deep architectural guide to re-engineering the Kubernetes control plane: dissecting kube-apiserver's in-memory WatchCache ring buffers and the three resourceVersion semantics; implementing standalone Aggregated APIServers for external high-throughput database backends; analyzing the combinatorial mathematics behind API Priority and Fairness (APF) Shuffle Sharding; and deploying physical dual-disk NVMe isolation and event sharding for 10,000-node hyperscale clusters."
+description: "Advanced Kubernetes control plane internals: Aggregated API Servers, API Priority and Fairness (APF) flow control, CRD scaling limits, and etcd performance tuning."
 extraTags:
   - Kubernetes
   - Control Plane

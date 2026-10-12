@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 5
-description: "Why is container networking widely regarded as the most intricate subsystem of Kubernetes? A deep architectural exploration into Kubernetes networking axioms and CNI (Container Network Interface) plugin execution lifecycles; rigorous comparisons between Flannel VXLAN overlays and Calico BGP underlay routing; how Cilium leverages Linux kernel eBPF and sockops socket redirection to bypass kube-proxy and iptables bottlenecks; and the role-oriented traffic governance of the modern Gateway API."
+description: "Kubernetes CNI networking guide: Flannel vs Calico topologies, Cilium eBPF socket redirection to bypass kube-proxy, and modern Gateway API traffic governance."
 extraTags:
   - Kubernetes
   - CNI

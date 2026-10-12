@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: Inference Systems
 series: llm-inference
 seriesOrder: 8
-description: "Why does colocating Prefill and Decode on identical GPUs inevitably collapse performance under 128k long contexts and reasoning workloads? An in-depth architectural breakdown of Prefill-Decode (P/D) Disaggregation: compute vs. memory spatial isolation, GQA vs. DeepSeek MLA cross-node bandwidth modeling, GPUDirect RDMA zero-copy transfers, global KV pooling, and optimal P:D node ratio queuing theory."
+description: "Prefill-Decode (P/D) Disaggregation architecture: compute vs memory isolation, MLA cross-node bandwidth modeling, GPUDirect RDMA KV transfers, and queuing theory."
 extraTags:
   - Disaggregated Serving
   - KV Cache

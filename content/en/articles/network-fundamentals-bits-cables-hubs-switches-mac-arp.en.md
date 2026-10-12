@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Computer Networking
 series: computer-networking
 seriesOrder: 1
-description: "If you know nothing about computer networking, how can you build an intuitive, solid first-principles foundation? Deconstruct network communication from absolute zero: how computers represent 0 and 1 via voltages and light pulses; why twisted pair copper cables are spiraled to cancel noise; single-mode vs multi-mode optical fiber physics; the legacy Hub era, shared media, collision domains, and CSMA/CD exponential backoff; how Layer 2 switches eliminate collisions using MAC address tables (CAM) and Ethernet frames; and dissect ARP broadcast requests, unicast replies, gratuitous ARP, and spoofing mitigation."
+description: "Computer networking from scratch: physical voltages, twisted pairs, optical fibers, collision domains, Ethernet frames, Layer-2 switches, and ARP broadcast mechanics."
 extraTags:
   - Computer Networking
   - Physical Layer

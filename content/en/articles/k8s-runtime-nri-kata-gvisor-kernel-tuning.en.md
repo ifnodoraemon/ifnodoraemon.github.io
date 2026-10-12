@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 10
-description: "Why do traditional runc containers sharing the host kernel fail against zero-day escapes, and why do dense worker nodes frequently freeze with 'PLEG is not healthy' errors? A deep architectural exploration of customizing Kubernetes worker nodes and container runtimes: analyzing Kubelet's syncLoop and the Evented PLEG streaming revolution; developing custom Go plugins using the containerd/CRI-O Node Resource Interface (NRI) for dynamic CPU pinning and OCI manipulation; contrasting Kata Containers microVMs against gVisor user-space kernel sandboxes; and mastering fine-grained kernel isolation using RuntimeClass, Sysctls, and cgroups v2 PSI/memory.high."
+description: "Kubernetes node runtime internals: Kubelet syncLoop, Evented PLEG, containerd Node Resource Interface (NRI) plugins, Kata microVMs, and gVisor sandboxing."
 extraTags:
   - Kubernetes
   - Kubelet

@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 3
-description: "Why do engineering teams still leverage Docker Swarm in the cloud-native era dominated by Kubernetes? An architectural deep dive into SwarmKit internals: Manager and Worker node topologies, built-in Raft consensus state machine, VXLAN-powered cross-host overlay networking, and kernel-level IPVS Ingress Routing Mesh service discovery, complete with production trade-offs between Swarm and Kubernetes."
+description: "Docker Swarm architecture deep dive: SwarmKit Raft consensus, VXLAN cross-host overlay networking, IPVS Ingress Routing Mesh, and Kubernetes trade-offs."
 extraTags:
   - Docker Swarm
   - SwarmKit

@@ -7,7 +7,7 @@ tagClass: tag-red
 category: Computer Networking
 series: computer-networking
 seriesOrder: 12
-description: "What bare-metal operational challenges arise when translating network architecture into physical 10,000-GPU AI data centers? A comprehensive guide to production InfiniBand operations: installing and managing Mellanox OFED / DOCA driver stacks and firmware tools (flint/mlxlink); configuring high-availability Master/Standby Subnet Manager topologies with OpenSM; auditing fabric health and diagnosing dirty optical links (Symbol Errors) and speed renegotiation drops using ibdiagnet; and diving into the GPU communication layer to configure GPUDirect RDMA (nvidia-peermem) and tune mission-critical NCCL parameters (NCCL_IB_HCA, NCCL_NET_GDR_LEVEL=5) for wire-speed All-Reduce performance."
+description: "Production InfiniBand cluster operations: MLNX_OFED driver stacks, OpenSM high availability, ibdiagnet fabric health auditing, and NCCL GPUDirect RDMA tuning."
 extraTags:
   - Computer Networking
   - InfiniBand

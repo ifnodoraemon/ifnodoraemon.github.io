@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
 seriesOrder: 3
-description: "Why does high-concurrency LLM serving suffer from severe latency spikes (TPOT jitter) even after eliminating memory fragmentation? A deep dive into the evolution from static batching to Orca's iteration-level continuous batching, the physical mechanics of head-of-line (HoL) blocking caused by long prefill bursts, and how Sarathi-Serve and vLLM leverage Chunked Prefill and decode piggybacking to flatten latency SLAs."
+description: "High-throughput LLM serving: Orca iteration-level continuous batching, head-of-line blocking mitigation, and Chunked Prefill with decode piggybacking in vLLM."
 extraTags:
   - Continuous Batching
   - Chunked Prefill

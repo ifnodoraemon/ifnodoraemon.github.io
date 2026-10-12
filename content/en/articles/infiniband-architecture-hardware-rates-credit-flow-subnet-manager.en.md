@@ -7,7 +7,7 @@ tagClass: tag-indigo
 category: Computer Networking
 series: computer-networking
 seriesOrder: 10
-description: "Why does native InfiniBand remain the dominant fabric for 10,000-GPU AI compute clusters and top-tier supercomputers in 2026? Deconstruct the layered InfiniBand protocol stack and physical link evolution: from EDR 100G, HDR 200G, and NDR 400G (Quantum-2) to the 2026 mass production of XDR 800G (Quantum-X800/ConnectX-8); analyze link-layer first principles: Flit-level Credit-Based hardware flow control and sub-100ns Cut-Through switching mechanics; and explore the control engine: Subnet Manager (OpenSM) fabric discovery, dynamic GUID/LID/LMC allocation, and Linear Forwarding Table (LFT) hardware orchestration."
+description: "InfiniBand hardware architecture: SDR to NDR/XDR link speeds, 4b/5b to PAM4 modulation, credit-based flow control, Virtual Lanes, and OpenSM subnet management."
 extraTags:
   - Computer Networking
   - InfiniBand

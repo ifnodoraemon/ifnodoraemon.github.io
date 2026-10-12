@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 9
-description: "Why does the default Kubernetes scheduler deadlock when handling distributed AI model training and batch computing workloads? A deep architectural guide to customizing the scheduling core: exploring the 11 extension points of the official Scheduling Framework and CycleState data caching; dissecting Volcano's Dominant Resource Fairness (DRF) mathematical model and PodGroup state machine; implementing a production-grade Gang Scheduling (All-or-Nothing) plugin in Go with atomic Unreserve rollbacks; and executing safe, telemetry-driven cluster rebalancing using the Descheduler."
+description: "Kubernetes custom scheduling: 11 Scheduling Framework extension points, CycleState caching, Volcano DRF algorithms, and Go Gang Scheduling plugin implementation."
 extraTags:
   - Kubernetes
   - Scheduling Framework

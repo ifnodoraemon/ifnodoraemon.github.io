@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 12
-description: "Why is the Operator pattern universally recognized as the decisive architectural breakthrough that crowned Kubernetes the operating system of the modern cloud? A comprehensive deconstruction of Operator philosophy: codifying senior SRE domain knowledge into software; how CRDs register dynamic endpoints in apiextensions-apiserver with /status and /scale subresource isolation; and an in-depth breakdown of Controller-Runtime and KubeBuilder architecture (Manager, Cache, Split Client, Reconcile, and Finalizers), complete with production Go code for high-availability distributed stateful middleware."
+description: "Production Kubernetes Operator guide: Kubebuilder architecture, CRD OpenAPI validation, Controller-Runtime reconciliation, and custom Go stateful controllers."
 extraTags:
   - Kubernetes
   - Operator

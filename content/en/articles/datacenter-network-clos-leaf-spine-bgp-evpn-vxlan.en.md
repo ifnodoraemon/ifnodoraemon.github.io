@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Computer Networking
 series: computer-networking
 seriesOrder: 8
-description: "Why can't traditional three-tier architectures and Spanning Tree Protocol (STP) handle modern cloud computing and large-scale AI clusters? Deconstruct the evolution of data center networking: from classical 3-tier bottlenecks (Access, Aggregation, Core) with STP link blocking and oversubscription, to Charles Clos's 1953 telephone switching theory and modern non-blocking 2-Tier / 3-Tier Leaf-Spine mathematical modeling; analyze RFC 7938 eBGP Underlay routing designs, ECMP 5-tuple hash polarization hazards and ASIC-level solutions; and dissect large Layer-2 Overlay mechanics: VXLAN MAC-in-UDP encapsulation (24-bit VNI, 9000 MTU Jumbo Frames) and MP-BGP EVPN Type-2/Type-3/Type-5 control plane route signaling."
+description: "First-principles guide to datacenter networking: Clos topologies, 2-Tier/3-Tier Leaf-Spine fabrics, RFC 7938 eBGP Underlay, ECMP hashing, and EVPN-VXLAN large Layer-2 Overlay."
 extraTags:
   - Computer Networking
   - Data Center

@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Mon, 12 Oct 2026 01:19:24 GMT</pubDate>
+  <pubDate>Mon, 12 Oct 2026 01:29:15 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA</title>
@@ -14,7 +14,7 @@
     <pubDate>Mon, 05 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Production Ops &amp; NCCL Tuning</category>
-    <description>What bare-metal operational challenges arise when translating network architecture into physical 10,000-GPU AI data centers? A comprehensive guide to production InfiniBand operations: installing and managing Mellanox OFED / DOCA driver stacks and firmware tools (flint/mlxlink); configuring high-availability Master/Standby Subnet Manager topologies with OpenSM; auditing fabric health and diagnosing dirty optical links (Symbol Errors) and speed renegotiation drops using ibdiagnet; and diving into the GPU communication layer to configure GPUDirect RDMA (nvidia-peermem) and tune mission-critical NCCL parameters (NCCL_IB_HCA, NCCL_NET_GDR_LEVEL=5) for wire-speed All-Reduce performance.</description>
+    <description>Production InfiniBand cluster operations: MLNX_OFED driver stacks, OpenSM high availability, ibdiagnet fabric health auditing, and NCCL GPUDirect RDMA tuning.</description>
     <enclosure url="https://blog.llmgo.top/og/en/infiniband-production-deployment-opensm-ofed-nccl-tuning.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -24,7 +24,7 @@
     <pubDate>Sun, 04 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Fat-Tree &amp; Adaptive Routing</category>
-    <description>How can thousands of 8-GPU servers be interconnected with tens of thousands of optical links into a non-blocking, deadlock-free high-performance fabric? Deconstruct modern AI supercluster topologies: from Charles Leiserson's 1985 Fat-Tree mathematical model and port count k derivations for 2-Tier and 3-Tier non-blocking ceilings to the 8-plane Rail-Optimized architecture tailored for DGX H100/H200/B200 clusters; analyze how FTree and Up/Down routing engines forbid 'Down-then-Up' turns to eliminate credit loop deadlocks; and discover how hardware Adaptive Routing (AR) and SHARP in-network aggregation achieve a 2x throughput boost during GPU All-Reduce operations.</description>
+    <description>AI cluster fabric topologies: Non-blocking Fat-Trees, Rail-Optimized cabling, Adaptive Routing (AR), SHARP in-network aggregation, and congestion mitigation.</description>
     <enclosure url="https://blog.llmgo.top/og/en/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -34,7 +34,7 @@
     <pubDate>Sat, 03 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>InfiniBand &amp; Subnet Manager</category>
-    <description>Why does native InfiniBand remain the dominant fabric for 10,000-GPU AI compute clusters and top-tier supercomputers in 2026? Deconstruct the layered InfiniBand protocol stack and physical link evolution: from EDR 100G, HDR 200G, and NDR 400G (Quantum-2) to the 2026 mass production of XDR 800G (Quantum-X800/ConnectX-8); analyze link-layer first principles: Flit-level Credit-Based hardware flow control and sub-100ns Cut-Through switching mechanics; and explore the control engine: Subnet Manager (OpenSM) fabric discovery, dynamic GUID/LID/LMC allocation, and Linear Forwarding Table (LFT) hardware orchestration.</description>
+    <description>InfiniBand hardware architecture: SDR to NDR/XDR link speeds, 4b/5b to PAM4 modulation, credit-based flow control, Virtual Lanes, and OpenSM subnet management.</description>
     <enclosure url="https://blog.llmgo.top/og/en/infiniband-architecture-hardware-rates-credit-flow-subnet-manager.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -44,7 +44,7 @@
     <pubDate>Fri, 02 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Linux Kernel &amp; eBPF Networking</category>
-    <description>How does an electrical pulse on an Ethernet cable transform into data inside application memory? Deconstruct the entire Linux operating system network protocol stack: from hardware NIC RX Ring Buffer descriptors and PCIe DMA zero-copy transfers to hardware interrupt handling, NAPI hybrid polling, and ksoftirqd softirq execution; analyze the pointer architecture and zero-copy lifecycle of Linux's core sk_buff data structure; optimize multi-core NICs via RSS hardware queues and RPS/RFS CPU affinity; and explore cutting-edge eBPF XDP (eXpress Data Path) mechanics for multi-million PPS wire-speed packet filtering and DDoS mitigation.</description>
+    <description>Linux kernel networking internals: NIC RX Ring Buffers, DMA transfers, NAPI hybrid polling, sk_buff lifecycle, RSS multi-queue affinity, and eBPF XDP wire filtering.</description>
     <enclosure url="https://blog.llmgo.top/og/en/linux-kernel-networking-napi-ring-buffer-skbuff-xdp.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -54,7 +54,7 @@
     <pubDate>Fri, 02 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>RDMA &amp; RoCEv2</category>
-    <description>Why does the traditional TCP/IP stack become a compute black hole in 400G and 800G networks? Deconstruct RDMA (Remote Direct Memory Access) first principles: Kernel Bypass, hardware-level Zero-Copy, and Memory Registration (MR/L_Key/R_Key); dissect core ibverbs primitives: Queue Pairs (SQ/RQ), Completion Queues (CQ), and microsecond-level mechanics of Two-Sided (Send/Recv) vs One-Sided (RDMA Read/Write/Atomic) operations; and uncover how Lossless RoCEv2 (UDP port 4791) leverages 802.1Qbb Priority Flow Control (PFC) backpressure and ECN/DCQCN closed-loop congestion control to resolve packet loss collapse and deadlock.</description>
+    <description>RDMA high-performance networking: Kernel bypass, hardware zero-copy, Queue Pair ibverbs verbs, and lossless RoCEv2 with 802.1Qbb PFC and DCQCN congestion control.</description>
     <enclosure url="https://blog.llmgo.top/og/en/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -64,7 +64,7 @@
     <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Datacenter &amp; Leaf-Spine</category>
-    <description>Why can't traditional three-tier architectures and Spanning Tree Protocol (STP) handle modern cloud computing and large-scale AI clusters? Deconstruct the evolution of data center networking: from classical 3-tier bottlenecks (Access, Aggregation, Core) with STP link blocking and oversubscription, to Charles Clos's 1953 telephone switching theory and modern non-blocking 2-Tier / 3-Tier Leaf-Spine mathematical modeling; analyze RFC 7938 eBGP Underlay routing designs, ECMP 5-tuple hash polarization hazards and ASIC-level solutions; and dissect large Layer-2 Overlay mechanics: VXLAN MAC-in-UDP encapsulation (24-bit VNI, 9000 MTU Jumbo Frames) and MP-BGP EVPN Type-2/Type-3/Type-5 control plane route signaling.</description>
+    <description>First-principles guide to datacenter networking: Clos topologies, 2-Tier/3-Tier Leaf-Spine fabrics, RFC 7938 eBGP Underlay, ECMP hashing, and EVPN-VXLAN large Layer-2 Overlay.</description>
     <enclosure url="https://blog.llmgo.top/og/en/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -74,7 +74,7 @@
     <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Transport Layer Bridge &amp; DNS</category>
-    <description>When you type a web URL into a browser and press Enter, how do packets locate the target server across continents and enter the exact destination application process? Deconstruct the bridge connecting applications to the transport layer: explore the global DNS hierarchy (13 logical Root Server clusters with Anycast scaling, TLD registries, authoritative name servers, recursive vs iterative querying); derive the fundamentals of Ports and OS Sockets, explaining how a single server port 80 sustains one million concurrent connections via 5-tuples; and compare the core design trade-offs of the transport layer's twin pillars: lightweight 8-byte UDP datagrams vs connection-oriented 20-byte TCP byte streams.</description>
+    <description>Application and transport layer bridges: DNS recursive resolution, Anycast root servers, 5-tuple socket multiplexing, and architectural UDP vs TCP trade-offs.</description>
     <enclosure url="https://blog.llmgo.top/og/en/transport-bridge-dns-sockets-ports-udp-vs-tcp.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -84,7 +84,7 @@
     <pubDate>Wed, 30 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>LAN &amp; VLAN Infrastructure</category>
-    <description>Why can a single physical network switch be carved into dozens of isolated virtual local networks? Deconstruct three core pillars of enterprise LAN engineering: from broadcast storm hazards to IEEE 802.1Q frame tagging (4-byte tag, 12-bit VID, PCP QoS priority); the operational differences between Access ports, Trunk ports, and PVID tag stripping/insertion; comparing router-on-a-stick sub-interfaces with Layer 3 Switch Virtual Interfaces (SVI); dissecting DHCP's 4-step DORA handshake and cross-subnet relay agents; and demystifying NAPT (Port Address Translation), SNAT, DNAT, and Linux kernel conntrack state tables.</description>
+    <description>Enterprise LAN infrastructure: IEEE 802.1Q VLAN trunking, DORA DHCP address pools, Router-on-a-Stick, L3 routing, and Linux iptables NAPT port forwarding.</description>
     <enclosure url="https://blog.llmgo.top/og/en/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -94,7 +94,7 @@
     <pubDate>Wed, 30 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Congestion Control &amp; QUIC</category>
-    <description>Why can sliding windows prevent buffer overflow at the peer receiver but fail to stop Internet backbone routers from collapsing? Deconstruct thirty years of congestion control evolution: from loss-based AIMD, Reno state machines, and Bufferbloat to the cubic polynomial mathematics of Linux's default Cubic algorithm; dissect Google BBR's physical modeling of maximum delivery rate and minimum round-trip propagation time (BtlBw/RTprop/Pacing Rate); and analyze the transport revolution from HTTP/1.1 and HTTP/2 Head-of-Line (HoL) blocking to UDP-based HTTP/3 (QUIC) 0-RTT handshakes and seamless connection migration.</description>
+    <description>TCP congestion control evolution: loss-based Reno, Linux default Cubic polynomial curves, Google BBR pacing models, and HTTP/3 QUIC 0-RTT transport.</description>
     <enclosure url="https://blog.llmgo.top/og/en/tcp-congestion-control-reno-cubic-bbr-quic-http3.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -104,7 +104,7 @@
     <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>IP Addressing &amp; Subnet Mask</category>
-    <description>Why must computers worldwide rely on IP addresses even though every network interface card already has a unique physical MAC address? Deconstruct network layer first principles from scratch: the binary structure and dotted-decimal notation of IPv4; the mathematical mechanics of Subnet Masks and step-by-step bitwise AND derivations, using 192.168.1.130/26 to compute network ID, broadcast address, and usable host capacity (the 2^H - 2 rule); examine the limitations of legacy Classful addressing, CIDR prefixes, and RFC 1918 private scopes; and demystify how the Default Gateway strips and rewrites Layer 2 headers when routing packets across subnets.</description>
+    <description>Deep dive into IP addressing: IPv4 32-bit binary representation, bitwise AND subnet masking, CIDR supernetting, default gateways, and Linux routing tables.</description>
     <enclosure url="https://blog.llmgo.top/og/en/ip-addressing-subnet-mask-cidr-default-gateway-routing.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -114,7 +114,7 @@
     <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>IP Routing &amp; TCP State Machine</category>
-    <description>How can an absolutely reliable, ordered stream of data be built on top of an unreliable physical network? Deconstruct core Layer 3 and Layer 4 mechanics: from IPv4/IPv6 packet structures and CIDR subnets to Linux kernel Longest Prefix Match (LPM) and FIB/RIB table lookups; dissect the classic 11 TCP state transitions, 3-way handshake mechanics, SYN Flood &amp; SYN Cookies defense, 4-way teardown with TIME_WAIT rationale; and derive sliding window flow control, zero-window probing, and TCP_NODELAY production tuning from first principles.</description>
+    <description>Layer 3 and Layer 4 networking: IPv4/IPv6 headers, Linux kernel LPM routing, TCP 11-state machine transitions, SYN cookies, and sliding window flow control.</description>
     <enclosure url="https://blog.llmgo.top/og/en/network-layer-transport-layer-ip-routing-tcp-state-machine.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -124,7 +124,7 @@
     <pubDate>Mon, 28 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Zero-Foundation Networking &amp; Layer 2</category>
-    <description>If you know nothing about computer networking, how can you build an intuitive, solid first-principles foundation? Deconstruct network communication from absolute zero: how computers represent 0 and 1 via voltages and light pulses; why twisted pair copper cables are spiraled to cancel noise; single-mode vs multi-mode optical fiber physics; the legacy Hub era, shared media, collision domains, and CSMA/CD exponential backoff; how Layer 2 switches eliminate collisions using MAC address tables (CAM) and Ethernet frames; and dissect ARP broadcast requests, unicast replies, gratuitous ARP, and spoofing mitigation.</description>
+    <description>Computer networking from scratch: physical voltages, twisted pairs, optical fibers, collision domains, Ethernet frames, Layer-2 switches, and ARP broadcast mechanics.</description>
     <enclosure url="https://blog.llmgo.top/og/en/network-fundamentals-bits-cables-hubs-switches-mac-arp.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -134,7 +134,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Container Networking</category>
-    <description>How do processes isolated within private Network Namespaces communicate with host networks and the external Internet? An in-depth teardown of container network packet forwarding: veth-pair virtual ethernet pipes, Linux Bridge (docker0) Layer-2 forwarding, iptables PREROUTING/POSTROUTING DNAT port forwarding and MASQUERADE SNAT, alongside a performance and architectural comparison across Host, Bridge, Macvlan, and Overlay cross-host topologies.</description>
+    <description>Container networking from scratch: Network Namespaces, veth-pairs, Linux bridge docker0 forwarding, iptables DNAT/SNAT, and Host vs Bridge vs Macvlan comparisons.</description>
     <enclosure url="https://blog.llmgo.top/og/en/container-networking-veth-bridge-iptables.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -144,7 +144,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Container Internals</category>
-    <description>Why are containers not lightweight virtual machines, but ordinary Linux processes constrained by kernel views and resource quotas? An in-depth first-principles exploration of Docker's three core pillars: clone() system calls with the six Linux Namespaces, cgroups v2 single-hierarchy unified resource limits, and OverlayFS layered union mounts with Copy-on-Write (CoW), alongside the OCI, containerd, and runc execution chain.</description>
+    <description>Docker internals from first principles: Linux Namespaces isolation, cgroups v2 resource limits, OverlayFS layered union mounts with CoW, and OCI runc execution.</description>
     <enclosure url="https://blog.llmgo.top/og/en/docker-internals-namespace-cgroups-overlayfs.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -154,7 +154,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Cluster Orchestration</category>
-    <description>Why do engineering teams still leverage Docker Swarm in the cloud-native era dominated by Kubernetes? An architectural deep dive into SwarmKit internals: Manager and Worker node topologies, built-in Raft consensus state machine, VXLAN-powered cross-host overlay networking, and kernel-level IPVS Ingress Routing Mesh service discovery, complete with production trade-offs between Swarm and Kubernetes.</description>
+    <description>Docker Swarm architecture deep dive: SwarmKit Raft consensus, VXLAN cross-host overlay networking, IPVS Ingress Routing Mesh, and Kubernetes trade-offs.</description>
     <enclosure url="https://blog.llmgo.top/og/en/docker-swarm-architecture-raft-routing-mesh.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -164,7 +164,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Application Networking</category>
-    <description>Why do enterprise microservices migrated to Kubernetes frequently suffer from intermittent 502 Bad Gateway errors during rolling updates while gRPC workloads bottleneck onto a single Pod? A deep architectural exploration into application-layer networking on Kubernetes: why HTTP/2 multiplexing breaks Layer-4 ClusterIP load balancing and how Headless Services and Envoy resolve it; MaxConnectionAge, JVM DNS TTL -1 traps, and reconnect storms; the asynchronous race condition between Pod deletion and EndpointSlice propagation; and production zero-downtime draining sequences via preStop hooks, graceful shutdowns, and readinessGates.</description>
+    <description>Kubernetes application networking: HTTP/2 gRPC load balancing, Envoy service mesh architecture, xDS control planes, and zero-downtime rolling deployment strategies.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-application-networking-grpc-service-mesh-zero-downtime.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -174,7 +174,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>K8s Control Plane</category>
-    <description>Why have declarative APIs and modern control theory emerged as the definitive standard for cloud infrastructure? A comprehensive architectural deconstruction of the Kubernetes Control Plane: kube-apiserver request admission pipelines (Authentication, RBAC, Mutating and Validating Webhooks), etcd v3 MVCC revisions and Watch streams, kube-scheduler two-phase filter and score algorithms, Informer mechanics (Reflector, DeltaFIFO, Indexer, WorkQueue), and level-triggered controller reconciliation loops.</description>
+    <description>Kubernetes control plane architecture: declarative reconciliation loops, informers, workqueue patterns, and optimistic concurrency control with etcd.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-control-plane-declarative-reconciliation.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -184,7 +184,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Control Plane Customization</category>
-    <description>Why do Custom Resource Definitions (CRDs) overwhelm etcd and paralyze Kubernetes when custom object counts breach millions? A deep architectural guide to re-engineering the Kubernetes control plane: dissecting kube-apiserver's in-memory WatchCache ring buffers and the three resourceVersion semantics; implementing standalone Aggregated APIServers for external high-throughput database backends; analyzing the combinatorial mathematics behind API Priority and Fairness (APF) Shuffle Sharding; and deploying physical dual-disk NVMe isolation and event sharding for 10,000-node hyperscale clusters.</description>
+    <description>Advanced Kubernetes control plane internals: Aggregated API Servers, API Priority and Fairness (APF) flow control, CRD scaling limits, and etcd performance tuning.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -194,7 +194,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Database Storage</category>
-    <description>Why do enterprise engineering teams migrating databases to Kubernetes abandon cloud network block storage in favor of bare-metal Local NVMe SSDs? A comprehensive exploration of running stateful distributed storage on Kubernetes: overcoming cloud disk multi-hop latency bottlenecks with Local Persistent Volumes; XFS formatting tuning and resolving cgroups v2 OOM cascades caused by Linux page cache dirty page backlogs; RocksDB/MySQL WAL Direct I/O and fdatasync optimizations; and mitigating split-brain dual-primary corruption using hardware IPMI STONITH and lease-based Node Fencing.</description>
+    <description>Running databases on Kubernetes: Local PV NVMe tuning, page cache dirty ratio optimization, RocksDB/MySQL WAL Direct I/O, and STONITH node fencing.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-database-storage-local-nvme-tuning-fencing.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -204,7 +204,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>AI GPU Scheduling</category>
-    <description>Why does traditional CPU/memory scalar scheduling fail in the large language model era? A rigorous architectural deconstruction of AI infrastructure on Kubernetes in 2026: automated zero-touch lifecycles via the NVIDIA GPU Operator; hardware-isolated Multi-Instance GPU (MIG) slicing versus time-slicing; overcoming cross-NUMA interconnect bottlenecks with Kubelet Topology Manager and Dynamic Resource Allocation (DRA); and production auto-scaling for vLLM and SGLang inference clusters leveraging KEDA and real-time KV cache saturation metrics.</description>
+    <description>AI infrastructure on Kubernetes: NVIDIA GPU Operator automation, MIG slicing, Kubelet Topology Manager NUMA alignment, Dynamic Resource Allocation, and KEDA scaling.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-gpu-operator-ai-inference-scheduling.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -214,7 +214,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>K8s Networking</category>
-    <description>Why is container networking widely regarded as the most intricate subsystem of Kubernetes? A deep architectural exploration into Kubernetes networking axioms and CNI (Container Network Interface) plugin execution lifecycles; rigorous comparisons between Flannel VXLAN overlays and Calico BGP underlay routing; how Cilium leverages Linux kernel eBPF and sockops socket redirection to bypass kube-proxy and iptables bottlenecks; and the role-oriented traffic governance of the modern Gateway API.</description>
+    <description>Kubernetes CNI networking guide: Flannel vs Calico topologies, Cilium eBPF socket redirection to bypass kube-proxy, and modern Gateway API traffic governance.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-networking-cni-cilium-ebpf-gateway-api.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -224,7 +224,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Operator Pattern</category>
-    <description>Why is the Operator pattern universally recognized as the decisive architectural breakthrough that crowned Kubernetes the operating system of the modern cloud? A comprehensive deconstruction of Operator philosophy: codifying senior SRE domain knowledge into software; how CRDs register dynamic endpoints in apiextensions-apiserver with /status and /scale subresource isolation; and an in-depth breakdown of Controller-Runtime and KubeBuilder architecture (Manager, Cache, Split Client, Reconcile, and Finalizers), complete with production Go code for high-availability distributed stateful middleware.</description>
+    <description>Production Kubernetes Operator guide: Kubebuilder architecture, CRD OpenAPI validation, Controller-Runtime reconciliation, and custom Go stateful controllers.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-operator-pattern-kubebuilder-crd.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -234,7 +234,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Node Runtime Customization</category>
-    <description>Why do traditional runc containers sharing the host kernel fail against zero-day escapes, and why do dense worker nodes frequently freeze with 'PLEG is not healthy' errors? A deep architectural exploration of customizing Kubernetes worker nodes and container runtimes: analyzing Kubelet's syncLoop and the Evented PLEG streaming revolution; developing custom Go plugins using the containerd/CRI-O Node Resource Interface (NRI) for dynamic CPU pinning and OCI manipulation; contrasting Kata Containers microVMs against gVisor user-space kernel sandboxes; and mastering fine-grained kernel isolation using RuntimeClass, Sysctls, and cgroups v2 PSI/memory.high.</description>
+    <description>Kubernetes node runtime internals: Kubelet syncLoop, Evented PLEG, containerd Node Resource Interface (NRI) plugins, Kata microVMs, and gVisor sandboxing.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-runtime-nri-kata-gvisor-kernel-tuning.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -244,7 +244,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Scheduler Customization</category>
-    <description>Why does the default Kubernetes scheduler deadlock when handling distributed AI model training and batch computing workloads? A deep architectural guide to customizing the scheduling core: exploring the 11 extension points of the official Scheduling Framework and CycleState data caching; dissecting Volcano's Dominant Resource Fairness (DRF) mathematical model and PodGroup state machine; implementing a production-grade Gang Scheduling (All-or-Nothing) plugin in Go with atomic Unreserve rollbacks; and executing safe, telemetry-driven cluster rebalancing using the Descheduler.</description>
+    <description>Kubernetes custom scheduling: 11 Scheduling Framework extension points, CycleState caching, Volcano DRF algorithms, and Go Gang Scheduling plugin implementation.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-scheduling-framework-custom-plugin-gang-scheduling.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -254,7 +254,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>K8s Storage</category>
-    <description>Why was executing stateful databases on Kubernetes once treated as an operational taboo? A detailed architectural exploration of the cloud-native storage stack: the three-tier decoupling of StorageClass, PersistentVolume (PV), and PersistentVolumeClaim (PVC); the four lifecycle stages of the Container Storage Interface (CSI) specification (Provision, Attach, Stage, and Mount); and how StatefulSets leverage Headless Services and volumeClaimTemplates to maintain strict topological ordering and immutable data persistence.</description>
+    <description>Cloud-native storage architecture: StorageClass, PV/PVC decoupling, CSI provision/attach/stage/mount lifecycles, and StatefulSet deterministic volume binding.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-storage-csi-statefulset-deep-dive.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -264,7 +264,7 @@
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Batching &amp; Scheduling</category>
-    <description>Why does high-concurrency LLM serving suffer from severe latency spikes (TPOT jitter) even after eliminating memory fragmentation? A deep dive into the evolution from static batching to Orca's iteration-level continuous batching, the physical mechanics of head-of-line (HoL) blocking caused by long prefill bursts, and how Sarathi-Serve and vLLM leverage Chunked Prefill and decode piggybacking to flatten latency SLAs.</description>
+    <description>High-throughput LLM serving: Orca iteration-level continuous batching, head-of-line blocking mitigation, and Chunked Prefill with decode piggybacking in vLLM.</description>
     <enclosure url="https://blog.llmgo.top/og/en/continuous-batching-chunked-prefill-guide.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -274,7 +274,7 @@
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Kernel Optimization</category>
-    <description>Why does standard self-attention trigger explosive HBM bandwidth bottlenecks as context scales? A comprehensive deep dive into the evolution of attention kernels: from FlashAttention-1's SRAM tiling and online softmax rescaling, to FlashAttention-2's loop inversion and warp-level zero-communication scheduling, to FlashAttention-3's Hopper TMA asynchronous copies and WGMMA warpgroups. Finally, we explore FlashInfer, the purpose-built LLM serving kernel library, revealing how native Paged KV cache indexing and Split-K parallel decoding rescue memory-bound decodes.</description>
+    <description>Deep dive into GPU attention kernels: FlashAttention-1 online softmax, FA-2 parallelism, FA-3 Hopper TMA asynchronous pipelines, and FlashInfer variable-length batching.</description>
     <enclosure url="https://blog.llmgo.top/og/en/flashattention-flashinfer-kernel-evolution.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -284,7 +284,7 @@
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Inference Engines</category>
-    <description>From Python scheduling to asynchronous C++/Rust execution engines: an in-depth codebase teardown of the open-source world's top four inference engines. Comparing vLLM v1 zero-overhead multi-step scheduling, SGLang RadixAttention tree-based execution loops, TensorRT-LLM fused kernel pipelines with in-flight batching, and llama.cpp zero-dependency edge quantization, with an enterprise engineering decision matrix.</description>
+    <description>Codebase teardown of top LLM inference engines: vLLM multi-step scheduling, SGLang RadixAttention, TensorRT-LLM in-flight batching, and llama.cpp quantization.</description>
     <enclosure url="https://blog.llmgo.top/og/en/inference-engines-core-architecture-internals.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -304,7 +304,7 @@
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Attention Architecture</category>
-    <description>Why does long-context inference hit an insurmountable wall despite aggressive software kernel and scheduling optimizations? A deep architectural exploration from classical MHA to GQA grouping compromises, culminating in DeepSeek's revolutionary Multi-Head Latent Attention (MLA). We mathematically deconstruct low-rank latent projections, Decoupled RoPE, and the Matrix Absorption trick that allows serving engines to erase over 90% of multi-head Key-Value tensors from physical HBM during decode.</description>
+    <description>Attention evolution for LLM serving: MHA memory bottlenecks, GQA grouping trade-offs, DeepSeek MLA low-rank latent projections, Decoupled RoPE, and Matrix Absorption.</description>
     <enclosure url="https://blog.llmgo.top/og/en/mha-gqa-mla-matrix-absorption-inference-engine.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -314,7 +314,7 @@
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>MoE &amp; Sparsity</category>
-    <description>Why does the 671B DeepSeek-V3 activate only 37B parameters per token yet hit severe network latency walls during decode? A comprehensive deep dive into MoE inference internals: dynamic routing gating, auxiliary-loss-free balancing, Expert Parallelism (EP) All-to-Allv communication patterns, CUTLASS Grouped GEMM kernels, and DualPipe computation-communication overlapping.</description>
+    <description>MoE inference internals: DeepSeek-V3 gating, Expert Parallelism (EP) All-to-All communication, CUTLASS Grouped GEMM kernels, and DualPipe overlap schedules.</description>
     <enclosure url="https://blog.llmgo.top/og/en/moe-expert-parallelism-inference-engine.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -334,7 +334,7 @@
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Inference Systems</category>
-    <description>Why does colocating Prefill and Decode on identical GPUs inevitably collapse performance under 128k long contexts and reasoning workloads? An in-depth architectural breakdown of Prefill-Decode (P/D) Disaggregation: compute vs. memory spatial isolation, GQA vs. DeepSeek MLA cross-node bandwidth modeling, GPUDirect RDMA zero-copy transfers, global KV pooling, and optimal P:D node ratio queuing theory.</description>
+    <description>Prefill-Decode (P/D) Disaggregation architecture: compute vs memory isolation, MLA cross-node bandwidth modeling, GPUDirect RDMA KV transfers, and queuing theory.</description>
     <enclosure url="https://blog.llmgo.top/og/en/pd-disaggregation-distributed-kv-cache.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -344,7 +344,7 @@
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Prefix Caching</category>
-    <description>Why do inference engines repeatedly execute thousands of redundant prompt forward passes across multi-turn conversations and agent loops? A comprehensive dissection of Prefix Caching internals: from vLLM's hash-chained block indexing and boundary penalty, to SGLang's pioneering RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction mechanics.</description>
+    <description>LLM state reuse internals: vLLM hash-chained block caching vs SGLang RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction.</description>
     <enclosure url="https://blog.llmgo.top/og/en/prefix-caching-radix-attention-internals.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -354,7 +354,7 @@
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Future Architectures</category>
-    <description>When autoregressive thinking tokens explode from hundreds to 128k in deep reasoning models, inference systems reach an epochal architectural inflection point. An in-depth investigation into Test-Time Compute infrastructure: mitigating KV Cache memory avalanches, tree-search (MCTS) speculative scheduling, reinforcement-learning-guided thinking budget governors, and cross-tier (SRAM/HBM/CXL/NVMe-oF) global KV pools.</description>
+    <description>Inference architectures for reasoning models: Test-Time Compute scaling, MCTS speculative tree scheduling, thinking budget governors, and tiered KV cache pools.</description>
     <enclosure url="https://blog.llmgo.top/og/en/reasoning-test-time-compute-inference-future.png" length="150000" type="image/png" />
   </item>
   <item>

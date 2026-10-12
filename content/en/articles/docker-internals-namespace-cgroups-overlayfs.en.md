@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 1
-description: "Why are containers not lightweight virtual machines, but ordinary Linux processes constrained by kernel views and resource quotas? An in-depth first-principles exploration of Docker's three core pillars: clone() system calls with the six Linux Namespaces, cgroups v2 single-hierarchy unified resource limits, and OverlayFS layered union mounts with Copy-on-Write (CoW), alongside the OCI, containerd, and runc execution chain."
+description: "Docker internals from first principles: Linux Namespaces isolation, cgroups v2 resource limits, OverlayFS layered union mounts with CoW, and OCI runc execution."
 extraTags:
   - Docker
   - Linux Kernel

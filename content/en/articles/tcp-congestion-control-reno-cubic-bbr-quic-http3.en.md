@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Computer Networking
 series: computer-networking
 seriesOrder: 6
-description: "Why can sliding windows prevent buffer overflow at the peer receiver but fail to stop Internet backbone routers from collapsing? Deconstruct thirty years of congestion control evolution: from loss-based AIMD, Reno state machines, and Bufferbloat to the cubic polynomial mathematics of Linux's default Cubic algorithm; dissect Google BBR's physical modeling of maximum delivery rate and minimum round-trip propagation time (BtlBw/RTprop/Pacing Rate); and analyze the transport revolution from HTTP/1.1 and HTTP/2 Head-of-Line (HoL) blocking to UDP-based HTTP/3 (QUIC) 0-RTT handshakes and seamless connection migration."
+description: "TCP congestion control evolution: loss-based Reno, Linux default Cubic polynomial curves, Google BBR pacing models, and HTTP/3 QUIC 0-RTT transport."
 extraTags:
   - Computer Networking
   - Congestion Control

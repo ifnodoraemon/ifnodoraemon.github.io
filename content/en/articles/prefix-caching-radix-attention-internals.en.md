@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
 seriesOrder: 4
-description: "Why do inference engines repeatedly execute thousands of redundant prompt forward passes across multi-turn conversations and agent loops? A comprehensive dissection of Prefix Caching internals: from vLLM's hash-chained block indexing and boundary penalty, to SGLang's pioneering RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction mechanics."
+description: "LLM state reuse internals: vLLM hash-chained block caching vs SGLang RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction."
 extraTags:
   - Prefix Caching
   - RadixAttention

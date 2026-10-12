@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 6
-description: "Why was executing stateful databases on Kubernetes once treated as an operational taboo? A detailed architectural exploration of the cloud-native storage stack: the three-tier decoupling of StorageClass, PersistentVolume (PV), and PersistentVolumeClaim (PVC); the four lifecycle stages of the Container Storage Interface (CSI) specification (Provision, Attach, Stage, and Mount); and how StatefulSets leverage Headless Services and volumeClaimTemplates to maintain strict topological ordering and immutable data persistence."
+description: "Cloud-native storage architecture: StorageClass, PV/PVC decoupling, CSI provision/attach/stage/mount lifecycles, and StatefulSet deterministic volume binding."
 extraTags:
   - Kubernetes
   - CSI

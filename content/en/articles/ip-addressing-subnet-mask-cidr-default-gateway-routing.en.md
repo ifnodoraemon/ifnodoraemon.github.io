@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: Computer Networking
 series: computer-networking
 seriesOrder: 2
-description: "Why must computers worldwide rely on IP addresses even though every network interface card already has a unique physical MAC address? Deconstruct network layer first principles from scratch: the binary structure and dotted-decimal notation of IPv4; the mathematical mechanics of Subnet Masks and step-by-step bitwise AND derivations, using 192.168.1.130/26 to compute network ID, broadcast address, and usable host capacity (the 2^H - 2 rule); examine the limitations of legacy Classful addressing, CIDR prefixes, and RFC 1918 private scopes; and demystify how the Default Gateway strips and rewrites Layer 2 headers when routing packets across subnets."
+description: "Deep dive into IP addressing: IPv4 32-bit binary representation, bitwise AND subnet masking, CIDR supernetting, default gateways, and Linux routing tables."
 extraTags:
   - Computer Networking
   - IP Address

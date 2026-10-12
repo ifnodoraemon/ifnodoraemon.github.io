@@ -7,7 +7,7 @@ tagClass: tag-orange
 category: Computer Networking
 series: computer-networking
 seriesOrder: 7
-description: "How does an electrical pulse on an Ethernet cable transform into data inside application memory? Deconstruct the entire Linux operating system network protocol stack: from hardware NIC RX Ring Buffer descriptors and PCIe DMA zero-copy transfers to hardware interrupt handling, NAPI hybrid polling, and ksoftirqd softirq execution; analyze the pointer architecture and zero-copy lifecycle of Linux's core sk_buff data structure; optimize multi-core NICs via RSS hardware queues and RPS/RFS CPU affinity; and explore cutting-edge eBPF XDP (eXpress Data Path) mechanics for multi-million PPS wire-speed packet filtering and DDoS mitigation."
+description: "Linux kernel networking internals: NIC RX Ring Buffers, DMA transfers, NAPI hybrid polling, sk_buff lifecycle, RSS multi-queue affinity, and eBPF XDP wire filtering."
 extraTags:
   - Computer Networking
   - Linux Kernel

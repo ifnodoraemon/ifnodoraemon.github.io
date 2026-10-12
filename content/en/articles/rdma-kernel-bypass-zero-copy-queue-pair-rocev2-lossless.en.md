@@ -7,7 +7,7 @@ tagClass: tag-emerald
 category: Computer Networking
 series: computer-networking
 seriesOrder: 9
-description: "Why does the traditional TCP/IP stack become a compute black hole in 400G and 800G networks? Deconstruct RDMA (Remote Direct Memory Access) first principles: Kernel Bypass, hardware-level Zero-Copy, and Memory Registration (MR/L_Key/R_Key); dissect core ibverbs primitives: Queue Pairs (SQ/RQ), Completion Queues (CQ), and microsecond-level mechanics of Two-Sided (Send/Recv) vs One-Sided (RDMA Read/Write/Atomic) operations; and uncover how Lossless RoCEv2 (UDP port 4791) leverages 802.1Qbb Priority Flow Control (PFC) backpressure and ECN/DCQCN closed-loop congestion control to resolve packet loss collapse and deadlock."
+description: "RDMA high-performance networking: Kernel bypass, hardware zero-copy, Queue Pair ibverbs verbs, and lossless RoCEv2 with 802.1Qbb PFC and DCQCN congestion control."
 extraTags:
   - Computer Networking
   - RDMA

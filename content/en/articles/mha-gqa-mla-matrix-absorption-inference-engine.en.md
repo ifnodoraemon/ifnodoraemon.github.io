@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
 seriesOrder: 6
-description: "Why does long-context inference hit an insurmountable wall despite aggressive software kernel and scheduling optimizations? A deep architectural exploration from classical MHA to GQA grouping compromises, culminating in DeepSeek's revolutionary Multi-Head Latent Attention (MLA). We mathematically deconstruct low-rank latent projections, Decoupled RoPE, and the Matrix Absorption trick that allows serving engines to erase over 90% of multi-head Key-Value tensors from physical HBM during decode."
+description: "Attention evolution for LLM serving: MHA memory bottlenecks, GQA grouping trade-offs, DeepSeek MLA low-rank latent projections, Decoupled RoPE, and Matrix Absorption."
 extraTags:
   - MLA
   - GQA

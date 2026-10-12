@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 8
-description: "Why do enterprise engineering teams migrating databases to Kubernetes abandon cloud network block storage in favor of bare-metal Local NVMe SSDs? A comprehensive exploration of running stateful distributed storage on Kubernetes: overcoming cloud disk multi-hop latency bottlenecks with Local Persistent Volumes; XFS formatting tuning and resolving cgroups v2 OOM cascades caused by Linux page cache dirty page backlogs; RocksDB/MySQL WAL Direct I/O and fdatasync optimizations; and mitigating split-brain dual-primary corruption using hardware IPMI STONITH and lease-based Node Fencing."
+description: "Running databases on Kubernetes: Local PV NVMe tuning, page cache dirty ratio optimization, RocksDB/MySQL WAL Direct I/O, and STONITH node fencing."
 extraTags:
   - Kubernetes
   - Database

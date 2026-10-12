@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
 seriesOrder: 7
-description: "Why does the 671B DeepSeek-V3 activate only 37B parameters per token yet hit severe network latency walls during decode? A comprehensive deep dive into MoE inference internals: dynamic routing gating, auxiliary-loss-free balancing, Expert Parallelism (EP) All-to-Allv communication patterns, CUTLASS Grouped GEMM kernels, and DualPipe computation-communication overlapping."
+description: "MoE inference internals: DeepSeek-V3 gating, Expert Parallelism (EP) All-to-All communication, CUTLASS Grouped GEMM kernels, and DualPipe overlap schedules."
 extraTags:
   - MoE
   - Expert Parallelism

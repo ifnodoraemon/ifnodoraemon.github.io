@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Computer Networking
 series: computer-networking
 seriesOrder: 3
-description: "Why can a single physical network switch be carved into dozens of isolated virtual local networks? Deconstruct three core pillars of enterprise LAN engineering: from broadcast storm hazards to IEEE 802.1Q frame tagging (4-byte tag, 12-bit VID, PCP QoS priority); the operational differences between Access ports, Trunk ports, and PVID tag stripping/insertion; comparing router-on-a-stick sub-interfaces with Layer 3 Switch Virtual Interfaces (SVI); dissecting DHCP's 4-step DORA handshake and cross-subnet relay agents; and demystifying NAPT (Port Address Translation), SNAT, DNAT, and Linux kernel conntrack state tables."
+description: "Enterprise LAN infrastructure: IEEE 802.1Q VLAN trunking, DORA DHCP address pools, Router-on-a-Stick, L3 routing, and Linux iptables NAPT port forwarding."
 extraTags:
   - Computer Networking
   - LAN

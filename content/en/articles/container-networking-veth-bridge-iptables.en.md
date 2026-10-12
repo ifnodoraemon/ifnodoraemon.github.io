@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 2
-description: "How do processes isolated within private Network Namespaces communicate with host networks and the external Internet? An in-depth teardown of container network packet forwarding: veth-pair virtual ethernet pipes, Linux Bridge (docker0) Layer-2 forwarding, iptables PREROUTING/POSTROUTING DNAT port forwarding and MASQUERADE SNAT, alongside a performance and architectural comparison across Host, Bridge, Macvlan, and Overlay cross-host topologies."
+description: "Container networking from scratch: Network Namespaces, veth-pairs, Linux bridge docker0 forwarding, iptables DNAT/SNAT, and Host vs Bridge vs Macvlan comparisons."
 extraTags:
   - Container Networking
   - veth-pair

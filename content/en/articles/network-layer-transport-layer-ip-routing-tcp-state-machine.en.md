@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: Computer Networking
 series: computer-networking
 seriesOrder: 5
-description: "How can an absolutely reliable, ordered stream of data be built on top of an unreliable physical network? Deconstruct core Layer 3 and Layer 4 mechanics: from IPv4/IPv6 packet structures and CIDR subnets to Linux kernel Longest Prefix Match (LPM) and FIB/RIB table lookups; dissect the classic 11 TCP state transitions, 3-way handshake mechanics, SYN Flood & SYN Cookies defense, 4-way teardown with TIME_WAIT rationale; and derive sliding window flow control, zero-window probing, and TCP_NODELAY production tuning from first principles."
+description: "Layer 3 and Layer 4 networking: IPv4/IPv6 headers, Linux kernel LPM routing, TCP 11-state machine transitions, SYN cookies, and sliding window flow control."
 extraTags:
   - Computer Networking
   - IP Routing

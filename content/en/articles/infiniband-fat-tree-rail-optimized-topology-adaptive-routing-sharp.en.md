@@ -7,7 +7,7 @@ tagClass: tag-pink
 category: Computer Networking
 series: computer-networking
 seriesOrder: 11
-description: "How can thousands of 8-GPU servers be interconnected with tens of thousands of optical links into a non-blocking, deadlock-free high-performance fabric? Deconstruct modern AI supercluster topologies: from Charles Leiserson's 1985 Fat-Tree mathematical model and port count k derivations for 2-Tier and 3-Tier non-blocking ceilings to the 8-plane Rail-Optimized architecture tailored for DGX H100/H200/B200 clusters; analyze how FTree and Up/Down routing engines forbid 'Down-then-Up' turns to eliminate credit loop deadlocks; and discover how hardware Adaptive Routing (AR) and SHARP in-network aggregation achieve a 2x throughput boost during GPU All-Reduce operations."
+description: "AI cluster fabric topologies: Non-blocking Fat-Trees, Rail-Optimized cabling, Adaptive Routing (AR), SHARP in-network aggregation, and congestion mitigation."
 extraTags:
   - Computer Networking
   - InfiniBand

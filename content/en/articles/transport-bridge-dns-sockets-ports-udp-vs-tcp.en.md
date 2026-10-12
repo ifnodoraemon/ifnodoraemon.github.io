@@ -7,7 +7,7 @@ tagClass: tag-indigo
 category: Computer Networking
 series: computer-networking
 seriesOrder: 4
-description: "When you type a web URL into a browser and press Enter, how do packets locate the target server across continents and enter the exact destination application process? Deconstruct the bridge connecting applications to the transport layer: explore the global DNS hierarchy (13 logical Root Server clusters with Anycast scaling, TLD registries, authoritative name servers, recursive vs iterative querying); derive the fundamentals of Ports and OS Sockets, explaining how a single server port 80 sustains one million concurrent connections via 5-tuples; and compare the core design trade-offs of the transport layer's twin pillars: lightweight 8-byte UDP datagrams vs connection-oriented 20-byte TCP byte streams."
+description: "Application and transport layer bridges: DNS recursive resolution, Anycast root servers, 5-tuple socket multiplexing, and architectural UDP vs TCP trade-offs."
 extraTags:
   - Computer Networking
   - DNS

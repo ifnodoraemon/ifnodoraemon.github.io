@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
 seriesOrder: 5
-description: "Why does standard self-attention trigger explosive HBM bandwidth bottlenecks as context scales? A comprehensive deep dive into the evolution of attention kernels: from FlashAttention-1's SRAM tiling and online softmax rescaling, to FlashAttention-2's loop inversion and warp-level zero-communication scheduling, to FlashAttention-3's Hopper TMA asynchronous copies and WGMMA warpgroups. Finally, we explore FlashInfer, the purpose-built LLM serving kernel library, revealing how native Paged KV cache indexing and Split-K parallel decoding rescue memory-bound decodes."
+description: "Deep dive into GPU attention kernels: FlashAttention-1 online softmax, FA-2 parallelism, FA-3 Hopper TMA asynchronous pipelines, and FlashInfer variable-length batching."
 extraTags:
   - FlashAttention
   - FlashInfer

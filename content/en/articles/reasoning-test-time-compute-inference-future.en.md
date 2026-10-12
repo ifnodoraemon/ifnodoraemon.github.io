@@ -7,7 +7,7 @@ tagClass: tag-amber
 category: Inference Systems
 series: llm-inference
 seriesOrder: 10
-description: "When autoregressive thinking tokens explode from hundreds to 128k in deep reasoning models, inference systems reach an epochal architectural inflection point. An in-depth investigation into Test-Time Compute infrastructure: mitigating KV Cache memory avalanches, tree-search (MCTS) speculative scheduling, reinforcement-learning-guided thinking budget governors, and cross-tier (SRAM/HBM/CXL/NVMe-oF) global KV pools."
+description: "Inference architectures for reasoning models: Test-Time Compute scaling, MCTS speculative tree scheduling, thinking budget governors, and tiered KV cache pools."
 extraTags:
   - Test-Time Compute
   - Reasoning
