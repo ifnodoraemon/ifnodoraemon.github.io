@@ -2,6 +2,7 @@
 title: MCP 协议深度解析：AI 的「USB-C 接口」
 slug: mcp-guide
 date: 2026-03-12
+updated: 2026-10-12
 tag: MCP 协议
 tagClass: tag-purple
 category: AI Agent
