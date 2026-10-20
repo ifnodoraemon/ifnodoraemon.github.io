@@ -47,7 +47,8 @@ async function main() {
 
   const endpoints = [
     'https://api.indexnow.org/indexnow',
-    'https://www.bing.com/indexnow'
+    'https://www.bing.com/indexnow',
+    'https://yandex.com/indexnow'
   ];
 
   for (const endpoint of endpoints) {
