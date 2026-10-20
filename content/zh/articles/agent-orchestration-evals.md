@@ -8,6 +8,7 @@ category: AI Agent
 series: ai-agent
 seriesOrder: 8
 description: 当大模型走向复杂的企业级落地，如何通过分布式编排对抗链路误差复合？如何构建具有统计学置信度的 Evals 评估体系？本文带你从基础概念直击硬核底座。
+updated: 2026-10-20
 ---
 
 ## 引子：为什么 Prompt Engineering 走到了尽头？
@@ -29,7 +30,7 @@ description: 当大模型走向复杂的企业级落地，如何通过分布式�
 ### 1. 持久化检查点与端到端幂等设计
 当你在编排几十个 Agent 互相协作时，遇到网络抖动、模型 API 熔断是常态。工业级编排必须引入持久化检查点与持久执行（Durable Execution）机制：
 *   **状态检查点持久化（Checkpointer）**：以 LangGraph 的 `PostgresSaver` 或 Temporal 的事件日志为范例，Agent 的当前图节点（Node）、局部变量与上下文增量必须在每个 Superstep 步进前后，原子化序列化保存到持久化存储（如 Postgres、Redis 或 SQLite）中，确保进程意外挂死后能无损断点续跑。
-*   **业务侧幂等性（Idempotency）保障**：分布式编排引擎（如 Temporal/Cadence）在面对网络超时时会对 Activity 采取自动重试（本质属于 **At-Least-Once** 至少一次执行）。外部副作用（如“扣减用户积分”、“调用支付接口”）**无法自动获得 Exactly-Once**，必须在工具调用与业务网关层实现显式幂等机制，基于唯一的 `Task_ID + Step_ID + Attempt` 注入幂等键（Idempotency Key），防止重复执行产生脏数据。关于工具边界隔离与运行时状态设计，可参考 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/)。
+*   **业务侧幂等性（Idempotency）保障**：分布式编排引擎（如 Temporal/Cadence）在面对网络超时时会对 Activity 采取自动重试（本质属于 **At-Least-Once** 至少一次执行）。外部副作用（如“扣减用户积分”、“调用支付接口”）**无法自动获得 Exactly-Once**，必须在工具调用与业务网关层实现显式幂等机制，基于唯一的 `Task_ID + Step_ID` 注入幂等键（Idempotency Key），防止重复执行产生脏数据。关于工具边界隔离与运行时状态设计，可参考 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/)。
 
 ### 2. 动态自愈路由 (Self-Healing Routing)
 普通的 Router 只是根据输入写死分支条件。高阶的编排中，Router 本身也是一个带有置信度判定机制的模型：
@@ -98,3 +99,5 @@ def calibrated_judge(answer_A, answer_B, rubric):
 
 ### Q5: 为什么不能完全依赖公共榜单？
 公共榜单的数据极易被模型在预训练或微调阶段“刷榜”污染。构建自己私有业务场景下的 Evals 体系才能真实反映系统的可用性，具体可参考 [大模型业务评估指南](/articles/llm-evaluation-guide/)。
+
+审批、支付等副作用的幂等键必须在同一步骤的所有重试中保持稳定；不要加入 `Attempt`。业务网关应持久化键与执行结果，并明确区分重试与新的业务操作。参见 [Temporal Activity 幂等性说明](https://docs.temporal.io/activity-definition)。

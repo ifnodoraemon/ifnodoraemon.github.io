@@ -6,6 +6,7 @@ tag: LLM Evaluation
 tagClass: tag-amber
 category: Evaluation & Trends
 description: Cease the obsession with writing more code; shift focus to deep evaluation thinking. We deconstruct LLM-as-a-Judge biases, the mathematics behind metrics, and reshaping CI/CD defenses for probabilistic systems.
+updated: 2026-10-20
 ---
 
 In 2026, if you attempt to persuade business stakeholders to greenlight a production LLM application backed solely by "MMLU 90" or "GSM8k 95" scores, you will likely be met with profound skepticism. Generic benchmark scores completely fail to reflect a model's true capability inside deep, vertical enterprise domains. Furthermore, with the rampant leakage of open-source test sets into training corpora (Data Contamination), the credibility of public leaderboards has gone bankrupt.
@@ -64,7 +65,7 @@ Traditional testing is starkly **Deterministic**: red means stop, green means go
 ### Tolerance Architecture in Defense Mechanics
 In the face of probabilistic ambiguity, your pipeline scripting must construct tiered assertions:
 - **Zero-Tolerance Hard Asserts**: Devastating boundary breaches dictate absolute veto power. If an adversarial injection prompts an un-sanitized system prompt dump, the case throws an Exit Status 1 and annihilates the PR immediately.
-- **Non-Inferiority Statistical Margins**: For quantitative tracking, avoid blocking PRs on small single-run fluctuations. Evaluate over $N \ge 300$ samples across 3 repeated runs, calculate 95% Confidence Intervals via Bootstrap/Wilson methods, and define a non-inferiority bound $\Delta = 1.5\%$ (requiring $p < 0.05$ to reject the null hypothesis of regression beyond $\Delta$) before halting deployment.
+- **Non-inferiority testing**: Evaluate both versions on paired tasks and predefine a tolerated regression $\Delta$. Bootstrap task pairs, keeping repeated runs of one task in the same cluster. Require a one-sided 95% lower confidence bound above $-\Delta$; using the lower endpoint of a two-sided 95% interval is a more conservative one-sided 97.5% rule. A Wilson interval for one proportion is not an interval for a paired accuracy difference. Choose sample size by power and precision requirements; 300 tasks and three repetitions do not eliminate randomness.
 - **The Perpetual Shadow Trial (A/B Routing)**: Understand that no static testing database can permanently inoculate your system against future semantic distribution shifts. The true final gate remains in persistent A/B live routing—shadowing new adjustments against 5% of global traffic, utilizing implicit end-user behavioral distribution as the ultimate supreme court.
 
 ## Conclusion
@@ -88,7 +89,6 @@ Automated judges are essential for continuous integration (CI/CD) and regression
 
 ---
 
-## Frequently Asked Questions (FAQ)
 
 ### Q4: How can we avoid over-reliance on a single LLM as a judge in evaluations?
 By introducing a mixed panel of judges and multiple blind evaluations, biases can be significantly reduced. For detailed implementations, refer to our [LLM Fine-Tuning Guide](/en/articles/fine-tuning-guide/) to optimize the judge models themselves.

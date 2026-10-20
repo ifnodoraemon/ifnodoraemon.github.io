@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { extractMarkdownTargets } from '../scripts/markdown-targets.js';
 
 import {
   getPageState,
@@ -14,6 +15,26 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
+
+test('article link validation ignores code and retains real and reference links', () => {
+  const markdown = [
+    '```python',
+    'delta = self.nodes[node](AgentState(copy.deepcopy(state)))',
+    '[not a link](/missing-code-asset.py)',
+    '```',
+    '`[also code](/missing-inline-asset.py)`',
+    '[real](/articles/build-lightweight-agent-framework/)',
+    '[reference][example]',
+    '![diagram](/og/zh/agent-runtime-practices.png)',
+    '',
+    '[example]: /examples/agents/state_graph.py',
+  ].join('\n');
+  assert.deepEqual(extractMarkdownTargets(markdown), [
+    '/articles/build-lightweight-agent-framework/',
+    '/examples/agents/state_graph.py',
+    '/og/zh/agent-runtime-practices.png',
+  ]);
+});
 
 test('route helpers normalize zh and en paths consistently', () => {
   assert.equal(isEnglishPath('/en/articles/'), true);
@@ -70,6 +91,53 @@ test('build outputs include root search index and generated article OG images', 
   assert.ok(fs.existsSync(enOgPath), 'expected en OG image to exist');
 });
 
+test('agent implementation articles are published and discoverable in both languages', () => {
+  const examples = {
+    'build-lightweight-agent-framework': 'state_graph',
+    'advanced-agent-tool-use-and-function-calling': 'tool_runtime',
+    'multi-agent-collaboration-and-concurrency': 'actor_runtime',
+  };
+  const sitemap = fs.readFileSync(path.join(ROOT, 'dist', 'sitemap.xml'), 'utf-8');
+  const searchIndex = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'search-index.json'), 'utf-8'));
+
+  for (const [slug, example] of Object.entries(examples)) {
+    const download = `examples/agents/${example}.py`;
+    assert.equal(
+      fs.readFileSync(path.join(ROOT, 'dist', download), 'utf-8'),
+      fs.readFileSync(path.join(ROOT, 'public', download), 'utf-8'),
+      `expected the full downloadable ${example} example`,
+    );
+    for (const lang of ['zh', 'en']) {
+      const prefix = lang === 'en' ? '/en' : '';
+      const route = `${prefix}/articles/${slug}/`;
+      const canonical = `https://blog.llmgo.top${route}`;
+      const html = fs.readFileSync(path.join(ROOT, 'dist', route, 'index.html'), 'utf-8');
+      const listing = fs.readFileSync(path.join(ROOT, 'dist', prefix, 'articles', 'index.html'), 'utf-8');
+      const feed = fs.readFileSync(path.join(ROOT, 'dist', prefix, 'feed.xml'), 'utf-8');
+
+      assert.ok(html.includes(`<link rel="canonical" href="${canonical}"`), `${route} canonical`);
+      for (const [alternateLang, alternatePrefix] of [['zh', ''], ['en', '/en'], ['x-default', '']]) {
+        assert.ok(html.includes(`hreflang="${alternateLang}" href="https://blog.llmgo.top${alternatePrefix}/articles/${slug}/"`), `${route} ${alternateLang} alternate`);
+      }
+      assert.ok(sitemap.includes(`<loc>${canonical}</loc>`), `${route} sitemap`);
+      assert.ok(feed.includes(`<link>${canonical}</link>`), `${route} RSS`);
+      assert.ok(listing.includes(`href="${route}"`), `${route} article listing`);
+      assert.ok(searchIndex.some(item => item.url === route && item.lang === lang && item.series), `${route} searchable series entry`);
+      assert.ok(html.includes(`/examples/agents/${example}.py`), `${route} download link`);
+      assert.match(html, /class="series-card/);
+      assert.ok(fs.existsSync(path.join(ROOT, 'dist', 'og', lang, `${slug}.png`)), `${route} OG image`);
+
+      const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+        .map(match => JSON.parse(match[1]));
+      const schema = blocks.find(block => block['@type'] === 'TechArticle');
+      const filename = `${slug}${lang === 'en' ? '.en' : ''}.md`;
+      const source = fs.readFileSync(path.join(ROOT, 'content', lang, 'articles', filename), 'utf-8');
+      assert.equal(schema.datePublished.slice(0, 10), source.match(/^date: (\S+)/m)[1]);
+      assert.equal(schema.dateModified.slice(0, 10), source.match(/^updated: (\S+)/m)[1]);
+    }
+  }
+});
+
 test('built assets reference the correct search index path and article pages include related content', () => {
   const assetsDir = path.join(ROOT, 'dist', 'assets');
   const mainBundles = fs.readdirSync(assetsDir).filter(file => file.startsWith('main-') && file.endsWith('.js'));
@@ -118,7 +186,11 @@ test('build outputs include IndexNow key and articles with FAQPage / TechArticle
     for (const block of jsonLdBlocks) {
       const parsed = JSON.parse(block[1]);
       if (parsed['@type'] === 'FAQPage') foundFaq = true;
-      if (parsed['@type'] === 'TechArticle') foundTechArticle = true;
+      if (parsed['@type'] === 'TechArticle') {
+        foundTechArticle = true;
+        assert.match(parsed.datePublished, /^\d{4}-\d{2}-\d{2}$/, `ISO publication date in ${file}`);
+        assert.match(parsed.dateModified, /^\d{4}-\d{2}-\d{2}$/, `ISO modification date in ${file}`);
+      }
     }
 
     assert.ok(foundFaq, `expected FAQPage schema in ${file}`);

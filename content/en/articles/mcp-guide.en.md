@@ -8,6 +8,7 @@ category: AI Agent
 series: ai-agent
 seriesOrder: 4
 description: From architecture to hands-on development, a complete guide to the Model Context Protocol. Includes Python SDK tutorial, security mechanisms, and ecosystem comparison.
+updated: 2026-10-20
 ---
 
 ## What is MCP?
@@ -240,7 +241,7 @@ Many confuse MCP with traditional Function Calling. They operate at **different 
 | **Standardization** | Different formats per vendor (OpenAI / Anthropic / Google) | Open standard, cross-model universal |
 | **State management** | Stateless, each call is independent | Supports stateful sessions and bidirectional communication |
 | **Tool discovery** | Requires manual declaration of complete tool lists per request | Servers dynamically expose capabilities at runtime, Clients auto-discover |
-| **Security model** | Relies on application-level implementation | Built-in OAuth 2.0 auth, permission levels, user confirmation flows |
+| **Security model** | Application-managed authentication and permissions | Optional HTTP authorization uses the specified OAuth 2.1 framework; confirmations, sandboxing, and operation-level permissions remain implementation responsibilities |
 | **Use case** | Simple, one-off tool calls | Complex multi-tool orchestration and long-term interaction |
 
 > **In one sentence**: Function Calling is an LLM's **capability** ("I can call functions"). MCP is the **standardized protocol** managing that capability ("everyone calls functions by the same rules"). MCP doesn't replace Function Calling — it builds a complete ecosystem framework on top of it. When [building an AI agent](/en/articles/build-ai-agent/), standardizing tool connections via MCP eliminates endless glue code and simplifies client-server integration.
@@ -369,11 +370,11 @@ Once the Server starts, AI can autonomously decide to invoke your note manager. 
 
 ## Security Mechanisms and Best Practices
 
-MCP establishes strict multi-layered defenses for security. For enterprise deployments, the following security architecture is **mandatory**:
+MCP defines authorization mechanisms and security guidance. Implement controls for the chosen transport and risk level; protocol adoption does not automatically provide isolation or human confirmation:
 
-### 1. OAuth 2.0 Authorization
+### 1. OAuth 2.1 Authorization
 
-The June 2025 spec update formally defined MCP Servers as **OAuth 2.0 Resource Servers**, introducing industry-grade authentication:
+For protected HTTP deployments using authorization, the specification treats the MCP server as an OAuth 2.1 resource server. This simplified flow does not apply universally to stdio credential handling:
 
 ```mermaid
 sequenceDiagram
@@ -460,37 +461,11 @@ As of early 2026, MCP has gained broad industry support:
 
 The community-driven MCP Server ecosystem has grown to **thousands of servers**, covering everything from cloud infrastructure (AWS, GCP, Azure) to vertical industries (healthcare, finance, education).
 
-## Protocol Evolution: 2025-2026
+## Protocol Versions and Implementation Boundaries
 
-MCP is evolving rapidly. Here are the most important developments:
+This article references the [2025-11-25 specification](https://modelcontextprotocol.io/specification/2025-11-25). Complete `initialize` negotiation and `notifications/initialized` before discovering and using negotiated capabilities. Tool lists can be paginated; one page need not contain every tool.
 
-### June 2025 Update
-
-- **Structured Tool Outputs**: Tools can return data constrained by strict JSON Schema, not just plain text
-- **Elicitation**: Servers can proactively request additional input from users during execution
-- **Enhanced OAuth Authorization**: Resource Indicators (RFC 8707), incremental scope negotiation
-
-### November 2025 Update
-
-- **Async Operations**: Background execution of long-running tasks with progress notifications
-- **Server Discovery**: Standardized server registration and discovery mechanisms
-- **OpenID Connect Discovery**: Deep integration with enterprise identity systems
-- **Task Management**: Experimental feature supporting complex workflow orchestration
-
-### 2026 Roadmap
-
-```mermaid
-graph LR
-    A["Transport Scalability"] --> B["Stateless + Multi-instance"]
-    C["Agent Communication"] --> D["Multi-agent Collaboration Protocol"]
-    E["MCP Server Cards"] --> F["Standardized Service Metadata Discovery"]
-    G["Governance Maturation"] --> H["Enterprise Compliance Auditing"]
-```
-
-- **Next-gen transport**: Stateless operations across multiple Server instances
-- **MCP Server Cards**: Service description standard (like OpenAPI) for automatic Server discovery and integration
-- **Agent communication protocol**: Enabling multi-AI-Agent collaboration via MCP
-- **Enterprise readiness**: Comprehensive governance structures and compliance auditing frameworks
+HTTP authorization uses the OAuth 2.1 framework. Stdio deployments typically obtain credentials from the process environment, so OAuth is not universal across transports. Tasks are experimental and require support from both peers. A roadmap proposal is not a released mandatory feature. See [lifecycle](https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle) and [authorization](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization).
 
 ## Frequently Asked Questions (FAQ)
 
@@ -501,9 +476,7 @@ MCP (Model Context Protocol) is an open standard purpose-built for AI model-to-s
 No refactoring is required. MCP Servers function as a lightweight, non-invasive gateway layer that wraps existing microservice endpoints, database clients, or third-party SDKs into standardized Tools and Resources. When you [build an AI agent](/en/articles/build-ai-agent/), this decoupled architecture allows you to integrate complex production toolchains without touching underlying legacy backends.
 
 ### Q3: Does deploying MCP Servers introduce security or data exfiltration risks?
-While MCP provides guidelines for transport-level authorization (such as OAuth 2.0 for HTTP/SSE services) and recommends client-side human-in-the-loop confirmation for high-impact calls, these are implementation-level architectural patterns rather than mandatory wire-protocol guarantees. In production environments, host systems must enforce containerized sandbox isolation (via Docker, gVisor, or bubblewrap) and establish strict schema validation to mitigate prompt injection and unauthorized exfiltration risks.
+While MCP provides guidelines for transport-level authorization (such as OAuth 2.1 for HTTP/SSE services) and recommends client-side human-in-the-loop confirmation for high-impact calls, these are implementation-level architectural patterns rather than mandatory wire-protocol guarantees. In production environments, host systems must enforce containerized sandbox isolation (via Docker, gVisor, or bubblewrap) and establish strict schema validation to mitigate prompt injection and unauthorized exfiltration risks.
 
-### Q4: How should developers choose between designing an MCP Tool versus an MCP Resource?
-The defining criterion is **invocation agency and dynamic parameterization**, rather than mere read-only status:
-- **Tools**: Invocations triggered dynamically by the **model** with model-supplied runtime parameters. Tools can have external side effects (e.g. database updates) **or be purely read-only queries** (e.g. MCP's official `get-forecast` weather tool, search APIs, or SQL queries);
-- **Resources**: URI-addressed data sources (e.g. `file:///repo/README.md`) selected by users or host applications to inject reference context into the conversation, where the model only reads data without supplying custom execution parameters.
+### Q4: How should developers choose between an MCP Tool and Resource?
+A Tool lets a model request execution with structured parameters and may be read-only or side-effecting. A Resource exposes URI-addressed context, usually selected by the application or user. Resource Templates support parameterized URI lookup; resources are not restricted to static addresses. Clients may also involve models in selection. These control patterns do not replace authorization boundaries. See the [Resources specification](https://modelcontextprotocol.io/specification/2025-11-25/server/resources).

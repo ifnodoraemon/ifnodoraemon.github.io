@@ -6,6 +6,7 @@ tag: 全流程微调
 tagClass: tag-emerald
 category: 模型工程
 description: "深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。" 
+updated: 2026-10-20
 ---
 
 ## 为什么需要微调？
@@ -233,9 +234,11 @@ python -m vllm.entrypoints.openai.api_server \
 
 | 服务 | 支持模型 | 最低数据量 | 特点 |
 |------|----------|-----------|------|
-| OpenAI Fine-tuning | GPT-5-mini, GPT-5 | 10 条 | 最简单，支持监督微调和 DPO |
-| Anthropic Fine-tuning | Claude 3 Haiku（via Bedrock） | 32 条 | 通过 Amazon Bedrock 托管 |
-| Google Vertex AI | Gemini 3.x 系列 | 100 条 | 与 Google Cloud 深度集成 |
+| OpenAI Fine-tuning | 按模型与 SFT / DPO / RFT 方法核对支持列表 | 按方法要求 | GPT-5 与 GPT-5 mini 的模型页均标为不支持微调，不可从推理 API 可用性推断微调支持 |
+| Amazon Bedrock | 按地区与模型核对自定义训练支持 | 按模型要求 | 不同 Claude 型号不能相互类推 |
+| Google Vertex AI | 按当前 supervised tuning 支持列表 | 按模型要求 | 不能假定所有 Gemini 3.x 型号均支持 |
+
+下单或上传数据前检查官方支持矩阵、方法和地区限制：[GPT-5](https://developers.openai.com/api/docs/models/gpt-5)、[GPT-5 mini](https://developers.openai.com/api/docs/models/gpt-5-mini)、[Bedrock 自定义模型](https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html)、[Vertex AI 监督微调](https://cloud.google.com/vertex-ai/generative-ai/docs/models/gemini-supervised-tuning)。
 
 ---
 

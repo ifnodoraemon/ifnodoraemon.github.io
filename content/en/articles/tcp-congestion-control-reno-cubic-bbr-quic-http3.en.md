@@ -18,6 +18,7 @@ extraTags:
   - HTTP/2
   - HTTP/3
   - QUIC
+updated: 2026-10-20
 ---
 
 ## Introduction: The Fundamental Division Between Flow Control and Congestion Control
@@ -94,7 +95,7 @@ Cubic Window Growth Curve (Concave and Convex Phases):
 - **Concave Phase**: Following packet loss, the window climbs rapidly, decelerating as it nears $W_{max}$ to gently approximate past capacity;
 - **Plateau Phase**: Around $t \approx K$, growth stays relatively flat, maximizing link saturation with minimal risk of triggering buffer drops;
 - **Convex Phase**: If no packet loss occurs, window growth accelerates exponentially upward, aggressively discovering whether more physical bandwidth is available;
-- **Mathematical Advantage**: Cubic's growth is **solely driven by wall-clock time $t$ and is decoupled from link RTT**, resolving Reno's unfair bias where short-RTT flows starved long-RTT flows.
+- **Time and RTT**: CUBIC uses elapsed time for its main growth function and retains a TCP-friendly region. Actual throughput and fairness still depend on RTT, ACKs, and competing flows.
 
 ---
 
@@ -182,23 +183,17 @@ flowchart TD
 
     subgraph HTTP3["HTTP/3: QUIC Independent Streams over UDP"]
         H3_Stream1["Stream 1 (Healthy)"] & H3_Stream2["Stream 2 (Packet Lost)"] & H3_Stream3["Stream 3 (Healthy)"] --> UDP_Pipe["Independent UDP Datagrams"]
-        UDP_Pipe --> H3_Fix["<b>Zero HoL Blocking</b>: Packet loss on Stream 2 only retransmits Stream 2<br/>Streams 1 and 3 are delivered immediately to the application!"]
+        UDP_Pipe --> H3_Fix["Independent stream delivery<br/>Shared congestion control still applies"]
     end
 ```
 
-### 3.2 Five Revolutionary Capabilities of HTTP/3 (QUIC)
+### 3.2 HTTP/3 and QUIC Capabilities and Limits
 
-1. **Elimination of Cross-Stream Head-of-Line Blocking**:
-   QUIC operates over UDP, maintaining independent packet sequencing and sliding windows for each logical Stream. Dropped packets on Stream A stall only Stream A; Streams B and C continue uninterrupted;
-2. **0-RTT Instant Handshakes**:
-   By merging the TCP transport handshake (1 RTT) with the TLS 1.3 cryptographic handshake (1 RTT), QUIC completes connection establishment in 1 RTT for initial requests and **0-RTT** for repeat visits, embedding encrypted HTTP requests in the initial flight;
-3. **Connection Migration**:
-   Traditional TCP binds sockets to a 4-tuple (Source IP, Source Port, Dest IP, Dest Port). When a mobile user steps outside and switches from Wi-Fi to 5G, the IP changes, tearing down the TCP connection.
-   QUIC binds sessions using a 64-bit **Connection ID (CID)**. As the physical IP shifts, the logical connection migrates transparently without interrupting active video calls or downloads;
-4. **User-Space Congestion Control & Agile Upgrades**:
-   TCP resides in the Linux kernel; rolling out updates requires kernel reboots across millions of machines. QUIC implementations live in user-space libraries, allowing teams to deploy modern congestion algorithms via regular software releases;
-5. **End-to-End Encryption and Anti-Tampering**:
-   Except for a minimal set of UDP header flags, all QUIC metadata (packet numbers, stream offsets, ACK frames) is encrypted via TLS 1.3, preventing middlebox manipulation and rogue ISP injection.
+1. **Independent stream delivery**: Streams use byte offsets; packet numbers belong to connection packet-number spaces, not individual streams. Loss on one stream need not block others, though shared congestion control and application dependencies still couple progress.
+2. **Handshake and 0-RTT**: Initial connections typically take 1 RTT. Resumption can attempt 0-RTT early data, but servers may reject it, and applications must account for replay. Repeat visits do not guarantee zero waiting.
+3. **Connection migration**: Variable-length CIDs enable continuity across address changes when endpoint support, path validation, and reachability permit it.
+4. **User-space implementation**: QUIC libraries can evolve independently of kernel TCP. Deploying a new binary does not imply arbitrary hot-swapping of algorithms on existing connections.
+5. **Encryption and visible metadata**: TLS 1.3 protects handshake and application data, and QUIC applies header protection. Some fields, including versions and CIDs, remain visible. Networks can still discard or delay packets; not all headers are encrypted.
 
 ---
 
@@ -243,16 +238,11 @@ In Chapter 7 of our masterclass, we dive straight into the Linux networking subs
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: Why is `fq` (Fair Queueing) recommended when running Google BBR? Does BBR strictly mandate `fq`?
-**In early kernels (Linux 4.9–4.12), BBR strictly depended on `fq` for socket pacing. However, in modern Linux (4.13+), the TCP layer implements native internal pacing via `SO_MAX_PACING_RATE` and high-resolution timers, allowing BBR to operate with other qdiscs like `fq_codel` or `pfifo_fast`.**
-Nonetheless, setting `default_qdisc = fq` remains strongly recommended for production environments. Hardware/qdisc-level pacing in `fq` offloads CPU timer interrupts, avoids lock contention across high-concurrency flows, and provides fair bandwidth slicing to prevent micro-bursts from corrupting BBR's BDP estimation.
+### Q1: Does BBR require fq?
+Modern Linux TCP has internal pacing as a fallback without `fq`. The `fq` qdisc is a common pacing and flow-fairness choice, not a universal protocol requirement or hardware-offload guarantee. Verify kernel version, qdisc behavior, and measured latency. See the [Linux BBR implementation notes](https://android.googlesource.com/kernel/common/+/refs/heads/android16-6.12-kminext/net/ipv4/tcp_bbr.c).
 
-### Q2: Under random packet loss (e.g., 10% loss on weak Wi-Fi or satellite links), why does Cubic's throughput collapse while BBR maintains near line-rate?
-**Because of a fundamental difference in how they define congestion:**
-- **Cubic is loss-driven**: It interprets any packet loss as a sign of catastrophic buffer overflow. With 10% random loss, Cubic continually triggers multiplicative decrease, halving `cwnd` until it drops to ~1 MSS, causing throughput to plummet;
-- **BBR is model-driven**: It estimates delivery rate from received ACKs and tracks minimum RTT. BBR recognizes that as long as the delivery rate matches the bottleneck physical bandwidth $BtlBw$, the pipe is not congested, regardless of packet drops. BBR maintains its pacing rate, promptly retransmits lost packets, and saturates more than 90% of available physical bandwidth.
+### Q2: Must BBR outperform CUBIC under random loss?
+No. CUBIC normally multiplies its window by $\beta=0.7$ after a congestion event rather than Reno's halving rule. BBR models delivery rate and RTT but remains affected by loss, retransmission, ACK behavior, and implementation version. It cannot guarantee 90% line rate at 10% loss. Control RTT, queues, loss models, and competing flows. See [RFC 9438](https://www.rfc-editor.org/rfc/rfc9438.html).
 
-### Q3: Since HTTP/3 runs on top of UDP, how does it prevent packet loss and remain secure in production environments?
-**QUIC implements reliable transport in user space and enforces end-to-end TLS 1.3 encryption by default.**
-1. **Full-stack reliability**: QUIC implements monotonic packet numbering, selective acknowledgments (SACK), user-space congestion control (Cubic/BBR), and retransmission timers. UDP is merely used as a stateless transport container to traverse existing switch ASICs and NAT gateways;
-2. **Protocol ossification defense**: Legacy middleboxes frequently drop or alter unknown TCP options. Because QUIC encrypts virtually its entire payload—including headers, stream IDs, and ACK frames—via TLS 1.3, intermediate network appliances cannot inspect or tamper with its internal state, ensuring secure, high-performance transport over untrusted public networks.
+### Q3: How does QUIC provide reliable streams over UDP?
+UDP/IP packets can still be lost. QUIC uses acknowledgments, loss detection, and retransmission of unacknowledged data for reliable byte streams. Retransmitted data appears in new packets, without reusing the original packet number. TLS 1.3 protects handshake and application data, while some routing headers remain visible. Separate streams reduce cross-stream transport head-of-line blocking; shared congestion control and application dependencies can still couple their progress. See [RFC 9000](https://www.rfc-editor.org/rfc/rfc9000.html) and [RFC 9001](https://www.rfc-editor.org/rfc/rfc9001.html).

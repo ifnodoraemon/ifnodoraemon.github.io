@@ -16,6 +16,7 @@ extraTags:
   - Split-K Attention
   - Hopper TMA
   - WGMMA
+updated: 2026-10-20
 ---
 
 ## 引言：自注意力算子的显存往返悲剧
@@ -133,7 +134,7 @@ flowchart TD
     CheckDone -- 是 --> FinalNorm["最终一步归一化: O_final = O_new / l_new<br/>(仅在全流程终点执行一次除法)"]
 ```
 
-借助这套数学魔术，FlashAttention **彻底消除了对中间矩阵 $S$ 和 $P$ 的 HBM 读写**。HBM 访存总量从 $O(N^2)$ 巨幅骤降至 $O(N^2 d / M)$，在 A100 上跑出了传统 Attention 2x~4x 的颠覆性加速，且显存开销从 $O(N^2)$ 彻底压制到 $O(N)$。
+借助这套数学魔术，FlashAttention **彻底消除了对中间矩阵 $S$ 和 $P$ 的 HBM 读写**。HBM 访存总量从 $O(N^2)$ 巨幅骤降至 $O(N^2 d^2 / M)$，在 A100 上跑出了传统 Attention 2x~4x 的颠覆性加速，且显存开销从 $O(N^2)$ 彻底压制到 $O(N)$。
 
 ---
 
@@ -163,7 +164,7 @@ GPU 的 Tensor Cores 极其擅长做大矩阵乘法（GEMM），但对于加减�
 
 在 CUDA 编程中，一个 Thread Block 包含多个 Warp（每个 Warp 32 线程）。
 - 在 FA-1 中，同一个 Block 内的所有 Warp 共享相同的 $Q$ 块切片，但各自切分 $K, V$ 块。这意味着计算行最大值与行累加和（rowmax/rowsum）时，不同 Warp 之间必须通过 Shared Memory 频繁进行局部的归约同步（`__syncthreads()`）；
-- FA-2 重新设计了 Warp 分工拓扑：**各个 Warp 分割 $Q$ 块（各自负责计算独立的输出 $O$ 行切片），而在 Block 内共享整块 $K, V$ 数据**。由于每个 Warp 产出的输出行天然正交互不干扰，Warp 之间完全消除了 Shared Memory 归约通信与同步屏障，实现了纯粹的零通信推进。
+- FA-2 的 sliced-Q 分工减少不同 warp 之间对输出的归约及 shared-memory 通信；块内数据加载、流水线及依赖仍需要同步，不能理解为消除了所有 barrier。
 
 经过这三项底层重构，FlashAttention-2 在 A100 上跑出了高达 **73% 的理论算力峰值（~225 TFLOPS）**，成为了整个大模型产业事实上的算子底座。
 
@@ -219,7 +220,7 @@ graph TD
 - **Consumer Warps（消费者，分配其余 3 个或更多 Warps）**：
   一旦收到 `mbarrier` 到达信号，立即发射异步 WGMMA 进行矩阵乘法，同时穿插计算 Softmax。
 
-通过双缓冲（Ping-Pong Double Buffering）机制，当消费者正在计算第 $K$ 块时，生产者早已借助 TMA 把第 $K+1$ 块静默搬入 SRAM。**数据搬运的时延被 100% 完全掩盖在计算耗时之内**！
+通过双缓冲（Ping-Pong Double Buffering）机制，当消费者正在计算第 $K$ 块时，生产者早已借助 TMA 把第 $K+1$ 块静默搬入 SRAM。**数据搬运可与计算重叠，实际隐藏程度取决于块尺寸、负载和硬件**！
 
 结合最新的 FP8 低精度与块级自适应缩放（Block Scaling），FlashAttention-3 在 H100 SXM5 上狂飙出 **700~800 TFLOPS** 的吞吐极限，将硬件利用率拉至逼近理论物理极值的 75%~85%。
 
@@ -291,7 +292,7 @@ graph TD
 | 维度 | 原生 PyTorch Attention | FlashAttention-1 | FlashAttention-2 | FlashAttention-3 | FlashInfer (Serving 专用) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **首创年份** | 传统框架基准 | 2022 (NeurIPS) | 2023 | 2024 | 2024 (LMSYS) |
-| **HBM 访存量** | $O(N^2)$ (极其庞大) | $O(N^2 d / M)$ | $O(N^2 d / M)$ | $O(N^2 d / M)$ | $O(N^2 d / M)$ |
+| **HBM 访存量** | $O(N^2)$ (极其庞大) | $O(N^2 d^2 / M)$ | $O(N^2 d^2 / M)$ | $O(N^2 d^2 / M)$ | 按 kernel、形状与阶段分析 |
 | **核心算法创新** | 无 (简单分步前向) | Tiling + Online Softmax | 循环重构 + Warp 优化 | TMA 异步 + WGMMA | Split-K 并行解码 + Paged 优化 |
 | **A100/H100 效率** | MFU &lt; 20% | MFU 30%~50% | MFU 50%~73% | MFU 75%~85% (H100) | 在线服务吞吐最高 |
 | **中间矩阵物化** | 完全物化到 HBM | 仅存在于片上 SRAM | 仅存在于寄存器/SRAM | 硬件 TMA 双缓冲流转 | 仅存在于寄存器/SRAM |
@@ -327,3 +328,5 @@ graph TD
 而在分块计算的 **Online Softmax** 中，由于全局最大值在不断更新，算法必须在每个迭代步**严格执行指数修正**：
 $$l^{(j)} = e^{m^{(j-1)} - m^{(j)}} \cdot l^{(j-1)} + \sum e^{S_k^{(j)} - m^{(j)}}$$
 因为 $m^{(j)} \ge m^{(j-1)}$，所以指数差值 $m^{(j-1)} - m^{(j)} \le 0$。这意味着缩放因子 $e^{m^{(j-1)} - m^{(j)}} \in (0, 1]$，保证了历史累加项在调整时**只会缩小、绝不上溢**。如果某个自定义内核在编写时未严格遵循局域最大值的减法更新，一旦上下文长度放大到数万 Token，指数累加便会瞬间冲破 FP16 的动态范围，导致模型输出乱码或直接崩溃。
+
+复杂度口径：以上 $M$ 表示以元素计的 SRAM 容量，$N$ 是序列长度，$d$ 是 head 维度。原论文给出的适用容量区间内，FlashAttention HBM 访问量为 $O(N^2 d^2/M)$；它不是所有形状下固定的实测加速倍数。参见 [FlashAttention 论文](https://arxiv.org/abs/2205.14135)、[FlashAttention-2](https://arxiv.org/abs/2307.08691)。

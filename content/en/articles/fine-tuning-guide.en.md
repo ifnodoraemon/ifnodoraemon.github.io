@@ -6,6 +6,7 @@ tag: Fine-Tuning
 tagClass: tag-emerald
 category: Model Engineering
 description: "Discover how LLM fine-tuning works under the hood, explore proven enterprise use cases (LoRA, QLoRA, Full Fine-Tuning), and learn end-to-end workflows from data preparation to vLLM serving." 
+updated: 2026-10-20
 ---
 
 ## Why Do We Need Fine-Tuning?
@@ -233,9 +234,11 @@ If you don't want to manage GPU infrastructure, you can use commercial API fine-
 
 | Service | Supported Models | Min Samples | Features |
 |------|----------|-----------|------|
-| OpenAI Fine-tuning | GPT-5-mini, GPT-5 | 10 | Easiest; supports SFT and DPO |
-| Anthropic Fine-tuning | Claude 3 Haiku (via Bedrock) | 32 | Managed through Amazon Bedrock |
-| Google Vertex AI | Gemini 3.x series | 100 | Deeply integrated with Google Cloud |
+| OpenAI Fine-tuning | Check support by model and SFT / DPO / RFT method | Method dependent | GPT-5 and GPT-5 mini model pages list fine-tuning as unsupported; inference availability does not imply training support |
+| Amazon Bedrock | Check customization support by model and region | Model dependent | Support for one Claude version does not imply support for another |
+| Google Vertex AI | Check the current supervised-tuning model list | Model dependent | Do not assume all Gemini 3.x versions support tuning |
+
+Before uploading data, verify the official model, method, and region requirements: [GPT-5](https://developers.openai.com/api/docs/models/gpt-5), [GPT-5 mini](https://developers.openai.com/api/docs/models/gpt-5-mini), [Bedrock model customization](https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html), and [Vertex AI supervised tuning](https://cloud.google.com/vertex-ai/generative-ai/docs/models/gemini-supervised-tuning).
 
 ---
 

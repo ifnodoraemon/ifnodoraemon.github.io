@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Mon, 12 Oct 2026 01:53:30 GMT</pubDate>
+  <pubDate>Tue, 20 Oct 2026 08:18:29 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战</title>
@@ -364,7 +364,7 @@
     <pubDate>Mon, 21 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>记忆架构</category>
-    <description>为什么数百万 Token 的上下文窗口依然无法解决智能体的失忆症？深入剖析从工作记忆、情景记忆到长期语义记忆的三层金字塔模型，详解 Stanford Generative Agents 与 Letta (MemGPT) 的记忆沉淀机制，并提供生产级混合检索与遗忘衰减实战代码。</description>
+    <description>解析 Agent 工作、情景与长期记忆，结合 MemGPT 和 Generative Agents 解释检索与衰减，并补充来源追踪、权限过滤、冲突处理和删除传播的生产边界。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/agent-memory-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -388,13 +388,13 @@
     <enclosure url="https://blog.llmgo.top/og/zh/browser-use-agent-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>SGLang vs vLLM 架构对决：RadixAttention 树状缓存、结构化输出与高并发基准实测</title>
+    <title>SGLang 与 vLLM 架构对比：前缀缓存、结构化输出与评测方法</title>
     <link>https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/</link>
     <guid>https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>引擎架构</category>
-    <description>深度剖析 2026 年两大顶级开源推理引擎 vLLM 与 SGLang 的底层内核差异。全面对比 PagedAttention 块级分页与 RadixAttention 基数树前缀缓存机制、调度层结构化输出（JSON Schema）实现原理，并基于 8x H100 集群提供严苛的多场景基准压测与工程选型决策树。</description>
+    <description>比较 SGLang RadixAttention 与 vLLM APC 的前缀复用机制、结构化输出和部署基线，并给出控制变量、冷暖缓存及延迟吞吐的可复现评测方法。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/sglang-vs-vllm-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -418,23 +418,23 @@
     <enclosure url="https://blog.llmgo.top/og/zh/test-time-compute-grpo.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 血泪踩坑实录：在物理机群跑通 DeepSeek-V4 与 Kimi K3 的硬核部署指南</title>
+    <title>2026 DeepSeek-V4 与 Kimi K3 部署指南：权重精度、显存预算与集群验证</title>
     <link>https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/</link>
     <guid>https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>集群部署</category>
-    <description>这不是一篇官方文档的搬运，而是我们烧了上百万 GPU 租金换来的排障血泪史。实战拆解如何在 4 节点（32 卡）H100 裸金属集群上，通过 vLLM 0.29.0 的混合并行（TP8+PP2+EP2）与 Triton 算子优化，成功压榨 1.6T 级 MoE 模型的每一滴极限吞吐量。</description>
+    <description>核对 DeepSeek-V4-Pro 与 Kimi K3 原生权重格式、逐卡显存预算、vLLM 分布式参数和官方启动配方，并用可持续吞吐约束私有化成本估算。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/deepseek-v4-kimi-k3-deployment-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 国产大模型巅峰决选：Kimi K3 vs GLM-5.3 vs DeepSeek-V4 实测与工程选型指南</title>
+    <title>2026 国产大模型比较：Kimi K3、GLM-5.3 与 DeepSeek-V4 工程选型</title>
     <link>https://blog.llmgo.top/articles/domestic-llm-comparison-2026/</link>
     <guid>https://blog.llmgo.top/articles/domestic-llm-comparison-2026/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>国产大模型</category>
-    <description>深度实测 2026 年三大国产顶流大模型：从 Kimi K3 的 2.8T KDA 注意力、GLM-5.3 的环境缩放 Terminal 领跑，到 DeepSeek-V4-Pro 的 1.6T MoE 软件工程突破，全方位剖析架构、成本与工程落地场景。</description>
+    <description>依据官方模型卡比较 Kimi K3、GLM-5.3 与 DeepSeek-V4-Pro 的架构、同版本基准和原生量化格式，提供长文档、终端排障与仓库修改的评测方案。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/domestic-llm-comparison-2026.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -444,17 +444,17 @@
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>环境缩放</category>
-    <description>剖析 2026 年大模型后训练的重大范式跃迁：为什么从文本自回归走向多任务环境沙箱博弈？结合 GLM-5.3 在 Terminal-Bench 3.0 的登顶实践，详解 Linux 容器编排、MCP 协议集成与零逃逸安全沙箱工程实战。</description>
+    <description>解释 Agent 环境缩放的任务分布、状态复位与独立验收，正确解读 GLM-5.3 终端任务成绩，并演示带超时清理的容器执行接口。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/environment-scaling-agent-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>解密 2026 架构创新：Kimi Delta Attention 与 DeepSeek MLA 是如何干掉显存墙的？</title>
+    <title>Kimi KDA、DeepSeek MLA 与 V4 CSA/HCA：长上下文缓存原理与显存估算</title>
     <link>https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/</link>
     <guid>https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>架构演进</category>
-    <description>在百万级长上下文与数万亿 MoE 时代，KV Cache 显存暴涨如何成为推理核心瓶颈？硬核剖析月之暗面 Kimi Delta Attention (KDA) 的增量状态演进与 DeepSeek 多头潜变量注意力 (MLA) 的低秩投影数学原理。</description>
+    <description>区分 KDA 循环状态、MLA 潜变量缓存与 DeepSeek-V4 CSA/HCA 序列压缩，结合 Kimi K3 混合层结构推导显存估算边界与可比较的测试方法。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/kimi-kda-deepseek-mla-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -486,6 +486,36 @@
     <category>循环工程</category>
     <description>深度解析 AI Agent 架构演进，探讨从 Prompt、Context、Harness 到 Loop 工程的四层控制面外推，以及 ReAct 架构的四大顽疾。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/loop-engineering.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Agent 开发中的 Tool Use 进阶：动态发现、沙箱隔离与错误恢复</title>
+    <link>https://blog.llmgo.top/articles/advanced-agent-tool-use-and-function-calling/</link>
+    <guid>https://blog.llmgo.top/articles/advanced-agent-tool-use-and-function-calling/</guid>
+    <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>工具调用</category>
+    <description>实现 Agent 动态工具检索、MCP 初始化与分页发现、gVisor 容器执行及有限重试，重点解释超时后清理、错误分类与示例的实际边界。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/advanced-agent-tool-use-and-function-calling.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>从零手搓轻量级 Agent 框架：基于状态机与事件流的设计模式</title>
+    <link>https://blog.llmgo.top/articles/build-lightweight-agent-framework/</link>
+    <guid>https://blog.llmgo.top/articles/build-lightweight-agent-framework/</guid>
+    <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>架构设计</category>
+    <description>从零实现 Python Agent 状态机：通过 SQLite 保存审批检查点，按挂起节点恢复、拒绝重复审批，并用异步事件流暴露执行过程和步数预算。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/build-lightweight-agent-framework.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>多 Agent 协作系统中的通信协议与并发控制实践</title>
+    <link>https://blog.llmgo.top/articles/multi-agent-collaboration-and-concurrency/</link>
+    <guid>https://blog.llmgo.top/articles/multi-agent-collaboration-and-concurrency/</guid>
+    <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>多智能体</category>
+    <description>用 Python asyncio 实现多 Agent 邮箱与消息总线，演示独立消息副本、投递背压、Actor 停机、CAS 文档提交和令牌桶限流。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/multi-agent-collaboration-and-concurrency.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>Agent 可观测性与调试：从黑盒到白盒的进阶之路</title>
@@ -574,7 +604,7 @@
     <pubDate>Tue, 31 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>量化理论</category>
-    <description>全面对比 FP32、BF16、FP16、FP8、INT8、INT4、NF4、FP4、1.58-bit 等所有主流量化精度格式，用真实 Benchmark 数据告诉你：每降低一级精度，模型到底会“变蠢”多少。含 FP8 vs INT8 深度技术对比。</description>
+    <description>区分 FP8、INT8、INT4、NF4 的权重、激活与 KV 量化，解释显存预算、加速条件和校准差异，并给出准确率、PPL 与业务验收的可复现评估方法。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/quantization-precision-guide.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -654,7 +684,7 @@
     <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>模型横评</category>
-    <description>从推理能力、编码水平、上下文窗口到 API 定价，全方位对比 2026 年三大主流大模型的实际表现与选型策略。</description>
+    <description>比较 GPT-5.4、Claude Opus/Sonnet 4.6 与 Gemini 3.1 Pro 的 API 能力、Token 价格和工程边界，给出可核验的调用示例、评测方法与自建成本公式。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/model-comparison-2026.png" length="150000" type="image/png" />
   </item>
   <item>

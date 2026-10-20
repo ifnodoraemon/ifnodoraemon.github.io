@@ -18,6 +18,7 @@ extraTags:
   - PFC
   - ECN
   - DCQCN
+updated: 2026-10-20
 ---
 
 ## Introduction: The "CPU Memory Wall" and Microsecond Latency Crisis at 400Gbps
@@ -151,11 +152,11 @@ RoCEv2 Packet Encapsulation:
 +-------------------+----------------+---------------+--------------------+------------------+
 ```
 
-### 3.1 The Vulnerability: Packet Loss Sensitivity and Go-Back-N Collapse
-Unlike heavyweight TCP stacks with selective acknowledgments (SACK), RDMA HCA silicon relies on lightweight hardware logic. **RoCEv2 defaults to Go-Back-N retransmission**:
-- If even a single packet is dropped, the receiving HCA discards all subsequent in-order packets, forcing the sender to retransmit the entire window from the lost packet onward;
-- A packet loss rate as low as 0.1% causes RoCEv2 effective throughput to collapse by over 80%!
-- **Fabric Deployment Models**: RoCEv2 can be operated in **Lossless (PFC + ECN)**, **Semi-Lossless**, or **Lossy (ECN with selective retransmission)** configurations. While high-performance AI GPU clusters traditionally configure lossless Ethernet via PFC to avoid Go-Back-N penalties, PFC is an operational tuning choice and performance pre-requisite rather than a protocol mandate. Modern HCAs (e.g. NVIDIA ConnectX-6/7/8) support Out-of-Order execution and Dynamic Connected Transport (DCT), leading several hyperscale cloud operators to adopt Lossy RoCE to eliminate PFC deadlocks entirely.
+### 3.1 Loss Recovery Depends on the Adapter and Transport
+
+Traditional reliable-connection Go-Back-N recovery can amplify retransmission after a lost packet. The impact depends on RTT, window size, adapter, and recovery implementation; there is no universal “0.1% loss causes an 80% throughput collapse” rule.
+
+RoCE supports lossless, semi-lossless, and lossy deployment choices depending on hardware capabilities. PFC is not mandatory in the RoCEv2 packet protocol. Lossy deployments still require suitable congestion control and recovery. Some HCAs support out-of-order placement and improved recovery. DCT reduces connection-state overhead; it is not a selective-retransmission algorithm. See [NVIDIA RoCE deployment configurations](https://enterprise-support.nvidia.com/s/article/recommended-network-configuration-examples-for-roce-deployment).
 
 ### 3.2 Engineering Lossless: Priority Flow Control (PFC, 802.1Qbb)
 
@@ -188,12 +189,12 @@ To throttle transmission rates smoothly before PFC pause thresholds are reached,
 flowchart LR
     Sender["<b>Sender HCA</b><br/>Transmits at current line rate"] -->|"Packet with IP ECT(0) marked"| Switch["<b>Intermediate Switch</b><br/>Queue depth exceeds Kmin threshold<br/>Marks IP CE bits to 11"]
     Switch -->|"CE-marked Congestion Packet"| Receiver["<b>Receiver HCA</b><br/>Detects CE mark"]
-    Receiver -->|"Generates 16-byte Congestion Notification (CNP)"| Sender
+    Receiver -->|"Generates Congestion Notification (CNP)"| Sender
     Sender -->|"<b>Executes DCQCN Throttling</b><br/>Reduces injection rate multiplicatively"| Sender
 ```
 
 - **Switch Stage (ECN Marking)**: When egress queue occupancy sits between $K_{min}$ and $K_{max}$, the switch probabilistically sets the IP ECN bits to `11` (Congestion Encountered, CE);
-- **Receiver Stage (CNP Generation)**: When the receiving HCA encounters a CE-marked packet, it immediately dispatches a 16-byte **CNP (Congestion Notification Packet)** back to the source;
+- **Receiver Stage (CNP Generation)**: When the receiving HCA encounters a CE-marked packet, it immediately dispatches a **CNP (Congestion Notification Packet)** back to the source;
 - **Sender Stage (Rate Backoff & Recovery)**: The transmitting HCA processes the CNP in hardware, multiplicatively reducing its transmission rate and recovering additively when subsequent packets arrive without congestion.
 
 ---

@@ -7,13 +7,14 @@ tagClass: tag-purple
 category: AI Agent
 series: ai-agent
 seriesOrder: 11
-description: "Why multi-million token context windows still fail to solve agent amnesia. A deep architectural dissection of the three-tier memory pyramid (Working, Episodic, and Long-Term Semantic Memory), Stanford Generative Agents reflection cycles, Letta (MemGPT) virtual paging, and runnable code with decay curves and hybrid retrieval."
+description: "Design agent working, episodic, and long-term memory with sourced retrieval concepts, a clearly scoped Python prototype, provenance, ACLs, conflict handling, and deletion."
 extraTags:
   - Agent Memory
   - Working Memory
   - Graph RAG
   - Episodic Memory
   - MemGPT
+updated: 2026-10-20
 ---
 
 In the rapid evolution of large language models, context window boundaries continue to expand—scaling from 8K and 32K tokens to 1M and beyond. Many engineers starting their journey in agent design arrive at an intuitive assumption: *"If the LLM can ingest millions of tokens in a single forward pass, why build complex memory systems? Can't we simply dump the entire conversation history into the prompt?"*
@@ -32,8 +33,8 @@ As the 11th comprehensive chapter in **《The Production AI Agent Architect Hand
 
 Treating an ultra-long context window as an artificial memory system introduces four critical architectural hazards:
 
-### 1. Quadratic Computational Costs & Latency Bottlenecks
-Even with sparse attention (DSA) and advanced KV-cache compression, processing massive context windows incurs substantial time-to-first-token (TTFT) penalties. If an agent at step 30 carries raw HTML dumps, diagnostic stack traces, and verbose JSON blobs from the previous 29 steps, request latency degrades from 500ms to 10+ seconds, destroying interactive agent workflows.
+### 1. Length, Architecture, and Compute Cost
+Context cost depends on attention architecture, caching, hardware, and request length. Dense-attention prefill has a quadratic component; sparse and recurrent layers differ. There is no universal 500ms-to-10s degradation curve. Measure TTFT, output speed, and resource usage for the actual workload.
 
 ### 2. Attention Dilution and the "Needle in a Haystack" Illusion
 Academic "Needle in a Haystack" evaluations benchmark single-point factual retrieval in clean, artificial contexts. In contrast, live agent execution contexts are saturated with competing distractor variables, aborted exploration branches, and malformed tool outputs.
@@ -173,13 +174,15 @@ In a temporal knowledge graph, mutating events close the `valid_to` timestamp of
 
 ---
 
-## 5. Production Implementation: A Resilient Python Memory Engine
+## 5. Teaching Prototype: In-Memory Ranking and Time Decay
 
-The following standalone Python 3.11+ implementation provides a production-grade agent memory manager with exponential decay scoring, multi-factor ranking, and asynchronous reflection:
+This example requires Python 3.11+ and Pydantic V2. It uses an in-memory list, whitespace-token overlap, and synchronously inserted fixed “reflection” text. It has no real embeddings, BM25, LLM summarization, persistence, Graph RAG, deletion, or access control. Its tokenizer is particularly unsuitable for Chinese. The class and logs identify a demonstration rather than a production memory service.
+
+Recency uses the last-access time. Frequent retrieval does not make an obsolete fact valid again; model factual validity separately. A printed read-only policy does not enforce database permissions.
 
 ```python
 """
-production_agent_memory.py
+demo_agent_memory.py
 Production-grade hierarchical agent memory engine featuring exponential recency decay,
 multi-factor hybrid retrieval, and automated consolidation reflection.
 """
@@ -211,10 +214,10 @@ class MemoryItem(BaseModel):
 
 
 # ==========================================================
-# 2. Production Hierarchical Memory Manager
+# 2. In-memory teaching prototype
 # ==========================================================
 
-class ProductionMemoryManager:
+class DemoMemoryManager:
     def __init__(
         self,
         decay_lambda: float = 0.005,
@@ -281,8 +284,8 @@ class ProductionMemoryManager:
         return results
 
     def _trigger_consolidation_reflection(self):
-        """Asynchronously synthesizes high-order insights from recent episodes."""
-        print("\n⚡ [Background Task] Importance threshold reached. Synthesizing insights...")
+        """Synchronously insert fixed demonstration text; no LLM or background worker."""
+        print("\n⚡ [Synchronous Demo] Importance threshold reached. Synthesizing insights...")
         recent_events = self.episodic_memory[-5:]
         consolidated_insight = (
             f"Consolidated Rule: Synthesized {len(recent_events)} operational episodes; "
@@ -316,7 +319,7 @@ class ProductionMemoryManager:
 
 if __name__ == "__main__":
     print("--- Step 1: Initializing Memory Manager ---")
-    mem_sys = ProductionMemoryManager()
+    mem_sys = DemoMemoryManager()
     mem_sys.set_core_memory("UserRole", "Principal Data Architect")
     mem_sys.set_core_memory("SystemConstraint", "All DB commands must be READ-ONLY; DROP operations forbidden")
 
@@ -334,31 +337,17 @@ if __name__ == "__main__":
     print(injected_context)
 ```
 
-### Execution Log Trace
+### Production Additions: Provenance, Permissions, Conflicts, and Deletion
 
-Executing the module demonstrates how background consolidation surfaces high-level rules alongside targeted historical context:
+Store at least `tenant_id`, `owner_id`, `source_ids`, `created_at`, `valid_from/valid_to`, `version`, and confidence. Summaries must link back to sources. Model inferences must not silently overwrite explicit user statements or elevate retrieved instructions into system policy.
 
-```text
---- Step 1: Initializing Memory Manager ---
+Apply tenant and ACL filters before retrieval, scope cache keys to permissions, and invalidate them when permissions change. Prompt text does not isolate tenants. Application logic must resolve entities and supersession, then close old versions through transactions or CAS. A graph database does not automatically understand factual conflicts; vector retrieval can also use validity metadata.
 
---- Step 2: Ingesting Episodic Trajectories ---
+Decay scores change ranking rather than deleting data. TTL expiry, user deletion, and permission revocation must cover sources, vectors, graph edges, summaries, caches, and affected checkpoints. Track provenance to remove derived memories and apply an explicit backup-retention policy. Test unauthorized recall, superseded facts, reappearance after deletion, and propagation of incorrect summaries.
 
-⚡ [Background Task] Importance threshold reached. Synthesizing insights...
-✓ Consolidated strategic insight stored: 'Consolidated Rule: Synthesized 4 operational episodes; user objective transitioned from diagnostic queries to production optimization.'
+Background consolidation additionally needs durable queues, idempotent events, version-conflict handling, and observable failures. See [state-machine checkpoints](/en/articles/build-lightweight-agent-framework/) and [actor/CAS concurrency](/en/articles/multi-agent-collaboration-and-concurrency/).
 
---- Step 3: Performing Retrieval & Context Assembly ---
-
-[Assembled Prompt Memory Block]:
-=== Core Memory (Immutable Policies) ===
-- UserRole: Principal Data Architect
-- SystemConstraint: All DB commands must be READ-ONLY; DROP operations forbidden
-
-=== Recalled Episodic Memory (Contextual Insights) ===
-[2026-09-21 11:30:00] (Priority: 9.5) Consolidated Rule: Synthesized 4 operational episodes; user objective transitioned from diagnostic queries to production optimization.
-[2026-09-21 11:30:00] (Priority: 8.5) Identified recurring slow query bottleneck: missing composite index on timestamp
-```
-
-The model receives the exact root cause of past latency spikes and the high-order strategic trajectory, preserving a clean prompt profile of under 400 tokens.
+Research background: [Generative Agents](https://arxiv.org/abs/2304.03442) studies experience storage, reflection, and retrieval; [MemGPT](https://arxiv.org/abs/2310.08560) studies tiered context management; [Lost in the Middle](https://arxiv.org/abs/2307.03172) examines positional sensitivity on selected tasks. These do not establish identical degradation in every model or replace product access-control and deletion design.
 
 ---
 
@@ -366,7 +355,7 @@ The model receives the exact root cause of past latency spikes and the high-orde
 
 Memory architecture and state machine topologies represent the **twin cornerstones** of dependable autonomous systems. The state machine enforces **deterministic step execution**, while the memory hierarchy provides **temporal continuity and context hygiene**.
 
-Explore the complete 11 chapters across this production handbook:
+Explore the first 11 chapters across this production handbook:
 
 1. **[Part 1 · Agentic Loops & State Machine Design: From ReAct to Deterministic Control Flows](/en/articles/agent-loop-state-machine/)**  
    *Foundational state machine topologies, transition guards, and circuit breaker patterns.*
@@ -387,7 +376,7 @@ Explore the complete 11 chapters across this production handbook:
 9. **[Part 9 · Agent Observability & Debugging: From Black Box to White Box](/en/articles/agent-observability-debugging/)**  
    *OpenTelemetry, LangSmith, and trajectory replay for complete execution transparency.*
 10. **[Part 10 · How Environment Scaling Reshapes Autonomous Agents: Sandboxing & RL](/en/articles/environment-scaling-agent-guide/)**  
-    *Post-training environment exploration, zero-escape container sandboxing, and benchmark dominance.*
+    *Post-training environment exploration, sandbox lifecycle, cleanup, and sourced benchmark interpretation.*
 11. **[Part 11 (Current) · AI Agent Memory Architecture: From Working Memory to Hierarchical Graph RAG](/en/articles/agent-memory-architecture/)**  
     *Constructing persistent memory pyramids, Ebbinghaus decay, and temporal causal graphs.*
 
@@ -398,8 +387,8 @@ Explore the complete 11 chapters across this production handbook:
 ### Q1: With modern LLMs supporting 1M+ token context windows, why decompose memory instead of dumping raw conversation history into prompts?
 Ultra-long context windows provide **instantaneous working bandwidth**, not true **cognitive memory**. Indiscriminately retaining hundreds of thousands of raw tokens introduces severe time-to-first-token (TTFT) latency spikes and compounding financial costs. More dangerously, uncurated contexts contain aborted reasoning branches, noisy stack traces, and formatting distractors that trigger attention dilution, causing models to drift from core user goals. Stratified memory filters, consolidates, and abstracts history locally, injecting only highly compressed, relevant facts into the active context window to preserve execution speed, low costs, and decision determinism.
 
-### Q2: How does a memory engine prevent retrieval contamination when user directives contradict earlier statements (e.g., migrating from Python to Rust)?
-Pure vector similarity retrieves entries strictly based on embedding distance, blind to chronological precedence or factual invalidation. Production systems resolve this through **Temporal Knowledge Graphs or validity window metadata**: every ingested memory item includes explicit `valid_from` and `valid_to` timestamps. When an agent detects a superseding declaration, the memory manager clamps the `valid_to` attribute of contradictory older facts to the current timestamp. Live retrieval queries enforce a hard filter (`valid_to == NULL`), pruning obsolete memories at the database layer before prompt assembly.
+### Q2: How can a system prevent superseded preferences from staying active?
+Record provenance, entities, versions, and validity. Resolve supersession rules, update transactionally or through CAS, and filter inactive facts during recall. Graphs, vector metadata, and relational stores can all support this. Preserve unresolved conflicts rather than silently treating an inference as fact.
 
 ### Q3: How should consolidation and reflection background tasks be architected in high-concurrency environments without blocking user-facing threads?
 Through an **asynchronous event queue decoupled from the primary request thread**. When a user interacts with the system, the primary application thread publishes the interaction event to a message queue (e.g., Redis Streams or Kafka) and updates local in-memory counters, responding to the client in milliseconds. Standalone worker processes consume the queue independently. When an agent enters an idle window or cumulative importance thresholds are reached, workers invoke high-throughput models to perform reflection synthesis, update the temporal graph, and persist consolidated memories without blocking real-time user conversations.

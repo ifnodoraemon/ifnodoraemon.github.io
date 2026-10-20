@@ -18,6 +18,7 @@ import markedKatex from './marked-katex.js';
 import markedCjkCompat from './marked-cjk-compat.js';
 import hljs from 'highlight.js';
 import { renderStaticNav, renderStaticFooter } from './render-components.js';
+import { extractMarkdownTargets } from './markdown-targets.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -64,6 +65,9 @@ const SERIES_DEFINITIONS = {
       'agent-observability-debugging',
       'environment-scaling-agent-guide',
       'agent-memory-architecture',
+      'build-lightweight-agent-framework',
+      'advanced-agent-tool-use-and-function-calling',
+      'multi-agent-collaboration-and-concurrency',
     ],
   },
   'llm-inference': {
@@ -349,6 +353,12 @@ function validateFrontmatter(entry, errors) {
     errors.push(`[${langKey}] ${file}: invalid date "${fm.date}"`);
   }
 
+  for (const field of ['updated', 'lastmod']) {
+    if (fm[field] != null && Number.isNaN(new Date(fm[field]).valueOf())) {
+      errors.push(`[${langKey}] ${file}: invalid date "${field}"`);
+    }
+  }
+
   if (fm.extraTags && (!Array.isArray(fm.extraTags) || fm.extraTags.some(tag => typeof tag !== 'string'))) {
     errors.push(`[${langKey}] ${file}: extraTags must be an array of strings`);
   }
@@ -481,7 +491,8 @@ function prepareArticles(list, isEn, gitDates = {}) {
     const dateFormatted = isoDate.replace(/-/g, '.');
     const gitKey = `${isEn ? 'en' : 'zh'}/${file}`;
     const gitModifiedDate = gitDates[gitKey];
-    const modifiedIsoDate = fm.lastmod || fm.updated || gitModifiedDate || isoDate;
+    const modifiedIsoDate = new Date(fm.lastmod || fm.updated || gitModifiedDate || isoDate)
+      .toISOString().split('T')[0];
     const imagePath = fm.image || generateOgImage({
       title: fm.title,
       description: fm.description,
@@ -1559,19 +1570,6 @@ function wrapOgText(text, maxChars, maxLines) {
   }
 
   return lines;
-}
-
-function extractMarkdownTargets(markdown) {
-  const targets = [];
-  const regex = /!?\[[^\]]*]\(([^)]+)\)/g;
-
-  for (const match of markdown.matchAll(regex)) {
-    const rawTarget = match[1]?.trim();
-    if (!rawTarget) continue;
-    targets.push(rawTarget.split(/\s+/)[0]);
-  }
-
-  return targets;
 }
 
 function isExternalTarget(target) {

@@ -8,6 +8,7 @@ category: AI Agent
 series: ai-agent
 seriesOrder: 8
 description: As LLMs move into complex enterprise production, how do we use distributed orchestration to combat error compounding? How do we build a statistically significant Evals system?
+updated: 2026-10-20
 ---
 
 ## Prologue: Why Prompt Engineering Hit a Dead End
@@ -29,7 +30,7 @@ The first step to combat error compounding is to break the long chain. We use th
 ### 1. Persistent Checkpointers and End-to-End Idempotency Design
 When orchestrating dozens of collaborating Agents, network jitter and Model API timeouts are the norm. Industrial orchestration must rely on durable execution and persistent state checkpointers:
 *   **State Checkpointing**: Adopting patterns like LangGraph's built-in `PostgresSaver` or Temporal event histories, an Agent's execution Node, local variables, and context mutations are atomically serialized to persistent storage (Postgres/Redis) after every superstep, ensuring seamless crash recovery.
-*   **Application-Level Idempotency**: Distributed execution engines (such as Temporal) automatically retry failed activities, providing **At-Least-Once** execution. External side-effects (such as payment processing, database writes, or email dispatches) **do not automatically inherit Exactly-Once semantics**; developers must implement explicit idempotency keys (e.g. `Task_ID + Step_ID + Attempt`) at the tool layer to guard against duplicate actions. For deep runtime constraints and guardrail architectures, see [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/).
+*   **Application-Level Idempotency**: Distributed execution engines (such as Temporal) automatically retry failed activities, providing **At-Least-Once** execution. External side-effects (such as payment processing, database writes, or email dispatches) **do not automatically inherit Exactly-Once semantics**; developers must implement explicit idempotency keys (e.g. `Task_ID + Step_ID`) at the tool layer to guard against duplicate actions. For deep runtime constraints and guardrail architectures, see [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/).
 
 ### 2. Self-Healing Routing
 A standard Router simply hardcodes branching conditions based on input. In advanced orchestration, the Router itself is a model with a confidence judgment mechanism:
@@ -98,3 +99,5 @@ We recommend using stronger (and more expensive) models for evaluation on critic
 
 ### Q5: Why shouldn't we rely completely on public leaderboards?
 Public leaderboards are easily contaminated by models "gaming" the metrics during pre-training or fine-tuning. Building your own Evals system for your private business scenarios is the only way to truly reflect system usability. For more details, see our [LLM Evaluation Guide](/en/articles/llm-evaluation-guide/).
+
+For payments and other side effects, keep the idempotency key stable across retries of the same logical step; do not include `Attempt`. Persist the key and result at the business gateway and distinguish a retry from a new operation. See [Temporal activity idempotency](https://docs.temporal.io/activity-definition).

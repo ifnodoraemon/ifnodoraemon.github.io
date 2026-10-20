@@ -13,6 +13,7 @@ extraTags:
   - Cursor
   - GitHub Copilot
   - OpenAI Codex
+updated: 2026-10-20
 ---
 
 ## What Are Skills?
@@ -99,7 +100,7 @@ skills/
         └── report-template.md
 ```
 
-> **Difference from full loading**: Traditional custom instructions (like `.cursorrules`) inject all content into every conversation. The Skills three-layer mechanism lets the AI load only relevant knowledge when needed — like borrowing just the book you need from the library, instead of hauling the entire library home.
+> Skills can reduce context overhead through on-demand loading. Rules may also be conditional or path-scoped, so they are not uniformly loaded in full. Use tests and checkers for deterministic quality requirements.
 
 ## SKILL.md Hands-On
 
@@ -265,142 +266,30 @@ docker-compose.yml
 
 The value of this Skill: when a new team member joins, the AI automatically gains **complete deployment knowledge** for the project — no manual onboarding needed.
 
-## Six-Platform Skills Comparison
+## Six Platforms: Compare Skills Separately from Rules
 
-By early 2026, all major AI coding assistants have launched their own "Skills" implementations. While the names differ, the core idea is the same — **configure files to make AI understand your project better**.
+Checked on 2026-10-20. A `SKILL.md` package provides task-specific procedures and resources. Rules and repository instructions provide persistent background or path-specific guidance. A platform's rule format is not its only extension mechanism and cannot establish that it lacks scripts or on-demand loading.
 
-### Concept Family Tree
+| Platform | Native skills and common project directories | Repository instructions or rules |
+|----------|-----------------------------------------------|----------------------------------|
+| Claude Code | `.claude/skills/<name>/SKILL.md` | `CLAUDE.md` |
+| Cursor | `.cursor/skills/`, `.agents/skills/` | `.cursor/rules/*.mdc`, alongside skills |
+| GitHub Copilot | `.github/skills/`; client support varies | `.github/copilot-instructions.md`, path instructions, and `AGENTS.md` in supported clients |
+| OpenAI Codex | `.agents/skills/<name>/SKILL.md`, plus user and system locations | Directory-scoped `AGENTS.md` |
+| Gemini CLI | `.gemini/skills/` or `.agents/skills/` | `GEMINI.md` |
+| Windsurf / Cascade | Verify discovery directories and support in the installed version | Existing `.windsurf/rules/` configuration does not describe every skill capability |
 
-```mermaid
-graph TB
-    Root["Skills (Umbrella Term)"]
-    Root --> A["SKILL.md"]
-    Root --> B[".cursor/rules/*.mdc"]
-    Root --> C["copilot-instructions.md"]
-    Root --> D[".windsurfrules"]
-    Root --> E["AGENTS.md"]
-    Root --> F["Custom Instructions + GPTs"]
-    A --> A1["Claude Code"]
-    B --> B1["Cursor"]
-    C --> C1["GitHub Copilot"]
-    D --> D1["Windsurf"]
-    E --> E1["GitHub / Gemini / OpenAI Codex / Multi-platform"]
-    F --> F1["ChatGPT / OpenAI API"]
-```
+Cursor, Copilot, and Gemini CLI skills can bundle scripts and reference resources. Execution still depends on tools, dependencies, and permissions. A common format does not make every extension field, trigger, or approval behavior portable.
 
-### Cross-Platform Comparison
+See [Claude Code Skills](https://code.claude.com/docs/en/skills), [Cursor Skills](https://cursor.com/docs/skills), [Copilot Skills](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/add-skills), [Codex Skills](https://developers.openai.com/codex/skills), and [Gemini CLI Skills](https://geminicli.com/docs/cli/skills/). Current Windsurf skill documentation could not be reliably retrieved during this review, so its script and loading capabilities are not marked unsupported.
 
-| Dimension | Claude (SKILL.md) | Cursor (.mdc) | GitHub Copilot | OpenAI (Codex / SKILL.md) | Windsurf | Gemini |
-|-----------|-------------------|---------------|----------------|---------------------------|----------|--------|
-| **Config path** | `.claude/skills/` | `.cursor/rules/` | `.github/` | `.codex/skills/` & `AGENTS.md` | Project root | `.gemini/` |
-| **File format** | YAML + Markdown | YAML + Markdown | Plain Markdown | YAML + Markdown (`SKILL.md`) | Plain Markdown | Plain Markdown |
-| **Granularity** | One folder per skill | One file per rule | Repo-level + path-level | Modular skill pack + repo-level | Global + project | Repo-level |
-| **Script support** | ✅ | ❌ | ❌ | ✅ (`scripts/` dirs & utilities) | ❌ | ❌ |
-| **Smart loading** | ✅ Three-layer progressive | ✅ Glob matching | ⚠️ Full load | ✅ Progressive loading (metadata discovery + on-demand) | ⚠️ Full load | ⚠️ Full load |
-| **Scope** | By skill domain | By file type | By path pattern | Task domain / repo-level | Global/project | Directory hierarchy |
-| **Cross-platform** | Open standard (multi-tool) | Cursor only | Copilot only | Open standard (Codex/Claude compatible) | Windsurf only | Gemini only |
+### AGENTS.md Is Not a Custom Agent Profile
 
-### Platform Deep Dives
+`AGENTS.md` usually describes repository structure, build steps, and local conventions. Copilot custom agent profiles use `.github/agents/*.agent.md`. Claude Code primarily uses `CLAUDE.md` for project instructions and supports explicit imports; do not assume every client automatically reads the same instruction files.
 
-#### Claude Code: SKILL.md + CLAUDE.md
+### Verify Portability
 
-Claude Code's Skills system is the most mature implementation to date. It provides two-layer configuration:
-
-- **CLAUDE.md**: Global config at the project root, defining coding standards, architecture conventions, and tech stack info
-- **SKILL.md**: Modular capability packs organized by **task domain** under `.claude/skills/`
-
-**Unique advantage**: Skills can include executable scripts (`scripts/` directory), enabling AI to not just "guide" but actually "execute." Early 2026 updates added subagent support, dynamic context injection, and lifecycle hooks.
-
-#### Cursor: Project Rules (.mdc)
-
-Cursor evolved from a single `.cursorrules` file to a multi-rule system under `.cursor/rules/`:
-
-```yaml
-# .cursor/rules/python-style.mdc
----
-description: Python code style rules
-globs: ["**/*.py"]
----
-- Use 4-space indentation
-- Functions must include type annotations
-- Use f-strings instead of .format()
-```
-
-**Unique advantage**: Fine-grained file type matching via the `globs` field — Python rules auto-apply to Python files, TypeScript rules to TS files. Rules can also be quickly created via the `/create-rule` command.
-
-#### GitHub Copilot: copilot-instructions.md + AGENTS.md
-
-Copilot offers a multi-tier instruction system:
-
-- `.github/copilot-instructions.md`: Repo-level global instructions
-- `.github/instructions/*.instructions.md`: Path-level fine-grained control
-- `AGENTS.md`: Define custom Agent roles (e.g., `@docs-agent`, `@test-agent`)
-
-**Unique advantage**: Supports **organization-level instructions**, enabling cross-repo shared coding standards at the GitHub organization level. The `/init` command can also auto-analyze a codebase and generate configuration.
-
-#### OpenAI: Custom Instructions + GPTs + Codex
-
-OpenAI has built a **three-tier system** in the Skills space, covering everyone from casual users to professional developers:
-
-**① ChatGPT Custom Instructions (User-level)**
-
-ChatGPT's custom instructions were one of the earliest "Skills" prototypes. Users can define persistent preferences in settings:
-
-- Background: "I'm a Python backend engineer, primarily using FastAPI and PostgreSQL"
-- Response preferences: "Keep answers concise, give code directly, use English comments"
-
-These instructions are auto-injected into every conversation — no need to repeat. While not as flexible as file-system-level Skills, it's the lowest-barrier AI customization.
-
-**② GPTs (Task-level Skills)**
-
-GPTs are OpenAI's "Skills package" concept — users can create custom ChatGPT versions for specific tasks:
-
-- Build with no code via GPT Builder: specify Instructions, Knowledge (file uploads), and Capabilities (tool permissions)
-- Publish to the GPT Store for community sharing
-- Upload reference docs and API schemas to give the GPT domain expertise
-- **Essentially "Skills + Model + Tools" pre-packaged as a product**
-
-**③ Codex Native Skills & AGENTS.md (Developer-level)**
-
-OpenAI Codex and leading developer agents (e.g. Cline, Aider) natively support the modern modular Skills ecosystem:
-
-- **Codex Native Skills**: Codex supports modular `SKILL.md` specifications located in `.codex/skills/<skill-name>/SKILL.md` or `.agents/skills/`. Each skill package encapsulates metadata, instructions, and executable helper scripts under `scripts/`, loading dynamically and progressively based on task intent rather than bloating the base prompt;
-- **AGENTS.md Repo Protocol**: Placing `AGENTS.md` at repository roots provides baseline architectural guidance, tech stack conventions, and verification workflows across monorepo trees;
-- **Cross-Platform Portability**: The open `SKILL.md` convention is shared across Anthropic Claude Code, OpenAI Codex, and Antigravity, allowing teams to author capability modules once and reuse them universally.
-
-#### Windsurf: .windsurfrules
-
-Windsurf deeply integrates `.windsurfrules` files with its Cascade system:
-
-- Supports global and project-level rules, with project-level overriding global
-- Links with Write Mode / Chat Mode / Turbo Mode
-- 2026 introduced a Code Integrity Layer that scans AI-generated code for security vulnerabilities before execution
-
-#### AGENTS.md: The Emerging Cross-Platform Open Standard
-
-`AGENTS.md` deserves special attention — it's an **open standard not tied to any vendor**:
-
-```markdown
-# AGENTS.md
-
-## Project Overview
-This is a full-stack web application built with FastAPI + React.
-
-## Build Steps
-- Backend: cd backend && pip install -r requirements.txt
-- Frontend: cd frontend && npm install && npm run build
-
-## Coding Standards
-- Python follows PEP 8
-- All API endpoints must have type annotations
-- Test coverage must be at least 80%
-
-## Important Notes
-- Never modify migration files under alembic/versions/
-- Inject sensitive configuration through environment variables
-```
-
-Already supported by GitHub Copilot, OpenAI Codex, Google Gemini, Claude Code, and more. OpenAI and GitHub are core drivers of this standard. It's positioned as a **"README for AI Agents"** — just as README.md is a project description for humans, AGENTS.md is a project description for AI.
+Share the standard skill body, scripts, and references first. Then check discovery paths, supported fields, resource resolution, command environments, and permissions in each client. Keep persistent project conventions in the client's repository-instruction entry point; one skill invocation does not permanently govern every future session.
 
 ## Where Skills Fit in the AI Customization Stack
 
@@ -590,8 +479,8 @@ graph LR
 ### Q1: What is the fundamental difference between Skills and System Prompts?
 System Prompts are immutable foundational instructions embedded by model providers and platform engines to enforce security baselines and core behavioral traits. Skills are developer-defined, domain-specific modular knowledge packages governed by on-demand activation. Rather than bloating the system prompt, Skills are dynamically compiled into context only when specific tasks (such as refactoring, test generation, or API security review) require specialized workflows.
 
-### Q2: Does configuring multiple project Skills cause excessive token consumption?
-No. Modern Agent Skill runtimes utilize a three-tier progressive loading architecture: only lightweight metadata (skill names and descriptions, taking fewer than 50 tokens) is indexed initially. Full instruction bodies and templates are pulled into active context strictly when the orchestrator classifies user intent toward that skill. This just-in-time approach reduces token overhead by over 90% compared to monolithic prompt injection.
+### Q2: Can a large skill catalog consume substantial context?
+Yes. Progressive loading usually exposes names and descriptions before activating bodies and resources, but catalog metadata also costs context. Savings depend on catalog size, instruction length, and activation scope; remove redundant or irrelevant skills rather than assuming a fixed 90% saving.
 
 ### Q3: How should software architects decide between implementing Skills versus MCP?
 Skills and MCP are complementary layers of the AI developer stack: Skills define **how the agent reasons and executes** (standards, decision heuristics, lint constraints, and style templates), while [MCP (Model Context Protocol)](/en/articles/mcp-guide/) provides **the physical hands to interact with systems** (database connections, git APIs, cloud execution sandboxes). Skills guide the model on how to compose and parameterize MCP tools safely.

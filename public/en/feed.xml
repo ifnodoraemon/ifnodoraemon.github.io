@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Mon, 12 Oct 2026 01:53:30 GMT</pubDate>
+  <pubDate>Tue, 20 Oct 2026 08:18:29 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA</title>
@@ -364,7 +364,7 @@
     <pubDate>Mon, 21 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Agent Memory</category>
-    <description>Why multi-million token context windows still fail to solve agent amnesia. A deep architectural dissection of the three-tier memory pyramid (Working, Episodic, and Long-Term Semantic Memory), Stanford Generative Agents reflection cycles, Letta (MemGPT) virtual paging, and runnable code with decay curves and hybrid retrieval.</description>
+    <description>Design agent working, episodic, and long-term memory with sourced retrieval concepts, a clearly scoped Python prototype, provenance, ACLs, conflict handling, and deletion.</description>
     <enclosure url="https://blog.llmgo.top/og/en/agent-memory-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -388,13 +388,13 @@
     <enclosure url="https://blog.llmgo.top/og/en/browser-use-agent-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>SGLang vs vLLM Architecture Showdown: RadixAttention, Structured Decoding, and High-Concurrency Benchmarks</title>
+    <title>SGLang vs vLLM: Prefix Caching, Structured Outputs, and Reproducible Evaluation</title>
     <link>https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/</link>
     <guid>https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Engine Architecture</category>
-    <description>A deep architectural breakdown between the dual titans of 2026 LLM inference: vLLM and SGLang. We dissect PagedAttention block paging versus RadixAttention tree-based prefix caching, compare scheduler-level structured decoding (JSON Schema) mechanics, and deliver rigorous benchmarks on an 8x H100 cluster alongside an enterprise decision framework.</description>
+    <description>Compare SGLang RadixAttention and vLLM APC, structured-output backends, minimal serving baselines, and reproducible cold/warm-cache latency and throughput evaluation.</description>
     <enclosure url="https://blog.llmgo.top/og/en/sglang-vs-vllm-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -418,23 +418,23 @@
     <enclosure url="https://blog.llmgo.top/og/en/test-time-compute-grpo.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Deploying 2026 Frontier Open Models On-Premise: Running DeepSeek-V4 and Kimi K3 on Multi-Node GPU Clusters</title>
+    <title>DeepSeek-V4 and Kimi K3 Deployment: Precision, GPU Memory and Cluster Validation</title>
     <link>https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/</link>
     <guid>https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Cluster Deployment</category>
-    <description>Complete enterprise on-premise deployment guide for 1.6T - 2.8T MoE open-weight models: Hardware planning across GPU clusters, vLLM / SGLang distributed TP/PP configuration, FP8 dynamic quantization, and high-concurrency API gateway production setups.</description>
+    <description>Plan DeepSeek-V4-Pro and Kimi K3 deployments using native checkpoint formats, per-rank GPU memory, official vLLM recipes, and throughput-based cost estimates.</description>
     <enclosure url="https://blog.llmgo.top/og/en/deepseek-v4-kimi-k3-deployment-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 Frontier Chinese LLMs Face-off: Kimi K3 vs GLM-5.3 vs DeepSeek-V4 Practical Benchmark &amp; Architecture Selection</title>
+    <title>Kimi K3 vs GLM-5.3 vs DeepSeek-V4: Architecture, Benchmarks and Deployment</title>
     <link>https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/</link>
     <guid>https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Chinese LLMs</category>
-    <description>In-depth evaluation of China's top three frontier models in 2026: Kimi K3's 2.8T KDA attention, GLM-5.3's environment-scaled terminal execution, and DeepSeek-V4-Pro's 1.6T MoE software engineering prowess.</description>
+    <description>Compare Kimi K3, GLM-5.3, and DeepSeek-V4-Pro with sourced architecture facts, matching benchmark versions, checkpoint formats, and workload evaluation plans.</description>
     <enclosure url="https://blog.llmgo.top/og/en/domestic-llm-comparison-2026.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -444,17 +444,17 @@
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Environment Scaling</category>
-    <description>Analyzing the major post-training paradigm shift of 2026: from text autoregression to multi-environment sandboxed RL. Deep dive into GLM-5.3's Terminal-Bench 3.0 breakthrough, Linux container orchestration, MCP protocol integration, and sandboxed agent engineering.</description>
+    <description>Understand agent environment scaling through task diversity, reset and verification, a sourced GLM-5.3 result, and container execution with cleanup after timeouts.</description>
     <enclosure url="https://blog.llmgo.top/og/en/environment-scaling-agent-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Demystifying 2026 Architecture Breakthroughs: How Kimi Delta Attention and DeepSeek MLA Conquered the Memory Wall</title>
+    <title>Kimi KDA, DeepSeek MLA and V4 CSA/HCA: Long-Context Cache and GPU Memory</title>
     <link>https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/</link>
     <guid>https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Architecture Evolution</category>
-    <description>In the era of million-token context windows and trillion-parameter MoE, how KV Cache memory saturation became the core bottleneck. Deep mathematical and architectural breakdown of Moonshot's KDA and DeepSeek's MLA low-rank projections.</description>
+    <description>Understand KDA recurrent state, MLA latent caches, and DeepSeek-V4 CSA/HCA sequence compression, with explicit memory formulas and reproducible measurement rules.</description>
     <enclosure url="https://blog.llmgo.top/og/en/kimi-kda-deepseek-mla-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -486,6 +486,36 @@
     <category>Loop Engineering</category>
     <description>A deep dive into the evolution of AI Agent architectures, exploring the 4-layer control plane extrapolation from Prompt, Context, Harness to Loop Engineering, and the 4 diseases of the ReAct architecture.</description>
     <enclosure url="https://blog.llmgo.top/og/en/loop-engineering.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Advanced Tool Use in Agent Architecture: Dynamic Discovery, Sandboxing, and Self-Healing Recovery</title>
+    <link>https://blog.llmgo.top/en/articles/advanced-agent-tool-use-and-function-calling/</link>
+    <guid>https://blog.llmgo.top/en/articles/advanced-agent-tool-use-and-function-calling/</guid>
+    <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Tool Use</category>
+    <description>Implement dynamic tool retrieval, MCP initialization and pagination, gVisor container execution, cleanup after timeouts, and bounded recovery with Python examples.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/advanced-agent-tool-use-and-function-calling.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Building a Lightweight Agent Framework from Scratch: State Machines and Event Streams</title>
+    <link>https://blog.llmgo.top/en/articles/build-lightweight-agent-framework/</link>
+    <guid>https://blog.llmgo.top/en/articles/build-lightweight-agent-framework/</guid>
+    <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Architecture</category>
+    <description>Build a Python agent state machine with SQLite approval checkpoints, restart recovery, single-use approvals, rejection handling, step budgets, and async events.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/build-lightweight-agent-framework.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Communication Protocols and Concurrency Control in Multi-Agent Systems</title>
+    <link>https://blog.llmgo.top/en/articles/multi-agent-collaboration-and-concurrency/</link>
+    <guid>https://blog.llmgo.top/en/articles/multi-agent-collaboration-and-concurrency/</guid>
+    <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Multi-Agent</category>
+    <description>Build asyncio agent mailboxes and a message bus with isolated payload copies, bounded delivery, graceful shutdown, CAS document updates, and token-bucket limiting.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/multi-agent-collaboration-and-concurrency.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>Agent Observability &amp; Debugging: The Path from Black Box to White Box</title>
@@ -574,7 +604,7 @@
     <pubDate>Tue, 31 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Quantization Precision</category>
-    <description>A comprehensive comparison of FP32, BF16, FP16, FP8, INT8, INT4, NF4, FP4, 1.58-bit and all major quantization formats — with real benchmark data and an in-depth FP8 vs INT8 technical analysis.</description>
+    <description>Understand FP8, INT8, INT4, and NF4 across weights, activations, and KV cache, with complete memory budgets, speed tradeoffs, calibration, and quality evaluation.</description>
     <enclosure url="https://blog.llmgo.top/og/en/quantization-precision-guide.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -654,7 +684,7 @@
     <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Model Benchmark</category>
-    <description>A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.</description>
+    <description>Compare GPT-5.4, Claude 4.6, and Gemini 3.1 Pro APIs with sourced capabilities, token prices, SDK examples, fair evaluation rules, and self-hosting cost formulas.</description>
     <enclosure url="https://blog.llmgo.top/og/en/model-comparison-2026.png" length="150000" type="image/png" />
   </item>
   <item>

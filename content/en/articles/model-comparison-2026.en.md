@@ -5,206 +5,117 @@ date: 2026-03-01
 tag: Model Benchmark
 tagClass: tag-amber
 category: Evaluation & Trends
-description: A comprehensive comparison of the top three foundation models in 2026, covering reasoning, coding, context windows, API pricing, and selection strategies.
+description: "Compare GPT-5.4, Claude 4.6, and Gemini 3.1 Pro APIs with sourced capabilities, token prices, SDK examples, fair evaluation rules, and self-hosting cost formulas."
 featured: true
 featuredStats:
-  - label: Test Cases
-    value: 50+
+  - label: Compared Models
+    value: 4
   - label: Dimensions
     value: 4
   - label: Top Models
     value: 3
+updated: 2026-10-20
 ---
 
-## Model Version Timeline
+## Scope and evidence
 
-Before comparing, let's review the model release cadence of the top three vendors in 2025-2026:
+This comparison preserves the GPT-5.4, Claude Opus / Sonnet 4.6, and Gemini 3.1 Pro group. It is an engineering reference, not a claim that these are today's newest models. Specifications come from provider documentation; unsupported score tables are not treated as controlled measurements. See the [Chinese open-weight comparison](/en/articles/domestic-llm-comparison-2026/).
 
-| Vendor | Model | Release Date | Positioning |
-|------|------|----------|------|
-| OpenAI | GPT-5.0 | Aug 7, 2025 | First unified multimodal model |
-| OpenAI | GPT-5.1 | Nov 2025 | Stability and efficiency optimization |
-| OpenAI | GPT-5.3-Codex | Feb 2026 | Dedicated coding model |
-| OpenAI | GPT-5.4 / 5.4 Thinking | Mar 5, 2026 | Strongest frontier model + native computer use |
-| Anthropic | Claude Opus 4.0 | May 22, 2025 | Claude 4 series debut |
-| Anthropic | Claude Opus 4.5 | Nov 24, 2025 | Strongest in coding and Agents |
-| Anthropic | Claude Opus 4.6 | Feb 5, 2026 | Agent Teams + PPT capabilities |
-| Anthropic | Claude Sonnet 4.6 | Feb 17, 2026 | Opus-level performance at mid-range price |
-| Google | Gemini 3.0 Pro | Nov 18, 2025 | Deep Think reasoning |
-| Google | Gemini 3.1 Pro | Feb 19, 2026 | Million-token context enhancement |
+## 1. Capabilities and API boundaries
 
-> **Comparison Baseline**: GPT-5.4 Thinking, Claude Sonnet 4.6 / Opus 4.6, Gemini 3.1 Pro (Latest versions as of March 2026)
+| Model | Input and output | Context | Engineering checks |
+| --- | --- | --- | --- |
+| GPT-5.4 | Text / image input, text output; no direct audio input | 1.05M total window, up to 128K output; shared input / output budget | Reasoning effort, Responses tools, computer use |
+| Claude Opus / Sonnet 4.6 | Text / image input; document processing supports PDF | Consult each model's 1M-context conditions | Adaptive thinking, tool parameters, available model IDs |
+| Gemini 3.1 Pro Preview | Multimodal understanding; check exact supported input formats | Limits depend on the Preview ID | Media accounting, tools, thinking configuration |
 
-## Core Metrics Comparison
+Sources: [GPT-5.4](https://developers.openai.com/api/docs/models/gpt-5.4), [Opus 4.6](https://platform.claude.com/docs/en/models/opus-4-6/overview), [Sonnet 4.6](https://platform.claude.com/docs/en/models/sonnet-4-6/overview), [Gemini 3.1 Pro Preview](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-pro-preview).
 
-### Basic Specifications
+ChatGPT's Thinking label is not a separate gpt-5.4-thinking API ID. Claude Code Agent Teams is a harness capability rather than automatic multi-agent orchestration in the base API. Distinguish API thinking parameters from separate consumer product modes.
 
-| Metric | GPT-5.4 | Claude 4.6 Series | Gemini 3.1 Pro |
-|------|---------|----------------|----------------|
-| Context | 1.05M tokens (922K in / 128K out) | 200K (Standard) / 1M (Beta) | 1M in / 64K out |
-| Thinking Mode | Built-in + Extreme mode | Extended / Adaptive Thinking | Deep Think |
-| Multimodal | Text / Image | Text / Image / PDF | Text / Image / Video / Audio |
-| Computer Control | Native support (OSWorld 75%) | Computer Use | — |
-| Knowledge Cutoff | Aug 2025 | — | — |
+## 2. Traceable token prices
 
-### API Pricing (per 1 Million tokens)
+Standard examples below are USD per million tokens. Account separately for long-context rates, cache writes, batch processing, regions, and tools.
 
-| Model | Input Price | Output Price | Cached Input | Notes |
-|------|---------|---------|---------|------|
-| GPT-5.4 | $2.50 | $15.00 | — | Latest frontier model |
-| GPT-5 | $1.25 | $10.00 | $0.13 | Default ChatGPT model |
-| GPT-5-mini | $0.25 | $2.00 | — | Lightweight |
-| Claude Opus 4.6 | $5.00 | $25.00 | $0.50 | Flagship reasoning |
-| Claude Sonnet 4.6 | $3.00 | $15.00 | $0.30 | King of cost-effectiveness |
-| Gemini 3.1 Pro (≤200K) | $2.00 | $12.00 | — | Standard pricing |
-| Gemini 3.1 Pro (>200K) | $4.00 | $18.00 | — | Long context |
+| Model | Input | Output | Cached input |
+| --- | --- | --- | --- |
+| GPT-5.4 | 2.50 | 15.00 | 0.25 |
+| Claude Opus 4.6 | 5.00 | 25.00 | 0.50 cache read |
+| Claude Sonnet 4.6 | 3.00 | 15.00 | 0.30 cache read |
+| Gemini 3.1 Pro Preview | Check input-length tier | Check input-length tier | Check cache and storage rates |
 
-> **Cost Tip**: Claude supports Prompt Caching (up to 90% off) and Batch API (50% discount); Gemini Batch API also offers a 50% discount. GPT-5.4's Tool Search feature can cut token consumption by almost half.
+Sources: [OpenAI model pricing](https://developers.openai.com/api/docs/models/gpt-5.4), [Claude model documentation](https://platform.claude.com/docs/en/models/overview), [Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing). GPT-5.4 applies long-context multipliers above 272K input tokens, so the standard rate cannot be applied to every million-token request.
 
-### Reasoning and Coding Benchmarks
+## 3. Fair reasoning, coding, and agent comparisons
 
-Based on public benchmarks and [standardized LLM evaluation frameworks](/en/articles/llm-evaluation-guide/) (March 2026 data):
+SWE-bench Verified, HumanEval, OSWorld, and mathematics tests measure different capabilities. Do not place Opus results in a Sonnet column or describe provider-specific harness results as one uniform reproduction.
 
-| Benchmark | GPT-5.4 | Claude Sonnet 4.6 | Gemini 3.1 Pro |
-|------|---------|-------------------|----------------|
-| SimpleBench (Reasoning) | 90% (Beats human 83%) | 85.2% | 87.4% |
-| OSWorld-Verified (Computer Control) | 75.0% (Beats human) | — | — |
-| HumanEval (Code) | 93.8% | 96.4% | 91.6% |
-| SWE-bench Verified (Engineering) | ✅ Improved | 80.8% (Opus 4.6) | — |
-| MATH | 88.5% | 86.3% | 89.7% |
+Pin the snapshot, reasoning budget, context, tool permissions, agent harness, timeout, and retries. Save patches, execution logs, and independent acceptance results. Compare quality, latency, and useful cost; see [LLM evaluation](/en/articles/llm-evaluation-guide/).
 
-**Key Findings**:
-- **GPT-5.4** highlights: Native computer control + huge context + 33% fewer hallucinations.
-- **Claude Series**: Continues to lead in HumanEval coding and actual SWE-bench engineering tasks.
-- **Gemini 3.1 Pro**: Best performance in Deep Think math reasoning, native million-token context.
+| Workload | Acceptance evidence |
+| --- | --- |
+| Repository changes | Hidden tests, patch scope, repeated-run stability |
+| Document extraction | Numeric accuracy, citations, retrieval, refusals |
+| Computer operation | Reset environment, success rate, unauthorized actions, duration |
+| Video / audio understanding | Supported modality, temporal grounding, quality, cost |
 
-## Practical Usage Comparison
+A large window does not establish complete repository understanding. A reported hallucination reduction on one evaluation is not a fixed improvement for all workloads.
 
-### Coding Capabilities
+## 4. API examples
+
+These examples require provider SDKs, credentials, and account access. Site verification does not call external models.
 
 ```python
-# GPT-5.4: Built-in GPT-5.3-Codex coding capabilities + computer control
-# Can directly interpret screenshots, send keystrokes/mouse clicks, combined with Playwright for automation
-
-# Claude Sonnet 4.6: Widely recognized as #1 in code quality
-# Extended Thinking mode plans before coding, resulting in cleaner code
-# Opus 4.6 scores an industry-high 80.8% on SWE-bench Verified real-world tasks
-
-# Gemini 3.1 Pro: Strongest grasp of massive codebases
-# Native 1M token context can ingest entire projects at once
-```
-
-### Long Context Processing
-
-| Scenario | Best Choice | Reason |
-|------|---------|------|
-| Full books / Ultra-long docs | GPT-5.4 / Gemini 3.1 Pro | Both support million-level contexts |
-| Large codebase refactoring | GPT-5.4 / Claude | GPT has computer control, Claude has high code quality |
-| Mass PDF analysis | Claude Sonnet 4.6 | Extended Thinking produces highly structured outputs |
-| Video understanding | Gemini 3.1 Pro | Native 1M context + video processing |
-
-### API Usage Examples
-
-```python
-# OpenAI GPT-5.4
 from openai import OpenAI
 
 client = OpenAI()
-response = client.chat.completions.create(
-    model="gpt-5.4",  # or "gpt-5.4-thinking"
-    messages=[{"role": "user", "content": "Explain the fundamental principles of quantum computing."}],
-    max_tokens=4096,
+response = client.responses.create(
+    model="gpt-5.4",
+    input="Explain the basics of quantum computing",
+    reasoning={"effort": "high"},
+    max_output_tokens=4096,
 )
+print(response.output_text)
 ```
 
 ```python
-# Anthropic Claude Sonnet 4.6
 import anthropic
 
 client = anthropic.Anthropic()
 response = client.messages.create(
-    model="claude-sonnet-4-6-20260217",
+    model="claude-sonnet-4-6",
     max_tokens=4096,
-    messages=[{"role": "user", "content": "Explain the fundamental principles of quantum computing."}],
+    messages=[{"role": "user", "content": "Explain quantum computing"}],
 )
+print(response.content)
 ```
 
 ```python
-# Google Gemini 3.1 Pro
-import google.generativeai as genai
+from google import genai
 
-model = genai.GenerativeModel("gemini-3.1-pro")
-response = model.generate_content("Explain the fundamental principles of quantum computing.")
+client = genai.Client()
+response = client.models.generate_content(
+    model="gemini-3.1-pro-preview",
+    contents="Explain quantum computing",
+)
+print(response.text)
 ```
 
-## Selection Advice
+Check IDs against your account's model list. Provider routing also needs consistent errors, deadlines, tool schemas, and usage accounting.
 
-### Recommended by Scenario
+## 5. Self-hosting arithmetic and KV budgets
 
-| Scenario | Recommended Model | Reason |
-|------|---------|------|
-| Daily coding assistant | Claude Sonnet 4.6 | Leading code quality + highly cost-effective ($3/$15) |
-| Computer automation | GPT-5.4 Thinking | Only model with native computer control |
-| Long docs / Knowledge base | Gemini 3.1 Pro | Native 1M context + lowest price |
-| Complex reasoning / Math | Gemini 3.1 Pro (Deep Think) | Best math benchmarks |
-| Agents / Automation | Claude Opus 4.6 | Agent Teams + strongest tool calling |
-| Budget sensitive | GPT-5-mini | Extremely low cost ($0.25/$2.00) |
-| Factual accuracy | GPT-5.4 | 33% fewer hallucinations than GPT-5.2 |
+At an assumed $30/hour server cost and blended $5 per million API tokens, a simplified break-even point is `30 / 5 × 1e6 / 3600 = 1,667 tokens/s`. This is not measured capacity or equivalent task quality. Input / output mix, utilization, expansion, and staffing change the result. See [deployment cost estimation](/en/articles/deepseek-v4-kimi-k3-deployment-guide/).
 
-### Enterprise Tokenomics: Cost Reduction & Breakeven Analysis
+For ordinary GQA with 80 layers, 8 KV heads, head_dim=128, and FP16, cache bytes per token are `2×80×8×128×2=327,680`. One million tokens require about 327.68GB or 305.18GiB. This is a defined example, not a rule for all 70B or hybrid models. PagedAttention improves allocation and reuse, not the size of an uncompressed KV element.
 
-In enterprise production environments, hardcoding applications to a single LLM API is both dangerous and financially ruinous.
-
-When traffic reaches a certain scale, you must calculate the exact **Breakeven Point** between **Self-hosting** and **Commercial APIs**.
-
-Let's take running an **open-source 70B model (such as Llama-3.3-70B or Qwen-2.5-72B)** on a rented/purchased **8x H100 (80GB)** server (roughly $30/hour on-demand) as an example:
-- Assume a blended API cost (e.g., GPT-5.4) of **$5.00 / 1M tokens**.
-- Given an 8x H100 node fully utilizing Continuous Batching and vLLM's PagedAttention, maximizing token throughput ($T$) per second.
-
-**Rule of Thumb Formula**:
-When your sustained business traffic exceeds roughly **1,600 Tokens per second (input+output)**, self-hosting a 70B model breaks even with the API cost. Once past this **Breakeven Point**, the savings from self-hosting compound exponentially as traffic scales.
-
-> **Architect's Advice**: Introduce an **AI Gateway (e.g., Kong AI Gateway or LiteLLM)** for unified traffic orchestration. Route 80% of routine conversations to zero-variable-cost local lightweight models (such as Qwen-2.5-7B or Llama-3.1-8B, or cost-effective endpoints from [Frontier Chinese LLMs](/en/articles/domestic-llm-comparison-2026/)), while reserving the remaining 20% of highly complex reasoning or failovers to GPT-5.4.
-
-### VRAM Explosion: The Physical Geek Formula for KV Cache
-
-The core pain point supporting long context windows is the **KV Cache VRAM Explosion**. While the VRAM required to hold model parameters is static, the KV Cache grows uncontrollably as context lengthens.
-
-In 2026, as an AI Architect, you must be able to mentally calculate this formula:
-
-```text
-KV_Cache_Size_Per_Token = 2 * 2 * n_layers * n_kv_heads * d_head
-// First 2: Key and Value matrices
-// Second 2: Bytes per element in FP16/BF16 (2 bytes)
-// n_layers: Number of transformer layers (usually 80 for a 70B model)
-// d_model: Hidden layer dimension (usually 8192 for a 70B model)
-```
-
-For a 70B model, every single Token consumes approximately **0.31MB** of VRAM.
-If you want to support an ultra-long context of **1 Million Tokens** for a single conversation, its KV Cache alone will devour:
-`1,000,000 * 0.31 MB ≈ 310,000 MB ≈ 310 GB`
-
-**This is intrinsically why your personal 24GB consumer GPU can never run an actual 1M context.**
-
-Enterprise Breakthrough Solutions:
-1. **vLLM PagedAttention**: Functions exactly like an OS managing virtual memory. It stores KV Cache in non-contiguous "blocks" or "pages," eliminating memory fragmentation and boosting concurrency throughput by 30%-50%.
-2. **Prompt Caching**: For extremely lengthy, repetitive system prompts, pre-compute their KV Cache and persist it in Redis or a dedicated VRAM pool. For subsequent identical requests, bypass the entire Prefill phase, crashing the Time-To-First-Token (TTFT) from seconds down to tens of milliseconds. This is the underlying engine enabling Claude API's 90% discount.
-
-## Summary
-
-The foundation model landscape in March 2026:
-
-- **GPT-5.4**: The All-Rounder — Million context + computer control + low hallucinations, but priciest.
-- **Claude 4.6**: The Code God — Unrivaled in code quality & Agent capabilities; Sonnet offers incredible value.
-- **Gemini 3.1 Pro**: The Context King — Native million context + Deep Think math reasoning, most budget-friendly.
-
-Best Practice: **Combine them based on task characteristics** — GPT-5-mini for simple tasks, Claude Sonnet 4.6 for coding/reasoning, Gemini 3.1 Pro for long documents, and GPT-5.4 for complex automation requiring computer control.
-
----
 ## Frequently Asked Questions (FAQ)
 
-### Q1: What is the core decision logic when choosing between GPT-5.4, Claude 4.6, and Gemini 3.1 Pro?
-For software engineering, large refactors, and complex agentic tool use, Claude Sonnet 4.6 and Opus 4.6 lead the field with Extended Thinking and unmatched contextual precision. For massive million-token multimodal contexts spanning video and high-density audio, Gemini 3.1 Pro delivers top-tier math reasoning with exceptional cost efficiency. For high-autonomy computer control, OS automation, and unified reasoning, GPT-5.4 stands out as the all-rounder flagship. For deeper evaluation metrics, explore our [LLM Evaluation Guide](/en/articles/llm-evaluation-guide/).
+### Q1: Which model is strongest at coding?
+Compare matching repository tasks, tools, and budgets. Provider benchmarks screen candidates; independent acceptance determines fit.
 
-### Q2: Is it strictly necessary to use international models for localized business scenarios in China?
-Not necessarily. Leading domestic LLMs have developed distinct advantages in Chinese semantic understanding and regulatory compliance, alongside more cost-effective API pricing tiers. However, for highly advanced general reasoning or global expansion use cases, international models are still preferred. For detailed comparisons of Chinese models, please see our [Domestic LLM Comparison](/en/articles/domestic-llm-comparison-2026/).
+### Q2: Does a million-token window guarantee accurate retrieval?
+No. Capacity, retrieval quality, citation reliability, and cost need separate measurements.
+
+### Q3: How should cost and reliability be balanced?
+Set minimum quality and SLA first, then compare useful cost. The [token calculator](/en/tools/) helps separate input, output, and cache charges.

@@ -1,115 +1,61 @@
 ---
-title: "解密 2026 架构创新：Kimi Delta Attention 与 DeepSeek MLA 是如何干掉显存墙的？"
+title: "Kimi KDA、DeepSeek MLA 与 V4 CSA/HCA：长上下文缓存原理与显存估算"
 slug: kimi-kda-deepseek-mla-architecture
 date: 2026-09-07
 tag: 架构演进
 tagClass: tag-cyan
 category: 推理系统
-description: "在百万级长上下文与数万亿 MoE 时代，KV Cache 显存暴涨如何成为推理核心瓶颈？硬核剖析月之暗面 Kimi Delta Attention (KDA) 的增量状态演进与 DeepSeek 多头潜变量注意力 (MLA) 的低秩投影数学原理。"
+description: "区分 KDA 循环状态、MLA 潜变量缓存与 DeepSeek-V4 CSA/HCA 序列压缩，结合 Kimi K3 混合层结构推导显存估算边界与可比较的测试方法。"
+updated: 2026-10-20
 ---
 
-在 2026 年，大模型领域最激动人心的技术较量不在于“谁的参数规模更大”，而在于**“谁能用最少的显存和最高的吞吐跑完百万上下文推理”**。
+## 三种架构解决的不是同一个问题
 
-随着大模型全面迈入 100 万（1M）乃至 1000 万（10M）Token 上下文时代，制约推理服务器并发能力的最大物理瓶颈早已不是纯粹的算力（TFLOPS），而是臭名昭著的**显存墙（Memory Wall）与 KV Cache（键值缓存）容量爆炸**。
+MLA 压缩每个历史 Token 的缓存表示；KDA 用固定维度的循环状态更新代替完整历史键值；DeepSeek-V4 的 CSA／HCA 还会压缩序列维度。它们需要分别讨论缓存容量、注意力计算与模型质量，不能用一组未经定义的“显存实测”混合比较。
 
-面对这一产业痛点，2026 年两大中国技术标杆交出了截然不同却同样惊艳的数学答卷：
-* **月之暗面（Moonshot AI）** 研发的 **Kimi Delta Attention（KDA）**
-* **DeepSeek** 迭代深化的 **Multi-head Latent Attention（MLA，多头潜变量注意力）**
-
-本文将从最底层的数学推导与张量投影入手，深入拆解它们是如何在物理层面击碎显存墙的。
-
----
-
-## 一、显存墙危机：为什么原生 Multi-Head Attention 会在百万上下文崩溃？
-
-在传统的标准多头注意力（MHA）中，对于一个输入序列长度为 L、模型隐藏维度为 D、层数为 N 的模型，单次请求保存在 GPU 显存中的 KV Cache 尺寸公式为：
-
-KV Cache Size = 2 × B × L × N × D × sizeof(FP16)
-
-以主流采用 GQA（分组查询注意力）的千亿参数模型（KV 隐藏维度 D=2048, 层数 N=80）为例：
-* 当序列长度 L = 4K 时，单个请求约消耗 **2.6 GB** 显存；
-* 但当上下文暴涨到 L = 1M 时，单个请求的 KV Cache 将直接膨胀至 **655 GB**！
-
-这就意味着：哪怕在一台配备 8 张 80GB H100 GPU（总显存 640GB）的顶级推理节点上，甚至**连一个 1M 并发请求的完整 KV Cache 都塞不下**！更遑论高并发生产服务。关于大规模 GPU 节点底层显存总线与驱动栈拓扑优化，可参考 [NVIDIA GPU 驱动栈全视野解析](/articles/nvidia-gpu-package-architecture/)。
-
----
-
-## 二、DeepSeek MLA：低秩潜变量投影与显存压缩
-
-为了解决 KV Cache 占用过大的问题，业界早期尝试了 MQA（多查询注意力）与 GQA（分组查询注意力），但均伴随着明显的长文本信息损失。DeepSeek 的解法是：**基于低秩矩阵投影（Low-Rank Compression）的 MLA**。
-
-### 1. 核心数学机制
-MLA 的核心洞见在于：不需要在显存中保留完整维度的 Key 和 Value 张量，而是将隐藏状态向量 h_t 压缩到一个极低维度的“潜变量空间（Latent Space）”：
-
-c_t^{KV} = W^{DKV} h_t
-
-其中潜变量维度 d_c 远小于 N_heads × d_h（通常仅为原始维度的 1/6 到 1/8）。在 GPU 显存中，我们**只需缓存低秩潜变量向量 c_t^{KV} 以及解耦的 RoPE 键向量**！
-
-在生成当前 Query 并需要执行 Attention 计算时，再通过反向投影矩阵实时恢复出虚拟的 Key 和 Value。更绝妙的是，根据矩阵乘法的结合律，反向解压缩矩阵可以直接与输出投影矩阵进行融合计算。这种巧妙的代数重组使得在自回归解码阶段，**GPU 显存中保存的缓存量锐减 75% 以上**，同时保留了全部注意力头的独立表达自由度。
-
----
-
-## 三、Kimi Delta Attention（KDA）：增量状态递归矩阵
-
-如果说 DeepSeek 的 MLA 是在“空间维度”上做低秩极限压缩，那么月之暗面为 Kimi K3 打造的 **Kimi Delta Attention（KDA）** 则是在“时间增量维度”上发动的一场降维革命。
-
-### 1. 动态语义冗余的观察
-月之暗面算法团队发现，在长达 100 万 Token 的上下文中，绝大部分相邻 Token 之间的注意力矩阵存在高达 80% 的信息冗余（即大多数上下文只是在承载语境，而非引入全新的实体或指令）。
-
-### 2. KDA 的递归差量更新机制
-KDA 结合了线性注意力（Linear Attention）的高速状态递归，并引入了专有的**“差量演进算子（Delta Operator）”**：
-
-S_t = S_{t-1} + ΔS_t
-
-* **物理含义**：当模型读取第 t 个 Token 时，它不再去逐一对比之前所有 Token 的具体键值，而是利用当前输入与前序全局记忆矩阵 S_{t-1} 计算出**语义差量（Delta）**，并仅将该增量状态更新进紧凑的内部记忆池中。
-* **显存效益**：对于单一 KDA 注意力层，无论上下文长度从 10 万增长到 100 万还是 1000 万，其维护的递归差量状态大小**恒定不变**（$O(1)$ 显存复杂度）。
-* **全模型混合设计**：需要特别厘清的是，在整网架构上，**Kimi K3 采用了“69 层 KDA ＋ 24 层 Gated MLA”的混合拓扑**。其中 69 层 KDA 负责长程背景常数显存递归，而 24 层 Gated MLA 保留密集关联检索能力（其 KV Cache 仍随序列线性微幅增长）。因此整个模型的总缓存开销并非绝对恒定，但增长斜率被极大平抑，从 100K 的 8.6 GB 仅温和上升至 1M 的 42 GB。
-
----
-
-## 四、架构实测对比：显存与吞吐硬核实测
-
-我们在由 8 张 80GB GPU 构成的标准节点上，对 2.8T MoE（采用 KDA）与 1.6T MoE（采用 MLA）进行了长上下文极限压测：
-
-| 测试场景 | 基准 GQA | DeepSeek MLA | Kimi KDA |
-| :--- | :--- | :--- | :--- |
-| **100K 上下文 KV 显存** | 64.2 GB | 14.8 GB (压缩 77%) | **8.6 GB (压缩 86%)** |
-| **1M 上下文 KV 显存** | 642 GB (物理 OOM) | 148 GB (支持多并发) | **42 GB (极低显存常数)** |
-| **大海捞针 (NIAH) 准确率**| 100% | 99.8% | 99.7% |
-| **首字延迟 (TTFT)** | 极慢 (随序列二次增长) | 快 (受带宽限制小) | **极快 (线性计算增长)** |
-| **解码吞吐 (Tokens/s)** | 22 t/s | 95 t/s | **110 t/s** |
+## 一、MHA／GQA 的缓存计算基线
 
 ```text
-显存占用对比曲线 (Context Length vs Memory Usage):
-
- 显存 (GB)
-   ▲
-600│                                  / [基准 GQA: OOM 悬崖]
-   │                                 /
-400│                                /
-   │                               /
-200│                              /      --- [DeepSeek MLA: 线性温和]
-   │                             /  ----
- 50│                  ---------/---          ···· [Kimi KDA: 渐进平缓]
-   └────────────────────────────────────────► 上下文长度
-     10K             100K                  1M
+KV_bytes = 2 × batch × sequence_length × layers × kv_heads × head_dim × bytes_per_element
 ```
 
----
+例如明确设定 batch=1、KV 隐藏维度=2048、80 层、FP16，每 Token 的缓存为 655,360 字节；4,000 Token 约 2.62GB，一百万 Token 约 655.36GB。这里统一使用十进制 GB；换算 GiB 时需除以 2^30。这只是指定 GQA 配置的算例，不是所有千亿参数模型的通用数值。
 
-## 五、技术总结
+## 二、DeepSeek-V2／V3 MLA：缓存潜变量与位置键
 
-* **DeepSeek MLA** 证明了通过线性代数与低秩矩阵分解，完全可以在不牺牲注意力多头表达力的情况下，将 KV 缓存砍至原先的四分之一，成为当前开源生态最通用的架构标配。关于 MoE 骨架下的专家并行与跨节点通讯调优，请参考专题 [《稀疏大模型 MoE 推理内核：专家并行 (EP)、动态路由门控与 All-to-All 通信重叠》](/articles/moe-expert-parallelism-inference-engine/)。
-* **Kimi KDA** 则更进一步，通过增量递归状态消除了长序列计算的二次方诅咒，使得 100 万 Token 交互在低成本商用服务器上实现高并发实时服务成为现实。
+MLA 将历史输入投影为低维潜变量，并单独保留解耦的 RoPE 键。Decode 可以通过矩阵吸收避免逐步完整重建多头 K/V，推导见 [MLA 矩阵吸收](/articles/mha-gqa-mla-matrix-absorption-inference-engine/)。
 
----
+MLA 的缓存仍随上下文长度线性增加，压缩率取决于潜变量、位置维度、层数与数据类型；它是训练好的架构，不是能对任意已训练 GQA 模型无损打开的运行时开关。
 
----
+## 三、KDA 层的循环状态与 Kimi K3 混合结构
+
+KDA 的状态更新包含门控、衰减与 delta 更新，`S_t = S_(t-1) + ΔS_t` 只能作为示意，不能当成完整算法。固定模型尺寸时，单个循环层的状态不随序列长度增长；每 Token 的更新成本也应与处理整段序列的总成本区分。
+
+[Kimi K3 模型卡](https://huggingface.co/moonshotai/Kimi-K3)列出 69 层 KDA 与 24 层 Gated MLA。因此全模型仍存在随上下文增长的缓存部分，不能描述为“恒定显存”。循环状态保存、前缀复用和并发也会改变服务端实际占用，见 [前缀缓存原理](/articles/prefix-caching-radix-attention-internals/)。
+
+## 四、DeepSeek-V4：CSA 与 HCA
+
+[DeepSeek-V4 模型卡](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro)给出的名称是 **Compressed Sparse Attention** 与 **Heavily Compressed Attention**。V4 的序列压缩与稀疏访问不同于只减少每 Token 维度的 V3 MLA，缓存预算必须按实际压缩布局和引擎实现计算。
+
+## 五、如何设计可比较的测量
+
+| 项目 | 必须固定或记录 |
+| --- | --- |
+| 模型 | 精确 revision、权重及缓存格式、层组成 |
+| 并行 | TP／PP／DP、是否存在 KV 复制、状态分片 |
+| 负载 | 输入与输出长度、并发、前缀复用与热身 |
+| 容量 | 每 Rank 权重、激活、缓存、通信和图捕获占用 |
+| 效果 | TTFT、TPOT、满足 SLA 的吞吐、引用与检索正确率 |
+
+没有这些配置就不能将“100K 用 8.6GB、1M 用 42GB、110 Token/s”等数字视作可复现结果。模型规模也不同，架构效果需要受控实验与质量评估；长上下文容量不等于高召回率或低幻觉率。部署条件见 [DeepSeek／Kimi 部署指南](/articles/deepseek-v4-kimi-k3-deployment-guide/)。
 
 ## 常见问题 (FAQ)
 
-### Q1: DeepSeek MLA 在部署时是否可以直接与 FP8 或 4-bit 量化叠加使用？
-完全可以。MLA 在算法层通过低秩潜变量投影减少了需要存储的向量维度，而模型权重与 KV Cache 仍可进一步采用 FP8 等进行量化。两者叠加可将显存占用大幅降低。量化格式细节可参考 [大模型量化精度全景图](/articles/quantization-precision-guide/)。
+### Q1: MLA 或 KDA 是否直接消除了全部 KV Cache？
+没有。MLA 保留压缩后的历史表示；KDA 循环层状态固定，但 K3 的 Gated MLA 层仍有缓存。
 
-### Q2: Kimi KDA 的增量递归状态与传统 Mamba / SSM 架构相比有何优势？
-纯 SSM 架构在长程精确信息检索上容易产生退化。KDA 创新地保留了注意力机制的高保真查询通道，仅对背景语境冗余进行增量 Delta 递归更新，从而保持了极高的大海捞针召回率。
+### Q2: 能否叠加低精度缓存？
+取决于模型和后端。权重量化、KV 量化和循环状态精度是不同配置，应分别测试质量与算子支持，参见 [量化指南](/articles/quantization-hands-on-guide/)。
+
+### Q3: KDA 是否必然比其他架构检索更准确？
+不能从状态更新形式推导质量排名，需要对同一检索任务、上下文长度与推理预算测量。

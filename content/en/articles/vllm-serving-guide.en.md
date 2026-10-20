@@ -14,6 +14,7 @@ featuredStats:
     value: 10+
   - label: Deploy Plans
     value: 3
+updated: 2026-10-20
 ---
 
 ## Introduction: Why vLLM?
@@ -170,12 +171,12 @@ Eviction rules:
 
 ### Four Key APC Use Cases
 
-| Scenario | Reusable Prefix | Performance Gain |
-|---------|----------------|-----------------|
-| **Multi-turn chat** | System prompt + chat history | Later turns approach zero prefill time |
-| **Document QA (RAG)** | Thousands of document tokens | Multiple queries on same doc = nearly free |
-| **Code completion** | Existing file content | Incremental computation per keystroke |
-| **Template batch processing** | Identical instruction prefix | 1000 same-template requests compute prefix once |
+| Scenario | Reusable prefix | Required condition |
+|----------|-----------------|--------------------|
+| Multi-turn chat | System instructions and unchanged history | Prefix remains cached |
+| Document QA | Repeated document tokens | Identical token ordering |
+| Code completion | Unchanged file beginning | Sufficient shared prefix before edits |
+| Template batches | Shared instruction prefix | Completed KV blocks remain resident |
 
 ### APC Limitations
 
@@ -210,9 +211,9 @@ The `usage` field will now include `prompt_tokens_details`:
 }
 ```
 
-**What this means**: Of 3000 prompt tokens, 2800 were reused from cache, only 200 needed GPU compute. **Your cost is 6.7% of list price, but you bill the user for all 3000 tokens.**
+Of the 3000 input tokens, 2800 can reuse prefix KV, leaving 6.7% uncached input. This is not a total-cost ratio: decoding, cache reads, memory residency, idle capacity, and operations still incur costs.
 
-> **Critical for billing**: Your middleware should record both `prompt_tokens` (user billing basis) and `cached_tokens` (your actual cost basis). The gap is your profit.
+> Record input tokens, cached tokens, output tokens, and latency separately; apply the pricing terms disclosed to customers.
 
 ### Cache Hit Rate Monitoring: Prometheus Metrics
 
@@ -220,21 +221,14 @@ vLLM V1 engine (v0.29.0) uses Counter-based metrics (replacing the deprecated `g
 
 ```text
 # V1 prefix cache metrics (Counter type, precise and reliable)
-vllm_prefix_cache_hits              # Cache hit tokens total (Counter)
-vllm_prefix_cache_queries           # Cache query tokens total (Counter)
+vllm:prefix_cache_hits_total              # Cache hit tokens total (Counter)
+vllm:prefix_cache_queries_total           # Cache query tokens total (Counter)
 
 # PromQL for real-time hit rate (use this in Grafana)
-(rate(vllm_prefix_cache_hits[5m]) / rate(vllm_prefix_cache_queries[5m])) * 100
+(rate(vllm:prefix_cache_hits_total[5m]) / rate(vllm:prefix_cache_queries_total[5m])) * 100
 ```
 
-**Healthy cache hit rate benchmarks**:
-
-| Scenario | Expected Hit Rate | If Lower, Check |
-|---------|-------------------|------------------|
-| Multi-turn chat (same session) | 80%-95% | Dynamic content inserted in prefix |
-| RAG document QA | 60%-85% | Document diversity too high, or cache pool too small |
-| Template batch processing | 90%+ | Template not at the front of prompt |
-| Completely random requests | <10% | Normal — APC doesn’t help here |
+There is no universal healthy cache-hit threshold. Establish cold/warm baselines for each workload and combine hits with TTFT, output speed, eviction, routing, and tenant isolation.
 
 ### Best Practices for Maximizing Cache Hits
 
@@ -242,7 +236,7 @@ vllm_prefix_cache_queries           # Cache query tokens total (Counter)
 2. **Avoid dynamic elements in prefixes**: e.g., `"Current time is 2026-04-14 10:00"` — a time change invalidates the entire cache chain. Put timestamps at the end.
 3. **Increase `--gpu-memory-utilization`**: More VRAM = larger cache pool = lower LRU eviction rate = higher hit rates.
 4. **Maintain session continuity**: Let vLLM naturally accumulate cache across turns.
-5. **Monitor `cached_tokens` / `prompt_tokens` ratio**: This is your "profit margin". Analyze by user/scenario to identify low-hit-rate patterns.
+5. **Track hits by workload**: Compare cached and input token counts alongside GPU time and total cost; cache-hit rate is not profit margin.
 
 ---
 
@@ -321,7 +315,6 @@ docker run -d \
   -p 8000:8000 \
   -v /path/to/models:/models \
   -e VLLM_API_KEY=your-secret-key \
-  -e PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus \
   vllm/vllm-openai:v0.29.0 \
   --model /models/Qwen2.5-72B-Instruct \
   --dtype auto \
@@ -362,70 +355,45 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
   --quantization fp8 \
   --kv-cache-dtype fp8_e5m2 \
   --tensor-parallel-size 2 \
-  --num-speculative-tokens 5 \
-  --speculative-model Qwen/Qwen2.5-1.5B-Instruct
+  --speculative-config '{"method":"draft_model","model":"Qwen/Qwen2.5-1.5B-Instruct","num_speculative_tokens":5}'
 ```
 
-#### [1] `--gpu-memory-utilization`
+#### [1] `--gpu-memory-utilization`: Total Executor Budget
 
-```text
-0.70: 30% wasted → tiny APC cache pool → hit rate plummets
-0.98: almost no buffer → OOM crash during spikes → all in-flight requests lost
-0.90~0.95: sweet spot for production
-```
+A value of 0.90 budgets a fraction of total VRAM for weights, activations, graph capture, other runtime overhead, and remaining KV storage. The vLLM 0.29 argument documentation lists 0.92 as the default; check other versions separately. Too little may prevent model loading; too much may conflict with additional allocations. There is no universal sweet spot.
 
-#### [2] `--max-model-len` — THE #1 PERFORMANCE KILLER
+#### [2] `--max-model-len`: Total Input and Output Limit
 
-vLLM pre-calculates KV Cache space based on this value. Many beginners use the model default (e.g., Qwen2.5's 131,072).
-
-```text
-Default 131072 → KV Cache reserves 30x more space → concurrency drops from 50 to 2
-Set to actual need 8192 → KV Cache right-sized → concurrency restored
-
-This single parameter change can be more impactful than all other optimizations combined.
-```
+This constrains request length and participates in KV-capacity checks and some runtime planning. The KV pool is primarily sized from memory budget and startup profiling, rather than reserving a full maximum window per request. Changing 131072 to 8192 does not imply a sixteenfold pool reduction or a fixed concurrency gain. Set business length limits and verify startup logs and long-request measurements.
 
 #### [3-4] Concurrency & Token Budget
 
 - **Online chat** (latency-first): `max-num-seqs 64-256`, `max-num-batched-tokens 8192-16384`
 - **Batch processing** (throughput-first): `max-num-seqs 2048-4096`, `max-num-batched-tokens 32768`
 
-#### [7-8] Quantization
+#### [7-8] Validate Weight and KV Quantization Separately
 
-| GPU | Recommended | Accuracy Loss | Effect |
-|-----|------------|---------------|--------|
-| **H100/H800** | FP8 (`--quantization fp8`) | <1% | ~1.5x throughput, zero-calibration |
-| **A100/L40S** | INT8 GPTQ/AWQ | ≈0% | 2x memory reduction |
-| **Blackwell B200** | NVFP4 | ≤1% | 2x throughput vs FP8 |
+FP8, AWQ, GPTQ, and NVFP4 require compatible hardware, checkpoint layouts, and kernels. GPU names alone cannot guarantee a fixed accuracy loss or twofold throughput. Weight-only quantization can reduce traffic, while dequantization and compute overhead may offset gains at large batch sizes.
 
-**KV Cache Quantization** (`--kv-cache-dtype fp8_e5m2`): Halves KV Cache memory with minimal quality impact, especially impactful for long-context (8K-128K) scenarios.
+`--kv-cache-dtype fp8_e5m2` is one optional cache-format example. It halves numerical storage width relative to BF16/FP16, but scales, cache layouts, and runtime overhead remain. Concurrency does not necessarily double. Verify backend support, scaling, long-context behavior, and task quality. See [quantization precision](/en/articles/quantization-precision-guide/).
 
-#### [9] Tensor Parallelism
+#### [9] Tensor Parallelism and Replicas
 
-```text
-Common mistake: 8 GPUs → TP=8 → worse throughput than TP=4
+TP partitions model computation across GPUs and introduces communication. Smaller TP with more replicas may improve throughput; larger TP may reduce single-request latency. Compare at equal GPU count, precision, lengths, and SLO. Fitting the weights is a starting constraint, not a guarantee of a 30–50% gain.
 
-Reason: AllReduce communication overhead can eat 40% of added compute
-
-Correct strategy:
-  1. Use minimum TP to fit the model (70B FP8 on 2x H100 → TP=2)
-  2. Use extra GPUs for more replicas + load balancer
-  Result: 2 instances × TP=2 often 30-50% higher throughput than 1 instance × TP=4
-```
-
-> **Advanced**: Check GPU topology with `nvidia-smi topo -m`. TP GPUs should be NVLink-connected, not PCIe-bridged (5-10x latency difference).
+Inspect `nvidia-smi topo -m`. NVLink/NVSwitch, PCIe, and inter-node fabrics have different bandwidth and latency; validate topology and parallel layout together.
 
 #### [10] Speculative Decoding
 
-```text
-Low concurrency (<10 QPS): 2-5x latency improvement
-High concurrency (>100 QPS): diminishing returns (GPU already saturated)
+A draft model or auxiliary head proposes candidates that the target model verifies and accepts or corrects. Benefits depend on acceptance rate, draft cost, batch size, model, and backend; QPS alone does not define a fixed speedup range.
 
-Best for: real-time chat, internal tools, latency-sensitive Agent calls
-Not for: high-concurrency API services
+vLLM 0.29 uses JSON configuration, for example:
+
+```bash
+--speculative-config '{"method":"draft_model","model":"Qwen/Qwen2.5-1.5B-Instruct","num_speculative_tokens":5}'
 ```
 
----
+Add this fragment to a serving command only after checking target/draft tokenizer, architecture, and backend compatibility. It is not a recipe for every target model. Measure ordinary decoding first, then compare latency and throughput under the same SLO.
 
 ## Layer 5: Disaggregated Serving — Architecture for Scale
 
@@ -486,8 +454,8 @@ User → [API Gateway (auth/rate-limit)] → [vLLM Engine]
 vllm:prompt_tokens_total / vllm:generation_tokens_total
 
 # Cache efficiency (V1, replaces deprecated gpu_prefix_cache_hit_rate)
-vllm:prefix_cache_hits / vllm:prefix_cache_queries
-# PromQL: (rate(vllm:prefix_cache_hits[5m]) / rate(vllm:prefix_cache_queries[5m])) * 100
+vllm:prefix_cache_hits_total / vllm:prefix_cache_queries_total
+# PromQL: (rate(vllm:prefix_cache_hits_total[5m]) / rate(vllm:prefix_cache_queries_total[5m])) * 100
 
 # Latency
 vllm:time_to_first_token_seconds / vllm:inter_token_latency_seconds
@@ -496,24 +464,15 @@ vllm:time_to_first_token_seconds / vllm:inter_token_latency_seconds
 vllm:kv_cache_usage_perc / vllm:num_requests_waiting / vllm:num_preemptions_total
 ```
 
-> **⚠️ Must set** `PROMETHEUS_MULTIPROC_DIR` env var for correct multi-process metric collection.
+> The standard vLLM server normally initializes multiprocess metric storage. Custom launchers must manage its lifecycle for the installed version and avoid stale process data.
 
 ### Five Token Billing Pitfalls
 
-**Pitfall 1: Should cached prefix tokens be billed?**
+**Pitfall 1: Treating cache hits as profit**
 
-```text
-Your actual compute cost:
-  Total prompt = 3000 tokens
-  APC prefix hit = 2800 tokens (cost ≈ 0)
-  Actually computed = 200 tokens
+A request with 3000 input tokens and 2800 cache hits has 200 uncached input tokens. It still incurs decoding, KV-memory traffic, and fixed costs. Cache pricing is a contractual choice, not an industry-wide full-price rule. Compare measured GPU time, latency, and total serving cost under the same traffic.
 
-User pays: Full 3000 prompt_tokens (industry convention)
-Your profit = User payment for 3000 tokens - Your GPU cost for 200 tokens
-Prefix caching is your profit engine.
-```
-
-**Pitfall 2: Streaming usage only in last chunk.** Extract `usage` from the chunk where `finish_reason != null`.
+**Pitfall 2: Streaming usage needs explicit handling.** Enable `stream_options={"include_usage": True}`. The final usage chunk can have empty `choices`; inspect `chunk.usage` rather than `finish_reason`. Interrupted streams may never receive final usage, so track incomplete accounting separately.
 
 **Pitfall 3: Speculative decoding waste tokens.** vLLM's `completion_tokens` automatically excludes rejected draft tokens.
 
@@ -525,23 +484,16 @@ Prefix caching is your profit engine.
 
 ## Cost Analysis: Build vs Buy
 
+First verify both options meet the same acceptance criteria. Equal token volume from models with different capabilities is not an equivalent service.
+
 ```text
-Qwen2.5-72B (FP8) on 2x H100:
-  GPU cost: ~$7/hour = $168/day
-  Throughput: ~4,000 tokens/s = ~345M tokens/day
-
-vs. OpenAI GPT-4o ($2.50/M input + $10/M output):
-  Same volume: ~$1,500/day
-
-Self-hosted: $168/day vs API: $1,500/day → ~9x cheaper
-
-Rule of thumb:
-  < 10M tokens/day → Buy API (simpler)
-  10M-100M tokens/day → Evaluate based on team capability
-  > 100M tokens/day → Self-host (cost advantage is overwhelming)
+Daily API cost = input volume × input rate + output volume × output rate
+               + cache write/read/storage + tools and platform fees
+Daily self-hosted cost = GPU/machine rent or depreciation + operations
+                      + network/storage + redundancy + evaluation/updates
 ```
 
----
+Keep rates consistently per token or per million tokens. Use measured SLO-compliant throughput, actual utilization, and peak traffic to check capacity. An unsupported 4000 tokens/s figure or a universal 100M-token self-hosting threshold is not a valid decision rule. Include model-quality differences, cold starts, and failure reserves. See the [distributed deployment guide](/en/articles/deepseek-v4-kimi-k3-deployment-guide/).
 
 ## Production Checklist
 
@@ -574,10 +526,10 @@ Rule of thumb:
 ```bash
 vllm serve /models/Qwen2.5-72B-Instruct \
   --gpu-memory-utilization 0.90 \
-  --max-model-len 8192 \                    # ⚠️ MOST CRITICAL
+  --max-model-len 8192 \
   --enable-chunked-prefill \
   --enable-prefix-caching \
-  --enable-prompt-tokens-details \          # Expose cached_tokens
+  --enable-prompt-tokens-details \
   --max-num-seqs 256 \
   --quantization fp8 \
   --kv-cache-dtype fp8_e5m2 \
@@ -619,7 +571,7 @@ vllm serve /models/Qwen2.5-72B-Instruct \
 1. **Get running first, tune later**: Start with a simple `vllm serve`, validate business logic, then optimize.
 2. **`max-model-len` is priority #1**: This single parameter may outweigh all other optimizations combined.
 3. **Monitor first**: Set up Prometheus + Grafana. `gpu_cache_usage_perc` is the single most important metric.
-4. **Cache hit rate = profit margin**: Track APC hits, optimize prompt structure to front-load static content.
+4. **Measure cache savings**: Track cache hits together with GPU time and serving cost, and optimize static prefixes and routing.
 5. **Bill at the gateway**: Don't modify vLLM source code. Intercept `usage` at the gateway layer.
 
 Stay updated via [official docs](https://docs.vllm.ai/) and [GitHub Releases](https://github.com/vllm-project/vllm/releases).
@@ -629,10 +581,12 @@ Stay updated via [official docs](https://docs.vllm.ai/) and [GitHub Releases](ht
 ## Frequently Asked Questions (FAQ)
 
 ### Q1: How to troubleshoot CUDA out of memory (OOM) when launching vLLM?
-First inspect `--gpu-memory-utilization` (default 0.90 allocates 90% of GPU VRAM for weights and KV Cache); adjust it to 0.85 if other background processes consume VRAM. Most importantly, explicitly configure `--max-model-len` (e.g. 4096 or 8192) according to your practical workload instead of letting it allocate for the theoretical context window. If VRAM remains constrained, enable 4-bit/8-bit weight quantization by consulting our [Quantization Hands-on Guide](/en/articles/quantization-hands-on-guide/).
+Use startup logs to distinguish weight loading, activation/graph capture, and KV allocation failures. A value of 0.90 is an example total executor budget, not a version-independent default or a KV-only reservation. Length, batch, and concurrency affect peaks; lowering `max-model-len` does not necessarily shrink the KV pool proportionally. Reduce load or use a validated quantization path when needed.
 
 ### Q2: When should I choose Tensor Parallelism vs Pipeline Parallelism?
 On a single machine with multiple GPUs connected via NVLink (such as 4x or 8x A100/H100), Tensor Parallelism (`--tensor-parallel-size`) is preferred because NVLink communication latency is negligible. For multi-node distributed setups, the best practice is multi-instance Data Parallelism with a lightweight load balancer, which prevents inter-node network synchronization bottlenecks.
 
 ### Q3: What makes vLLM superior to Ollama or TGI for production serving?
-vLLM is specifically engineered for high-concurrency enterprise throughput. Utilizing PagedAttention, Continuous Batching, and Chunked Prefill with Automatic Prefix Caching (APC), vLLM achieves 3x to 5x higher sustained throughput under variable batch requests while exposing a native OpenAI-compatible API. For hardware background, refer to our [NVIDIA GPU Package Architecture](/en/articles/nvidia-gpu-package-architecture/) breakdown.
+vLLM provides continuous batching, prefix caching, and OpenAI-compatible serving interfaces. Throughput relative to other engines depends on the model, precision, hardware, and workload; there is no universal 3–5x advantage or complete compatibility with every OpenAI product feature.
+
+Metric examples target the vLLM 0.29 Prometheus export format; Counter samples use the `_total` suffix. Verify the actual `/metrics` endpoint before deployment. Preserve the `le` label when aggregating histogram buckets. See [vLLM 0.29 engine arguments](https://docs.vllm.ai/en/v0.29.0/configuration/engine_args/) and [metric design](https://docs.vllm.ai/en/v0.29.0/design/metrics/).

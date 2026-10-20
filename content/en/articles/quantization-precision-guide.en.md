@@ -5,247 +5,93 @@ date: 2026-03-31
 tag: Quantization Precision
 tagClass: tag-cyan
 category: Inference Systems
-description: A comprehensive comparison of FP32, BF16, FP16, FP8, INT8, INT4, NF4, FP4, 1.58-bit and all major quantization formats — with real benchmark data and an in-depth FP8 vs INT8 technical analysis.
+description: "Understand FP8, INT8, INT4, and NF4 across weights, activations, and KV cache, with complete memory budgets, speed tradeoffs, calibration, and quality evaluation."
 featured: true
 featuredStats:
   - label: Precision Formats
-    value: 12+
+    value: 4
   - label: Quantization Methods
-    value: 8
+    value: 3
   - label: Data Dimensions
-    value: 6
+    value: 4
+updated: 2026-10-20
 ---
 
-## Beginner's Guide: What is Quantization? Will the Model Get "Dumber"?
+## Separate weights, activations, and cache
 
-In 2026, the biggest anxiety when tinkering with Large Language Models isn't raw compute power; it's **VRAM (Video RAM)**. 
-Take an extreme example: Even at FP16 precision, Llama 4 Maverick 400B requires about 800GB of VRAM just to store the weights. That means even an entire $300,000 server with eight 80GB H100s (640GB total) cannot even fit the weights alone (requiring at least an 8x H200 node or a 16x H100 cluster), let alone run inference. Even a 70B model needs ~140GB — far beyond the limit of any single consumer GPU.
+Quantization maps selected values to lower-bit representations to reduce capacity, traffic, or compute cost. It does not promise a fixed intelligence-loss percentage. See the [hands-on guide](/en/articles/quantization-hands-on-guide/).
 
-This harsh reality forced the adoption of **Quantization**.
+| Label | Meaning | Benefit and condition |
+| --- | --- | --- |
+| W4A16 / W8A16 | Low-bit weights, higher-precision activations | Less weight traffic; speed depends on fused dequantization and workload |
+| W8A8 | Eight-bit weight and activation paths | Compatible hardware and kernels can accelerate matrix multiplication |
+| FP8 KV | Low-precision historical keys / values | Smaller cache; separate scales and quality validation |
+| NF4 + LoRA | Quantized frozen base, higher-precision adapters | Lower training resources, not all-NF4 computation |
 
-**To use a simple analogy:**
-If a high-precision model (FP32/FP16) is like an **uncompressed, ultra-HD BMP image** (massive file size), then quantization is like saving that image as a **JPEG or GIF**.
-This inevitably loses some color depth (numerical precision drops), but if the compression strategy is smart, the human eye (or the user chatting with the model) barely notices the difference, while the file size is reduced by 4x to 8x.
+Even W8A8 implementations often retain higher-precision normalization, routing, accumulation, or output operations. Inspect the actual checkpoint and kernels.
 
-So, by using fewer bits to store LLM weights, we drastically cut VRAM usage and can also leverage the integer math units in GPUs to speed up calculations.
+## 1. INT8, FP8, and BitsAndBytes
 
-But here comes the ultimate question: **After compression, how much "dumber" does the model actually get?** Will it start talking nonsense?
-Before we hit you with hardcore benchmark numbers, let's look at a quick deployment cheat sheet.
+INT8 uses scales to map values into an integer range. FP8 has an exponent but still needs numerical range management. Dynamic scaling can avoid offline calibration; static schemes may need representative data. Universal calibration-free FP8 with less than 1% degradation is not guaranteed.
 
-## One-Minute Decision Tree: If You're in a Hurry
+BitsAndBytes **LLM.int8()** uses INT8 for the main path and higher precision for outliers. The threshold and input determine outlier dimensions; they are not fixed at 0.1%. See the [official documentation](https://huggingface.co/docs/bitsandbytes/reference/nn/linear8bit). This is distinct from weight-only W8A16.
 
-For different users and hardware setups, the choice of LLM quantization has become highly standardized. You can just follow this decision tree:
+## 2. GPTQ, AWQ, and GGUF
+
+GPTQ and AWQ are quantization methods. GGUF is a file format carrying multiple quantization types. Record the method, group size, mixed-precision layout, and backend rather than assigning a hardware-independent speed or accuracy ranking.
+
+Weight-only quantization can accelerate small-batch, memory-bound decode by reducing weight reads. Larger batches may lose that advantage to dequantization and compute costs. The [AWQ paper](https://arxiv.org/abs/2306.00978) combines a method with optimized inference implementations; compression ratio is not a universal speedup.
+
+## 3. Estimate complete memory requirements
 
 ```text
-What's your primary scenario?
-│
-├─ Training (Pre-training / Fine-tuning)
-│   ├─ Unlimited Hardware (H100/H800+) → BF16 mixed precision (or enable FP8 for 2x speedup)
-│   ├─ Barely Enough (A100/4090)       → BF16 mixed precision
-│   └─ VRAM-Starved (< 24GB)           → QLoRA (use NF4 quantized base + high-precision LoRA adapters)
-│
-├─ Datacenter Inference (Pursuing Max Throughput & Lowest Cost)
-│   ├─ Bleeding Edge: Blackwell B200 → NVFP4 (≤1% accuracy loss, 2x throughput of FP8)
-│   ├─ Modern: Hopper H100/H800      → FP8 E4M3 (<1% loss, 1.5x throughput, **zero calibration**)
-│   └─ Legacy: A100/L40S/T4          → INT8 / INT4 (GPTQ/AWQ) or SmoothQuant W8A8
-│
-├─ Geek / Personal GPU Inference (VRAM-limited, just want it to run)
-│   ├─ Dual GPU Setup: 2x RTX 3090/4090 (48GB)    → AWQ/GPTQ 4-bit (70B 4-bit weights ~35GB, requires ~40GB+ with metadata/KV)
-│   ├─ Top Consumer: RTX 4090 (24GB) / RTX 5090 (32GB) → AWQ/GPTQ 4-bit (Recommend models ≤32B)
-│   ├─ Mid-High Tier: RTX 4080 (16GB)             → GPTQ 4-bit (Choose models ≤14B)
-│   └─ Entry-level: RTX 3060/4060 (8~12GB)        → GGUF Q4_K_M (Choose models ≤8B)
-│
-└─ CPU Only or Mac (No discrete NVIDIA GPU)
-    ├─ RAM ≥ 32GB → GGUF Q4_K_M (Best balance of intelligence and generation speed)
-    ├─ RAM ≥ 64GB → GGUF Q5_K_M (Don't care about speed, just want max accuracy)
-    └─ RAM < 32GB → GGUF Q2_K / Q3_K_S (Extreme compression, **intelligence will degrade noticeably**)
+Raw weight lower bound = parameter_count × bits / 8
+Device memory = weights + scales / metadata + KV / recurrent state
+              + activations / communication / graphs / runtime allocations
 ```
 
-See the pattern? **8-bit is a nearly free lunch, 4-bit is the sweet spot for cost-performance, and anything below 2-bit suffers visible "brain damage".**
+Pure 4-bit 70B weights need about 35GB before overhead, so 24–32GB cards do not generally hold the full model plus workspace. Multi-GPU sharding and CPU offload are different configurations. A 4-bit 32B model on a 24GB card also needs real checkpoint, context, and runtime accounting. The RTX 3090 has 24GB; common RTX 4080 configurations have 16GB; 3060 / 4060 variants must be checked individually.
 
----
+| Resources | Starting point |
+| --- | --- |
+| Roughly 8–12GB usable VRAM | Start with a smaller model and short context, then measure |
+| Roughly 16–32GB | Check actual 4-bit 7B / 14B / 32B checkpoint and cache requirements |
+| Multiple GPUs | Include communication, uneven sharding, and replicated caches |
+| CPU / unified memory | Check capacity, bandwidth, backend support, and latency |
 
-## Level 1 Cognition: The Illusion of INT8 Quantization
+Hardware formats and efficient engine kernels are separate requirements. Verify the deployed version's support matrix; see [vLLM serving](/en/articles/vllm-serving-guide/).
 
-After reading the decision tree, beginners often encounter a massive point of confusion:
-> **"Don't technical articles say that INT8 quantization causes the model to crash and output garbage? Why is everyone in the community using INT8 just fine?"**
+## 4. Report quality with defined metrics
 
-Understanding this concept is the master key to decoding LLM deployment.
-**The answer is: the "INT8 Quantization" frequently talked about by the community is usually NOT full quantization (W8A8), but "Weight-Only" quantization.**
+Hold revision, tokenizer, dataset, and inference settings constant. PPL is exp(mean negative log likelihood), dependent on corpus, tokenization, and evaluation window. Relative PPL change is not an intelligence-loss percentage.
 
-Let's break down what's actually happening:
+An accuracy change from 70.24% to 69.64% is **0.60 percentage points**, or roughly 0.85% relative decline. Business acceptance thresholds must be explicit; there is no universal PPL increase of 0.1–0.2 or one-percentage-point deployment standard.
 
-| "Community Term" | Actual Underlying Operation | What Gets Quantized? | Accuracy Loss |
-|----------|---------|----------|---------|
-| "I quantized my 70B to **INT8** using GPTQ" | GPTQ **Weight-Only** Quant | **Only the weight matrices are compressed to INT8. During math ops, they are decompressed to multiply with high-precision FP16 activations.** | ≈0% (Lossless) |
-| "Loaded INT8 using BitsAndBytes" | BnB LLM.int8() Vector-wise Mixed Quant | Weights in INT8, 0.1% outlier dimensions kept in FP16, rest in INT8xINT8 GEMM | ≈0% |
-| "Deployed INT8 via SmoothQuant" | INT8 **Full Quantization** (W8A8) | Both weights and activations are **pure INT8** (math is pure 8-bit integer multiplication) | ≈0% (But the smoothing engineering is exhausting) |
-| "Enabled **FP8** in vLLM" | FP8 **Full Quantization** (W8A8) | Both weights and activations are **FP8** (racing on native float units) | <1% (Out-of-the-box) |
+| Record | Required information |
+| --- | --- |
+| Method | Revision, W / A / KV precision, group size, calibration set |
+| Quality | Task success, numeric / citation / format errors, repeated-run intervals |
+| Speed | TTFT, TPOT, useful throughput at fixed SLA, lengths, and concurrency |
+| Capacity | Per-rank weights, cache, and peak allocations |
 
-### Two Completely Different Paths
+See [evaluation methodology](/en/articles/llm-evaluation-guide/). Publish raw results rather than labels such as perfectly passed.
 
-So, in reality, there are two distinct paths in quantization, solving completely different pain points:
+## 5. NF4, low-bit training, and hardware formats
 
-1. **Path 1: My GPU is too small, I can't fit the model (Weight-Only INT8/INT4)**
-   - **How it works:** Like zipping a large file. Weights are loaded in compressed form and dequantized during token execution.
-   - **Pros:** Massively saves VRAM with **minimal risk of model collapse**, as activations retain full precision.
-   - **Latency & Speed:** In single-request or small batch autoregressive decode, LLM inference is strictly **memory-bandwidth bound**. Reducing weight transfer bytes from VRAM by 2x-4x allows modern GEMV kernels (such as AWQ and Marlin) to achieve **1.5x - 3x faster decoding latency**, rather than slowing down! Only when batch concurrency is saturated (compute-bound) does weight-only quantization plateau relative to W8A8 Tensor Cores.
+NF4 is designed around approximately normally distributed values; real weights need not be perfectly Gaussian. QLoRA still uses scales and higher-precision adapters; see the [QLoRA paper](https://arxiv.org/abs/2305.14314).
 
-2. **Path 2: My GPUs fit the model, but traffic is too high, I need maximum throughput (W8A8 Full Quantization)**
-   - **How it works:** You compress both the storage weights AND the compute activations, unleashing the blazing-fast INT8 or FP8 Tensor Cores inside the GPU.
-   - **The INT8 Pain Point:** If you use the `INT8` structure here, the occasional massive outlier numbers in activations will blow out the integer calculation grid, causing instant gibberish. You must use cumbersome plugins like `SmoothQuant` to painstakingly massage the numbers offline.
-   - **Why FP8 is God-Tier:** The `FP8` floating-point structure has built-in exponent bits, acting like a natural shock absorber. It requires zero plugins or calibration datasets. You enable it, and your throughput immediately jumps by 1.5x.
-
-> **Phase Summary:** If you are running on personal consumer cards (3090/4090), stick to downloading INT4 weight-only models via GPTQ or AWQ. If you are handling massive concurrent traffic in a datacenter with H100s, **FP8 (W8A8)** is the undisputed king—don't torture yourself trying to calibrate INT8.
-
----
-
-## Level 2 Tool Selection: GPTQ vs. AWQ vs. GGUF?
-
-Now that we know 90% of regular users are dealing with weight-only quantization (like 4-bit weights), what's the difference between the mainstream formats?
-
-| Dimension | GPTQ | AWQ | GGUF (llama.cpp) |
-|------|------|-----|------|
-| **Core Idea** | Uses Hessian matrices to compute error compensation. | Uses heuristics to find and protect the "1% most salient weights". | Group-wise mixed quantization (e.g., mixing precision across layers). |
-| **Accuracy Retention** | Excellent | **Best** | Highly flexible (Q2~Q8) |
-| **Setup Difficulty** | Needs calibration dataset (but open-source repos usually pre-bake it for you) | Needs calibration dataset | None whatsoever; just run it |
-| **Inference Speed (NVIDIA)** | **Fastest** (pairs great with vLLM/TRT-LLM) | Very Fast | Moderate-to-Slow |
-| **Runs On** | NVIDIA GPU (Server staple) | NVIDIA GPU (For accuracy purists) | **Anything**: Mac, Windows CPU, even a Raspberry Pi! |
-
-**Quick Selection Guide**:
-- If you have OCD and want to **defend the model's absolute baseline intelligence** under strict VRAM limits → Use **AWQ** 
-- If you are deploying an API and want to **maximize tokens-per-second** → Get a **GPTQ** model and run it on [vLLM](/en/articles/vllm-serving-guide/).
-- If your machine **only has an Apple Silicon Mac or Intel CPU** → Download a **GGUF** format and enjoy it via Ollama / LM Studio. We usually recommend `Q4_K_M`.
-
----
-
-## Core Data Evidence: Show Me the Numbers
-
-We can't just claim "how much dumber" it gets without proof. Let's look at real Benchmark data.
-
-### The Accuracy Loss Panorama
-
-| Precision Level | Representative Tech | Overall Intelligence Drop | Recommended Scenario | VRAM Compression |
-|---------|---------|---------|---------|----------|
-| **16-bit Baseline** | BF16 / FP16 | 0% | Standard alignment / R&D | 1x |
-| **8-bit Full Quant** | FP8 (E4M3) | **<1%** | Datacenter No.1 Choice (H100/H800) | 2x |
-| **8-bit Weight-Only**| INT8 GPTQ | **≈0%** | Standard clusters (A100 and below) | 2x |
-| **4-bit Weight-Only**| INT4 AWQ / NF4 QLoRA | **1%~5%** | **Ultimate Value**, Personal PC standard | 4x |
-| **4-bit Full Quant** | NVFP4 (Blackwell) | **≤1%** | Next-gen supercomputer necessity | 4x |
-| **2~3 bit Compress** | GGUF Q2_K | **5%~15%+** | Mobile playgrounds, high error tolerance | 5~8x |
-| **Extreme 1.58-bit**| BitNet b1.58 | **≈0%** | Bleeding edge (**Must be trained from scratch**) | ~8x |
-
-### The Truth Mirror: Llama 2 70B Perplexity Test
-
-Perplexity (PPL) measures the uncertainty of an LLM's text generation. **Lower is better.**
-
-| Evaluation Subject | Precision & Type | Perplexity PPL (Lower=Better) | Degradation vs FP16 | VRAM Needed |
-|------|------|-----|---------------|----------|
-| **Pure Original** | FP16 (Baseline) | 3.12~3.17 | — | ~140 GB |
-| **8-bit Lossless** | INT8 - GPTQ / HQQ | 3.12 | **≈0%** (Virtually identical) | ~70 GB |
-| **8-bit Micro-loss**| INT8 - BitsAndBytes| 3.17 | **≈0~1.6%** | ~70 GB |
-| **4-bit Mild Pain** | INT4 - AWQ (g64) | 3.20 | **≈1.0~2.6%** | ~35 GB |
-| **4-bit Mild Pain** | INT4 - GPTQ (g64) | 3.23 | **≈1.9~3.5%** | ~35 GB |
-
-> **What the data proves:** Because a 70B model is huge, its internal redundancy creates massive tolerance for quantization. INT4 degradation is firmly kept under 3%. While casually chatting with the model, you will never notice a 3% intelligence drop, but your VRAM requirement drops from "Server Only" to "Single RTX Desktop."
-
-### The King of Production: FP8 vs BF16 (Qwen3-32B)
-
-If we go full FP8 on high-end cards like H100, does it really not drop?
-
-| Metric | BF16 (Baseline) | FP8 E4M3 Full Quantization | Gap |
-|---------|------------|----------|------|
-| **MMLU-Pro (Heavy Knowledge Logic)** | 70.24% | 69.64% | Lost a mere **0.6%** |
-| **HumanEval (Heavy Code Generation)** | Passed ✓ | Passed ✓ | **≈0% Drop** |
-| **Throughput Speed** | 1x | Flying: **~1.5x** | +50% Efficiency |
-
-### Future Tech: Is 1.58-bit (BitNet) Black Magic?
-
-| Metric | Traditional FP16 Architecture | Microsoft's BitNet b1.58 |
-|------|------------------|-------------|
-| **Perplexity PPL** | Baseline | **Virtually Matched!** |
-| **Extreme Inference Speed**| 1x | Surges **2.71x ~ 8.9x** |
-| **VRAM Footprint** | 1x | Incredibly tiny **~0.28x** (-72%) |
-
-> **Severe Warning:** Many influencers claim you can "compress" existing models into 1.58-bit. This is false. 1.58-bit ({ -1, 0, 1 } ternary math) cannot be achieved via post-training compression—it will turn the model braindead. It **must be trained from absolute scratch with special architectures, burning millions of dollars in compute.**
-
----
-
-## Deep Dive: Why is FP8 So Smooth While INT8 Struggles?
-
-We mentioned repeatedly that for "Full Quantization" (compressing both weights and activations), FP8 is a god, while INT8 needs the painful SmoothQuant tuning. 
-This is due to a "genetic defect" inherent to LLMs: the presence of massive, sudden **Activation Outliers**.
-
-When a model surpasses 6.7B parameters, its data streams routinely spike with "monster numbers" that are fifty to a hundred times larger than normal values.
-
-**If we use an INT8 uniform grid to catch them:**
-```text
-Imagine 99.9% of our values are between [-0.3, 0.3], but suddenly a [60.0] appears.
-
-INT8's structure: It only has uniformly sliced integer slots from [-128 to 127].
-The Tragedy: To ensure the [60.0] doesn't crash the system, the global "ruler scaling factor" must be stretched wildly.
-Result: The [60.0] is safely stored as the number 127.
-BUT! All those normal values like [0.05] and [0.15], under this massive new ruler, get entirely crushed and rounded down to [0].
-At this moment, the model loses all its fine-grained texture and starts hallucinating.
-```
-
-**If we use the FP8 E4M3 floating-point structure:**
-```text
-FP8 has 1 sign bit + 4 'spring-loaded' exponent bits + 3 precise mantissa bits.
-The Miracle: The exponent bits (E) act as a natural dynamic zoom.
-When processing 0.05, it pulls out the (E=-4) microscope, precisely recording the texture as 0.0078.
-When processing 60, it automatically switches to the (E=5) macro lens, packing it roughly as 60. The mantissa is rougher, but the system doesn't crash.
-Both the big and small numbers coexist peacefully. Extremely smooth.
-```
-This perfectly explains why NVIDIA went out of its way to forge dedicated native FP8 Tensor Cores in their Hopper architecture.
-
-## Architectural Evolution: Why NF4 and not INT4?
-
-Why did QLoRA—the monument of the fine-tuning world—use a weird format called `NF4 (NormalFloat 4-bit)` instead of the universally common `INT4`?
-
-**Simple explanation: Because we need to use our limited resources where they matter most.**
-
-- `INT4` is a rigid ruler. It rigidly marks 16 equal distances: -8, -7, -6... 0... 6, 7.
-- However, an LLM's weight distribution is usually a perfect Gaussian **Normal Distribution (massive bulge in the middle around 0, incredibly thin on the extreme ends)**. The vast majority of weights are squeezed around 0.
-- Thus, `NF4` casts a spell on these 16 slots: It heavily concentrates over 10 ultra-fine markers right in the middle near 0, and only sparsely places a few markers at the extreme tail ends.
-- **Information-Theoretic Optimality Achieved**: It perfectly hugs the statistical laws, allowing a meager 4-bit capacity to express detail far beyond its weight class.
-
-## The End Game: Blackwell and the OCP MX Microscaling Standard
-
-In recent years, tech giants realized that fighting over software wasn't enough; they needed a unified hardware standard. First proposed in late 2023 and formalized in 2024, AMD, Arm, Intel, Meta, Microsoft, NVIDIA, Qualcomm, and others unprecedentedly united to forge the `OCP Microscaling (MX)` specification.
-
-Its core idea is highly disruptive:
-Stop arguing about FP8 vs INT8. Just use a technique called **"Communal Scaling Factors"** (e.g., MXFP6, MXFP4).
-Force 32 neighboring neurons to share the exact same 8-bit dynamic range "exponent ceiling".
-By the time NVIDIA applied their ultimate engineering magic in the Blackwell B200, this evolved into `NVFP4`: mandating scale-sharing every 16 neurons.
-This magic trick means: **Although it essentially only takes up 4.5 bits of physical space (FP4-level compression), it retains a terrifying accuracy profile comparable to FP8 distributions (<1% loss). It is the true next-generation throughput deity.**
-
-## Final Conclusion
-
-Quantization is not a "lossy, cheap substitute"; it is the very bedrock that keeps LLMs operational in the real world. Remember these three maxims:
-1. **For Personal Hacking**: Embrace 4-bit AWQ / GGUF without hesitation (see our hands-on workflows in the [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/)). Experience incredibly powerful models for a fraction of the hardware cost.
-2. **For Production inference endpoints (with modern hardware)**: Abandon complex SmoothQuant engineering. Mindlessly run FP8 inside [vLLM](/en/articles/vllm-serving-guide/). It is the officially anointed optimal solution.
-3. **Always Benchmark the Truth**: Perplexity is a good mirror, but for tasks requiring extreme logical rigor like coding or math, any compression below 4-bit might break your pipeline. Your model is only truly "running" if it survives your actual business tasks.
-
----
+Ternary BitNet-style models require suitable training or adaptation, not an arbitrary lossless conversion of any FP16 checkpoint. MXFP4 and NVFP4 also have different scaling and execution paths. Matching bit counts do not make checkpoints interchangeable.
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: How should I choose between FP16 and BF16 for LLM training and inference?
-Unless your hardware is constrained to legacy architectures (such as Volta or Turing cards lacking native bfloat16 Tensor Cores), **BF16** is almost universally the preferred choice. BF16 shares the exact same 8-bit dynamic range exponent as FP32, making it virtually immune to underflow and overflow without requiring dynamic loss scaling during training or fine-tuning. For serving modern foundation models at scale, BF16 integrates seamlessly into high-throughput backends like our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
+### Q1: Is eight-bit always lossless and four-bit always 1–5% worse?
+No. Model, method, data, and task matter; evaluate coding, mathematics, and long context separately.
 
-### Q2: What accuracy loss threshold is considered acceptable when quantizing for production?
-In enterprise deployments, an acceptable threshold typically requires a perplexity (PPL) increase under 0.1 to 0.2 and a downstream task accuracy drop within 1% across core benchmarks like MMLU or GSM8k. While creative chat and summarization applications easily tolerate the ~2-3% drop of 4-bit AWQ or GPTQ, tasks demanding mathematical or syntactic precision (such as code generation) should use FP8 or refer to our [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/) to protect sensitive weight outliers.
+### Q2: Why can weight-only quantization be faster?
+It reduces memory traffic when that is the bottleneck. Kernel fusion, batch, and hardware determine actual gains.
 
-### Q3: When should teams adopt mixed precision instead of full-model uniform quantization?
-Mixed precision is essential during model pre-training, fine-tuning (e.g., QLoRA), and inference pipelines where specific layers exhibit high numerical sensitivity. Typically, bulk matrix multiplications in feed-forward layers run on INT8/FP8 Tensor Cores, while fragile operations like token embeddings, LayerNorm, and Softmax remain in BF16 or FP32 to prevent numerical degradation.
+### Q3: Should FP8 weights and KV be enabled together?
+Validate each before combining them. KV scales and backend support are separate concerns.
 
----
-
-## Frequently Asked Questions (FAQ)
-
-### Q4: How can I resolve Out-of-Memory (OOM) issues during the quantization process?
-When quantizing large models, you can use block-wise loading techniques to control VRAM usage. For more detailed operational advice, please refer to the best practices in our [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/).
-
-### Q5: How well does the vLLM inference framework support various quantization formats?
-Mainstream quantization formats like AWQ and GPTQ are currently supported in most inference frameworks. For detailed information on using these formats in production environments, please consult our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
+### Q4: Which precision should fine-tuning use?
+Choose BF16 / FP16 or QLoRA based on the base model, memory, and training stack, then validate stability. BF16's larger range does not make overflow impossible. See [fine-tuning](/en/articles/fine-tuning-guide/).

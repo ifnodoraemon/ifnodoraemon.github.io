@@ -1,82 +1,61 @@
 ---
-title: "Demystifying 2026 Architecture Breakthroughs: How Kimi Delta Attention and DeepSeek MLA Conquered the Memory Wall"
+title: "Kimi KDA, DeepSeek MLA and V4 CSA/HCA: Long-Context Cache and GPU Memory"
 slug: kimi-kda-deepseek-mla-architecture
 date: 2026-09-07
 tag: Architecture Evolution
 tagClass: tag-cyan
 category: Inference Systems
-description: "In the era of million-token context windows and trillion-parameter MoE, how KV Cache memory saturation became the core bottleneck. Deep mathematical and architectural breakdown of Moonshot's KDA and DeepSeek's MLA low-rank projections."
+description: "Understand KDA recurrent state, MLA latent caches, and DeepSeek-V4 CSA/HCA sequence compression, with explicit memory formulas and reproducible measurement rules."
+updated: 2026-10-20
 ---
 
-In 2026, the decisive technological competition among frontier LLMs is not merely parameter scale, but **who can process million-token contexts with minimal GPU memory footprint and maximum decoding throughput**.
+## Distinguish cache representations from model-wide behavior
 
-As context horizons expanded to 1,000,000 (1M) and even 10,000,000 (10M) tokens, the primary physical bottleneck shifted from raw compute (TFLOPS) to the infamous **Memory Wall and exponential KV Cache bloat**.
+MLA compresses each historical token's representation. KDA replaces a full historical cache in a recurrent layer with fixed-size state. DeepSeek-V4's CSA / HCA also compress the sequence dimension. These mechanisms need separate capacity, compute, and quality analysis.
 
-To solve this challenge, two Chinese AI leaders delivered distinct mathematical breakthroughs:
-* **Moonshot AI's Kimi Delta Attention (KDA)**
-* **DeepSeek's Multi-head Latent Attention (MLA)**
+## 1. A defined MHA / GQA baseline
 
-This article provides an in-depth breakdown of their mathematical formulations and matrix projections to reveal how they dismantled the memory wall.
+```text
+KV_bytes = 2 × batch × sequence_length × layers × kv_heads × head_dim × bytes_per_element
+```
 
----
+For batch=1, a KV hidden dimension of 2048, 80 layers, and FP16, each token needs 655,360 bytes: about 2.62GB at 4,000 tokens and 655.36GB at one million. These are decimal GB; divide bytes by 2^30 for GiB. The example is not a universal estimate for every large model.
 
-## 1. The KV Cache Memory Crisis
+## 2. DeepSeek-V2 / V3 MLA
 
-In conventional Multi-Head Attention (MHA), storing Key-Value tensors across sequence length L, hidden dimension D, and layer count N yields:
+MLA caches a low-dimensional latent representation and separate positional keys. Matrix absorption can avoid fully reconstructing historical multi-head K/V at every decode step. See [MLA matrix absorption](/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/).
 
-KV Cache Size = 2 × B × L × N × D × sizeof(FP16)
+Cache still grows linearly with context. Its ratio depends on dimensions, layers, and precision. MLA is a trained architecture, not a lossless runtime switch for an arbitrary GQA checkpoint.
 
-For a typical 100B+ parameter model utilizing GQA (Grouped Query Attention) with KV hidden dimension D=2048 and N=80 layers:
-* At L = 4K, a single request consumes **2.6 GB**;
-* At L = 1M, KV Cache explodes to **655 GB**!
+## 3. KDA states and the Kimi K3 hybrid
 
-On an 8x H100 GPU server (640GB total VRAM), **a single 1M context request triggers out-of-memory (OOM)** before any concurrency can be served. For hardware considerations and cluster driver management, refer to our guide on [Mapping the NVIDIA GPU Driver Stack](/en/articles/nvidia-gpu-package-architecture/).
+KDA includes gating, decay, and delta updates. `S_t = S_(t-1) + ΔS_t` is only an illustration. At fixed model dimensions, one recurrent layer has sequence-independent state size; distinguish per-token updates from total sequence processing.
 
----
+The [Kimi K3 model card](https://huggingface.co/moonshotai/Kimi-K3) specifies 69 KDA layers and 24 Gated MLA layers. The complete model therefore retains a context-dependent cache component. State snapshots, prefix reuse, and concurrency affect serving memory too; see [prefix caching](/en/articles/prefix-caching-radix-attention-internals/).
 
-## 2. DeepSeek MLA: Low-Rank Latent Compression
+## 4. DeepSeek-V4 CSA and HCA
 
-DeepSeek's Multi-head Latent Attention compresses the hidden representations into an ultra-compact latent space:
+The [DeepSeek-V4 model card](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro) names **Compressed Sparse Attention** and **Heavily Compressed Attention**. Sequence compression and sparse access require different accounting from V3 MLA's per-token latent cache. Use the checkpoint and engine's actual layout.
 
-c_t^{KV} = W^{DKV} h_t
+## 5. Design comparable measurements
 
-where latent dimension d_c << N_heads × d_h. **Only the compressed latent representation c_t^{KV} and the decoupled RoPE keys are retained in GPU memory**.
+| Area | Required controls |
+| --- | --- |
+| Model | Exact revision, weight / cache formats, layer composition |
+| Parallelism | TP / PP / DP, cache replication and state sharding |
+| Workload | Input / output lengths, concurrency, shared prefixes, warm-up |
+| Capacity | Per-rank weights, activations, cache, communication, graphs |
+| Quality and speed | TTFT, TPOT, throughput at SLA, retrieval and citation accuracy |
 
-During decoding, keys and values are projected on the fly. Because projection matrices can be fused directly into output layers, KV Cache memory drops by over **75%** while fully preserving independent multi-head attention expressive power.
-
----
-
-## 3. Kimi Delta Attention (KDA): Incremental State Recurrence
-
-While DeepSeek compresses along the spatial dimension, Moonshot AI's **Kimi Delta Attention (KDA)** transforms temporal attention into a recurrent state delta formulation:
-
-S_t = S_{t-1} + ΔS_t
-
-Rather than attending pairwise across all historical tokens, KDA dynamically tracks the semantic delta of the current token relative to cumulative memory S_{t-1}. In terms of full-network topology, **Kimi K3 utilizes a hybrid structure of 69 KDA layers and 24 Gated MLA layers**. While each KDA layer maintains a strictly constant state tensor across expanding sequence lengths, the 24 Gated MLA layers preserve high-fidelity associative lookup with mildly scaling KV cache, keeping aggregate memory growth exceptionally modest (from 8.6 GB at 100K to only 42 GB at 1M tokens).
-
----
-
-## 4. Empirical Performance Benchmarks
-
-Stress testing across 8x 80GB GPU nodes:
-
-| Metric | Baseline GQA | DeepSeek MLA | Kimi KDA |
-| :--- | :--- | :--- | :--- |
-| **100K Context VRAM** | 64.2 GB | 14.8 GB (-77%) | **8.6 GB (-86%)** |
-| **1M Context VRAM** | 642 GB (OOM) | 148 GB (Concurrent) | **42 GB (Minimal constant)**|
-| **Needle in a Haystack** | 100% | 99.8% | 99.7% |
-| **Decoding Speed** | 22 t/s | 95 t/s | **110 t/s** |
-
-Both architectural paradigms prove that mathematical optimization can break physical hardware boundaries, enabling high-concurrency long-context intelligence for production enterprise systems. For deep-dive implementations of MoE kernels, expert parallelism, and All-to-All communication overlapping, see [MoE Inference Engines: Expert Parallelism, Dynamic Routing & All-to-All Overlap](/en/articles/moe-expert-parallelism-inference-engine/).
-
----
-
----
+Without this information, numbers such as 8.6GB at 100K, 42GB at 1M, or 110 tokens/s are not reproducible benchmarks. Architectural claims require controlled workloads and quality checks. See the [deployment guide](/en/articles/deepseek-v4-kimi-k3-deployment-guide/).
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: Can DeepSeek MLA be stacked with FP8 or INT4 quantization?
-Yes. While MLA reduces the dimensionality of stored key-value vectors via latent projections, weights and the latent KV representations can still be quantized to FP8 or INT4, reducing aggregate VRAM demand significantly. For detailed quantization benchmarks, see our [LLM Quantization Precision Guide](/en/articles/quantization-precision-guide/).
+### Q1: Do MLA or KDA eliminate all KV cache?
+No. MLA keeps compressed history; recurrent KDA layers have fixed state, but K3's Gated MLA layers retain caches.
 
-### Q2: How does Kimi KDA compare with pure SSM / Mamba architectures?
-Pure SSMs frequently suffer from information decay on exact multi-hop recall benchmarks. KDA resolves this by retaining a direct attention query mechanism while compressing contextual background token redundancy into an incremental recurrent delta state.
+### Q2: Can these architectures use lower precision?
+It depends on model and backend. Weight quantization, KV precision, and recurrent-state precision are separate controls; test them separately. See the [quantization guide](/en/articles/quantization-hands-on-guide/).
+
+### Q3: Is KDA necessarily more accurate at retrieval?
+No quality ranking follows from the recurrence alone. Measure matching tasks, sequence lengths, and reasoning budgets.

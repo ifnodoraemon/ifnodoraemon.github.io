@@ -20,6 +20,7 @@ extraTags:
   - gVisor
   - cgroups v2
   - Sysctl
+updated: 2026-10-20
 ---
 
 ## Introduction: Breaking runc's "Shared-Kernel Original Sin" and Node Freeze Flaws
@@ -58,8 +59,8 @@ flowchart TD
     subgraph EventedPLEG["Evented PLEG Architecture (Feature-Gated EventedPLEG via CRI Stream)"]
         direction TB
         E1["containerd detects container state changes"] -->|"gRPC Streaming Push<br/>GetContainerEvents()"| E2["Kubelet Evented PLEG Listener"]
-        E2 -->|"Microsecond real-time event delivery"| E3["Kubelet syncLoop processes immediately"]
-        E4["Fallback reconciliation timer (Polls every 5 minutes)" ] -.-> E2
+        E2 -->|"Container lifecycle event delivery"| E3["Kubelet syncLoop processes changes"]
+        E4["Polling fallback and health checks (version-dependent intervals)" ] -.-> E2
     end
 ```
 
@@ -69,12 +70,11 @@ Traditional PLEG relies on **exhaustive snapshot diffing (Relist)**:
 - It diffs the current state against the previous snapshot. If any container status has changed, it generates an internal lifecycle event for `eventChannel`;
 - **The Cascading Freeze Trap**: When a node hosts over 100 Pods, or when heavy disk I/O drives containerd processes into uninterruptible D-state sleeps, CRI gRPC calls balloon from 10ms to several seconds. If a relist cannot complete within 3 minutes, Kubelet declares PLEG broken, marks the node `NotReady`, and triggers cluster-wide evictions!
 
-### 1.2 The Production Solution: Evented PLEG (Event Streaming)
-To eliminate polling overhead, Kubernetes and containerd introduced **Evented PLEG** (KEP-3386):
-1. **Streaming gRPC Connection**: At startup, Kubelet opens a persistent streaming gRPC subscription to containerd via `runtimeService.GetContainerEvents()`;
-2. **Push-Based Notifications**: As containers start, stop, or pause, containerd pushes lifecycle events directly into the stream in **microseconds**, bypassing the need to rescan the container inventory every second;
-3. **Extended Fallback Intervals**: To guard against rare missed events, the periodic relist interval is lengthened from 1 second to **5 minutes (300 seconds)**;
-4. **Production Benefit**: Kubelet CPU utilization **drops by up to 80%**, and spurious `PLEG is not healthy` node flaps are eliminated!
+### 1.2 Evented PLEG: Event Delivery and Polling Fallback
+
+Evented PLEG receives container lifecycle changes through CRI `GetContainerEvents()`, reducing frequent full-relist work. Event latency, relist intervals, and CPU savings depend on Kubernetes version, runtime support, and node load. It does not guarantee microsecond notification or an 80% CPU reduction. An unhealthy event path still requires polling fallback and monitoring.
+
+Check the version-specific `EventedPLEG` feature gate and CRI implementation. Do not describe the feature as universally enabled and GA across clusters. See [KEP-3386](https://github.com/kubernetes/enhancements/tree/master/keps/sig-node/3386-kubelet-evented-pleg).
 
 ---
 
@@ -301,10 +301,8 @@ In Chapter 11, **[Hacking the Kubernetes Control Plane: Aggregated APIServers, A
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: Why does traditional Relist PLEG trigger "PLEG is not healthy" errors, and how does Evented PLEG resolve it?
-**Root Cause: The fragility of synchronous polling under load**.
-Traditional PLEG issues `ListPodSandbox` and `ListContainers` every single second. On nodes running heavy workloads or experiencing I/O bottlenecks, these gRPC calls stall. If PLEG misses heartbeats for 3 minutes, Kubelet flags the node as `NotReady`.
-**The Evented PLEG Fix**: By establishing a persistent gRPC event stream with containerd, the runtime pushes container lifecycle events immediately upon occurrence. Fallback polling is relaxed from 1 second to 5 minutes, permanently removing queuing latency and preventing false node failures.
+### Q1: How does Evented PLEG reduce traditional PLEG overhead?
+Relist depends on runtime queries, so runtime or disk stalls can delay state updates. Evented PLEG adds push delivery to reduce polling. It cannot eliminate every node failure; compatibility checks, fallback, and health monitoring remain necessary.
 
 ### Q2: How should architects choose between Kata Containers and gVisor in multi-tenant environments?
 **Syscall Profile and Workload Lifespan determine the choice**:

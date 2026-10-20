@@ -5,206 +5,117 @@ date: 2026-03-01
 tag: 模型横评
 tagClass: tag-amber
 category: 评测与趋势
-description: 从推理能力、编码水平、上下文窗口到 API 定价，全方位对比 2026 年三大主流大模型的实际表现与选型策略。
+description: "比较 GPT-5.4、Claude Opus/Sonnet 4.6 与 Gemini 3.1 Pro 的 API 能力、Token 价格和工程边界，给出可核验的调用示例、评测方法与自建成本公式。"
 featured: true
 featuredStats:
-  - label: 测试用例
-    value: 50+
+  - label: 比较模型
+    value: 4
   - label: 评测维度
     value: 4
   - label: 顶级模型
     value: 3
+updated: 2026-10-20
 ---
 
-## 模型版本时间线
+## 比较范围与证据
 
-在进行对比之前，先梳理三大厂商在 2025-2026 年的模型发布节奏：
+本文保留 GPT-5.4、Claude Opus／Sonnet 4.6、Gemini 3.1 Pro 这一组模型，讨论 API 工程选型，不把它们称为今天所有模型中的最新版本。规格依据厂商文档；没有统一复测记录的分数不用于排名。国产开放权重模型见 [Kimi／GLM／DeepSeek 比较](/articles/domestic-llm-comparison-2026/)。
 
-| 厂商 | 模型 | 发布日期 | 定位 |
-|------|------|----------|------|
-| OpenAI | GPT-5.0 | 2025 年 8 月 7 日 | 首发统一多模态模型 |
-| OpenAI | GPT-5.1 | 2025 年 11 月 | 稳定性与效率优化 |
-| OpenAI | GPT-5.3-Codex | 2026 年 2 月 | 专业编码模型 |
-| OpenAI | GPT-5.4 / 5.4 Thinking | 2026 年 3 月 5 日 | 最强前沿模型 + 原生计算机操控 |
-| Anthropic | Claude Opus 4.0 | 2025 年 5 月 22 日 | Claude 4 系列首发 |
-| Anthropic | Claude Opus 4.5 | 2025 年 11 月 24 日 | 编码与 Agent 最强 |
-| Anthropic | Claude Opus 4.6 | 2026 年 2 月 5 日 | Agent Teams + PPT |
-| Anthropic | Claude Sonnet 4.6 | 2026 年 2 月 17 日 | Opus 级性能中端价 |
-| Google | Gemini 3.0 Pro | 2025 年 11 月 18 日 | Deep Think 推理 |
-| Google | Gemini 3.1 Pro | 2026 年 2 月 19 日 | 百万上下文增强 |
+## 一、能力和 API 边界
 
-> **本文对比基准**：GPT-5.4 Thinking、Claude Sonnet 4.6 / Opus 4.6、Gemini 3.1 Pro（截至 2026 年 3 月最新版本）
+| 模型 | 输入与输出 | 上下文说明 | 工程关注点 |
+| --- | --- | --- | --- |
+| GPT-5.4 | 文本、图像输入；文本输出，不直接接收音频 | 1.05M 总窗口，最大输出 128K；输入与输出共享预算 | reasoning effort、Responses 工具、计算机操作 |
+| Claude Opus／Sonnet 4.6 | 文本与图像输入；PDF 由文档处理能力支持 | 1M 上下文的适用条件见对应模型文档 | Adaptive Thinking、工具参数、平台可用版本 |
+| Gemini 3.1 Pro Preview | 多模态理解模型；接口支持按模型文档核对 | 长上下文及输出限制按具体 Preview ID 查询 | 预览版 ID、媒体计量、工具及 thinking 配置 |
 
-## 核心指标对比
+资料：[GPT-5.4](https://developers.openai.com/api/docs/models/gpt-5.4)、[Opus 4.6](https://platform.claude.com/docs/en/models/opus-4-6/overview)、[Sonnet 4.6](https://platform.claude.com/docs/en/models/sonnet-4-6/overview)、[Gemini 3.1 Pro Preview](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-pro-preview)。
 
-### 基础参数
+ChatGPT 产品中的 Thinking 名称不等于一个 `gpt-5.4-thinking` API ID；Claude Code 的 Agent Teams 也不是裸模型 API 自动提供的协作系统。Gemini 的模型 thinking 参数与独立产品模式需要分别核对，不能仅用“Deep Think”概括全部接口。
 
-| 指标 | GPT-5.4 | Claude 4.6 系列 | Gemini 3.1 Pro |
-|------|---------|----------------|----------------|
-| 上下文 | 1.05M tokens（922K 入 / 128K 出） | 200K（标准）/ 1M（Beta） | 1M 入 / 64K 出 |
-| Thinking 模式 | 内置 + Extreme 模式 | Extended / Adaptive Thinking | Deep Think |
-| 多模态 | 文本 / 图像 | 文本 / 图像 / PDF | 文本 / 图像 / 视频 / 音频 |
-| 计算机操控 | 原生支持（OSWorld 75%） | Computer Use | — |
-| 知识截止 | 2025 年 8 月 | — | — |
+## 二、可追溯的 Token 价格
 
-### API 定价（每 100 万 tokens）
+以下为标准 Token 价格示例，单位美元／百万 Token。长上下文、缓存写入、批处理、地区和工具费用需另行核算，不应只比较输入单价。
 
-| 模型 | 输入价格 | 输出价格 | 缓存输入 |  备注 |
-|------|---------|---------|---------|------|
-| GPT-5.4 | $2.50 | $15.00 | — | 最新前沿模型 |
-| GPT-5 | $1.25 | $10.00 | $0.13 | 默认 ChatGPT 模型 |
-| GPT-5-mini | $0.25 | $2.00 | — | 轻量级 |
-| Claude Opus 4.6 | $5.00 | $25.00 | $0.50 | 旗舰推理 |
-| Claude Sonnet 4.6 | $3.00 | $15.00 | $0.30 | 性价比之王 |
-| Gemini 3.1 Pro（≤200K） | $2.00 | $12.00 | — | 标准价 |
-| Gemini 3.1 Pro（>200K） | $4.00 | $18.00 | — | 长上下文 |
+| 模型 | 输入 | 输出 | 缓存输入 |
+| --- | --- | --- | --- |
+| GPT-5.4 | 2.50 | 15.00 | 0.25 |
+| Claude Opus 4.6 | 5.00 | 25.00 | 0.50（缓存读取） |
+| Claude Sonnet 4.6 | 3.00 | 15.00 | 0.30（缓存读取） |
+| Gemini 3.1 Pro Preview | 按输入长度档位核对 | 按输入长度档位核对 | 按缓存及存储计费核对 |
 
-> **成本提示**：Claude 支持 Prompt Caching（最高省 90%）和 Batch API（50% 折扣）；Gemini Batch API 同样 50% 折扣。GPT-5.4 的 Tool Search 功能可减少近一半 token 消耗。
+出处：[OpenAI 模型价格](https://developers.openai.com/api/docs/models/gpt-5.4)、[Claude 模型文档](https://platform.claude.com/docs/en/models/overview)、[Gemini 价格表](https://ai.google.dev/gemini-api/docs/pricing)。GPT-5.4 超过 272K 输入 Token 时有整次请求的长上下文计费倍率，不能把标准价用于所有百万上下文请求。
 
-### 推理与编码评测
+## 三、如何公平比较推理、编码和 Agent 能力
 
-基于官方发布技术报告与公开权威基准（2026 年 3 月统计，评测环境采用统一 SWE-agent/Agentless harness，Thinking 模式分配对应推理步数预算）：
+SWE-bench Verified、HumanEval、OSWorld 和数学任务衡量不同能力，不能将 Opus 成绩放在 Sonnet 列，也不能把某个厂商脚手架结果写成所有模型共享同一 harness 的实测。
 
-| 基准 | GPT-5.4 | Claude Sonnet 4.6 | Gemini 3.1 Pro |
-|------|---------|-------------------|----------------|
-| SimpleBench（推理） | 90%（超越人类 83%） | 85.2% | 87.4% |
-| OSWorld-Verified（计算机操控） | 75.0%（超越人类） | — | — |
-| HumanEval（代码） | 93.8% | 96.4% | 91.6% |
-| SWE-bench Verified（工程） | ✅ 改进 | 80.8%（Opus 4.6） | — |
-| MATH（数学） | 88.5% | 86.3% | 89.7% |
+自己的选型评测至少固定模型快照、推理预算、上下文、工具权限、Agent harness、超时和重试次数。对同一任务保留补丁、执行日志和独立验收结果，再比较质量、延迟及成本；详细方法见 [LLM 评估指南](/articles/llm-evaluation-guide/)。
 
-**关键发现**：
-- **GPT-5.4** 最大亮点：原生计算机操控 + 超大上下文 + 33% 更少幻觉
-- **Claude 系列**：HumanEval 代码评测和 SWE-bench 实际工程任务持续领先
-- **Gemini 3.1 Pro**：Deep Think 数学推理表现最佳，原生百万上下文
+| 场景 | 主要验收项 |
+| --- | --- |
+| 仓库代码修改 | 隐藏测试通过率、补丁范围、重复运行稳定性 |
+| 长文档抽取 | 数值准确率、引用出处、跨段检索与拒答质量 |
+| 计算机操作 | 环境复位、操作成功率、越权动作与任务耗时 |
+| 视频／音频理解 | 对应输入模态、时间定位、转录／理解质量与费用 |
 
-## 实际使用对比
+窗口容量不能证明模型读懂整个仓库，某项“少幻觉百分比”也不能推广为所有业务的固定改善。
 
-### 编码能力
+## 四、API 调用示例
+
+示例需要各厂商 SDK、账号和 API 密钥；本次站点验证不向外部模型发请求。
 
 ```python
-# GPT-5.4：内置 GPT-5.3-Codex 编码能力 + 计算机操控
-# 可直接解读截屏、发送键鼠命令，配合 Playwright 自动化
-
-# Claude Sonnet 4.6：代码质量公认第一
-# Extended Thinking 模式先规划再编码，代码更整洁
-# Opus 4.6 在 SWE-bench Verified 实际工程任务上 80.8% 业内最高
-
-# Gemini 3.1 Pro：大型代码库理解最强
-# 原生 1M token 上下文可一次读入整个项目
-```
-
-### 长上下文处理
-
-| 场景 | 最佳选择 | 原因 |
-|------|---------|------|
-| 整本书 / 超长文档 | GPT-5.4 / Gemini 3.1 Pro | 均支持百万级上下文 |
-| 大型代码库重构 | GPT-5.4 / Claude | GPT 有计算机操控，Claude 代码质量高 |
-| 大量 PDF 分析 | Claude Sonnet 4.6 | Extended Thinking 输出更结构化 |
-| 视频理解 | Gemini 3.1 Pro | 原生 1M 上下文 + 视频处理 |
-
-### API 调用示例
-
-```python
-# OpenAI GPT-5.4
 from openai import OpenAI
 
 client = OpenAI()
-response = client.chat.completions.create(
-    model="gpt-5.4",  # 或 "gpt-5.4-thinking"
-    messages=[{"role": "user", "content": "解释量子计算的基本原理"}],
-    max_tokens=4096,
+response = client.responses.create(
+    model="gpt-5.4",
+    input="解释量子计算的基本原理",
+    reasoning={"effort": "high"},
+    max_output_tokens=4096,
 )
+print(response.output_text)
 ```
 
 ```python
-# Anthropic Claude Sonnet 4.6
 import anthropic
 
 client = anthropic.Anthropic()
 response = client.messages.create(
-    model="claude-sonnet-4-6-20260217",
+    model="claude-sonnet-4-6",
     max_tokens=4096,
     messages=[{"role": "user", "content": "解释量子计算的基本原理"}],
 )
+print(response.content)
 ```
 
 ```python
-# Google Gemini 3.1 Pro
-import google.generativeai as genai
+from google import genai
 
-model = genai.GenerativeModel("gemini-3.1-pro")
-response = model.generate_content("解释量子计算的基本原理")
+client = genai.Client()
+response = client.models.generate_content(
+    model="gemini-3.1-pro-preview",
+    contents="解释量子计算的基本原理",
+)
+print(response.text)
 ```
 
-## 选型建议
+使用实际账号的模型列表确认 ID 和可用性；请求模型与平台 UI 名称应分开记录。多厂商路由还需统一错误分类、超时、工具 Schema 和用量统计。
 
-### 按场景推荐
+## 五、自建盈亏平衡与 KV 预算
 
-| 场景 | 推荐模型 | 理由 |
-|------|---------|------|
-| 日常编码助手 | Claude Sonnet 4.6 | 代码质量领先 + 性价比高（$3/$15） |
-| 计算机自动化 | GPT-5.4 Thinking | 唯一原生计算机操控模型 |
-| 长文档 / 知识库 | Gemini 3.1 Pro | 原生 1M 上下文 + 价格最低 |
-| 复杂推理 / 数学 | Gemini 3.1 Pro（Deep Think） | 数学基准最佳 |
-| Agent / 自动化 | Claude Opus 4.6 | Agent Teams + 工具调用最强 |
-| 预算敏感 | GPT-5-mini | $0.25/$2.00 极低成本 |
-| 事实准确性 | GPT-5.4 | 幻觉比 GPT-5.2 减少 33% |
+若仅作算术假设：服务器每小时 $30，API 混合价格 $5／百万 Token，则忽略其他成本时交叉点约为 `30 / 5 × 1e6 / 3600 = 1,667 Token/s`。这不是已测容量，也不代表两个模型质量相同；输入／输出比例、利用率、额外扩容及人工成本都会改变结果。见 [部署成本估算](/articles/deepseek-v4-kimi-k3-deployment-guide/)。
 
-### 企业级 Tokenomics：成本削减与交叉点分析
+缓存量也必须按架构计算。以普通 GQA、80 层、8 个 KV 头、head_dim=128、FP16 为例，每 Token 为 `2×80×8×128×2=327,680` 字节，百万 Token 约 327.68GB（305.18GiB）。这是指定配置的算例，不是对所有 70B 或混合注意力模型的结论。PagedAttention 改善分配与复用，不会改变每个未压缩 KV 元素的大小。
 
-在企业级生产环境中，直接将应用硬编码绑定到某一个大模型 API 是非常危险且易破产的。
-
-当流量到达一定规模时，你必须计算**自托管模型（Self-hosting）**与**商业 API** 的成本交叉点（Breakeven Point）。
-
-我们以购买/租赁 1 台 **8x H100 (80GB)** 服务器（约 $30/小时 按需租赁，或整机买断折旧）运行**开源 70B 级别大模型（如 Llama-3.3-70B 或 Qwen-2.5-72B）**为例：
-- 假设 API (比如 GPT-5.4) 的混合成本估算为 **$5.00 / 1M tokens**。
-- 一台 8x H100 开满 Continuous Batching 并使用 vLLM 的 PagedAttention 后，假设每秒吞吐量（Tokens per Second）为 $T$。
-
-**推算极速法则**：
-当你的业务持续请求量达到每秒大约 **1,600 Tokens (输入+输出)** 时，自托管 70B 模型与调用 API 的成本开始持平。一旦越过这个 **Breakeven Point**，流量越大，自托管省下的钱成指数级增长。
-
-> **架构师建议**：引入 **AI Gateway (如 Kong AI Gateway 或 LiteLLM)** 进行统一调度分流。将 80% 的日常对话打入本地免费的开源端侧模型（如 Qwen-2.5-7B 或 Llama-3.1-8B，面向中文专属业务亦可混合调度 [2026 国产主流大模型](/articles/domestic-llm-comparison-2026/)），仅将 20% 的极端复杂推理路由或 Failback 到 GPT-5.4。
-
-### 显存暴漏：KV Cache 的物理极客公式
-
-支撑长上下文的核心痛点是 **KV Cache 显存暴漏**。模型参数占据的显存是固定的，但随着上下文变长，KV Cache 的体积会失控。
-
-在 2026 年，作为 AI 架构师，你必须会心算这段公式：
-
-```text
-KV_Cache_Size_Per_Token = 2 * 2 * n_layers * n_kv_heads * d_head
-// 2 代表 Key 和 Value 两个矩阵
-// 第二个 2 代表 FP16/BF16 占用的字节数 (2 bytes)
-// n_layers：模型层数（70B 模型一般是 80）
-// d_model：隐藏层维度（70B 模型一般是 8192）
-```
-
-以 70B 模型为例，每一个 Token 消耗约 **0.31MB** 显存。
-如果你想支持 **1M（一百万）Tokens** 的超长上下文单次对话，它的 KV Cache 就需要吃掉：
-`1,000,000 * 0.31 MB ≈ 310,000 MB ≈ 310 GB`
-
-**这也就是为什么你个人的 24G 显卡永远跑不了 1M 上下文的原因。**
-
-企业破局方案：
-1. **vLLM PagedAttention**：像操作系统管理虚拟内存一样，将 KV Cache 按块（block）分页存储，解决显存碎片化，提升 30%-50% 并发吞吐量。
-2. **Prompt Caching（提示缓存）**：将极其冗长的系统前置 prompt 预先计算出 KV Cache 后持久化到 Redis / 显存池中。下次相同请求进来，直接跳过 Prefill 阶段，第一 Token 延迟（TTFT）从几秒降至几十毫秒。这也是目前 Claude API 能省下 90% 开销的技术底座。
-
-## 总结
-
-2026 年 3 月的大模型格局：
-
-- **GPT-5.4**：全能王——百万上下文 + 计算机操控 + 低幻觉，但价格最高
-- **Claude 4.6**：编码之神——代码质量 & Agent 能力独步，Sonnet 性价比极高
-- **Gemini 3.1 Pro**：长文本王——原生百万上下文 + Deep Think 数学推理，价格最亲民
-
-最佳实践：**根据任务特性组合使用** — GPT-5-mini 做简单任务、Claude Sonnet 4.6 做编码推理、Gemini 3.1 Pro 做长文档、GPT-5.4 做需要计算机操控的复杂自动化。
-
----
 ## 常见问题 (FAQ)
 
-### Q1: 在选择 GPT-5.4、Claude 4.6 系列和 Gemini 3.1 Pro 时，核心决策逻辑是什么？
-在系统级编程重构、复杂长流程 Agent 与工具编排中，Claude Sonnet 4.6 / Opus 4.6 凭借 Extended Thinking 与极高的工程连贯性占据首选；对于包含复杂音视频的原生百万级超长文本任务，Gemini 3.1 Pro 兼具最高性价比与数学推理优势；而在需要原生屏幕感知与计算机操控（Computer-Using Agent）等高阶自主化任务中，GPT-5.4 凭借全能表现领跑。如需更系统化的评测框架，可参考我们的[大模型评测指南](/articles/llm-evaluation-guide/)。
+### Q1: 哪个模型代码能力最强？
+需在相同仓库任务、工具与预算下比较。厂商成绩用于筛选候选，不能替代自己的独立验收。
 
-### Q2: 针对国内业务场景，是否必须选择海外大模型？
-并非必须。当前国内头部大模型在中文语义理解和本地化合规方面已经具备明显优势，且在API定价层级（API pricing tiers）上更具性价比。对于对通用推理能力要求极高的场景，海外模型仍是首选。关于国产模型的详细对比，请查阅[国产大模型对比评测](/articles/domestic-llm-comparison-2026/)。
+### Q2: 百万上下文是否等于百万 Token 都能正确检索？
+不是。容量、检索质量、引用可靠性和成本是不同指标，应分别测量。
+
+### Q3: 如何在成本与可靠性间选择？
+先设置最低任务质量和 SLA，再比较达到标准的有效成本。使用 [Token 换算器](/tools/) 核算输入、输出和缓存费用，并保留回退路径。

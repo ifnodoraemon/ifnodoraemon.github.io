@@ -2,7 +2,7 @@
 title: MCP 协议深度解析：AI 的「USB-C 接口」
 slug: mcp-guide
 date: 2026-03-12
-updated: 2026-10-12
+updated: 2026-10-20
 tag: MCP 协议
 tagClass: tag-purple
 category: AI Agent
@@ -228,7 +228,7 @@ sequenceDiagram
 
 **关键特性：**
 - 支持**会话管理**（通过 `Mcp-Session-Id` Header）
-- 短操作直接返回 JSON 响应，长操作自动升级为 **SSE 流式传输**
+- Streamable HTTP 的 POST 响应可以是 JSON 或 SSE；不是按操作耗时自动切换的协议保证。
 - 支持可恢复连接和断线重连
 
 ## MCP vs Function Calling：不是替代，是进化
@@ -241,7 +241,7 @@ sequenceDiagram
 | **标准化** | 各厂商格式不同（OpenAI / Anthropic / Google 各一套） | 开放标准，跨模型通用 |
 | **状态管理** | 无状态，每次调用独立 | 支持有状态的会话和双向通信 |
 | **工具发现** | 需在请求中手动声明完整工具列表 | Server 运行时动态暴露能力，Client 自动发现 |
-| **安全模型** | 依赖应用层自行实现 | 内置 OAuth 2.0 授权、权限分级、用户确认流程 |
+| **安全模型** | 应用负责认证与权限检查 | HTTP 可采用规范定义的 OAuth 2.1 授权；操作确认、沙箱及细粒度权限仍由实现负责 |
 | **适用场景** | 简单、一次性的工具调用 | 复杂的多工具编排与长期交互 |
 
 > **一句话总结**：Function Calling 是 LLM 的一种**能力**（"我能调用函数"），MCP 是管理这种能力的**标准化协议**（"大家按统一规则来调用函数"）。MCP 不是取代 Function Calling——它是在 Function Calling 之上构建的完整生态框架。在[从零搭建 AI Agent 应用](/articles/build-ai-agent/)时，使用 MCP 协议可以极大降低多工具接入与维护的复杂度。
@@ -370,11 +370,11 @@ Server 启动后，AI 即可自主决定调用你的笔记管理器。例如当�
 
 ## 安全机制与最佳实践
 
-MCP 在安全方面建立了严格的多层防线。对于企业级落地，以下安全架构是**硬性要求**：
+MCP 提供授权规范和安全建议。应按传输方式与风险实现以下控制，而不是假设协议自动提供全部隔离与人工确认：
 
-### 1. OAuth 2.0 授权体系
+### 1. OAuth 2.1 授权体系
 
-2025 年 6 月的规范更新将 MCP Server 正式定义为 **OAuth 2.0 Resource Server**，引入了行业级别的认证授权框架：
+对采用 HTTP 授权的受保护服务，当前规范将 MCP Server 定位为 OAuth 2.1 Resource Server。以下为简化授权示意；stdio 的凭据传递方式不同：
 
 ```mermaid
 sequenceDiagram
@@ -461,37 +461,11 @@ async def harmless_search(query: str) -> str:
 
 社区驱动的 MCP Server 数量已超过 **数千个**，覆盖从云基础设施（AWS、GCP、Azure）到垂直行业（医疗、金融、教育）的各个领域。
 
-## 2025-2026 协议演进
+## 协议版本与实现边界
 
-MCP 协议正在快速迭代，以下是最重要的技术演进：
+本文核对 [2025-11-25 规范](https://modelcontextprotocol.io/specification/2025-11-25)。客户端先完成 `initialize` 协商与 `notifications/initialized`，再根据声明的 capabilities 发现和调用工具。工具列表可以分页，不能只读第一页。
 
-### 2025 年 6 月更新
-
-- **结构化工具输出 (Structured Tool Outputs)**：Tool 可以返回严格的 JSON Schema 约束的结构化数据，而非纯文本
-- **Elicitation（交互式信息请求）**：Server 可以在执行过程中主动向用户请求额外输入
-- **增强的 OAuth 授权**：Resource Indicators (RFC 8707)、增量范围协商
-
-### 2025 年 11 月更新
-
-- **异步操作 (Async Operations)**：支持长耗时任务的后台执行与进度通知
-- **Server Discovery（服务发现）**：标准化的 Server 注册与发现机制
-- **OpenID Connect Discovery**：与企业身份系统深度集成
-- **任务管理 (Task Management)**：实验性功能，支持复杂工作流编排
-
-### 2026 年路线图
-
-```mermaid
-graph LR
-    A["传输层可扩展性"] --> B["无状态化 + 多实例"]
-    C["Agent 间通信"] --> D["多智能体协作协议"]
-    E["MCP Server Cards"] --> F["标准化服务元数据发现"]
-    G["治理框架成熟化"] --> H["企业级合规审计"]
-```
-
-- **下一代传输机制**：支持跨多个 Server 实例的无状态操作
-- **MCP Server Cards**：类似 OpenAPI 的服务描述标准，用于自动发现和集成 MCP Server
-- **Agent 通信协议**：让多个 AI Agent 通过 MCP 相互协作
-- **企业就绪**：完善的治理结构和合规审计框架
+HTTP 授权使用 OAuth 2.1 体系；stdio 通常从进程环境获取凭据，不能假设所有传输都经过 OAuth。Tasks 属于实验性扩展，应在双方支持时使用；路线图提案不能写成已发布的强制能力。参见 [生命周期](https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle)、[授权](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization)。
 
 ## 常见问题 (FAQ)
 
@@ -499,12 +473,10 @@ graph LR
 MCP 是一种专门为 AI 模型与外部系统交互而设计的开放通信协议。传统 REST/gRPC API 面向人类程序员，依赖人工阅读文档并编写调用代码；而 MCP 面向 AI 模型，标准化了工具发现、上下文注入（Resources/Prompts）与动态调用指令，支持双向通知流与细粒度用户确认，大幅消除了工具集成的胶水代码。
 
 ### Q2: 企业引入 MCP 是否需要重构现有的后端业务系统？
-不需要。MCP Server 采用非侵入式的中间层架构，只需将现有微服务 API、数据库连接或云服务 SDK 包装为标准的 MCP Tool 或 Resource 接口即可暴露给客户端。原有后端架构与业务代码保持 100% 不变。在[从零搭建 AI Agent 应用](/articles/build-ai-agent/)时，这种解耦架构能够使多工具接入成本降低 80% 以上。
+不需要。MCP Server 采用非侵入式的中间层架构，只需将现有微服务 API、数据库连接或云服务 SDK 包装为标准的 MCP Tool 或 Resource 接口即可暴露给客户端。原有后端架构与业务代码保持 100% 不变。在[从零搭建 AI Agent 应用](/articles/build-ai-agent/)时，这种解耦架构能够使复用工具发现与调用协议，减少重复接入工作。
 
 ### Q3: MCP 在生产环境中运行是否会引入安全漏洞？
-MCP 协议本身运行在 JSON-RPC 2.0 之上，规范建议实现端引入基于传输层的安全认证（如针对 HTTP/SSE 服务的 OAuth 2.0 鉴权扩展），并建议宿主客户端在执行高危 Tool 前设计人工确认环节（Human-in-the-loop）。但需要明确：OAuth 与人机确认属于实现层的安全建议与控制实践，**并非所有 MCP 传输模式内置强制的协议级保证**。在生产落地时，宿主环境必须在操作系统层实现沙盒隔离（如 Docker/gVisor），严格审计 Tool 的执行白名单与参数边界，防范提示词注入引发的未授权数据泄露。
+MCP 协议本身运行在 JSON-RPC 2.0 之上，规范建议实现端引入基于传输层的安全认证（如针对 HTTP/SSE 服务的 OAuth 2.1 鉴权扩展），并建议宿主客户端在执行高危 Tool 前设计人工确认环节（Human-in-the-loop）。但需要明确：OAuth 与人机确认属于实现层的安全建议与控制实践，**并非所有 MCP 传输模式内置强制的协议级保证**。在生产落地时，宿主环境必须在操作系统层实现沙盒隔离（如 Docker/gVisor），严格审计 Tool 的执行白名单与参数边界，防范提示词注入引发的未授权数据泄露。
 
 ### Q4: 在设计 MCP 接口时，如何区分 Tool 与 Resource？
-核心区别在于**驱动主体与参数交互方式**，而非简单以“是否只读”划分：
-- **Tool（工具）**：由**模型自主决策触发**并接收模型传入的动态参数，可以包含副作用（如发邮件、写数据库），**也可以纯粹是只读查询**（例如 MCP 官方天气示例中的 `get-forecast` 传入城市坐标查天气、调用搜索引擎等均属于 Tool）；
-- **Resource（资源）**：是由 **URI 唯一定位的上下文数据源**（如 `file:///repo/README.md` 或 `postgres://schema`），主要由用户或宿主客户端主动选择并附加至模型上下文中，模型只能读取其内容，无法直接向其传递运行时动态执行参数。
+Tool 适合让模型提交结构化参数并请求执行，既可以只读也可以有副作用。Resource 提供由 URI 标识的上下文，通常由应用或用户选择。Resource Template 可以通过 URI 模板参数动态定位资源，并非“资源不能接收动态参数”。客户端也可以让模型参与选择资源，控制方式属于推荐交互模式而非强制的执行权限边界。参见 [Resources 规范](https://modelcontextprotocol.io/specification/2025-11-25/server/resources)。

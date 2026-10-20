@@ -13,6 +13,7 @@ extraTags:
   - Cursor
   - GitHub Copilot
   - OpenAI Codex
+updated: 2026-10-20
 ---
 
 ## 什么是 Skills？
@@ -34,17 +35,17 @@ graph LR
     subgraph 有了Skills
         U2["开发者"] -- "正常对话" --> A2["AI 助手"]
         S["Skills 工作手册"] -- "自动注入专业知识" --> A2
-        A2 -- "标准化输出" --> R2["代码质量始终一致"]
+        A2 -- "标准化输出" --> R2["提供一致的检查流程"]
     end
 ```
 
-Skills 是 **AI 编程助手的模块化能力扩展包**——通过结构化的 Markdown 文件，将团队的编码规范、最佳实践、工作流程「一次编写，永久生效」地注入 AI 的工作上下文。它不改变 AI 的"智商"，但极大提升了它的"专业度"。
+Skills 是 **AI 编程助手的模块化能力扩展包**——通过结构化的 Markdown 文件，将团队的编码规范、最佳实践、工作流程「随项目维护、按需使用」地注入 AI 的工作上下文。它不改变 AI 的"智商"，但极大提升了它的"专业度"。
 
 ## 为什么需要 Skills？
 
 | 痛点 | 没有 Skills | 有了 Skills |
 |------|------------|------------|
-| **重复指令** | 每次对话都要重复"用 4 空格缩进""函数不超过 50 行" | 写一次  Skills，永久自动遵守 |
+| **重复指令** | 每次对话都要重复"用 4 空格缩进""函数不超过 50 行" | 共享可维护的指令，配合自动检查 |
 | **输出不一致** | 同一个 Code Review 任务，每次给出不同的检查维度 | 严格按照 Skills 定义的清单审查 |
 | **上下文遗忘** | AI 不记得你的项目用 FastAPI + PostgreSQL | Skills 自动注入项目技术栈上下文 |
 | **团队协作** | 每个人的 AI 都要单独教育 | Skills 随代码仓库共享，全团队一致 |
@@ -99,7 +100,7 @@ skills/
         └── report-template.md
 ```
 
-> **与全量加载的区别**：传统的自定义指令（如 `.cursorrules`）会在每次对话中全量注入所有内容。而 Skills 的三层机制让 AI 只在需要时才加载相关知识，就像图书馆里你只取走需要的那本书，而不是把整个图书馆搬回家。
+> Skills 的按需加载有助于控制上下文开销；规则也可能按路径或条件加载，不能一概视为全量注入。技能提供指导，确定性的质量要求仍应通过测试和检查器验证。
 
 ## SKILL.md 编写实战
 
@@ -265,142 +266,30 @@ docker-compose.yml
 
 这个 Skill 的价值在于：新人加入团队时，AI 自动获得项目的**完整部署知识**，不需要任何人手动传授。
 
-## 六大平台 Skills 对比
+## 六大平台：Skills、规则与仓库指令要分开比较
 
-2026 年初，所有主流 AI 编程助手都推出了各自的"Skills"实现。虽然叫法不同，核心思想一致——**通过配置文件让 AI 更懂你的项目**。
+核对日期为 2026-10-20。`SKILL.md` 是可按任务加载的能力包；Rules 和仓库指令负责持久背景或路径规则。不能把某个平台的规则格式当成它唯一的扩展能力，再据此断言“不支持脚本”或“只能全量加载”。
 
-### 概念族谱
+| 平台 | 原生技能与常见项目目录 | 仓库指令或规则 |
+|------|----------------------|--------------|
+| Claude Code | `.claude/skills/<name>/SKILL.md` | `CLAUDE.md` |
+| Cursor | `.cursor/skills/`、`.agents/skills/` | `.cursor/rules/*.mdc`，与 Skills 并存 |
+| GitHub Copilot | `.github/skills/`，支持范围依客户端 | `.github/copilot-instructions.md`、路径指令、部分客户端的 `AGENTS.md` |
+| OpenAI Codex | `.agents/skills/<name>/SKILL.md`，另有用户与系统目录 | `AGENTS.md`，按目录作用域读取 |
+| Gemini CLI | `.gemini/skills/` 或 `.agents/skills/` | `GEMINI.md` |
+| Windsurf / Cascade | 技能目录及版本支持应以当前客户端文档为准 | 既有 `.windsurf/rules/` 等规则不能代表全部技能能力 |
 
-```mermaid
-graph TB
-    Root["Skills（统称）"]
-    Root --> A["SKILL.md"]
-    Root --> B[".cursor/rules/*.mdc"]
-    Root --> C["copilot-instructions.md"]
-    Root --> D[".windsurfrules"]
-    Root --> E["AGENTS.md"]
-    Root --> F["Custom Instructions + GPTs"]
-    A --> A1["Claude Code"]
-    B --> B1["Cursor"]
-    C --> C1["GitHub Copilot"]
-    D --> D1["Windsurf"]
-    E --> E1["GitHub / Gemini / OpenAI Codex / 多平台"]
-    F --> F1["ChatGPT / OpenAI API"]
-```
+Cursor、Copilot 与 Gemini CLI 的技能都可以携带脚本和参考资源；实际执行仍取决于可用工具、依赖和权限。通用格式不意味着所有 frontmatter 扩展字段、触发方式或审批流程都能原样迁移。
 
-### 横向对比
+参见 [Claude Code Skills](https://code.claude.com/docs/en/skills)、[Cursor Skills](https://cursor.com/docs/skills)、[Copilot Skills](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/add-skills)、[Codex Skills](https://developers.openai.com/codex/skills)、[Gemini CLI Skills](https://geminicli.com/docs/cli/skills/)。Windsurf 的当前技能文档本次未能可靠读取，因此不将其脚本与加载能力标为不支持。
 
-| 维度 | Claude (SKILL.md) | Cursor (.mdc) | GitHub Copilot | OpenAI (Codex / SKILL.md) | Windsurf | Gemini |
-|------|-------------------|---------------|----------------|---------------------------|----------|--------|
-| **配置路径** | `.claude/skills/` | `.cursor/rules/` | `.github/` | `.codex/skills/` 与 `AGENTS.md` | 项目根目录 | `.gemini/` |
-| **文件格式** | YAML + Markdown | YAML + Markdown | 纯 Markdown | YAML + Markdown (`SKILL.md`) | 纯 Markdown | 纯 Markdown |
-| **粒度** | 每技能一个文件夹 | 每规则一个文件 | 仓库级 + 路径级 | 模块化技能包 + 仓库级 | 全局 + 项目级 | 仓库级 |
-| **脚本支持** | ✅ | ❌ | ❌ | ✅ (`scripts/` 目录与工具链) | ❌ | ❌ |
-| **智能加载** | ✅ 三层渐进 | ✅ glob 匹配 | ⚠️ 全量 | ✅ 渐进式加载（元数据初筛+按需加载） | ⚠️ 全量 | ⚠️ 全量 |
-| **作用域** | 按技能领域 | 按文件类型 | 按路径模式 | 任务领域 / 仓库级 | 全局/项目 | 目录层级 |
-| **跨平台** | 开放标准 (多平台兼容) | Cursor 专属 | Copilot 专属 | 开放标准 (Codex/Claude 兼容) | Windsurf 专属 | Gemini 专属 |
+### AGENTS.md 不等于自定义 Agent 角色
 
-### 各平台详解
+`AGENTS.md` 通常承载项目结构、构建步骤与目录约定。GitHub Copilot 的自定义 Agent profile 使用 `.github/agents/*.agent.md`，不能把角色定义归到 `AGENTS.md`。Claude Code 的主要项目指令入口是 `CLAUDE.md`，可显式导入其他文件；不要假设所有客户端都会自动读取同一套文件。
 
-#### Claude Code：SKILL.md + CLAUDE.md
+### 跨平台迁移怎么验证？
 
-Claude Code 的 Skills 系统是目前最成熟的实现。它提供两层配置：
-
-- **CLAUDE.md**：项目根目录的全局配置，定义编码规范、架构约定、技术栈信息
-- **SKILL.md**：模块化的能力扩展包，按**任务领域**组织在 `.claude/skills/` 下
-
-**独特优势**：Skills 可以包含可执行脚本（`scripts/` 目录），让 AI 不仅能"指导"，更能"执行"。2026 年初的更新还支持了子代理（Subagent）、动态上下文注入和生命周期钩子。
-
-#### Cursor：Project Rules (.mdc)
-
-Cursor 从早期的单一 `.cursorrules` 文件，演进为 `.cursor/rules/` 目录下的多规则系统：
-
-```yaml
-# .cursor/rules/python-style.mdc
----
-description: Python 代码风格规则
-globs: ["**/*.py"]
----
-- 使用 4 空格缩进
-- 函数必须包含类型注解
-- 使用 f-string 而非 .format()
-```
-
-**独特优势**：通过 `globs` 字段实现精细的文件类型匹配——Python 文件自动应用 Python 规则，TypeScript 文件应用 TS 规则。还可通过 `/create-rule` 命令快速创建。
-
-#### GitHub Copilot：copilot-instructions.md + AGENTS.md
-
-Copilot 提供了多层级的指令体系：
-
-- `.github/copilot-instructions.md`：仓库级全局指令
-- `.github/instructions/*.instructions.md`：路径级精细控制
-- `AGENTS.md`：定义自定义 Agent 角色（如 `@docs-agent`、`@test-agent`）
-
-**独特优势**：支持**组织级指令**，可以在 GitHub 组织层面定义跨仓库共享的编码规范。`/init` 命令还能自动分析代码库并生成配置。
-
-#### OpenAI：Custom Instructions + GPTs + Codex
-
-OpenAI 在 Skills 领域构建了**三层体系**，覆盖从普通用户到专业开发者的全部场景：
-
-**① ChatGPT Custom Instructions（用户级）**
-
-ChatGPT 的自定义指令是最早的"Skills"雏形之一。用户可以在设置中定义持久化的偏好：
-
-- 背景信息："我是一名 Python 后端工程师，主要使用 FastAPI 和 PostgreSQL"
-- 回复偏好："回答要简洁，直接给代码，使用中文注释"
-
-这些指令会自动注入每次对话，无需重复描述。虽然不如文件系统级的 Skills 灵活，但它是最低门槛的 AI 定制方式。
-
-**② GPTs（任务级 Skills）**
-
-GPTs 是 OpenAI 的"Skills 包"概念——用户可以创建针对特定任务的自定义 ChatGPT：
-
-- 通过 GPT Builder 无代码创建，指定 Instructions、Knowledge（知识库文件）和 Capabilities（工具权限）
-- 可发布到 GPT Store 供社区共享
-- 支持上传参考文档、API Schema，让 GPT 具备领域专业知识
-- **本质上就是"Skills + 模型 + 工具"的预封装产品**
-
-**③ Codex 原生 Skills 规范与 AGENTS.md（开发者级）**
-
-OpenAI Codex 及前沿编码助手（如 Cline、Aider）已全面支持现代工程化 Skills 体系：
-
-- **Codex 原生 Skills 支持**：Codex 现已全面支持模块化 `SKILL.md` 标准（置于 `.codex/skills/<skill-name>/SKILL.md` 或 `.agents/skills/` 目录），每个 Skill 包独立封装元数据、指令提示词以及包含测试脚本与辅助工具的 `scripts/` 目录，完全支持通过元数据匹配实现的按需**渐进式动态加载**，彻底打破了以往仅能全量加载的局限；
-- **AGENTS.md 仓库级契约**：在仓库根目录放置 `AGENTS.md`，Codex 自动读取项目结构、编码规范与工作流约束；支持在 monorepo 中嵌套放置实现子项目级精细上下文隔离；
-- **跨平台互通标准**：`SKILL.md` 格式已成为跨 Claude Code、OpenAI Codex 等主流平台的通用能力包标准，开发者编写一次技能包即可在多平台无缝复用。
-
-#### Windsurf：.windsurfrules
-
-Windsurf 通过 `.windsurfrules` 文件和 Cascade 系统深度集成：
-
-- 支持全局规则和项目级规则，项目级可覆盖全局
-- 与 Write Mode / Chat Mode / Turbo Mode 联动
-- 2026 年引入 Code Integrity Layer，在执行前扫描安全漏洞
-
-#### AGENTS.md：新兴的跨平台开放标准
-
-`AGENTS.md` 值得特别关注——它是一个**不绑定任何厂商的开放标准**：
-
-```markdown
-# AGENTS.md
-
-## 项目概述
-这是一个基于 FastAPI + React 的全栈 Web 应用。
-
-## 构建步骤
-- 后端：cd backend && pip install -r requirements.txt
-- 前端：cd frontend && npm install && npm run build
-
-## 编码规范
-- Python 遵循 PEP 8
-- 所有 API 端点必须有类型注解
-- 测试覆盖率不低于 80%
-
-## 注意事项
-- 永远不要修改 alembic/versions/ 下的迁移文件
-- 敏感配置通过环境变量注入
-```
-
-已被 GitHub Copilot、OpenAI Codex、Google Gemini、Claude Code 等多个平台同时支持。OpenAI 和 GitHub 是该标准的核心推动者。它的定位是 **"README for AI Agents"**——就像 README.md 是给人类读的项目说明，AGENTS.md 是给 AI 读的项目说明。
+先共享标准 `SKILL.md` 正文、脚本和参考文件，再逐个平台确认发现目录、支持字段、资源路径、命令环境及权限行为。把始终需要的项目约定保留在各客户端认可的仓库指令入口，不要期望一次技能触发就永久约束所有未来会话。
 
 ## Skills 在 AI 定制体系中的位置
 
@@ -590,8 +479,8 @@ graph LR
 ### Q1: Skills 与传统 System Prompt 的本质区别是什么？
 System Prompt 是由平台和模型厂商固化的底层基底指令，通常包含全局安全伦理红线且不可被开发者直接抹除或替换。Skills 则是开发者根据特定业务工程领域自定义的高阶外挂知识规范包，遵循按需激活与模块化装配原则，可以根据开发场景（如专项测试、架构评审、SQL 审查）动态注入大模型上下文，避免提示词膨胀。
 
-### Q2: 项目中引入多个 Skills 是否会导致 Token 消耗暴增？
-不会。成熟的 Agent Skills 系统采用三层渐进式装配机制：首先仅加载轻量级元数据列表（Skill Name 与描述，仅耗费数十 Token），仅当模型通过意图识别判定当前任务必须调用某项能力时，才会全量拉取对应的正文与操作规范。相比每次对话机械注入万字完整文档，这种惰性加载方案节省了 90% 以上的上下文空间。
+### Q2: 配置很多 Skills 会不会占用上下文？
+会。渐进式加载通常先提供技能名称与描述，相关任务再读取正文与资源，但目录元数据本身也有开销。节省比例取决于技能数量、长度与触发范围；减少重复和无关技能，比承诺固定 90% 节省更可靠。
 
 ### Q3: 工程架构中如何决策该采用 Skills 还是 MCP？
 两者的角色完全互补：Skills 负责教大模型**如何正确思考与执行流程**（即最佳实践、规范清单、架构约束和代码模板）；而 [MCP（Model Context Protocol）](/articles/mcp-guide/) 负责为大模型提供**与外部世界交互的实际工具**（如操作数据库客户端、调用外部 API、读取沙箱环境）。Skills 指导大模型何时以及如何以合规参数调用对应的 MCP 工具。

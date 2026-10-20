@@ -17,6 +17,7 @@ extraTags:
   - vLLM
   - SGLang
   - KEDA
+updated: 2026-10-20
 ---
 
 ## 引言：从 CPU 标量调度到 GPU 智算拓扑的范式巨变
@@ -152,7 +153,7 @@ cpuManagerPolicy: static
 在大规模生产环境中，如何将像 **vLLM** 或 **SGLang** 这样的大模型推理引擎安全、高效地运行在 Kubernetes 集群之上？
 
 我们在专栏兄弟篇 [大模型推理引擎架构](/articles/inference-engines-core-architecture-internals/) 中深入剖析过，现代大模型推理具有两大约束：
-1. **显存预分配机制**：vLLM 启动后会立即向操作系统申请占满 90% 的物理显存作为 PagedAttention KV Cache 资源池。因此，**传统的 Kubernetes CPU/Memory HPA 伸缩指标在此完全失效**（因为显存利用率永远维持在 90% 恒定不动）；
+1. **显存预分配机制**：`--gpu-memory-utilization` 是引擎相对整卡显存的预算，包含权重、激活与运行时开销，剩余预算才用于 KV Cache。预留显存与实际被 Token 占用的缓存块比例不同；仅凭整卡显存占用不能判断请求压力。
 2. **P/D 分离（Prefill / Decode 分离）**：Prefill 是算力密集型，Decode 是内存带宽与吞吐密集型。
 
 针对这些特性，2026 年工业界标准的云原生架构是**基于 KEDA（Kubernetes Event-driven Autoscaling）结合 vLLM 自定义 Prometheus 核心指标驱动的弹性集群**：
@@ -171,16 +172,16 @@ flowchart TD
         Router -->|"流式 Token 生成"| DecodePool["Decode 推理 Pods (低延迟/KV Cache 敏感)"]
 
         PrefillPool -.->|"DCGM / vLLM 指标 (:8000/metrics)"| Prometheus["Prometheus 监控中心"]
-        DecodePool -.->|"vllm:num_requests_waiting<br/>vllm:gpu_cache_usage_factor"| Prometheus
+        DecodePool -.->|"vllm:num_requests_waiting<br/>vllm:kv_cache_usage_perc"| Prometheus
 
         Prometheus --> KEDA["<b>KEDA 弹性伸缩控制器</b><br/>实时监听排队延迟与 KV Cache 水位"]
-        KEDA -->|"HPA 动态伸缩 (0 -> N 节点)"| DecodePool
+        KEDA -->|"HPA 动态伸缩 (1 -> N 副本)"| DecodePool
     end
 ```
 
 ### 4.1 生产级 KEDA 弹性伸缩配置清单 (ScaledObject)
 
-以下是针对生产级 vLLM 推理 Pod 的真实 KEDA 伸缩声明清单：
+以下是针对生产级 vLLM 推理 Pod 的KEDA 伸缩配置示例：
 
 ```yaml
 apiVersion: keda.sh/v1alpha1
@@ -214,14 +215,15 @@ spec:
     metadata:
       serverAddress: http://prometheus-k8s.monitoring.svc.cluster.local:9090
       metricName: vllm_num_requests_waiting
-      query: sum(vllm:num_requests_waiting{model="qwen-72b"})
+      query: sum(vllm:num_requests_waiting{model_name="qwen-72b"})
       threshold: '5'        # 只要排队等待处理的请求数超过 5 个，立即触发扩容
   # 触发器 2: 基于 PagedAttention KV Cache 显存块的实际使用率
   - type: prometheus
+    metricType: Value
     metadata:
       serverAddress: http://prometheus-k8s.monitoring.svc.cluster.local:9090
       metricName: vllm_kv_cache_usage_perc
-      query: avg(vllm:kv_cache_usage_perc{model="qwen-72b"})
+      query: avg(vllm:kv_cache_usage_perc{model_name="qwen-72b"})
       threshold: '0.80'     # 当集群的 KV Cache 平均使用率突破 80% (0.80) 时，提前扩容防止换入换出卡顿
 ```
 
@@ -261,29 +263,14 @@ flowchart TD
 
 ## 常见问题 (FAQ)
 
-### Q1: 为什么 vLLM / SGLang Pod 刚拉起完成，Prometheus 就报告其 GPU 显存利用率（`memory.used`）达到了 90% 以上？这会导致 Kubernetes 判定 OOM 吗？
-**不会。**
-这是由于 vLLM 的 **PagedAttention 显存预分配机制（KV Cache Pre-allocation）** 导致的：
-- 启动时，vLLM 会首先加载模型权重参数（例如 Qwen-72B 占用约 144GB 显存，分摊在两张 80GB 卡上）；
-- 加载完成后，vLLM 会默认将剩余所有可用物理显存的 90%（由 `--gpu-memory-utilization=0.9` 参数控制）**全部预先申请并锁定**，用于构建高效的逻辑内存块分页表；
-- **Kubernetes 视角的区别**：Kubernetes 的 OOMKiller 监控的是**系统物理主机内存（RAM）**，而不是 GPU 显存（VRAM）。只要主机的系统内存没有超出 Pod 的 `resources.limits.memory`，Pod 就绝不会被 Kubernetes OOM 杀死；
-- **伸缩建议**：不能基于 DCGM 采集的显存占用率去编写 HPA，而必须基于 vLLM 内部暴露的 `vllm:gpu_cache_usage_factor`（实际被 Token 占用的有效缓存块比例）进行精准自动扩容。
+### Q1: vLLM 预分配显存与 Kubernetes OOM 有什么关系？
+`--gpu-memory-utilization` 约束引擎相对整卡的显存预算，扣除模型权重和其他开销后才分配 KV 张量存储，不是把“剩余显存的 90%”用作分页表。GPU OOM 与主机 RAM 的 cgroup OOM 不同；即使 Pod 没超过自身内存限额，节点内存压力也可能触发系统 OOM 或驱逐。伸缩应结合排队、TTFT、抢占和有效 KV 块占用，不能只看 `memory.used`。
 
-### Q2: 在 8 卡 GPU 宿主机中，为什么任意分配 4 张 GPU 给 Tensor Parallelism (TP=4) 的大模型推理会引发灾难性延迟？Topology Manager 如何避免该问题？
-**根本原因：NVLink 拓扑不对称性**。
-在现代 HGX/MGX 架构服务器中，8 张 GPU 并不是任意两两全互联的。它们通常被组织在特定的一组 NVSwitch 交换矩阵下，每 4 张 GPU（如 GPU 0~3，或者 GPU 4~7）形成一个极速的全互联闭环（双向带宽达 900 GB/s）。
-如果调度器随意挑选中了 GPU 0、1、4、5：
-- GPU 0 与 GPU 1 之间走极速 NVLink；
-- 但 GPU 1 与 GPU 4 之间的数据交换将被迫绕行低速的 PCIe 总线甚至是跨 CPU 插槽的 UPI 总线（带宽骤降至数十 GB/s）；
-- 张量并行要求每一层注意力计算后必须执行全局 `All-Reduce` 集合通信，**木桶效应会导致所有卡必须停下来等待那条跨拓扑慢链路**，整体推理吞吐直接暴跌 80%！
-**Topology Manager 方案**：
-配置 `topologyManagerPolicy: single-numa-node` 或利用 Kubernetes 1.30+ 的 **DRA（动态资源分配）** 驱动，在调度清单中显式声明拓扑约束（`TopologyHint`），强制调度器只能选择在同一组 PCIe/NVLink 拓扑树下的紧凑 GPU 组合。
+### Q2: Topology Manager 能保证选到同一组 NVLink GPU 吗？
+不能直接保证。它组合 CPU、内存及设备插件的 NUMA hints 做节点准入，不是任意 NVLink 连通图的调度器。不同服务器拓扑不同；例如 DGX H100 的八张 GPU 经 NVSwitch 全互联，不能一概画成两个四卡岛。使用 `nvidia-smi topo -m` 和厂商文档核对实际连接；需要 GPU/NIC 联合拓扑约束时，确认设备驱动及调度扩展真正提供了对应能力。参见 [DGX H100 硬件说明](https://docs.nvidia.com/dgx/dgxh100-user-guide/introduction-to-dgxh100.html)。
 
-### Q3: 为什么说 2026 年主流的动态资源分配（DRA）相比传统的 Device Plugin 是云原生智算调度的革命性跃升？
-**传统 Device Plugin 的致命短板**：
-它只能向 Kubernetes 报告简单的标量整数（如 `nvidia.com/gpu: 4`）。调度器在决策时完全是“抓瞎”的，根本不知道它挑选出来的这 4 张卡是否属于同一个 NUMA 节点、相互之间是否有 NVLink 连接、或者是否直连了特定的 RoCE 智算网卡。
+### Q3: DRA 是否自动解决所有 GPU 与网卡拓扑问题？
+不会。DRA 允许通过 ResourceClaim 和驱动发布的设备属性表达更丰富的选择条件，但可用属性、跨设备约束与分配行为取决于 Kubernetes 版本和驱动实现。必须确认 GPU/NIC 驱动确实公布所需拓扑信息，并验证调度与准入行为；不能仅因启用 DRA 就保证最佳 NVLink 组合或无跨 NUMA 访问。参见 [Kubernetes DRA 文档](https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/)。
 
-**DRA（Dynamic Resource Allocation）的革命性突破**：
-1. **参数化与 Claim 模式**：Pod 不再申请抽象数字，而是提交一个 `ResourceClaim`，可以像写 SQL 一样声明复杂的硬件参数；
-2. **结构化参数与拓扑感知**：DRA 允许厂商驱动将硬件的复杂拓扑图（如 NVLink 连通矩阵、RDMA 网卡亲和性、MIG 尺寸）直接暴露给调度器；
-3. **跨多设备联合协同决策**：调度器在单次调度决策中，能够同时且原子性地匹配“最佳的 GPU 组合 + 直连在同一 PCIe 交换机下的 InfiniBand 网卡”，彻底终结了拓扑错配引发的算力损耗。
+
+KEDA 示例的 `qwen-72b` 应与 vLLM 的 `--served-model-name` 一致；实际标签名以 `/metrics` 为准。队列总量使用 `AverageValue` 让副本数分担负载，而集群平均缓存比例使用 `metricType: Value`，避免被 HPA 再次按副本数归一化。阈值只作示例，扩容还需可用 GPU、启动时间及缓存预热预算。

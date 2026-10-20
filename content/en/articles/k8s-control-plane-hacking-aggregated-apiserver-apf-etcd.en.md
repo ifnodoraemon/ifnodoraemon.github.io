@@ -18,6 +18,7 @@ extraTags:
   - etcd
   - Shuffle Sharding
   - Scale
+updated: 2026-10-20
 ---
 
 ## Introduction: Scaling Towards 10,000 Nodes and Tens of Millions of Objects
@@ -26,10 +27,10 @@ In previous chapters, we mastered building Kubernetes Operators using Custom Res
 
 For standard middleware deployments (such as MySQL or Redis clusters), CRDs are the premier architectural choice. However, when platform teams manage **hyperscale IoT device registries, high-frequency time-series telemetry, or massive security audit event streams**, the underlying storage mechanics of CRDs introduce systemic failure points:
 
-1. **The Physical 8GB "Death Redline" of etcd**:
-   Kubernetes persists all standard CRD payloads directly into underlying `etcd` clusters. As a strongly consistent memory/bbolt key-value database relying on Raft consensus, etcd enforces a strict recommended operational ceiling of **2GB to 8GB**. Continuous mutations across millions of custom objects trigger quota exhaustion (`database space exceeded`), freezing the entire Kubernetes control plane!
+1. **etcd Quotas and Metadata Load**:
+   CRDs normally share the core etcd backend. The default quota is 2 GiB; 8 GiB is a suggested maximum for normal environments, not a physical hard limit. Exceeding quota raises NOSPACE and restricts writes rather than instantly stopping all reads. Select storage for high-frequency data and large objects using latency, capacity, and maintenance requirements. See [etcd limits](https://etcd.io/docs/v3.6/dev-guide/limit/).
 2. **WatchCache Cache Bypasses and Thundering Herds**:
-   In clusters spanning 10,000+ worker nodes, rogue CI/CD automation pipelines or unoptimized monitoring scripts can issue hundreds of thousands of concurrent `List Pods` queries specifying `resourceVersion=""`. These queries punch through in-memory caches directly into etcd, causing Raft heartbeat starvation and cascading node lease expiration across the fleet!
+   Frequent full LISTs can overload serialization, memory, network, and storage. Cache behavior depends on version and request options; use pagination, limits, and measured capacity.
 
 To surmount these enterprise scalability barriers, platform architects must directly **re-engineer the central control plane architecture of Kubernetes**.
 
@@ -43,38 +44,30 @@ Protecting `kube-apiserver` under massive concurrent read pressure requires unde
 
 ```mermaid
 flowchart TD
-    Client["Client Issues List / Watch Request"] --> APIServerEntry["kube-apiserver REST Handler"]
-
-    APIServerEntry --> CheckRV{"Inspect query parameter: resourceVersion (RV)"}
-
-    CheckRV -->|"RV = '' (Unset / Empty string)"| DirectETCD["<b>Quorum Read Direct to etcd Disk</b><br/>Completely bypasses WatchCache memory!<br/>Saturates disk I/O & risks etcd collapse"]
-    CheckRV -->|"RV = '0' (Explicitly set to 0)"| CacheAny["<b>In-Memory WatchCache (Any Recent State)</b><br/>Served purely from apiserver RAM; zero disk I/O"]
-    CheckRV -->|"RV = '12345' (Specific Historical RV)"| CheckRingBuffer{"Is RV within the WatchCache<br/>sliding ring buffer window?"}
-
-    CheckRingBuffer -->|"Within Ring Buffer"| ServeFromBuffer["Stream incremental events from memory"]
-    CheckRingBuffer -->|"Compacted Out (Too Old)"| Return410["<b>Return HTTP 410 Gone</b><br/>'too old resource version'<br/>Forces client to perform full relist"]
-
-    DirectETCD --> CoreETCD[("etcd Cluster Disk")]
-    CoreETCD -.->|"Reflector continuously streams updates"| WatchCacheStorage["WatchCache In-Memory Storage (cacher)"]
-    WatchCacheStorage --> ServeFromBuffer
-    WatchCacheStorage --> CacheAny
+    Request["LIST / WATCH"] --> Kind{"Request kind"}
+    Kind -->|"LIST"| Consistency{"Required consistency"}
+    Consistency -->|"MostRecent"| Fresh{"Consistent cache available?"}
+    Fresh -->|"Yes"| Cache["Serve after cache freshness check"]
+    Fresh -->|"No"| Store["Read storage"]
+    Consistency -->|"Any, RV=0"| Any["May serve a stale cached snapshot"]
+    Consistency -->|"Specified RV"| Match["Apply resourceVersionMatch semantics"]
+    Kind -->|"WATCH from RV"| History{"History retained?"}
+    History -->|"Yes"| Stream["Deliver changes after RV"]
+    History -->|"No"| Relist["410 Gone: relist and watch"]
 ```
 
-### 1.1 The Three Crucial `resourceVersion` Semantics
-Misunderstanding `resourceVersion` is the primary reason naive API clients bring down production control planes:
-1. **`resourceVersion = ""` (Unset / Empty String - Linearizable Read)**:
-   **Semantics**: Demands **latest linearizable consistent data (Quorum Read)**.
-   **Mechanism**: Prior to Kubernetes v1.31, `kube-apiserver` **strictly bypassed its in-memory WatchCache** and issued a quorum read directly across the etcd Raft cluster, risking severe etcd saturation under traffic spikes. Starting in **Kubernetes v1.31+** (via the `ConsistentListFromCache` / `WatchList` feature), when enabled and backed by etcd progress notifications, the apiserver can fulfill linearizable reads directly from WatchCache memory without hitting etcd disks; however, in unconfigured or earlier clusters, empty string queries still punch through directly to etcd.
-2. **`resourceVersion = "0"` (Safe & Recommended for Read Scaling)**:
-   **Semantics**: Demands **any recent consistent snapshot from apiserver memory**.
-   **Mechanism**: Returns immediately from the `WatchCache` in RAM. While data may lag etcd by a few milliseconds, it incurs **zero disk I/O**, increasing read throughput by orders of magnitude!
-3. **`resourceVersion = "<specific_number>"`**:
-   **Semantics**: Establish a Watch starting from this precise revision.
-   **Mechanism**: Served from the circular cyclic event ring buffer in memory. If the requested revision has already been compacted out, the server returns **`HTTP 410 Gone (Too old resource version)`**, prompting the client to re-establish state via `resourceVersion="0"`.
+### 1.1 resourceVersion Means Different Things for LIST and WATCH
+
+- A LIST without `resourceVersion` requests MostRecent consistency. Kubernetes 1.31 introduced consistent reads from cache when the feature and etcd progress-notification requirements are met. The server can wait for cache freshness rather than fetching the entire object list from etcd. `WatchList` and `ConsistentListFromCache` are different features.
+- LIST with `resourceVersion="0"` requests Any semantics and may return stale data. There is no guaranteed few-millisecond bound. Use it only when the application accepts that consistency, not as a universal safe default.
+- LIST with a specific RV depends on `resourceVersionMatch`, such as Exact or NotOlderThan. It returns a list, not an incremental stream. WATCH with an RV observes subsequent changes. On an expired-version 410 response, relist and establish a new watch.
+
+Kubernetes 1.34 snapshot caching additionally improves paginated and historical-list cases. Cache paths vary by version, resource, and options. RV is an opaque marker, not an integer clients should calculate. See [API consistency semantics](https://kubernetes.io/docs/reference/using-api/api-concepts/) and [1.34 snapshot caching](https://kubernetes.io/blog/2025/09/09/kubernetes-v1-34-snapshottable-api-server-cache/).
+
 
 ---
 
-## 2. Bypassing the 8GB etcd Boundary: Aggregated APIServer Architecture
+## 2. Managing etcd Capacity and Extending Storage: Aggregated APIServer Architecture
 
 When data domains exhibit the following operational characteristics, **CRDs must be abandoned in favor of an Aggregated APIServer**:
 - Extreme volume (hundreds of thousands to tens of millions of records);
@@ -212,7 +205,7 @@ Configure dedicated NVMe storage devices:
 Physical drive separation prevents random BoltDB flushing from blocking Raft WAL disk commits, eliminating consensus leader flaps.
 
 ### 4.2 Architectural Decoupling: Dedicated Event Sharding (`/events`)
-Over **80% of high-frequency ephemeral writes** in massive clusters originate from Kubernetes `Event` objects.
+Event objects can contribute substantial transient writes; measure their share before selecting a dedicated backend.
 Configure dedicated event clustering in `kube-apiserver`:
 ```bash
 --etcd-servers=https://etcd-core-1:2379,https://etcd-core-2:2379,https://etcd-core-3:2379 \
@@ -243,8 +236,8 @@ Configure dedicated event clustering in `kube-apiserver`:
 ## 5. Summary and Transition
 
 Customizing the Kubernetes control plane enables unprecedented infrastructure scale:
-- **WatchCache and resourceVersion** reveal the internal mechanics of memory caching, preventing catastrophic disk quorum read storms via `resourceVersion="0"`;
-- **Aggregated APIServers** bypass the 8GB storage limit of etcd, integrating external distributed databases behind a native API facade;
+- **WatchCache and resourceVersion** reveal the internal mechanics of memory caching, using list/watch and pagination within application consistency requirements;
+- **Aggregated APIServers** allow a separate storage backend with its own capacity and operational limits, integrating external distributed databases behind a native API facade;
 - **APF with Shuffle Sharding** applies combinatorial mathematics to protect critical control loops from noisy-neighbor traffic;
 - **Physical dual-disk isolation and event sharding** provide hardware-level consensus resilience for clusters exceeding 10,000 nodes.
 
@@ -259,14 +252,11 @@ In Chapter 12, **[Kubernetes Extensibility Core: Operator Pattern, CRDs, and Kub
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: Why does the choice of `resourceVersion` dictate the survivability of the control plane during high-concurrency queries?
-**Root Cause: Direct etcd disk bypass versus quorum read saturation**.
-- With `resourceVersion=""`, clients demand strict linearizability (Quorum Read), forcing `kube-apiserver` to query etcd disks across all Raft nodes. Concurrent full-cluster lists quickly saturate etcd disk I/O, leading to node heartbeat timeouts and control plane failure;
-- With `resourceVersion="0"`, queries are fulfilled entirely from the in-memory `WatchCache`, completing in milliseconds with zero etcd disk overhead;
-- With `resourceVersion="<rv>"`, apiserver reads incremental mutations from its sliding memory ring buffer, returning HTTP 410 Gone if compacted, which smoothly triggers client resynchronization.
+### Q1: How does resourceVersion affect high-concurrency queries?
+It constrains consistency and history rather than acting as a fixed cache switch. Modern apiservers can provide consistent LIST responses from cache when requirements are met. RV=0 permits stale snapshots; a specific LIST version is different from a WATCH starting point. Use mature list/watch and resynchronization behavior, plus APF, pagination, and client backoff to control load.
 
 ### Q2: When must platform architects adopt an Aggregated APIServer over a CRD?
-1. **Massive data volume and update rates**: Telemetry collections generating millions of points per second (like `metrics-server`) will exhaust etcd's 8GB limit within hours if stored as CRDs;
+1. **Massive data volume and update rates**: Telemetry collections generating millions of points per second (like `metrics-server`) can impose unsuitable quota, latency, and maintenance pressure if stored as CRDs;
 2. **Specialized query requirements**: Workloads requiring OLAP aggregations (ClickHouse) or full-text search (Elasticsearch);
 3. **Virtualizing legacy external data**: Exposing existing enterprise CMDB registries via standard Kubernetes REST endpoints without duplicating state into etcd.
 

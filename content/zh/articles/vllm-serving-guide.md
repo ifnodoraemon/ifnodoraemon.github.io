@@ -14,6 +14,7 @@ featuredStats:
     value: 10+
   - label: 部署方案
     value: 3
+updated: 2026-10-20
 ---
 
 ## 引言：为什么是 vLLM？
@@ -106,7 +107,7 @@ vLLM 引入了**连续批处理**（也叫 iteration-level scheduling）：
 
 ---
 
-## 第二层深水区：APC 前缀缓存——理解它的人都赚到了
+## 第二层：APC 前缀缓存与计算复用
 > [!TIP]
 > **显存容量与吞吐快速核算**：部署前不确定显卡是否会 OOM？可通过站内交互工具：[LLM 显存占用与吞吐估算器](/tools/) 输入模型权重与预期并发数，快速测算最佳 `gpu_memory_utilization` 与最大并发上限。
 
@@ -180,12 +181,12 @@ GPU 显存有限，不可能缓存所有历史请求的 KV Cache。vLLM 使用**
 
 ### APC 的四大使用场景
 
-| 场景 | 可复用的前缀 | 性能收益 |
+| 场景 | 可复用的前缀 | 收益条件 |
 |------|------------|---------|
-| **多轮对话** | 系统提示词 + 历史对话 | 越聊越快，后续轮次预填充时间 ≈ 0 |
-| **长文档问答** (RAG) | 几千 Token 的文档片段 | 同一文档的多次提问几乎免费 |
-| **代码补全** | 当前文件的已有内容 | 用户每打一个字，增量计算极少 |
-| **批量处理同模板** | 相同的指令前缀 | 1000 条相同模板的请求，实际只算 1 次前缀 |
+| 多轮对话 | 系统提示词与已有历史 | 历史前缀未变且缓存未被淘汰 |
+| 文档问答 | 重复使用的文档片段 | 文档排列与 Token 序列一致 |
+| 代码补全 | 文件开头的未变部分 | 编辑位置之前有足够长的共同前缀 |
+| 批量模板 | 相同的指令开头 | 前缀块已完成计算且仍驻留缓存 |
 
 ### APC 的限制：什么时候没用？
 
@@ -222,9 +223,9 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
 }
 ```
 
-**这意味着什么？** 3000 个 Prompt Token 中，有 2800 个直接从缓存复用，只有 200 个需要 GPU 实际计算。**你的成本只有标价的 6.7%，但可以按 3000 Token 全额向用户收费。**
+这表示 2800 个输入 Token 可复用前缀 KV，未缓存输入占 6.7%。这个比例不是总成本比例：解码、缓存读取、显存驻留、空闲算力与运维仍有成本。
 
-> **对计费系统至关重要**：你的计费中间件应该同时记录 `prompt_tokens`（用户付费依据）和 `cached_tokens`（你的真实成本依据），这两个数字的差值就是你的利润。
+> 同时记录 `prompt_tokens`、`cached_tokens`、输出 Token 和请求时延。收费规则应按服务合同明确披露；缓存命中量本身不能换算为利润。
 
 ### 缓存命中率监控：Prometheus 指标
 
@@ -232,21 +233,14 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
 
 ```text
 # V1 前缀缓存指标（Counter 类型，精确可靠）
-vllm_prefix_cache_hits              # 命中的缓存 Token 总数 (Counter)
-vllm_prefix_cache_queries           # 查询的缓存 Token 总数 (Counter)
+vllm:prefix_cache_hits_total              # 命中的缓存 Token 总数 (Counter)
+vllm:prefix_cache_queries_total           # 查询的缓存 Token 总数 (Counter)
 
 # 用 PromQL 计算实时命中率（Grafana 面板用这个）
-(rate(vllm_prefix_cache_hits[5m]) / rate(vllm_prefix_cache_queries[5m])) * 100
+(rate(vllm:prefix_cache_hits_total[5m]) / rate(vllm:prefix_cache_queries_total[5m])) * 100
 ```
 
-**健康的缓存命中率参考值**：
-
-| 场景 | 期望缓存命中率 | 如果低于该值说明 |
-|------|-------------|----------------|
-| 多轮对话（同 session） | 80%~95% | Prompt 结构可能不合理，动态内容插入了前缀 |
-| RAG 文档问答 | 60%~85% | 文档片段多样性太高，或缓存池太小 |
-| 批量同模板处理 | 90%+ | 模板没有固定在最前面 |
-| 完全随机请求 | <10% | 正常现象，APC 对此场景无效 |
+命中率没有统一健康阈值。先按工作负载记录冷缓存与热缓存基线，再结合 TTFT、输出速度、缓存淘汰与租户隔离设置告警。
 
 ### 优化缓存命中率的最佳实践
 
@@ -254,7 +248,7 @@ vllm_prefix_cache_queries           # 查询的缓存 Token 总数 (Counter)
 2. **避免在前缀中插入动态元素**：比如 `"当前时间是 2026-04-14 10:00"`。一旦时间变化，整个后续的缓存链都会失效。把时间戳放到 Prompt 尾部。
 3. **适当增大 `--gpu-memory-utilization`**：更多显存 = 更大的缓存池 = 更低的 LRU 淘汰频率 = 更高的命中率。
 4. **多轮对话保持 session 连续性**：不要每轮都重新拼接完整历史，而是让 vLLM 自然地在缓存中积累。
-5. **监控 `cached_tokens` 与 `prompt_tokens` 的比值**：这是你的"利润率"。定期按用户/场景分析这个比值，找出低命中率的异常模式。
+5. **按场景追踪命中率**：比较 `cached_tokens` 与输入量，并结合 GPU 时间和成本核算收益，不把命中率称为利润率。
 
 ---
 
@@ -387,7 +381,6 @@ docker run -d \
   -p 8000:8000 \
   -v /path/to/models:/models \
   -e VLLM_API_KEY=your-secret-key \
-  -e PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus \
   vllm/vllm-openai:v0.29.0 \
   --model /models/Qwen2.5-72B-Instruct \
   --dtype auto \
@@ -398,7 +391,7 @@ docker run -d \
   --enable-prompt-tokens-details    # 让计费系统获取 cached_tokens
 ```
 
-> **⚠️ 必须加 `--ipc=host`**：vLLM 使用 PyTorch 的共享内存进行多进程通信，不加这个参数在容器内会直接报错。这是新手最常踩的坑。
+> 多进程通信需要足够共享内存；可选 `--ipc=host`，也可以在隔离 IPC 命名空间中配置合适的 `--shm-size`。应按实际进程通信需求与部署边界选择。
 
 ---
 
@@ -430,36 +423,16 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
   --quantization fp8 \
   --kv-cache-dtype fp8_e5m2 \
   --tensor-parallel-size 2 \
-  --num-speculative-tokens 5 \
-  --speculative-model Qwen/Qwen2.5-1.5B-Instruct
+  --speculative-config '{"method":"draft_model","model":"Qwen/Qwen2.5-1.5B-Instruct","num_speculative_tokens":5}'
 ```
 
-#### [1] `--gpu-memory-utilization` 显存利用率
+#### [1] `--gpu-memory-utilization`：总执行器预算
 
-设为 `0.90` 是指 vLLM 模型执行器预先占用的**整卡显存预算上限**（总物理显存的 90%）。vLLM 在启动时先从这 90% 预算中扣除**静态模型权重**与**运行时激活值 Profile 评估预留**，将其余全部显存划归 PagedAttention 的 KV Cache 物理块池。剩下的 10% 显存缓冲则留给操作系统的图形驱动、CUDA Runtime 上下文及非 PyTorch 内部临时开销。
+`0.90` 表示引擎使用整卡显存的预算比例，包含权重、激活、图捕获和其他运行时开销，剩余部分才用于 KV。vLLM 0.29 参数文档默认值为 0.92，其他版本应单独核对。预算过低可能装不下模型，过高可能与额外分配冲突；没有对所有负载通用的“甜区”。
 
-```text
-太低 (0.70)：留给 KV Cache 块池的空间被严重挤压 → APC 缓存池太小 → 缓存命中率暴跌 → 并发能力打折
-太高 (0.98)：几乎没有系统缓冲 → 驱动或瞬时 CUDA 上下文抖动极易触发宿主机 OOM
-甜区 (0.90~0.95)：平衡安全与性能。流量与长文本长度稳定后可逐步微调
-```
+#### [2] `--max-model-len`：输入与输出总长度上限
 
-#### [2] `--max-model-len` 最大上下文长度
-
-这是最容易被忽略的**致命参数**。vLLM 会根据这个值预计算 KV Cache 的总空间，进而决定最大并发数。
-
-```text
-默认值 = 模型配置文件中的最大值（如 Qwen2.5 的 131,072）
-你的业务实际最大对话长度可能只有 4,096
-
-后果：
-  使用默认值 131072 → KV Cache 预留空间膨胀 30 倍 → 并发数从 50 降到 2
-  设为实际需求 8192  → KV Cache 合理预留 → 并发数翻回来
-
-这可能是你遇到的 #1 性能杀手。
-```
-
-> **黄金法则**：如果你的业务对话永远不会超过 8K Token，就设为 `8192`。这一项改动就能让并发量翻好几倍。
+这是请求长度约束，也会参与可用 KV 容量检查与部分运行时规划。KV 块池主要按显存预算和启动画像确定，不是给每个请求预留完整最大窗口，因此把 131072 改为 8192 不代表 KV 总量自动缩小 16 倍或并发固定增加。仍应按业务限制总长度，并用启动日志和实际长请求压测判断容量。
 
 #### [3] `--max-num-seqs` 最大并发数
 
@@ -472,7 +445,7 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
 批处理 / 离线推理（高吞吐优先）：2048 ~ 4096
   → GPU 被塞满，吞吐拉满，但单请求延迟会上升
 
-自适应思路：监控 vllm_num_requests_waiting
+自适应思路：监控 vllm:num_requests_waiting
   → 如果长期 > 0，说明请求在排队，考虑增大 max-num-seqs 或加机器
   → 如果长期 = 0 且 GPU 利用率 < 50%，说明太空闲，可以减小此值节约资源
 ```
@@ -485,65 +458,29 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
 - 设小（8192）→ 延迟平稳，预填充被充分分块
 - 在线服务推荐 `8192 ~ 16384`
 
-#### [7] 模型量化方案选型
+#### [7-8] 权重与 KV 量化应分别验证
 
-| 你的 GPU | 推荐方案 | 精度损失 | 效果 |
-|---------|---------|---------|------|
-| **H100/H800** | FP8 (`--quantization fp8`) | <1% | 吞吐提升 ~1.5x，**零校准**开箱即用 |
-| **A100/L40S** | INT8 GPTQ/AWQ | ≈0% | 显存减半，速度持平或略快 |
-| **Blackwell B200** | NVFP4 | ≤1% | 吞吐是 FP8 的 **2x** |
-| **任何卡** | INT4 AWQ | 1~3% | 极限压缩，单卡跑更大模型 |
+FP8、AWQ、GPTQ 与 NVFP4 需要相应 GPU、checkpoint 布局和 kernel 支持。不能按 GPU 型号直接承诺“固定 1% 以内损失”或“固定两倍吞吐”。仅权重量化可减少访存；大 batch 下反量化与计算开销可能抵消收益。
 
-#### [8] KV Cache 量化——容易被忽视的隐藏加速器
+`--kv-cache-dtype fp8_e5m2` 是一种可选的缓存格式示例。相对 BF16/FP16，其数值存储位宽减半，但 scale、缓存布局和运行时开销仍存在，并发不会必然翻倍。验证后端支持、尺度来源、长上下文和业务质量后再上线。详见 [量化精度指南](/articles/quantization-precision-guide/)。
 
-除了模型权重量化，vLLM 还支持对 KV Cache 本身做量化。这意味着每个请求的缓存占用更少显存，同样的 GPU 能服务更多并发：
+#### [9] 张量并行与副本数
 
-```bash
---kv-cache-dtype fp8_e5m2  # 将 KV Cache 从 FP16/BF16 压缩为 FP8
-```
+TP 将模型计算切分到多张 GPU，额外引入层间通信。较小 TP 加多副本可能提高吞吐，较大 TP 也可能降低单请求时延；应在相同 GPU 总数、精度、长度和 SLO 下比较。模型装得下只是起点，不能承诺固定 30%～50% 提升。
 
-效果：KV Cache 显存占用**减半**，对输出质量的影响极小（因为注意力值的动态范围通常不大）。这在长上下文场景（8K-128K）中收益尤其明显。
+使用 `nvidia-smi topo -m` 核实互联。NVLink/NVSwitch、PCIe 与跨节点网络的带宽及延迟不同；拓扑和并行布局需要一起验证。
 
-#### [9] 张量并行的正确姿势
+#### [10] 推测解码
 
-当模型太大、单卡装不下时，用多块 GPU 分担。但不是越多越好：
+小模型或辅助预测头生成候选，目标模型验证后接受或修正。收益取决于接受率、draft 成本、批量、目标模型和后端，不能只按 QPS 划分固定加速区间。
 
-```text
-常见错误：有 8 张卡 → 设 TP=8 → 发现吞吐还不如 TP=4 的时候
-
-原因：TP 越大，每轮都要做 AllReduce 通信。
-      8 卡间的通信开销可能吃掉你新增算力的 40%
-
-正确策略：
-  1. 用最小 TP 让模型装得下（如 70B FP8 在 2 张 H100 上 → TP=2）
-  2. 多余的卡用来多开实例
-  3. 前面放负载均衡
-
-  结论：2 个 TP=2 实例 通常比 1 个 TP=4 实例 吞吐高 30%~50%
-```
-
-> **进阶**：检查 GPU 拓扑 `nvidia-smi topo -m`。TP 的多卡尽量选 NVLink 直连的对，避免走 PCIe 桥接，通信延迟差 5~10 倍。
-
-#### [10] 推测解码：低并发场景的延迟黑科技
-
-用一个小模型快速"猜"后续 Token，然后大模型一次性验证。猜对了跳过，猜错了重来。
+vLLM 0.29 使用 JSON 配置接口，例如：
 
 ```bash
---speculative-model Qwen/Qwen2.5-1.5B-Instruct \
---num-speculative-tokens 5
+--speculative-config '{"method":"draft_model","model":"Qwen/Qwen2.5-1.5B-Instruct","num_speculative_tokens":5}'
 ```
 
-vLLM 支持多种策略：**n-gram（基于已生成文本的模式匹配）、EAGLE（自回归头预测）、DFlash** 等。
-
-```text
-在低并发时（< 10 QPS）：延迟提升 2~5 倍
-在高并发时（> 100 QPS）：收益递减（GPU 已经被连续批处理填满了）
-
-适用场景：实时对话应用、内部工具、延迟敏感的 Agent 调用
-不适用：高并发 API 服务
-```
-
----
+此片段用于已有启动命令；draft 与目标模型的 tokenizer、架构和后端必须兼容。它不是任意目标模型均可直接使用的通用配方。先测正常解码，再比较相同 SLO 下的延迟和吞吐。
 
 ## 第五层：分离式推理——超大规模服务的终极架构
 
@@ -645,10 +582,9 @@ vllm:request_prompt_tokens          # 每请求输入 Token 分布 (Histogram)
 vllm:request_generation_tokens      # 每请求输出 Token 分布 (Histogram)
 
 # ─── 缓存效率 ───（V1 新指标，替代已废弃的 gpu_prefix_cache_hit_rate）
-vllm:prefix_cache_hits              # 缓存命中 Token 总数 (Counter)
-vllm:prefix_cache_queries           # 缓存查询 Token 总数 (Counter)
-vllm:prompt_tokens_cached           # 已缓存的 Prompt Token 数
-vllm:prompt_tokens_recomputed       # 被缓存但仍需重算的 Token 数
+vllm:prefix_cache_hits_total              # 缓存命中 Token 总数 (Counter)
+vllm:prefix_cache_queries_total           # 缓存查询 Token 总数 (Counter)
+vllm:prompt_tokens_cached_total           # 已缓存的 Prompt Token 数
 
 # ─── 延迟指标 ───
 vllm:time_to_first_token_seconds    # 首 Token 延迟 TTFT (Histogram)
@@ -656,7 +592,7 @@ vllm:inter_token_latency_seconds    # Token 间延迟 ITL (Histogram)
 vllm:e2e_request_latency_seconds    # 端到端请求延迟 (Histogram)
 
 # ─── 资源饱和度 ───
-vllm:kv_cache_usage_perc            # KV Cache 显存占用比（亦作 gpu_cache_usage_perc，走向 1.0 即发生排队）
+vllm:kv_cache_usage_perc            # KV Cache 显存占用比（取值 0~1；接近 1 表示缓存块紧张，非整卡显存比例）
 vllm:num_requests_running           # 正在执行的请求数
 vllm:num_requests_waiting           # 排队等待的请求数
 
@@ -664,43 +600,28 @@ vllm:num_requests_waiting           # 排队等待的请求数
 vllm:num_preemptions_total          # 请求被抢占次数（如果频繁 → 显存不够）
 ```
 
-> **⚠️ 关键配置**：vLLM 的 API 服务使用多进程架构。**必须设置** `PROMETHEUS_MULTIPROC_DIR` 环境变量指向一个共享临时目录，否则 Prometheus 指标数据会丢失或不一致。
+> vLLM 的标准服务通常会初始化多进程指标目录；自定义进程启动方式时，应按对应版本实现管理 `PROMETHEUS_MULTIPROC_DIR` 的生命周期，避免复用旧进程数据。
 
 **Grafana 看板建议**：
 
 | 面板 | PromQL | 告警阈值 | 含义 |
 |------|--------|---------|------|
-| **🔥 缓存命中率** | `rate(vllm_prefix_cache_hits[5m]) / rate(vllm_prefix_cache_queries[5m]) * 100` | <50% 持续 10min | 缓存效率低，利润下降 |
-| Token 吞吐量 | `rate(vllm_generation_tokens_total[5m])` | 突降 >50% | 引擎可能卡住 |
-| KV Cache 使用率 | `vllm_gpu_cache_usage_perc` | >0.95 | 即将 OOM |
-| 请求排队长度 | `vllm_num_requests_waiting` | >100 持续 1min | 需要扩容 |
-| P99 首Token延迟 | `histogram_quantile(0.99, rate(vllm_time_to_first_token_seconds_bucket[5m]))` | >3s | 用户体验恶化 |
-| 抢占次数 | `rate(vllm_num_preemptions_total[5m])` | >0 持续 | 显存严重不足 |
+| **🔥 缓存命中率** | `rate(vllm:prefix_cache_hits_total[5m]) / rate(vllm:prefix_cache_queries_total[5m]) * 100` | <50% 持续 10min | 缓存效率低，利润下降 |
+| Token 吞吐量 | `rate(vllm:generation_tokens_total[5m])` | 突降 >50% | 引擎可能卡住 |
+| KV Cache 使用率 | `vllm:kv_cache_usage_perc` | >0.95 | 缓存块压力较高，结合抢占与排队判断 |
+| 请求排队长度 | `vllm:num_requests_waiting` | >100 持续 1min | 需要扩容 |
+| P99 首Token延迟 | `histogram_quantile(0.99, rate(vllm:time_to_first_token_seconds_bucket[5m]))` | >3s | 用户体验恶化 |
+| 抢占次数 | `rate(vllm:num_preemptions_total[5m])` | >0 持续 | 显存严重不足 |
 
 ### Token 计费的五大陷阱
 
-**陷阱一：前缀缓存命中的 Token 要不要收费？**
+**陷阱一：把缓存命中量当成利润**
 
-APC 命中后，那些 Prompt Token 几乎不消耗 GPU 计算。但从用户视角看，它们确实占用了上下文窗口，影响了模型的输出。
-
-```text
-你的真实计算成本：
-  请求总 Prompt = 3000 Token
-  APC 命中前缀 = 2800 Token（成本 ≈ 0）
-  实际需要计算 = 200 Token
-
-用户应付费用：
-  按行业惯例：仍按 3000 prompt_tokens 全额收费
-
-你的利润空间 = 用户支付的 3000 Token 费用 - 你实际 200 Token 的 GPU 成本
-这就是自建推理服务相比直接转卖 OpenAI API 的核心利润来源
-```
-
-> **结论**：前缀缓存是你的利润引擎。缓存命中率越高，利润越厚。
+以 3000 输入 Token、2800 缓存命中为例，只能得出未缓存输入为 200 Token。缓存命中减少重复预填充，但不免除后续解码、KV 访存和固定成本。缓存 Token 是否折价由你的定价合同决定，没有“行业统一全价收费”规则。评估收益应使用相同流量下的实际 GPU 时间、延迟与整机成本。
 
 **陷阱二：流式输出（Streaming）的 Token 统计**
 
-流式输出时 usage 只在**最后一个 chunk**（`finish_reason != null` 的那个）中返回。中间的 chunk 里 usage 字段可能为 null 或缺失。
+请求中开启 `stream_options={"include_usage": True}` 后，流结束前可收到携带总 usage 的额外 chunk，其 `choices` 可能为空。不要依赖 `finish_reason` 判定计量事件；应检查 `chunk.usage`。断连可能收不到最终 usage，需要单独记录未完整结算的请求。
 
 ```python
 # ❌ 错误做法：只读第一个 chunk 的 usage
@@ -726,38 +647,16 @@ vLLM 提供了 `/tokenize` 端点用于预先统计 Token 数。但要注意：C
 
 ## 第七层：成本分析——自建 vs 购买 API
 
-最终的商业问题：自建 vLLM 推理服务，和直接购买 OpenAI / Claude API，到底哪个更划算？
+先确认两条路线达到相同业务验收要求，再比较成本。不同能力模型处理相同 Token 数，不等于提供了相同服务。
 
 ```text
-以 Qwen2.5-72B (FP8 量化) 在 2 张 H100 上部署为例：
-
-GPU 成本：
-  云厂商 H100 SXM 80GB ≈ $3.5/小时/张
-  2 张 = $7/小时 = $168/天 = $5,040/月
-
-vLLM 吞吐能力（FP8 + APC + Chunked Prefill）：
-  ≈ 4,000 tokens/s (包含 input + output)
-  ≈ 345,600,000 tokens/天
-
-与 OpenAI GPT-4o 对比（$2.50/M input + $10/M output, 假设 3:1 比例）：
-  同等 Token 量的 OpenAI 费用 ≈ $1,500/天
-
-  自建成本 $168/天 vs OpenAI $1,500/天
-  → 自建便宜约 9 倍
-
-但别忘了额外成本：
-  + 运维人力（监控、排障、升级）
-  + 网络带宽和存储
-  + 模型更新和测试
-  + 冗余和高可用
-
-经验法则：
-  日均 Token < 1000 万 → 直接买 API，省心
-  日均 Token 1000 万 ~ 1 亿 → 根据团队能力评估
-  日均 Token > 1 亿 → 自建几乎是必选，成本优势碾压
+API 每日成本 = 输入量 × 输入单价 + 输出量 × 输出单价
+             + 缓存写入/读取/存储 + 工具与平台费用
+自建每日成本 = GPU/整机租用或折旧 + 运维 + 网络存储
+             + 冗余容量 + 模型评测与更新
 ```
 
----
+单价需统一为“每 Token”或“每百万 Token”，不能混算。使用自己压测得到的 SLO 内吞吐、实际利用率及峰谷流量，确认容量是否够用；没有日志支撑的 4000 tokens/s 或“日均一亿 Token 必须自建”不是通用结论。开源模型的质量差异、冷启动和故障备用也需要计入。更完整的容量推导见 [多机部署指南](/articles/deepseek-v4-kimi-k3-deployment-guide/)。
 
 ## 生产部署终极 Checklist
 
@@ -765,8 +664,8 @@ vLLM 吞吐能力（FP8 + APC + Chunked Prefill）：
 
 | 项目 | 推荐方案 | 说明 |
 |------|---------|------|
-| GPU 型号 | H100 SXM 80GB / A100 80GB | H100 支持 FP8 零校准量化，性价比最优 |
-| GPU 互联 | NVLink 4.0 / NVSwitch | TP 多卡必须用 NVLink，PCIe 桥接性能差 5-10x |
+| GPU 型号 | H100 SXM 80GB / A100 80GB | 按模型、精度、SLO 与报价验证成本 |
+| GPU 互联 | NVLink 4.0 / NVSwitch | TP 通信需核对互联与实测带宽 |
 | CPU 配置 | ≥ (2 + N) 物理核 (N=GPU 数) | vLLM 的 Engine Core 进程对 CPU 敏感，不足会导致调度延迟 |
 | 内存 | ≥ 模型文件大小 × 2 | 模型加载时需要 CPU 内存暂存 |
 
@@ -799,7 +698,7 @@ vLLM 吞吐能力（FP8 + APC + Chunked Prefill）：
 | VLLM_HOST_IP | 设为私网 IP | 避免绑定到公网接口 |
 
 ```text
-✅ 使用 Docker: --ipc=host（PyTorch 共享内存必须）
+✅ 使用 Docker 时提供足够共享内存（host IPC 或 --shm-size）
 ✅ 配置反向代理处理 TLS、认证和限流
 ✅ 设置 VLLM_HOST_IP 为私网接口地址
 ```
@@ -808,15 +707,15 @@ vLLM 吞吐能力（FP8 + APC + Chunked Prefill）：
 
 ```bash
 vllm serve /models/Qwen2.5-72B-Instruct \
-  --gpu-memory-utilization 0.90 \           # 甜区 0.90~0.95
-  --max-model-len 8192 \                    # ⚠️ 最关键参数！按业务实际设置
-  --enable-chunked-prefill \                # 在线服务必开
-  --enable-prefix-caching \                 # 利润引擎
-  --enable-prompt-tokens-details \          # 让 API 返回 cached_tokens
-  --max-num-seqs 256 \                      # 在线: 128~256
-  --max-num-batched-tokens 16384 \          # Token 预算
-  --quantization fp8 \                      # H100 首选
-  --kv-cache-dtype fp8_e5m2 \               # 长上下文场景
+  --gpu-memory-utilization 0.90 \
+  --max-model-len 8192 \
+  --enable-chunked-prefill \
+  --enable-prefix-caching \
+  --enable-prompt-tokens-details \
+  --max-num-seqs 256 \
+  --max-num-batched-tokens 16384 \
+  --quantization fp8 \
+  --kv-cache-dtype fp8_e5m2 \
   --tensor-parallel-size 2                  # 最小 TP + 多实例
 ```
 
@@ -838,14 +737,14 @@ vllm serve /models/Qwen2.5-72B-Instruct \
 | 分布式追踪 | OpenTelemetry | 端到端延迟分析（网关 → vLLM → 响应） |
 
 ```text
-✅ 设置 PROMETHEUS_MULTIPROC_DIR（多进程指标聚合必须）
+✅ 核实多进程指标聚合及临时目录生命周期
 ✅ Grafana 看板必看 6 个面板:
-   - 缓存命中率: rate(vllm_prefix_cache_hits[5m]) / rate(vllm_prefix_cache_queries[5m])
-   - KV Cache 使用率: vllm_gpu_cache_usage_perc（>0.95 告警）
-   - Token 吞吐量: rate(vllm_generation_tokens_total[5m])
-   - 请求排队长度: vllm_num_requests_waiting（>100 告警）
+   - 缓存命中率: rate(vllm:prefix_cache_hits_total[5m]) / rate(vllm:prefix_cache_queries_total[5m])
+   - KV Cache 使用率: vllm:kv_cache_usage_perc（>0.95 告警）
+   - Token 吞吐量: rate(vllm:generation_tokens_total[5m])
+   - 请求排队长度: vllm:num_requests_waiting（>100 告警）
    - P99 TTFT: histogram_quantile(0.99, ...)（>3s 告警）
-   - 抢占次数: rate(vllm_num_preemptions_total[5m])（>0 告警）
+   - 抢占次数: rate(vllm:num_preemptions_total[5m])（>0 告警）
 ```
 
 ### 六、计费与业务层
@@ -861,7 +760,7 @@ vllm serve /models/Qwen2.5-72B-Instruct \
 ✅ 计费中间件同时记录 prompt_tokens 和 cached_tokens
    → prompt_tokens = 用户账单依据
    → cached_tokens = 你的成本优化依据
-   → 差值 = 利润空间
+   → 结合 GPU 时间与固定成本核算利润
 ✅ 流式场景正确处理最后一个 chunk 的 usage
 ✅ 确保 tokenizer 与 vLLM 完全一致（避免账单争议）
 ```
@@ -895,15 +794,15 @@ vllm serve /models/Qwen2.5-72B-Instruct \
                          ┌──────────▼──────────┐
                          │   vLLM 推理引擎      │
                          │                     │
-                         │  PagedAttention      │ ← 显存利用率 >96%
-                         │  连续批处理          │ ← GPU 时刻满载
-                         │  分块预填充          │ ← 消灭延迟毛刺
-                         │  APC 前缀缓存        │ ← 计算复用 = 利润
-                         │  FP8 量化            │ ← 吞吐再翻 1.5x
-                         │  KV Cache FP8        │ ← 并发再翻 2x
-                         │  推测解码            │ ← 延迟降 2-5x
+                         │  PagedAttention      │ ← 按负载验证收益与限制
+                         │  连续批处理          │ ← 按负载验证收益与限制
+                         │  分块预填充          │ ← 按负载验证收益与限制
+                         │  APC 前缀缓存        │ ← 按负载验证收益与限制
+                         │  FP8 量化            │ ← 按负载验证收益与限制
+                         │  KV Cache FP8        │ ← 按负载验证收益与限制
+                         │  推测解码            │ ← 按负载验证收益与限制
                          │  Multi-LoRA          │ ← 一机服务多客户
-                         │  结构化输出          │ ← 工具调用不出格式错
+                         │  结构化输出          │ ← 按负载验证收益与限制
                          │                     │
                          └──────────┬──────────┘
                                     │
@@ -918,9 +817,9 @@ vllm serve /models/Qwen2.5-72B-Instruct \
 **核心行动建议**：
 
 1. **先跑起来再调优**：用 `vllm serve` 一行命令启动，验证业务逻辑跑通，再逐步开启量化、调参数。
-2. **`max-model-len` 是第一优先级**：这一个参数可能比其他所有优化加起来效果都大。
-3. **监控先行**：先搭好 Prometheus + Grafana，看着数据调。`gpu_cache_usage_perc` 是单一最重要的指标。
-4. **缓存命中率 = 利润率**：持续追踪 APC 命中率，优化 Prompt 结构让静态内容前置。
+2. **按业务设置长度和并发预算**：结合启动画像和压测，定位实际瓶颈。
+3. **监控先行**：先搭好 Prometheus + Grafana，看着数据调。将 KV 块占用、TTFT、排队与抢占结合判断。
+4. **缓存收益要实测**：持续追踪命中量、GPU 时间与业务成本，优化静态前缀与路由。
 5. **计费做在网关层**：不要改 vLLM 源码，在网关层拦截 `usage` 字段是最干净的方案。
 
 vLLM 的迭代速度极快（几乎每周都有新版本），建议持续关注其 [官方文档](https://docs.vllm.ai/) 和 [GitHub Releases](https://github.com/vllm-project/vllm/releases)。
@@ -930,10 +829,12 @@ vLLM 的迭代速度极快（几乎每周都有新版本），建议持续关注
 ## 常见问题 (FAQ)
 
 ### Q1: vLLM 启动时报错 CUDA out of memory (OOM) 怎么排查？
-首先检查 `--gpu-memory-utilization`，默认 0.90 会预留 90% 显存给模型权重和 KV Cache，若宿主系统还有其他显存占用可临时降至 0.85。其次务必根据业务上限显式指定 `--max-model-len`（如 4096 或 8192），避免按模型理论极限预分配过大 KV Cache。若显存依旧不足，建议结合 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 开启 AWQ 或 FP8 权重量化。
+按启动日志区分权重加载、激活/图捕获与 KV 分配阶段。`--gpu-memory-utilization 0.90` 是示例预算，默认值随版本核对；它包含权重和运行时开销，不只分配 KV。业务长度、batch 与并发限制也会影响峰值；降低 `max-model-len` 不保证 KV 池按比例缩小。必要时减少负载或使用已验证的量化方案。
 
 ### Q2: 张量并行 (Tensor Parallel) 与流水线并行 (Pipeline Parallel) 怎么选？
 在单机多卡环境（如 4卡或 8卡 A100/H100 NVLink），优先使用张量并行 `--tensor-parallel-size`，通信延迟极低且切分均匀；对于跨多台机器的分布式推理，建议使用张量并行（单机内）+ 数据并行（多实例多副本），通过前置负载均衡分发，避免跨节点流水线并行带来的通信瓶颈。
 
 ### Q3: vLLM 与 Ollama、TGI 相比在生产环境的核心优势是什么？
-vLLM 的核心优势在于高并发生产级吞吐，依托 PagedAttention、连续批处理（Continuous Batching）和自动前缀缓存（APC），在高并发与长文本混合请求下的吞吐量是轻量级本地引擎的 3~5 倍，且天然兼容 OpenAI 完整 API 协议。更多底层显卡架构可参考 [NVIDIA GPU 封装架构演进](/articles/nvidia-gpu-package-architecture/)。
+vLLM 提供连续批处理、前缀缓存与 OpenAI 兼容接口等服务能力。实际吞吐差异取决于模型、精度、硬件与负载，不能承诺相对其他引擎固定 3～5 倍；也不应将兼容接口称为覆盖 OpenAI 全部产品能力。
+
+指标示例针对 vLLM 0.29 的 Prometheus 导出格式，Counter 样本使用 `_total` 后缀；上线前以实际 `/metrics` 为准。按实例/模型聚合 histogram bucket 时要保留 `le` 标签。参考 [vLLM 0.29 引擎参数](https://docs.vllm.ai/en/v0.29.0/configuration/engine_args/)、[监控指标设计](https://docs.vllm.ai/en/v0.29.0/design/metrics/)。

@@ -16,6 +16,7 @@ extraTags:
   - Split-K Attention
   - Hopper TMA
   - WGMMA
+updated: 2026-10-20
 ---
 
 ## Introduction: The Memory Traffic Crisis of Self-Attention
@@ -133,7 +134,7 @@ flowchart TD
     CheckDone -- Yes --> FinalNorm["Final Single Normalization: O_final = O_new / l_new<br/>(One division per element at loop completion)"]
 ```
 
-With this formulation, FlashAttention **completely eliminated HBM writes for intermediate matrices $S$ and $P$**. Total memory traffic plummeted from $O(N^2)$ to $O(N^2 d / M)$, delivering a 2x-4x wall-clock speedup on A100 GPUs while reducing memory footprint to $O(N)$.
+With this formulation, FlashAttention **completely eliminated HBM writes for intermediate matrices $S$ and $P$**. Total memory traffic plummeted from $O(N^2)$ to $O(N^2 d^2 / M)$, delivering a 2x-4x wall-clock speedup on A100 GPUs while reducing memory footprint to $O(N)$.
 
 ---
 
@@ -159,11 +160,11 @@ GPU Tensor Cores are optimized for dense matrix multiplication (GEMM). Non-matmu
 
 FlashAttention-1 evaluated division operations at every tile iteration. FlashAttention-2 deferred normalization entirely: **The inner loop performs pure addition and multiplication. Only after the entire sequence is scanned does the kernel execute a single vectorized division across the output registers**, substantially increasing Tensor Core occupancy.
 
-### 2.3 Warp Partitioning: Eradicating Shared Memory Barriers
+### 2.3 Warp Partitioning: Reducing Output Reductions
 
 In CUDA thread hierarchies, each Thread Block is divided into 32-thread Warps.
 - In FA-1, all warps cooperated across the $Q$ block while splitting $K, V$ blocks, requiring repeated reduction and synchronization barriers (`__syncthreads()`) through Shared Memory to compute row sums and maximums;
-- FA-2 redesigned warp partitioning: **Warps partition the $Q$ tile (each warp computes independent output $O$ rows), while all warps in the block share the $K, V$ tiles**. Because each warp writes to disjoint output rows, inter-warp synchronization and shared memory reduction barriers were completely eradicated.
+- FA-2 partitions the Q tile into independent output rows, reducing cross-warp output reduction and shared-memory traffic. Data loading, pipeline dependencies, and other block operations still require synchronization; not all barriers disappear.
 
 These optimizations elevated FlashAttention-2's compute efficiency to **up to 73% of theoretical peak FLOPs (~225 TFLOPS on A100)**.
 
@@ -291,7 +292,7 @@ Developed by the LMSYS and MLC teams, **FlashInfer** was engineered specifically
 | Dimension | Vanilla PyTorch | FlashAttention-1 | FlashAttention-2 | FlashAttention-3 | FlashInfer (Serving Optimized) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Release Year** | Baseline | 2022 (NeurIPS) | 2023 | 2024 | 2024 (LMSYS) |
-| **HBM Traffic** | $O(N^2)$ (Severe) | $O(N^2 d / M)$ | $O(N^2 d / M)$ | $O(N^2 d / M)$ | $O(N^2 d / M)$ |
+| **HBM Traffic** | $O(N^2)$ (Severe) | $O(N^2 d^2 / M)$ | $O(N^2 d^2 / M)$ | $O(N^2 d^2 / M)$ | Kernel-, shape-, and phase-dependent |
 | **Core Innovation** | None | Tiling + Online Softmax | Loop Inversion + Register Pin | TMA Async + WGMMA | Split-K Decode + Native Paged KV |
 | **Hardware Target** | Any | Volta / Ampere | Ampere / Hopper | Hopper (H100/H200) Only | Ampere / Hopper / Ada |
 | **Intermediate Matrix**| Materialized in HBM | On-chip SRAM | On-chip Registers/SRAM | Hardware TMA Pipelines | On-chip Registers/SRAM |
@@ -327,3 +328,5 @@ Standard implementations avoid this by subtracting the global row maximum: $S_{i
 In tiled **Online Softmax**, where the maximum is updated incrementally, the kernel must apply a dynamic exponential correction factor at each step:
 $$l^{(j)} = e^{m^{(j-1)} - m^{(j)}} \cdot l^{(j-1)} + \sum e^{S_k^{(j)} - m^{(j)}}$$
 Because $m^{(j)} \ge m^{(j-1)}$, the exponent difference satisfies $m^{(j-1)} - m^{(j)} \le 0$. Consequently, the scaling multiplier $e^{m^{(j-1)} - m^{(j)}} \in (0, 1]$ **only attenuates previous sums and can never cause numerical overflow**. If a custom kernel fails to enforce this subtractive rescaling strictly, scaling up context length will cause immediate numeric instability.
+
+Complexity convention: $M$ denotes SRAM capacity in elements, $N$ sequence length, and $d$ head dimension. Within the capacity regime analyzed in the paper, FlashAttention uses $O(N^2 d^2/M)$ HBM accesses. This does not specify a fixed measured speedup for every shape. See [FlashAttention](https://arxiv.org/abs/2205.14135) and [FlashAttention-2](https://arxiv.org/abs/2307.08691).

@@ -17,6 +17,7 @@ extraTags:
   - vLLM
   - SGLang
   - KEDA
+updated: 2026-10-20
 ---
 
 ## Introduction: The Paradigm Shift from Scalar CPUs to AI GPU Topologies
@@ -150,7 +151,7 @@ Under `single-numa-node`:
 ## 4. Production AI Serving: Autoscaling vLLM & SGLang on Kubernetes
 
 Operating production inference engines like **vLLM** and **SGLang** (analyzed in our companion deep dive on [Production Inference Engines Core Architecture Internals](/en/articles/inference-engines-core-architecture-internals/)) on Kubernetes requires accounting for two architectural constraints:
-1. **Aggressive VRAM Pre-allocation**: Upon initialization, vLLM allocates up to 90% of available VRAM to establish its PagedAttention KV Cache pool. Consequently, **conventional Kubernetes CPU/Memory HPA policies fail**, as GPU memory utilization remains constant regardless of active traffic;
+1. **VRAM preallocation**: `--gpu-memory-utilization` budgets a fraction of total device memory for the engine, including weights, activations, runtime overhead, and remaining KV storage. Allocated VRAM is different from occupied KV blocks, so device memory alone does not measure request pressure.
 2. **Prefill/Decode (P/D) Disaggregation**: Prefill operations are compute-bound, whereas Decode operations are memory-bandwidth-bound.
 
 The modern production architecture leverages **KEDA (Kubernetes Event-driven Autoscaling)** triggered by vLLM metrics scraped via Prometheus:
@@ -212,14 +213,15 @@ spec:
     metadata:
       serverAddress: http://prometheus-k8s.monitoring.svc.cluster.local:9090
       metricName: vllm_num_requests_waiting
-      query: sum(vllm:num_requests_waiting{model="qwen-72b"})
+      query: sum(vllm:num_requests_waiting{model_name="qwen-72b"})
       threshold: '5'        # Scales up when queue backlog exceeds 5 requests
   # Trigger 2: KV cache block allocation saturation
   - type: prometheus
+    metricType: Value
     metadata:
       serverAddress: http://prometheus-k8s.monitoring.svc.cluster.local:9090
       metricName: vllm_kv_cache_usage_perc
-      query: avg(vllm:kv_cache_usage_perc{model="qwen-72b"})
+      query: avg(vllm:kv_cache_usage_perc{model_name="qwen-72b"})
       threshold: '0.80'     # Triggers expansion when KV cache saturation crosses 80%
 ```
 
@@ -259,29 +261,14 @@ flowchart TD
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: Why does vLLM report GPU VRAM allocation above 90% immediately after booting, and will this trigger Kubernetes OOMKills?
-**No.**
-This is an intentional design pattern of **PagedAttention KV Cache pre-allocation**:
-- During startup, vLLM loads model weights (e.g., Qwen-72B requires ~144GB across multiple cards);
-- Following model initialization, vLLM pre-allocates 90% of remaining physical VRAM (`--gpu-memory-utilization=0.9`) to manage dynamic paging tables;
-- **Kubernetes OOM Behavior**: The Kubernetes OOMKiller monitors **Host Physical RAM**, not device VRAM. As long as host memory stays within `resources.limits.memory`, the container will not be terminated;
-- **Autoscaling Guidance**: Do not base HPA rules on raw VRAM consumption reported by DCGM. Instead, autoscale against vLLM's internal metric `vllm:kv_cache_usage_perc`.
+### Q1: How does vLLM VRAM preallocation relate to Kubernetes OOM?
+`--gpu-memory-utilization` is a fraction of total device memory budgeted for the engine. Weights and other overhead are deducted before KV tensor storage is allocated; it is not 90% of remaining VRAM allocated to page tables. GPU OOM differs from host-RAM cgroup OOM. Node pressure can cause system OOM or eviction even when a Pod is below its own memory limit. Scale using queues, TTFT, preemptions, and occupied KV blocks together, rather than `memory.used` alone.
 
-### Q2: On an 8-GPU node, why does distributing a Tensor Parallel (TP=4) model across arbitrary GPUs introduce severe latency, and how does the Topology Manager resolve it?
-**Root Cause: Asymmetric Interconnect Topologies**.
-In HGX architectures, GPUs communicate in distinct sub-clusters via high-bandwidth NVSwitch fabrics (up to 900 GB/s bidirectional bandwidth per card).
-If the scheduler places a TP=4 workload across non-co-located GPUs (e.g., GPUs 0, 1, 4, and 5):
-- GPUs 0 and 1 communicate over high-speed NVLink;
-- GPUs 1 and 4 are forced over lower-bandwidth PCIe or cross-socket CPU interconnects (dropping bandwidth to sub-30 GB/s);
-- Because Tensor Parallelism requires frequent synchronization via `All-Reduce` operations, overall throughput drops significantly;
-**Resolution**:
-Enable `topologyManagerPolicy: single-numa-node` or leverage Kubernetes 1.30+ **Dynamic Resource Allocation (DRA)** to schedule GPU workloads within verified interconnect boundaries.
+### Q2: Does Topology Manager guarantee a particular NVLink GPU group?
+No. It combines NUMA hints from CPU, memory, and device managers for node admission; it is not a scheduler for arbitrary NVLink connectivity graphs. Server topology varies. DGX H100 connects all eight GPUs through NVSwitch, so two four-GPU islands are not a universal model. Check `nvidia-smi topo -m` and vendor documentation, then verify driver and scheduler support for any required GPU/NIC topology constraints. See the [DGX H100 hardware guide](https://docs.nvidia.com/dgx/dgxh100-user-guide/introduction-to-dgxh100.html).
 
-### Q3: What is the primary operational advantage of Kubernetes Dynamic Resource Allocation (DRA) over traditional Device Plugins for AI workloads?
-**Limitations of Traditional Device Plugins**:
-Device Plugins advertise resources as scalar integers (e.g., `nvidia.com/gpu: 4`). The scheduler cannot evaluate whether the assigned GPUs share an NVLink fabric, connect to the same NUMA socket, or align with local InfiniBand NICs.
+### Q3: Does DRA automatically solve every GPU and NIC topology problem?
+No. ResourceClaims and driver-published device attributes can express richer selection criteria, but available properties, cross-device constraints, and allocation behavior depend on Kubernetes and driver versions. Verify that GPU/NIC drivers expose the required topology and validate scheduling and admission behavior. Enabling DRA alone does not guarantee an optimal NVLink group or eliminate cross-NUMA traffic. See [Kubernetes DRA](https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/).
 
-**Capabilities of Dynamic Resource Allocation (DRA)**:
-1. **Claim-Based Parameterization**: Workloads submit a `ResourceClaim` specifying structured hardware constraints;
-2. **Topology Discovery**: DRA enables vendor drivers to expose hardware topology (NVLink connectivity matrices, PCIe switch mappings) directly to the scheduling framework;
-3. **Coordinated Multi-Device Scheduling**: The scheduler atomically pairs GPU allocations with corresponding local network controllers on the same PCIe root complex, preventing interconnect bottlenecks.
+
+In the KEDA example, `qwen-72b` must match vLLM `--served-model-name`; verify labels at `/metrics`. A total queue uses `AverageValue` to divide work among replicas; a cluster-average cache fraction uses `metricType: Value` to avoid an extra per-replica normalization. Thresholds are illustrative and require available GPUs, startup time, and cache-warmup planning.

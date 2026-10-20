@@ -18,6 +18,7 @@ extraTags:
   - PFC
   - ECN
   - DCQCN
+updated: 2026-10-20
 ---
 
 ## 引言：400Gbps 吞吐时代的“CPU 内存墙”与延迟危机
@@ -150,11 +151,11 @@ RoCEv2 报文物理封装:
 +-------------------+----------------+---------------+--------------------+------------------+
 ```
 
-### 3.1 致命瓶颈：RoCEv2 的丢包敏感性与 Go-Back-N 灾难
-与复杂精密的 TCP 协议栈不同，RDMA 网卡 ASIC 的硬件缓存极为精简，**RoCEv2 默认依赖脆弱的 Go-Back-N 重传机制**：
-- 一旦网络中丢掉哪怕 1 个数据包，接收端网卡会直接丢弃后续所有按序到达的数据，强迫发送端从丢失的数据包开始全部重发；
-- 丢包率仅需达到 0.1%，传统基于 Go-Back-N 的 RoCEv2 实际吞吐量便会断崖式暴跌 80% 以上；
-- **网络部署模式的权衡**：在工程部署上，RoCEv2 实际存在 **Lossless（无损模式，启用 PFC+ECN）**、**Semi-lossless（半无损模式）** 和 **Lossy（有损模式，仅依赖 ECN 与网卡快速重传）** 三种架构。在追求极致低延迟的 GPU 训练集群中，通常采用 PFC 构建无损以太网以榨干硬件算力；但 PFC 属于部署选择与性能条件，**并非协议强制必需条件**。现代高端智能网卡（如 NVIDIA ConnectX-6/7/8）已支持乱序接收（OOO）与动态连接传输（DCT），许多公有云厂商甚至主动选用 Lossy RoCE 部署以彻底规避 PFC 死锁风险。
+### 3.1 丢包恢复取决于网卡与传输实现
+
+传统可靠连接的 Go-Back-N 恢复可能放大单次丢包的重传开销，实际影响取决于 RTT、窗口、网卡和恢复算法；没有通用的“0.1% 丢包必然损失 80% 吞吐”结论。
+
+RoCE 可按硬件能力选择 PFC 无损、半无损或有损部署。PFC 是部署选择，不是 RoCEv2 报文协议的强制要求；有损部署也需要正确的拥塞控制与丢包恢复。部分 HCA 支持乱序放置及更高效的恢复，但 DCT 是降低连接状态开销的传输机制，不能将它当作选择重传算法。参见 [NVIDIA RoCE 部署配置](https://enterprise-support.nvidia.com/s/article/recommended-network-configuration-examples-for-roce-deployment)。
 
 ### 3.2 制造无损：PFC（基于优先级的流量控制，802.1Qbb）
 
@@ -187,12 +188,12 @@ sequenceDiagram
 flowchart LR
     Sender["<b>发送端 HCA</b><br/>以当前线速发送数据"] -->|"带有 IP ECT(0) 标记的数据包"| Switch["<b>中间交换机</b><br/>队列深度超过 ECN 阈值 Kmin<br/>硬件标记 IP 报文 CE 位为 11"]
     Switch -->|"打上了 CE 拥塞标记的报文"| Receiver["<b>接收端 HCA</b><br/>捕获 CE 标记"]
-    Receiver -->|"生成 16 字节拥塞通知包 (CNP)"| Sender
+    Receiver -->|"生成 拥塞通知包 (CNP)"| Sender
     Sender -->|"<b>执行 DCQCN 降速算法</b><br/>主动削减发送端速率"| Sender
 ```
 
 - **交换机侧（ECN 阈值）**：交换机配置 WRED 曲线，当队列长度在 $K_{min}$ 到 $K_{max}$ 之间时，以一定概率将报文 IP 头部的 ECN 字段置为 `11`（Congestion Encountered, CE）；
-- **接收网卡（CNP 生成）**：接收端 HCA 发现 CE 报文，立刻生成一个专门的 16 字节 **CNP（Congestion Notification Packet）** 报文直发源端；
+- **接收网卡（CNP 生成）**：接收端 HCA 发现 CE 报文，立刻生成一个专门的 **CNP（Congestion Notification Packet）** 报文直发源端；
 - **发送网卡（降速与恢复）**：发送端 HCA 收到 CNP 后，利用内部硬件状态机立即乘法削减当前流的注入速率，并在后续无 CNP 间隔中逐步加法恢复速率。
 
 ---
@@ -252,7 +253,7 @@ RDMA 以内核旁路、零拷贝与内存注册三大核心支柱，终结了传
 ### Q3: RoCEv2 与原生 InfiniBand（IB）在链路层与物理实现上有何本质不同？
 1. **流控机制的物理维度不同**：
    - RoCEv2 运行在有损的以太网上，依赖反应式的 **PFC Pause 帧（出现拥塞后反向刹车）**，容易发生死锁与风暴；
-   - InfiniBand 采用原生底层的 **Credit-Based 信用度流控**。发送端在发包前必须预先拥有接收端赋予的信用额度（Credit），接收端没有缓冲区就绝对不发，从物理层面 100% 杜绝了缓冲区溢出丢包与死锁；
+   - InfiniBand 采用原生底层的 **Credit-Based 信用度流控**。发送端在发包前必须预先拥有接收端赋予的信用额度（Credit），接收端没有缓冲区就绝对不发，可避免接收缓冲溢出，但错误、链路故障和配置导致的死锁仍需处理；
 2. **协议报头开销与转发延迟**：
    - RoCEv2 必须包含完整的以太网帧头、IPv4 报头与 UDP 报头（至少 42 字节开销），交换机转发延迟普遍在数百纳秒；
    - InfiniBand 使用极简的本地路由头（LRH）与基本传输头（BTH），采用超轻量 Cut-through 直通转发，硬件交换延迟通常低于 100 纳秒。

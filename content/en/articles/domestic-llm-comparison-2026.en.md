@@ -1,84 +1,73 @@
 ---
-title: "2026 Frontier Chinese LLMs Face-off: Kimi K3 vs GLM-5.3 vs DeepSeek-V4 Practical Benchmark & Architecture Selection"
+title: "Kimi K3 vs GLM-5.3 vs DeepSeek-V4: Architecture, Benchmarks and Deployment"
 slug: domestic-llm-comparison-2026
 date: 2026-09-07
 tag: Chinese LLMs
 tagClass: tag-amber
 category: Evaluation & Trends
-description: "In-depth evaluation of China's top three frontier models in 2026: Kimi K3's 2.8T KDA attention, GLM-5.3's environment-scaled terminal execution, and DeepSeek-V4-Pro's 1.6T MoE software engineering prowess."
+description: "Compare Kimi K3, GLM-5.3, and DeepSeek-V4-Pro with sourced architecture facts, matching benchmark versions, checkpoint formats, and workload evaluation plans."
+updated: 2026-10-20
 ---
 
-Entering the third quarter of 2026, the global AI landscape has undergone a monumental shift. The era where Western frontier labs unilaterally dominated foundational reasoning (see our [2026 Mainstream Foundation Models Comparison](/en/articles/model-comparison-2026/)) has come to an end. Chinese leading AI innovators—represented by **Moonshot AI**, **Zhipu AI (Z.ai)**, and **DeepSeek**—have unleashed world-class breakthroughs across model architecture, post-training methodology, and open-weights compute efficiency.
+## Scope: public evidence and workload evaluation
 
-In the summer of 2026, three landmark milestones emerged:
-1. **Kimi K3**: A colossus with 2.8 Trillion MoE parameters, introducing **Kimi Delta Attention (KDA)** to secure a 1512 Elo ranking in the LMSYS Chatbot Arena Tier 1;
-2. **GLM-5.3**: Pioneering the **"Environment Scaling"** post-training paradigm, claiming #1 worldwide on Terminal-Bench 3.0 for autonomous CLI task execution;
-3. **DeepSeek-V4-Pro**: A 1.6 Trillion MoE open-weights model, achieving 80.6% to 96.4% on SWE-bench Verified for production-grade software engineering.
+This guide compares Kimi K3, GLM-5.3, and DeepSeek-V4-Pro using model cards. Reported benchmarks are not this site's controlled measurements. Workload sections describe evaluation plans rather than completed experiments. See the [GPT / Claude / Gemini comparison](/en/articles/model-comparison-2026/) for commercial model considerations.
 
-How should enterprise software architects and AI practitioners navigate these distinct technologies? This guide provides an objective, empirical breakdown of architectural philosophies, real-world stress tests, and API vs. self-hosting cost economics.
+## 1. Architecture and checkpoint requirements
 
----
+| Property | Kimi K3 | GLM-5.3 | DeepSeek-V4-Pro |
+| --- | --- | --- | --- |
+| Total parameters | 2.8T | Approximately 753B | 1.6T |
+| Active parameters | 104B | Consult the architecture configuration | 49B |
+| Long context | 1M class | 1M class | 1M class |
+| Engineering focus | Hybrid KDA / Gated MLA, native vision | Long-horizon post-training and terminal evaluations | CSA / HCA attention and compressed caches |
+| Weights | Open; check the license | Open; check the license | Open; check the license |
 
-## 1. Architectural Philosophies Compared
+Sources: [Kimi K3](https://huggingface.co/moonshotai/Kimi-K3), [GLM-5.3](https://huggingface.co/zai-org/GLM-5.3), [DeepSeek-V4-Pro](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro).
 
-```text
-       ┌────────────────────────────────────────────────────────┐
-       │             2026 Frontier Chinese AI Architectures     │
-       └────────────────────────────────────────────────────────┘
-                                   │
-         ┌─────────────────────────┼─────────────────────────┐
-         ▼                         ▼                         ▼
-   【Moonshot Kimi K3】       【Zhipu AI GLM-5.3】       【DeepSeek-V4-Pro】
-    • 2.8T MoE (104B Active)  • ~753B Sparse Hybrid MoE  • 1.6T MoE (49B Active)
-    • Kimi Delta Attention    • Environment Scaling      • CSA + HCA Hybrid Attention
-    • 1M Context + Multimodal • Real Linux Sandbox RL    • Repo-level Coding & Open
-```
+K3 combines 69 KDA layers with 24 Gated MLA layers. Constant recurrent state in KDA does not make the complete model's cache constant. DeepSeek-V4 uses **Compressed Sparse Attention (CSA)** and **Heavily Compressed Attention (HCA)**, and its configuration includes shared experts. See the [attention architecture guide](/en/articles/kimi-kda-deepseek-mla-architecture/).
 
-### Kimi K3: Massive Capacity & Delta Attention (KDA)
-Moonshot AI advanced the frontier of attention mathematics. While scaling total parameters to 2.8T (104B active), standard Full Attention would saturate hundreds of gigabytes of GPU KV Cache at 1M tokens. KDA introduces an incremental state recurrence matrix that only tracks semantic deltas across tokens, slicing memory requirements by 62% without degrading needle-in-a-haystack retrieval fidelity.
+GLM-5.3 reuses the GLM-5.2 base model and attributes its gains to post-training. This does not establish an exact sandbox count, training interaction count, or universal troubleshooting success rate.
 
-### GLM-5.3: Post-Training "Environment Scaling"
-Zhipu AI recognized that pre-training data hits diminishing returns without autonomous feedback loops. GLM-5.3 was immersed in tens of thousands of containerized Linux sandboxes, terminal consoles, and security environments. Through millions of self-directed trial-and-error cycles, GLM-5.3 developed unmatched reliability in bash command synthesis, log interpretation, and kernel-level troubleshooting.
+## 2. Compare matching benchmark versions
 
-### DeepSeek-V4-Pro: Uncompromising Open Efficiency
-DeepSeek continues to lead open-weights economics. With 1.6T total MoE parameters and only 49B dynamically activated, its architecture evolves beyond pure MLA by adopting a hybrid CSA (Cross-layer Shared Attention) and HCA (Hierarchical Compressed Attention) design, coupled with fine-grained unshared expert routing. This enables full FP8 deployment across 32x H100 GPUs or high-end domestic compute clusters, slashing total cost of ownership to 1/15th of proprietary equivalents while resolving 80.6% ~ 96.4% on SWE-bench Verified. For physical cluster orchestration and production inference, see our [DeepSeek-V4 & Kimi K3 Bare-Metal Deployment Guide](/en/articles/deepseek-v4-kimi-k3-deployment-guide/) and our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
+The following values come from the comparison in GLM-5.3's model card. They describe that report, not an independent reproduction or universal ranking.
 
----
+| Benchmark | Kimi K3 | GLM-5.3 | DeepSeek-V4 Pro-0813 |
+| --- | --- | --- | --- |
+| Terminal-Bench 2.1 | 88.3 | 88.2 | 87.9 |
+| Terminal-Bench 3.0 | 17.4 | 28.3 | Not reported in this table |
+| DeepSWE v1.1 | 67.5 | 66.9 | 62.7 |
 
-## 2. Benchmark Comparison Matrix
+Read the [official table and footnotes](https://huggingface.co/zai-org/GLM-5.3#benchmark) for harness, reasoning, context, and time budgets. Its Terminal-Bench 3.0 result uses a specified Claude Code harness and avg@3. An absent result is neither zero nor evidence that a model has never been evaluated. Pass@1, Pass@k, and different harness results cannot be merged into one 80.6%–96.4% score range. See [LLM evaluation](/en/articles/llm-evaluation-guide/).
 
-| Evaluation Metric | Kimi K3 | GLM-5.3 | DeepSeek-V4-Pro |
-| :--- | :--- | :--- | :--- |
-| **Developer** | Moonshot AI | Zhipu AI (Z.ai) | DeepSeek |
-| **Release Date** | July 16, 2026 | August 14, 2026 | August 13, 2026 |
-| **Parameters** | 2.8T MoE (104B Active) | ~753B Sparse Hybrid MoE | 1.6T MoE (49B Active) |
-| **LMSYS Arena Elo** | **1512 (Tier-1)** | 1498 | 1506 |
-| **AA Intelligence** | 65.0 | 63.8 | 64.8 |
-| **SWE-bench Verified**| 85.6% | 82.4% | **80.6% ~ 96.4% (#1)** |
-| **Terminal-Bench 3.0**| 17.4 | **28.3 (Open-source #1)** | Not Listed (Official card) |
-| **Context Window** | 1,000,000 Tokens (1M) | 1,000,000 Tokens (1M) | 1,000,000 Tokens (1M) |
-| **Throughput (TPS)** | 90 Tokens/s | 115 Tokens/s (Flash: 260) | 95 Tokens/s |
-| **Open Weights** | **Yes (Self-Hostable)** | Yes (Open-Weights) | **Yes (Open Benchmark)** |
-| **API Pricing (Input)** | $1.20 / 1M Tokens | $0.50 / 1M Tokens | **$0.25 / 1M Tokens** |
-| **API Pricing (Output)**| $4.80 / 1M Tokens | $2.00 / 1M Tokens | **$0.90 / 1M Tokens** |
+## 3. Workload evaluation plans
 
----
+### Long documents and charts
 
-## 3. Engineering Recommendations
+Freeze authorized source files and token budgets. Request field values, page references, and supporting excerpts. Measure numeric accuracy, citation accuracy, unsupported claims, latency, and cost. Needle retrieval alone does not establish financial-audit reliability.
 
-1. **Choose Kimi K3** when your primary workloads demand **deep multimodal reasoning**, **million-token document extraction**, and high-fidelity long-horizon context retention.
-2. **Choose GLM-5.3** when building **autonomous DevOps agents**, **cybersecurity diagnostic pipelines**, and sandboxed terminal automation.
-3. **Choose DeepSeek-V4-Pro** when you require **enterprise on-premise deployment**, **repository-scale code refactoring**, and maximum cost efficiency for high-concurrency production pipelines.
+### Terminal troubleshooting agents
 
----
+Reset identical faulty images before each run. Fix tool permissions, turns, and deadlines. Use deterministic probes to verify DNS, Service, and gRPC recovery; record unnecessary changes, unsafe actions, and rollback behavior.
+
+### Repository modifications
+
+Pin the repository commit, issue, and hidden tests. Record patches, commands, pass rates, and repeated runs under equal tool and compute budgets. Passing tests written by the model itself does not prove task completion.
+
+## 4. Deployment and cost selection
+
+Filter candidates by input modality and available kernels, then measure quality and SLA. Total weights still determine MoE capacity. DeepSeek's native FP4 / FP8 mix and K3's MXFP4 format require different deployment checks; see the [deployment guide](/en/articles/deepseek-v4-kimi-k3-deployment-guide/).
+
+Record API input, output, cached-input, tool, provider, and time-based charges separately. Throughput depends on request lengths, concurrency, and reasoning budgets; one unqualified TPS number per model is not comparable evidence. Compare useful cost at matched quality, then design retries, circuit breakers, and fallback routing.
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: What are the specific hardware prerequisites for self-hosting DeepSeek-V4 or Kimi K3?
-DeepSeek-V4 requires only 49B active parameters and can be deployed in FP8 across a 32x H100/H800 cluster (4 nodes) or compatible domestic accelerators running [vLLM production serving](/en/articles/vllm-serving-guide/). Conversely, Kimi K3’s massive 2.8T MoE architecture necessitates a minimum of 4 nodes (32 GPUs) interconnected via 400Gbps RoCEv2 or InfiniBand fabrics despite KDA KV-cache savings; review our [DeepSeek-V4 & Kimi K3 Bare-Metal Deployment Guide](/en/articles/deepseek-v4-kimi-k3-deployment-guide/) for complete topology benchmarks.
+### Q1: Does a lower Terminal-Bench 3.0 score imply regression from 2.1?
+No. They are different task versions. Compare matching versions and execution settings.
 
-### Q2: How do official APIs for Chinese frontier models compare to Western providers in stability and latency?
-By mid-2026, Chinese frontier API providers match Western leaders in baseline latency (TTFT under 400ms) and standard SLA metrics, as surveyed in our [2026 Mainstream Foundation Models Comparison](/en/articles/model-comparison-2026/). However, during peak hours, domestic APIs occasionally experience token-rate throttling; production architectures should always implement gateway-level circuit breakers, exponential backoff retries, and multi-provider failover routing.
+### Q2: Is Kimi K3 necessarily best for every long-document task?
+Its vision and context capabilities make it a candidate. Validate parsing, citations, and numeric extraction on the actual material rather than assuming no hallucinations.
 
-### Q3: Which domestic model performs best for Chinese enterprise NLP workloads?
-For nuanced Chinese legal documents, annual financial disclosures, and multi-turn conversational agents with ultra-long memory, **Kimi K3** delivers superior fidelity and context retention. For enterprise Linux DevOps orchestration, terminal automation, and security sandboxes, **GLM-5.3** dominates. For enterprise coding repositories, structured JSON generation, and high-throughput self-hosted workloads, **DeepSeek-V4-Pro** represents the undisputed performance-to-cost champion.
+### Q3: When is self-hosting worthwhile?
+After validating format support, capacity, sustained traffic, quality, and SLA, compare measured costs. The [token calculator](/en/tools/) can assist with arithmetic.

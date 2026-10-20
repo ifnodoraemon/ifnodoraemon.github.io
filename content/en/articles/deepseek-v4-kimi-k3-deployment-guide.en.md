@@ -1,107 +1,88 @@
 ---
-title: "Deploying 2026 Frontier Open Models On-Premise: Running DeepSeek-V4 and Kimi K3 on Multi-Node GPU Clusters"
+title: "DeepSeek-V4 and Kimi K3 Deployment: Precision, GPU Memory and Cluster Validation"
 slug: deepseek-v4-kimi-k3-deployment-guide
 date: 2026-09-07
 tag: Cluster Deployment
 tagClass: tag-cyan
 category: Inference Systems
-description: "Complete enterprise on-premise deployment guide for 1.6T - 2.8T MoE open-weight models: Hardware planning across GPU clusters, vLLM / SGLang distributed TP/PP configuration, FP8 dynamic quantization, and high-concurrency API gateway production setups."
+description: "Plan DeepSeek-V4-Pro and Kimi K3 deployments using native checkpoint formats, per-rank GPU memory, official vLLM recipes, and throughput-based cost estimates."
+updated: 2026-10-20
 ---
 
-With the arrival of 2026 open-weight frontier giants—namely **DeepSeek-V4-Pro (1.6T MoE)** and **Kimi K3 (2.8T MoE)**—enterprise AI infrastructure has crossed a historic threshold:
+## Scope and source versions
 
-**Organizations can now deploy frontier-tier models rivaling the world's most capable proprietary systems entirely inside their own secure data centers.**
+This guide uses public model cards and engine recipes to explain deployment decisions for DeepSeek-V4-Pro and Kimi K3. Capacity calculations are estimates, not published cluster measurements or guarantees of throughput. See the [vLLM serving guide](/en/articles/vllm-serving-guide/) for general configuration.
 
-However, deploying trillion-parameter Mixture-of-Experts (MoE) architectures with dynamic routing requires modern distributed serving architectures. This guide provides a production-tested engineering blueprint using **vLLM and SGLang**.
+## 1. Identify the native checkpoint format
 
----
+| Model | Total / active parameters | Published format | First checks |
+| --- | --- | --- | --- |
+| DeepSeek-V4-Pro | 1.6T / 49B | FP4 experts and mostly FP8 elsewhere | Revision, expert format, matching engine kernels |
+| Kimi K3 | 2.8T / 104B | MXFP4 weights, MXFP8 activations, quantization-aware training | Native-format support and KDA / Gated MLA backends |
 
-## 1. Hardware Sizing & Compute Topologies
+Sources: [DeepSeek model card](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro), [Kimi model card](https://huggingface.co/moonshotai/Kimi-K3). Active parameters describe part of the compute; they do not mean only those weights must be accessible.
 
-For trillion-scale MoE models, GPU memory must account for **static weights** plus **dynamic KV cache**:
+For a hypothetical uniform FP8 conversion, 2.8T parameters require roughly 2.8TB before metadata and runtime memory. That exceeds the nominal 2.56TB of 32x80GB GPUs. A 32-card deployment therefore cannot be advertised as a general all-FP8 K3 configuration. Native MXFP4 changes both capacity and kernel requirements.
 
-* **FP8 Precision (2026 Enterprise Standard)**: Requires ~1.0 GB VRAM per 1 Billion parameters (for practical quantization tooling, see our [Quantization Hands-on Guide](/en/articles/quantization-hands-on-guide/));
-* **BF16 Precision**: Requires ~2.0 GB VRAM per 1 Billion parameters.
+DeepSeek-V4-Pro has 61 layers and uses Compressed Sparse Attention (CSA) plus Heavily Compressed Attention (HCA). Multiplying V3 latent-cache dimensions by an assumed 64 layers is not a valid V4 estimate. See the [official configuration](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/main/config.json) and [attention architecture guide](/en/articles/kimi-kda-deepseek-mla-architecture/).
 
-| Model | Total / Active Parameters | Precision | Weight VRAM | Target GPU Topology |
-| :--- | :--- | :--- | :--- | :--- |
-| **DeepSeek-V4-Pro** | 1.6T / 49B | FP8 | ~1.6 TB | **4 Nodes H100 (32x80GB) or 2 Nodes B200 (16x192GB)** |
-| **Kimi K3** | 2.8T / 104B | FP8 Hybrid | ~2.7 TB | **6 Nodes H100 (48x80GB) or 3 Nodes B200 (24x192GB)** |
+## 2. Budget memory per rank
 
-> **Crucial Requirement**: Inter-node fabric requires **400Gbps/800Gbps RoCEv2 or InfiniBand (IB)**. Slower commodity ethernet will severely bottleneck cross-node Expert Parallelism (EP).
+```text
+Executor budget = visible device memory × gpu_memory_utilization
+KV / recurrent-state budget = executor budget - local weights - peak activations
+                            - communication / non-PyTorch memory - graph overhead
+```
 
----
+Record the busiest rank rather than only cluster totals. TP may replicate state and PP stages may be uneven. Communication buffers depend on groups, kernels, token batches, and backend; there is no universal 120GB minimum for every 32-GPU cluster.
 
-## 2. Distributed Parallelism: Combining TP, PP, and EP
+For an ordinary GQA example, cache bytes are approximately `2 × batch × sequence_length × layers × kv_heads × head_dim × bytes_per_element`. MLA, sequence-compressed attention, recurrent states, and quantization scales require their own accounting.
 
-Within an individual 8-GPU node, use **Tensor Parallelism (TP=8)** across NVLink. Across nodes, configure **Pipeline Parallelism (PP=2 or PP=4)** or Expert Parallelism (EP). For foundational cluster tuning, see our [Production Guide to vLLM Serving & Tuning](/en/articles/vllm-serving-guide/):
+## 3. Use a hardware-matched engine recipe
+
+Select the [DeepSeek-V4-Pro recipe](https://recipes.vllm.ai/deepseek-ai/DeepSeek-V4-Pro) or [Kimi K3 recipe](https://recipes.vllm.ai/moonshotai/Kimi-K3), then pin the image digest, weight revision, GPU, driver, and CUDA versions. K3's documented Blackwell / AMD paths do not establish support for an arbitrary H100 layout.
 
 ```bash
-# Master Node Startup Script (vLLM Distributed Cluster)
-export RAY_ADDRESS="auto"
-export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
-
-python3 -m vllm.entrypoints.openai.api_server \
-    --model /data/models/DeepSeek-V4-Pro-FP8 \
-    --served-model-name deepseek-v4-pro \
-    --tensor-parallel-size 8 \
-    --pipeline-parallel-size 4 \
-    --quantization fp8 \
-    --max-model-len 131072 \
-    --gpu-memory-utilization 0.92 \
-    --max-num-seqs 256 \
-    --enable-prefix-caching \
-    --port 8000
+vllm --version
+vllm serve --help
+nvidia-smi
 ```
 
----
+| Setting | Meaning and boundary |
+| --- | --- |
+| `--dtype auto` | Compute dtype selection; FP8 is not a valid dtype value |
+| Native checkpoint loading | Follow its quantization configuration; an override does not convert arbitrary packed weights |
+| `--distributed-executor-backend ray` | Ray backend selection, after the workers have joined a Ray cluster |
+| `--enable-expert-parallel` | EP layout is derived with TP / DP configuration, not an extra independent GPU-count multiplier |
+| `--kda-prefill-backend` | The documented choices include auto, triton, and flashkda; hardware support still applies |
 
-## 3. High-Concurrency Reverse Proxy Gateway (Nginx SSE)
+Do not inject an undocumented library through LD_PRELOAD. KDA requires appropriate kernels; renaming an attention backend does not turn FlashAttention into KDA.
 
-```nginx
-upstream vllm_cluster {
-    zone vllm_zone 64k;
-    server 10.0.1.10:8000 max_fails=3 fail_timeout=10s;
-    server 10.0.1.11:8000 max_fails=3 fail_timeout=10s;
-    keepalive 64;
-}
+Intra-node TP and inter-node PP are one possible layout. Without EP enabled, that layout does not imply cross-node expert All-to-All traffic. Network sizing should follow collective and application measurements rather than a universal 400Gbps minimum.
 
-server {
-    listen 443 ssl http2;
-    server_name internal-llm.corp.local;
+## 4. Validate before scaling
 
-    location /v1/chat/completions {
-        proxy_pass http://vllm_cluster;
-        proxy_http_version 1.1;
-        proxy_set_header Connection "";
-        proxy_buffering off;
-        proxy_cache off;
-        chunked_transfer_encoding on;
-        proxy_read_timeout 600s;
-    }
-}
+Start with short, single-request inference, checking tokenizer, reasoning mode, and output format. Increase sequence length and concurrency gradually. Record image and weight versions, complete commands, GPU / NIC topology, per-rank memory, NCCL logs, input and output distributions, TTFT, TPOT, tail latency, and throughput that meets the SLA.
+
+Compare FP8 KV task quality with a baseline. Chunked prefill can reduce blocking but does not guarantee a fixed speedup. See [vLLM monitoring](/en/articles/vllm-serving-guide/).
+
+## 5. Cost models must respect capacity
+
+```text
+Daily API cost = input_tokens / 1e6 × input_price
+               + output_tokens / 1e6 × output_price
+Self-hosted unit cost = measured monthly total cost / useful monthly tokens at SLA
 ```
 
----
-
-## 4. Enterprise ROI Assessment
-> [!TIP]
-> **On-Premise vs API Cost Calculator**: To calculate the break-even point between dedicated GPU serving clusters and public API calls based on your peak QPS and monthly token volume, check out our [Token Pricing & Throughput Estimator](/en/tools/).
-
-
-For an enterprise processing 5 Billion tokens monthly:
-* **Proprietary API Costs**: Exceeds **$33,000 / month (~$400K annually)**;
-* **Self-Hosted 4-Node Cluster**: Reserved GPU node costs remain flat (~$36K - $44K/month) regardless of volume spikes, with 100% data sovereignty and zero telemetry leaks.
-
----
+At an assumed blended $2.5 per million tokens, 2 billion tokens daily cost $5,000 and 20 billion cost $50,000. This arithmetic does not show that one fixed cluster can serve ten times the traffic. Twenty billion tokens daily imply a sustained 231,481 tokens per second; input and output also have different compute costs. Include extra capacity when measured demand exceeds the cluster's sustainable throughput. The [token calculator](/en/tools/) helps with arithmetic, not capacity validation.
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: How do we diagnose cross-node NCCL timeouts or All-to-All hangs when deploying DeepSeek-V4?
-Cross-node hangs are typically triggered by network packet drops, mismatched MTUs, or PFC flow control issues during MoE All-to-All routing. Verify that InfiniBand or RoCEv2 interfaces have consistent MTU settings, set `NCCL_CROSS_NIC=1` and `NCCL_IB_DISABLE=0`, and run with `NCCL_DEBUG=INFO` to isolate the stalled rank. Comprehensive cluster networking and serving patterns are detailed in our [Production Guide to vLLM Serving & Tuning](/en/articles/vllm-serving-guide/).
+### Q1: Can 32 H100 GPUs serve both models?
+Check the exact native weights, kernels, layout, and concurrency. All-FP8 K3 weights alone exceed their nominal combined memory; native MXFP4 is a different deployment condition.
 
-### Q2: Can we run trillion-parameter MoE models on smaller GPU clusters using 4-bit AWQ or GPTQ quantization?
-Yes. Applying 4-bit weight quantization (W4A16) via AWQ or GPTQ compresses 1.6T MoE static model weights down to approximately 900 GB, allowing deployment across 2 nodes (16x 80GB GPUs) instead of 4 nodes. However, dequantization overhead on memory bandwidth slightly elevates per-token latency under light loads. Step-by-step conversion and benchmarking recipes are provided in our [LLM Quantization in Practice: AWQ, GPTQ, and GGUF Hands-On Guide](/en/articles/quantization-hands-on-guide/).
+### Q2: Is FP8 KV always lossless?
+No. Scales, model, backend, and context length matter. Evaluate task quality against a baseline.
 
-### Q3: Why does enabling Chunked Prefill improve system throughput while slightly increasing single-request TTFT?
-Chunked Prefill breaks large context prompts into uniform token chunks that are co-scheduled alongside decoding steps. This deliberately prevents a single long-context prompt from monopolizing all GPU compute cores, drastically improving P99 tail latency and overall system concurrency at the cost of negligible single-request prefill overhead.
+### Q3: Is self-hosting necessarily cheaper?
+No. Compare equivalent quality and SLA, measured utilization, operations, and capacity expansion. See the [Chinese model comparison](/en/articles/domestic-llm-comparison-2026/).

@@ -20,6 +20,7 @@ extraTags:
   - gVisor
   - cgroups v2
   - Sysctl
+updated: 2026-10-20
 ---
 
 ## 引言：打破 runc 共享内核的“安全原罪”与节点假死枷锁
@@ -58,8 +59,8 @@ flowchart TD
     subgraph EventedPLEG["Evented PLEG 架构 (EventedPLEG 特性门控与 CRI 事件流驱动)"]
         direction TB
         E1["containerd 运行时内部<br/>感知 OCI 容器状态变迁"] -->|"gRPC 流式长连接推送<br/>GetContainerEvents()"| E2["Kubelet Evented PLEG 监听器"]
-        E2 -->|"微秒级实时事件推入"| E3["Kubelet syncLoop 立即响应"]
-        E4["保底低频对齐定时器 (每 5 分钟轮询一次)"] -.-> E2
+        E2 -->|"推送容器生命周期事件"| E3["Kubelet syncLoop 处理变更"]
+        E4["轮询回退与健康检查 (周期依版本配置)"] -.-> E2
     end
 ```
 
@@ -69,12 +70,11 @@ flowchart TD
 - 将当前快照与上一秒的快照进行全量对比，如果发现容器 ID 或状态发生变迁，便生成一个生命周期事件送入 `eventChannel`；
 - **雪崩陷阱**：当单机运行超过 100 个 Pod，或者宿主机由于高频磁盘写入导致 D 状态进程卡死时，CRI 的 gRPC 调用耗时会迅速从 10ms 飙升至数秒。当连续 3 分钟未能完成一次完整的 Relist 时，Kubelet 会判定 PLEG 崩溃，将该节点状态标记为 `NotReady`，触发集群级大面积驱逐误杀！
 
-### 1.2 生产级破局：Evented PLEG (事件流驱动)
-为了终结 PLEG 的轮询灾难，社区在 Kubelet 与 containerd 之间重构了基于流式事件推送的 **Evented PLEG**（KEP-3386，受 `--feature-gates=EventedPLEG=true` 门控与 CRI 运行时事件流支持约束）：
-1. **gRPC 流式事件监听**：Kubelet 启动时向 containerd 建立单向长连接 `runtimeService.GetContainerEvents()`；
-2. **事件驱动推送到端**：当容器退出、暂停或启动时，containerd 内部直接将事件推送到 gRPC 流中，Kubelet 在**微秒级**时间内即可获知，完全摆脱了每秒全量扫描容器列表的沉重开销；
-3. **保底兜底周期拉长**：为了防止网络丢包引发事件遗漏，将原先 1 秒一次的 Relist 保底对齐周期拉长至 **5 分钟（300秒）** 一次。
-4. **调优收益与门控要求**：在大规模高密度计算节点上，Kubelet 自身的 CPU 开销直接**降低 80%**，极大缓解了 `PLEG is not healthy` 假死。需要注意该特性仍要求关注各版本 `EventedPLEG` 特性门控与 containerd CRI 兼容状态，尚未作为不可配置的默认稳态推广。
+### 1.2 Evented PLEG：事件通路与轮询回退
+
+Evented PLEG 通过 CRI 的 `GetContainerEvents()` 接收容器生命周期变化，减少高频全量 relist 开销。实际事件延迟、relist 周期与 CPU 收益取决于 Kubernetes 版本、运行时支持和节点负载，不能承诺“微秒级通知”或固定降低 80%。事件通路不健康时仍需轮询回退与健康检查。
+
+部署前核对对应版本的 `EventedPLEG` 特性门控与 CRI 实现；不能将该功能写成所有集群均已默认 GA 的既成事实。参见 [KEP-3386](https://github.com/kubernetes/enhancements/tree/master/keps/sig-node/3386-kubelet-evented-pleg)。
 
 ---
 
@@ -301,10 +301,8 @@ Kubernetes 将内核 Sysctl 参数严格划分为两类：
 
 ## 常见问题 (FAQ)
 
-### Q1: 传统 Relist PLEG 为什么容易在生产中产生 \"PLEG is not healthy\" 的假死报错？Evented PLEG 是如何根治它的？
-**根本原因：定时主动全量轮询的阻塞脆弱性**。
-传统 PLEG 必须每秒遍历调用 CRI 运行时的 `ListPodSandbox` 和 `ListContainers`。当节点上的容器数量较多，或者遇到磁盘高 I/O 导致 containerd 响应变慢时，这个本该在毫秒内完成的调用可能会阻塞数秒甚至数分钟。当时间超过 3 分钟阈值时，Kubelet 会误以为运行时已死亡，导致节点状态跳变为 `NotReady`。
-**Evented PLEG 的根治方案**：通过与 containerd 建立常驻的 gRPC 事件监听流，把“主动轮询快照比对”变为“被动事件推流”。每当有容器状态变迁，运行时主动推流给 Kubelet，并将低频保底对齐间隔从 1 秒大幅拉长至 5 分钟，彻底消除了轮询排队阻塞风险。
+### Q1: Evented PLEG 如何减少传统 PLEG 的负担？
+传统 relist 依赖运行时查询，运行时或磁盘阻塞会推迟状态更新。Evented PLEG 增加事件推送通路以减少轮询，但没有根治所有节点故障的保证；需要版本兼容检查、回退与健康监测。
 
 ### Q2: 为什么 gVisor 在运行 I/O 密集型或高频系统调用（如频繁 read/write/epoll）的应用程序时性能损耗较大，而 Kata Containers 表现更好？
 **根本原因：系统调用拦截的上下文切换损耗**。

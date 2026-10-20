@@ -18,6 +18,7 @@ extraTags:
   - etcd
   - Shuffle Sharding
   - Scale
+updated: 2026-10-20
 ---
 
 ## 引言：当集群规模迈向万级节点与千万对象
@@ -26,10 +27,10 @@ extraTags:
 
 对于绝大多数常规中间件（如 MySQL、Redis 集群），CRD 确实是首选方案。然而，当你的平台团队开始承担**超大规模物联网（IoT）设备管理、高频指标时序监控、海量安全审计流水日志**等极端业务场景时，CRD 的底层缺陷便会引发致命的灾难：
 
-1. **etcd 的物理“死亡红线”**：
-   Kubernetes 默认的所有 CRD 数据全部存储在底层的 `etcd` 中。而 etcd 作为一个基于 Raft 协议的强一致内存/bbolt 数据库，其推荐的健康物理存储上限**仅为 2GB ~ 8GB**！一旦数百万个自定义资源对象持续写入，etcd 会瞬间触发空间配额报警（`database space exceeded`），导致整个 Kubernetes 控制面彻底瘫痪！
+1. **etcd 配额与元数据负载**：
+   CRD 对象通常保存在核心 etcd 中。默认后端配额为 2 GiB，8 GiB 是普通环境建议上限，不是无法突破的物理边界。超配额会触发 NOSPACE 并限制写入，不能说所有读操作立即停止。高频时序数据与大对象应结合延迟、配额和维护成本选择存储，参见 [etcd 限制](https://etcd.io/docs/v3.6/dev-guide/limit/)。
 2. **WatchCache 击穿与失控客户端的“雪崩踩踏”（Thundering Herd）**：
-   在拥有上万个节点的大型集群中，某个编写有 Bug 的 CI/CD 自动化流水线或者第三方巡检脚本，可能会在 1 秒内向 `kube-apiserver` 发起几十万次带有 `resourceVersion=""` 的高并发全量 `List Pods` 查询，瞬间击穿 apiserver 内存缓存直插 etcd，导致核心 Kubelet 心跳和控制器 Lease 租约续期全部超时，诱发不可挽回的全集群节点假死级联雪崩！
+   高频全量 LIST 会增加对象序列化、内存、网络及后端负载。是否从缓存返回取决于版本与请求选项，应通过限流、分页和压测保护控制面。
 
 要突破这些工业级天花板，我们必须直接**对 Kubernetes 控制平面的神经中枢动刀**。
 
@@ -43,40 +44,32 @@ extraTags:
 
 ```mermaid
 flowchart TD
-    Client["客户端发起 List / Watch 请求"] --> APIServerEntry["kube-apiserver REST Handler"]
-
-    APIServerEntry --> CheckRV{"检查请求参数中的 resourceVersion (RV)"}
-
-    CheckRV -->|"RV = '' (未设置，空字符串)"| DirectETCD["<b>强一致 Quorum Read 直查 etcd 磁盘</b><br/>完全绕过内存缓存，击穿磁盘，极易引发 etcd 崩溃！"]
-    CheckRV -->|"RV = '0' (显式设为 0)"| CacheAny["<b>内存 WatchCache (任一最新快照)</b><br/>完全从 apiserver 内存返回，零磁盘 IO，极速响应"]
-    CheckRV -->|"RV = '12345' (指定历史具体版本)"| CheckRingBuffer{"检查 RV 是否在 WatchCache<br/>环形历史滑动窗口中？"}
-
-    CheckRingBuffer -->|"在环形缓冲区内"| ServeFromBuffer["从内存增量事件队列提供 Watch 流"]
-    CheckRingBuffer -->|"已被滚动淘汰 (Too Old)"| Return410["<b>返回 HTTP 410 Gone</b><br/>'too old resource version'<br/>迫使客户端发起全量同步"]
-
-    DirectETCD --> CoreETCD[("etcd 集群磁盘")]
-    CoreETCD -.->|"Reflector 持续监听同步"| WatchCacheStorage["WatchCache 内存存储 (cacher)"]
-    WatchCacheStorage --> ServeFromBuffer
-    WatchCacheStorage --> CacheAny
+    Request["LIST / WATCH"] --> Kind{"Request kind"}
+    Kind -->|"LIST"| Consistency{"Required consistency"}
+    Consistency -->|"MostRecent"| Fresh{"Consistent cache available?"}
+    Fresh -->|"Yes"| Cache["Serve after cache freshness check"]
+    Fresh -->|"No"| Store["Read storage"]
+    Consistency -->|"Any, RV=0"| Any["May serve a stale cached snapshot"]
+    Consistency -->|"Specified RV"| Match["Apply resourceVersionMatch semantics"]
+    Kind -->|"WATCH from RV"| History{"History retained?"}
+    History -->|"Yes"| Stream["Deliver changes after RV"]
+    History -->|"No"| Relist["410 Gone: relist and watch"]
 ```
 
-### 1.1 `resourceVersion` 的三大致命语义陷阱
-很多高并发客户端由于混淆了 `resourceVersion` 的取值，直接把 apiserver 送进重症监护室：
-1. **`resourceVersion = ""`（空字符串，强一致性读取）**：
-   **语义**：要求返回**最新强一致性（Consistent/Quorum Read）数据**。
-   **内部机理**：在 Kubernetes v1.31 之前，`kube-apiserver` 会**强制绕过本地 WatchCache**，直接向底层 etcd 发起跨节点 Raft 强一致性查询，并发洪峰极易压垮 etcd。自 **Kubernetes v1.31 起**（引入 `ConsistentListFromCache` / `WatchList` 特性），当特性门控启用且 etcd 支持进度通知时，apiserver 已支持直接通过 WatchCache 内存提供线性一致性读取，不再无脑击穿至 etcd；但在未启用该特性的旧版本或特定资源配置下，空字符串仍会穿透到 etcd。
-2. **`resourceVersion = "0"`（安全推荐）**：
-   **语义**：要求返回**当前 apiserver 内存中已缓存的最新数据**。
-   **内部机理**：直接由 `WatchCache` 内存返回，允许存在几十毫秒的微小主从同步延迟，**零 etcd 磁盘开销**，吞吐量提升两个数量级！
-3. **`resourceVersion = "<具体数字>"`**：
-   **语义**：从指定版本开始监听变更。
-   **内部机理**：apiserver 内部维护着一个固定长度的循环事件环形缓冲区（Cyclic Buffer）。如果客户端请求的版本仍在环形队列中，直接从内存吐出增量事件；如果该版本因时间太久已被环形队列覆盖淘汰，apiserver 会立即返回 **`HTTP 410 Gone (Too old resource version)`**，要求客户端重新发起一次 `resourceVersion="0"` 的全量 List。
+### 1.1 LIST 与 WATCH 的 resourceVersion 语义
+
+- LIST 未设置 `resourceVersion` 时要求 MostRecent 一致性。Kubernetes 1.31 引入从缓存提供一致性读取的能力，满足特性与 etcd 进度通知条件时，可等待缓存足够新再返回；不代表每次都从 etcd 读取完整对象。`WatchList` 是不同功能，不能与 `ConsistentListFromCache` 混称。
+- LIST 的 `resourceVersion="0"` 表示 Any 语义，允许返回较旧数据，没有“只落后几毫秒”的上界。仅在业务能接受这种一致性时使用，不能当作所有查询的安全默认值。
+- LIST 的具体 RV 要结合 `resourceVersionMatch` 判断，例如 Exact 或 NotOlderThan；它返回对象列表，不是增量事件流。WATCH 的具体 RV 才表示从相应版本之后观察变化。版本过期遇到 410 时应重新列举再建立 watch。
+
+Kubernetes 1.34 的快照缓存还改进了分页与历史列表场景。具体缓存路径随版本、资源与选项而变，RV 是不透明标记，不应当作可自行计算的整数。参见 [API 一致性语义](https://kubernetes.io/docs/reference/using-api/api-concepts/)、[1.34 快照缓存](https://kubernetes.io/blog/2025/09/09/kubernetes-v1-34-snapshottable-api-server-cache/)。
+
 
 ---
 
-## 二、 突破 etcd 8GB 极限：Aggregated APIServer 独立扩展架构
+## 二、 管理 etcd 容量与扩展存储：Aggregated APIServer 独立扩展架构
 
-当自定义数据模型存在以下特征时，**必须坚决放弃 CRD，转向 Aggregated APIServer（聚合 API 服务器）**：
+当自定义数据模型存在以下特征时，**可评估 Aggregated APIServer（聚合 API 服务器）或独立业务 API，同时计入兼容性、运维及授权成本**：
 - 数据体量极其庞大（数十万到数千万级对象，远超 etcd 承载上限）；
 - 数据变更极其频繁（微秒级高频刷新，如 `metrics.k8s.io` 监控时序数据）；
 - 数据底层需要存放在专门的分布式数据库中（如 PostgreSQL、ClickHouse、Redis 或 Cassandra）。
@@ -212,7 +205,7 @@ etcd 内部的写入包含两个截然不同的物理阶段：
 将两块不同的物理企业级 NVMe SSD 分别挂载到这两个目录，杜绝 BoltDB 页面刷盘排队对 Raft WAL 顺序刷盘的心跳干扰，彻底终结 Raft 偶发选主震荡。
 
 ### 4.2 治本之策：事件独立分库 (`/events` 分流)
-在大型集群中，**80% 以上的高频临时写入全部来自 Kubernetes 的 `Event` 对象**。
+在大型集群中，**`Event` 对象可能贡献大量高频临时写入，应先用指标核实占比**。
 在 `kube-apiserver` 的启动参数中配置分流：
 ```bash
 --etcd-servers=https://etcd-core-1:2379,https://etcd-core-2:2379,https://etcd-core-3:2379 \
@@ -234,7 +227,7 @@ etcd 内部的写入包含两个截然不同的物理阶段：
 --heartbeat-interval=250      # 心跳间隔调高至 250ms
 --election-timeout=1250       # 选举超时设为 1250ms (防止网络偶发抖动引发反复选主)
 
-# 4. 单次请求包上限调整 (针对大型集群超大 List 响应)
+# 4. 单次请求包上限调整 (限制提交到 etcd 的请求大小，不控制 LIST 响应大小)
 --max-request-bytes=33554432  # 提升至 32MB
 ```
 
@@ -243,8 +236,8 @@ etcd 内部的写入包含两个截然不同的物理阶段：
 ## 五、 总结与进阶预告
 
 对 Kubernetes 控制面动刀，展示了超大型分布式系统在面对规模与性能极限时的架构哲学：
-- **WatchCache 与 resourceVersion** 揭示了 apiserver 内存防护的深层机理，通过合理利用 `resourceVersion="0"` 消除击穿风险；
-- **Aggregated APIServer** 打破了 etcd 单一数据库的物理牢笼，用统一的 Kubernetes API 外观实现了异构高性能存储的无限横向扩展；
+- **WatchCache 与 resourceVersion** 揭示了 apiserver 内存防护的深层机理，在业务一致性要求内使用 list/watch、分页与缓存；
+- **Aggregated APIServer** 打破了 etcd 单一数据库的物理牢笼，用统一的 Kubernetes API 外观允许使用其他存储后端，其容量仍受实现与运维限制；
 - **APF 洗牌分片流控** 借助组合数学的精妙概率，为高并发集群筑造起不可被击穿的隔离护盾；
 - **etcd 物理双盘隔离与事件分流** 则从物理硬件层面为万级节点的超大规模集群夯实了强一致基石。
 
@@ -261,14 +254,11 @@ etcd 内部的写入包含两个截然不同的物理阶段：
 
 ## 常见问题 (FAQ)
 
-### Q1: 在高并发查询中，为什么请求参数中 `resourceVersion` 的取值会决定整个集群控制面的生死？
-**根本原因：是否绕过 WatchCache 击穿 etcd 磁盘**。
-- 当 `resourceVersion=""` 时，客户端要求强一致读（Quorum Read），apiserver 必须绕过本地内存缓存，向底层的 etcd 发起实时读。当大量客户端并发请求全量 List 时，etcd 的磁盘 I/O 排队打满，导致节点心跳写入失败，引发全集群瘫痪；
-- 当 `resourceVersion="0"` 时，请求直接由 apiserver 内存中的 WatchCache 返回，耗时仅需数毫秒，不产生任何 etcd 磁盘开销；
-- 当 `resourceVersion="<rv>"` 时，apiserver 从其环形缓冲区（Cacher Ring Buffer）中读取增量变更，如果该版本已被压缩淘汰，返回 410 Gone，驱使客户端平滑重新同步。
+### Q1: resourceVersion 如何影响高并发查询？
+它约束一致性和历史版本，而不是一个固定的“缓存开关”。现代 apiserver 在支持条件满足时可以从缓存提供一致性 LIST。RV=0 允许旧快照；LIST 的具体版本与 WATCH 的起点语义不同。应使用 client-go 等成熟客户端的 list/watch 与重同步机制，再通过 APF、分页和客户端退避控制查询压力。
 
 ### Q2: 在什么具体业务场景下，平台架构师必须选择构建 Aggregated APIServer 而不是创建 CRD？
-1. **数据体量庞大且频繁更新**：如采集全集群每秒数百万个容器的细粒度性能指标（如 `metrics-server`），写入 CRD 会在几小时内撑爆 etcd 8GB 的物理限制；
+1. **数据体量庞大且频繁更新**：高频遥测若直接写入大量 CRD，可能给核心 etcd 带来不合适的配额、延迟与维护压力；应评估专门的遥测存储和 API，而不是预设固定的耗尽时间；
 2. **底层需要专用数据库的高级查询能力**：例如需要利用 ClickHouse 的时序 OLAP 向量化统计分析，或 Elasticsearch 的全文检索能力；
 3. **既有异构系统的虚拟呈现**：以标准的 Kubernetes REST API 风格（支持 `kubectl`）将既有的企业 CMDB 资产系统只读暴露给云原生平台，无需在 etcd 中重复持久化。
 
