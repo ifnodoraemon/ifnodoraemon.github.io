@@ -161,6 +161,8 @@ test('built assets reference the correct search index path and article pages inc
 test('build outputs include IndexNow key and articles with FAQPage / TechArticle schema', () => {
   const indexNowKeyPath = path.join(ROOT, 'dist', 'd0b17a8c4e6f9a2b5d8e1f4c7a0b3e6f.txt');
   assert.ok(fs.existsSync(indexNowKeyPath), 'expected dist IndexNow key file to exist');
+  assert.equal(fs.readFileSync(indexNowKeyPath, 'utf-8'), 'd0b17a8c4e6f9a2b5d8e1f4c7a0b3e6f');
+  assert.equal(fs.statSync(indexNowKeyPath).size, 32, 'IndexNow key must not have trailing whitespace or newline');
 
   const vllmHtml = fs.readFileSync(path.join(ROOT, 'dist', 'articles', 'vllm-serving-guide', 'index.html'), 'utf-8');
   assert.match(vllmHtml, /"@type":\s*"TechArticle"/);
