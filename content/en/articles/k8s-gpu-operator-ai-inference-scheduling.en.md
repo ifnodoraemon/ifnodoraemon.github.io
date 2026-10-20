@@ -143,7 +143,7 @@ cpuManagerPolicy: static
 Under `single-numa-node`:
 1. When Kubelet receives a container assignment, the Topology Manager evaluates NUMA boundaries;
 2. **The container launches only if all requested exclusive CPU cores, HugePages memory allocations, and GPU devices reside within the identical physical NUMA node**;
-3. If alignment cannot be satisfied, Kubelet rejects the placement (`TopologyAffinityError`), forcing `kube-scheduler` to find an aligned node and preventing cross-NUMA interconnect stalls.
+3. If alignment cannot be satisfied, Kubelet rejects the container at admission (`TopologyAffinityError`), placing the Pod in `Failed` phase. Note that `kube-scheduler` does not automatically reschedule the terminated Pod instance; rescheduling requires a higher-level workload controller (e.g. Deployment/Job) to recreate a new Pod, or integrating topology-aware scheduling plugins (e.g. NodeResourceTopologyMatch) during the scheduling pre-filter phase.
 
 ---
 
@@ -169,7 +169,7 @@ flowchart TD
         Router -->|"Latency-Sensitive Decode"| DecodePool["Decode Pods (KV Cache Sensitive)"]
 
         PrefillPool -.->|"Metrics (:8000/metrics)"| Prometheus["Prometheus Server"]
-        DecodePool -.->|"vllm:num_requests_waiting<br/>vllm:gpu_cache_usage_factor"| Prometheus
+        DecodePool -.->|"vllm:num_requests_waiting<br/>vllm:kv_cache_usage_perc"| Prometheus
 
         Prometheus --> KEDA["<b>KEDA Autoscaling Engine</b><br/>Evaluates Queue Depth & KV Saturation"]
         KEDA -->|"HPA Dynamic Scaling"| DecodePool
@@ -218,8 +218,8 @@ spec:
   - type: prometheus
     metadata:
       serverAddress: http://prometheus-k8s.monitoring.svc.cluster.local:9090
-      metricName: vllm_gpu_cache_usage_factor
-      query: avg(vllm:gpu_cache_usage_factor{model="qwen-72b"})
+      metricName: vllm_kv_cache_usage_perc
+      query: avg(vllm:kv_cache_usage_perc{model="qwen-72b"})
       threshold: '0.80'     # Triggers expansion when KV cache saturation crosses 80%
 ```
 
@@ -265,7 +265,7 @@ This is an intentional design pattern of **PagedAttention KV Cache pre-allocatio
 - During startup, vLLM loads model weights (e.g., Qwen-72B requires ~144GB across multiple cards);
 - Following model initialization, vLLM pre-allocates 90% of remaining physical VRAM (`--gpu-memory-utilization=0.9`) to manage dynamic paging tables;
 - **Kubernetes OOM Behavior**: The Kubernetes OOMKiller monitors **Host Physical RAM**, not device VRAM. As long as host memory stays within `resources.limits.memory`, the container will not be terminated;
-- **Autoscaling Guidance**: Do not base HPA rules on raw VRAM consumption reported by DCGM. Instead, autoscale against vLLM's internal metric `vllm:gpu_cache_usage_factor`.
+- **Autoscaling Guidance**: Do not base HPA rules on raw VRAM consumption reported by DCGM. Instead, autoscale against vLLM's internal metric `vllm:kv_cache_usage_perc`.
 
 ### Q2: On an 8-GPU node, why does distributing a Tensor Parallel (TP=4) model across arbitrary GPUs introduce severe latency, and how does the Topology Manager resolve it?
 **Root Cause: Asymmetric Interconnect Topologies**.

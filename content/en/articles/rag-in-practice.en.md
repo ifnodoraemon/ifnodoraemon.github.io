@@ -125,15 +125,18 @@ import weaviate
 # Connect to the vector database
 client = weaviate.connect_to_local()
 
-# Create retriever (Hybrid Search = Vector + BM25 Keywords)
+# Create diversity retriever (MMR: Maximal Marginal Relevance, balancing relevance and redundancy)
 retriever = vectorstore.as_retriever(
     search_type="mmr",       # Maximal Marginal Relevance
     search_kwargs={
-        "k": 5,              # Return 5 results
-        "fetch_k": 20,       # Candidate pool size
-        "lambda_mult": 0.7,  # Relevance vs. Diversity weight
+        "k": 5,              # Return 5 deduplicated diverse results
+        "fetch_k": 20,       # Initial candidate pool size
+        "lambda_mult": 0.7,  # 0.7 relevance vs. 0.3 diversity weight
     }
 )
+
+# Note: For true "Dense Vector + BM25 Sparse" Hybrid Search, 
+# use Weaviate native hybrid search or LangChain EnsembleRetriever.
 ```
 
 ## Retrieval-Augmented Generation Strategies: Architecture Matrix

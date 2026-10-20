@@ -24,14 +24,12 @@ description: 当大模型走向复杂的企业级落地，如何通过分布式�
 
 ## 深度防御一：工业级 Agent 的分布式编排架构
 
-对抗误差复合的第一步是切断长链路。我们通过分治法（Divide and Conquer），将任务路由给不同的微型 Agent 执行。但在高并发下，基于内存的状态机（如原生的 LangGraph）是脆弱的。
+对抗误差复合的第一步是切断长链路。我们通过分治法（Divide and Conquer），将任务路由给不同的微型 Agent 执行。但如果编排框架仅依赖单机内存状态，在高并发与崩溃恢复面前将极其脆弱。
 
-### 1. 放弃纯内存状态，拥抱 Event-Driven 与 Exactly-Once
-当你在编排几十个 Agent 互相协作时，遇到网络抖动、模型 API 熔断是常态。工业级编排必须引入底层的消息队列系统（如基于 Temporal 或 Kafka 的持久化编排器）。
-
-**架构范式升级：**
-*   **状态外挂化**：Agent 的当前执行节点（Node）、局部变量（Local State）必须在每一步执行前后，序列化保存到 Redis 或 Postgres 中。
-*   **幂等性（Idempotency）设计**：在重试机制下，一个 Agent 可能会被唤醒多次去执行同一个工具（比如“扣减积分”）。为了防止脏数据，工具调用层必须实现严格的 Exactly-Once 语义，基于特定的 `Task_ID + Step_ID` 颁发请求令牌（Token）。关于工具边界隔离与运行时状态设计，可参考 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/)。
+### 1. 持久化检查点与端到端幂等设计
+当你在编排几十个 Agent 互相协作时，遇到网络抖动、模型 API 熔断是常态。工业级编排必须引入持久化检查点与持久执行（Durable Execution）机制：
+*   **状态检查点持久化（Checkpointer）**：以 LangGraph 的 `PostgresSaver` 或 Temporal 的事件日志为范例，Agent 的当前图节点（Node）、局部变量与上下文增量必须在每个 Superstep 步进前后，原子化序列化保存到持久化存储（如 Postgres、Redis 或 SQLite）中，确保进程意外挂死后能无损断点续跑。
+*   **业务侧幂等性（Idempotency）保障**：分布式编排引擎（如 Temporal/Cadence）在面对网络超时时会对 Activity 采取自动重试（本质属于 **At-Least-Once** 至少一次执行）。外部副作用（如“扣减用户积分”、“调用支付接口”）**无法自动获得 Exactly-Once**，必须在工具调用与业务网关层实现显式幂等机制，基于唯一的 `Task_ID + Step_ID + Attempt` 注入幂等键（Idempotency Key），防止重复执行产生脏数据。关于工具边界隔离与运行时状态设计，可参考 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/)。
 
 ### 2. 动态自愈路由 (Self-Healing Routing)
 普通的 Router 只是根据输入写死分支条件。高阶的编排中，Router 本身也是一个带有置信度判定机制的模型：

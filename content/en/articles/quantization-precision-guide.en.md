@@ -50,9 +50,10 @@ What's your primary scenario?
 │   └─ Legacy: A100/L40S/T4          → INT8 / INT4 (GPTQ/AWQ) or SmoothQuant W8A8
 │
 ├─ Geek / Personal GPU Inference (VRAM-limited, just want it to run)
-│   ├─ Top-tier Consumer: RTX 4090/5090 (24~32GB) → AWQ/GPTQ 4-bit (Can run 70B models!)
-│   ├─ Mid-tier: RTX 3090/4080 (16GB)             → GPTQ 4-bit (Choose ≤30B models)
-│   └─ Entry-level: RTX 3060/4060 (8GB)           → GGUF Q4_K_M (Choose ≤8B models)
+│   ├─ Dual GPU Setup: 2x RTX 3090/4090 (48GB)    → AWQ/GPTQ 4-bit (70B 4-bit weights ~35GB, requires ~40GB+ with metadata/KV)
+│   ├─ Top Consumer: RTX 4090 (24GB) / RTX 5090 (32GB) → AWQ/GPTQ 4-bit (Recommend models ≤32B)
+│   ├─ Mid-High Tier: RTX 4080 (16GB)             → GPTQ 4-bit (Choose models ≤14B)
+│   └─ Entry-level: RTX 3060/4060 (8~12GB)        → GGUF Q4_K_M (Choose models ≤8B)
 │
 └─ CPU Only or Mac (No discrete NVIDIA GPU)
     ├─ RAM ≥ 32GB → GGUF Q4_K_M (Best balance of intelligence and generation speed)
@@ -77,7 +78,7 @@ Let's break down what's actually happening:
 | "Community Term" | Actual Underlying Operation | What Gets Quantized? | Accuracy Loss |
 |----------|---------|----------|---------|
 | "I quantized my 70B to **INT8** using GPTQ" | GPTQ **Weight-Only** Quant | **Only the weight matrices are compressed to INT8. During math ops, they are decompressed to multiply with high-precision FP16 activations.** | ≈0% (Lossless) |
-| "Loaded INT8 using BitsAndBytes" | BnB nf8/int8 Weight-Only | Same as above | ≈0~1.6% |
+| "Loaded INT8 using BitsAndBytes" | BnB LLM.int8() Vector-wise Mixed Quant | Weights in INT8, 0.1% outlier dimensions kept in FP16, rest in INT8xINT8 GEMM | ≈0% |
 | "Deployed INT8 via SmoothQuant" | INT8 **Full Quantization** (W8A8) | Both weights and activations are **pure INT8** (math is pure 8-bit integer multiplication) | ≈0% (But the smoothing engineering is exhausting) |
 | "Enabled **FP8** in vLLM" | FP8 **Full Quantization** (W8A8) | Both weights and activations are **FP8** (racing on native float units) | <1% (Out-of-the-box) |
 
@@ -86,9 +87,9 @@ Let's break down what's actually happening:
 So, in reality, there are two distinct paths in quantization, solving completely different pain points:
 
 1. **Path 1: My GPU is too small, I can't fit the model (Weight-Only INT8/INT4)**
-   - **How it works:** Like zipping a large file. You decompress it back to FP16 on the fly during calculation.
-   - **Pros:** Massively saves VRAM with **zero risk of model collapse**. The "outlier explosions" that cause models to break only exist in the **activations**. Since activations are never quantized here (staying at FP16), the model remains safe.
-   - **Cons:** Because it still uses high-precision math, generation speed **doesn't actually get faster** (sometimes it's even slower due to decompression overhead). It exists purely to save space. This is why it's the go-to for RTX 3090/4090 users (using GPTQ/AWQ).
+   - **How it works:** Like zipping a large file. Weights are loaded in compressed form and dequantized during token execution.
+   - **Pros:** Massively saves VRAM with **minimal risk of model collapse**, as activations retain full precision.
+   - **Latency & Speed:** In single-request or small batch autoregressive decode, LLM inference is strictly **memory-bandwidth bound**. Reducing weight transfer bytes from VRAM by 2x-4x allows modern GEMV kernels (such as AWQ and Marlin) to achieve **1.5x - 3x faster decoding latency**, rather than slowing down! Only when batch concurrency is saturated (compute-bound) does weight-only quantization plateau relative to W8A8 Tensor Cores.
 
 2. **Path 2: My GPUs fit the model, but traffic is too high, I need maximum throughput (W8A8 Full Quantization)**
    - **How it works:** You compress both the storage weights AND the compute activations, unleashing the blazing-fast INT8 or FP8 Tensor Cores inside the GPU.

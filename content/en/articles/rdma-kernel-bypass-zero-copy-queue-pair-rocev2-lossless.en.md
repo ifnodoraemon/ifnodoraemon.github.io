@@ -155,7 +155,7 @@ RoCEv2 Packet Encapsulation:
 Unlike heavyweight TCP stacks with selective acknowledgments (SACK), RDMA HCA silicon relies on lightweight hardware logic. **RoCEv2 defaults to Go-Back-N retransmission**:
 - If even a single packet is dropped, the receiving HCA discards all subsequent in-order packets, forcing the sender to retransmit the entire window from the lost packet onward;
 - A packet loss rate as low as 0.1% causes RoCEv2 effective throughput to collapse by over 80%!
-- **Takeaway**: Ethernet fabrics carrying RoCEv2 **must be engineered as strictly Lossless Networks**.
+- **Fabric Deployment Models**: RoCEv2 can be operated in **Lossless (PFC + ECN)**, **Semi-Lossless**, or **Lossy (ECN with selective retransmission)** configurations. While high-performance AI GPU clusters traditionally configure lossless Ethernet via PFC to avoid Go-Back-N penalties, PFC is an operational tuning choice and performance pre-requisite rather than a protocol mandate. Modern HCAs (e.g. NVIDIA ConnectX-6/7/8) support Out-of-Order execution and Dynamic Connected Transport (DCT), leading several hyperscale cloud operators to adopt Lossy RoCE to eliminate PFC deadlocks entirely.
 
 ### 3.2 Engineering Lossless: Priority Flow Control (PFC, 802.1Qbb)
 

@@ -62,9 +62,9 @@ flowchart TD
 
 ### 1.1 `resourceVersion` 的三大致命语义陷阱
 很多高并发客户端由于混淆了 `resourceVersion` 的取值，直接把 apiserver 送进重症监护室：
-1. **`resourceVersion = ""`（危险，空字符串）**：
-   **语义**：要求返回**绝对强一致性（Quorum Read）的最新数据**。
-   **内部机理**：`kube-apiserver` 会**强制绕过本地 WatchCache**，直接向底层的 etcd 发起跨节点 Raft 强一致性读取。一旦数千个客户端并发发起此类查询，etcd 的磁盘 I/O 和 CPU 会瞬间打满，控制面彻底瘫痪！
+1. **`resourceVersion = ""`（空字符串，强一致性读取）**：
+   **语义**：要求返回**最新强一致性（Consistent/Quorum Read）数据**。
+   **内部机理**：在 Kubernetes v1.31 之前，`kube-apiserver` 会**强制绕过本地 WatchCache**，直接向底层 etcd 发起跨节点 Raft 强一致性查询，并发洪峰极易压垮 etcd。自 **Kubernetes v1.31 起**（引入 `ConsistentListFromCache` / `WatchList` 特性），当特性门控启用且 etcd 支持进度通知时，apiserver 已支持直接通过 WatchCache 内存提供线性一致性读取，不再无脑击穿至 etcd；但在未启用该特性的旧版本或特定资源配置下，空字符串仍会穿透到 etcd。
 2. **`resourceVersion = "0"`（安全推荐）**：
    **语义**：要求返回**当前 apiserver 内存中已缓存的最新数据**。
    **内部机理**：直接由 `WatchCache` 内存返回，允许存在几十毫秒的微小主从同步延迟，**零 etcd 磁盘开销**，吞吐量提升两个数量级！

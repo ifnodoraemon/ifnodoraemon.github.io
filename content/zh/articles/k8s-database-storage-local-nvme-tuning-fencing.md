@@ -150,7 +150,7 @@ vm.dirty_background_ratio = 5
 # 2. 限制脏页绝对上限，防止单次暴增堵塞 IO (调低至 10%)
 vm.dirty_ratio = 10
 
-# 3. 缩短脏页驻留生命周期 (单位为 1/100 秒，从默认 3000 降至 500，即 5 秒内必须落盘)
+# 3. 缩短脏页达龄阈值 (单位为 1/100 秒，从默认 3000 降至 500，即驻留满 5 秒即具备被内核 flusher 线程异步回写的资格，注意该值代表达龄资格而非硬性落盘超时承诺)
 vm.dirty_expire_centisecs = 500
 ```
 
@@ -158,7 +158,7 @@ vm.dirty_expire_centisecs = 500
 对于极度追求稳定吞吐的数据库（如 MySQL InnoDB 或基于 RocksDB 的存储底座），最彻底的方案是在应用配置中**开启 Direct I/O (`O_DIRECT`)**：
 - **MySQL 配置**：`innodb_flush_method = O_DIRECT`；
 - **RocksDB 配置**：`use_direct_io_for_flush_and_compaction = true`，`use_direct_reads = true`。
-- **WAL 刷盘模式**：数据库的 Write-Ahead Log（预写式日志）必须将 `fsync()` 优化为 `fdatasync()`。`fsync()` 会强制刷新 inode 元数据，引发磁盘磁头寻址抖动；而 `fdatasync()` 仅刷数据本身，性能提升高达 40%！
+- **WAL 刷盘模式**：数据库的 Write-Ahead Log（预写式日志）通常将 `fsync()` 优化为 `fdatasync()`。`fsync()` 会无差别同步全部 inode 元数据（包括修改时间戳等属性），增加文件系统日志提交开销；而 `fdatasync()` 仅同步数据以及后续检索该数据所必需的关键元数据（如文件大小变化），能够有效减少元数据同步带来的额外 I/O 抖动。
 - 数据读写直接在用户空间 Buffer 与物理 NVMe 磁盘之间通过 DMA 传输，**彻底绕过操作系统 Page Cache，从根本上杜绝了 Page Cache 引起的内存超限与 Double Buffering 二次拷贝损耗！**
 
 ---

@@ -290,15 +290,15 @@ graph TB
 
 ### Cross-Platform Comparison
 
-| Dimension | Claude (SKILL.md) | Cursor (.mdc) | GitHub Copilot | OpenAI (Codex/GPTs) | Windsurf | Gemini |
-|-----------|-------------------|---------------|----------------|---------------------|----------|--------|
-| **Config path** | `.claude/skills/` | `.cursor/rules/` | `.github/` | `AGENTS.md` / GPT Builder | Project root | `.gemini/` |
-| **File format** | YAML + Markdown | YAML + Markdown | Plain Markdown | Markdown / GUI | Plain Markdown | Plain Markdown |
-| **Granularity** | One folder per skill | One file per rule | Repo-level + path-level | Repo-level + GPT-level | Global + project | Repo-level |
-| **Script support** | ✅ | ❌ | ❌ | ⚠️ GPTs can attach files | ❌ | ❌ |
-| **Smart loading** | ✅ Three-layer progressive | ✅ Glob matching | ⚠️ Full load | ⚠️ Full load | ⚠️ Full load | ⚠️ Full load |
-| **Scope** | By skill domain | By file type | By path pattern | User-level / repo-level | Global/project | Directory hierarchy |
-| **Cross-platform** | Claude only | Cursor only | Copilot only | OpenAI only | Windsurf only | Gemini only |
+| Dimension | Claude (SKILL.md) | Cursor (.mdc) | GitHub Copilot | OpenAI (Codex / SKILL.md) | Windsurf | Gemini |
+|-----------|-------------------|---------------|----------------|---------------------------|----------|--------|
+| **Config path** | `.claude/skills/` | `.cursor/rules/` | `.github/` | `.codex/skills/` & `AGENTS.md` | Project root | `.gemini/` |
+| **File format** | YAML + Markdown | YAML + Markdown | Plain Markdown | YAML + Markdown (`SKILL.md`) | Plain Markdown | Plain Markdown |
+| **Granularity** | One folder per skill | One file per rule | Repo-level + path-level | Modular skill pack + repo-level | Global + project | Repo-level |
+| **Script support** | ✅ | ❌ | ❌ | ✅ (`scripts/` dirs & utilities) | ❌ | ❌ |
+| **Smart loading** | ✅ Three-layer progressive | ✅ Glob matching | ⚠️ Full load | ✅ Progressive loading (metadata discovery + on-demand) | ⚠️ Full load | ⚠️ Full load |
+| **Scope** | By skill domain | By file type | By path pattern | Task domain / repo-level | Global/project | Directory hierarchy |
+| **Cross-platform** | Open standard (multi-tool) | Cursor only | Copilot only | Open standard (Codex/Claude compatible) | Windsurf only | Gemini only |
 
 ### Platform Deep Dives
 
@@ -360,15 +360,13 @@ GPTs are OpenAI's "Skills package" concept — users can create custom ChatGPT v
 - Upload reference docs and API schemas to give the GPT domain expertise
 - **Essentially "Skills + Model + Tools" pre-packaged as a product**
 
-**③ Codex Agent + AGENTS.md (Developer-level)**
+**③ Codex Native Skills & AGENTS.md (Developer-level)**
 
-Modern AI coding agents (like Cline, Aider) natively support the `AGENTS.md` open standard:
+OpenAI Codex and leading developer agents (e.g. Cline, Aider) natively support the modern modular Skills ecosystem:
 
-- Place `AGENTS.md` at the repo root, and Codex automatically reads project structure, coding standards, and build commands
-- Supports nested `AGENTS.md` in monorepos for independent subproject context
-- OpenAI is also a co-driver of the `AGENTS.md` open standard
-
-**Unique advantage**: OpenAI's three-tier system has the widest coverage — from "product managers using GPTs without writing code" to "hardcore developers using Codex + AGENTS.md" — accommodating users of all technical levels.
+- **Codex Native Skills**: Codex supports modular `SKILL.md` specifications located in `.codex/skills/<skill-name>/SKILL.md` or `.agents/skills/`. Each skill package encapsulates metadata, instructions, and executable helper scripts under `scripts/`, loading dynamically and progressively based on task intent rather than bloating the base prompt;
+- **AGENTS.md Repo Protocol**: Placing `AGENTS.md` at repository roots provides baseline architectural guidance, tech stack conventions, and verification workflows across monorepo trees;
+- **Cross-Platform Portability**: The open `SKILL.md` convention is shared across Anthropic Claude Code, OpenAI Codex, and Antigravity, allowing teams to author capability modules once and reuse them universally.
 
 #### Windsurf: .windsurfrules
 

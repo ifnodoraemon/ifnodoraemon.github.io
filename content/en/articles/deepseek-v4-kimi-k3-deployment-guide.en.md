@@ -45,7 +45,7 @@ python3 -m vllm.entrypoints.openai.api_server \
     --model /data/models/DeepSeek-V4-Pro-FP8 \
     --served-model-name deepseek-v4-pro \
     --tensor-parallel-size 8 \
-    --pipeline-parallel-size 2 \
+    --pipeline-parallel-size 4 \
     --quantization fp8 \
     --max-model-len 131072 \
     --gpu-memory-utilization 0.92 \

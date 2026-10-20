@@ -29,8 +29,8 @@ How should enterprise software architects and AI practitioners navigate these di
          ┌─────────────────────────┼─────────────────────────┐
          ▼                         ▼                         ▼
    【Moonshot Kimi K3】       【Zhipu AI GLM-5.3】       【DeepSeek-V4-Pro】
-    • 2.8T MoE (104B Active)  • Sparse-Linear Hybrid MoE • 1.6T MoE (49B Active)
-    • Kimi Delta Attention    • Environment Scaling      • Enhanced Multi-Head MLA
+    • 2.8T MoE (104B Active)  • ~753B Sparse Hybrid MoE  • 1.6T MoE (49B Active)
+    • Kimi Delta Attention    • Environment Scaling      • CSA + HCA Hybrid Attention
     • 1M Context + Multimodal • Real Linux Sandbox RL    • Repo-level Coding & Open
 ```
 
@@ -41,7 +41,7 @@ Moonshot AI advanced the frontier of attention mathematics. While scaling total 
 Zhipu AI recognized that pre-training data hits diminishing returns without autonomous feedback loops. GLM-5.3 was immersed in tens of thousands of containerized Linux sandboxes, terminal consoles, and security environments. Through millions of self-directed trial-and-error cycles, GLM-5.3 developed unmatched reliability in bash command synthesis, log interpretation, and kernel-level troubleshooting.
 
 ### DeepSeek-V4-Pro: Uncompromising Open Efficiency
-DeepSeek continues to lead open-weights economics. With 1.6T total MoE parameters and only 49B dynamically activated, its enhanced Multi-head Latent Attention (MLA) enables full FP8 deployment across 32x H100 GPUs or high-end domestic compute clusters, slashing total cost of ownership to 1/15th of proprietary equivalents while resolving 96.4% on SWE-bench Verified. For physical cluster orchestration and production inference, see our [DeepSeek-V4 & Kimi K3 Bare-Metal Deployment Guide](/en/articles/deepseek-v4-kimi-k3-deployment-guide/) and our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
+DeepSeek continues to lead open-weights economics. With 1.6T total MoE parameters and only 49B dynamically activated, its architecture evolves beyond pure MLA by adopting a hybrid CSA (Cross-layer Shared Attention) and HCA (Hierarchical Compressed Attention) design, coupled with fine-grained unshared expert routing. This enables full FP8 deployment across 32x H100 GPUs or high-end domestic compute clusters, slashing total cost of ownership to 1/15th of proprietary equivalents while resolving 80.6% ~ 96.4% on SWE-bench Verified. For physical cluster orchestration and production inference, see our [DeepSeek-V4 & Kimi K3 Bare-Metal Deployment Guide](/en/articles/deepseek-v4-kimi-k3-deployment-guide/) and our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
 
 ---
 
@@ -51,11 +51,11 @@ DeepSeek continues to lead open-weights economics. With 1.6T total MoE parameter
 | :--- | :--- | :--- | :--- |
 | **Developer** | Moonshot AI | Zhipu AI (Z.ai) | DeepSeek |
 | **Release Date** | July 16, 2026 | August 14, 2026 | August 13, 2026 |
-| **Parameters** | 2.8T MoE (104B Active) | 850B MoE Hybrid | 1.6T MoE (49B Active) |
+| **Parameters** | 2.8T MoE (104B Active) | ~753B Sparse Hybrid MoE | 1.6T MoE (49B Active) |
 | **LMSYS Arena Elo** | **1512 (Tier-1)** | 1498 | 1506 |
 | **AA Intelligence** | 65.0 | 63.8 | 64.8 |
 | **SWE-bench Verified**| 85.6% | 82.4% | **80.6% ~ 96.4% (#1)** |
-| **Terminal-Bench 3.0**| 79.8% | **28.3 (Open-source #1)** | 83.2% |
+| **Terminal-Bench 3.0**| 17.4 | **28.3 (Open-source #1)** | Not Listed (Official card) |
 | **Context Window** | 1,000,000 Tokens (1M) | 1,000,000 Tokens (1M) | 1,000,000 Tokens (1M) |
 | **Throughput (TPS)** | 90 Tokens/s | 115 Tokens/s (Flash: 260) | 95 Tokens/s |
 | **Open Weights** | **Yes (Self-Hostable)** | Yes (Open-Weights) | **Yes (Open Benchmark)** |

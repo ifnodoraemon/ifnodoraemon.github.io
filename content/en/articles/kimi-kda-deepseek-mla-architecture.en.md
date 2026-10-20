@@ -52,7 +52,7 @@ While DeepSeek compresses along the spatial dimension, Moonshot AI's **Kimi Delt
 
 S_t = S_{t-1} + ΔS_t
 
-Rather than attending pairwise across all historical tokens, KDA dynamically tracks the semantic delta of the current token relative to cumulative memory S_{t-1}. The internal recurrent state remains constant regardless of whether sequence length expands from 100K to 1M tokens, transforming computational complexity from O(L^2) to strictly O(L).
+Rather than attending pairwise across all historical tokens, KDA dynamically tracks the semantic delta of the current token relative to cumulative memory S_{t-1}. In terms of full-network topology, **Kimi K3 utilizes a hybrid structure of 69 KDA layers and 24 Gated MLA layers**. While each KDA layer maintains a strictly constant state tensor across expanding sequence lengths, the 24 Gated MLA layers preserve high-fidelity associative lookup with mildly scaling KV cache, keeping aggregate memory growth exceptionally modest (from 8.6 GB at 100K to only 42 GB at 1M tokens).
 
 ---
 

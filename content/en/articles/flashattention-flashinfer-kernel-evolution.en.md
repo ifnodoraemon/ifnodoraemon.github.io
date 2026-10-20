@@ -162,8 +162,8 @@ FlashAttention-1 evaluated division operations at every tile iteration. FlashAtt
 ### 2.3 Warp Partitioning: Eradicating Shared Memory Barriers
 
 In CUDA thread hierarchies, each Thread Block is divided into 32-thread Warps.
-- In FA-1, all warps cooperated across both $Q$ and $K, V$ blocks, requiring repeated synchronization barriers (`__syncthreads()`) through Shared Memory;
-- FA-2 redesigned warp partitioning: **All warps in a block share the same $Q$ tile, but each warp is assigned independent, non-overlapping slices of the $K, V$ tiles**. This design eliminated inter-warp synchronization within the inner loop, achieving barrier-free parallel execution.
+- In FA-1, all warps cooperated across the $Q$ block while splitting $K, V$ blocks, requiring repeated reduction and synchronization barriers (`__syncthreads()`) through Shared Memory to compute row sums and maximums;
+- FA-2 redesigned warp partitioning: **Warps partition the $Q$ tile (each warp computes independent output $O$ rows), while all warps in the block share the $K, V$ tiles**. Because each warp writes to disjoint output rows, inter-warp synchronization and shared memory reduction barriers were completely eradicated.
 
 These optimizations elevated FlashAttention-2's compute efficiency to **up to 73% of theoretical peak FLOPs (~225 TFLOPS on A100)**.
 

@@ -147,7 +147,7 @@ vm.dirty_background_ratio = 5
 # 2. Bound maximum dirty page volume to prevent IO stalls (cap at 10%)
 vm.dirty_ratio = 10
 
-# 3. Shorten dirty page expiration window (centiseconds: drop from 3000 to 500 = 5 seconds)
+# 3. Shorten dirty page expiration window (centiseconds: drop from 3000 to 500 = eligible for flusher after 5 seconds)
 vm.dirty_expire_centisecs = 500
 ```
 
@@ -155,7 +155,7 @@ vm.dirty_expire_centisecs = 500
 For consistent throughput across write-heavy engines (MySQL InnoDB, RocksDB WAL engines), applications should **enable Direct I/O (`O_DIRECT`)**:
 - **MySQL Configuration**: `innodb_flush_method = O_DIRECT`;
 - **RocksDB Configuration**: `use_direct_io_for_flush_and_compaction = true`, `use_direct_reads = true`;
-- **WAL Flush Optimization**: Replace standard `fsync()` with `fdatasync()`. While `fsync()` forces synchronous metadata updates (triggering disk controller stalls), `fdatasync()` flushes only raw data blocks, delivering up to 40% higher throughput;
+- **WAL Flush Optimization**: Replace standard `fsync()` with `fdatasync()`. While `fsync()` forces synchronous metadata synchronization (e.g. atime/mtime timestamps, triggering filesystem journal writes), `fdatasync()` flushes data and essential metadata needed for retrieval (such as file size), minimizing journal I/O latency;
 - Data transfers bypass the OS Page Cache entirely, **eliminating double-buffering memory overhead and guarding against container OOM kills**.
 
 ---

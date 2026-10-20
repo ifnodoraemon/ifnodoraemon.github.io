@@ -301,7 +301,7 @@ Consequently, modern engines execute prefill using uncompressed GEMM kernels, sw
 While MLA dramatically compresses dynamic KV cache memory, large-scale serving clusters face additional physical baselines:
 
 1. **Static Parameter Footprint**:
-   In frontier models like DeepSeek-V3 (671B MoE with 37B active parameters), model weights occupy approximately **350 GB** even in FP8 quantization, consuming significant baseline VRAM across the cluster;
+   In frontier models like DeepSeek-V3 (671B MoE with 37B active parameters), model weights occupy approximately **671 GB** in FP8 (or ~**350 GB** in 4-bit quantization with metadata), consuming significant baseline VRAM across the cluster;
 2. **Working Memory at High Concurrency**:
    Across hundreds of concurrent streams executing long chain-of-thought reasoning (such as DeepSeek-R1 emitting thousands of reasoning tokens), scratchpad buffers and activation tensors accumulate substantially.
 

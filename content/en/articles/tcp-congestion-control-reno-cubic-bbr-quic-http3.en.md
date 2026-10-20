@@ -75,8 +75,8 @@ $$W_{cubic}(t) = C \cdot (t - K)^3 + W_{max}$$
 
 Where:
 - $W_{max}$ is the congestion window size right before the previous packet loss event;
-- $K = \sqrt[3]{\frac{W_{max} \cdot \beta}{C}}$ is the time constant required to scale the window back to $W_{max}$;
-- $C$ is a scaling constant (typically ~0.4), and $\beta$ is the multiplicative decrease factor (typically ~0.2).
+- $K = \sqrt[3]{\frac{W_{max} \cdot (1 - \beta)}{C}}$ is the time constant required to scale the window back to $W_{max}$;
+- $C$ is a scaling constant (typically ~0.4), and $\beta$ is the multiplicative decrease factor specified by RFC 8312 / RFC 9438 (default 0.7, yielding an initial window reduction of $1 - \beta = 0.3$).
 
 ```text
 Cubic Window Growth Curve (Concave and Convex Phases):
@@ -243,10 +243,9 @@ In Chapter 7 of our masterclass, we dive straight into the Linux networking subs
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: Why does Google BBR strictly require the `fq` (Fair Queueing) scheduler instead of the default `pfifo_fast`?
-**The core reason is that BBR relies on fine-grained pacing, which `pfifo_fast` cannot enforce.**
-Traditional Linux stacks write data in large packet bursts directly to the network driver. BBR eliminates burst-induced bufferbloat by pacing packets out evenly at calculated nanosecond intervals (`pacing_rate`).
-The `fq` scheduler maintains per-socket timers that enforce precise transmission timestamps. If run with a standard FIFO queue like `pfifo_fast`, packets are released in bursts, causing momentary buffer spikes in intermediate switches and corrupting BBR's real-time measurements of bottleneck bandwidth and propagation delay.
+### Q1: Why is `fq` (Fair Queueing) recommended when running Google BBR? Does BBR strictly mandate `fq`?
+**In early kernels (Linux 4.9–4.12), BBR strictly depended on `fq` for socket pacing. However, in modern Linux (4.13+), the TCP layer implements native internal pacing via `SO_MAX_PACING_RATE` and high-resolution timers, allowing BBR to operate with other qdiscs like `fq_codel` or `pfifo_fast`.**
+Nonetheless, setting `default_qdisc = fq` remains strongly recommended for production environments. Hardware/qdisc-level pacing in `fq` offloads CPU timer interrupts, avoids lock contention across high-concurrency flows, and provides fair bandwidth slicing to prevent micro-bursts from corrupting BBR's BDP estimation.
 
 ### Q2: Under random packet loss (e.g., 10% loss on weak Wi-Fi or satellite links), why does Cubic's throughput collapse while BBR maintains near line-rate?
 **Because of a fundamental difference in how they define congestion:**

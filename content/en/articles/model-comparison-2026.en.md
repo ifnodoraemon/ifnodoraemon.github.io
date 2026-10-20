@@ -43,7 +43,7 @@ Before comparing, let's review the model release cadence of the top three vendor
 |------|---------|----------------|----------------|
 | Context | 1.05M tokens (922K in / 128K out) | 200K (Standard) / 1M (Beta) | 1M in / 64K out |
 | Thinking Mode | Built-in + Extreme mode | Extended / Adaptive Thinking | Deep Think |
-| Multimodal | Text / Image / Audio | Text / Image / PDF | Text / Image / Video / Audio |
+| Multimodal | Text / Image | Text / Image / PDF | Text / Image / Video / Audio |
 | Computer Control | Native support (OSWorld 75%) | Computer Use | — |
 | Knowledge Cutoff | Aug 2025 | — | — |
 
@@ -54,7 +54,7 @@ Before comparing, let's review the model release cadence of the top three vendor
 | GPT-5.4 | $2.50 | $15.00 | — | Latest frontier model |
 | GPT-5 | $1.25 | $10.00 | $0.13 | Default ChatGPT model |
 | GPT-5-mini | $0.25 | $2.00 | — | Lightweight |
-| Claude Opus 4.6 | $15.00 | $75.00 | $1.50 | Flagship reasoning |
+| Claude Opus 4.6 | $5.00 | $25.00 | $0.50 | Flagship reasoning |
 | Claude Sonnet 4.6 | $3.00 | $15.00 | $0.30 | King of cost-effectiveness |
 | Gemini 3.1 Pro (≤200K) | $2.00 | $12.00 | — | Standard pricing |
 | Gemini 3.1 Pro (>200K) | $4.00 | $18.00 | — | Long context |

@@ -55,7 +55,7 @@ flowchart TD
         T2 -.->|"Heavy I/O latency > 1s<br/>PLEG starves beyond 3m threshold"| T5["<b>Error: PLEG is not healthy!</b><br/>Node status flips to NotReady"]
     end
 
-    subgraph EventedPLEG["Evented PLEG Architecture (K8s 1.27+ Beta / 1.30+ GA Event Streaming)"]
+    subgraph EventedPLEG["Evented PLEG Architecture (Feature-Gated EventedPLEG via CRI Stream)"]
         direction TB
         E1["containerd detects container state changes"] -->|"gRPC Streaming Push<br/>GetContainerEvents()"| E2["Kubelet Evented PLEG Listener"]
         E2 -->|"Microsecond real-time event delivery"| E3["Kubelet syncLoop processes immediately"]

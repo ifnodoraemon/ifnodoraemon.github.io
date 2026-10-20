@@ -233,7 +233,7 @@ If you don't want to manage GPU infrastructure, you can use commercial API fine-
 
 | Service | Supported Models | Min Samples | Features |
 |------|----------|-----------|------|
-| OpenAI Fine-tuning | GPT-5-mini, GPT-5, GPT-5.4 | 10 | Easiest; supports SFT and DPO |
+| OpenAI Fine-tuning | GPT-5-mini, GPT-5 | 10 | Easiest; supports SFT and DPO |
 | Anthropic Fine-tuning | Claude 3 Haiku (via Bedrock) | 32 | Managed through Amazon Bedrock |
 | Google Vertex AI | Gemini 3.x series | 100 | Deeply integrated with Google Cloud |
 

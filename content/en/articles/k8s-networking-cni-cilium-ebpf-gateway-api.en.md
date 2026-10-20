@@ -120,7 +120,7 @@ Underlay (Calico BGP) Direct Packet:
 ### 3.1 Overlay Networks (e.g., Flannel VXLAN, Cilium Geneve)
 - **Mechanics**: Regardless of underlying physical network complexity, as long as host nodes exchange UDP datagrams, Pod packets are encapsulated inside outer UDP frames, projecting a virtual Layer 2 overlay atop physical infrastructure;
 - **Strengths**: **Maximum Portability**. Works out-of-the-box across any public cloud provider, hybrid virtualization platform, or complex multi-VPC environment without physical switch dependencies;
-- **Trade-offs**: Adds a 50-byte header overhead per packet, requiring host MTUs to drop to `1450` (or `8950` with Jumbo Frames) to prevent packet fragmentation. CPU cycles are consumed by constant encapsulation and decapsulation, causing a 5%–15% throughput penalty under intense workloads.
+- **Trade-offs**: Adds a 50-byte header overhead per packet, requiring container veth/tunnel interface MTUs to drop to `1450` when the physical underlay runs at standard 1500 to prevent packet fragmentation. CPU cycles are consumed by constant encapsulation and decapsulation, causing a 5%–15% throughput penalty under intense workloads.
 
 ### 3.2 Underlay / BGP Direct Routing (e.g., Calico BGP)
 - **Mechanics**: Treats every host node as an autonomous **BGP Router**. Using internal routing daemons (such as BIRD / Felix), nodes peer with physical Top-of-Rack (ToR) switches using the Border Gateway Protocol (BGP), advertising node-local Pod CIDR blocks directly into physical routing tables;

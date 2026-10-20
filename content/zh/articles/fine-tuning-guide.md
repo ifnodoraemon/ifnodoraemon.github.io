@@ -233,7 +233,7 @@ python -m vllm.entrypoints.openai.api_server \
 
 | 服务 | 支持模型 | 最低数据量 | 特点 |
 |------|----------|-----------|------|
-| OpenAI Fine-tuning | GPT-5-mini, GPT-5, GPT-5.4 | 10 条 | 最简单，支持监督微调和 DPO |
+| OpenAI Fine-tuning | GPT-5-mini, GPT-5 | 10 条 | 最简单，支持监督微调和 DPO |
 | Anthropic Fine-tuning | Claude 3 Haiku（via Bedrock） | 32 条 | 通过 Amazon Bedrock 托管 |
 | Google Vertex AI | Gemini 3.x 系列 | 100 条 | 与 Google Cloud 深度集成 |
 

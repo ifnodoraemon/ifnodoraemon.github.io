@@ -143,7 +143,7 @@ cpuManagerPolicy: static
 当配置为 `single-numa-node` 时：
 1. 调度器在将 Pod 交付给节点后，节点的 Topology Manager 执行严格的联合判定；
 2. **只有当该节点能够在同一个物理 NUMA 节点内，同时凑齐该容器所申请的所有独占 CPU 核心、大页内存（HugePages）、以及指定的全部 GPU 设备时**，该容器才被允许启动；
-3. 如果无法在单一 NUMA 节点内完成对齐，Kubelet 会直接拒绝启动该容器（返回 `TopologyAffinityError`），触发调度器去寻找其他拓扑对齐的节点，从而**在硬件源头保证了大模型算力的零损耗性能输出**！
+3. 如果无法在单一 NUMA 节点内完成对齐，Kubelet 会在准入阶段直接拒绝该 Pod（置于 `Failed` 终止状态并报错 `TopologyAffinityError`）。需要注意：Kubernetes 调度器**并不会**自动将该失败的 Pod 漂移到其他节点重试；若要实现跨节点自动重试，必须由上层控制器（如 Deployment/Job）感知 Pod 失败并重建新实例，或在控制面调度器中引入 Topology-Aware 调度插件（如 Scheduler Plugins 的 NodeResourceTopologyMatch）在调度预选阶段即提前规避拓扑不对齐的节点。
 
 ---
 
@@ -220,9 +220,9 @@ spec:
   - type: prometheus
     metadata:
       serverAddress: http://prometheus-k8s.monitoring.svc.cluster.local:9090
-      metricName: vllm_gpu_cache_usage_factor
-      query: avg(vllm:gpu_cache_usage_factor{model="qwen-72b"})
-      threshold: '0.80'     # 当集群的 KV Cache 平均使用率突破 80% 时，提前扩容防止换入换出卡顿
+      metricName: vllm_kv_cache_usage_perc
+      query: avg(vllm:kv_cache_usage_perc{model="qwen-72b"})
+      threshold: '0.80'     # 当集群的 KV Cache 平均使用率突破 80% (0.80) 时，提前扩容防止换入换出卡顿
 ```
 
 ---

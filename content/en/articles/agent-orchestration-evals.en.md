@@ -24,14 +24,12 @@ This is the number one enemy for AI engineering in 2026: **Error Compounding**. 
 
 ## Defense in Depth I: Distributed Orchestration Architecture for Industrial Agents
 
-The first step to combat error compounding is to break the long chain. We use the Divide and Conquer approach, routing tasks to various micro-Agents. However, under high concurrency, pure in-memory state machines (like native LangGraph) are fragile.
+The first step to combat error compounding is to break the long chain. We use the Divide and Conquer approach, routing tasks to various micro-Agents. However, naive orchestrations running exclusively on volatile in-memory state cannot survive worker crashes or network disruptions.
 
-### 1. Abandon Pure Memory State, Embrace Event-Driven & Exactly-Once Semantics
-When orchestrating dozens of collaborating Agents, network jitter and Model API timeouts are the norm. Industrial orchestration must introduce underlying message queuing systems (like Temporal or Kafka-based durable orchestrators).
-
-**Architecture Paradigm Shift:**
-*   **Externalized State**: An Agent's current execution Node and Local State must be serialized and saved to Redis or Postgres before and after every step.
-*   **Idempotency Design**: Under a retry mechanism, an Agent might be awakened multiple times to execute the same tool (e.g., "deduct user points"). To prevent dirty data, the tool invocation layer must implement strict Exactly-Once semantics, issuing request tokens based on a unique `Task_ID + Step_ID`. For deep runtime constraints and guardrail architectures, see [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/).
+### 1. Persistent Checkpointers and End-to-End Idempotency Design
+When orchestrating dozens of collaborating Agents, network jitter and Model API timeouts are the norm. Industrial orchestration must rely on durable execution and persistent state checkpointers:
+*   **State Checkpointing**: Adopting patterns like LangGraph's built-in `PostgresSaver` or Temporal event histories, an Agent's execution Node, local variables, and context mutations are atomically serialized to persistent storage (Postgres/Redis) after every superstep, ensuring seamless crash recovery.
+*   **Application-Level Idempotency**: Distributed execution engines (such as Temporal) automatically retry failed activities, providing **At-Least-Once** execution. External side-effects (such as payment processing, database writes, or email dispatches) **do not automatically inherit Exactly-Once semantics**; developers must implement explicit idempotency keys (e.g. `Task_ID + Step_ID + Attempt`) at the tool layer to guard against duplicate actions. For deep runtime constraints and guardrail architectures, see [7 Runtime Practices for Building AI Agents](/en/articles/agent-runtime-practices/).
 
 ### 2. Self-Healing Routing
 A standard Router simply hardcodes branching conditions based on input. In advanced orchestration, the Router itself is a model with a confidence judgment mechanism:

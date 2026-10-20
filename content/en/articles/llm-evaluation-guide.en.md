@@ -41,7 +41,7 @@ When a system starts confidently hallucinating, how precisely does the evaluator
 ### 2.2 Context Precision — The Ranking Penalty Algorithm
 Feeding correct information into the LLM's context window does not guarantee success due to the notorious "Lost in the Middle" phenomenon. 
 Context Precision evaluation runs on an evolved variation of the **MAP@K (Mean Average Precision)** algorithm, long standard in search engines:
-- It not only verifies the authenticity of retrieved chunks but applies extreme scrutiny to their positional rank. Golden chunks arriving at position 1 yield massive weight bonuses; however, if noise clusters at the top and the golden chunk is buried at the tail, the algorithm's exponential decay punishes the score brutally.
+- It calculates the weighted sum of Precision@$k$ across all ground-truth relevant positions: $\text{Context Precision@K} = \frac{\sum_{k=1}^K (\text{Precision@}k \times v_k)}{\text{Total Relevant Chunks}}$, where $v_k \in \{0, 1\}$ indicates binary relevance. Placing relevant chunks at top ranks boosts cumulative precision, whereas burying golden chunks behind irrelevant noise severely degrades the final metric.
 - ***Architectural Insight***: This metric directly castigates your **recall ranking strategy**. Failure here acts as an explicit mandate to introduce a dedicated precision-ranking component (e.g., a Cross-Encoder Reranker) to force relevance hierarchy.
 
 ## 3. Test Set Evolutionary Vectors: Mutation and Log Purification
@@ -64,7 +64,7 @@ Traditional testing is starkly **Deterministic**: red means stop, green means go
 ### Tolerance Architecture in Defense Mechanics
 In the face of probabilistic ambiguity, your pipeline scripting must construct tiered assertions:
 - **Zero-Tolerance Hard Asserts**: Devastating boundary breaches dictate absolute veto power. If an adversarial injection prompts an un-sanitized system prompt dump, the case throws an Exit Status 1 and annihilates the PR immediately.
-- **Statistical Degradation Margins**: For quantitative tracking (like context recall), architect margins of tolerance akin to load testing logic. If the baseline mean rests at 85, you only block commits that force the deviation significantly below the p-value floor, rather than halting progress over incidental two-point noise.
+- **Non-Inferiority Statistical Margins**: For quantitative tracking, avoid blocking PRs on small single-run fluctuations. Evaluate over $N \ge 300$ samples across 3 repeated runs, calculate 95% Confidence Intervals via Bootstrap/Wilson methods, and define a non-inferiority bound $\Delta = 1.5\%$ (requiring $p < 0.05$ to reject the null hypothesis of regression beyond $\Delta$) before halting deployment.
 - **The Perpetual Shadow Trial (A/B Routing)**: Understand that no static testing database can permanently inoculate your system against future semantic distribution shifts. The true final gate remains in persistent A/B live routing—shadowing new adjustments against 5% of global traffic, utilizing implicit end-user behavioral distribution as the ultimate supreme court.
 
 ## Conclusion

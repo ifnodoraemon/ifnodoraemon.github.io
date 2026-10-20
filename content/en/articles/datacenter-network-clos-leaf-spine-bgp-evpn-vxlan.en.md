@@ -190,7 +190,7 @@ VXLAN Packet Encapsulation Hierarchy:
 
 1. **Shattering the 4096 VLAN Limit**: VXLAN provides a **24-bit VNI (VXLAN Network Identifier)**, scaling to over $16.7\text{ million}$ isolated virtual tenant networks;
 2. **ECMP Load Balancing via Outer UDP Source Port**: The VTEP hashes the inner 5-tuple into the outer UDP source port. Intermediate Underlay Spine/Leaf switches do not need to understand VXLAN; standard ECMP distributes encapsulated packets across all spine links;
-3. **Mandatory Jumbo Frames**: The outer headers introduce $14 + 20 + 8 + 8 = 50$ bytes of encapsulation overhead. To prevent 1500-byte guest frames from fragmenting, **Underlay physical switch ports must be configured with an MTU of 9000 or 9216 bytes!**
+3. **Jumbo Frames Best Practice**: The outer headers introduce $14 + 20 + 8 + 8 = 50$ bytes of encapsulation overhead. While RFC 7348 does not strictly mandate Jumbo Frames on the wire (VM MTUs can alternatively be dropped to 1450 over 1500 Underlays), enterprise data center Underlay switch ports are strongly recommended to configure MTUs of 1600+ or 9000/9216 bytes to enable standard 1500 payload transmission without fragmentation!
 
 ### 3.2 The Control Plane Solution: MP-BGP EVPN
 

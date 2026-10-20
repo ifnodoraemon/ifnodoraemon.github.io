@@ -225,9 +225,9 @@ model = AutoModelForSequenceClassification.from_pretrained("meta-llama/Llama-Pro
 inputs = tokenizer(user_input, return_tensors="pt")
 logits = model(**inputs).logits
 
-# Outputs probability across [Benign, Injection Attack, Jailbreak Attempt]
+# Prompt Guard 2 outputs binary classification: 0 for benign, 1 for malicious (injection or jailbreak)
 predicted_class = logits.argmax().item()
-if predicted_class != 0:
+if predicted_class == 1:
     raise SecurityException("Critical injection payload detected. Request intercepted and dropped.")
 ```
 *Introducing this firewall layer adds less than 5 milliseconds of latency, drastically shrinking the blast radius of prompt injection attacks.*

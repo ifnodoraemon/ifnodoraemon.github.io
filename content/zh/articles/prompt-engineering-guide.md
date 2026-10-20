@@ -225,9 +225,9 @@ model = AutoModelForSequenceClassification.from_pretrained("meta-llama/Llama-Pro
 inputs = tokenizer(user_input, return_tensors="pt")
 logits = model(**inputs).logits
 
-# 输出 [正常, 注入攻击, 越狱企图]
+# Prompt Guard 2 为标准的二分类模型: 0 为 benign (正常), 1 为 malicious (恶意载荷/越狱注入)
 predicted_class = logits.argmax().item()
-if predicted_class != 0:
+if predicted_class == 1:
     raise SecurityException("检测到高危注入载荷，请求已拦截。")
 ```
 *引入这层防火墙只需不到 5 毫秒延迟，极大地压缩了注入攻击的爆炸半径。*

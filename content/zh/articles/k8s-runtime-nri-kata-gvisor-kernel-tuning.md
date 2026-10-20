@@ -55,7 +55,7 @@ flowchart TD
         T2 -.->|"高负载下 CRI 响应 > 1s<br/>导致 PLEG 错过 3 分钟心跳"| T5["<b>报错: PLEG is not healthy!</b><br/>物理节点翻转为 NotReady"]
     end
 
-    subgraph EventedPLEG["Evented PLEG 架构 (K8s 1.27+ Beta / 1.30+ GA 事件流推送)"]
+    subgraph EventedPLEG["Evented PLEG 架构 (EventedPLEG 特性门控与 CRI 事件流驱动)"]
         direction TB
         E1["containerd 运行时内部<br/>感知 OCI 容器状态变迁"] -->|"gRPC 流式长连接推送<br/>GetContainerEvents()"| E2["Kubelet Evented PLEG 监听器"]
         E2 -->|"微秒级实时事件推入"| E3["Kubelet syncLoop 立即响应"]
@@ -70,11 +70,11 @@ flowchart TD
 - **雪崩陷阱**：当单机运行超过 100 个 Pod，或者宿主机由于高频磁盘写入导致 D 状态进程卡死时，CRI 的 gRPC 调用耗时会迅速从 10ms 飙升至数秒。当连续 3 分钟未能完成一次完整的 Relist 时，Kubelet 会判定 PLEG 崩溃，将该节点状态标记为 `NotReady`，触发集群级大面积驱逐误杀！
 
 ### 1.2 生产级破局：Evented PLEG (事件流驱动)
-为了终结 PLEG 的轮询灾难，社区在 Kubelet 与 containerd 之间重构了基于流式事件推送的 **Evented PLEG**（KEP-3386）：
+为了终结 PLEG 的轮询灾难，社区在 Kubelet 与 containerd 之间重构了基于流式事件推送的 **Evented PLEG**（KEP-3386，受 `--feature-gates=EventedPLEG=true` 门控与 CRI 运行时事件流支持约束）：
 1. **gRPC 流式事件监听**：Kubelet 启动时向 containerd 建立单向长连接 `runtimeService.GetContainerEvents()`；
 2. **事件驱动推送到端**：当容器退出、暂停或启动时，containerd 内部直接将事件推送到 gRPC 流中，Kubelet 在**微秒级**时间内即可获知，完全摆脱了每秒全量扫描容器列表的沉重开销；
 3. **保底兜底周期拉长**：为了防止网络丢包引发事件遗漏，将原先 1 秒一次的 Relist 保底对齐周期拉长至 **5 分钟（300秒）** 一次。
-4. **调优收益**：在大规模高密度计算节点上，Kubelet 自身的 CPU 开销直接**降低 80%**，彻底终结了偶发的 `PLEG is not healthy` 假死震荡！
+4. **调优收益与门控要求**：在大规模高密度计算节点上，Kubelet 自身的 CPU 开销直接**降低 80%**，极大缓解了 `PLEG is not healthy` 假死。需要注意该特性仍要求关注各版本 `EventedPLEG` 特性门控与 containerd CRI 兼容状态，尚未作为不可配置的默认稳态推广。
 
 ---
 

@@ -62,9 +62,9 @@ flowchart TD
 
 ### 1.1 The Three Crucial `resourceVersion` Semantics
 Misunderstanding `resourceVersion` is the primary reason naive API clients bring down production control planes:
-1. **`resourceVersion = ""` (Unset / Empty String - High Risk)**:
-   **Semantics**: Demands **absolute linearizable consistency (Quorum Read)**.
-   **Mechanism**: `kube-apiserver` **bypasses its local in-memory WatchCache** and issues a quorum read across the etcd Raft cluster. When thousands of clients issue simultaneous un-versioned `List` calls, etcd disk I/O and CPU spike to 100%, causing cluster-wide heartbeat failures!
+1. **`resourceVersion = ""` (Unset / Empty String - Linearizable Read)**:
+   **Semantics**: Demands **latest linearizable consistent data (Quorum Read)**.
+   **Mechanism**: Prior to Kubernetes v1.31, `kube-apiserver` **strictly bypassed its in-memory WatchCache** and issued a quorum read directly across the etcd Raft cluster, risking severe etcd saturation under traffic spikes. Starting in **Kubernetes v1.31+** (via the `ConsistentListFromCache` / `WatchList` feature), when enabled and backed by etcd progress notifications, the apiserver can fulfill linearizable reads directly from WatchCache memory without hitting etcd disks; however, in unconfigured or earlier clusters, empty string queries still punch through directly to etcd.
 2. **`resourceVersion = "0"` (Safe & Recommended for Read Scaling)**:
    **Semantics**: Demands **any recent consistent snapshot from apiserver memory**.
    **Mechanism**: Returns immediately from the `WatchCache` in RAM. While data may lag etcd by a few milliseconds, it incurs **zero disk I/O**, increasing read throughput by orders of magnitude!

@@ -419,28 +419,29 @@ docker run -d \
 ### 全参数调优指南
 
 ```bash
+# 全参数调优生产启动命令
 vllm serve Qwen/Qwen2.5-72B-Instruct \
-  --gpu-memory-utilization 0.90 \     # [1] 显存利用率
-  --max-model-len 8192 \              # [2] 最大上下文长度
-  --max-num-seqs 256 \                # [3] 最大并发请求数
-  --max-num-batched-tokens 16384 \    # [4] 每批最大 Token 数
-  --enable-chunked-prefill \          # [5] 分块预填充
-  --enable-prefix-caching \           # [6] APC 前缀缓存
-  --quantization fp8 \                # [7] 量化方案
-  --kv-cache-dtype fp8_e5m2 \         # [8] KV Cache 量化
-  --tensor-parallel-size 2 \          # [9] 张量并行
-  --num-speculative-tokens 5 \        # [10] 推测解码
+  --gpu-memory-utilization 0.90 \
+  --max-model-len 8192 \
+  --max-num-seqs 256 \
+  --max-num-batched-tokens 16384 \
+  --enable-chunked-prefill \
+  --enable-prefix-caching \
+  --quantization fp8 \
+  --kv-cache-dtype fp8_e5m2 \
+  --tensor-parallel-size 2 \
+  --num-speculative-tokens 5 \
   --speculative-model Qwen/Qwen2.5-1.5B-Instruct
 ```
 
 #### [1] `--gpu-memory-utilization` 显存利用率
 
-设为 `0.90` 意味着 vLLM 会使用 90% 的 GPU 显存来存储 KV Cache。剩下 10% 作为安全缓冲——留给 PyTorch 的临时张量、CUDA 的内部分配等。
+设为 `0.90` 是指 vLLM 模型执行器预先占用的**整卡显存预算上限**（总物理显存的 90%）。vLLM 在启动时先从这 90% 预算中扣除**静态模型权重**与**运行时激活值 Profile 评估预留**，将其余全部显存划归 PagedAttention 的 KV Cache 物理块池。剩下的 10% 显存缓冲则留给操作系统的图形驱动、CUDA Runtime 上下文及非 PyTorch 内部临时开销。
 
 ```text
-太低 (0.70)：浪费了 30% 的显存 → APC 缓存池太小 → 缓存命中率暴跌 → 并发能力打折
-太高 (0.98)：几乎没有缓冲 → 流量突增时 OOM → 引擎崩溃重启 → 所有在途请求丢失
-甜区 (0.90~0.95)：平衡安全与性能。流量稳定后可小心地逐步提高
+太低 (0.70)：留给 KV Cache 块池的空间被严重挤压 → APC 缓存池太小 → 缓存命中率暴跌 → 并发能力打折
+太高 (0.98)：几乎没有系统缓冲 → 驱动或瞬时 CUDA 上下文抖动极易触发宿主机 OOM
+甜区 (0.90~0.95)：平衡安全与性能。流量与长文本长度稳定后可逐步微调
 ```
 
 #### [2] `--max-model-len` 最大上下文长度
@@ -638,29 +639,29 @@ vLLM 内置了丰富的 Prometheus 指标端点（`http://localhost:8000/metrics
 
 ```text
 # ─── Token 计量 ───
-vllm_prompt_tokens_total            # 累计输入 Token 总数 (Counter)
-vllm_generation_tokens_total        # 累计输出 Token 总数 (Counter)
-vllm_request_prompt_tokens          # 每请求输入 Token 分布 (Histogram)
-vllm_request_generation_tokens      # 每请求输出 Token 分布 (Histogram)
+vllm:prompt_tokens_total            # 累计输入 Token 总数 (Counter)
+vllm:generation_tokens_total        # 累计输出 Token 总数 (Counter)
+vllm:request_prompt_tokens          # 每请求输入 Token 分布 (Histogram)
+vllm:request_generation_tokens      # 每请求输出 Token 分布 (Histogram)
 
 # ─── 缓存效率 ───（V1 新指标，替代已废弃的 gpu_prefix_cache_hit_rate）
-vllm_prefix_cache_hits              # 缓存命中 Token 总数 (Counter)
-vllm_prefix_cache_queries           # 缓存查询 Token 总数 (Counter)
-vllm_prompt_tokens_cached           # 已缓存的 Prompt Token 数
-vllm_prompt_tokens_recomputed       # 被缓存但仍需重算的 Token 数
+vllm:prefix_cache_hits              # 缓存命中 Token 总数 (Counter)
+vllm:prefix_cache_queries           # 缓存查询 Token 总数 (Counter)
+vllm:prompt_tokens_cached           # 已缓存的 Prompt Token 数
+vllm:prompt_tokens_recomputed       # 被缓存但仍需重算的 Token 数
 
 # ─── 延迟指标 ───
-vllm_time_to_first_token_seconds    # 首 Token 延迟 TTFT (Histogram)
-vllm_inter_token_latency_seconds    # Token 间延迟 ITL (Histogram)
-vllm_e2e_request_latency_seconds    # 端到端请求延迟 (Histogram)
+vllm:time_to_first_token_seconds    # 首 Token 延迟 TTFT (Histogram)
+vllm:inter_token_latency_seconds    # Token 间延迟 ITL (Histogram)
+vllm:e2e_request_latency_seconds    # 端到端请求延迟 (Histogram)
 
 # ─── 资源饱和度 ───
-vllm_gpu_cache_usage_perc           # KV Cache 显存占用比（走向 1.0 就危险了！）
-vllm_num_requests_running           # 正在执行的请求数
-vllm_num_requests_waiting           # 排队等待的请求数
+vllm:kv_cache_usage_perc            # KV Cache 显存占用比（亦作 gpu_cache_usage_perc，走向 1.0 即发生排队）
+vllm:num_requests_running           # 正在执行的请求数
+vllm:num_requests_waiting           # 排队等待的请求数
 
 # ─── 吞吐量 ───
-vllm_num_preemptions_total          # 请求被抢占次数（如果频繁 → 显存不够）
+vllm:num_preemptions_total          # 请求被抢占次数（如果频繁 → 显存不够）
 ```
 
 > **⚠️ 关键配置**：vLLM 的 API 服务使用多进程架构。**必须设置** `PROMETHEUS_MULTIPROC_DIR` 环境变量指向一个共享临时目录，否则 Prometheus 指标数据会丢失或不一致。

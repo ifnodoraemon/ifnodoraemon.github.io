@@ -125,15 +125,18 @@ import weaviate
 # 连接向量数据库
 client = weaviate.connect_to_local()
 
-# 创建检索器（混合搜索 = 向量 + BM25 关键词）
+# 创建多样性检索器（MMR: 最大边际相关性，平衡相关度与召回多样性去重）
 retriever = vectorstore.as_retriever(
-    search_type="mmr",       # 最大边际相关性
+    search_type="mmr",       # 最大边际相关性 (Maximal Marginal Relevance)
     search_kwargs={
-        "k": 5,              # 返回 5 个结果
-        "fetch_k": 20,       # 候选集大小
-        "lambda_mult": 0.7,  # 相关性 vs 多样性权重
+        "k": 5,              # 最终返回 5 个互不重复的多样性结果
+        "fetch_k": 20,       # 初筛候选集大小
+        "lambda_mult": 0.7,  # 0.7 偏向相关性，0.3 偏向多样性去重
     }
 )
+
+# 提示：若需实现真正的“稠密向量 + BM25 关键词”混合检索 (Hybrid Search)，
+# 可使用 Weaviate 原生 hybrid 查询，或通过 LangChain 的 EnsembleRetriever 融合两种 Retriever。
 ```
 
 ## 企业级 RAG 检索策略选型架构矩阵 (Strategy Matrix)

@@ -351,17 +351,18 @@ docker run -d \
 ### Complete Tuning Guide
 
 ```bash
+# Complete production startup configuration
 vllm serve Qwen/Qwen2.5-72B-Instruct \
-  --gpu-memory-utilization 0.90 \     # [1]
-  --max-model-len 8192 \              # [2] THE MOST CRITICAL PARAMETER
-  --max-num-seqs 256 \                # [3]
-  --max-num-batched-tokens 16384 \    # [4]
-  --enable-chunked-prefill \          # [5]
-  --enable-prefix-caching \           # [6]
-  --quantization fp8 \                # [7]
-  --kv-cache-dtype fp8_e5m2 \         # [8]
-  --tensor-parallel-size 2 \          # [9]
-  --num-speculative-tokens 5 \        # [10]
+  --gpu-memory-utilization 0.90 \
+  --max-model-len 8192 \
+  --max-num-seqs 256 \
+  --max-num-batched-tokens 16384 \
+  --enable-chunked-prefill \
+  --enable-prefix-caching \
+  --quantization fp8 \
+  --kv-cache-dtype fp8_e5m2 \
+  --tensor-parallel-size 2 \
+  --num-speculative-tokens 5 \
   --speculative-model Qwen/Qwen2.5-1.5B-Instruct
 ```
 
@@ -482,17 +483,17 @@ User → [API Gateway (auth/rate-limit)] → [vLLM Engine]
 
 ```text
 # Token metering
-vllm_prompt_tokens_total / vllm_generation_tokens_total
+vllm:prompt_tokens_total / vllm:generation_tokens_total
 
 # Cache efficiency (V1, replaces deprecated gpu_prefix_cache_hit_rate)
-vllm_prefix_cache_hits / vllm_prefix_cache_queries
-# PromQL: (rate(vllm_prefix_cache_hits[5m]) / rate(vllm_prefix_cache_queries[5m])) * 100
+vllm:prefix_cache_hits / vllm:prefix_cache_queries
+# PromQL: (rate(vllm:prefix_cache_hits[5m]) / rate(vllm:prefix_cache_queries[5m])) * 100
 
 # Latency
-vllm_time_to_first_token_seconds / vllm_inter_token_latency_seconds
+vllm:time_to_first_token_seconds / vllm:inter_token_latency_seconds
 
 # Saturation
-vllm_gpu_cache_usage_perc / vllm_num_requests_waiting / vllm_num_preemptions_total
+vllm:kv_cache_usage_perc / vllm:num_requests_waiting / vllm:num_preemptions_total
 ```
 
 > **⚠️ Must set** `PROMETHEUS_MULTIPROC_DIR` env var for correct multi-process metric collection.

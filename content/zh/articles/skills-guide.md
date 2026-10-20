@@ -290,15 +290,15 @@ graph TB
 
 ### 横向对比
 
-| 维度 | Claude (SKILL.md) | Cursor (.mdc) | GitHub Copilot | OpenAI (Codex/GPTs) | Windsurf | Gemini |
-|------|-------------------|---------------|----------------|---------------------|----------|--------|
-| **配置路径** | `.claude/skills/` | `.cursor/rules/` | `.github/` | `AGENTS.md` / GPT Builder | 项目根目录 | `.gemini/` |
-| **文件格式** | YAML + Markdown | YAML + Markdown | 纯 Markdown | Markdown / GUI 配置 | 纯 Markdown | 纯 Markdown |
-| **粒度** | 每技能一个文件夹 | 每规则一个文件 | 仓库级 + 路径级 | 仓库级 + GPT 级 | 全局 + 项目级 | 仓库级 |
-| **脚本支持** | ✅ | ❌ | ❌ | ⚠️ GPTs 可附带文件 | ❌ | ❌ |
-| **智能加载** | ✅ 三层渐进 | ✅ glob 匹配 | ⚠️ 全量 | ⚠️ 全量 | ⚠️ 全量 | ⚠️ 全量 |
-| **作用域** | 按技能领域 | 按文件类型 | 按路径模式 | 用户级 / 仓库级 | 全局/项目 | 目录层级 |
-| **跨平台** | Claude 专属 | Cursor 专属 | Copilot 专属 | OpenAI 专属 | Windsurf 专属 | Gemini 专属 |
+| 维度 | Claude (SKILL.md) | Cursor (.mdc) | GitHub Copilot | OpenAI (Codex / SKILL.md) | Windsurf | Gemini |
+|------|-------------------|---------------|----------------|---------------------------|----------|--------|
+| **配置路径** | `.claude/skills/` | `.cursor/rules/` | `.github/` | `.codex/skills/` 与 `AGENTS.md` | 项目根目录 | `.gemini/` |
+| **文件格式** | YAML + Markdown | YAML + Markdown | 纯 Markdown | YAML + Markdown (`SKILL.md`) | 纯 Markdown | 纯 Markdown |
+| **粒度** | 每技能一个文件夹 | 每规则一个文件 | 仓库级 + 路径级 | 模块化技能包 + 仓库级 | 全局 + 项目级 | 仓库级 |
+| **脚本支持** | ✅ | ❌ | ❌ | ✅ (`scripts/` 目录与工具链) | ❌ | ❌ |
+| **智能加载** | ✅ 三层渐进 | ✅ glob 匹配 | ⚠️ 全量 | ✅ 渐进式加载（元数据初筛+按需加载） | ⚠️ 全量 | ⚠️ 全量 |
+| **作用域** | 按技能领域 | 按文件类型 | 按路径模式 | 任务领域 / 仓库级 | 全局/项目 | 目录层级 |
+| **跨平台** | 开放标准 (多平台兼容) | Cursor 专属 | Copilot 专属 | 开放标准 (Codex/Claude 兼容) | Windsurf 专属 | Gemini 专属 |
 
 ### 各平台详解
 
@@ -360,15 +360,13 @@ GPTs 是 OpenAI 的"Skills 包"概念——用户可以创建针对特定任务�
 - 支持上传参考文档、API Schema，让 GPT 具备领域专业知识
 - **本质上就是"Skills + 模型 + 工具"的预封装产品**
 
-**③ Codex Agent + AGENTS.md（开发者级）**
+**③ Codex 原生 Skills 规范与 AGENTS.md（开发者级）**
 
-现代 AI 编码代理（如 Cline、Aider）原生支持 `AGENTS.md` 开放标准：
+OpenAI Codex 及前沿编码助手（如 Cline、Aider）已全面支持现代工程化 Skills 体系：
 
-- 在仓库根目录放置 `AGENTS.md`，Codex 自动读取项目结构、编码规范和构建命令
-- 支持在 monorepo 中嵌套放置 `AGENTS.md`，子项目获得独立的上下文指导
-- OpenAI 也是 `AGENTS.md` 开放标准的联合推动者之一
-
-**独特优势**：OpenAI 的三层体系覆盖面最广——从"不写代码的产品经理用 GPTs"到"硬核开发者用 Codex + AGENTS.md"，适应不同技术水平的用户。
+- **Codex 原生 Skills 支持**：Codex 现已全面支持模块化 `SKILL.md` 标准（置于 `.codex/skills/<skill-name>/SKILL.md` 或 `.agents/skills/` 目录），每个 Skill 包独立封装元数据、指令提示词以及包含测试脚本与辅助工具的 `scripts/` 目录，完全支持通过元数据匹配实现的按需**渐进式动态加载**，彻底打破了以往仅能全量加载的局限；
+- **AGENTS.md 仓库级契约**：在仓库根目录放置 `AGENTS.md`，Codex 自动读取项目结构、编码规范与工作流约束；支持在 monorepo 中嵌套放置实现子项目级精细上下文隔离；
+- **跨平台互通标准**：`SKILL.md` 格式已成为跨 Claude Code、OpenAI Codex 等主流平台的通用能力包标准，开发者编写一次技能包即可在多平台无缝复用。
 
 #### Windsurf：.windsurfrules
 

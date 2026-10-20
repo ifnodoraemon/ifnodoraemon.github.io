@@ -162,8 +162,8 @@ GPU 的 Tensor Cores 极其擅长做大矩阵乘法（GEMM），但对于加减�
 ### 2.3 Warp 调度拓扑：消灭 Shared Memory 通信屏障
 
 在 CUDA 编程中，一个 Thread Block 包含多个 Warp（每个 Warp 32 线程）。
-- 在 FA-1 中，所有的 Warp 共同切分 $Q$ 块和 $K, V$ 块，不同 Warp 之间需要通过 Shared Memory 频繁进行局部的归约同步（`__syncthreads()`）；
-- FA-2 重新设计了 Warp 分割策略：**同一个 Thread Block 内的所有 Warp 共享相同的 $Q$ 块切片，但各自独立处理互不重叠的 $K, V$ 块片段**。Warp 之间完全消除了同步屏障，实现了纯粹的零通信并行推进。
+- 在 FA-1 中，同一个 Block 内的所有 Warp 共享相同的 $Q$ 块切片，但各自切分 $K, V$ 块。这意味着计算行最大值与行累加和（rowmax/rowsum）时，不同 Warp 之间必须通过 Shared Memory 频繁进行局部的归约同步（`__syncthreads()`）；
+- FA-2 重新设计了 Warp 分工拓扑：**各个 Warp 分割 $Q$ 块（各自负责计算独立的输出 $O$ 行切片），而在 Block 内共享整块 $K, V$ 数据**。由于每个 Warp 产出的输出行天然正交互不干扰，Warp 之间完全消除了 Shared Memory 归约通信与同步屏障，实现了纯粹的零通信推进。
 
 经过这三项底层重构，FlashAttention-2 在 A100 上跑出了高达 **73% 的理论算力峰值（~225 TFLOPS）**，成为了整个大模型产业事实上的算子底座。
 
