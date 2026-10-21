@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Wed, 21 Oct 2026 02:56:27 GMT</pubDate>
+  <pubDate>Wed, 21 Oct 2026 03:59:21 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA</title>
@@ -418,13 +418,13 @@
     <enclosure url="https://blog.llmgo.top/og/en/test-time-compute-grpo.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Production Deployment of DeepSeek-V4 and Kimi K3: 32-GPU Topologies, Memory Math, and Cluster Engineering</title>
+    <title>Production Deployment of DeepSeek-V4 and Kimi K3: 32-GPU Topologies, Memory Math, and Real-World Troubleshooting</title>
     <link>https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/</link>
     <guid>https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Cluster Deployment</category>
-    <description>Comprehensive production guide for hosting DeepSeek-V4-Pro (CSA+HCA) and Kimi K3 (KDA+MLA): covering 4-node/32-GPU and 8-node/64-GPU topologies, per-rank GPU memory budgeting, Ray cluster orchestration, vLLM/SGLang tuning, KubeRay enterprise manifests, and rigorous TCO economics.</description>
+    <description>Comprehensive production guide for hosting DeepSeek-V4-Pro (CSA+HCA) and Kimi K3 (KDA+MLA): covering 4-node/32-GPU and 8-node/64-GPU topologies, per-rank GPU memory budgeting, six hardcore production pitfalls (NUMA crossing, MoE routing skew, CUDAGraph pseudo-OOM, PFC deadlock), Ray and KubeRay orchestration.</description>
     <enclosure url="https://blog.llmgo.top/og/en/deepseek-v4-kimi-k3-deployment-guide.png" length="150000" type="image/png" />
   </item>
   <item>

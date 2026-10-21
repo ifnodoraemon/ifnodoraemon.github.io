@@ -66,9 +66,10 @@ function getPublishedMap() {
   return {};
 }
 
-function recordPublished(slug, url) {
+function recordPublished(slug, url, id = null) {
   const map = getPublishedMap();
   map[slug] = {
+    id: id || (map[slug] && map[slug].id) || null,
     url,
     publishedAt: new Date().toISOString()
   };
@@ -124,7 +125,7 @@ function prepareMarkdown(content, slug, title) {
   return md + footer;
 }
 
-async function publishArticle(apiKey, filePath, isDraft = false) {
+async function publishArticle(apiKey, filePath, isDraft = false, articleId = null) {
   const raw = fs.readFileSync(filePath, 'utf-8');
   const { data, content } = matter(raw);
 
@@ -134,7 +135,8 @@ async function publishArticle(apiKey, filePath, isDraft = false) {
   const tags = formatTags(data.tag, slug);
   const markdownBody = prepareMarkdown(content, slug, title);
 
-  console.log(`\n📤 正在发布: "${title}"`);
+  const action = articleId ? `更新 (ID: ${articleId})` : '全新发布';
+  console.log(`\n📤 正在${action}: "${title}"`);
   console.log(`   🏷️  标签: ${tags.join(', ')}`);
   console.log(`   🔗 Canonical 原文: ${canonicalUrl}`);
   console.log(`   📝 状态: ${isDraft ? '草稿 (Draft)' : '正式公开发布 (Published)'}`);
@@ -150,8 +152,11 @@ async function publishArticle(apiKey, filePath, isDraft = false) {
     }
   };
 
-  const res = await fetch('https://dev.to/api/articles', {
-    method: 'POST',
+  const endpoint = articleId ? `https://dev.to/api/articles/${articleId}` : 'https://dev.to/api/articles';
+  const method = articleId ? 'PUT' : 'POST';
+
+  const res = await fetch(endpoint, {
+    method,
     headers: {
       'api-key': apiKey,
       'Content-Type': 'application/json',
@@ -163,13 +168,13 @@ async function publishArticle(apiKey, filePath, isDraft = false) {
   const resData = await res.json();
 
   if (!res.ok) {
-    console.error(`   ❌ 发布失败 (${res.status}):`, resData.error || resData.message || JSON.stringify(resData));
+    console.error(`   ❌ 发布/更新失败 (${res.status}):`, resData.error || resData.message || JSON.stringify(resData));
     return { success: false, error: resData };
   }
 
-  console.log(`   🎉 发布成功！`);
+  console.log(`   🎉 ${articleId ? '更新成功！' : '发布成功！'}`);
   console.log(`   🔗 DEV.to 文章地址: ${resData.url}`);
-  recordPublished(slug, resData.url);
+  recordPublished(slug, resData.url, resData.id);
   return { success: true, url: resData.url };
 }
 
@@ -236,15 +241,17 @@ async function main() {
     }
 
     if (publishedMap[slug] && !force) {
-      console.log(`\n⏭️  [${count}/${targetSlugs.length}] ${slug} 之前已发布过，跳过 (如需强制重发请加 --force)`);
+      console.log(`\n⏭️  [${count}/${targetSlugs.length}] ${slug} 之前已发布过，跳过 (如需强制更新请加 --force)`);
       console.log(`   已发布链接: ${publishedMap[slug].url}`);
       continue;
     }
 
-    console.log(`\n----------------------------------------------------------------`);
-    console.log(`[${count}/${targetSlugs.length}] 正在处理: ${slug}`);
+    const existingId = (publishedMap[slug] && publishedMap[slug].id) || null;
 
-    const res = await publishArticle(apiKey, path.join(EN_ARTICLES_DIR, targetFile), isDraft);
+    console.log(`\n----------------------------------------------------------------`);
+    console.log(`[${count}/${targetSlugs.length}] 正在处理: ${slug}${existingId ? ` (更新已发布文章 ID: ${existingId})` : ''}`);
+
+    const res = await publishArticle(apiKey, path.join(EN_ARTICLES_DIR, targetFile), isDraft, existingId);
     if (res.success) {
       successCount++;
     } else if (res.error && JSON.stringify(res.error).includes('Rate limit')) {

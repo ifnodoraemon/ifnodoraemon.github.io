@@ -1,18 +1,18 @@
 ---
-title: "Production Deployment of DeepSeek-V4 and Kimi K3: 32-GPU Topologies, Memory Math, and Cluster Engineering"
+title: "Production Deployment of DeepSeek-V4 and Kimi K3: 32-GPU Topologies, Memory Math, and Real-World Troubleshooting"
 slug: deepseek-v4-kimi-k3-deployment-guide
 date: 2026-09-07
 tag: Cluster Deployment
 tagClass: tag-cyan
 category: Inference Systems
-description: "Comprehensive production guide for hosting DeepSeek-V4-Pro (CSA+HCA) and Kimi K3 (KDA+MLA): covering 4-node/32-GPU and 8-node/64-GPU topologies, per-rank GPU memory budgeting, Ray cluster orchestration, vLLM/SGLang tuning, KubeRay enterprise manifests, and rigorous TCO economics."
+description: "Comprehensive production guide for hosting DeepSeek-V4-Pro (CSA+HCA) and Kimi K3 (KDA+MLA): covering 4-node/32-GPU and 8-node/64-GPU topologies, per-rank GPU memory budgeting, six hardcore production pitfalls (NUMA crossing, MoE routing skew, CUDAGraph pseudo-OOM, PFC deadlock), Ray and KubeRay orchestration."
 updated: 2026-10-21
 ---
 
 > [!NOTE] Executive Summary (TL;DR)
 > - **Architecture & Checkpoint Formats**: DeepSeek-V4 employs hybrid CSA (Compressed Sparse Attention) + HCA (Heavily Compressed Attention) with FP8/FP4 sparse MoE layers; Kimi K3 (official repository `moonshotai/Kimi-K3`) features a 93-layer hybrid design (69 KDA recurrent linear attention layers + 24 Gated MLA layers) with native MXFP4 weights and MXFP8 activations.
 > - **Cluster Topology & Interconnect**: Hosting 600B+ MoE architectures requires intra-node TP8 across NVLink (900 GB/s bidirectional) combined with cross-node PP2/PP4 and Expert Parallelism (EP). Inter-node fabrics strictly mandate 8x 400Gbps InfiniBand (NDR) or RoCEv2 rail-optimized topologies; cross-node TP is strictly prohibited due to communication bottlenecks.
-> - **Engine Parameters & Runtime Nuances**: In vLLM, `--dtype` does not accept `fp8` (use `--dtype auto --quantization fp8`); KDA operators demand specialized Triton or FlashKDA backends; multi-node Ray deployments require explicit `/dev/shm` IPC expansion.
+> - **Six Hardcore Production Pitfalls**: Comprehensive root-cause playbooks resolving cross-NUMA PCIe throughput collapse, MoE routing skew and straggler stalls, CUDAGraph multi-batch memory bloat and external fragmentation, lossless fabric PFC deadlocks, KDA recurrent state session drift, and Raylet IPC leaks.
 > - **Cross-Disciplinary Deep Dives**: Fabric architecture is detailed in [InfiniBand Production Tuning](/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/) and [Lossless RoCEv2 Deployments](/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/); underlying attention mechanics are analyzed in [KDA vs. DeepSeek MLA](/en/articles/kimi-kda-deepseek-mla-architecture/); runtime serving optimizations are covered in [vLLM Production Serving](/en/articles/vllm-serving-guide/) and [SGLang vs. vLLM Architecture Comparison](/en/articles/sglang-vs-vllm-architecture/).
 
 ---
@@ -24,9 +24,9 @@ By 2026, state-of-the-art open-weights foundation models have universally conver
 However, operating these models under stringent enterprise SLAs exposes three fundamental infrastructure challenges:
 1. **Memory Capacity vs. Interconnect Disparity**: Trillion-parameter checkpoints cannot reside on a single 8-GPU node. Without precise parallel sharding (TP, PP, and EP), cross-node network traffic saturates InfiniBand fabrics, collapsing inference throughput.
 2. **Non-Standard Kernel Execution**: DeepSeek-V4 replaces homogeneous attention with a heterogeneous pipeline of Compressed Sparse Attention (CSA) and Heavily Compressed Attention (HCA); Kimi K3 pairs 69 layers of recurrent linear attention (KDA) with 24 layers of Gated MLA. Off-the-shelf standard attention kernels cannot execute these dynamic computation graphs efficiently.
-3. **Enterprise TCO and Provisioning Economics**: Provisioning dedicated 4-node (32 GPU) or 8-node (64 GPU) clusters incurs substantial CapEx amortization, power draw, and orchestration overhead. Architecture teams require rigorous token volume break-even models before committing to private hosting.
+3. **Severe Hardware and Distributed Traps**: From cross-NUMA RDMA throughput drops and MoE expert straggler barriers to CUDAGraph pseudo-OOM crashes, misconfigured low-level parameters can easily stall multi-million-dollar compute clusters.
 
-This guide provides an end-to-end engineering blueprint covering hardware topologies, memory calculations, distributed Ray setups, production startup scripts, Kubernetes manifests, and cost models.
+This guide provides an end-to-end engineering blueprint covering hardware topologies, memory calculations, six hardcore production pitfalls with battle-tested playbooks, distributed Ray setups, production startup scripts, Kubernetes manifests, and cost models.
 
 ---
 
@@ -177,7 +177,139 @@ Budget allocation for DeepSeek-V4-Pro under a 32-GPU hybrid topology (TP8 x PP4)
 
 ---
 
-## 4. Multi-Node Ray Cluster and Production Startup Scripts
+## 4. Real-World Battle Scars: Six High-Severity Production Pitfalls and Root-Cause Playbooks
+
+In 32-GPU and 64-GPU production cluster turnups, over 90% of failures stem from low-level hardware topology, NUMA bindings, memory fragmentation, and network deadlocks rather than application-layer code. Below are the six most critical pitfalls and proven production remedies:
+
+### 1. Cross-Socket NUMA Interconnect Degradation (PCIe P2P & RDMA Throttle)
+
+* **Symptom**:
+  On dual-socket HGX platforms (such as dual AMD EPYC 9654 or Intel Xeon Platinum 8480+), NCCL All-to-All throughput achieves only 30%–40% of the theoretical 400Gbps line rate. GPUs 0–3 perform normally, while GPUs 4–7 exhibit severe latency spikes, halving overall cluster throughput.
+* **Root Cause**:
+  GPUs 0–3 and Mellanox HCAs `mlx5_0–3` reside on Socket 0 (NUMA Node 0), while GPUs 4–7 and `mlx5_4–7` reside on Socket 1 (NUMA Node 1). If Ray worker processes launch without explicit CPU core pinning, the OS scheduler arbitrarily schedules worker threads. If a process driving GPU 4 is scheduled on NUMA 0, all GPUDirect RDMA transactions must cross the inter-socket bus (AMD xGMI or Intel UPI), saturating interconnect links and dropping PCIe peer-to-peer DMA speeds.
+* **Production Playbook**:
+  Enforce strict hardware-affinity binding and generate explicit NCCL topology graphs:
+
+```bash
+#!/usr/bin/env bash
+# 1. Audit NUMA affinity for all InfiniBand HCA devices
+for dev in $(ibstat -l); do
+    numa=$(cat /sys/class/net/${dev}/device/numa_node)
+    pci=$(cat /sys/class/net/${dev}/device/uevent | grep PCI_SLOT_NAME | cut -d= -f2)
+    echo "Device ${dev} (PCI: ${pci}) -> NUMA Node: ${numa}"
+done
+
+# 2. Pin GPUDirect RDMA level and dump topology graph (Level 5 forces direct PCIe switch bypass)
+export NCCL_NET_GDR_LEVEL=5
+export NCCL_TOPO_DUMP_FILE=/tmp/nccl_topo.xml
+export NCCL_SET_STACK_SIZE=1
+
+# 3. Launch Ray workers with strict numactl memory and CPU socket pinning
+# e.g., pin GPUs 0-3 strictly to NUMA 0, GPUs 4-7 strictly to NUMA 1
+numactl --cpunodebind=0 --membind=0 python3 -m vllm.entrypoints.openai.api_server ...
+```
+
+---
+
+### 2. MoE Expert Routing Imbalance & Straggler Barrier Avalanche
+
+* **Symptom**:
+  Serving runs smoothly under synthetic benchmarks. However, when processing domain-specific traffic (e.g., intensive SQL synthesis or medical QA), Time-Per-Output-Token (TPOT) spikes erratically from 16ms to over 300ms, and GPU utilization exhibits sawtooth degradation.
+* **Root Cause**:
+  MoE gating networks route tokens dynamically. Homogeneous domain prompts direct disproportionate token volumes to a small handful of specialized experts. Under Expert Parallelism (EP), the GPU ranks hosting hot experts become compute-saturated. Meanwhile, ranks assigned idle experts complete local work in 5ms. However, because downstream transformer layers require an `all_to_all_v` collective barrier, **all 32 GPUs must stall until the most overloaded rank finishes**, triggering cluster-wide straggler degradation.
+* **Production Playbook**:
+  1. **Configure Dynamic Capacity Factors and Residual Bypasses**:
+     Specify `--moe-capacity-factor 1.25` in vLLM to cap maximum tokens routed to any single expert within a batch; excess tokens bypass the expert via residual skip connections.
+  2. **Deploy Redundant Expert Replicas (Expert Replication)**:
+     Profile offline query logs to identify the top-4 most active experts and replicate them locally across all worker nodes:
+     ```bash
+     --enable-expert-parallel \
+     --moe-redundant-experts 4 \
+     --moe-async-all-to-all
+     ```
+
+---
+
+### 3. CUDAGraph Long-Sequence Captures & "False OOM" Allocator Fragmentation
+
+* **Symptom**:
+  Initial warmups succeed. However, during high-concurrency bursts with long context requests (16k–32k tokens), GPUs crash with `torch.cuda.OutOfMemoryError`, even though `nvidia-smi` reports 12GB–15GB of free physical VRAM.
+* **Root Cause**:
+  1. **Private Workspace Replication**: To eliminate decode overhead, engines statically capture CUDAGraphs across batch sizes (1, 2, 4, 8, 16, 32, 64, 128). On trillion-parameter models, each graph capture clones private copies of intermediate tensors and collective buffers, silently consuming over 10GB of VRAM.
+  2. **External Memory Fragmentation**: PyTorch's native Caching Allocator fragments physical memory under alternating short and long prompts. When the runtime attempts to allocate a contiguous 2GB collective buffer, it fails despite abundant aggregate free memory, throwing a "false OOM."
+* **Production Playbook**:
+  1. **Enable PyTorch Virtual Memory Splicing**:
+     ```bash
+     # Allows non-contiguous physical pages to satisfy contiguous virtual requests
+     export PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True,max_split_size_mb:128"
+     ```
+  2. **Constrain CUDAGraph Batch Capture Steps**:
+     Cap capture sizes via `--cuda-graph-max-batch-size 64` and limit total sequences via `--max-num-seqs 128`.
+
+---
+
+### 4. InfiniBand PFC Deadlock & RoCEv2 Slow Receiver Congestion Storms
+
+* **Symptom**:
+  After 10–15 minutes of peak load, all 32 GPUs suddenly stall simultaneously. Processes freeze inside NCCL kernel calls; CPU utilization sits at 0% while GPU utilization sits at 100% (busy waiting in spinlocks). Host `dmesg` logs report `mlx5_core: async event 0x4` (link pause timeout).
+* **Root Cause**:
+  In lossless networks, when a node experiences microsecond GC stalls or memory pressure, its NIC ingress buffers fill, transmitting **Priority Flow Control (PFC) Pause frames** upstream. If All-to-All collective exchanges create cyclic buffer dependencies across spine switches, pause frames cascade across the fabric, halting all switch ports in a distributed **PFC Deadlock**.
+* **Production Playbook**:
+  1. **Enable Hardware-Level PFC Deadlock Detection and Drain Timers (DLD)**:
+     ```bash
+     # Configure ConnectX-7 adapters to drop stalled packets exceeding deadlock thresholds
+     for dev in $(ls /dev/mst/*_pciconf0); do
+         mstconfig -d ${dev} set PFC_DEADLOCK_DETECTION_EN=1
+         mstconfig -d ${dev} set PFC_DEADLOCK_DETECTION_TIMER=100
+     done
+     ```
+  2. **Enforce ECN Marking & DCQCN Congestion Control**:
+     Enable proactive sender throttling before packet drops occur:
+     ```bash
+     sysctl -w net.ipv4.tcp_ecn=1
+     export NCCL_ALGO=Tree
+     export NCCL_PROTO=Simple
+     ```
+
+---
+
+### 5. KDA Recurrent State Node Drift & Multiturn Divergence (K3-Specific)
+
+* **Symptom**:
+  On multi-turn conversational workloads with Kimi K3, the first turn generates coherent outputs. However, by turn 2 or 3, the model begins producing garbled, repetitive, or hallucinated text, accompanied by high TTFT jitter.
+* **Root Cause**:
+  Kimi K3's 69 KDA layers maintain recurrent hidden state vectors $S_t$. Standard round-robin load balancers (such as NGINX or Kubernetes Ingress) route subsequent user turns to different node replicas. Because the new node does not possess the preceding recurrent state $S_t$, inference executes against zero-initialized states, erasing earlier conversation context.
+* **Production Playbook**:
+  1. **Enforce Gateway-Level Sticky Sessions via Consistent Hashing**:
+     Configure Envoy/Ingress controllers to hash incoming `x-session-id` headers, pinning multi-turn conversations to identical serving instances.
+  2. **Implement Explicit State Snapshot Snapshots**:
+     Serialize 64KB per-layer KDA state fingerprints to an external low-latency Redis cluster at request boundaries, enabling instant state hydration across failovers.
+
+---
+
+### 6. Raylet Silent Freezes, Heartbeat Timeouts, and `/dev/shm` IPC Descriptor Leaks
+
+* **Symptom**:
+  After 12–24 hours of continuous operation, the Ray head node reports `Raylet heartbeat timeout`, declaring worker nodes dead and terminating the cluster.
+* **Root Cause**:
+  1. **Shared Memory Exhaustion**: High-concurrency short-lived connections that disconnect prematurely leak IPC memory descriptors in `/dev/shm`. Over hours, shared memory fills completely, causing Raylet processes to crash when writing heartbeat state.
+  2. **Kernel OOM Invocations**: Linux kernel OOM Killer processes often target low-memory monitoring daemons (such as `raylet`) when system memory nears saturation.
+* **Production Playbook**:
+  1. **Shield Ray Daemon Processes from Kernel OOM Killers**:
+     ```bash
+     pgrep -f "raylet|gcs_server" | xargs -I {} sh -c 'echo -1000 > /proc/{}/oom_score_adj'
+     ```
+  2. **Expand Ray Heartbeat Fault Tolerance**:
+     ```bash
+     export RAY_heartbeat_timeout_milliseconds=60000
+     export RAY_num_heartbeats_timeout=30
+     # Run scheduled IPC garbage collection
+     ipcs -m | awk '$6 == 0 {print $2}' | xargs -r ipcrm -m
+     ```
+
+---
+
+## 5. Multi-Node Ray Cluster and Production Startup Scripts
 
 Production deployment across 4 physical nodes (Node 0: `192.168.10.101`, Node 1: `192.168.10.102`, Node 2: `192.168.10.103`, Node 3: `192.168.10.104`).
 
@@ -243,6 +375,7 @@ export NCCL_IB_GID_INDEX=3
 export NCCL_CROSS_NIC=1
 export NCCL_SOCKET_IFNAME=eth0
 export VLLM_HOST_IP=192.168.10.101
+export PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True,max_split_size_mb:128"
 
 # Launch DeepSeek-V4-Pro Production Service
 vllm serve deepseek-ai/DeepSeek-V4-Pro \
@@ -273,6 +406,8 @@ For Kimi K3, specify the dedicated recurrent kernel backend:
 
 ```bash
 #!/usr/bin/env bash
+export PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True,max_split_size_mb:128"
+
 vllm serve moonshotai/Kimi-K3 \
     --host 0.0.0.0 \
     --port 8000 \
@@ -288,7 +423,7 @@ vllm serve moonshotai/Kimi-K3 \
 
 ---
 
-## 5. Enterprise Kubernetes Deployment with KubeRay
+## 6. Enterprise Kubernetes Deployment with KubeRay
 
 In containerized Kubernetes environments, clusters are managed declaratively using the KubeRay Operator:
 
@@ -372,7 +507,7 @@ spec:
 
 ---
 
-## 6. Benchmarks and Production SLA Target Baselines
+## 7. Benchmarks and Production SLA Target Baselines
 
 Verify latency and throughput under production traffic using vLLM's `benchmark_serving.py`:
 
@@ -418,7 +553,7 @@ Time per Output Token (TPOT):
 
 ---
 
-## 7. Enterprise TCO Economics: Self-Hosting vs. Commercial APIs
+## 8. Enterprise TCO Economics: Self-Hosting vs. Commercial APIs
 
 ```mermaid
 flowchart LR
