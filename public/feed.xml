@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Wed, 21 Oct 2026 00:56:27 GMT</pubDate>
+  <pubDate>Wed, 21 Oct 2026 02:56:27 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战</title>
@@ -418,13 +418,13 @@
     <enclosure url="https://blog.llmgo.top/og/zh/test-time-compute-grpo.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 DeepSeek-V4 与 Kimi K3 部署指南：权重精度、显存预算与集群验证</title>
+    <title>2026 DeepSeek-V4 与 Kimi K3 生产级部署实战指南：四机 32 卡拓扑、显存数学与集群工程落地</title>
     <link>https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/</link>
     <guid>https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>集群部署</category>
-    <description>核对 DeepSeek-V4-Pro 与 Kimi K3 原生权重格式、逐卡显存预算、vLLM 分布式参数和官方启动配方，并用可持续吞吐约束私有化成本估算。</description>
+    <description>深入解析 DeepSeek-V4-Pro (CSA+HCA) 与 Kimi K3 (KDA+MLA) 生产级多机部署全流程：涵盖四机 32 卡 / 八机 64 卡硬件拓扑、逐卡显存数学建模、Ray 分布式启动、vLLM/SGLang 生产参数调优、KubeRay 云原生编排与真实 TCO 经济学模型。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/deepseek-v4-kimi-k3-deployment-guide.png" length="150000" type="image/png" />
   </item>
   <item>

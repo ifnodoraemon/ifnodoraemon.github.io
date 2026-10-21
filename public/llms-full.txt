@@ -68,7 +68,7 @@
 - [SGLang 与 vLLM 架构对比：前缀缓存、结构化输出与评测方法](https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/): 比较 SGLang RadixAttention 与 vLLM APC 的前缀复用机制、结构化输出和部署基线，并给出控制变量、冷暖缓存及延迟吞吐的可复现评测方法。
 - [投机采样 (Speculative Decoding) 生产实操：从 Draft Model 到 EAGLE-3 动态推测树实现 3x~5x 无损加速](https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/): 大模型解码阶段的核心物理瓶颈是什么？全面解密投机采样（Speculative Decoding）的数学无损证明、拒绝采样检验机制，深入剖析从双模型投机、Medusa 到清华开源爆款 EAGLE-2/3 动态自适应推测树的架构演进，并提供在 vLLM 与 SGLang 中开启生产级 3x~5x 加速的实操配置。
 - [推理时扩展 (Test-Time Compute) 与 GRPO 强化学习实战：从 PPO 到无 Critic 策略优化](https://blog.llmgo.top/articles/test-time-compute-grpo/): 深入剖析从预训练 Scaling Law 向推理时算力扩展 (Test-Time Scaling) 的范式转移。全面拆解 DeepSeek-R1 核心的 GRPO 组相对策略优化数学推导、无 Critic 架构优势、长思维链自我反思涌现机制，并提供完整的极简实战代码。
-- [2026 DeepSeek-V4 与 Kimi K3 部署指南：权重精度、显存预算与集群验证](https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/): 核对 DeepSeek-V4-Pro 与 Kimi K3 原生权重格式、逐卡显存预算、vLLM 分布式参数和官方启动配方，并用可持续吞吐约束私有化成本估算。
+- [2026 DeepSeek-V4 与 Kimi K3 生产级部署实战指南：四机 32 卡拓扑、显存数学与集群工程落地](https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/): 深入解析 DeepSeek-V4-Pro (CSA+HCA) 与 Kimi K3 (KDA+MLA) 生产级多机部署全流程：涵盖四机 32 卡 / 八机 64 卡硬件拓扑、逐卡显存数学建模、Ray 分布式启动、vLLM/SGLang 生产参数调优、KubeRay 云原生编排与真实 TCO 经济学模型。
 - [2026 国产大模型比较：Kimi K3、GLM-5.3 与 DeepSeek-V4 工程选型](https://blog.llmgo.top/articles/domestic-llm-comparison-2026/): 依据官方模型卡比较 Kimi K3、GLM-5.3 与 DeepSeek-V4-Pro 的架构、同版本基准和原生量化格式，提供长文档、终端排障与仓库修改的评测方案。
 - [告别单纯 Prompt：2026 年“环境缩放 (Environment Scaling)”如何重塑自主 Agent](https://blog.llmgo.top/articles/environment-scaling-agent-guide/): 解释 Agent 环境缩放的任务分布、状态复位与独立验收，正确解读 GLM-5.3 终端任务成绩，并演示带超时清理的容器执行接口。
 - [Kimi KDA、DeepSeek MLA 与 V4 CSA/HCA：长上下文缓存原理与显存估算](https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/): 区分 KDA 循环状态、MLA 潜变量缓存与 DeepSeek-V4 CSA/HCA 序列压缩，结合 Kimi K3 混合层结构推导显存估算边界与可比较的测试方法。
@@ -141,7 +141,7 @@
 - [SGLang vs vLLM: Prefix Caching, Structured Outputs, and Reproducible Evaluation](https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/): Compare SGLang RadixAttention and vLLM APC, structured-output backends, minimal serving baselines, and reproducible cold/warm-cache latency and throughput evaluation.
 - [Speculative Decoding in Production: From Draft Models to EAGLE-3 Dynamic Trees for 3x-5x Lossless Acceleration](https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/): Why is autoregressive LLM decoding fundamentally bottlenecked by memory bandwidth? We dissect the mathematical proof of lossless distribution invariance in speculative decoding, trace its evolution from dual-model drafts to EAGLE-2/3 dynamic draft trees, and provide production configurations in vLLM and SGLang.
 - [Test-Time Compute and GRPO in Practice: From PPO to Critic-Free Reinforcement Learning](https://blog.llmgo.top/en/articles/test-time-compute-grpo/): A deep dive into the paradigm shift from pre-training scaling laws to test-time compute. We deconstruct the mathematical derivation of DeepSeek-R1's Group Relative Policy Optimization (GRPO), critic-free architecture advantages, emergent self-reflection in long reasoning traces, and a complete, reproducible hands-on implementation.
-- [DeepSeek-V4 and Kimi K3 Deployment: Precision, GPU Memory and Cluster Validation](https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/): Plan DeepSeek-V4-Pro and Kimi K3 deployments using native checkpoint formats, per-rank GPU memory, official vLLM recipes, and throughput-based cost estimates.
+- [Production Deployment of DeepSeek-V4 and Kimi K3: 32-GPU Topologies, Memory Math, and Cluster Engineering](https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/): Comprehensive production guide for hosting DeepSeek-V4-Pro (CSA+HCA) and Kimi K3 (KDA+MLA): covering 4-node/32-GPU and 8-node/64-GPU topologies, per-rank GPU memory budgeting, Ray cluster orchestration, vLLM/SGLang tuning, KubeRay enterprise manifests, and rigorous TCO economics.
 - [Kimi K3 vs GLM-5.3 vs DeepSeek-V4: Architecture, Benchmarks and Deployment](https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/): Compare Kimi K3, GLM-5.3, and DeepSeek-V4-Pro with sourced architecture facts, matching benchmark versions, checkpoint formats, and workload evaluation plans.
 - [Beyond Simple Prompts: How Environment Scaling Is Reshaping Autonomous Agents in 2026](https://blog.llmgo.top/en/articles/environment-scaling-agent-guide/): Understand agent environment scaling through task diversity, reset and verification, a sourced GLM-5.3 result, and container execution with cleanup after timeouts.
 - [Kimi KDA, DeepSeek MLA and V4 CSA/HCA: Long-Context Cache and GPU Memory](https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/): Understand KDA recurrent state, MLA latent caches, and DeepSeek-V4 CSA/HCA sequence compression, with explicit memory formulas and reproducible measurement rules.
@@ -634,16 +634,16 @@
   * Q: Q3: GRPO 与 DPO（直接偏好优化）有什么核心区别？
     A: DPO 属于离线监督式偏好学习（Offline），依赖预先收集固定的正负样本对 $(y_w, y_l)$，模型无法在探索过程中发现超出静态数据集以外的全新推理路径；而 GRPO 属于在线强化学习（Online Exploration），每一轮更新都由模型实时生成候选采样并由规则环境即时打分，因而能够探索并演化出自发反思与自我纠错的新策略。...
 
-### [2026 DeepSeek-V4 与 Kimi K3 部署指南：权重精度、显存预算与集群验证](https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/)
-- 发布日期: 2026-09-07 | 标签: 集群部署 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1874 字
-- 概述: 核对 DeepSeek-V4-Pro 与 Kimi K3 原生权重格式、逐卡显存预算、vLLM 分布式参数和官方启动配方，并用可持续吞吐约束私有化成本估算。
+### [2026 DeepSeek-V4 与 Kimi K3 生产级部署实战指南：四机 32 卡拓扑、显存数学与集群工程落地](https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/)
+- 发布日期: 2026-09-07 | 标签: 集群部署 | 预计阅读: 预计阅读 24 分钟 | 字数: 约 5976 字
+- 概述: 深入解析 DeepSeek-V4-Pro (CSA+HCA) 与 Kimi K3 (KDA+MLA) 生产级多机部署全流程：涵盖四机 32 卡 / 八机 64 卡硬件拓扑、逐卡显存数学建模、Ray 分布式启动、vLLM/SGLang 生产参数调优、KubeRay 云原生编排与真实 TCO 经济学模型。
 - 核心 FAQ 解答:
-  * Q: Q1: 32 张 H100 能否部署这两个模型？
-    A: 要分别核对原生权重、引擎算子、并行布局和目标并发。2.8T 全 FP8 K3 的权重已超过其名义总显存；原生 MXFP4 是不同部署条件，不能混为一谈。...
-  * Q: Q2: 开启 FP8 KV 是否一定不掉精度？
-    A: 不是。scale、模型、后端与上下文长度都会影响结果，应使用业务评测集对照基线。...
-  * Q: Q3: 自建是否一定比 API 便宜？
-    A: 不是。需比较相近任务质量和 SLA 下的有效吞吐、利用率、运维与扩容成本。公开模型间的选型背景见 [国产模型比较](/articles/domestic-llm-comparison-2026/)。...
+  * Q: Q1: 32 张 H100 80GB 能否部署全量 FP8 精度的 Kimi K3？
+    A: 不能。 Kimi K3 拥有 2.8T 庞大参数，若全部以 FP8 格式（每参数 1 字节）加载，仅裸权重就达到 2.8TB，直接超出了 32 张 80GB 显卡的名义总容量（$32 \times 80 = 2560\text{GB} = 2.5\text{TB}$），根本无法留出空间给工作区、通信缓冲与 KV Cache。Kimi K3 的四机 32 卡方案前提是采用官方量化感知训练的原生 MXFP4 权重格式（每参数约 0.5 字节，全量权重约 1.4TB），才能在 32 卡上正常装载并提供充足的 KV Cache 空间。...
+  * Q: Q2: 为什么跨物理机部署时，绝对不能将 Tensor Parallelism 设置为 16 或 32？
+    A: 张量并行（TP）在 Transformer 的每一层 Linear 运算后，都要求并行组内的所有 GPU 进行两次高频的 All-Reduce 集合通信。在机内，这依托 900 GB/s 的 NVLink 互联，通信耗时在微秒级；但一旦跨越物理机，即使配备了顶级的 400Gbps InfiniBand 网络，跨机单向带宽也仅约 50 GB/s，比 NVLink 慢了整整 18 倍，且包含网络协议栈时延。跨节点设置 TP 会导致 GPU Tensor Core 90% 以上的周期都在停等网络传输，推理延迟成倍暴增。因此，跨节点只能使用通信频次极低的 Pipeline Parallelism (P...
+  * Q: Q3: DeepSeek-V4 的 CSA+HCA 注意力与 V3 的 MLA 有何本质区别？
+    A: DeepSeek-V3 的 MLA（多头潜在注意力）是将全量 Keys 和 Values 投影到单一固定维度的低秩潜在向量 $c_t^{KV}$，再在推理端通过矩阵吸收消解 Decode 阶段的展开显存；而 DeepSeek-V4-Pro 的 CSA（Compressed Sparse Attention）和 HCA（Heavily Compressed Attention）是针对超长序列的分层异构设计：CSA 仅针对关键信息保留稀疏的全局注意力路径，其余普通序列采用局部滑窗与近邻压缩；HCA 则对背景上下文实施更高阶的极低秩压缩。两者混合不仅进一步压低了 KV Cache 显存消耗，还显著提...
 
 ### [2026 国产大模型比较：Kimi K3、GLM-5.3 与 DeepSeek-V4 工程选型](https://blog.llmgo.top/articles/domestic-llm-comparison-2026/)
 - 发布日期: 2026-09-07 | 标签: 国产大模型 | 预计阅读: 预计阅读 6 分钟 | 字数: 约 1430 字
@@ -1396,16 +1396,16 @@
   * Q: Q3: What is the fundamental difference between GRPO and DPO?
     A: DPO (Direct Preference Optimization) is an offline supervised preference algorithm operating on static pairs of chosen and rejected responses $(y_w, y_l)$. It cannot discover novel reasoning pathways absent from the static dataset. GRPO is an active, online reinforcement learning algorithm where the...
 
-### [DeepSeek-V4 and Kimi K3 Deployment: Precision, GPU Memory and Cluster Validation](https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/)
-- Date: 2026-09-07 | Tag: Cluster Deployment | Read: 4 min read | Words: 857 words
-- Summary: Plan DeepSeek-V4-Pro and Kimi K3 deployments using native checkpoint formats, per-rank GPU memory, official vLLM recipes, and throughput-based cost estimates.
+### [Production Deployment of DeepSeek-V4 and Kimi K3: 32-GPU Topologies, Memory Math, and Cluster Engineering](https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/)
+- Date: 2026-09-07 | Tag: Cluster Deployment | Read: 12 min read | Words: 2860 words
+- Summary: Comprehensive production guide for hosting DeepSeek-V4-Pro (CSA+HCA) and Kimi K3 (KDA+MLA): covering 4-node/32-GPU and 8-node/64-GPU topologies, per-rank GPU memory budgeting, Ray cluster orchestration, vLLM/SGLang tuning, KubeRay enterprise manifests, and rigorous TCO economics.
 - Key FAQ Insights:
-  * Q: Q1: Can 32 H100 GPUs serve both models?
-    A: Check the exact native weights, kernels, layout, and concurrency. All-FP8 K3 weights alone exceed their nominal combined memory; native MXFP4 is a different deployment condition....
-  * Q: Q2: Is FP8 KV always lossless?
-    A: No. Scales, model, backend, and context length matter. Evaluate task quality against a baseline....
-  * Q: Q3: Is self-hosting necessarily cheaper?
-    A: No. Compare equivalent quality and SLA, measured utilization, operations, and capacity expansion. See the [Chinese model comparison](/en/articles/domestic-llm-comparison-2026/)....
+  * Q: Q1: Can a 32-card H100 80GB cluster host Kimi K3 in full FP8 precision?
+    A: No. Kimi K3 contains 2.8T parameters. In FP8 precision (1 byte per parameter), raw uncompressed weights alone consume 2.8TB, exceeding the nominal physical memory of 32x 80GB GPUs ($32 \times 80 = 2560\text{GB} = 2.56\text{TB}$). This leaves zero memory for CUDA contexts, collective buffers, activat...
+  * Q: Q2: Why is setting Tensor Parallelism (TP > 8) across physical nodes prohibited?
+    A: Tensor Parallelism requires every GPU in the TP group to perform two high-frequency All-Reduce collectives per transformer layer. Intra-node, this runs across NVLink at 900 GB/s with microsecond latency. Pushing TP across network nodes limits bandwidth to 400Gbps (~50 GB/s)—18 times slower than NVLi...
+  * Q: Q3: What is the architectural difference between DeepSeek-V4's CSA+HCA and V3's MLA?
+    A: DeepSeek-V3's Multi-Head Latent Attention (MLA) compresses keys and values into a single low-rank latent vector $c_t^{KV}$, mathematically absorbing projection matrices during decoding. DeepSeek-V4-Pro's Compressed Sparse Attention (CSA) and Heavily Compressed Attention (HCA) form a heterogeneous ti...
 
 ### [Kimi K3 vs GLM-5.3 vs DeepSeek-V4: Architecture, Benchmarks and Deployment](https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/)
 - Date: 2026-09-07 | Tag: Chinese LLMs | Read: 3 min read | Words: 722 words
