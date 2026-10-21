@@ -17,6 +17,11 @@ extraTags:
   - Kernel Fusion
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **主流推理引擎架构解密**：全景剖析 vLLM (v1 引擎重构)、SGLang (RadixAttention 极致吞吐)、TensorRT-LLM (英伟达硬件极限调优) 与 llama.cpp (边缘端全量量化) 的核心调度器设计与源码实现差异。
+> - **关键维度选型**：多轮对话与复杂前缀场景首选 SGLang；标准化微服务生态与丰富模型覆盖首选 vLLM；单卡边缘端轻量部署首选 llama.cpp。
+> - **技术关联推荐**：进阶实战可参阅 [SGLang vs vLLM 架构对决](/articles/sglang-vs-vllm-architecture/) 与 [生产级 vLLM 部署调优指南](/articles/vllm-serving-guide/)。
+
 ## 引言：从玩具脚本到工业级高并发推理底座
 
 在 2023 年大模型浪潮之初，绝大多数开发者运行大模型的方式是在单张显卡上执行一段简单的 Python 脚本：

@@ -20,6 +20,11 @@ extraTags:
   - NCCL Tuning
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **万卡智算互联基石**：详解 InfiniBand 子网管理器 (OpenSM) 路由算法配置（Up/Down 与 Fat-Tree 拓扑路由）、OFED 驱动栈加载与 NCCL 环境变量实战调优。
+> - **NCCL 通信提速**：调优 `NCCL_ALGO=Tree/Ring`、`NCCL_PROTO=Simple` 以及缓冲区尺寸，杜绝超大模型分布式训练与推理中的隐蔽死锁与微秒级掉速。
+> - **模型部署配套**：直接服务于 [DeepSeek-V4 与 Kimi K3 多机部署](/articles/deepseek-v4-kimi-k3-deployment-guide/) 以及 [MoE 专家并行 All-to-All 吞吐](/articles/moe-expert-parallelism-inference-engine/)。
+
 ## 引言：从拓扑图纸到万卡机房运维的“深水区”
 
 在前面的十一个章节中，我们从最底层的以太网物理信号与 Linux 内核收发包链路，一路走到了 Clos Leaf-Spine 组网、RDMA 零拷贝、InfiniBand 物理信道与 Rail-Optimized 胖树架构。

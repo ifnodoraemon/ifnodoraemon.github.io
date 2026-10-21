@@ -21,6 +21,11 @@ extraTags:
   - EVPN
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Datacenter Network Evolution**: Evolves from traditional STP bridging to modern Layer-3 Clos Leaf-Spine topologies, leveraging BGP-EVPN control planes and VXLAN overlays with equal-cost multi-pathing (ECMP).
+> - **Specification Realities**: RFC 7348 does not strictly enforce 9000/9216 jumbo frames; standard 1500 underlay environments handle encapsulation overhead by clamping inner overlay MTUs.
+> - **Cloud-Native Integration**: Harmonizes directly with container fabrics in [Kubernetes CNI & Cilium eBPF](/en/articles/k8s-networking-cni-cilium-ebpf-gateway-api/).
+
 ## Introduction: From North-South Enterprise Traffic to East-West AI Computation Torrents
 
 In Chapter 7 of our masterclass, [Linux Kernel Networking Subsystem in Depth: From NIC Drivers, NAPI, and Ring Buffers to eBPF XDP Wire-Speed Forwarding](/en/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/), we explored how a host operating system optimizes packet paths and leverages eBPF for microsecond forwarding.

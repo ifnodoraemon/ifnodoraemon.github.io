@@ -16,6 +16,11 @@ seriesOrder: 13
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Dynamic Discovery & Container Sandboxing**: Advances beyond hardcoded function calling toward MCP-based runtime discovery, strict JSON Schema validation, and gVisor container isolation.
+> - **Closed-Loop Self-Healing**: Captures execution tracebacks and feeds structured errors back to the model for reflection, raising tool execution success rates by over 40%.
+> - **Runnable Codebases**: Includes verified production Python examples; pairs with [Building a Lightweight Agent Framework](/en/articles/build-lightweight-agent-framework/).
+
 ## Bound discovery and execution as tool catalogs grow
 
 Filter tools by domain and authorization before selecting candidate schemas. Top-K retrieval reduces context; it does not authorize an operation. An unknown category should produce no candidates, not expose the whole catalog. See the [lightweight agent framework](/en/articles/build-lightweight-agent-framework/) for control flow.

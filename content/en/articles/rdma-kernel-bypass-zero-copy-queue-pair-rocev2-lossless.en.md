@@ -21,6 +21,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Kernel Bypass & Memory Semantics**: Disassembles RDMA verbs (Send/Receive, RDMA Read/Write) and Queue Pair (QP) architectures, achieving sub-microsecond one-sided memory transfers.
+> - **RoCEv2 Deployment Realities**: Corrects the myth of mandatory lossless networks—RoCEv2 operates in lossless, semi-lossless, and lossy configurations, with PFC representing a deployment choice rather than an intrinsic protocol requirement.
+> - **Enterprise Applications**: Underpins high-speed KV transfers in [P/D Disaggregated KV Cache Clusters](/en/articles/pd-disaggregation-distributed-kv-cache/).
+
 ## Introduction: The "CPU Memory Wall" and Microsecond Latency Crisis at 400Gbps
 
 In the traditional Linux TCP/IP networking stack, a packet arriving from the physical interface card must traverse a complex, multi-stage path:

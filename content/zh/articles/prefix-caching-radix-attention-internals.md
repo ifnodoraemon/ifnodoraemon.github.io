@@ -18,6 +18,11 @@ extraTags:
   - LRU Eviction
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **树状前缀复用**：多轮对话、Few-Shot 提示与 Agent 循环存在大量的重复 System Prompt 与上下文前缀；SGLang 提出的 RadixAttention 将传统 Hash 匹配升级为基数树（Radix Tree）动态维护。
+> - **零拷贝与动态驱逐**：利用引用计数与 LRU 策略管理活跃与待回收 Block，实现长前缀上下文的高达 70%+ 命中率与毫秒级首字延迟 (TTFT)。
+> - **系统联动**：前缀缓存与 [FlashInfer 异构内核加速](/articles/flashattention-flashinfer-kernel-evolution/) 以及 [投机解码 EAGLE](/articles/speculative-decoding-eagle-guide/) 组合时能释放极致推理能效。
+
 ## 引言：为什么大模型总在反复做“无用功”？
 
 在前面的章节中，我们已经逐步搭建起了现代大模型推理系统的基石认知：

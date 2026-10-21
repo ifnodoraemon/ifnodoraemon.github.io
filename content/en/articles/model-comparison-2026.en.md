@@ -17,6 +17,11 @@ featuredStats:
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **2026 Frontier Landscape**: Comprehensive comparison across frontier closed models (GPT-5.4, Claude 4.6, Gemini 3) and open-weights leaders (DeepSeek-V4, Kimi K3) across pricing and benchmarks.
+> - **Rigorous Fact Checks**: Confirms official Claude Opus 4.6 pricing at $5/$25 per million tokens, and verifies GPT-5.4 modalities (text and vision inputs without direct fine-tuning support).
+> - **Specialized Deep Dive**: For national open-source model ecosystems, consult the [2026 Domestic LLM Comprehensive Benchmark Report](/en/articles/domestic-llm-comparison-2026/).
+
 ## Scope and evidence
 
 This comparison preserves the GPT-5.4, Claude Opus / Sonnet 4.6, and Gemini 3.1 Pro group. It is an engineering reference, not a claim that these are today's newest models. Specifications come from provider documentation; unsupported score tables are not treated as controlled measurements. See the [Chinese open-weight comparison](/en/articles/domestic-llm-comparison-2026/).

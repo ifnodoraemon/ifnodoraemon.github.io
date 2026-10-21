@@ -11,6 +11,11 @@ seriesOrder: 4
 description: 从架构原理到实战开发，完整解析 Model Context Protocol。含 Python SDK 实战、安全机制、生态对比。
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **统一上下文协议**：Model Context Protocol (MCP) 建立了大模型与外部数据源及工具生态互联的标准协议层，消除每个工具写专属适配器的碎片化问题。
+> - **协议核心边界**：规范澄清只读查询（如天气、检索）推荐使用 Resource 或只读 Tool，OAuth 与用户授权按规范属于可选扩展实现，并非全协议强制统一托管。
+> - **工程实战落地**：建议深入参考 [工具调用与 Function Calling 进阶](/articles/advanced-agent-tool-use-and-function-calling/) 实现动态 MCP 工具注册与 gVisor 安全沙箱隔离。
+
 ## 什么是 MCP？
 
 想象一下：你有一台笔记本电脑，需要连接显示器、键盘、硬盘、手机充电……在 USB-C 统一之前，你需要为每个设备准备不同的线缆和接口。**MCP（Model Context Protocol，模型上下文协议）就是 AI 世界的 USB-C**。

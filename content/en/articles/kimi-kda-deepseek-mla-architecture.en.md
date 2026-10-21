@@ -9,6 +9,11 @@ description: "Understand KDA recurrent state, MLA latent caches, and DeepSeek-V4
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Novel Attention Breakdown**: Thorough analysis of Kimi K3's hybrid 69-layer KDA (Kimi Dynamic Attention) + 24-layer Gated MLA design, dispelling the myth of universal constant-state caching.
+> - **Memory Scaling Profiles**: Blending recurrent linear state updates with gated attention achieves effective long-context recall while flattening linear KV Cache memory trajectories.
+> - **System Alignment**: Pairs directly with [DeepSeek MLA Matrix Absorption](/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/) and [Test-Time Reasoning Architectures](/en/articles/reasoning-test-time-compute-inference-future/).
+
 ## Distinguish cache representations from model-wide behavior
 
 MLA compresses each historical token's representation. KDA replaces a full historical cache in a recurrent layer with fixed-size state. DeepSeek-V4's CSA / HCA also compress the sequence dimension. These mechanisms need separate capacity, compute, and quality analysis.

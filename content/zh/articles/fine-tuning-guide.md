@@ -9,6 +9,11 @@ description: "深入剖析大模型微调底层工作原理（交叉熵损失与
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **微调范式全景**：系统对比 Full Fine-Tuning、LoRA、QLoRA 与 DoRA 的显存占用公式、可训练参数比例与下游任务泛化保持度。
+> - **避免灾难性遗忘**：利用数据配比回放、梯度裁剪与针对特定领域的对齐优化，确保垂类能力增强的同时基础逻辑能力不退化。
+> - **下游推理衔接**：微调权重合并与导出后，可直接结合 [量化精度调优](/articles/quantization-precision-guide/) 与 [生产级 vLLM 部署](/articles/vllm-serving-guide/) 投产上线。
+
 ## 为什么需要微调？
 
 尽管 GPT-5.4、Claude 4.6 等通用大模型能力强大，但在特定场景下仍存在局限：

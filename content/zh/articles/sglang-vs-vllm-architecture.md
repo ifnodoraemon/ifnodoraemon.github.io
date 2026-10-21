@@ -17,6 +17,11 @@ featuredStats:
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **架构流派抉择**：SGLang 以 RadixAttention 树状前缀缓存与端到端编译为核心，在多轮对话与 Agent 场景具备极高的 Cache 命中率与吞吐；vLLM 则以广泛的生态适配与模块化插件见长。
+> - **选型指标实测**：在固定系统提示词（System Prompt 占比 >50%）的高并发负载下，SGLang 表现出更优异的 TTFT 与吞吐指标；在快速多硬件平台（AMD/Ascend/NVIDIA）迁移中 vLLM 兼容性更广。
+> - **落地关联**：建议结合 [RadixAttention 源码解密](/articles/prefix-caching-radix-attention-internals/) 与 [vLLM 生产级落地部署指南](/articles/vllm-serving-guide/) 综合规划技术栈。
+
 ## vLLM 与 SGLang 应该比较什么？
 
 两者都是持续演进的推理服务框架，都支持前缀缓存、连续批处理以及结构化输出。本文比较数据结构与评测方法，不提供本站集群实测排名；没有原始请求、日志、版本与复现脚本支撑的“8×H100 跑分”不能作为选型证据。

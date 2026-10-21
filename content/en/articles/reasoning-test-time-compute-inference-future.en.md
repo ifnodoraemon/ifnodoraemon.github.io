@@ -17,6 +17,11 @@ extraTags:
   - Future Architecture
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Test-Time Compute Scaling Law**: Moving beyond pre-training parameter scaling toward dynamic runtime computation via extended chains-of-thought, self-correction, and tree search.
+> - **Infrastructure Strain**: Extended reasoning balloons sequence lengths into 32k-128k windows, demanding robust tiered KV memory management and dynamic swapping.
+> - **Algorithmic Synergy**: Explore the training counterpart in [GRPO Reinforcement Learning Deep Dive](/en/articles/test-time-compute-grpo/) and cluster-scale serving via [P/D Disaggregation](/en/articles/pd-disaggregation-distributed-kv-cache/).
+
 ## Introduction: The Epochal Turning Point of Autoregressive Serving
 
 Prior to 2024, the architecture of virtually every LLM serving system was constructed around an implicit assumption: **"Large input, short output."**

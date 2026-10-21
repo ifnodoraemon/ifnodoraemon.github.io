@@ -21,6 +21,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Congestion Control Progression**: Compares loss-based Reno against cubic-growth CUBIC (standard multiplicative decrease factor beta=0.7) and Google's BDP-model BBR.
+> - **Kernel Implementation Truths**: Clarifies that modern Linux kernel BBR implementations do not strictly mandate the external `fq` qdisc, utilizing internal pacing engines.
+> - **Modern Transport**: Explores UDP-based QUIC and HTTP/3 0-RTT migrations, safeguarding distributed LLM API pipelines against volatile network degradation.
+
 ## Introduction: The Fundamental Division Between Flow Control and Congestion Control
 
 In Chapter 5 of our series, [Network & Transport Layers in Depth: IP Routing, CIDR, TCP 11-State Machine, and Sliding Window First Principles](/en/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/), we saw how TCP's sliding window uses the Advertised Window (`rwnd`) to protect the receiver's socket buffer.

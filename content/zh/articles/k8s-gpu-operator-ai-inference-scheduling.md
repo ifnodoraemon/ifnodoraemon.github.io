@@ -20,6 +20,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **GPU 拓扑感知调度**：深度剖析 NUMA 节点、PCIe 交换机与 NVLink 域拓扑对大模型推理的影响，利用 Node Feature Discovery (NFD) 与 GPU Operator 实现硬件亲和准入。
+> - **拓扑准入失败机制**：Kubernetes Topology Manager 在准入失败进入终止状态后，调度器不会自动将同一个 Pod 漂移至其他节点，必须依赖上层控制器重建机制。
+> - **推理集群调度**：结合 [vLLM 生产级监控指标](/articles/vllm-serving-guide/) 与 [K8s 调度框架 Gang Scheduling 自定义插件](/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/) 实现高效并行调度。
+
 ## 引言：从 CPU 标量调度到 GPU 智算拓扑的范式巨变
 
 在过去十余年的云原生演进中，Kubernetes 调度的核心资源模型本质上是**标量（Scalar）且同质（Homogeneous）的**：

@@ -16,6 +16,11 @@ featuredStats:
     value: EAGLE-3
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Mathematical Underpinnings**: A lightweight draft model generates $K$ candidate tokens, verified in parallel by the target model in a single forward pass under rejection sampling to preserve exact output distribution equivalence.
+> - **EAGLE Tree Attention**: EAGLE operates across hidden feature representations with tree attention verification, achieving acceptance lengths of 2.5-3.5 tokens for real-world 2x-3x speedups.
+> - **Production Integration**: Speculative decoding is pivotal when hosting massive models like [DeepSeek-V4 and Kimi K3](/en/articles/deepseek-v4-kimi-k3-deployment-guide/) on [vLLM and SGLang](/en/articles/sglang-vs-vllm-architecture/).
+
 ## Introduction: The Memory-Bandwidth Curse of Autoregressive Decoding
 
 Before evaluating model acceleration techniques, we must confront the primary physical bottleneck of LLM inference: **autoregressive generation is profoundly memory-bandwidth bound**.

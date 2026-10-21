@@ -18,6 +18,11 @@ featuredStats:
     value: Production Ready
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **DOM Pruning & Set-of-Marks**: Strips >90% of redundant DOM elements, indexing interactive elements into visual bounding boxes (Set-of-Marks) to minimize multimodal token consumption.
+> - **Closed-Loop Action Verification**: Cross-references rendered browser screenshots with DOM trees to prevent hallucinated clicks during asynchronous frontend loading.
+> - **Security Hardening**: Enterprise browser agents require [Sandbox Container Isolation](/en/articles/advanced-agent-tool-use-and-function-calling/) and [Environment Scaling Practices](/en/articles/environment-scaling-agent-guide/).
+
 ## Introduction: The Death of Fragile RPA and Selector-Based Automation
 
 For more than a decade, web automation—spanning web scraping, QA regression testing, and Robotic Process Automation (RPA)—has been plagued by a fundamental failure mode: **brittle XPath and CSS selectors**.

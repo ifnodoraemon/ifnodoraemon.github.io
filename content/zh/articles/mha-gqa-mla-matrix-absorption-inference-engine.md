@@ -18,6 +18,11 @@ extraTags:
   - Decoupled RoPE
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **KV Cache 压缩革命**：从 MHA（全量头，KV 显存膨胀）到 GQA（分组共享，8:1 压缩），再到 DeepSeek 提出的 MLA（多头潜在注意力），通过低秩投影将 KV Cache 压缩为单一潜在向量 $c_t^{KV}$ 与解耦 RoPE 向量。
+> - **矩阵吸收机制**：在自回归生成阶段，将投影权重矩阵与 Query 投影提前进行矩阵乘法吸收，在 Decode 阶段完全无需解压还原庞大的 Keys/Values，显存占用降低至 MHA 的 1/5 甚至更低。
+> - **硬件拓扑约束**：MLA 的极致访存收益要求推理引擎必须匹配专门设计的计算图与 [MoE 专家并行方案](/articles/moe-expert-parallelism-inference-engine/)，并在 [DeepSeek-V4 与 Kimi K3 部署实践](/articles/deepseek-v4-kimi-k3-deployment-guide/) 中发挥核心支柱作用。
+
 ## 引言：当软件优化逼近物理极值
 
 在前面的五讲中，我们作为系统架构师，已经将现代 GPU 硬件与编译调度榨取到了物理极限：

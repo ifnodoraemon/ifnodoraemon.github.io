@@ -21,6 +21,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **RDMA 内核旁路与零拷贝**：剖析 Send/Receive、RDMA Read/Write 四大动词与 Queue Pair (QP) 内存映射机制，绕过操作系统内核协议栈实现亚微秒级单边数据直传。
+> - **RoCEv2 真实部署模式**：澄清 RoCEv2 存在无损 (Lossless)、半无损与有损 (Lossy) 多种工业落地模式；PFC 优先级流控属于网络性能调优选项，并非协议绝对强制要求。
+> - **系统级加速实践**：广泛应用于 [P/D 分离的分布式 KV Cache 传输](/articles/pd-disaggregation-distributed-kv-cache/) 与企业级大模型分布式推理系统。
+
 ## 引言：400Gbps 吞吐时代的“CPU 内存墙”与延迟危机
 
 在传统的 Linux TCP/IP 协议栈中，数据包从网卡到达应用程序，必须跨越漫长繁琐的链路：

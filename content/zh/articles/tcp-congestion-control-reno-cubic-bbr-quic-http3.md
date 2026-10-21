@@ -21,6 +21,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **拥塞控制算法演进**：对比基于丢包反馈的传统 Reno、基于三次函数增长的 CUBIC（规范乘法递减因子为 0.7）以及基于带宽延迟积 (BDP) 测量的 Google BBR 算法本质差异。
+> - **内核实现细节**：澄清现代 Linux 内核实现中 BBR 并不强制绑定 fq 排队规则，内核内部支持内置 pacing 机制。
+> - **协议终局**：剖析 QUIC 协议在 UDP 之上的用户态重构与 HTTP/3 零 RTT 连接迁移，为跨机大模型 API 调用提供抗网络抖动底座。
+
 ## 引言：流量控制与拥塞控制的本质分野
 
 在专栏第五讲 [网络层与传输层精解：IP 路由选路、CIDR、TCP 三次握手/四次挥手状态机与滑动窗口第一性原理](/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/) 中，我们剖析了 TCP 滑动窗口如何通过通告窗口（Advertised Window, `rwnd`）精确保护接收端的缓冲区内存。

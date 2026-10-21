@@ -16,6 +16,11 @@ extraTags:
   - Circuit Breaker
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Deterministic Control Flow**: Transitioning unpredictable ReAct loops into deterministic Finite State Machines (FSM) with explicit states for planning, tool execution, reflection, and human approval.
+> - **Deadlock & Infinite Loop Prevention**: Implements step budget ceilings, action idempotency checks, and self-healing transitions to halt runaway agent token consumption.
+> - **Framework Implementations**: Code implementations are expanded in [Building Lightweight Agent Frameworks](/en/articles/build-lightweight-agent-framework/) and [Multi-Agent Concurrency & Actor Models](/en/articles/multi-agent-collaboration-and-concurrency/).
+
 When software engineers first experiment with Large Language Model (LLM) agents, the textbook pattern feels enchantingly simple: write a system prompt defining available tools, provide the LLM with a `while (has_tool_call)` loop, execute whatever functions the model outputs, and feed the results back into the conversation history.
 
 In small-scale demos or isolated queries, this straightforward **ReAct (Reasoning + Acting)** loop performs adequately. However, when deployed into serious enterprise production—navigating dozens of heterogeneous tools, flaky external APIs, ill-formed data payloads, and complex multi-branch business logic—an unconstrained ReAct loop almost inevitably collapses.

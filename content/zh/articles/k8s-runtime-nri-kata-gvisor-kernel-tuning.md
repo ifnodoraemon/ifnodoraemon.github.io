@@ -23,6 +23,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **容器运行时安全与演进**：深度对比 runc、Kata Containers（轻量虚拟化）与 gVisor（进程级内核拦截），以及 Node Resource Interface (NRI) 动态拦截注入机制。
+> - **内核与特性状态澄清**：Evented PLEG 截至当前版本仍处于特性门控（Feature Gate）阶段，不能作为已稳定 GA 且默认开启的能力盲目依赖。
+> - **Agent 沙箱落地**：为 [工具调用与安全沙箱执行](/articles/advanced-agent-tool-use-and-function-calling/) 提供了底层宿主机安全边界保障。
+
 ## 引言：打破 runc 共享内核的“安全原罪”与节点假死枷锁
 
 在专栏的第一讲 [Docker 内核第一性原理](/articles/docker-internals-namespace-cgroups-overlayfs/) 中，我们确立了一个不可撼动的底层物理事实：**容器只是一个被 Linux Namespace 限制了视界、被 cgroups 限制了资源的普通宿主机进程，它与宿主机上成千上万的其他进程共享同一个 Linux 操作系统内核**。

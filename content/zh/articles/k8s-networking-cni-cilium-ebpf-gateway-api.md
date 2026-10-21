@@ -19,6 +19,11 @@ extraTags:
   - kube-proxy
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **eBPF 云原生网络革命**：从传统 iptables / IPVS 的 $O(N)$ 链表膨胀与 conntrack 瓶颈，转向 Cilium eBPF 在 Linux tc / XDP 层的直接短路转发与透明加密。
+> - **隧道与 MTU 规约**：澄清在 Underlay 物理网络 MTU 为 1500 时，必须在隧道内网卡 / Pod MTU 上做减法（降至 1450），而非随意修改宿主机底层物理网卡。
+> - **数据中心网络衔接**：与底层 [数据中心 Leaf-Spine BGP EVPN 架构](/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/) 形成紧密的上下层协议栈联动。
+
 ## 引言：云原生网络的终极演进之战
 
 在专栏的第二讲 [容器网络全景解密：veth-pair、Linux Bridge、iptables NAT 与跨主机网络拓扑](/articles/container-networking-veth-bridge-iptables/) 中，我们见证了单机 Docker 时代如何利用 Linux Bridge 和 iptables NAT 构建简易的容器局域网。

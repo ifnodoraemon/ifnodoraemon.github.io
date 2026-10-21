@@ -16,6 +16,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Progressive Capability Injection**: The Agent Skills specification (`SKILL.md`) implements progressive disclosure, preventing massive prompt bloat in the system context window by loading resources on demand.
+> - **Cross-Platform Standard**: Supported across modern AI developer tooling including Claude and OpenAI Codex runtime specifications.
+> - **Ecosystem Fit**: Pairs directly with [The Complete MCP Guide](/en/articles/mcp-guide/) and [AI Coding Mastery](/en/articles/ai-coding-mastery/) to build robust agent toolkits.
+
 ## What Are Skills?
 
 Imagine you hired a brilliant new team member — incredibly smart, learns fast, but **knows nothing about your project**. They don't know your coding standards, aren't familiar with your tech stack, and have no idea about your team's Code Review checklist. Every time you assign a task, you have to explain everything from scratch.

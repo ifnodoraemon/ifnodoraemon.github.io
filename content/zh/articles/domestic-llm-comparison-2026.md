@@ -9,6 +9,11 @@ description: "依据官方模型卡比较 Kimi K3、GLM-5.3 与 DeepSeek-V4-Pro 
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **国产大模型真实战力拆解**：严密对比 DeepSeek-V4、月之暗面 Kimi K3、智谱 GLM-5.3（官方权重标示约 753B）与 MiniMax 在真实代码推理与生产落地表现。
+> - **架构创新透视**：DeepSeek-V4 采用 CSA＋HCA 混合注意力设计，Kimi K3 采用 69 层 KDA + 24 层 Gated MLA，展现出国产架构对传统 Transformer 的深度重塑。
+> - **算力与自建指南**：详细集群落地配置请参阅 [DeepSeek-V4 与 Kimi K3 生产级部署实战指南](/articles/deepseek-v4-kimi-k3-deployment-guide/)。
+
 ## 比较范围：模型卡事实与业务评测分开
 
 本文比较 Kimi K3、GLM-5.3 与 DeepSeek-V4-Pro 的架构和部署条件。以下基准引用官方模型卡，并非本站在统一环境下的复测；业务场景部分提供可执行的评测设计，不把示例写成已有测量结果。海外模型比较见 [GPT／Claude／Gemini 工程选型](/articles/model-comparison-2026/)。

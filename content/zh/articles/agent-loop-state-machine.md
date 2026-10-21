@@ -16,6 +16,11 @@ extraTags:
   - Circuit Breaker
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **控制流确定性**：从不可控的自发 ReAct 循环，升级为基于有限状态机 (FSM) 的确定性控制流，明确区分规划、工具调用、反思与人工介入状态。
+> - **防止死循环与雪崩**：通过最大步数防御、重复动作幂等检测与自愈回退，杜绝 Agent 在复杂环境陷入死循环消耗无限 Token。
+> - **框架与落地扩展**：核心概念已在 [轻量级 Agent 框架自研](/articles/build-lightweight-agent-framework/) 与 [多智能体并发协作](/articles/multi-agent-collaboration-and-concurrency/) 中提供完整 Python 生产级实现。
+
 在构建大模型智能体（AI Agent）的过程中，许多开发者最初接触的范式往往非常轻巧：写一段包含工具定义的 System Prompt，交给大模型（LLM）驱动一个 `while (has_tool_call)` 循环，根据模型的输出不断解析工具、执行并回填结果。
 
 在简单的演示 Demo 或单步骤任务中，这种基于 **ReAct（Reasoning + Acting）** 的自由循环运作良好。然而，一旦将这样的系统推向严肃的企业级生产环境——面对数十步复杂的调用链、网络抖动、脏数据与多分支业务逻辑时，未加约束的 ReAct 循环几乎 100% 会遭遇灾难性的崩溃。

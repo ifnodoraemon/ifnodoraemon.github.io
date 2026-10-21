@@ -184,7 +184,7 @@
 ## 中文文章深度 FAQ 与要点汇总
 
 ### [InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战](https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/)
-- 发布日期: 2026-10-05 | 标签: 生产落地与NCCL调优 | 预计阅读: 预计阅读 15 分钟 | 字数: 约 3597 字
+- 发布日期: 2026-10-05 | 标签: 生产落地与NCCL调优 | 预计阅读: 预计阅读 15 分钟 | 字数: 约 3740 字
 - 概述: 从网络架构设计到万卡 AI 智算中心裸金属物理落地，工程师必须攻克哪些工程深水区？全景拆解 InfiniBand 生产落地实战：Mellanox OFED / DOCA 驱动栈与固件管理工具（flint/mlxlink）；搭建基于 OpenSM 的 Master/Standby 主备高可用子网管理架构；深入实战 ibdiagnet 全网巡检，秒级定位物理层 Symbol Error 脏光纤与降速协商链路；并深入 GPU 通信最底层，实战验证 GPUDirect RDMA（nvidia-peermem 驱动）与 NCCL 核心环境变量（NCCL_IB_HCA / NCCL_NET_GDR_LEVEL=5）极限压测调优。
 - 核心 FAQ 解答:
   * Q: Q1: 在运行 `nccl-tests` 时，如何排查 GPUDirect RDMA 是否在底层发生了“静默降级（Silent Fallback）”？
@@ -195,7 +195,7 @@
     A: 根本机制：InfiniBand 规范原生内置的优先级抢占仲裁与单 Master 事务机制。 在 InfiniBand 架构中，子网管理包（SMP）是直接在物理织网内点对点传输的。 1. Master SM 心跳权威性：Master SM（优先级 15）会以固定周期（如 3 秒）向全网交换机发送心跳和轮询包。全网交换机只接受当前有效持有 Master 租约的 SM 所下发的 LFT 线性转发表； 2. 仲裁机制：即使两台主控节点的带外以太网断开，备用 SM（优先级 1）也会通过 InfiniBand 物理光纤探测到网络中仍有高优先级的 Master SM 在正常工作，因此会一直安分地停留在 ST...
 
 ### [InfiniBand 智算集群组网实战：Fat-Tree 胖树拓扑、Rail-Optimized 轨道优化设计、自适应路由 (AR) 与 SHARP 网内计算](https://blog.llmgo.top/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/)
-- 发布日期: 2026-10-04 | 标签: 胖树拓扑与自适应路由 | 预计阅读: 预计阅读 17 分钟 | 字数: 约 4106 字
+- 发布日期: 2026-10-04 | 标签: 胖树拓扑与自适应路由 | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4264 字
 - 概述: 如何将成千上万台配备 8 卡 GPU 的服务器用万根光纤编织成一张无阻塞、零死锁的高性能互联网络？深入剖析万卡 AI 智算中心核心拓扑：从 1985 年 Leiserson 胖树（Fat-Tree）数学模型、端口数 k 与 2-Tier/3-Tier 最大节点数严格推导，到专为 DGX H100/H200/B200 量身定制的 Rail-Optimized（轨道优化）八独立平面物理组网；深入解析 FTree 与 Up/Down 算法如何通过禁止“先下后上”破除信用死锁环路；并解密自适应路由（Adaptive Routing）与 SHARP 交换机网内规约计算如何将 All-Reduce 集合通信带宽效率提升 2 倍。
 - 核心 FAQ 解答:
   * Q: Q1: 为什么 Rail-Optimized（轨道优化）组网能对大模型训练中的张量并行（TP）与数据并行（DP）产生巨大的加速效果？
@@ -228,7 +228,7 @@
     A: 根本原因在于绕过 sk_buff 分配与极简上下文： - XDP 性能秘密：XDP 运行在网卡驱动接收 DMA 缓冲区的第一刻。此时系统尚未分配包含数十个字段的复杂 sk_buff 结构，数据包只是一片连续的裸内存指针（xdp_buff），直接由 JIT 编译后的原生机器码进行过滤转发，单包耗时仅数纳秒； - 对比 DPDK 的权衡：   - DPDK 优势：完全接管物理网卡（PMD 轮询模式驱动），绕过内核运行在纯用户态，性能极高；致命缺陷：独占绑定 CPU 核心（单核永远 100% 满转）、剥夺了操作系统的所有网络管理工具（tcpdump、iptables、iproute2 全部失效）、开...
 
 ### [RDMA 高性能通信基石：Kernel Bypass、Zero-Copy、Queue Pair 机制与无损以太网 RoCEv2 (PFC/ECN) 全景透视](https://blog.llmgo.top/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/)
-- 发布日期: 2026-10-02 | 标签: RDMA与RoCEv2 | 预计阅读: 预计阅读 17 分钟 | 字数: 约 4016 字
+- 发布日期: 2026-10-02 | 标签: RDMA与RoCEv2 | 预计阅读: 预计阅读 17 分钟 | 字数: 约 4183 字
 - 概述: 为什么在 400G/800G 网络时代，传统的 TCP/IP 协议栈彻底沦为算力黑洞？深度拆解 RDMA（远程直接内存访问）第一性原理：Kernel Bypass（内核旁路）、Zero-Copy（硬件级零拷贝）与内存注册（Memory Registration/L_Key/R_Key）；剖析 ibverbs 核心架构：Queue Pair（SQ/RQ）、完成队列（CQ）以及双边操作（Send/Recv）与单边操作（RDMA Read/Write/Atomic）的微秒级机理；解密无损以太网 RoCEv2（UDP 端口 4791）如何通过 PFC 802.1Qbb 八优先级流控反压与 ECN/DCQCN 拥塞控制闭环解决丢包崩溃与死锁难题。
 - 核心 FAQ 解答:
   * Q: Q1: 什么是 PFC 死锁（PFC Deadlock），现代数据中心无损网络如何根除它？
@@ -239,7 +239,7 @@
     A: 1. 流控机制的物理维度不同：    - RoCEv2 运行在有损的以太网上，依赖反应式的 PFC Pause 帧（出现拥塞后反向刹车），容易发生死锁与风暴；    - InfiniBand 采用原生底层的 Credit-Based 信用度流控。发送端在发包前必须预先拥有接收端赋予的信用额度（Credit），接收端没有缓冲区就绝对不发，可避免接收缓冲溢出，但错误、链路故障和配置导致的死锁仍需处理； 2. 协议报头开销与转发延迟：    - RoCEv2 必须包含完整的以太网帧头、IPv4 报头与 UDP 报头（至少 42 字节开销），交换机转发延迟普遍在数百纳秒；    - InfiniBan...
 
 ### [现代数据中心网络架构第一性原理：Clos 拓扑、Leaf-Spine 组网、BGP Underlay 与 EVPN-VXLAN 大二层虚拟化](https://blog.llmgo.top/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/)
-- 发布日期: 2026-10-01 | 标签: 数据中心与Leaf-Spine | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4503 字
+- 发布日期: 2026-10-01 | 标签: 数据中心与Leaf-Spine | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4667 字
 - 概述: 为什么传统三层网络与 STP 生成树无法承载现代云计算与 AI 大规模算力集群？深度拆解数据中心网络演进史：从经典三层架构（接入 Access/汇聚 Aggregation/核心 Core）的 STP 阻塞与收敛比失衡痛点，到 1953 年 Charles Clos 电话交换理论与现代无阻塞 2-Tier / 3-Tier Leaf-Spine 拓扑数学建模；详解基于 RFC 7938 的 eBGP Underlay 路由设计、ECMP 等价多路径五元组哈希极化（Hash Polarization）破除方案；全面剖析大二层 Overlay 核心技术：VXLAN 报文 MAC-in-UDP 封装（VNI 24-bit/Jumbo Frame 9000 MTU）与 MP-BGP EVPN 控制平面 Type-2/Type-3/Type-5 路由交换机理。
 - 核心 FAQ 解答:
   * Q: Q1: 为什么超大规模数据中心 Underlay 普遍抛弃 OSPF/IS-IS，而全面倒向 eBGP？
@@ -272,7 +272,7 @@
     A: 根本原因：传统 NAT 路由器的安全单向性与外部未知流量拦截。 当内网电脑没有向外部发送过数据包时，其家里的 NAT 路由器上的 conntrack 表中不存在任何针对外部 IP 的映射规则。当朋友从外部直接向你家的公网 IP 和端口发送 UDP 数据包时，你的路由器判定这是未知的外部恶意主动探测，会在外网入口处直接静默丢弃。 NAT 打洞原理：双方电脑同时借助一台位于公网的第三方中继服务器（STUN 服务器），探明各自在公网被 NAT 路由器转换后的 <公网IP:外部映射端口>。随后双方在微秒级时间内同时向对端的公网端口反向发送 UDP 探测包。这一动作强迫各自的 NAT 路由器在本地 co...
 
 ### [TCP 拥塞控制演进史与高性能传输：从 Reno、Cubic 到 BBR 数学模型，以及 HTTP/2 到 HTTP/3 (QUIC) 协议栈革命](https://blog.llmgo.top/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/)
-- 发布日期: 2026-09-30 | 标签: 拥塞控制与QUIC | 预计阅读: 预计阅读 15 分钟 | 字数: 约 3714 字
+- 发布日期: 2026-09-30 | 标签: 拥塞控制与QUIC | 预计阅读: 预计阅读 16 分钟 | 字数: 约 3887 字
 - 概述: 为什么滑动窗口能防冲垮对端内存，却防不住互联网骨干路由器的崩溃？深度剖析拥塞控制三十年演进史：从基于丢包的经典 AIMD、Reno 状态机、Bufferbloat（缓冲区膨胀）到 Linux 默认 Cubic 的三次多项式数学推导；深入解密 Google BBR 基于最大交付率与最小往返时延的瓶颈物理建模（BtlBw/RTprop/Pacing Rate）；并对比分析从 HTTP/1.1、HTTP/2 多路复用线头阻塞（HoL Blocking）到基于 UDP 的 HTTP/3 (QUIC) 零 RTT 握手与连接迁移协议栈大一统革命。
 - 核心 FAQ 解答:
   * Q: Q1: BBR 是否强制依赖 fq？
@@ -371,7 +371,7 @@
     A: 本质原因： 这是 Kubernetes 基于 etcd resourceVersion 实现的乐观并发控制（Optimistic Concurrency Control）安全机制。 当你的控制器从本地缓存 Indexer 读取了一个对象（例如带有 resourceVersion: 100），在执行本地计算的这几毫秒内，另一个控制器（例如 Kubelet 或 HPA）抢先一步向 apiserver 提交了更新，导致该对象在 etcd 中的版本提升为了 101。此时你的控制器再拿着 100 去提交写操作，apiserver 就会果断拒绝并返回 409 冲突，防止你用过期的旧数据覆盖掉别人的最新修改...
 
 ### [对 K8s 控制面动刀：WatchCache 缓存穿透机理、Aggregated APIServer 聚合扩展、APF 洗牌分片流控与万级节点 etcd 调优](https://blog.llmgo.top/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/)
-- 发布日期: 2026-09-25 | 标签: 控制面内核定制 | 预计阅读: 预计阅读 15 分钟 | 字数: 约 3709 字
+- 发布日期: 2026-09-25 | 标签: 控制面内核定制 | 预计阅读: 预计阅读 16 分钟 | 字数: 约 3862 字
 - 概述: 为什么当自定义资源数量突破数百万级时，CRD 会直接把 etcd 撑爆导致整个 Kubernetes 集群瘫痪？深度拆解对 Kubernetes 控制面中枢的深水区改造：剖析 kube-apiserver 内部 WatchCache 环形缓冲区与 resourceVersion 三大语义机制；构建独立的 Aggregated APIServer（聚合 API 服务器）实现后端存储旁路解耦；深入剖析 API Priority and Fairness（APF）洗牌分片流控数学模型如何化解并发流量雪崩；并全面公开支撑上万节点超大规模集群的 etcd 物理双盘隔离与事件分库极限方案。
 - 核心 FAQ 解答:
   * Q: Q1: resourceVersion 如何影响高并发查询？
@@ -393,7 +393,7 @@
     A: Pod 健康探针（Liveness/Readiness Probe）只能检测本节点内的容器存活性，它无法区分“节点网络单向中断”与“容器真正死亡”。 在单向网络分区场景下，旧主节点的容器进程实际上还在正常运转，且完全可能继续接收来自同网段客户端的写请求。如果仅靠 K8s 判定其不健康并在新节点拉起新主库，就会导致两个主库同时对不同的数据卷进行写入，造成不可逆的数据冲突破坏。 Node Fencing 的必要性：它在物理或存储控制层面强制掐断旧节点的写入权限（如 IPMI 强制关电或存储锁剥离），确保旧节点在绝对无法写入后，才允许新主库上线。...
 
 ### [2026 AI 智算调度终局：Kubernetes GPU Operator、MIG 分割、拓扑感知调度与 vLLM/SGLang 集群弹性扩缩容](https://blog.llmgo.top/articles/k8s-gpu-operator-ai-inference-scheduling/)
-- 发布日期: 2026-09-25 | 标签: AI 智算调度 | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4508 字
+- 发布日期: 2026-09-25 | 标签: AI 智算调度 | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4676 字
 - 概述: 为什么传统以 CPU/内存为核心的调度体系在大模型时代全面失效？深入拆解 2026 AI 时代 Kubernetes 智算基础设施调度架构：NVIDIA GPU Operator 驱动与运行时全自动纳管链路、MIG（多实例 GPU）硬件物理分割与时间切片方案；Kubelet Topology Manager 与 DRA（动态资源分配）如何解决跨 NUMA 节点与 NVLink 互联性能断崖；并实战构建基于 P/D 分离、KV Cache 负载指标与 KEDA 的生产级 vLLM / SGLang 大模型推理集群弹性扩缩容架构。
 - 核心 FAQ 解答:
   * Q: Q1: vLLM 预分配显存与 Kubernetes OOM 有什么关系？
@@ -404,7 +404,7 @@
     A: 不会。DRA 允许通过 ResourceClaim 和驱动发布的设备属性表达更丰富的选择条件，但可用属性、跨设备约束与分配行为取决于 Kubernetes 版本和驱动实现。必须确认 GPU/NIC 驱动确实公布所需拓扑信息，并验证调度与准入行为；不能仅因启用 DRA 就保证最佳 NVLink 组合或无跨 NUMA 访问。参见 [Kubernetes DRA 文档](https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/)。 KEDA 示例的 qwen-72b 应与 vLLM 的 -...
 
 ### [Kubernetes 网络模型全景：CNI 规范演进、Calico BGP、Cilium eBPF 与 Gateway API 架构解密](https://blog.llmgo.top/articles/k8s-networking-cni-cilium-ebpf-gateway-api/)
-- 发布日期: 2026-09-25 | 标签: K8s 网络 | 预计阅读: 预计阅读 17 分钟 | 字数: 约 4229 字
+- 发布日期: 2026-09-25 | 标签: K8s 网络 | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4389 字
 - 概述: 为什么说容器网络是 Kubernetes 中最复杂、最容易踩坑的深水区？深度拆解云原生网络四大公理与 CNI（Container Network Interface）插件规范底层执行机理；全面对比 Flannel VXLAN 覆盖网络与 Calico BGP 纯二层路由性能与开销；深入解密 Cilium 如何利用 Linux 内核 eBPF 与 sockops 套接字重定向彻底革新 kube-proxy 与 iptables 性能瓶颈；并剖析面向未来的 Gateway API 角色分离与流量治理架构。
 - 核心 FAQ 解答:
   * Q: Q1: 为什么使用 VXLAN Overlay 网络时，部分大包请求（如大文件上传或 TLS 握手）会发生偶发性超时甚至静默丢包？
@@ -426,7 +426,7 @@
     A: 两大关键原因： 1. 防止乐观并发冲突（409 Conflict）死循环：普通的 r.Update() 会同时提交对象的 Spec 与元数据。如果此时用户恰好修改了 YAML 中的期望副本数，Operator 盲目调用 r.Update() 就会产生版本冲突；使用专门的 r.Status().Update() 仅更新状态字段，减少并发锁冲突； 2. 遵循权限最小化与 RBAC 安全规范：在企业集群中，业务开发团队通常被赋予修改 CRD spec 的权限，但被严厉禁止修改 status；而 Operator 拥有访问 /status 子资源的特权。将两者在代码层面严格解耦，是构建工业级安全 Op...
 
 ### [对 K8s 节点与运行时动刀：PLEG 瓶颈突破、NRI 节点资源接口插件、Kata/gVisor 多安全沙箱运行时与 cgroups v2 调优](https://blog.llmgo.top/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/)
-- 发布日期: 2026-09-25 | 标签: 节点运行时定制 | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4372 字
+- 发布日期: 2026-09-25 | 标签: 节点运行时定制 | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4515 字
 - 概述: 为什么共享宿主机内核的传统 runc 容器无法抵御零日漏洞逃逸，物理节点又频频陷入 PLEG is not healthy 假死超时？深度解密对 Kubernetes 工作节点（Worker Node）与容器运行时的深水区内核改造：剖析 Kubelet syncLoop 核心主循环与 Evented PLEG 流式事件驱动革新；深入 containerd/CRI-O 原生 NRI（Node Resource Interface）插件架构并编写 Go 代码实现动态 CPU 绑核与 OCI 拦截；全景对比微虚拟机 Kata Containers 与用户态内核沙箱 gVisor 的底层架构与性能损耗；并掌握通过 RuntimeClass、安全 Sysctl 与 cgroups v2 PSI/memory.high 实施精细化内核防护。
 - 核心 FAQ 解答:
   * Q: Q1: Evented PLEG 如何减少传统 PLEG 的负担？
@@ -459,7 +459,7 @@
     A: - Delete 模式：当对应的 PVC 被物理删除后，绑定的 PV 会被自动删除，且底层云厂商的物理块设备（如云盘）也会被立刻物理销毁。 - Retain 模式：当 PVC 被删除后，底层 PV 不会被销毁，而是转为 Released（已释放）保留状态，底层的物理磁盘数据毫发无损，防止误删。但此时其他 PVC 也无法直接复用该卷，需要管理员手动提取数据或格式化后重新标记可用。 - 生产推荐：对于重要的生产核心数据库（MySQL, Mongo, PG），强烈建议将 StorageClass 的回收策略配置为 Retain，作为防止误操作导致物理数据灭失的最后一道安全护城河。...
 
 ### [高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞](https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/)
-- 发布日期: 2026-09-24 | 标签: 并发调度 | 预计阅读: 预计阅读 28 分钟 | 字数: 约 6754 字
+- 发布日期: 2026-09-24 | 标签: 并发调度 | 预计阅读: 预计阅读 28 分钟 | 字数: 约 6930 字
 - 概述: 为什么在消除显存碎片后，高并发大模型服务依然会遭遇严重的单字时延（TPOT）剧烈抖动？深度解构从传统静态批处理到 Orca 迭代级连续批处理的状态机演进，揭秘超长 Prefill 霸占 GPU 引发排头阻塞（HoL Blocking）的物理根源，以及 Sarathi-Serve 和 vLLM 借助 Chunked Prefill 实现算力与访存动态拼车（Piggybacking）的底层机制。
 - 核心 FAQ 解答:
   * Q: Q1: 既然 Chunked Prefill 会稍微拉长总的 Prefill 耗时，在什么业务场景下应该关闭它？
@@ -470,7 +470,7 @@
     A: Chunked Prefill 是在“单台物理节点内部”对 Prefill 与 Decode 矛盾的极致调和，但它在物理上依然共享了同一套显存、同一套 PCIe/NVLink 总线和同一组 SM 计算核心： 1. 硬件选型妥协：Prefill 需要极致的 FLOPs（算力芯片，如 H100 SXM），Decode 需要极致的显存带宽与容量（如大显存的 H200 或更廉价的带宽卡）。单机混部意味着所有机器都必须堆叠昂贵的高规格算力卡； 2. KV Cache 跨节点隔离需求：在超大规模集群中，长文档的 Prefill 可能会被路由到特定的大算力池，而 Decode 阶段可以通过高速 RDMA 远...
 
 ### [Attention 算子加速史：从 FlashAttention-1/2/3 的 SRAM Tiling 到 FlashInfer 统一异构核心](https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/)
-- 发布日期: 2026-09-24 | 标签: 算子优化 | 预计阅读: 预计阅读 25 分钟 | 字数: 约 6132 字
+- 发布日期: 2026-09-24 | 标签: 算子优化 | 预计阅读: 预计阅读 26 分钟 | 字数: 约 6308 字
 - 概述: 为什么标准自注意力计算会随序列长度呈平方级拖垮显存带宽？深度解析现代 Attention 算子加速史：从 FlashAttention-1 的 SRAM 分块分片（Tiling）与 Online Softmax 动态局部重规约，到 FlashAttention-2 循环重构与 Warp 零通信调度，再到 FlashAttention-3 独占 Hopper 架构的 TMA 硬件异步搬运与 WGMMA 异步流水线。最后全面剖析专为大模型在线服务而生的 FlashInfer，揭秘其如何凭借 Paged KV Cache 原生寻址与 Split-K 解码并行，终结长文本 Decode 算力饥饿。
 - 核心 FAQ 解答:
   * Q: Q1: 为什么 FlashAttention 在反向传播（Backward Pass）中选择重新计算（Recomputation）注意力矩阵，而不是在正向传播时将其保存下来？这难道不会增加计算量吗？
@@ -481,7 +481,7 @@
     A: 在标准指数计算 $e^x$ 中，由于浮点数表示范围的限制，对于 FP16 精度，最大可表示的数值约为 $65504$。如果注意力得分 $S_{ij} = q_i \cdot k_j / \sqrt{d}$ 达到甚至超过 $11$，$e^{11} \approx 59874$，极易发生数值上溢（Overflow，变成 +inf 并在除法后产生 NaN）；反之，若负数过大则会发生数值下溢（Underflow，变成纯 0）。 传统的做法是在计算指数前，先减去整行的全局最大值 $m = \max(S)$，使得指数项的最大输入为 $e^0 = 1$，所有项均落在 $(0, 1]$ 的安全数值区间内。 而...
 
 ### [四大主流生产级推理引擎架构横评与调度器源码解密：vLLM v1 vs SGLang vs TensorRT-LLM vs llama.cpp](https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/)
-- 发布日期: 2026-09-24 | 标签: 推理引擎 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5037 字
+- 发布日期: 2026-09-24 | 标签: 推理引擎 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5203 字
 - 概述: 从 Python 运行时到 C++/Rust 异步执行引擎：深度拆解开源世界四大顶级推理底座的源码设计哲学。对比 vLLM v1 零开销调度器与多步执行、SGLang RadixAttention 树状层级执行环、TensorRT-LLM 原生算子深度融合与 In-Flight Batching，以及 llama.cpp 端侧无依赖极限定量化运行时，奉上生产级全景技术选型指南。
 - 核心 FAQ 解答:
   * Q: Q1: 在企业自建统一大模型服务平台（Model-as-a-Service, MaaS）时，为什么很多团队会混合搭配 vLLM 与 SGLang？
@@ -492,7 +492,7 @@
     A: 在配备 M 系列芯片的苹果设备（如 Mac Studio / MacBook Pro）上，CPU 与 GPU 共享同一组高带宽物理 LPDDR 内存条（统一内存架构，带宽可达 400~800 GB/s）。 在传统 PC 或数据中心服务器中，模型必须从宿主机内存（Host RAM）经过漫长的 PCIe 总线拷贝到独立的显存（GPU HBM）中才能计算。而在统一内存架构下，llama.cpp 借助操作系统的 mmap() 系统调用，直接让 GPU 核心就地读取内存中的模型权重，完全省去了漫长的加载显存搬运过程，且能直接加载超过单卡独立显存上限（如 128GB 内存跑 70B 模型）的庞大参数。但在...
 
 ### [从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的物理撕裂](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/)
-- 发布日期: 2026-09-24 | 标签: 算力建模 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5178 字
+- 发布日期: 2026-09-24 | 标签: 算力建模 | 预计阅读: 预计阅读 22 分钟 | 字数: 约 5361 字
 - 概述: 为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。
 - 核心 FAQ 解答:
   * Q: Q1: 既然 Decode 阶段是显存带宽受限，为什么不无限增大 Batch Size 把算力跑满？
@@ -503,7 +503,7 @@
     A: FlashAttention 的核心收益在于通过 Tiling 分块将 $O(N^2)$ 的 Attention 中间结果留在 SRAM（片上高速缓存）中，避免向 HBM 频繁换入换出。  在 Prefill 阶段，序列长度 $N$ 很大，$N \times N$ 的 Attention Map 非常巨大，FlashAttention 能砍掉数十倍的 HBM 显存读写，收益极其恐怖；  在 Decode 阶段，Query 长度仅仅为 ${1}$，计算实质上是 ${1} \times N$ 的向量矩阵乘法（GEMV），根本不存在庞大的 $N \times N$ 矩阵。Decode 阶段的核心开销...
 
 ### [模型架构反哺推理系统：从 MHA/GQA 到 DeepSeek MLA 矩阵吸收与显存极简主义](https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/)
-- 发布日期: 2026-09-24 | 标签: 注意力架构 | 预计阅读: 预计阅读 22 分钟 | 字数: 约 5368 字
+- 发布日期: 2026-09-24 | 标签: 注意力架构 | 预计阅读: 预计阅读 23 分钟 | 字数: 约 5585 字
 - 概述: 为什么无论工程系统如何优化，长上下文推理依然会被海量 KV Cache 逼入绝境？深度解构从传统 MHA 到 GQA 分组折中，再到 DeepSeek 开创性 MLA（多头潜变量注意力）的技术演进。全面剖析低秩潜变量投影、解耦 RoPE 旋转位置编码，以及推理引擎在自回归 Decode 阶段借助矩阵吸收（Matrix Absorption）将 90% 以上多头张量物理凭空抹除的底层数学机理与 FlashMLA 工程落地。
 - 核心 FAQ 解答:
   * Q: Q1: 既然 MLA 效果如此惊艳且能节省 90%+ 显存，为什么在所有开源模型（如 LLaMA-3、Mistral）中没有全面普及？训练 MLA 的代价是什么？
@@ -514,7 +514,7 @@
     A: 尽管 MLA 将每个 Token 的 KV 缓存压缩到了区区 1.15 KB，但随着并发连接数（Concurrency）拉大到几百甚至上千路，系统面临着两个新的物理下限： 1. 静态模型权重的物理常驻：    以 DeepSeek-V3（671B MoE，激活参数 37B）为例，按 FP8（1 字节/参数）计算，整套静态模型权重的体积依然高达 ~671 GB（若进一步压缩至 4-bit 权重加元数据也需 ~350 GB），必须常年死死驻留在多卡显存中，占据了近一半的集群物理卡容量； 2. 超长长尾（Tail Sequences）并发的算力累积：    当几百个并发请求同时涌入，且每个请求都在执...
 
 ### [稀疏大模型 MoE 推理内核：专家并行 (EP)、动态路由门控与 All-to-All 通信重叠](https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/)
-- 发布日期: 2026-09-24 | 标签: 稀疏计算 | 预计阅读: 预计阅读 28 分钟 | 字数: 约 6827 字
+- 发布日期: 2026-09-24 | 标签: 稀疏计算 | 预计阅读: 预计阅读 29 分钟 | 字数: 约 7004 字
 - 概述: 为什么 671B 参数的 DeepSeek-V3 每次解码仅激活 37B 参数，吞吐却常受制于跨节点网络？深度剖析稀疏大模型 MoE 推理内核：从动态门控与无辅助损失负载均衡，到专家并行 (EP) All-to-Allv 通信瓶颈，再到 CUTLASS Grouped GEMM 算子融合与 DualPipe 通信计算重叠终极优化。
 - 核心 FAQ 解答:
   * Q: Q1: 在 MoE 自回归解码 (Decode) 时，如果某张卡上的专家分配到的 Token 数为 0，这会导致报错或等待死锁吗？
@@ -525,7 +525,7 @@
     A: 必须依据物理网络的互联拓扑（Topology-Aware Hierarchy）来严格决定： - 黄金原则：将通信频次极高的张量并行（TP）锁死在单机内部的 NVLink 高速总线域内（通常单机 8 卡，带宽高达 900GB/s）；将专家并行（EP）放在跨节点的网络拓扑上（InfiniBand / RoCE）。 - 如果你有 4 台 8 卡机器（共 32 卡）：   - 若选择 TP=4 + EP=8：每台机器切分为 2 个独立的 TP=4 组（走片内 NVLink），跨越 8 个节点走 EP。通信量更加分散，是目前多数长序列高并发集群的主流配置；   - 若选择 TP=8 + EP=4：每台机...
 
 ### [显存虚拟化革命：PagedAttention 内存池管理与显存碎片终结](https://blog.llmgo.top/articles/pagedattention-memory-virtualization/)
-- 发布日期: 2026-09-24 | 标签: 显存虚拟化 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5003 字
+- 发布日期: 2026-09-24 | 标签: 显存虚拟化 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5182 字
 - 概述: 为什么传统大模型推理会浪费 60%~80% 的 GPU 显存？深度剖析 vLLM 开创的 PagedAttention 核心机制，解构逻辑块到物理块映射、动态显存池生命周期、Copy-on-Write 分叉复用与 CUDA 非连续访存内核，彻底终结显存碎片化顽疾。
 - 核心 FAQ 解答:
   * Q: Q1: 块大小（Block Size）设为 16 还是 32 更好？为什么各大引擎不推荐设为 1 或 128？
@@ -536,7 +536,7 @@
     A: 完全没有冲突，两者是底层显存管理与上层算子维度的完美互补：  [Kimi KDA 与 DeepSeek MLA](/articles/kimi-kda-deepseek-mla-architecture/) 是在算法数学层面，将原本庞大的 KV 向量投影压缩成极小的潜在向量（Latent Vector），从而在源头上将每个 Token 所需的显存字节数砍掉数倍；  PagedAttention 是在系统存储层面，负责为这些被压缩后的向量提供无碎片的虚拟分页管理。两者的结合使得 2026 年单台 8 卡服务器并发支撑数十万乃至百万长文本交互成为工程现实。...
 
 ### [P/D 分离 (Prefill-Decode Disaggregation) 架构：计算与访存解耦、RDMA 分布式 KV Cache 传输与集群池化调度](https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/)
-- 发布日期: 2026-09-24 | 标签: 推理架构 | 预计阅读: 预计阅读 26 分钟 | 字数: 约 6394 字
+- 发布日期: 2026-09-24 | 标签: 推理架构 | 预计阅读: 预计阅读 27 分钟 | 字数: 约 6569 字
 - 概述: 为什么在 128k 超长上下文与长思考链时代，单机混合部署 Prefill 与 Decode 必然走向性能崩溃？深度剖析 P/D 分离 (Disaggregated Serving) 架构：从计算密集与访存密集的空间物理隔离、GQA 与 DeepSeek MLA 跨节点传输带宽推导，到 GPUDirect RDMA 单边零拷贝、全局 KV 池化调度与 P:D 节点最优比例数学建模。
 - 核心 FAQ 解答:
   * Q: Q1: P/D 分离相比单机混合部署，一定会带来更高的整体吞吐（Throughput）吗？
@@ -547,7 +547,7 @@
     A: 现代生产级引擎设计了三级高可用保障机制： 1. 网络层 RoCEv2 PFC (Priority Flow Control) 与 DCQCN 拥塞控制：在交换机与网卡物理层保障无损网络传输（Lossless Ethernet），从根本上避免拥塞丢包； 2. 传输层心跳租约与超时 Fallback：P 节点在发起 RDMA 写入后启动硬件计时器。若在阈值内（如 200 ms）未收到目标网卡的完成信号（CQE），全局调度器将把请求标记为传输失败，并调度至备用 D 节点直接触发本地快速重新 Prefill，避免客户端长时间无响应； 3. 全局前缀树元数据隔离：在如 Mooncake 或 SGLang...
 
 ### [前缀缓存架构演进：从 Hash 块级寻址到 SGLang RadixAttention 树状缓存与动态驱逐](https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/)
-- 发布日期: 2026-09-24 | 标签: 前缀缓存 | 预计阅读: 预计阅读 23 分钟 | 字数: 约 5521 字
+- 发布日期: 2026-09-24 | 标签: 前缀缓存 | 预计阅读: 预计阅读 23 分钟 | 字数: 约 5688 字
 - 概述: 为什么每次多轮对话或 Agent 交互，GPU 都要重复做成千上万次无意义的长文本前向计算？深度剖析前缀缓存（Prefix Caching）的核心原理，从 vLLM 的链式 Hash 块级寻址与边界惩罚，到 SGLang 独创的 RadixAttention 树状动态匹配、节点分裂与 LRU 叶子驱逐机制，彻底看透大模型状态复用的底层工程极限。
 - 核心 FAQ 解答:
   * Q: Q1: 前缀缓存大幅降低了 Prefill 阶段的计算量，为什么有时反而会导致 GPU 显存占用过高甚至引发 OOM？
@@ -558,7 +558,7 @@
     A: 在单机模式下，节点一旦重启，GPU HBM 中的 RadixTree 便化为乌有，必须经历一段冷启动阶段重新积累前缀。但在大规模企业级集群中，业界已经发展出成熟的多级缓存应对方案： 1. 分层分级存储（Tiered Memory Hierarchy）：    当 GPU 显存紧张需要驱逐时，并不直接 Drop 掉物理块，而是将高频公共前缀的 KV Cache 通过高带宽 PCIe 异步换出（Offload）到主机 CPU 内存（Host RAM），甚至下刷到本地高速 NVMe SSD。当请求再次命中该前缀时，直接通过 CUDA 异步内存拷贝搬回 GPU，耗时依然远低于重新跑一次 GPU Pre...
 
 ### [长思维链 (Reasoning / Test-Time Compute) 与大集群推理系统的未来终局](https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/)
-- 发布日期: 2026-09-24 | 标签: 终局前瞻 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4945 字
+- 发布日期: 2026-09-24 | 标签: 终局前瞻 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5113 字
 - 概述: 当自回归思考步长从数百 Token 飙升至 128k 深度反思，大模型推理系统迎来了颠覆性的物理拐点。深度探讨长思考链 (Test-Time Compute) 时代的系统级重构：KV Cache 爆炸式显存雪崩对抗、树状搜索 (MCTS) 与投机解码协同调度、基于强化学习的动态思考预算治理，以及跨介质多级分层 (SRAM/HBM/CXL/NVMe-oF) 全球 KV 存储池的未来终局。
 - 核心 FAQ 解答:
   * Q: Q1: 在长思维链（Reasoning）模型下，传统的 Chunked Prefill 策略是否已经彻底失效？
@@ -569,7 +569,7 @@
     A: 不能，CXL 内存的作用是“容量扩展（Expansion）”，而非替代 HBM。 两者的物理定位泾渭分明： - HBM 的不可替代性：目前顶级 HBM3e/HBM4 提供了高达 $3 \sim 4 \text{ TB/s}$ 的极致吞吐带宽，这是自回归计算中跑满高吞吐 Decode GEMV 的绝对底线； - CXL 3.0 的核心价值：通过 PCIe 5.0/6.0 织网，CXL 提供了数十至数百 GB/s 的带宽与仅约一百多纳秒的访问延迟。这一带宽不足以支撑活跃的最内层自回归计算，但它极其适合存放“前缀树中深度的历史 KV 块”以及“暂时处于等待分支判断的休眠请求”。 将数据在 HBM 与...
 
 ### [AI Agent 记忆系统设计：从工作记忆、情景记忆到分层 Graph RAG](https://blog.llmgo.top/articles/agent-memory-architecture/)
-- 发布日期: 2026-09-21 | 标签: 记忆架构 | 预计阅读: 预计阅读 22 分钟 | 字数: 约 5356 字
+- 发布日期: 2026-09-21 | 标签: 记忆架构 | 预计阅读: 预计阅读 23 分钟 | 字数: 约 5526 字
 - 概述: 解析 Agent 工作、情景与长期记忆，结合 MemGPT 和 Generative Agents 解释检索与衰减，并补充来源追踪、权限过滤、冲突处理和删除传播的生产边界。
 - 核心 FAQ 解答:
   * Q: Q1: 现在的很多模型已经具备 1M 甚至更长的 Context Window，为什么不能直接把历史所有会话一次性丢进 Prompt，而必须做记忆分层？
@@ -580,7 +580,7 @@
     A: 基于“异步事件队列 + 离线工作池（Worker Pool）”的解耦架构。用户在前台交互时，主线程只负责将原始交互日志以事件形式快速推入消息队列（如 Redis Stream / Kafka），并在本地仅更新轻量级的计数器与短期工作内存，主线程毫秒级响应用户。由独立的后台 Worker 服务负责消费事件队列，在智能体处于空闲间隙（Idle Window）或当累积重要度达到阈值时，在后台启动轻量级高吞吐模型执行反思提纯与知识图谱的合并更新。完成后将生成的结构化记忆原子性写回数据库，实现用户交互与记忆提纯的完全非阻塞解耦。...
 
 ### [Agent 执行循环与状态机设计：从 ReAct 到确定性控制流](https://blog.llmgo.top/articles/agent-loop-state-machine/)
-- 发布日期: 2026-09-20 | 标签: 状态机设计 | 预计阅读: 预计阅读 24 分钟 | 字数: 约 5976 字
+- 发布日期: 2026-09-20 | 标签: 状态机设计 | 预计阅读: 预计阅读 25 分钟 | 字数: 约 6143 字
 - 概述: 为什么单纯的 Prompt 链与自由 ReAct 无法支撑生产级系统？深度拆解 Agent 执行循环的四大失效模式、基于有限状态机 (FSM) 的图控流设计、Tool Calling 容错降级与熔断器机制，并提供生产级状态机实战代码。
 - 核心 FAQ 解答:
   * Q: Q1: 既然大模型已经具备强大的自主推理能力，为什么不在 Agent 中直接使用全自主动态循环（Autonomous Loop），而要用状态机强制限制状态流转？
@@ -591,7 +591,7 @@
     A: 基于“持久化检查点（Persistent Checkpoint）+ 异步事件驱动”设计。当状态机路由至 HumanInTheLoop 节点时，引擎将当前的 AgentState 进行 JSON 序列化并写入持久化数据库（如 PostgreSQL / Redis），记录对应的 session_id 与 checkpoint_id，随后立即将 Worker 线程/协程释放回进程池，避免产生挂起阻塞。系统向管理员端（如企业微信、Slack 或内部审批系统）推送带回调 Webhook 的审批卡片。当人工点击“批准”或“驳回”时，Webhook 接收服务根据 checkpoint_id 反序列化取出完整...
 
 ### [突破 10 万 Star 的 Browser-use 架构深度剖析：DOM 树提纯、视觉定位与生产级网页 Agent 实战](https://blog.llmgo.top/articles/browser-use-agent-architecture/)
-- 发布日期: 2026-09-18 | 标签: 浏览器智能体 | 预计阅读: 预计阅读 15 分钟 | 字数: 约 3525 字
+- 发布日期: 2026-09-18 | 标签: 浏览器智能体 | 预计阅读: 预计阅读 15 分钟 | 字数: 约 3688 字
 - 概述: 为什么传统 Selenium/Playwright 脚本在动态前端下频频崩溃？深度拆解斩获 10 万+ GitHub Star 的现象级项目 Browser-use 的底层架构：DOM 树智能提纯降噪、Set-of-Mark (SoM) 视觉坐标定位、状态机闭环容错，并手把手构建一个可生产落地的企业级网页自动化智能体。
 - 核心 FAQ 解答:
   * Q: Q1: Browser-use 每步都需要上传截图，会不会导致 Token 费用失控？
@@ -602,7 +602,7 @@
     A: 完全支持。在生产环境中，最推荐的部署架构是将其封装在轻量级 Linux Docker 容器内，运行 Xvfb（虚拟帧缓冲）来虚拟出屏幕显示设备。这样既能保证纯无头环境的高并发部署，又能保留完整的截图多模态视觉感知能力。...
 
 ### [SGLang 与 vLLM 架构对比：前缀缓存、结构化输出与评测方法](https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/)
-- 发布日期: 2026-09-18 | 标签: 引擎架构 | 预计阅读: 预计阅读 6 分钟 | 字数: 约 1303 字
+- 发布日期: 2026-09-18 | 标签: 引擎架构 | 预计阅读: 预计阅读 6 分钟 | 字数: 约 1480 字
 - 概述: 比较 SGLang RadixAttention 与 vLLM APC 的前缀复用机制、结构化输出和部署基线，并给出控制变量、冷暖缓存及延迟吞吐的可复现评测方法。
 - 核心 FAQ 解答:
   * Q: Q1: SGLang 的前缀树一定比 vLLM APC 命中率高吗？
@@ -613,7 +613,7 @@
     A: 没有。本文提供来源可核查的机制与实验设计；上线选择需要保留可复现日志的本地评测。...
 
 ### [投机采样 (Speculative Decoding) 生产实操：从 Draft Model 到 EAGLE-3 动态推测树实现 3x~5x 无损加速](https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/)
-- 发布日期: 2026-09-18 | 标签: 投机采样 | 预计阅读: 预计阅读 14 分钟 | 字数: 约 3373 字
+- 发布日期: 2026-09-18 | 标签: 投机采样 | 预计阅读: 预计阅读 15 分钟 | 字数: 约 3558 字
 - 概述: 大模型解码阶段的核心物理瓶颈是什么？全面解密投机采样（Speculative Decoding）的数学无损证明、拒绝采样检验机制，深入剖析从双模型投机、Medusa 到清华开源爆款 EAGLE-2/3 动态自适应推测树的架构演进，并提供在 vLLM 与 SGLang 中开启生产级 3x~5x 加速的实操配置。
 - 核心 FAQ 解答:
   * Q: Q1: 投机采样是否需要重新训练原始大模型？
@@ -624,7 +624,7 @@
     A: 实际加速比严格取决于当前业务 Prompt 的接受率 $\alpha$。在编程语言生成（Python/Java 具有极强的语法结构规律）和结构化 JSON 提取中，接受率通常高达 85% 以上，加速可达 4x 甚至更高；但在文学创作、高温度（Temperature $\ge 1.0$）的开放式对话中，文本熵极高，接受率可能跌至 50% 甚至更低，此时实际加速比通常在 1.8x~2.2x 之间。...
 
 ### [推理时扩展 (Test-Time Compute) 与 GRPO 强化学习实战：从 PPO 到无 Critic 策略优化](https://blog.llmgo.top/articles/test-time-compute-grpo/)
-- 发布日期: 2026-09-18 | 标签: 强化学习 | 预计阅读: 预计阅读 17 分钟 | 字数: 约 4013 字
+- 发布日期: 2026-09-18 | 标签: 强化学习 | 预计阅读: 预计阅读 17 分钟 | 字数: 约 4214 字
 - 概述: 深入剖析从预训练 Scaling Law 向推理时算力扩展 (Test-Time Scaling) 的范式转移。全面拆解 DeepSeek-R1 核心的 GRPO 组相对策略优化数学推导、无 Critic 架构优势、长思维链自我反思涌现机制，并提供完整的极简实战代码。
 - 核心 FAQ 解答:
   * Q: Q1: 为什么 GRPO 在没有 Critic 模型的情况下依然能够收敛？
@@ -635,7 +635,7 @@
     A: DPO 属于离线监督式偏好学习（Offline），依赖预先收集固定的正负样本对 $(y_w, y_l)$，模型无法在探索过程中发现超出静态数据集以外的全新推理路径；而 GRPO 属于在线强化学习（Online Exploration），每一轮更新都由模型实时生成候选采样并由规则环境即时打分，因而能够探索并演化出自发反思与自我纠错的新策略。...
 
 ### [2026 DeepSeek-V4 与 Kimi K3 部署指南：权重精度、显存预算与集群验证](https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/)
-- 发布日期: 2026-09-07 | 标签: 集群部署 | 预计阅读: 预计阅读 7 分钟 | 字数: 约 1709 字
+- 发布日期: 2026-09-07 | 标签: 集群部署 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1874 字
 - 概述: 核对 DeepSeek-V4-Pro 与 Kimi K3 原生权重格式、逐卡显存预算、vLLM 分布式参数和官方启动配方，并用可持续吞吐约束私有化成本估算。
 - 核心 FAQ 解答:
   * Q: Q1: 32 张 H100 能否部署这两个模型？
@@ -646,7 +646,7 @@
     A: 不是。需比较相近任务质量和 SLA 下的有效吞吐、利用率、运维与扩容成本。公开模型间的选型背景见 [国产模型比较](/articles/domestic-llm-comparison-2026/)。...
 
 ### [2026 国产大模型比较：Kimi K3、GLM-5.3 与 DeepSeek-V4 工程选型](https://blog.llmgo.top/articles/domestic-llm-comparison-2026/)
-- 发布日期: 2026-09-07 | 标签: 国产大模型 | 预计阅读: 预计阅读 6 分钟 | 字数: 约 1281 字
+- 发布日期: 2026-09-07 | 标签: 国产大模型 | 预计阅读: 预计阅读 6 分钟 | 字数: 约 1430 字
 - 概述: 依据官方模型卡比较 Kimi K3、GLM-5.3 与 DeepSeek-V4-Pro 的架构、同版本基准和原生量化格式，提供长文档、终端排障与仓库修改的评测方案。
 - 核心 FAQ 解答:
   * Q: Q1: Terminal-Bench 3.0 得分低是否代表模型变弱？
@@ -668,7 +668,7 @@
     A: 等待 API 超时不能证明远程进程停止。必须执行清理并验证状态，保留运行 ID，在 daemon 断连等故障下由独立回收器继续处理。...
 
 ### [Kimi KDA、DeepSeek MLA 与 V4 CSA/HCA：长上下文缓存原理与显存估算](https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/)
-- 发布日期: 2026-09-07 | 标签: 架构演进 | 预计阅读: 预计阅读 4 分钟 | 字数: 约 981 字
+- 发布日期: 2026-09-07 | 标签: 架构演进 | 预计阅读: 预计阅读 5 分钟 | 字数: 约 1144 字
 - 概述: 区分 KDA 循环状态、MLA 潜变量缓存与 DeepSeek-V4 CSA/HCA 序列压缩，结合 Kimi K3 混合层结构推导显存估算边界与可比较的测试方法。
 - 核心 FAQ 解答:
   * Q: Q1: MLA 或 KDA 是否直接消除了全部 KV Cache？
@@ -710,7 +710,7 @@
     A: 因为每一次失败尝试都会被追加到上下文中，导致上下文污染并放大模型的错误偏见。通过Loop工程的独立裁判(Checker)机制隔离上下文，并设置安全闸门，可以有效阻断死循环。...
 
 ### [Agent 开发中的 Tool Use 进阶：动态发现、沙箱隔离与错误恢复](https://blog.llmgo.top/articles/advanced-agent-tool-use-and-function-calling/)
-- 发布日期: 2026-06-16 | 标签: 工具调用 | 预计阅读: 预计阅读 6 分钟 | 字数: 约 1348 字
+- 发布日期: 2026-06-16 | 标签: 工具调用 | 预计阅读: 预计阅读 7 分钟 | 字数: 约 1528 字
 - 概述: 实现 Agent 动态工具检索、MCP 初始化与分页发现、gVisor 容器执行及有限重试，重点解释超时后清理、错误分类与示例的实际边界。
 - 核心 FAQ 解答:
   * Q: Q1: gVisor 能保证代码绝不逃逸吗？
@@ -721,7 +721,7 @@
     A: 不足。工具选择影响上下文，权限检查必须在执行端实施。支付、发信等有副作用的操作还需要人工审批或业务幂等策略。 依据：[MCP 生命周期](https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle)、[Python SDK](https://github.com/modelcontextprotocol/python-sdk)、[Docker SDK wait](https://docker-py.readthedocs.io/en/stable/containers.html)、[gVisor 安全模型](...
 
 ### [从零手搓轻量级 Agent 框架：基于状态机与事件流的设计模式](https://blog.llmgo.top/articles/build-lightweight-agent-framework/)
-- 发布日期: 2026-06-16 | 标签: 架构设计 | 预计阅读: 预计阅读 6 分钟 | 字数: 约 1352 字
+- 发布日期: 2026-06-16 | 标签: 架构设计 | 预计阅读: 预计阅读 7 分钟 | 字数: 约 1513 字
 - 概述: 从零实现 Python Agent 状态机：通过 SQLite 保存审批检查点，按挂起节点恢复、拒绝重复审批，并用异步事件流暴露执行过程和步数预算。
 - 核心 FAQ 解答:
   * Q: Q1: 拒绝审批后会不会继续执行工具？
@@ -732,7 +732,7 @@
     A: 不能自动保证。检查点记录控制流，外部系统的写入需要独立的幂等与事务设计。工具执行和异常恢复见 [Tool Use 进阶](/articles/advanced-agent-tool-use-and-function-calling/)。 依据：[LangGraph 持久化](https://docs.langchain.com/oss/python/langgraph/persistence)、[Temporal Activity 幂等性](https://docs.temporal.io/activity-definition)。...
 
 ### [多 Agent 协作系统中的通信协议与并发控制实践](https://blog.llmgo.top/articles/multi-agent-collaboration-and-concurrency/)
-- 发布日期: 2026-06-16 | 标签: 多智能体 | 预计阅读: 预计阅读 6 分钟 | 字数: 约 1336 字
+- 发布日期: 2026-06-16 | 标签: 多智能体 | 预计阅读: 预计阅读 7 分钟 | 字数: 约 1507 字
 - 概述: 用 Python asyncio 实现多 Agent 邮箱与消息总线，演示独立消息副本、投递背压、Actor 停机、CAS 文档提交和令牌桶限流。
 - 核心 FAQ 解答:
   * Q: Q1: `frozen=True` 是否足以实现不可变消息？
@@ -774,7 +774,7 @@
     A: 首要原则是“先写测试再写实现（TDD）”并强制执行“只读规划（Plan Mode）”。在第一轮提示中明确禁止 AI 生成任何实现代码，仅要求其产出包含修改文件清单与依赖分析的 PLAN.md；待人工审查确认边界后，再启动独立会话分块执行代码修改并运行测试，避免大范围无约束扩散。...
 
 ### [拒绝榜单刷分：如何构筑契合业务的 LLM 评估体系](https://blog.llmgo.top/articles/llm-evaluation-guide/)
-- 发布日期: 2026-04-22 | 标签: 业务评测 | 预计阅读: 预计阅读 13 分钟 | 字数: 约 3118 字
+- 发布日期: 2026-04-22 | 标签: 业务评测 | 预计阅读: 预计阅读 14 分钟 | 字数: 约 3278 字
 - 概述: 不再迷恋堆砌代码，建立大模型评估思维才是核心。本文深度剖析 LLM-as-a-Judge 的底层偏差、Ragas 算分的数学机制，以及如何用概率思维重塑 CI/CD 防线。
 - 核心 FAQ 解答:
   * Q: Q1: 通用榜单（如 MMLU、GSM8k）高分在企业垂直业务落地中有多大参考价值？
@@ -807,7 +807,7 @@
     A: 短期内全盘替代的可能性极低，但混合架构（Hybrid Attention-SSM）已在长文本与端侧领域形成实质性突破。Transformer 凭借强大的 KV Cache 生态与成熟的底层算子库占据坚固的工业生态位，而新架构主要解决超长序列的 $O(1)$ 推理显存瓶颈；关注前沿落地表现可参考 [2026 年主流大模型横评](/articles/model-comparison-2026/) 中的实际工程选型建议。 ---...
 
 ### [vLLM 在线推理服务实战：从架构原理到 Token 计费，一文搞定生产部署](https://blog.llmgo.top/articles/vllm-serving-guide/)
-- 发布日期: 2026-04-14 | 标签: 服务部署 | 预计阅读: 预计阅读 39 分钟 | 字数: 约 9701 字
+- 发布日期: 2026-04-14 | 标签: 服务部署 | 预计阅读: 预计阅读 40 分钟 | 字数: 约 9840 字
 - 概述: 深入浅出解析 vLLM 核心架构（PagedAttention、连续批处理、APC 前缀缓存、推测解码），面向在线推理服务场景，手把手教你搭建 OpenAI 兼容 API、调优性能参数、搭建 Token 计费体系。附完整 Docker 部署方案与 Prometheus 监控配置。
 - 核心 FAQ 解答:
   * Q: Q1: vLLM 启动时报错 CUDA out of memory (OOM) 怎么排查？
@@ -829,7 +829,7 @@
     A: 此类错误绝大多数发生在系统执行自动补丁更新之后。核心排查顺序为：先验证宿主机 nvidia-container-toolkit 是否已通过 nvidia-ctk runtime configure --runtime=docker 注入 Docker 守护进程配置并重启服务；再确认宿主机 Linux 内核是否发生静默升级，导致旧内核下的预编译驱动模块无法被新内核加载。如果显卡显存处于极限吃紧状态，也可参考 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 压缩模型显存，避免容器初始化分配显存失败。 ---...
 
 ### [大模型量化精度全景图：从 FP32 到 1-bit，精度损失到底有多大？](https://blog.llmgo.top/articles/quantization-precision-guide/)
-- 发布日期: 2026-03-31 | 标签: 量化理论 | 预计阅读: 预计阅读 7 分钟 | 字数: 约 1663 字
+- 发布日期: 2026-03-31 | 标签: 量化理论 | 预计阅读: 预计阅读 8 分钟 | 字数: 约 1820 字
 - 概述: 区分 FP8、INT8、INT4、NF4 的权重、激活与 KV 量化，解释显存预算、加速条件和校准差异，并给出准确率、PPL 与业务验收的可复现评估方法。
 - 核心 FAQ 解答:
   * Q: Q1: 8-bit 是否一定无损，4-bit 是否一定损失 1%～5%？
@@ -851,7 +851,7 @@
     A: 严禁采用简单的全量历史滑动窗口截断，这会导致关键系统指令或早期事实丢失。推荐采用分级治理：工具调用结果及时摘要化、利用 Working Memory 显式沉淀已验证结论、对早期非核心轮次进行周期性压缩归纳（Digest）。更系统化的上下文治理方案可参阅 [上下文工程全指南](/articles/context-engineering-guide/)。...
 
 ### [MCP 协议深度解析：AI 的「USB-C 接口」](https://blog.llmgo.top/articles/mcp-guide/)
-- 发布日期: 2026-03-12 | 标签: MCP 协议 | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4507 字
+- 发布日期: 2026-03-12 | 标签: MCP 协议 | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4678 字
 - 概述: 从架构原理到实战开发，完整解析 Model Context Protocol。含 Python SDK 实战、安全机制、生态对比。
 - 核心 FAQ 解答:
   * Q: Q1: MCP 和传统 API 有什么本质区别？
@@ -862,7 +862,7 @@
     A: MCP 协议本身运行在 JSON-RPC 2.0 之上，规范建议实现端引入基于传输层的安全认证（如针对 HTTP/SSE 服务的 OAuth 2.1 鉴权扩展），并建议宿主客户端在执行高危 Tool 前设计人工确认环节（Human-in-the-loop）。但需要明确：OAuth 与人机确认属于实现层的安全建议与控制实践，并非所有 MCP 传输模式内置强制的协议级保证。在生产落地时，宿主环境必须在操作系统层实现沙盒隔离（如 Docker/gVisor），严格审计 Tool 的执行白名单与参数边界，防范提示词注入引发的未授权数据泄露。...
 
 ### [Skills 深度解析：给 AI 编程助手装上「专业大脑」](https://blog.llmgo.top/articles/skills-guide/)
-- 发布日期: 2026-03-12 | 标签: Skills 体系 | 预计阅读: 预计阅读 21 分钟 | 字数: 约 5194 字
+- 发布日期: 2026-03-12 | 标签: Skills 体系 | 预计阅读: 预计阅读 22 分钟 | 字数: 约 5348 字
 - 概述: 从核心原理到跨平台实战，完整解析 AI 编程助手的 Skills 系统。涵盖 SKILL.md 机制、六大平台对比、实战编写指南与最佳实践。
 - 核心 FAQ 解答:
   * Q: Q1: Skills 与传统 System Prompt 的本质区别是什么？
@@ -902,7 +902,7 @@
     A: 通过结合 Redis持久化机制与分布式的任务编排引擎（如 Temporal），可以使 Agent 具备极强的并发处理能力和容灾恢复能力。这比传统的单体同步架构更稳定。...
 
 ### [RAG 检索增强生成实战：企业级检索策略与高并发工程最佳实践](https://blog.llmgo.top/articles/rag-in-practice/)
-- 发布日期: 2026-03-03 | 标签: RAG 检索 | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4486 字
+- 发布日期: 2026-03-03 | 标签: RAG 检索 | 预计阅读: 预计阅读 19 分钟 | 字数: 约 4648 字
 - 概述: 从向量数据库选型到 Embedding 策略，深度剖析 Naive RAG、混合检索、HyDE 与 GraphRAG 架构选型矩阵，总结 7 大企业级检索增强生成最佳实践，含 Pinecone 与 Weaviate 性能实测。
 - 核心 FAQ 解答:
   * Q: Q1: 如何科学选型和使用检索增强生成策略？
@@ -913,7 +913,7 @@
     A: 遇到检索不准确的情况，应优先检查文本切分策略与 Embedding 模型的匹配性。对于复杂的企业级数据，引入多向量检索和基于 RRF 算法的混合搜索能显著提升最终的召回率。...
 
 ### [2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro](https://blog.llmgo.top/articles/model-comparison-2026/)
-- 发布日期: 2026-03-01 | 标签: 模型横评 | 预计阅读: 预计阅读 6 分钟 | 字数: 约 1475 字
+- 发布日期: 2026-03-01 | 标签: 模型横评 | 预计阅读: 预计阅读 7 分钟 | 字数: 约 1625 字
 - 概述: 比较 GPT-5.4、Claude Opus/Sonnet 4.6 与 Gemini 3.1 Pro 的 API 能力、Token 价格和工程边界，给出可核验的调用示例、评测方法与自建成本公式。
 - 核心 FAQ 解答:
   * Q: Q1: 哪个模型代码能力最强？
@@ -933,7 +933,7 @@
     A: 多模态模型通常基于 Vision Transformer (ViT) 将图片切割为 Patch。高分辨率图像会导致 Token 消耗成倍增加，因此建议在后端执行降采样，以平衡成本和解析精度。...
 
 ### [大模型微调全流程指南：底层工作原理、高价值落地用例与生产实战](https://blog.llmgo.top/articles/fine-tuning-guide/)
-- 发布日期: 2026-02-25 | 标签: 全流程微调 | 预计阅读: 预计阅读 17 分钟 | 字数: 约 4044 字
+- 发布日期: 2026-02-25 | 标签: 全流程微调 | 预计阅读: 预计阅读 17 分钟 | 字数: 约 4195 字
 - 概述: 深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。
 - 核心 FAQ 解答:
   * Q: Q1: 通俗解释大模型微调的底层工作机制是什么？
@@ -946,7 +946,7 @@
 ## English Articles Technical FAQ & Key Takeaways
 
 ### [Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA](https://blog.llmgo.top/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/)
-- Date: 2026-10-05 | Tag: Production Ops & NCCL Tuning | Read: 8 min read | Words: 1829 words
+- Date: 2026-10-05 | Tag: Production Ops & NCCL Tuning | Read: 8 min read | Words: 1899 words
 - Summary: Production InfiniBand cluster operations: MLNX_OFED driver stacks, OpenSM high availability, ibdiagnet fabric health auditing, and NCCL GPUDirect RDMA tuning.
 - Key FAQ Insights:
   * Q: Q1: When running `nccl-tests`, how do you confirm whether GPUDirect RDMA has silently fallen back to host memory staging?
@@ -957,7 +957,7 @@
     A: InfiniBand's in-band priority arbitration and single-master transaction semantics. In InfiniBand fabrics, Subnet Management Packets (SMP) travel in-band directly across the data fabric. 1. Periodic Master Heartbeats: The Master SM (configured with priority 15) broadcasts heartbeat sweeps across the ...
 
 ### [InfiniBand AI Cluster Networking in Practice: Fat-Tree Topologies, Rail-Optimized Architecture, Adaptive Routing (AR), and In-Network Reduction (SHARP)](https://blog.llmgo.top/en/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/)
-- Date: 2026-10-04 | Tag: Fat-Tree & Adaptive Routing | Read: 8 min read | Words: 1921 words
+- Date: 2026-10-04 | Tag: Fat-Tree & Adaptive Routing | Read: 8 min read | Words: 1987 words
 - Summary: AI cluster fabric topologies: Non-blocking Fat-Trees, Rail-Optimized cabling, Adaptive Routing (AR), SHARP in-network aggregation, and congestion mitigation.
 - Key FAQ Insights:
   * Q: Q1: Why does the Rail-Optimized topology accelerate Tensor Parallelism (TP) and Data Parallelism (DP) in distributed LLM training?
@@ -990,7 +990,7 @@
     A: Root Cause: Bypassing sk_buff allocation and minimizing kernel context. - XDP Performance: XDP processes raw memory pointers (xdp_buff) directly from driver DMA buffers before the kernel allocates metadata structures, processing packets in nanoseconds via JIT-compiled bytecode; - XDP vs DPDK Trade-O...
 
 ### [RDMA High-Performance Networking Foundations: Kernel Bypass, Zero-Copy, Queue Pairs, and Lossless RoCEv2 (PFC/ECN) Architecture](https://blog.llmgo.top/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/)
-- Date: 2026-10-02 | Tag: RDMA & RoCEv2 | Read: 9 min read | Words: 2051 words
+- Date: 2026-10-02 | Tag: RDMA & RoCEv2 | Read: 9 min read | Words: 2124 words
 - Summary: RDMA high-performance networking: Kernel bypass, hardware zero-copy, Queue Pair ibverbs verbs, and lossless RoCEv2 with 802.1Qbb PFC and DCQCN congestion control.
 - Key FAQ Insights:
   * Q: Q1: What causes PFC Deadlock, and how do modern lossless fabrics prevent it?
@@ -1001,7 +1001,7 @@
     A: 1. Flow Control Mechanism:    - RoCEv2 runs over lossy Ethernet and relies on reactive PFC Pause frames, which react to congestion after buffers fill, carrying deadlock risks;    - InfiniBand employs proactive Credit-Based Link Flow Control. A sender transmits only if it holds buffer credits explici...
 
 ### [Modern Data Center Network Architecture First Principles: Clos Topologies, Leaf-Spine Fabrics, BGP Underlay, and EVPN-VXLAN Large Layer-2 Virtualization](https://blog.llmgo.top/en/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/)
-- Date: 2026-10-01 | Tag: Datacenter & Leaf-Spine | Read: 10 min read | Words: 2281 words
+- Date: 2026-10-01 | Tag: Datacenter & Leaf-Spine | Read: 10 min read | Words: 2353 words
 - Summary: First-principles guide to datacenter networking: Clos topologies, 2-Tier/3-Tier Leaf-Spine fabrics, RFC 7938 eBGP Underlay, ECMP hashing, and EVPN-VXLAN large Layer-2 Overlay.
 - Key FAQ Insights:
   * Q: Q1: Why do hyperscale data center Underlays favor eBGP over OSPF or IS-IS?
@@ -1034,7 +1034,7 @@
     A: Root Cause: Stateful NAT drop policies on unsolicited inbound traffic. Unless an internal host initiates an outbound session, the router's conntrack table contains no matching entry for external IP addresses. When a remote peer sends unsolicited packets to your public IP, your router drops them as p...
 
 ### [TCP Congestion Control Evolution & High-Performance Transport: From Reno and Cubic to BBR Mathematical Models, and HTTP/2 to HTTP/3 (QUIC)](https://blog.llmgo.top/en/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/)
-- Date: 2026-09-30 | Tag: Congestion Control & QUIC | Read: 8 min read | Words: 1987 words
+- Date: 2026-09-30 | Tag: Congestion Control & QUIC | Read: 9 min read | Words: 2056 words
 - Summary: TCP congestion control evolution: loss-based Reno, Linux default Cubic polynomial curves, Google BBR pacing models, and HTTP/3 QUIC 0-RTT transport.
 - Key FAQ Insights:
   * Q: Q1: Does BBR require fq?
@@ -1133,7 +1133,7 @@
     A: Root Cause: This error is triggered by Kubernetes' Optimistic Concurrency Control (OCC) based on etcd resourceVersion. When a controller fetches an object with revision 100 and prepares a mutation, another agent (e.g., Kubelet or HPA) may commit an intermediate mutation updating the revision to 101....
 
 ### [Hacking the Kubernetes Control Plane: WatchCache Internals, Aggregated APIServers, APF Shuffle Sharding, and 10k-Node etcd Sharding](https://blog.llmgo.top/en/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/)
-- Date: 2026-09-25 | Tag: Control Plane Customization | Read: 7 min read | Words: 1653 words
+- Date: 2026-09-25 | Tag: Control Plane Customization | Read: 7 min read | Words: 1722 words
 - Summary: Advanced Kubernetes control plane internals: Aggregated API Servers, API Priority and Fairness (APF) flow control, CRD scaling limits, and etcd performance tuning.
 - Key FAQ Insights:
   * Q: Q1: How does resourceVersion affect high-concurrency queries?
@@ -1155,7 +1155,7 @@
     A: Liveness probes evaluate process health locally within a node; they cannot distinguish between container failure and an asymmetric network partition. If a primary node becomes isolated from the control plane while remaining reachable by local clients, promoting a secondary node without fencing cause...
 
 ### [2026 AI Computing Infrastructure: Kubernetes GPU Operator, MIG Partitioning, Topology-Aware Scheduling, and Auto-scaling Inference Engines](https://blog.llmgo.top/en/articles/k8s-gpu-operator-ai-inference-scheduling/)
-- Date: 2026-09-25 | Tag: AI GPU Scheduling | Read: 9 min read | Words: 2153 words
+- Date: 2026-09-25 | Tag: AI GPU Scheduling | Read: 9 min read | Words: 2229 words
 - Summary: AI infrastructure on Kubernetes: NVIDIA GPU Operator automation, MIG slicing, Kubelet Topology Manager NUMA alignment, Dynamic Resource Allocation, and KEDA scaling.
 - Key FAQ Insights:
   * Q: Q1: How does vLLM VRAM preallocation relate to Kubernetes OOM?
@@ -1166,7 +1166,7 @@
     A: No. ResourceClaims and driver-published device attributes can express richer selection criteria, but available properties, cross-device constraints, and allocation behavior depend on Kubernetes and driver versions. Verify that GPU/NIC drivers expose the required topology and validate scheduling and ...
 
 ### [Kubernetes Networking Panorama: CNI Specification, Calico BGP, Cilium eBPF, and Gateway API Architecture](https://blog.llmgo.top/en/articles/k8s-networking-cni-cilium-ebpf-gateway-api/)
-- Date: 2026-09-25 | Tag: K8s Networking | Read: 9 min read | Words: 2068 words
+- Date: 2026-09-25 | Tag: K8s Networking | Read: 9 min read | Words: 2138 words
 - Summary: Kubernetes CNI networking guide: Flannel vs Calico topologies, Cilium eBPF socket redirection to bypass kube-proxy, and modern Gateway API traffic governance.
 - Key FAQ Insights:
   * Q: Q1: Why do large packets (such as TLS handshakes or bulk uploads) experience intermittent timeouts or silent drops on VXLAN Overlay networks?
@@ -1188,7 +1188,7 @@
     A: Key Reasons: 1. Minimizes 409 Conflict Errors: Generic r.Update() commits both spec and metadata fields. If a user modifies the spec concurrently, the controller hits an optimistic locking conflict. Calling r.Status().Update() targets only status subresource paths, drastically reducing collision pro...
 
 ### [Hacking Kubernetes Nodes & Runtimes: Breaking PLEG Bottlenecks, NRI Plugins, Kata/gVisor Sandboxes, and cgroups v2 Tuning](https://blog.llmgo.top/en/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/)
-- Date: 2026-09-25 | Tag: Node Runtime Customization | Read: 9 min read | Words: 2054 words
+- Date: 2026-09-25 | Tag: Node Runtime Customization | Read: 9 min read | Words: 2124 words
 - Summary: Kubernetes node runtime internals: Kubelet syncLoop, Evented PLEG, containerd Node Resource Interface (NRI) plugins, Kata microVMs, and gVisor sandboxing.
 - Key FAQ Insights:
   * Q: Q1: How does Evented PLEG reduce traditional PLEG overhead?
@@ -1221,7 +1221,7 @@
     A: - Delete Policy: When a PVC is deleted, the bound PV and the underlying cloud disk asset are automatically destroyed. - Retain Policy: When a PVC is deleted, the underlying PV transitions to the Released state without deleting the physical disk, preserving data. The volume cannot be rebound until an...
 
 ### [Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking](https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/)
-- Date: 2026-09-24 | Tag: Batching & Scheduling | Read: 15 min read | Words: 3531 words
+- Date: 2026-09-24 | Tag: Batching & Scheduling | Read: 15 min read | Words: 3613 words
 - Summary: High-throughput LLM serving: Orca iteration-level continuous batching, head-of-line blocking mitigation, and Chunked Prefill with decode piggybacking in vLLM.
 - Key FAQ Insights:
   * Q: Q1: Since Chunked Prefill slightly increases overall prefill wall-clock time, are there production scenarios where it should be disabled?
@@ -1232,7 +1232,7 @@
     A: Chunked Prefill resolves the prefill/decode conflict within a single physical node, but it still forces both phases to share the same physical GPUs, HBM buses, and SM clusters: 1. Hardware Mismatch: Prefill demands peak FP16/FP8 FLOPs (e.g., compute-dense accelerators like H100 SXM), whereas Decode ...
 
 ### [Evolution of Attention Kernels: From FlashAttention-1/2/3 SRAM Tiling to FlashInfer Unified Heterogeneous Serving](https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/)
-- Date: 2026-09-24 | Tag: Kernel Optimization | Read: 13 min read | Words: 3083 words
+- Date: 2026-09-24 | Tag: Kernel Optimization | Read: 13 min read | Words: 3157 words
 - Summary: Deep dive into GPU attention kernels: FlashAttention-1 online softmax, FA-2 parallelism, FA-3 Hopper TMA asynchronous pipelines, and FlashInfer variable-length batching.
 - Key FAQ Insights:
   * Q: Q1: Why does FlashAttention recompute attention matrices during the backward pass instead of saving them during forward execution? Doesn't this increase total FLOPs?
@@ -1243,7 +1243,7 @@
     A: In floating-point math, $e^x$ overflows quickly. Under FP16 precision, the maximum representable value is approximately $65,504$. If an unnormalized attention score $S_{ij} = q_i \cdot k_j / \sqrt{d}$ exceeds $11$, $e^{11} \approx 59,874$, putting the calculation at immediate risk of overflow (produ...
 
 ### [Production LLM Inference Engines Teardown: vLLM v1 vs. SGLang vs. TensorRT-LLM vs. llama.cpp Internals](https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/)
-- Date: 2026-09-24 | Tag: Inference Engines | Read: 10 min read | Words: 2285 words
+- Date: 2026-09-24 | Tag: Inference Engines | Read: 10 min read | Words: 2362 words
 - Summary: Codebase teardown of top LLM inference engines: vLLM multi-step scheduling, SGLang RadixAttention, TensorRT-LLM in-flight batching, and llama.cpp quantization.
 - Key FAQ Insights:
   * Q: Q1: Why do enterprise Model-as-a-Service (MaaS) platforms often deploy both vLLM and SGLang concurrently?
@@ -1254,7 +1254,7 @@
     A: On Apple Silicon devices (e.g., Mac Studio with M-series chips), the CPU and GPU share a unified pool of high-bandwidth LPDDR memory (achieving 400~800 GB/s bandwidth). In standard PC or data center servers, model weights must be copied from host system RAM across the PCIe bus into discrete GPU HBM ...
 
 ### [From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence](https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/)
-- Date: 2026-09-24 | Tag: Roofline Modeling | Read: 11 min read | Words: 2701 words
+- Date: 2026-09-24 | Tag: Roofline Modeling | Read: 12 min read | Words: 2783 words
 - Summary: Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode.
 - Key FAQ Insights:
   * Q: Q1: If decode is memory-bandwidth bound, why not increase batch size indefinitely to saturate the compute units?
@@ -1265,7 +1265,7 @@
     A: FlashAttention's primary innovation is tiling the attention computation to keep intermediate activations ($S, P$) in fast on-chip SRAM, avoiding $O(N^2)$ reads and writes to slow HBM.  In Prefill, sequence length $N$ is large, resulting in massive $N \times N$ attention matrices. Eliminating quadrat...
 
 ### [Model Architecture Driving Inference Systems: From MHA/GQA to DeepSeek MLA Matrix Absorption and Memory Minimalism](https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/)
-- Date: 2026-09-24 | Tag: Attention Architecture | Read: 11 min read | Words: 2579 words
+- Date: 2026-09-24 | Tag: Attention Architecture | Read: 11 min read | Words: 2663 words
 - Summary: Attention evolution for LLM serving: MHA memory bottlenecks, GQA grouping trade-offs, DeepSeek MLA low-rank latent projections, Decoupled RoPE, and Matrix Absorption.
 - Key FAQ Insights:
   * Q: Q1: Given that MLA reduces KV cache size by over 90% while maintaining accuracy, why hasn't it been universally adopted in models like LLaMA-3 or Mistral? What are the training costs?
@@ -1276,7 +1276,7 @@
     A: While MLA dramatically compresses dynamic KV cache memory, large-scale serving clusters face additional physical baselines: 1. Static Parameter Footprint:    In frontier models like DeepSeek-V3 (671B MoE with 37B active parameters), model weights occupy approximately 671 GB in FP8 (or ~350 GB in 4-b...
 
 ### [MoE Inference Internals: Expert Parallelism (EP), Dynamic Routing Gating, and All-to-All Overlapping](https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/)
-- Date: 2026-09-24 | Tag: MoE & Sparsity | Read: 14 min read | Words: 3330 words
+- Date: 2026-09-24 | Tag: MoE & Sparsity | Read: 14 min read | Words: 3405 words
 - Summary: MoE inference internals: DeepSeek-V3 gating, Expert Parallelism (EP) All-to-All communication, CUTLASS Grouped GEMM kernels, and DualPipe overlap schedules.
 - Key FAQ Insights:
   * Q: Q1: During MoE decode, what happens if an expert on a GPU receives zero tokens? Does it cause crashes or pipeline deadlocks?
@@ -1287,7 +1287,7 @@
     A: Topology-aware placement dictates this choice: - Golden Rule: Confine high-frequency, latency-sensitive Tensor Parallelism (TP) strictly within single-node NVLink domains (900 GB/s bandwidth); assign Expert Parallelism (EP) to inter-node network fabrics (InfiniBand / RoCE). - Across 4 nodes with 8 G...
 
 ### [Memory Virtualization in Inference Engines: PagedAttention and the Elimination of Memory Fragmentation](https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/)
-- Date: 2026-09-24 | Tag: Memory Virtualization | Read: 10 min read | Words: 2298 words
+- Date: 2026-09-24 | Tag: Memory Virtualization | Read: 10 min read | Words: 2377 words
 - Summary: Why did early LLM serving systems waste 60% to 80% of GPU memory? A deep architectural exploration of vLLM's PagedAttention, logical-to-physical block mapping, zero-copy Copy-on-Write sharing, and non-contiguous CUDA attention kernels.
 - Key FAQ Insights:
   * Q: Q1: Should block size be configured to 16 or 32? Why not 1 or 128?
@@ -1298,7 +1298,7 @@
     A: PagedAttention operates orthogonally to architectural optimizations like GQA and MLA:  Architectural innovations like [Kimi KDA and DeepSeek MLA](/en/articles/kimi-kda-deepseek-mla-architecture/) compress the dimension of the key-value representation mathematically, reducing the byte size of each to...
 
 ### [Prefill-Decode (P/D) Disaggregation Architecture: Compute-Memory Decoupling, RDMA Distributed KV Cache Transfer, and Cluster-Scale Pooling](https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/)
-- Date: 2026-09-24 | Tag: Inference Systems | Read: 12 min read | Words: 2935 words
+- Date: 2026-09-24 | Tag: Inference Systems | Read: 13 min read | Words: 3011 words
 - Summary: Prefill-Decode (P/D) Disaggregation architecture: compute vs memory isolation, MLA cross-node bandwidth modeling, GPUDirect RDMA KV transfers, and queuing theory.
 - Key FAQ Insights:
   * Q: Q1: Does P/D disaggregation guarantee higher overall system throughput in all deployments?
@@ -1309,7 +1309,7 @@
     A: Modern systems implement three-tier fault tolerance: 1. Lossless Ethernet via PFC and DCQCN: RoCEv2 Priority Flow Control (PFC) and Data Center Quantized Congestion Notification (DCQCN) minimize buffer overflows and prevent packet loss at the network switch tier; 2. Hardware Timers and Fallback Rero...
 
 ### [Prefix Caching and State Reuse: From Hash Block Addressing to SGLang RadixAttention and Dynamic Tree Eviction](https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/)
-- Date: 2026-09-24 | Tag: Prefix Caching | Read: 11 min read | Words: 2730 words
+- Date: 2026-09-24 | Tag: Prefix Caching | Read: 12 min read | Words: 2807 words
 - Summary: LLM state reuse internals: vLLM hash-chained block caching vs SGLang RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction.
 - Key FAQ Insights:
   * Q: Q1: Since Prefix Caching significantly reduces prefill computation, why does it sometimes lead to high GPU memory utilization or Out-Of-Memory (OOM) errors?
@@ -1320,7 +1320,7 @@
     A: In a single-node configuration, restarting a worker clears its GPU HBM cache, forcing a cold-start recomputation phase. Modern distributed systems mitigate this through multi-tiered architectures: 1. Tiered Memory Hierarchy:    When GPU memory is reclaimed, high-frequency prefix blocks can be offloa...
 
 ### [The Future of LLM Inference: Test-Time Compute, Reasoning Scheduling, and Tiered Cluster Storage](https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/)
-- Date: 2026-09-24 | Tag: Future Architectures | Read: 9 min read | Words: 2151 words
+- Date: 2026-09-24 | Tag: Future Architectures | Read: 9 min read | Words: 2219 words
 - Summary: Inference architectures for reasoning models: Test-Time Compute scaling, MCTS speculative tree scheduling, thinking budget governors, and tiered KV cache pools.
 - Key FAQ Insights:
   * Q: Q1: Does Chunked Prefill become obsolete under extended reasoning models?
@@ -1331,7 +1331,7 @@
     A: No. CXL expands memory capacity; it does not replace HBM. The physical functions of both tiers remain distinct: - HBM remains indispensable: HBM3e/HBM4 delivers $3 \sim 4 \text{ TB/s}$ of memory bandwidth, which is essential to saturate high-throughput decode GEMV operations; - CXL 3.0 provides scal...
 
 ### [AI Agent Memory Architecture: From Working Memory to Episodic Memory & Hierarchical Graph RAG](https://blog.llmgo.top/en/articles/agent-memory-architecture/)
-- Date: 2026-09-21 | Tag: Agent Memory | Read: 11 min read | Words: 2660 words
+- Date: 2026-09-21 | Tag: Agent Memory | Read: 11 min read | Words: 2724 words
 - Summary: Design agent working, episodic, and long-term memory with sourced retrieval concepts, a clearly scoped Python prototype, provenance, ACLs, conflict handling, and deletion.
 - Key FAQ Insights:
   * Q: Q1: With modern LLMs supporting 1M+ token context windows, why decompose memory instead of dumping raw conversation history into prompts?
@@ -1342,7 +1342,7 @@
     A: Through an asynchronous event queue decoupled from the primary request thread. When a user interacts with the system, the primary application thread publishes the interaction event to a message queue (e.g., Redis Streams or Kafka) and updates local in-memory counters, responding to the client in mil...
 
 ### [Agentic Loops & State Machine Design: From ReAct to Deterministic Control Flows](https://blog.llmgo.top/en/articles/agent-loop-state-machine/)
-- Date: 2026-09-20 | Tag: State Machine | Read: 13 min read | Words: 3101 words
+- Date: 2026-09-20 | Tag: State Machine | Read: 13 min read | Words: 3174 words
 - Summary: Why prompt chaining and unconstrained ReAct loops fail in production AI systems. A deep architectural dissection of agent failure modes, Finite State Machine (FSM) graph flows, tool-calling resilience, and circuit breakers with runnable code.
 - Key FAQ Insights:
   * Q: Q1: Given that modern LLMs exhibit impressive autonomous reasoning, why constrain them with rigid state machines rather than using fully autonomous loops?
@@ -1353,7 +1353,7 @@
     A: Through persistent checkpointer serialization coupled with asynchronous event webhooks. When an FSM routes to a HumanInTheLoop node for high-risk approvals, the engine serializes the complete AgentState snapshot to a persistent store (e.g., PostgreSQL or Redis) tagged with a session_id and checkpoin...
 
 ### [Under the Hood of Browser-use (100k+ Stars): DOM Tree Distillation, Vision Grounding, and Production Web Agents](https://blog.llmgo.top/en/articles/browser-use-agent-architecture/)
-- Date: 2026-09-18 | Tag: Browser Agents | Read: 7 min read | Words: 1594 words
+- Date: 2026-09-18 | Tag: Browser Agents | Read: 7 min read | Words: 1659 words
 - Summary: Why do traditional Selenium and Playwright scripts constantly break against modern web frontends? We dissect the architecture of Browser-use, the breakout open-source project with over 100k GitHub stars: DOM tree pruning, Set-of-Mark (SoM) visual coordinate grounding, state machine resilience, and end-to-end production recipes.
 - Key FAQ Insights:
   * Q: Q1: Does capturing screenshots on every step cause token costs to explode?
@@ -1364,7 +1364,7 @@
     A: Yes. In production Kubernetes clusters, the standard deployment pattern packages the agent inside a lightweight Linux container utilizing Xvfb (X Virtual Framebuffer) to emulate a display. This enables headless execution while preserving full screenshot and Set-of-Mark visual grounding capabilities....
 
 ### [SGLang vs vLLM: Prefix Caching, Structured Outputs, and Reproducible Evaluation](https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/)
-- Date: 2026-09-18 | Tag: Engine Architecture | Read: 3 min read | Words: 652 words
+- Date: 2026-09-18 | Tag: Engine Architecture | Read: 3 min read | Words: 723 words
 - Summary: Compare SGLang RadixAttention and vLLM APC, structured-output backends, minimal serving baselines, and reproducible cold/warm-cache latency and throughput evaluation.
 - Key FAQ Insights:
   * Q: Q1: Must a radix tree achieve more cache hits than vLLM APC?
@@ -1375,7 +1375,7 @@
     A: No. It provides sourced mechanisms and an experiment design. Production decisions require local measurements with reproducible logs....
 
 ### [Speculative Decoding in Production: From Draft Models to EAGLE-3 Dynamic Trees for 3x-5x Lossless Acceleration](https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/)
-- Date: 2026-09-18 | Tag: Speculative Decoding | Read: 6 min read | Words: 1471 words
+- Date: 2026-09-18 | Tag: Speculative Decoding | Read: 7 min read | Words: 1555 words
 - Summary: Why is autoregressive LLM decoding fundamentally bottlenecked by memory bandwidth? We dissect the mathematical proof of lossless distribution invariance in speculative decoding, trace its evolution from dual-model drafts to EAGLE-2/3 dynamic draft trees, and provide production configurations in vLLM and SGLang.
 - Key FAQ Insights:
   * Q: Q1: Does speculative decoding require retraining the base model?
@@ -1386,7 +1386,7 @@
     A: Realized acceleration is strictly bounded by the empirical acceptance rate $\alpha$. In programming languages (Python/Java) and JSON extraction where syntax is highly structured, acceptance rates exceed 85%, yielding 4x+ speedups. In open-ended conversational domains with high sampling temperatures ...
 
 ### [Test-Time Compute and GRPO in Practice: From PPO to Critic-Free Reinforcement Learning](https://blog.llmgo.top/en/articles/test-time-compute-grpo/)
-- Date: 2026-09-18 | Tag: RL & Reasoning | Read: 8 min read | Words: 1876 words
+- Date: 2026-09-18 | Tag: RL & Reasoning | Read: 8 min read | Words: 1957 words
 - Summary: A deep dive into the paradigm shift from pre-training scaling laws to test-time compute. We deconstruct the mathematical derivation of DeepSeek-R1's Group Relative Policy Optimization (GRPO), critic-free architecture advantages, emergent self-reflection in long reasoning traces, and a complete, reproducible hands-on implementation.
 - Key FAQ Insights:
   * Q: Q1: How does GRPO converge reliably without an explicit Critic network?
@@ -1397,7 +1397,7 @@
     A: DPO (Direct Preference Optimization) is an offline supervised preference algorithm operating on static pairs of chosen and rejected responses $(y_w, y_l)$. It cannot discover novel reasoning pathways absent from the static dataset. GRPO is an active, online reinforcement learning algorithm where the...
 
 ### [DeepSeek-V4 and Kimi K3 Deployment: Precision, GPU Memory and Cluster Validation](https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/)
-- Date: 2026-09-07 | Tag: Cluster Deployment | Read: 4 min read | Words: 794 words
+- Date: 2026-09-07 | Tag: Cluster Deployment | Read: 4 min read | Words: 857 words
 - Summary: Plan DeepSeek-V4-Pro and Kimi K3 deployments using native checkpoint formats, per-rank GPU memory, official vLLM recipes, and throughput-based cost estimates.
 - Key FAQ Insights:
   * Q: Q1: Can 32 H100 GPUs serve both models?
@@ -1408,7 +1408,7 @@
     A: No. Compare equivalent quality and SLA, measured utilization, operations, and capacity expansion. See the [Chinese model comparison](/en/articles/domestic-llm-comparison-2026/)....
 
 ### [Kimi K3 vs GLM-5.3 vs DeepSeek-V4: Architecture, Benchmarks and Deployment](https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/)
-- Date: 2026-09-07 | Tag: Chinese LLMs | Read: 3 min read | Words: 650 words
+- Date: 2026-09-07 | Tag: Chinese LLMs | Read: 3 min read | Words: 722 words
 - Summary: Compare Kimi K3, GLM-5.3, and DeepSeek-V4-Pro with sourced architecture facts, matching benchmark versions, checkpoint formats, and workload evaluation plans.
 - Key FAQ Insights:
   * Q: Q1: Does a lower Terminal-Bench 3.0 score imply regression from 2.1?
@@ -1430,7 +1430,7 @@
     A: No. Perform cleanup and verify state, retain the run ID, and use an independent reaper when daemon communication fails....
 
 ### [Kimi KDA, DeepSeek MLA and V4 CSA/HCA: Long-Context Cache and GPU Memory](https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/)
-- Date: 2026-09-07 | Tag: Architecture Evolution | Read: 2 min read | Words: 485 words
+- Date: 2026-09-07 | Tag: Architecture Evolution | Read: 3 min read | Words: 557 words
 - Summary: Understand KDA recurrent state, MLA latent caches, and DeepSeek-V4 CSA/HCA sequence compression, with explicit memory formulas and reproducible measurement rules.
 - Key FAQ Insights:
   * Q: Q1: Do MLA or KDA eliminate all KV cache?
@@ -1472,7 +1472,7 @@
     A: Because every failed attempt is appended to the context, causing context pollution and amplifying the model's error bias. By isolating the context with Loop Engineering's independent referee (Checker) mechanism and setting safety gates, doom-loops can be effectively blocked....
 
 ### [Advanced Tool Use in Agent Architecture: Dynamic Discovery, Sandboxing, and Self-Healing Recovery](https://blog.llmgo.top/en/articles/advanced-agent-tool-use-and-function-calling/)
-- Date: 2026-06-16 | Tag: Tool Use | Read: 4 min read | Words: 897 words
+- Date: 2026-06-16 | Tag: Tool Use | Read: 4 min read | Words: 967 words
 - Summary: Implement dynamic tool retrieval, MCP initialization and pagination, gVisor container execution, cleanup after timeouts, and bounded recovery with Python examples.
 - Key FAQ Insights:
   * Q: Q1: Does gVisor guarantee that escape is impossible?
@@ -1483,7 +1483,7 @@
     A: No. Authorization belongs at the execution boundary. Side effects also need approval or business idempotency controls. References: [MCP lifecycle](https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle), [Python SDK](https://github.com/modelcontextprotocol/python-sdk), [Docker SDK ...
 
 ### [Building a Lightweight Agent Framework from Scratch: State Machines and Event Streams](https://blog.llmgo.top/en/articles/build-lightweight-agent-framework/)
-- Date: 2026-06-16 | Tag: Architecture | Read: 4 min read | Words: 940 words
+- Date: 2026-06-16 | Tag: Architecture | Read: 5 min read | Words: 1006 words
 - Summary: Build a Python agent state machine with SQLite approval checkpoints, restart recovery, single-use approvals, rejection handling, step budgets, and async events.
 - Key FAQ Insights:
   * Q: Q1: Does rejecting approval execute the tool?
@@ -1494,7 +1494,7 @@
     A: No. Control-flow persistence and external transactions are separate concerns. See [advanced tool execution](/en/articles/advanced-agent-tool-use-and-function-calling/) for execution and recovery boundaries. References: [LangGraph persistence](https://docs.langchain.com/oss/python/langgraph/persisten...
 
 ### [Communication Protocols and Concurrency Control in Multi-Agent Systems](https://blog.llmgo.top/en/articles/multi-agent-collaboration-and-concurrency/)
-- Date: 2026-06-16 | Tag: Multi-Agent | Read: 4 min read | Words: 921 words
+- Date: 2026-06-16 | Tag: Multi-Agent | Read: 4 min read | Words: 993 words
 - Summary: Build asyncio agent mailboxes and a message bus with isolated payload copies, bounded delivery, graceful shutdown, CAS document updates, and token-bucket limiting.
 - Key FAQ Insights:
   * Q: Q1: Is frozen=True enough for immutable messages?
@@ -1536,7 +1536,7 @@
     A: Enforce a strict two-stage protocol: mandate a read-only "Plan Mode" where the assistant first generates a PLAN.md detailing affected files and dependency risks without touching source code. Once you review and approve the plan, execute changes incrementally in isolated sessions verified by determin...
 
 ### [Reject Benchmark Hacking: How to Build an LLM Evaluation System for Your Business (LLM-as-a-Judge)](https://blog.llmgo.top/en/articles/llm-evaluation-guide/)
-- Date: 2026-04-22 | Tag: LLM Evaluation | Read: 7 min read | Words: 1676 words
+- Date: 2026-04-22 | Tag: LLM Evaluation | Read: 7 min read | Words: 1738 words
 - Summary: Cease the obsession with writing more code; shift focus to deep evaluation thinking. We deconstruct LLM-as-a-Judge biases, the mathematics behind metrics, and reshaping CI/CD defenses for probabilistic systems.
 - Key FAQ Insights:
   * Q: Q1: Are high benchmark scores like MMLU meaningful for enterprise business scenarios?
@@ -1569,7 +1569,7 @@
     A: An outright replacement is unlikely in the immediate term, but hybrid architectures (combining Attention with State Space Models) are already capturing critical niches. Transformers enjoy a deeply entrenched ecosystem of hardware-optimized kernels and KV Cache infrastructure, whereas SSMs specifical...
 
 ### [vLLM Online Inference in Production: From Architecture to Token Billing](https://blog.llmgo.top/en/articles/vllm-serving-guide/)
-- Date: 2026-04-14 | Tag: Serving & Deployment | Read: 14 min read | Words: 3499 words
+- Date: 2026-04-14 | Tag: Serving & Deployment | Read: 15 min read | Words: 3559 words
 - Summary: A deep dive into vLLM's core architecture (PagedAttention, continuous batching, APC prefix caching, speculative decoding) for online serving. Covers OpenAI-compatible API setup, performance tuning, token billing systems, and complete Docker deployment with Prometheus monitoring.
 - Key FAQ Insights:
   * Q: Q1: How to troubleshoot CUDA out of memory (OOM) when launching vLLM?
@@ -1591,7 +1591,7 @@
     A: These errors most commonly arise following an automatic host Linux kernel update that disconnects pre-compiled kernel modules from userspace libraries. First, verify that nvidia-ctk runtime configure --runtime=docker has configured the Docker daemon and restart the Docker service. If the host kernel...
 
 ### [LLM Quantization Precision Guide: From FP32 to 1-bit, How Much Quality Do You Actually Lose?](https://blog.llmgo.top/en/articles/quantization-precision-guide/)
-- Date: 2026-03-31 | Tag: Quantization Precision | Read: 4 min read | Words: 814 words
+- Date: 2026-03-31 | Tag: Quantization Precision | Read: 4 min read | Words: 888 words
 - Summary: Understand FP8, INT8, INT4, and NF4 across weights, activations, and KV cache, with complete memory budgets, speed tradeoffs, calibration, and quality evaluation.
 - Key FAQ Insights:
   * Q: Q1: Is eight-bit always lossless and four-bit always 1–5% worse?
@@ -1613,7 +1613,7 @@
     A: Avoid naive sliding-window truncations that discard foundational system instructions or critical historical constraints. Instead, employ hierarchical context hygiene: prune verbose raw tool outputs into compact summaries, persist stable conclusions into dedicated working memory structures, and perio...
 
 ### [MCP Deep Dive: The USB-C Port for AI](https://blog.llmgo.top/en/articles/mcp-guide/)
-- Date: 2026-03-12 | Tag: MCP Protocol | Read: 11 min read | Words: 2583 words
+- Date: 2026-03-12 | Tag: MCP Protocol | Read: 11 min read | Words: 2661 words
 - Summary: From architecture to hands-on development, a complete guide to the Model Context Protocol. Includes Python SDK tutorial, security mechanisms, and ecosystem comparison.
 - Key FAQ Insights:
   * Q: Q1: How does MCP fundamentally differ from traditional APIs?
@@ -1624,7 +1624,7 @@
     A: While MCP provides guidelines for transport-level authorization (such as OAuth 2.1 for HTTP/SSE services) and recommends client-side human-in-the-loop confirmation for high-impact calls, these are implementation-level architectural patterns rather than mandatory wire-protocol guarantees. In producti...
 
 ### [Skills Deep Dive: Give Your AI Coding Assistant a Professional Brain](https://blog.llmgo.top/en/articles/skills-guide/)
-- Date: 2026-03-12 | Tag: Agent Skills | Read: 12 min read | Words: 2894 words
+- Date: 2026-03-12 | Tag: Agent Skills | Read: 12 min read | Words: 2963 words
 - Summary: From core principles to cross-platform practice, a complete guide to the AI coding assistant Skills system. Covers SKILL.md mechanics, six-platform comparison, hands-on writing guide, and best practices.
 - Key FAQ Insights:
   * Q: Q1: What is the fundamental difference between Skills and System Prompts?
@@ -1664,7 +1664,7 @@
     A: By combining Redis persistence mechanisms with distributed task orchestration engines (such as Temporal), Agents can achieve extremely strong concurrent processing and disaster recovery capabilities. This is much more stable than traditional monolithic synchronous architectures....
 
 ### [Retrieval-Augmented Generation (RAG) in Practice: Strategies & Production Best Practices](https://blog.llmgo.top/en/articles/rag-in-practice/)
-- Date: 2026-03-03 | Tag: RAG Architecture | Read: 10 min read | Words: 2351 words
+- Date: 2026-03-03 | Tag: RAG Architecture | Read: 10 min read | Words: 2424 words
 - Summary: A complete guide on how to use retrieval-augmented generation strategies and production best practices. Covers vector databases, semantic chunking, ColBERT reranking, GraphRAG, and automated Ragas evaluation.
 - Key FAQ Insights:
   * Q: Q1: How do I choose and use retrieval-augmented generation strategies effectively?
@@ -1675,7 +1675,7 @@
     A: First, verify the alignment between your semantic chunking strategy and the Embedding model you are using. For complex scenarios, adopting multi-vector retrieval or hybrid search pipelines with Reciprocal Rank Fusion can significantly improve precision....
 
 ### [2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro](https://blog.llmgo.top/en/articles/model-comparison-2026/)
-- Date: 2026-03-01 | Tag: Model Benchmark | Read: 4 min read | Words: 764 words
+- Date: 2026-03-01 | Tag: Model Benchmark | Read: 4 min read | Words: 841 words
 - Summary: Compare GPT-5.4, Claude 4.6, and Gemini 3.1 Pro APIs with sourced capabilities, token prices, SDK examples, fair evaluation rules, and self-hosting cost formulas.
 - Key FAQ Insights:
   * Q: Q1: Which model is strongest at coding?
@@ -1695,7 +1695,7 @@
     A: Multimodal models typically split images into Patches based on Vision Transformers (ViT). High-resolution images lead to massive token consumption, so performing downsampling in the backend is recommended to balance costs and parsing precision....
 
 ### [LLM Fine-Tuning Guide: How It Works, Real-World Use Cases, and Workflows](https://blog.llmgo.top/en/articles/fine-tuning-guide/)
-- Date: 2026-02-25 | Tag: Fine-Tuning | Read: 9 min read | Words: 2204 words
+- Date: 2026-02-25 | Tag: Fine-Tuning | Read: 10 min read | Words: 2271 words
 - Summary: Discover how LLM fine-tuning works under the hood, explore proven enterprise use cases (LoRA, QLoRA, Full Fine-Tuning), and learn end-to-end workflows from data preparation to vLLM serving.
 - Key FAQ Insights:
   * Q: Q1: How does LLM fine-tuning work in simple terms?

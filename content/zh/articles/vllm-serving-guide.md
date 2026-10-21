@@ -17,6 +17,11 @@ featuredStats:
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **生产级配置调优**：详解 `gpu-memory-utilization`（整体显存预算）、`max-model-len` 与 `max-num-seqs` 等核心参数调优逻辑，规避显存溢出 (OOM) 与 KV Cache 剧烈抖动。
+> - **Prometheus 监控落地**：规范使用官方 `vllm:` 指标命名空间，监控 `vllm:kv_cache_usage_perc` 与请求排队水位，搭建企业级弹性扩缩容体系。
+> - **协同加速**：配合 [投机解码 EAGLE](/articles/speculative-decoding-eagle-guide/) 与 [量化选型指南](/articles/quantization-precision-guide/) 可在有限显存下实现吞吐翻倍。
+
 ## 引言：为什么是 vLLM？
 
 2026 年，如果你要在生产环境中部署一个大模型在线推理服务——不管是搭建公司内部的 AI 助手、还是对外售卖 API 的商业化平台——你几乎绑不开一个名字：**vLLM**。

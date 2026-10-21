@@ -1,10 +1,17 @@
 # 智算架构志 (LLM Systems Architecture)
 
-Welcome to **LLM Systems Architecture**, a technical experimental node observing the rapid evolution of Artificial Intelligence and Large Language Model architectures.
+[![Live Site](https://img.shields.io/badge/Live_Site-blog.llmgo.top-6366f1?style=flat-square&logo=google-chrome)](https://blog.llmgo.top/)
+[![Technical SEO](https://img.shields.io/badge/Google_SEO-100%2F100-10b981?style=flat-square&logo=google)](https://blog.llmgo.top/)
+[![Robots.txt](https://img.shields.io/badge/Robots.txt-RFC_9309-blue?style=flat-square)](https://blog.llmgo.top/robots.txt)
+[![IndexNow](https://img.shields.io/badge/IndexNow-Enabled-0ea5e9?style=flat-square)](https://blog.llmgo.top/sitemap.xml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-🌐 **Live Blog:** [blog.llmgo.top](https://blog.llmgo.top/)  
+Welcome to **LLM Systems Architecture**, an engineering research and experimental publication platform tracking the frontier evolution of AI Agents, Inference Engines, and Large Language Model architectures.
+
+🌐 **Live Blog (Chinese):** [blog.llmgo.top](https://blog.llmgo.top/)  
 🌐 **English Portal:** [blog.llmgo.top/en/](https://blog.llmgo.top/en/)  
-📊 **2026 AI Models Benchmark Matrix:** [Frontier Models](https://blog.llmgo.top/models/)
+📊 **2026 Frontier Models Benchmark Matrix:** [Frontier Models](https://blog.llmgo.top/models/)  
+🛠️ **LLM Developer Toolbox:** [Interactive Tools Suite](https://blog.llmgo.top/tools/)
 
 ---
 
@@ -45,14 +52,40 @@ Welcome to **LLM Systems Architecture**, a technical experimental node observing
 * **[AI Agent 记忆系统设计：从工作记忆到分层 Graph RAG](https://blog.llmgo.top/articles/agent-memory-architecture/)** (👉 [English](https://blog.llmgo.top/en/articles/agent-memory-architecture/))
 * **[对抗复合误差的分布式 Agent 编排与量化 Evals 体系](https://blog.llmgo.top/articles/agent-orchestration-evals/)** (👉 [English](https://blog.llmgo.top/en/articles/agent-orchestration-evals/))
 * **[AI 编程驾驭指南：从「帮我写个 XX」到架构编排者](https://blog.llmgo.top/articles/ai-coding-mastery/)** (👉 [English](https://blog.llmgo.top/en/articles/ai-coding-mastery/))
+* **[工具调用与 Function Calling 进阶：从 MCP 自动注册到沙箱执行与自愈循环](https://blog.llmgo.top/articles/advanced-agent-tool-use-and-function-calling/)** (👉 [English](https://blog.llmgo.top/en/articles/advanced-agent-tool-use-and-function-calling/))
+* **[从零构建轻量级 Agent 框架：有限状态机、事件流与人机协同 (Human-in-the-Loop)](https://blog.llmgo.top/articles/build-lightweight-agent-framework/)** (👉 [English](https://blog.llmgo.top/en/articles/build-lightweight-agent-framework/))
+* **[多智能体协作与并发控制：Actor 模型、状态共享与死锁防护](https://blog.llmgo.top/articles/multi-agent-collaboration-and-concurrency/)** (👉 [English](https://blog.llmgo.top/en/articles/multi-agent-collaboration-and-concurrency/))
 
 ---
 
 ### 🔬 更多前沿硬核研报 (High-Throughput Serving & Alignment)
+* **[DeepSeek-V4 与 Kimi K3 生产级部署实战指南：四机 32 卡拓扑与成本推演](https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/))
 * **[Test-Time Compute 与 GRPO 强化学习全景拆解：从自我反思到长思维链落地](https://blog.llmgo.top/articles/test-time-compute-grpo/)** (👉 [English](https://blog.llmgo.top/en/articles/test-time-compute-grpo/))
 * **[SGLang vs vLLM 架构全景深度对比：RadixAttention、PageAttention 与吞吐极限评测](https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/)** (👉 [English](https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/))
 * **[投机解码 (Speculative Decoding) 与 EAGLE 工业级落地实践](https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/))
+* **[大模型量化选型与精度评测全景：从 INT8/FP8 到 AWQ/GPTQ 与显存数学](https://blog.llmgo.top/articles/quantization-precision-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/quantization-precision-guide/))
+* **[2026 主流前沿大模型全景横评：GPT-5.4、Claude 4.6、Gemini 3 与开源双雄](https://blog.llmgo.top/articles/model-comparison-2026/)** (👉 [English](https://blog.llmgo.top/en/articles/model-comparison-2026/))
 * **[生产级 RAG 检索增强全景演进：向量数据库、混合检索与重排序优化](https://blog.llmgo.top/articles/rag-in-practice/)** (👉 [English](https://blog.llmgo.top/en/articles/rag-in-practice/))
+
+---
+
+## 🚀 Multi-Channel Syndication & SEO Automation (多渠道分发与外链建设)
+
+本仓库内置高度自动化的多平台内容同步与规范反链属性脚本：
+
+```bash
+# 1. 批量导出适合国内平台 (掘金、知乎、微信公众号) 的规范 Markdown (带首发版权与反向内链)
+npm run export:domestic -- --all
+
+# 2. 自动化将顶流英文技术专栏发布至 DEV.to (具备官方 canonical_url 权威反链继承)
+npm run publish:devto --top
+
+# 3. 运行全站 Technical SEO 审计与 Google Search Central 合规校验 (100/100 满分)
+npm run seo:google
+
+# 4. 执行毫秒级搜索引擎 IndexNow 协议主动推流 (Bing / Yandex / Seznam)
+npm run indexnow
+```
 
 ---
 

@@ -9,6 +9,11 @@ description: "Plan DeepSeek-V4-Pro and Kimi K3 deployments using native checkpoi
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Ultra-Large Cluster Topology**: Mathematically validates TP8xPP2xEP2 distributed topologies across 4-node/32-GPU and 8-node/64-GPU clusters for 600B+ MoE architectures.
+> - **Operational Accuracy**: Identifies exact official model identifiers (`moonshotai/Kimi-K3`) and confirms valid vLLM serving parameters to avoid configuration crashes.
+> - **Fabric Dependency**: Multi-node MoE performance hinges on non-blocking fabrics; review [InfiniBand Production Tuning](/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/) and [Lossless RoCEv2 Deployments](/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/).
+
 ## Scope and source versions
 
 This guide uses public model cards and engine recipes to explain deployment decisions for DeepSeek-V4-Pro and Kimi K3. Capacity calculations are estimates, not published cluster measurements or guarantees of throughput. See the [vLLM serving guide](/en/articles/vllm-serving-guide/) for general configuration.

@@ -16,6 +16,11 @@ extraTags:
   - Virtual Memory
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Memory Virtualization Breakthrough**: Traditional contiguous allocation wastes 60%~80% of VRAM in internal/external fragmentation. PagedAttention borrows OS paging principles to partition KV Cache into fixed-size physical blocks.
+> - **Core Metric Gains**: Memory waste drops from >60% to below 4%, enabling a 2x-4x increase in concurrent request serving capacity on identical GPU footprints.
+> - **Architectural Evolution**: Paging forms the foundation for [RadixAttention Prefix Caching](/en/articles/prefix-caching-radix-attention-internals/), seamless [Chunked Prefill](/en/articles/continuous-batching-chunked-prefill-guide/), and modern [vLLM Production Serving](/en/articles/vllm-serving-guide/).
+
 ## Introduction: The Eighty-Percent Memory Drain
 
 In our previous deep dive, [From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence](/en/articles/inference-roofline-prefill-decode/), we derived from first principles that the autoregressive decode phase is deeply **memory-bandwidth bound**. To maximize effective GPU compute utilization and amortize memory traffic, the only viable path is to scale concurrent batch sizes as high as possible.

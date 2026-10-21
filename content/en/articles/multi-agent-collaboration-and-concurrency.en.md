@@ -16,6 +16,11 @@ seriesOrder: 14
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Actor Model & Mailbox Concurrency**: Coordinates multi-agent swarms using Actor message envelopes and isolated state machines, eliminating deadlock hazards and raw mutexes.
+> - **Optimistic Concurrency & Backpressure**: Leverages OCC versioning on shared task boards alongside Token Bucket rate limiters to buffer LLM API bursts smoothly.
+> - **Ecosystem Stacking**: Individual actors run on top of [Building Lightweight Agent Frameworks](/en/articles/build-lightweight-agent-framework/) and [Advanced Function Calling Engines](/en/articles/advanced-agent-tool-use-and-function-calling/).
+
 ## Message ownership matters in multi-agent systems
 
 Multiple agents help when tasks are separable, results are verifiable, and parallel gains exceed communication costs. This article demonstrates in-process asyncio actors, bounded delivery, CAS updates, and token buckets. A local queue is not a durable distributed broker.

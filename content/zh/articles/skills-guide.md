@@ -16,6 +16,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **渐进式能力注入**：Agent Skills 规范（基于 `SKILL.md`）通过将大型说明文档拆分为渐进式元数据加载，避免在每次调用时全量注入几万字 Prompt 挤爆上下文窗口。
+> - **多平台标准化**：不仅适用于 Claude，最新 OpenAI Codex 等平台同样支持基于 `SKILL.md` 的脚本资源与按需加载规范。
+> - **智能体结合**：与 [MCP 协议完全指南](/articles/mcp-guide/) 及 [AI 编程架构师实战](/articles/ai-coding-mastery/) 形成完整的 Agent 外脑扩展生态。
+
 ## 什么是 Skills？
 
 假设你招了一个 IQ 极高的新人，他学什么都快，但他**不了解你的项目**——不知道你的代码规范、不熟悉你的技术栈、更不清楚你团队的 Code Review 标准。每次分配任务，你都得从头说一遍。

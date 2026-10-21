@@ -16,6 +16,11 @@ extraTags:
   - TTFT vs TPOT
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Physical Two-Phase Split**: Autoregressive LLM inference bifurcates into compute-bound Prefill (high arithmetic intensity) and memory-bound Decode (low arithmetic intensity), heavily bottlenecked by GPU HBM bandwidth.
+> - **Compute Utilization Penalty**: Single-token Decode arithmetic intensity drops below 1 FLOP/Byte, idling Tensor Cores during memory fetch cycles and suppressing utilization below 5%.
+> - **Engineering Solutions**: Production engines mitigate this via [Continuous Batching](/en/articles/continuous-batching-chunked-prefill-guide/) for dynamic batching, [PagedAttention](/en/articles/pagedattention-memory-virtualization/) for memory virtualization, and [P/D Disaggregation](/en/articles/pd-disaggregation-distributed-kv-cache/) for decoupled cluster scheduling.
+
 ## Introduction: The Dormant Tensor Cores of `model.generate()`
 
 When software engineers first transition from machine learning modeling to high-performance inference systems, the textbook entry point in PyTorch and Hugging Face looks deceptively straightforward:

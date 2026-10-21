@@ -17,6 +17,11 @@ extraTags:
   - Roofline
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **异构解耦与物理隔离**：Prefill（高吞吐、显存峰值）与 Decode（低延迟、长期驻留）混跑在同一张卡上会导致不可调和的资源争抢；P/D 分离将两者拆分为独立的物理计算池。
+> - **高速 KV 迁移**：Prefill 节点完成上下文编码后，利用 RDMA 零拷贝技术将 KV Cache 毫秒级直推到指定的 Decode 节点，彻底消除本地 Prefill 对解码时延的扰动。
+> - **技术图谱支撑**：P/D 架构的工业化部署深度依赖 [RDMA Queue Pair 通信](/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/) 与云原生 [K8s GPU 拓扑调度](/articles/k8s-gpu-operator-ai-inference-scheduling/)。
+
 ## 引言：单机混合调度的物理终局
 
 在专栏的第一章[《从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的物理撕裂》](/articles/inference-roofline-prefill-decode/)中，我们从底层硬件的第一性原理出发，推导了自回归大模型推理必须对抗的核心物理矛盾：

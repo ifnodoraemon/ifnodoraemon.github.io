@@ -9,6 +9,11 @@ description: "Compare Kimi K3, GLM-5.3, and DeepSeek-V4-Pro with sourced archite
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Domestic LLM Engineering Teardown**: Rigorously analyzes DeepSeek-V4, Moonshot Kimi K3, Zhipu GLM-5.3 (~753B parameter class), and MiniMax across real coding, reasoning, and production deployments.
+> - **Architectural Breakthroughs**: DeepSeek-V4 features CSA+HCA hybrid attention while Kimi K3 deploys 69 KDA + 24 Gated MLA layers, redesigning traditional Transformer economics.
+> - **Infrastructure Blueprint**: For multi-node hardware planning, see the [DeepSeek-V4 and Kimi K3 Production Deployment Guide](/en/articles/deepseek-v4-kimi-k3-deployment-guide/).
+
 ## Scope: public evidence and workload evaluation
 
 This guide compares Kimi K3, GLM-5.3, and DeepSeek-V4-Pro using model cards. Reported benchmarks are not this site's controlled measurements. Workload sections describe evaluation plans rather than completed experiments. See the [GPT / Claude / Gemini comparison](/en/articles/model-comparison-2026/) for commercial model considerations.

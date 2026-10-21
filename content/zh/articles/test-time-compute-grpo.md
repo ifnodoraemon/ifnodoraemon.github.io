@@ -16,6 +16,11 @@ featuredStats:
     value: 完整可用
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **GRPO 算法精髓**：Group Relative Policy Optimization (GRPO) 彻底摒弃了传统 PPO 庞大耗显存的 Critic 价值模型，通过对同一个 Prompt 采样分组输出并基于组内相对胜率进行归一化优势计算。
+> - **显存节省与长思维链**：消除 Critic 模型为训练节省了近 50% 显存开销，使得强化学习能够在有限显存下容纳更长的思维链探索 (Thinking Process) 与复杂数学代码自验证。
+> - **推理集群联动**：GRPO 训练出的长思考模型直接推动了 [推理计算扩展律](/articles/reasoning-test-time-compute-inference-future/)，并对底层的 [P/D 分离架构](/articles/pd-disaggregation-distributed-kv-cache/) 提出前所未有的超长 KV 管理需求。
+
 ## 引言：Scaling Law 撞墙与推理时扩展的诞生
 
 在过去的几年里，大模型界奉为圭臬的法则是 **Chinchilla 预训练缩放定律（Pre-training Scaling Laws）**：堆叠更多的参数、灌入更多的清洗语料、燃烧更多的 GPU FLOPs。

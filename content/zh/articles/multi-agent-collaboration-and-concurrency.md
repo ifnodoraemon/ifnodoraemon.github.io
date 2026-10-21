@@ -16,6 +16,11 @@ seriesOrder: 14
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **Actor 模型与并发通信**：基于 Actor 消息信封机制设计多智能体协同网络，各 Agent 独占自身状态并通过异步消息队列交互，彻底消除裸锁与死锁风险。
+> - **数据一致性与背压保护**：采用乐观并发控制（OCC 版本号校验）维护共享任务黑板，内嵌令牌桶（Token Bucket）算法进行系统级 LLM API 速率限制与背压防御。
+> - **生态协同**：多智能体系统的单体节点实现基于 [轻量级 Agent 框架](/articles/build-lightweight-agent-framework/) 与 [安全工具调用内核](/articles/advanced-agent-tool-use-and-function-calling/)。
+
 ## 多 Agent 协作需要明确的消息与所有权
 
 多 Agent 并不自动优于单 Agent。只有任务能分解、结果可验证，且并行收益超过通信和模型成本时，才值得拆分。本文用进程内 `asyncio` 演示 Actor 邮箱、消息投递、CAS 提交与令牌桶，不把本地队列等同于分布式持久消息代理。

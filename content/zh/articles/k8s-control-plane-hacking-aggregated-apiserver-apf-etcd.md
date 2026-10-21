@@ -21,6 +21,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **API Server 深度内幕**：揭秘 API Priority and Fairness (APF) 流控队列、Aggregated API Server 扩展机制以及 etcd Raft 事务提交的底层执行链路。
+> - **一致性读取演进**：Kubernetes 从 v1.31 起支持通过 WatchCache 提供一致性读取，空 `resourceVersion` 在特定版本与功能门控开启下不再必然绕过缓存直打 etcd。
+> - **控制面最佳实践**：与 [声明式对齐控制器原理](/articles/k8s-control-plane-declarative-reconciliation/) 及 [高可用本地 NVMe 存储选型](/articles/k8s-database-storage-local-nvme-tuning-fencing/) 构成高可靠集群底座。
+
 ## 引言：当集群规模迈向万级节点与千万对象
 
 在前面的章节中，我们深入掌握了通过 CRD（自定义资源定义）和 KubeBuilder 编写 Operator 来扩展 Kubernetes 的能力。

@@ -16,6 +16,11 @@ seriesOrder: 12
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Lightweight Production Core**: Avoids bloated generic frameworks by implementing an asynchronous Python FSM with planning, tool dispatching, reflection, and streaming events.
+> - **Human-in-the-Loop & State Recovery**: Implements native interruption workflows for high-risk actions, coupled with checkpoint persistence for seamless process restart recovery.
+> - **Next Step**: Extend this foundational runtime into [Multi-Agent Collaboration & Concurrency](/en/articles/multi-agent-collaboration-and-concurrency/) for multi-actor swarms.
+
 ## Why make agent state explicit?
 
 A loop can implement a reliable agent when it records the current node, arguments, recovery position, and stopping rules. A state graph makes those controls inspectable. See [agent loops and state machines](/en/articles/agent-loop-state-machine/) for the foundations.

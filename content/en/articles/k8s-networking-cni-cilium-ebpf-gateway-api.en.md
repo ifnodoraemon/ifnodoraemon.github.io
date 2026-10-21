@@ -19,6 +19,11 @@ extraTags:
   - kube-proxy
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **eBPF Networking Revolution**: Replaces linear $O(N)$ iptables / IPVS rule chains and conntrack table exhaustion with Cilium eBPF socket and tc/XDP shortcut routing.
+> - **Tunneling & MTU Realities**: Clarifies that standard 1500 Underlay networks require clamping overlay/Pod interface MTUs (to ~1450), preserving host physical interfaces.
+> - **Network Infrastructure**: Bridges directly with physical underlay designs in [Datacenter Clos Leaf-Spine BGP EVPN VXLAN](/en/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/).
+
 ## Introduction: The Evolutionary Battle of Cloud-Native Networking
 
 In Chapter 02, [Container Networking Deep Dive: veth-pair, Linux Bridge, iptables NAT, and Cross-Host Topologies](/en/articles/container-networking-veth-bridge-iptables/), we unraveled how single-host Docker creates local container subnets using Linux Bridges, veth-pairs, and iptables NAT.

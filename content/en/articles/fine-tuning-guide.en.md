@@ -9,6 +9,11 @@ description: "Discover how LLM fine-tuning works under the hood, explore proven 
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Fine-Tuning Spectrum**: Mathematical and practical comparisons across Full Parameter Tuning, LoRA, QLoRA, and DoRA in VRAM footprint and generalization retention.
+> - **Mitigating Catastrophic Forgetting**: Employs domain replay datasets, disciplined learning rate warmup, and gradient clipping to protect general intelligence while acquiring domain expertise.
+> - **Downstream Pipeline**: Merged weights seamlessly pipeline into [Quantization Precision Tuning](/en/articles/quantization-precision-guide/) and [High-Throughput vLLM Serving](/en/articles/vllm-serving-guide/).
+
 ## Why Do We Need Fine-Tuning?
 
 Although general-purpose large language models like GPT-5.4 and Claude 4.6 are incredibly capable, they still have limitations in specific scenarios:

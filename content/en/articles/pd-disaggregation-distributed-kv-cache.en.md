@@ -17,6 +17,11 @@ extraTags:
   - Roofline
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Heterogeneous Decoupling**: Colocating compute-heavy Prefill and memory-latency-sensitive Decode on identical GPUs causes severe interference. Prefill-Decode (P/D) disaggregation physically isolates both workloads into dedicated pools.
+> - **Sub-Millisecond KV Transfers**: Finished prompt KV states are pushed to Decode nodes across high-speed RDMA fabrics via kernel-bypass memory copies without CPU intermediary serialization.
+> - **Infrastructure Foundation**: Enterprise P/D systems depend directly on [RDMA Queue Pair networking](/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/) and [Kubernetes GPU Operator scheduling](/en/articles/k8s-gpu-operator-ai-inference-scheduling/).
+
 ## Introduction: The Inevitable Physical Limit of Colocated Serving
 
 In Chapter 01 of this handbook, [From model.generate() to Reality: Roofline Modeling of Prefill vs. Decode Disruption](/en/articles/inference-roofline-prefill-decode/), we derived from first hardware principles the foundational physical dilemma underlying all autoregressive Large Language Model (LLM) serving systems:

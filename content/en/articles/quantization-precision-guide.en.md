@@ -17,6 +17,11 @@ featuredStats:
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Precision Math & Memory Bounds**: Exhaustive breakdown of Weight-Only (AWQ, GPTQ) versus Weight-Activation (FP8, SmoothQuant) quantization schemes and their real HBM bandwidth savings.
+> - **Hardware Realities**: 70B 4-bit weights consume ~35GB before KV Cache buffers, making 24GB-32GB single-card serving physically unfeasible; RTX 3090/4090 cards provide exactly 24GB VRAM.
+> - **Hands-On Guidance**: Follow up with [Hands-On Quantization Labs](/en/articles/quantization-hands-on-guide/) and calculate memory profiles with [MLA Matrix Absorption](/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/).
+
 ## Separate weights, activations, and cache
 
 Quantization maps selected values to lower-bit representations to reduce capacity, traffic, or compute cost. It does not promise a fixed intelligence-loss percentage. See the [hands-on guide](/en/articles/quantization-hands-on-guide/).

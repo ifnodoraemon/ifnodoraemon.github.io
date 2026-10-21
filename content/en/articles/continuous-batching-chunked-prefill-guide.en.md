@@ -17,6 +17,11 @@ extraTags:
   - vLLM
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Dynamic Scheduling Revolution**: Static batching suffers massive padding bubbles due to variable sequence lengths. Iteration-level Continuous Batching dynamically ingests arriving requests and retires finished tokens per step.
+> - **Head-of-Line Blocking Mitigation**: Chunked Prefill slices long input prompts into budget chunks (e.g., 512 tokens), co-scheduling them alongside Decode steps to stabilize TPOT variance and prevent service freezes.
+> - **Engine Integration**: Production adoption requires synchronization with [PagedAttention block lifecycles](/en/articles/pagedattention-memory-virtualization/) and [SGLang vs vLLM scheduling architectures](/en/articles/sglang-vs-vllm-architecture/).
+
 ## Introduction: Beyond the Memory Wall, the Scheduling Wall Rises
 
 In the first two chapters of this series, we laid down the physical and architectural foundations of LLM inference systems:

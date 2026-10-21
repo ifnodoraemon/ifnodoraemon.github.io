@@ -18,6 +18,11 @@ extraTags:
   - Decoupled RoPE
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **KV Cache Compression Evolution**: Progressing from MHA (full heads, memory explosion) to GQA (grouped sharing) and DeepSeek MLA (Multi-Head Latent Attention), latent low-rank projections condense KV representations into compact vectors.
+> - **Matrix Absorption Mechanism**: During autoregressive decoding, projection matrices are mathematically absorbed into query projections, eliminating the need to materialize uncompressed key-value matrices in HBM.
+> - **System Synergy**: MLA's memory efficiency requires tightly coupled execution kernels alongside [MoE Expert Parallelism](/en/articles/moe-expert-parallelism-inference-engine/) and [DeepSeek-V4/Kimi K3 cluster topologies](/en/articles/deepseek-v4-kimi-k3-deployment-guide/).
+
 ## Introduction: When Software Optimizations Collide with Physical Limits
 
 Throughout the first five chapters of this series, we pushed modern GPU hardware and runtime schedulers to their absolute physical boundaries:

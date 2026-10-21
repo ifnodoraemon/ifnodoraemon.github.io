@@ -8,6 +8,11 @@ category: Model Engineering
 description: "A complete guide on how to use retrieval-augmented generation strategies and production best practices. Covers vector databases, semantic chunking, ColBERT reranking, GraphRAG, and automated Ragas evaluation." 
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Hybrid Retrieval & Reranking**: Enterprise RAG surpasses naive dense embedding search by fusing BM25 keyword search with dense vectors, followed by high-precision Cross-Encoder neural rerankers.
+> - **Chunking & Context Preservation**: Semantic Chunking and Parent-Child block indexing preserve macro-document semantics while retrieving pinpoint micro-passages.
+> - **Agent Integration**: Production RAG serves as the long-term knowledge tier in [AI Agent Memory Architectures](/en/articles/agent-memory-architecture/) and connects with [Context Engineering](/en/articles/context-engineering-guide/).
+
 ## What is RAG?
 
 Retrieval-Augmented Generation (RAG) is a technical paradigm that enhances the output quality of large language models through **external knowledge retrieval**. Put simply:

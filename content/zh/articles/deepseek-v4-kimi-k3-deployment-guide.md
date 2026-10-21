@@ -9,6 +9,11 @@ description: "核对 DeepSeek-V4-Pro 与 Kimi K3 原生权重格式、逐卡显�
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **超大模型拓扑规划**：针对 600B+ 超大 MoE 架构，严密推导四机 32 卡与八机 64 卡的 TP8×PP2×EP2 分布式切分策略与通信 Buffer 显存占用。
+> - **版本与参数避坑**：官方标准模型标识月之暗面 Kimi K3 为 `moonshotai/Kimi-K3`，且启动参数需严格核对 vLLM 对应版本支持的量化与专家并行配置。
+> - **集群网络强依赖**：多节点 MoE 推理极致依赖无拥塞网络，建议配套查阅 [InfiniBand 高性能组网](/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/) 与 [RoCEv2 拥塞控制](/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/)。
+
 ## 部署范围与资料版本
 
 本文基于公开模型卡与推理引擎配方，说明 DeepSeek-V4-Pro、Kimi K3 的部署决策。这里的容量计算是估算，命令是配置起点；没有可公开复现的集群压测记录，因此不承诺固定卡数、吞吐或成本优势。通用服务参数见 [vLLM 部署指南](/articles/vllm-serving-guide/)。

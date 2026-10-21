@@ -17,6 +17,11 @@ extraTags:
   - DualPipe
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **稀疏路由与专家并行**：MoE 模型通过 Router 门控动态选择少量 Top-K 专家激活，在将模型参数拉升至数百甚至数千亿的同时，单 Token 激活算力保持常数级。
+> - **All-to-All 通信瓶颈**：跨节点专家并行 (EP) 的核心性能死穴在于 All-to-All 集合通信；生产级引擎必须利用跨机 InfiniBand/RoCE 网卡建立通信与计算重叠（Overlap）流水线。
+> - **部署最佳实践**：在实践中需与 [TP/PP 混合切分](/articles/deepseek-v4-kimi-k3-deployment-guide/) 以及底层 [InfiniBand 高性能拓扑配置](/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/) 形成系统级软硬件协同。
+
 ## 引言：671B 庞然大物的“稀疏”算力谜题
 
 在专栏前六讲中，我们沿着自回归推理的底层演进脉络，从 [Roofline 模型与 Prefill/Decode 物理撕裂](/articles/inference-roofline-prefill-decode/)、[PagedAttention 显存池化](/articles/pagedattention-memory-virtualization/)、[Continuous Batching 调度](/articles/continuous-batching-chunked-prefill-guide/)、[Prefix Caching 前缀树缓存](/articles/prefix-caching-radix-attention-internals/)，一路深入到 [FlashAttention/FlashInfer 算子演进](/articles/flashattention-flashinfer-kernel-evolution/) 与 [DeepSeek MLA 矩阵吸收压缩](/articles/mha-gqa-mla-matrix-absorption-inference-engine/)。

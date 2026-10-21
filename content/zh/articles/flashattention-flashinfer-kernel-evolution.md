@@ -19,6 +19,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **IO 感知与访存优化**：从 FlashAttention-1 的 Tiling 与重计算，到 FA-2 的 Warp 线程划分优化（各 Warp 分割 Q、共享 K/V），再到 FA-3 的 FP8 支持与 TMA 异步管线，注意力算子始终围绕 SRAM/HBM 数据搬运极限制定。
+> - **统一异构内核**：FlashInfer 进一步抽象了 PageKV、变长 Batch 与混合精度的异构解码算子库，成为现代推理引擎（如 SGLang）的标准计算后端。
+> - **模型架构反哺**：底层算子演进与上层 [DeepSeek MLA 矩阵吸收](/articles/mha-gqa-mla-matrix-absorption-inference-engine/) 和 [Roofline 算力建模](/articles/inference-roofline-prefill-decode/) 紧密互为因果。
+
 ## 引言：自注意力算子的显存往返悲剧
 
 在前面的章节中，我们已经深入探讨了推理引擎的宏观架构与调度机制：

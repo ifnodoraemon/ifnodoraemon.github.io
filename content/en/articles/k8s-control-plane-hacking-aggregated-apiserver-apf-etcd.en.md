@@ -21,6 +21,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **API Server Internals**: Demystifies API Priority and Fairness (APF) flow queues, Aggregated API Server extension mechanisms, and etcd Raft log commits.
+> - **Consistent Read Evolution**: Kubernetes v1.31+ supports consistent reads served directly from WatchCache, evolving beyond the legacy assumption that empty `resourceVersion` universally bypasses caches.
+> - **Control Plane Blueprint**: Pairs with [Declarative Reconciliation Controllers](/en/articles/k8s-control-plane-declarative-reconciliation/) and [Local NVMe Storage & Fencing](/en/articles/k8s-database-storage-local-nvme-tuning-fencing/).
+
 ## Introduction: Scaling Towards 10,000 Nodes and Tens of Millions of Objects
 
 In previous chapters, we mastered building Kubernetes Operators using Custom Resource Definitions (CRDs) and KubeBuilder.

@@ -21,6 +21,11 @@ extraTags:
   - EVPN
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **现代数据中心网络演进**：从传统的二层 STP 阻塞网络演进为大规模三层 Clos Leaf-Spine 扁平拓扑，通过 BGP-EVPN 控制平面与 VXLAN 数据平面构建全网等价多路径 (ECMP)。
+> - **规范与 MTU 规约**：澄清 RFC 7348 并没有将 9000/9216 巨型帧作为 VXLAN 的强制条件；在通用 1500 Underlay 环境下，通常是降低内部虚拟网络 MTU 以规避分片。
+> - **云原生结合**：与 Kubernetes 云原生网络 [Cilium eBPF 与 CNI 架构](/articles/k8s-networking-cni-cilium-ebpf-gateway-api/) 紧密无缝衔接。
+
 ## 引言：从南北向传统网络，到东西向分布式算力洪流
 
 在专栏第七讲 [Linux 内核网络子系统硬核剖析：从网卡驱动、NAPI 机制、Ring Buffer 到 eBPF XDP 极速转发](/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/) 中，我们见证了单台主机操作系统如何在内核驱动层与 eBPF 中实现微秒级的包收发流转。

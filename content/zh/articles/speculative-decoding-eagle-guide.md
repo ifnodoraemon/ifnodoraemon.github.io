@@ -16,6 +16,11 @@ featuredStats:
     value: EAGLE-3
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **投机解码数学原理**：利用轻量级 Draft 模型以低时延快速生成 $K$ 个候选 Token，Target 大模型单次前向完成并行验证，利用拒绝采样保证输出概率分布与单模型严格数学等价。
+> - **EAGLE 架构演进**：EAGLE 在特征层进行下一轮预测，利用树状注意力 (Tree Attention) 同时验证多条生成分支，实际平均接受长度提升至 2.5~3.5 tokens，实现 2x~3x 推理加速。
+> - **落地支撑**：投机解码在超大参数场景下与 [DeepSeek / Kimi 部署方案](/articles/deepseek-v4-kimi-k3-deployment-guide/) 和 [推理引擎架构对比](/articles/sglang-vs-vllm-architecture/) 紧密契合。
+
 ## 引言：自回归生成的内存带宽诅咒
 
 在深入了解任何加速算法之前，我们必须直面大模型推理的最底层物理铁律：**自回归解码（Autoregressive Decoding）是极端受限于显存带宽（Memory-Bandwidth Bound）的计算过程。**

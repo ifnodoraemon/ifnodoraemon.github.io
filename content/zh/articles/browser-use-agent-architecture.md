@@ -18,6 +18,11 @@ featuredStats:
     value: 完整可用代码
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **DOM 树轻量化修剪**：解析 Web 界面时剔除 90% 以上与用户交互无关的冗余标签，将可见交互元素编码为高亮数字标签（Set-of-Marks），大幅压缩视觉与文本 Token 消耗。
+> - **多模态闭环执行**：结合截图与 DOM 拓扑进行双重校验，杜绝因网页弹窗或异步渲染引起的幻觉点击与误操作。
+> - **安全性扩展**：在生产环境中运行浏览器智能体时，必须配套 [安全沙箱隔离](/articles/advanced-agent-tool-use-and-function-calling/) 与 [环境扩展指南](/articles/environment-scaling-agent-guide/)。
+
 ## 引言：传统 RPA 与脆弱自动化脚本的终结
 
 在过去的十余年里，无论是网页数据采集、端到端测试还是政企 RPA（机器人流程自动化），开发者都受困于同一个梦魇：**以 XPath 和 CSS 选择器为核心的自动化脚本极其脆弱。**

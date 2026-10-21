@@ -17,6 +17,11 @@ featuredStats:
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **精度与显存数学**：从纯权重（Weight-Only）量化（AWQ, GPTQ）到全量矩阵与激活值量化（FP8, SmoothQuant），精确推导每种量化模式下的显存占用与访存带宽节省。
+> - **显卡档位实测红线**：70B 模型 4-bit 纯权重已占用 35GB，必须预留 KV Cache 与上下文空间，单卡无法在 24GB~32GB 上裸跑；RTX 3090/4090 真实物理显存为 24GB。
+> - **实战指南**：配合 [量化实战动手实验](/articles/quantization-hands-on-guide/) 与 [DeepSeek MLA 权重体积核算](/articles/mha-gqa-mla-matrix-absorption-inference-engine/)，实现精度无损的低成本落地。
+
 ## 先区分权重、激活与缓存
 
 量化把部分数值映射到更少的表示位数，目标是降低显存、访存或计算开销；它不是一个能承诺固定“智力损失百分比”的压缩开关。实际执行步骤见 [量化实战指南](/articles/quantization-hands-on-guide/)。

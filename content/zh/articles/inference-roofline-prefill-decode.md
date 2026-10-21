@@ -16,6 +16,11 @@ extraTags:
   - TTFT vs TPOT
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **双阶段物理撕裂**：大模型自回归推理在 Prefill（计算密集型，高算力强度）与 Decode（访存密集型，低算力强度）阶段存在本质矛盾，单个 Token 的自回归生成严重受限于 GPU HBM 带宽墙。
+> - **硬件利用率落差**：Decode 阶段运算强度往往低于 1 FLOP/Byte，Tensor Core 大部分周期都在等待显存搬运，利用率经常跌破 5%。
+> - **核心工程解法**：通过 [Continuous Batching](/articles/continuous-batching-chunked-prefill-guide/) 提升有效 Batch 并发、利用 [PagedAttention](/articles/pagedattention-memory-virtualization/) 消除碎片化显存浪费，并在超大集群落地 [P/D 分离架构](/articles/pd-disaggregation-distributed-kv-cache/) 彻底解耦异构负载。
+
 ## 引言：从 `model.generate()` 说起 —— 沉睡的 Tensor Core
 
 在开启大模型系统研发时，几乎每一位工程师写下的第一行推理代码都类似这样：

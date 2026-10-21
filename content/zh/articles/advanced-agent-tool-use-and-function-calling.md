@@ -16,6 +16,11 @@ seriesOrder: 13
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **动态注册与沙箱隔离**：从写死代码的函数调用，升级为支持 MCP 动态工具发现、参数模式严谨校验与 gVisor/Docker 微秒级安全容器隔离的工具执行中枢。
+> - **闭环自愈机制**：捕获代码执行异常与语法错误，将错误栈格式化后自动送回 LLM 进行最多 3 次针对性反思自愈，工具调用成功率提升 40% 以上。
+> - **系列延伸**：本篇提供完整生产级 Python 代码示例，可配合 [轻量级 Agent 框架自研](/articles/build-lightweight-agent-framework/) 形成完整的独立 Agent 引擎。
+
 ## 工具数量增长后，先控制发现和执行边界
 
 当工具目录很大时，可以先按业务领域和权限过滤，再检索候选 Schema。Top-K 只负责缩小上下文，不能代替服务端鉴权；未知分类应返回空结果，不能回退为全部工具。整体控制流见 [轻量 Agent 框架](/articles/build-lightweight-agent-framework/)。

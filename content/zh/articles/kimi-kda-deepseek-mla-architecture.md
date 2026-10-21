@@ -9,6 +9,11 @@ description: "区分 KDA 循环状态、MLA 潜变量缓存与 DeepSeek-V4 CSA/H
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **新型注意力架构对比**：深入拆解 Kimi K3 采用的 69 层 KDA（Kimi Dynamic Attention）+ 24 层 Gated MLA 混合架构，纠正“全模型状态恒定”的技术误区。
+> - **显存增长曲线推演**：KDA 线性状态层与 MLA 注意力层相互配合，既保留了长文本动态检索能力，又大幅压平了长序列 KV Cache 爆炸曲线。
+> - **推理工程适配**：与 [DeepSeek MLA 矩阵吸收原理](/articles/mha-gqa-mla-matrix-absorption-inference-engine/) 及 [长思维链推理演进](/articles/reasoning-test-time-compute-inference-future/) 构成现代推理模型演进的核心链条。
+
 ## 三种架构解决的不是同一个问题
 
 MLA 压缩每个历史 Token 的缓存表示；KDA 用固定维度的循环状态更新代替完整历史键值；DeepSeek-V4 的 CSA／HCA 还会压缩序列维度。它们需要分别讨论缓存容量、注意力计算与模型质量，不能用一组未经定义的“显存实测”混合比较。

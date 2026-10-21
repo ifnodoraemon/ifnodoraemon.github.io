@@ -17,6 +17,11 @@ extraTags:
   - DualPipe
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Sparse Routing & Expert Parallelism**: Mixture-of-Experts activates only top-K routed experts per token, scaling parameter capacity to hundreds of billions while maintaining bounded FLOPs per step.
+> - **All-to-All Communication Bottleneck**: Cross-node Expert Parallelism (EP) is throttled by All-to-All collective exchanges, necessitating overlapping communication with compute pipelines across high-bandwidth RDMA fabrics.
+> - **Production Setup**: Real-world deployments demand unified orchestration across [TP/PP/EP hybrid topologies](/en/articles/deepseek-v4-kimi-k3-deployment-guide/) and [InfiniBand Rail-Optimized Fabrics](/en/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/).
+
 ## Introduction: The Sparsity Paradox of a 671B Behemoth
 
 Across the first six chapters of our series, we journeyed through the physical principles governing autoregressive inference: from [Roofline Modeling and the Prefill vs Decode Divide](/en/articles/inference-roofline-prefill-decode/), [PagedAttention Virtual Memory Pooling](/en/articles/pagedattention-memory-virtualization/), [Continuous Batching and Chunked Prefill](/en/articles/continuous-batching-chunked-prefill-guide/), [Prefix Caching & RadixAttention](/en/articles/prefix-caching-radix-attention-internals/), to [FlashAttention/FlashInfer Kernel Evolution](/en/articles/flashattention-flashinfer-kernel-evolution/) and [DeepSeek MLA Matrix Absorption](/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/).

@@ -20,6 +20,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Topology-Aware GPU Scheduling**: Analyzes NUMA, PCIe switch, and NVLink domain affinity in multi-GPU inference, leveraging Node Feature Discovery and the NVIDIA GPU Operator.
+> - **Admission Failure Realities**: Clarifies that when a Pod fails Topology Manager admission, the scheduler does not automatically relocate the exact same Pod; reconciliation relies on higher-level controller reconstruction.
+> - **Inference Alignment**: Connects directly with [vLLM Production Serving Metrics](/en/articles/vllm-serving-guide/) and [Custom Gang Scheduling Plugins](/en/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/).
+
 ## Introduction: The Paradigm Shift from Scalar CPUs to AI GPU Topologies
 
 Throughout the first decade of cloud-native evolution, the core resource abstractions of Kubernetes scheduling were fundamentally **scalar and homogeneous**:

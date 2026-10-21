@@ -16,6 +16,11 @@ extraTags:
   - Virtual Memory
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **显存虚拟化突破**：传统连续内存分配造成高达 60%~80% 的内部与外部显存碎片；PagedAttention 借鉴操作系统分页原理，将 KV Cache 切分为固定尺寸 Block，实现非连续物理显存的高效离散映射。
+> - **核心性能收益**：显存浪费率从传统方案的 60%+ 骤降至 4% 以下，同等 GPU 显存容量下服务吞吐并发直接提升 2~4 倍。
+> - **延伸演进**：分页机制后续被进一步拓展为 [RadixAttention 树状前缀复用](/articles/prefix-caching-radix-attention-internals/)，并与 [Chunked Prefill](/articles/continuous-batching-chunked-prefill-guide/) 以及 [vLLM 生产级调度](/articles/vllm-serving-guide/) 深度融合。
+
 ## 引言：被“浪费”的八成显存
 
 在上一讲 [从 model.generate() 说起：Roofline 模型与 Prefill/Decode 的物理撕裂](/articles/inference-roofline-prefill-decode/) 中，我们从第一性原理推导出一个残酷的物理事实：自回归解码（Decode）阶段是极度**访存带宽密集型（Memory-bandwidth bound）**的。为了提升 GPU 的有效利用率，唯一的出路就是尽可能提高并发批大小（Batch Size）。

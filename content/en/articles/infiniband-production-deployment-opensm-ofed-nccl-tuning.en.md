@@ -20,6 +20,11 @@ extraTags:
   - NCCL Tuning
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Ultra-Scale AI Fabric Core**: Details InfiniBand Subnet Manager (OpenSM) routing algorithms (Up/Down and Fat-Tree), OFED kernel-bypass driver stacks, and production NCCL tuning.
+> - **NCCL Optimization**: Fine-tunes `NCCL_ALGO`, `NCCL_PROTO`, and buffer sizing to prevent silent micro-drops and deadlocks during distributed training and serving.
+> - **Deployment Target**: Foundational to hosting [DeepSeek-V4 and Kimi K3 Multi-Node Clusters](/en/articles/deepseek-v4-kimi-k3-deployment-guide/) and speeding up [MoE Expert All-to-All Collectives](/en/articles/moe-expert-parallelism-inference-engine/).
+
 ## Introduction: The Operational Reality of 10,000-GPU AI Data Centers
 
 Across the preceding eleven chapters, our masterclass progressed from physical Ethernet signaling and Linux kernel packet paths through Clos Leaf-Spine topologies, RDMA zero-copy primitives, native InfiniBand signaling, and Rail-Optimized Fat-Trees.

@@ -50,6 +50,9 @@ const TOP_TIER_SLUGS = [
   'rag-in-practice',
   'prompt-engineering-guide',
   'build-ai-agent',
+  'advanced-agent-tool-use-and-function-calling',
+  'build-lightweight-agent-framework',
+  'multi-agent-collaboration-and-concurrency',
   'model-comparison-2026',
   'deepseek-v4-kimi-k3-deployment-guide'
 ];
@@ -254,10 +257,10 @@ async function main() {
       break;
     }
 
-    // Rate limit safety: 2.5 second pause between DEV.to API calls
+    // Rate limit safety: 31 second pause between DEV.to API calls to prevent 429 rate limit
     if (count < targetSlugs.length) {
-      console.log(`⏳ 等待 2.5 秒以符合 DEV.to 频控限制...`);
-      await sleep(2500);
+      console.log(`⏳ 等待 31 秒以符合 DEV.to 频控限制...`);
+      await sleep(31000);
     }
   }
 

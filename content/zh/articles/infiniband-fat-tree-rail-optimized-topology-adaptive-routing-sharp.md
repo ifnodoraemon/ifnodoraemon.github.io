@@ -20,6 +20,11 @@ extraTags:
   - DGX Cluster
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **无收敛 Fat-Tree 拓扑**：剖析 1:1 无收敛胖树架构的设计与 Rail-Optimized（轨道优化）组网，保证同卡跨机 NCCL All-Reduce 流量完全限制在单一子树内。
+> - **自适应路由与 SHARP 卸载**：利用 Adaptive Routing 消除跨链路拥塞热点，开启 SHARP（可扩展分层聚合与归约协议）将向量归约计算直接卸载至网络交换机芯片。
+> - **网络硬件全景**：配合参阅 [InfiniBand 架构速率与信用流控](/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/) 建立软硬件完整心智模型。
+
 ## 引言：当万卡分布式训练遭遇“通信墙”
 
 在上一讲 [InfiniBand 架构第一性原理：物理链路速率演进、Credit-Based 链路级流控与子网管理器 (Subnet Manager) 全局编排](/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/) 中，我们剖析了单机与交换机端口的硬件流控与控制面原理。而在 2026 年的前沿大模型（LLM）与多模态万亿参数训练中，万卡级 GPU 集群已成为工业界标准底座。

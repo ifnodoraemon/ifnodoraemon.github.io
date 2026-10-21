@@ -19,6 +19,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **IO-Aware Architecture**: From FlashAttention-1 tiling and recomputation to FA-2 warp partitioning (Q-partitioning with shared K/V) and FA-3 asynchronous TMA pipelines, attention kernels focus on minimizing HBM memory traffic.
+> - **Unified Heterogeneous Kernels**: FlashInfer provides unified PageKV, ragged batching, and mixed-precision kernels, serving as the high-performance backend for modern inference engines.
+> - **Architecture Feedback**: Kernel optimizations directly underpin [DeepSeek MLA Matrix Absorption](/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/) and [Roofline Prefill/Decode scaling](/en/articles/inference-roofline-prefill-decode/).
+
 ## Introduction: The Memory Traffic Crisis of Self-Attention
 
 In the previous chapters of this series, we examined the macroscopic architecture and scheduling dynamics of inference engines:

@@ -17,6 +17,11 @@ extraTags:
   - Kernel Fusion
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Engine Architecture Teardown**: In-depth disassembly of scheduler internals across vLLM (v1 pipeline overhaul), SGLang (RadixAttention maximum throughput), TRT-LLM (NVIDIA hardware-bound tuning), and llama.cpp (edge quantization).
+> - **Architectural Selection**: SGLang excels in structured prompts and multi-turn prefix workloads; vLLM offers the most robust ecosystem integrations; llama.cpp leads local edge execution.
+> - **Recommended Reading**: Compare real-world benchmarks in [SGLang vs vLLM Architecture Comparison](/en/articles/sglang-vs-vllm-architecture/) and follow the [vLLM Serving Production Guide](/en/articles/vllm-serving-guide/).
+
 ## Introduction: From Toy Scripts to Enterprise-Grade Serving Runtimes
 
 In the early days of the generative AI boom in 2023, most developers initiated LLM inference on a single GPU using a simple Python loop:

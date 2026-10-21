@@ -8,6 +8,11 @@ category: 模型工程
 description: "从向量数据库选型到 Embedding 策略，深度剖析 Naive RAG、混合检索、HyDE 与 GraphRAG 架构选型矩阵，总结 7 大企业级检索增强生成最佳实践，含 Pinecone 与 Weaviate 性能实测。" 
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **混合检索与重排序**：生产级 RAG 架构必须超越单一的密集向量（Dense Vector）检索，采用 BM25 稀疏检索与 Dense 向量检索融合，并在前级召回后接入 Cross-Encoder 重排序（Rerank）。
+> - **分块与元数据治理**：语义分块（Semantic Chunking）结合 Parent-Child 父子文档分块，保留长上下文连贯性的同时提供精确检索切片。
+> - **智能体记忆演进**：RAG 模式是 [AI Agent 记忆系统设计](/articles/agent-memory-architecture/) 的长时记忆基础，亦与 [提示工程实战](/articles/prompt-engineering-guide/) 紧密交织。
+
 ## 什么是 RAG？
 
 RAG（Retrieval-Augmented Generation，检索增强生成）是一种通过**外部知识检索**来增强大模型输出质量的技术范式。简单来说：

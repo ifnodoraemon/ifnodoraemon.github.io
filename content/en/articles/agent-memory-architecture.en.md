@@ -17,6 +17,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Hierarchical Memory Stack**: Deconstructs Working Memory (context window), Short-Term Memory (session FSM states), and Long-Term Memory (vector stores + Graph RAG entity graphs).
+> - **Memory Governance**: Production systems require strict provenance tracking, tenant isolation, cascading deletion propagation, and factual self-correction mechanisms.
+> - **Architecture Coupling**: Integrates seamlessly with [Agent FSM State Machines](/en/articles/agent-loop-state-machine/) and [Production Enterprise RAG](/en/articles/rag-in-practice/).
+
 In the rapid evolution of large language models, context window boundaries continue to expand—scaling from 8K and 32K tokens to 1M and beyond. Many engineers starting their journey in agent design arrive at an intuitive assumption: *"If the LLM can ingest millions of tokens in a single forward pass, why build complex memory systems? Can't we simply dump the entire conversation history into the prompt?"*
 
 In high-concurrency production deployments, this brute-force approach invariably breaks down within weeks.

@@ -23,6 +23,11 @@ extraTags:
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Runtime Isolation & Extension**: Compares standard runc against Kata micro-VMs and gVisor syscall-interception sandboxes, leveraging the Node Resource Interface (NRI) for dynamic container hooks.
+> - **Feature Gate Realities**: Confirms that Evented PLEG remains guarded behind Kubernetes feature gates rather than treated as an unconditionally GA capability.
+> - **Sandbox Implementation**: Directly underpins isolation infrastructure for [Safe Agent Tool Execution & Function Calling](/en/articles/advanced-agent-tool-use-and-function-calling/).
+
 ## Introduction: Breaking runc's "Shared-Kernel Original Sin" and Node Freeze Flaws
 
 In Chapter 01, [Docker Kernel First Principles](/en/articles/docker-internals-namespace-cgroups-overlayfs/), we established a foundational physical truth: **A container is merely a standard host process constrained by Linux Namespaces and throttled by cgroups, sharing the identical underlying Linux operating system kernel with thousands of other host processes**.

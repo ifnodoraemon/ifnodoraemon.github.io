@@ -17,6 +17,11 @@ extraTags:
   - Future Architecture
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **推理计算扩展律 (Scaling Law)**：从单纯依赖预训练参数量的预先扩展，转向依赖长思维链 (Thinking Process) 与 MCTS/自我反思的推理期计算扩展 (Test-Time Compute)。
+> - **系统级工程冲击**：动态长思维链使序列长度激增至 32k~128k，导致 KV Cache 呈爆炸式增长，对调度器的分级存储、动态显存换入换出提出极限挑战。
+> - **算法与架构协同**：需紧密结合 [GRPO 强化学习训练全景](/articles/test-time-compute-grpo/) 与 [P/D 分离集群池化](/articles/pd-disaggregation-distributed-kv-cache/) 探索万卡集群推理终局。
+
 ## 引言：自回归推理的历史性拐点 —— 思考时间扩展
 
 在 2024 年之前，全球所有大模型推理系统的架构设计都建立在一个不言自明的隐含假设之上：**“大输入，短输出”**。

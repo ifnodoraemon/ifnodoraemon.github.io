@@ -17,6 +17,11 @@ extraTags:
   - vLLM
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **动态调度重构**：传统静态批处理受制于最长请求产生严重气泡（Padding Waste）；Continuous Batching 以 Iteration（迭代步）为粒度动态插入新请求并剔除已完成请求。
+> - **消除排头阻塞**：通过 Chunked Prefill 将超长 Prompt 分片为固定预算（如 512 tokens），与正在运行的 Decode 步混合调度，彻底消除了超长 Prompt 导致的系统假死与 TPOT 剧烈抖动。
+> - **体系融合**：在工程落地中必须紧密结合 [PagedAttention 块生命周期](/articles/pagedattention-memory-virtualization/) 与 [SGLang / vLLM 架构实现](/articles/sglang-vs-vllm-architecture/)，防止显存超卖导致驱逐卡顿。
+
 ## 引言：显存墙跨过之后，调度墙降临
 
 在前两讲中，我们完成了大模型推理系统底层物理与显存架构的奠基：

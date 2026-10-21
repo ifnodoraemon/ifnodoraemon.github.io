@@ -20,6 +20,11 @@ extraTags:
   - DGX Cluster
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Non-Blocking Fat-Tree & Rail Optimization**: Designs 1:1 non-blocking topologies and rail-aligned cabling to constrain GPU peer-to-peer collective traffic within dedicated fabric rails.
+> - **Adaptive Routing & SHARP**: Eliminates static routing hot spots via dynamic packet-level multi-pathing and offloads mathematical reductions into switch ASICs via SHARP.
+> - **Hardware Deep Dive**: Read alongside [InfiniBand Architecture & Credit-Based Flow Control](/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/).
+
 ## Introduction: When 10,000-GPU Distributed Training Hits the "Communication Wall"
 
 In Chapter 10 of our masterclass, [InfiniBand Architecture First Principles: Physical Link Rates, Credit-Based Link Flow Control, and Subnet Manager Fabric Orchestration](/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/), we deconstructed physical link speeds, hardware credit flow control, and the centralized Subnet Manager. In the 2026 era of frontier trillion-parameter Large Language Models (LLMs) and multi-modal architectures, 10,000-GPU clusters represent the baseline infrastructure for AI labs.

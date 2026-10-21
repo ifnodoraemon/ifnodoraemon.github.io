@@ -17,6 +17,11 @@ featuredStats:
 updated: 2026-10-20
 ---
 
+> [!NOTE] 核心速览 (TL;DR)
+> - **2026 前沿闭源三强与开源双雄**：深度横评 GPT-5.4、Claude 4.6、Gemini 3 与开源旗舰 DeepSeek-V4、Kimi K3 的基准评测、价格梯度与工程适用场景。
+> - **准确规格核查**：Claude Opus 4.6 官方标准定价为 $5 / $25 每百万 Token；GPT-5.4 支持文本与视觉输入，官方文档明确标示 API 模型暂不支持 Fine-tuning。
+> - **国内开源对比**：针对国产自研模型细化对比，可继续参阅 [2026 国产自研大模型综合横评研报](/articles/domestic-llm-comparison-2026/)。
+
 ## 比较范围与证据
 
 本文保留 GPT-5.4、Claude Opus／Sonnet 4.6、Gemini 3.1 Pro 这一组模型，讨论 API 工程选型，不把它们称为今天所有模型中的最新版本。规格依据厂商文档；没有统一复测记录的分数不用于排名。国产开放权重模型见 [Kimi／GLM／DeepSeek 比较](/articles/domestic-llm-comparison-2026/)。

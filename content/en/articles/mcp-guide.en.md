@@ -11,6 +11,11 @@ description: From architecture to hands-on development, a complete guide to the 
 updated: 2026-10-20
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **Universal Context Standard**: The Model Context Protocol (MCP) defines an open standard connecting foundation models with enterprise data sources and runtime tools without proprietary glue code.
+> - **Specification Clarifications**: Read-only workflows may be modeled as Resources or read-only Tools; authorization mechanisms like OAuth represent optional protocol layers rather than monolithic requirements.
+> - **Production Integration**: See [Advanced Function Calling & Tool Execution](/en/articles/advanced-agent-tool-use-and-function-calling/) for dynamic MCP auto-discovery and gVisor sandbox containerization.
+
 ## What is MCP?
 
 Imagine you have a laptop that needs to connect to a monitor, keyboard, hard drive, and phone charger. Before USB-C unified everything, you needed a different cable for each device. **MCP (Model Context Protocol) is the USB-C of the AI world**.

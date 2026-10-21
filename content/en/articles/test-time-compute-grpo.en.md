@@ -16,6 +16,11 @@ featuredStats:
     value: Production Ready
 ---
 
+> [!NOTE] Executive Summary (TL;DR)
+> - **GRPO Algorithmic Innovation**: Group Relative Policy Optimization (GRPO) eliminates the memory-heavy Critic value model by sampling candidate groups and computing relative advantages normalized against group baselines.
+> - **Memory Savings for Extended CoT**: Reclaiming memory previously reserved for Critic parameters enables training on vastly longer reasoning traces and complex verifiable tasks within fixed GPU budgets.
+> - **Serving Ramifications**: Models trained with GRPO stimulate the [Test-Time Compute Scaling Law](/en/articles/reasoning-test-time-compute-inference-future/) and stress-test [Prefill-Decode Disaggregated Serving](/en/articles/pd-disaggregation-distributed-kv-cache/).
+
 ## Introduction: The Pre-training Wall and the Dawn of Test-Time Scaling
 
 For the past several years, the foundational law of frontier LLM development was Chinchilla's **Pre-training Scaling Laws**: stack deeper transformer layers, ingest multi-trillion token corpora, and burn increasingly massive GPU clusters.
