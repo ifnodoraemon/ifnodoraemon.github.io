@@ -186,7 +186,7 @@
 ## 中文文章深度 FAQ 与要点汇总
 
 ### [解密 DeepSeek 推理印钞机：DeepInfer 与 deepseek-recipe 从硅基地基到协议顶层的生产全栈拆解](https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/)
-- 发布日期: 2026-10-21 | 标签: 推理架构 | 预计阅读: 预计阅读 41 分钟 | 字数: 约 10179 字
+- 发布日期: 2026-10-21 | 标签: 推理架构 | 预计阅读: 预计阅读 59 分钟 | 字数: 约 14673 字
 - 概述: 从底层芯片与通信物理地基，到算子内核、PD 极致分离拓扑、DSpark 动态投机解码、SWA 边界重放，再到 deepseek-recipe 协议中间层与百万亿 Token 商业印钞机经济学，全景剖析 DeepSeek 最新开源生产推理全栈。
 - 核心 FAQ 解答:
   * Q: Q1: DeepInfer 为什么不直接在现有的 vLLM 或 SGLang 之上打补丁，而是要独立自研一套全新引擎？
@@ -959,7 +959,7 @@
 ## English Articles Technical FAQ & Key Takeaways
 
 ### [Inside DeepSeek's Trillion-Token Engine: DeepInfer and deepseek-recipe Architecture from Silicon to Protocol Layer](https://blog.llmgo.top/en/articles/deepinfer-deepseek-recipe-architecture/)
-- Date: 2026-10-21 | Tag: Inference Architecture | Read: 18 min read | Words: 4487 words
+- Date: 2026-10-21 | Tag: Inference Architecture | Read: 28 min read | Words: 6924 words
 - Summary: From physical silicon foundations and kernel matrices to 1:1 PD disaggregation topologies, DSpark dynamic speculative decoding, SWA bounded replay, deepseek-recipe protocol layers, and $38/GPU/h unit economics: a complete architectural dissection of DeepSeek's production inference stack.
 - Key FAQ Insights:
   * Q: Q1: Why did DeepSeek build DeepInfer from scratch instead of contributing patches to vLLM or SGLang?
