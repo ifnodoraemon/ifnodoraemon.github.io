@@ -5,8 +5,18 @@
   <link>https://blog.llmgo.top/</link>
   <description>专注 AI 大模型技术研究与实践的技术博客</description>
   <language>zh-CN</language>
-  <pubDate>Wed, 21 Oct 2026 03:59:21 GMT</pubDate>
+  <pubDate>Wed, 21 Oct 2026 05:37:39 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>解密 DeepSeek 推理印钞机：DeepInfer 与 deepseek-recipe 从硅基地基到协议顶层的生产全栈拆解</title>
+    <link>https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/</link>
+    <guid>https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/</guid>
+    <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>推理架构</category>
+    <description>从底层芯片与通信物理地基，到算子内核、PD 极致分离拓扑、DSpark 动态投机解码、SWA 边界重放，再到 deepseek-recipe 协议中间层与百万亿 Token 商业印钞机经济学，全景剖析 DeepSeek 最新开源生产推理全栈。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/deepinfer-deepseek-recipe-architecture.png" length="150000" type="image/png" />
+  </item>
   <item>
     <title>InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战</title>
     <link>https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/</link>

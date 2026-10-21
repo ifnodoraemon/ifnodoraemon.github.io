@@ -25,8 +25,9 @@
 - [Computer Networking Masterclass: From Ethernet Principles to Hyperscale InfiniBand Architecture](https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/): A ground-zero masterclass to 10,000-GPU AI networking: from physical voltages, twisted pairs, and optical fibers to hubs, collision domains, switches, and MAC/ARP; step-by-step binary derivations of IP addressing, subnet masks, default gateways, VLANs, DHCP, and NAT; in-depth DNS, Socket 5-tuples, TCP 11-state machines, and BBR congestion control; Linux kernel NAPI, sk_buff, and eBPF XDP; datacenter traditional 3-tier vs 2-tier Spine-Leaf fabrics and EVPN-VXLAN; leading up to AI supercomputing: lossless RoCEv2, native InfiniBand NDR/XDR link speeds, credit flow control, Rail-Optimized Fat-Trees, Adaptive Routing, SHARP, and bare-metal OFED/NCCL performance tuning. (12 articles, opening chapter: [network-fundamentals-bits-cables-hubs-switches-mac-arp](https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/))
 - [Modern Applied LLM Engineering & Selection Guide](https://blog.llmgo.top/en/articles/): Enterprise RAG pipelines, fine-tuning workflows, Test-Time Compute & GRPO, evaluation suites, and multi-model benchmark selections.
 
-## 中文文章索引 / Chinese Technical Articles (70 篇)
+## 中文文章索引 / Chinese Technical Articles (71 篇)
 
+- [解密 DeepSeek 推理印钞机：DeepInfer 与 deepseek-recipe 从硅基地基到协议顶层的生产全栈拆解](https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/): 从底层芯片与通信物理地基，到算子内核、PD 极致分离拓扑、DSpark 动态投机解码、SWA 边界重放，再到 deepseek-recipe 协议中间层与百万亿 Token 商业印钞机经济学，全景剖析 DeepSeek 最新开源生产推理全栈。
 - [InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战](https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/): 从网络架构设计到万卡 AI 智算中心裸金属物理落地，工程师必须攻克哪些工程深水区？全景拆解 InfiniBand 生产落地实战：Mellanox OFED / DOCA 驱动栈与固件管理工具（flint/mlxlink）；搭建基于 OpenSM 的 Master/Standby 主备高可用子网管理架构；深入实战 ibdiagnet 全网巡检，秒级定位物理层 Symbol Error 脏光纤与降速协商链路；并深入 GPU 通信最底层，实战验证 GPUDirect RDMA（nvidia-peermem 驱动）与 NCCL 核心环境变量（NCCL_IB_HCA / NCCL_NET_GDR_LEVEL=5）极限压测调优。
 - [InfiniBand 智算集群组网实战：Fat-Tree 胖树拓扑、Rail-Optimized 轨道优化设计、自适应路由 (AR) 与 SHARP 网内计算](https://blog.llmgo.top/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/): 如何将成千上万台配备 8 卡 GPU 的服务器用万根光纤编织成一张无阻塞、零死锁的高性能互联网络？深入剖析万卡 AI 智算中心核心拓扑：从 1985 年 Leiserson 胖树（Fat-Tree）数学模型、端口数 k 与 2-Tier/3-Tier 最大节点数严格推导，到专为 DGX H100/H200/B200 量身定制的 Rail-Optimized（轨道优化）八独立平面物理组网；深入解析 FTree 与 Up/Down 算法如何通过禁止“先下后上”破除信用死锁环路；并解密自适应路由（Adaptive Routing）与 SHARP 交换机网内规约计算如何将 All-Reduce 集合通信带宽效率提升 2 倍。
 - [InfiniBand 架构第一性原理：物理链路速率演进、Credit-Based 链路级流控与子网管理器 (Subnet Manager) 全局编排](https://blog.llmgo.top/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/): 为什么在 2026 年全球顶尖的万卡 AI 算力集群与前沿超算中，原生 InfiniBand 依然牢牢统治着智算中心的核心动脉？深度拆解 InfiniBand 分层协议栈与物理层演进史：从 EDR 100G、HDR 200G、NDR 400G（Quantum-2）到 2026 规模量产的 XDR 800G（Quantum-X800/ConnectX-8）；剖析链路层第一性原理：基于 Flit 的 Credit-Based 信用度硬件级流控与 Cut-Through 直通交换纳秒级低时延机理；解密控制中枢子网管理器（Subnet Manager, OpenSM）全网拓扑发现、GUID/LID/LMC 动态编排与 LFT 线性转发表下发控制全流程。
@@ -98,8 +99,9 @@
 - [多模态大模型入门指南](https://blog.llmgo.top/articles/multimodal-guide/): 探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。
 - [大模型微调全流程指南：底层工作原理、高价值落地用例与生产实战](https://blog.llmgo.top/articles/fine-tuning-guide/): 深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。
 
-## 英文文章索引 / English Technical Articles (70 Articles)
+## 英文文章索引 / English Technical Articles (71 Articles)
 
+- [Inside DeepSeek's Trillion-Token Engine: DeepInfer and deepseek-recipe Architecture from Silicon to Protocol Layer](https://blog.llmgo.top/en/articles/deepinfer-deepseek-recipe-architecture/): From physical silicon foundations and kernel matrices to 1:1 PD disaggregation topologies, DSpark dynamic speculative decoding, SWA bounded replay, deepseek-recipe protocol layers, and $38/GPU/h unit economics: a complete architectural dissection of DeepSeek's production inference stack.
 - [Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA](https://blog.llmgo.top/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/): Production InfiniBand cluster operations: MLNX_OFED driver stacks, OpenSM high availability, ibdiagnet fabric health auditing, and NCCL GPUDirect RDMA tuning.
 - [InfiniBand AI Cluster Networking in Practice: Fat-Tree Topologies, Rail-Optimized Architecture, Adaptive Routing (AR), and In-Network Reduction (SHARP)](https://blog.llmgo.top/en/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/): AI cluster fabric topologies: Non-blocking Fat-Trees, Rail-Optimized cabling, Adaptive Routing (AR), SHARP in-network aggregation, and congestion mitigation.
 - [InfiniBand Architecture First Principles: Physical Link Rates, Credit-Based Link Flow Control, and Subnet Manager Fabric Orchestration](https://blog.llmgo.top/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/): InfiniBand hardware architecture: SDR to NDR/XDR link speeds, 4b/5b to PAM4 modulation, credit-based flow control, Virtual Lanes, and OpenSM subnet management.
@@ -182,6 +184,17 @@
 # 深度知识库与问答全文 / Full Knowledge Base & Technical FAQ Details
 
 ## 中文文章深度 FAQ 与要点汇总
+
+### [解密 DeepSeek 推理印钞机：DeepInfer 与 deepseek-recipe 从硅基地基到协议顶层的生产全栈拆解](https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/)
+- 发布日期: 2026-10-21 | 标签: 推理架构 | 预计阅读: 预计阅读 41 分钟 | 字数: 约 10179 字
+- 概述: 从底层芯片与通信物理地基，到算子内核、PD 极致分离拓扑、DSpark 动态投机解码、SWA 边界重放，再到 deepseek-recipe 协议中间层与百万亿 Token 商业印钞机经济学，全景剖析 DeepSeek 最新开源生产推理全栈。
+- 核心 FAQ 解答:
+  * Q: Q1: DeepInfer 为什么不直接在现有的 vLLM 或 SGLang 之上打补丁，而是要独立自研一套全新引擎？
+    A: 主流开源引擎（如 vLLM 和 SGLang）的设计初衷是服务于社区广泛的通用模型、单机或小规模集群部署，其架构需要兼容数百种不同的开源模型和多样化的执行硬件。这种“大而全”的历史包袱导致其难以针对单一极端工况做极致削减。 DeepInfer 的使命完全不同：它是专为 DeepSeek 自研模型架构（MLA、CSA+HCA、MoE）、万亿参数规模、跨节点 Wide-EP 超节点、以及英伟达/昇腾特定硬件 定制生产的“专用利刃”。通过把与核心架构无关的中间抽象层、通用的运行时兼容全部剥离，DeepInfer 实现了代码体积精简、零冗余内存开销与算子端到端穿透，这也是其能在单机卡效上跑出 $38/...
+  * Q: Q2: 为什么 deepseek-recipe 要用 Rust 编写并强制废弃 Jinja？在企业现有微服务网关中如何无缝迁移？
+    A: Jinja 模板是解释执行的纯文本拼接工具，在面对复杂的长文本思考链（<think> 隔离）、多轮工具调用（Function Calling）以及精准 Token 上下文截断时，性能低下且极易发生转义错误。Rust 原生具备零成本抽象、无垃圾回收（No GC）与强类型内存安全特性，能够实现纳秒级的语法树解析与协议转换。 在企业迁移上，官方通过 PyO3 打包发布了 PyPI 标准库（pip install deepseek-recipe）。现有的 Python 微服务网关（如基于 FastAPI 或 LiteLLM 构建的统一接入层）只需替换 Prompt 渲染模块，将其统一路由到 deeps...
+  * Q: Q3: 华为昇腾 950 与英伟达 Blackwell 在运行 DeepInfer 时的核心算子实现差异与性能表现如何？
+    A: - 硬件架构侧：NVIDIA Blackwell 依托强大的第五代 Tensor Core、TMA 引擎与 10 TB/s 片内互联，在稠密 GEMM 与 FP4/FP8 纯计算吞吐上具备绝对优势；华为昇腾 950 则基于 DaVinci 架构的 3D Cube 矩阵计算单元与特化的向量 Vector 单元，并拥有极具竞争力的本地片上通信（HCCS）。 - 算子调度侧：DeepInfer 通过自研的 TileLang 领域特定语言，抹平了底层代码分歧。在英伟达端直接编译为极致优化的 SASS 指令；在昇腾端则编译为匹配 Ascend C 的并行指令，并充分调度昇腾片上存储（L0/L1 Buff...
 
 ### [InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战](https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/)
 - 发布日期: 2026-10-05 | 标签: 生产落地与NCCL调优 | 预计阅读: 预计阅读 15 分钟 | 字数: 约 3740 字
@@ -944,6 +957,17 @@
     A: 工业界普遍以 LoRA 为默认首选，它能在保留基础通用知识的同时节省 80% 以上的显存和算力开销。若本地硬件处于极限受限状态，建议直接采用基于 4-bit 权重的 QLoRA（详见[大模型量化实战指南](/articles/quantization-hands-on-guide/)）。只有在需要重训全新基础底座语言或发生颠覆性结构范式迁移时，才建议启动昂贵的全参数微调。此外，若追求长推理链与复杂逻辑突破，可在 SFT 后结合基于强化学习的测试时扩展优化，详见 [《推理时扩展 (Test-Time Compute) 与 GRPO 强化学习实战》](/articles/test-time-com...
 
 ## English Articles Technical FAQ & Key Takeaways
+
+### [Inside DeepSeek's Trillion-Token Engine: DeepInfer and deepseek-recipe Architecture from Silicon to Protocol Layer](https://blog.llmgo.top/en/articles/deepinfer-deepseek-recipe-architecture/)
+- Date: 2026-10-21 | Tag: Inference Architecture | Read: 18 min read | Words: 4487 words
+- Summary: From physical silicon foundations and kernel matrices to 1:1 PD disaggregation topologies, DSpark dynamic speculative decoding, SWA bounded replay, deepseek-recipe protocol layers, and $38/GPU/h unit economics: a complete architectural dissection of DeepSeek's production inference stack.
+- Key FAQ Insights:
+  * Q: Q1: Why did DeepSeek build DeepInfer from scratch instead of contributing patches to vLLM or SGLang?
+    A: General-purpose frameworks like vLLM and SGLang are designed to support hundreds of model architectures and diverse consumer and enterprise deployment scenarios. This broad compatibility necessitates generalized abstraction layers and complex multi-device runtime wrappers. DeepInfer was engineered w...
+  * Q: Q2: Why is deepseek-recipe implemented in Rust, and how can teams integrate it into existing API gateways?
+    A: Jinja templates are interpreted dynamically as raw text. When handling multi-turn tool calling, complex system prompts, and strict <think> token isolation, Jinja incurs high CPU overhead and risks token escaping errors. Rust provides zero-cost abstractions, deterministic memory safety without a garb...
+  * Q: Q3: How do Huawei Ascend 950 and NVIDIA Blackwell compare when running DeepInfer?
+    A: - Compute Subsystem: NVIDIA Blackwell excels in raw dense FP4/FP8 GEMM throughput due to its 5th-Gen Tensor Cores and TMA subsystem. Huawei Ascend 950 provides strong matrix throughput via its DaVinci 3D Cube cores and Vector units, backed by competitive HCCS intra-node interconnects. - Software Ali...
 
 ### [Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA](https://blog.llmgo.top/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/)
 - Date: 2026-10-05 | Tag: Production Ops & NCCL Tuning | Read: 8 min read | Words: 1899 words

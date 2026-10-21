@@ -5,8 +5,18 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Focusing on AI foundation models and tech insights</description>
   <language>en</language>
-  <pubDate>Wed, 21 Oct 2026 03:59:21 GMT</pubDate>
+  <pubDate>Wed, 21 Oct 2026 05:37:39 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Inside DeepSeek's Trillion-Token Engine: DeepInfer and deepseek-recipe Architecture from Silicon to Protocol Layer</title>
+    <link>https://blog.llmgo.top/en/articles/deepinfer-deepseek-recipe-architecture/</link>
+    <guid>https://blog.llmgo.top/en/articles/deepinfer-deepseek-recipe-architecture/</guid>
+    <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Inference Architecture</category>
+    <description>From physical silicon foundations and kernel matrices to 1:1 PD disaggregation topologies, DSpark dynamic speculative decoding, SWA bounded replay, deepseek-recipe protocol layers, and $38/GPU/h unit economics: a complete architectural dissection of DeepSeek's production inference stack.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/deepinfer-deepseek-recipe-architecture.png" length="150000" type="image/png" />
+  </item>
   <item>
     <title>Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA</title>
     <link>https://blog.llmgo.top/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/</link>
