@@ -99,7 +99,7 @@ function formatTags(tagStr, slug) {
   const defaults = ['ai', 'programming'];
   let tags = [];
   if (tagStr) {
-    const clean = tagStr.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const clean = tagStr.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 30);
     if (clean) tags.push(clean);
   }
   if (slug.includes('agent')) tags.push('agents');
@@ -107,6 +107,10 @@ function formatTags(tagStr, slug) {
   if (slug.includes('prompt')) tags.push('promptengineering');
   if (slug.includes('rag')) tags.push('datascience');
   if (slug.includes('quantization')) tags.push('performance');
+  if (slug.includes('network') || slug.includes('infiniband') || slug.includes('rdma') || slug.includes('tcp')) tags.push('networking');
+  if (slug.includes('k8s') || slug.includes('docker') || slug.includes('container')) tags.push('devops');
+
+  tags = Array.from(new Set(tags));
 
   for (const def of defaults) {
     if (tags.length < 4 && !tags.includes(def)) tags.push(def);
@@ -125,12 +129,20 @@ function prepareMarkdown(content, slug, title) {
   return md + footer;
 }
 
+function formatTitle(title) {
+  if (!title || title.length <= 125) return title;
+  const trimmed = title.slice(0, 122);
+  const lastSpace = trimmed.lastIndexOf(' ');
+  const clean = lastSpace > 75 ? trimmed.slice(0, lastSpace) : trimmed;
+  return clean.replace(/[:,;\s]+$/, '') + '...';
+}
+
 async function publishArticle(apiKey, filePath, isDraft = false, articleId = null) {
   const raw = fs.readFileSync(filePath, 'utf-8');
   const { data, content } = matter(raw);
 
   const slug = data.slug || path.basename(filePath).replace(/\.en\.md$/, '');
-  const title = data.title;
+  const title = formatTitle(data.title);
   const canonicalUrl = `${SITE_URL}/en/articles/${slug}/`;
   const tags = formatTags(data.tag, slug);
   const markdownBody = prepareMarkdown(content, slug, title);
