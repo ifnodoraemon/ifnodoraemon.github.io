@@ -1,5 +1,5 @@
 ---
-title: "长思维链 (Reasoning / Test-Time Compute) 与大集群推理系统的未来终局"
+title: "长思维链推理：Test-Time Compute 与 KV 调度"
 slug: reasoning-test-time-compute-inference-future
 date: 2026-09-24
 tag: 终局前瞻
@@ -7,7 +7,7 @@ tagClass: tag-amber
 category: 推理系统
 series: llm-inference
 seriesOrder: 10
-description: "当自回归思考步长从数百 Token 飙升至 128k 深度反思，大模型推理系统迎来了颠覆性的物理拐点。深度探讨长思考链 (Test-Time Compute) 时代的系统级重构：KV Cache 爆炸式显存雪崩对抗、树状搜索 (MCTS) 与投机解码协同调度、基于强化学习的动态思考预算治理，以及跨介质多级分层 (SRAM/HBM/CXL/NVMe-oF) 全球 KV 存储池的未来终局。"
+description: "说明变长思维链如何放大 KV Cache 占用，以及测试时计算、投机树调度和分层 KV 存储要在推理系统里解决什么问题。调度策略也要跟着改。"
 extraTags:
   - Test-Time Compute
   - Reasoning

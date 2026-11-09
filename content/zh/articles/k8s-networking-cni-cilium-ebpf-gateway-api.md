@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes 网络模型全景：CNI 规范演进、Calico BGP、Cilium eBPF 与 Gateway API 架构解密"
+title: "K8s 网络：CNI、Cilium eBPF 与 Gateway API"
 slug: k8s-networking-cni-cilium-ebpf-gateway-api
 date: 2026-09-25
 tag: K8s 网络
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 5
-description: "为什么说容器网络是 Kubernetes 中最复杂、最容易踩坑的深水区？深度拆解云原生网络四大公理与 CNI（Container Network Interface）插件规范底层执行机理；全面对比 Flannel VXLAN 覆盖网络与 Calico BGP 纯二层路由性能与开销；深入解密 Cilium 如何利用 Linux 内核 eBPF 与 sockops 套接字重定向彻底革新 kube-proxy 与 iptables 性能瓶颈；并剖析面向未来的 Gateway API 角色分离与流量治理架构。"
+description: "比较 Flannel、Calico BGP 与 Cilium eBPF 的数据面差异，并说明 Gateway API 如何把流量策略拆给不同角色来管理。"
 extraTags:
   - Kubernetes
   - CNI

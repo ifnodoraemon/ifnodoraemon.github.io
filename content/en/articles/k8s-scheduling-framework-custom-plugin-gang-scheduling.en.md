@@ -1,5 +1,5 @@
 ---
-title: "Hacking the Kubernetes Scheduler: Custom Plugins via Scheduling Framework, Volcano DRF Math, and Descheduler Dynamic Rebalancing"
+title: "Kubernetes Scheduling: Plugins and Gang Scheduling"
 slug: k8s-scheduling-framework-custom-plugin-gang-scheduling
 date: 2026-09-25
 tag: Scheduler Customization
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 9
-description: "Kubernetes custom scheduling: 11 Scheduling Framework extension points, CycleState caching, Volcano DRF algorithms, and Go Gang Scheduling plugin implementation."
+description: "How the Scheduling Framework loads custom plugins, and how gang scheduling plus the descheduler place a batch job and move pods when the cluster shifts."
 extraTags:
   - Kubernetes
   - Scheduling Framework

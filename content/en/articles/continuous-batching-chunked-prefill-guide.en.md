@@ -1,5 +1,5 @@
 ---
-title: "Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking"
+title: "Continuous Batching and Chunked Prefill"
 slug: continuous-batching-chunked-prefill-guide
 date: 2026-09-24
 tag: Batching & Scheduling
@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
 seriesOrder: 3
-description: "High-throughput LLM serving: Orca iteration-level continuous batching, head-of-line blocking mitigation, and Chunked Prefill with decode piggybacking in vLLM."
+description: "Why one long prefill still blocks other decode steps after continuous batching, and how chunked prefill splits that work so waiting requests can run too."
 extraTags:
   - Continuous Batching
   - Chunked Prefill

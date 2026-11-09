@@ -1,5 +1,5 @@
 ---
-title: "Production Databases and Storage on Kubernetes: Local NVMe Passthrough, RocksDB/WAL Tuning, and Fencing Split-Brain Protection"
+title: "Databases on Kubernetes: Local NVMe and Fencing"
 slug: k8s-database-storage-local-nvme-tuning-fencing
 date: 2026-09-25
 tag: Database Storage
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 8
-description: "Running databases on Kubernetes: Local PV NVMe tuning, page cache dirty ratio optimization, RocksDB/MySQL WAL Direct I/O, and STONITH node fencing."
+description: "How to place a database on Kubernetes local NVMe, tune RocksDB and WAL flushes, and fence an old primary so it cannot keep writing after a failover event."
 extraTags:
   - Kubernetes
   - Database

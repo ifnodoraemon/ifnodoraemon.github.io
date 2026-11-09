@@ -1,5 +1,5 @@
 ---
-title: "RDMA High-Performance Networking Foundations: Kernel Bypass, Zero-Copy, Queue Pairs, and Lossless RoCEv2 (PFC/ECN) Architecture"
+title: "RDMA Basics: Kernel Bypass, Queue Pairs, RoCEv2"
 slug: rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless
 date: 2026-10-02
 tag: RDMA & RoCEv2
@@ -7,7 +7,7 @@ tagClass: tag-emerald
 category: Computer Networking
 series: computer-networking
 seriesOrder: 9
-description: "RDMA high-performance networking: Kernel bypass, hardware zero-copy, Queue Pair ibverbs verbs, and lossless RoCEv2 with 802.1Qbb PFC and DCQCN congestion control."
+description: "How RDMA registers memory, bypasses the kernel, and copies nothing in software; how queue pairs transfer data; and how RoCEv2 uses PFC and ECN plus memory keys."
 extraTags:
   - Computer Networking
   - RDMA

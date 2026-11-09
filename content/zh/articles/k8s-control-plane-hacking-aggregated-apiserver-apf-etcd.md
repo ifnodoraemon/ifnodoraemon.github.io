@@ -1,5 +1,5 @@
 ---
-title: "对 K8s 控制面动刀：WatchCache 缓存穿透机理、Aggregated APIServer 聚合扩展、APF 洗牌分片流控与万级节点 etcd 调优"
+title: "K8s 控制面：聚合 APIServer、APF 与 etcd"
 slug: k8s-control-plane-hacking-aggregated-apiserver-apf-etcd
 date: 2026-09-25
 tag: 控制面内核定制
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 11
-description: "为什么当自定义资源数量突破数百万级时，CRD 会直接把 etcd 撑爆导致整个 Kubernetes 集群瘫痪？深度拆解对 Kubernetes 控制面中枢的深水区改造：剖析 kube-apiserver 内部 WatchCache 环形缓冲区与 resourceVersion 三大语义机制；构建独立的 Aggregated APIServer（聚合 API 服务器）实现后端存储旁路解耦；深入剖析 API Priority and Fairness（APF）洗牌分片流控数学模型如何化解并发流量雪崩；并全面公开支撑上万节点超大规模集群的 etcd 物理双盘隔离与事件分库极限方案。"
+description: "说明 WatchCache、聚合 APIServer 和 APF 如何扩展 Kubernetes 控制面，以及节点规模变大以后 etcd 需要做哪些调优。"
 extraTags:
   - Kubernetes
   - Control Plane

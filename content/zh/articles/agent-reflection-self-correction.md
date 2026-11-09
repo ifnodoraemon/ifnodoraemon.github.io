@@ -1,5 +1,5 @@
 ---
-title: 让模型在运行中进化：从基础反思到基于 MCTS 的 Test-Time Compute 搜索
+title: "Agent 反思与自我修正：从批评到 MCTS"
 slug: agent-reflection-self-correction
 date: 2026-07-16
 tag: 自省演进
@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: AI Agent
 series: ai-agent
 seriesOrder: 7
-description: 大语言模型的潜力不止于预训练参数。本文带你深入探讨 Test-Time Compute 的前沿：从 Actor-Critic 双边架构，一路深入到利用蒙特卡洛树搜索（MCTS）解码 Agent 的自我纠错极限。
+description: "说明 Agent 运行时反思如何从 Actor-Critic 的互相检查，走到用蒙特卡洛树搜索展开候选，并把测试时计算用在自我修正上，不改模型权重。"
 ---
 
 ## 引子：为什么模型需要“想一想再回答”？

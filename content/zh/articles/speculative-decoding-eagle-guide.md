@@ -1,11 +1,11 @@
 ---
-title: "投机采样 (Speculative Decoding) 生产实操：从 Draft Model 到 EAGLE-3 动态推测树实现 3x~5x 无损加速"
+title: "投机解码：从 Draft Model 到 EAGLE-3"
 slug: speculative-decoding-eagle-guide
 date: 2026-09-18
 tag: 投机采样
 tagClass: tag-cyan
 category: 推理系统
-description: "大模型解码阶段的核心物理瓶颈是什么？全面解密投机采样（Speculative Decoding）的数学无损证明、拒绝采样检验机制，深入剖析从双模型投机、Medusa 到清华开源爆款 EAGLE-2/3 动态自适应推测树的架构演进，并提供在 vLLM 与 SGLang 中开启生产级 3x~5x 加速的实操配置。"
+description: "说明投机解码为何可以不改变采样分布，以及从草稿模型、Medusa 到 EAGLE-3，在 vLLM 和 SGLang 里怎样打开这项加速，可对照配置。"
 featured: true
 featuredStats:
   - label: 加速倍率

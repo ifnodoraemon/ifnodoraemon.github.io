@@ -1,5 +1,5 @@
 ---
-title: "Production LLM Inference Engines Teardown: vLLM v1 vs. SGLang vs. TensorRT-LLM vs. llama.cpp Internals"
+title: "Inference Engines: vLLM, SGLang, TRT-LLM, llama.cpp"
 slug: inference-engines-core-architecture-internals
 date: 2026-09-24
 tag: Inference Engines
@@ -7,7 +7,7 @@ tagClass: tag-emerald
 category: Inference Systems
 series: llm-inference
 seriesOrder: 9
-description: "Codebase teardown of top LLM inference engines: vLLM multi-step scheduling, SGLang RadixAttention, TensorRT-LLM in-flight batching, and llama.cpp quantization."
+description: "Compare the scheduler loop and execution backend in vLLM v1, SGLang, TensorRT-LLM, and llama.cpp when choosing an engine for throughput or a latency target."
 extraTags:
   - vLLM
   - SGLang

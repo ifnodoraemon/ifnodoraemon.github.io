@@ -1,5 +1,5 @@
 ---
-title: "Enterprise LAN Infrastructure: VLAN Segmentation (802.1Q), Dynamic DHCP, and NAT Port Forwarding"
+title: "Enterprise LAN: VLAN, DHCP, and NAT"
 slug: enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding
 date: 2026-09-30
 tag: LAN & VLAN Infrastructure
@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Computer Networking
 series: computer-networking
 seriesOrder: 3
-description: "Enterprise LAN infrastructure: IEEE 802.1Q VLAN trunking, DORA DHCP address pools, Router-on-a-Stick, L3 routing, and Linux iptables NAPT port forwarding."
+description: "How 802.1Q VLANs split one switch into separate broadcast domains, how DHCP DORA leases addresses, and how NAPT forwards ports through a gateway. See relay."
 extraTags:
   - Computer Networking
   - LAN

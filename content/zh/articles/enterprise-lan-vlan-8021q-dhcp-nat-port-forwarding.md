@@ -1,5 +1,5 @@
 ---
-title: "局域网企业级基建：VLAN 划分 (802.1Q)、DHCP 动态分配与 NAT 端口映射机制"
+title: "企业局域网：VLAN、DHCP 与 NAT"
 slug: enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding
 date: 2026-09-30
 tag: 局域网基建与VLAN
@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: 计算机网络
 series: computer-networking
 seriesOrder: 3
-description: "为什么一台物理交换机能够切分成几十个互不干扰的虚拟局域网？深度拆解现代企业局域网三大核心基建：从广播风暴危害到 IEEE 802.1Q 帧标签结构（4 字节 Tag、12 位 VID、PCP 优先级）；全面理清 Access 口、Trunk 口与 PVID 剥离/插入全流程，对比单臂路由与三层交换机 SVI 虚接口；深入剖析 DHCP 动态主机配置协议 DORA 四步握手与跨网段 Relay 中继机理；并手把手揭秘 NAPT（网络地址端口转换）、SNAT、DNAT 端口映射与 Linux conntrack 连接跟踪表物理运转真相。"
+description: "说明 802.1Q VLAN 如何把一台交换机划成多个广播域，DHCP 如何用 DORA 分配地址，以及 NAPT 如何做端口映射，含 Access 口。"
 extraTags:
   - Computer Networking
   - LAN

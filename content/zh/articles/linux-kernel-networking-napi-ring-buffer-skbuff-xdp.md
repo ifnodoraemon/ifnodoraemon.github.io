@@ -1,5 +1,5 @@
 ---
-title: "Linux 内核网络子系统硬核剖析：从网卡驱动、NAPI 机制、Ring Buffer 到 eBPF XDP 极速转发"
+title: "Linux 内核网络：NAPI、Ring Buffer 与 XDP"
 slug: linux-kernel-networking-napi-ring-buffer-skbuff-xdp
 date: 2026-10-02
 tag: Linux网络与eBPF
@@ -7,7 +7,7 @@ tagClass: tag-orange
 category: 计算机网络
 series: computer-networking
 seriesOrder: 7
-description: "一个以太网电脉冲是如何最终变成应用程序内存中的数据的？深度剖析 Linux 操作系统内核网络协议栈全流程：从硬件网卡 RX Ring Buffer 描述符、PCIe DMA 零 CPU 搬运，到硬中断触发、NAPI 混合轮询机制与 ksoftirqd 软中断调度；全景透视 Linux 内核最核心的数据结构 sk_buff 指针拓扑与零拷贝内存流转；详解多核网卡 RSS 多队列与 RPS/RFS CPU 亲和性调优；并深入技术最前沿，剖析 eBPF XDP（eXpress Data Path）如何在网卡驱动层实现千万级 PPS 极速包转发与防 DDoS 机制。"
+description: "讲解网卡接收环、DMA 与 NAPI 轮询如何收包，sk_buff 如何在内核中流转，以及 eBPF XDP 在驱动层如何丢弃或转发，也讲 RSS。"
 extraTags:
   - Computer Networking
   - Linux Kernel

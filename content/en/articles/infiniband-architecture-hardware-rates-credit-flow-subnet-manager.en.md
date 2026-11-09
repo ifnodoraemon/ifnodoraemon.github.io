@@ -1,5 +1,5 @@
 ---
-title: "InfiniBand Architecture First Principles: Physical Link Rates, Credit-Based Link Flow Control, and Subnet Manager Fabric Orchestration"
+title: "InfiniBand Architecture: Rates, Credits, and OpenSM"
 slug: infiniband-architecture-hardware-rates-credit-flow-subnet-manager
 date: 2026-10-03
 tag: InfiniBand & Subnet Manager
@@ -7,7 +7,7 @@ tagClass: tag-indigo
 category: Computer Networking
 series: computer-networking
 seriesOrder: 10
-description: "InfiniBand hardware architecture: SDR to NDR/XDR link speeds, 4b/5b to PAM4 modulation, credit-based flow control, Virtual Lanes, and OpenSM subnet management."
+description: "InfiniBand link rates from HDR through XDR, how credit-based flow control avoids drops, and how OpenSM discovers the fabric and installs forwarding tables."
 extraTags:
   - Computer Networking
   - InfiniBand

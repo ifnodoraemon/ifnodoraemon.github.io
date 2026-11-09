@@ -1,11 +1,11 @@
 ---
-title: "2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro"
+title: "2026 Model Comparison: GPT-5.4, Claude 4.6, Gemini"
 slug: model-comparison-2026
 date: 2026-03-01
 tag: Model Benchmark
 tagClass: tag-amber
 category: Evaluation & Trends
-description: "Compare GPT-5.4, Claude 4.6, and Gemini 3.1 Pro APIs with sourced capabilities, token prices, SDK examples, fair evaluation rules, and self-hosting cost formulas."
+description: "Compare GPT-5.4, Claude 4.6, and Gemini 3.1 Pro by API capability, token price, and calling pattern, with checks you can rerun and a self-hosted cost formula."
 featured: true
 featuredStats:
   - label: Compared Models

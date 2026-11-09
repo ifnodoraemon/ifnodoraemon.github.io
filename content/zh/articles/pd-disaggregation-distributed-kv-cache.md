@@ -1,5 +1,5 @@
 ---
-title: "P/D 分离 (Prefill-Decode Disaggregation) 架构：计算与访存解耦、RDMA 分布式 KV Cache 传输与集群池化调度"
+title: "P/D 分离：Prefill 与 Decode 解耦及 KV 传输"
 slug: pd-disaggregation-distributed-kv-cache
 date: 2026-09-24
 tag: 推理架构
@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: 推理系统
 series: llm-inference
 seriesOrder: 8
-description: "为什么在 128k 超长上下文与长思考链时代，单机混合部署 Prefill 与 Decode 必然走向性能崩溃？深度剖析 P/D 分离 (Disaggregated Serving) 架构：从计算密集与访存密集的空间物理隔离、GQA 与 DeepSeek MLA 跨节点传输带宽推导，到 GPUDirect RDMA 单边零拷贝、全局 KV 池化调度与 P:D 节点最优比例数学建模。"
+description: "说明 Prefill 与 Decode 为什么要分池部署，KV Cache 如何经 RDMA 在节点间传递，以及集群怎样把这些缓存池化调度。"
 extraTags:
   - Disaggregated Serving
   - KV Cache

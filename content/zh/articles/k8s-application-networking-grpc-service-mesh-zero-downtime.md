@@ -1,5 +1,5 @@
 ---
-title: "业务软件在 K8s 上的网络架构实战：gRPC 长连接负载均衡陷阱、Service Mesh 与零停机平滑切流时序"
+title: "K8s 应用网络：gRPC 均衡与平滑切流"
 slug: k8s-application-networking-grpc-service-mesh-zero-downtime
 date: 2026-09-25
 tag: 业务网络实战
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 7
-description: "为什么我们的微服务搬上 Kubernetes 后，滚动发布总会出现偶发 502 报错，gRPC 流量更是死死钉在某一个 Pod 上完全不均衡？深度拆解业务软件在 K8s 上的网络工程实战：HTTP/2 多路复用导致四层 ClusterIP 负载均衡彻底失效的底层根因与 Headless Service / Envoy 网格解法；MaxConnectionAge、JVM DNS TTL 永久缓存与指数退避重连风暴四大生产陷阱；完整复盘 Pod 销毁与 EndpointSlice 异步切流的时序竞态冲突；并给出从 preStop 缓冲、平滑连接排空到 readinessGates 的生产级零停机发布实践。"
+description: "说明 gRPC 长连接为何让 Kubernetes Service 负载倾斜，以及 Service Mesh 如何按连接排空，做到发布时不断流量。"
 extraTags:
   - Kubernetes
   - gRPC

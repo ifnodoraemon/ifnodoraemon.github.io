@@ -1,5 +1,5 @@
 ---
-title: "2026 AI 智算调度终局：Kubernetes GPU Operator、MIG 分割、拓扑感知调度与 vLLM/SGLang 集群弹性扩缩容"
+title: "K8s GPU 调度：GPU Operator、MIG 与推理扩缩"
 slug: k8s-gpu-operator-ai-inference-scheduling
 date: 2026-09-25
 tag: AI 智算调度
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 13
-description: "为什么传统以 CPU/内存为核心的调度体系在大模型时代全面失效？深入拆解 2026 AI 时代 Kubernetes 智算基础设施调度架构：NVIDIA GPU Operator 驱动与运行时全自动纳管链路、MIG（多实例 GPU）硬件物理分割与时间切片方案；Kubelet Topology Manager 与 DRA（动态资源分配）如何解决跨 NUMA 节点与 NVLink 互联性能断崖；并实战构建基于 P/D 分离、KV Cache 负载指标与 KEDA 的生产级 vLLM / SGLang 大模型推理集群弹性扩缩容架构。"
+description: "说明 GPU Operator 如何安装驱动与设备插件，MIG 如何切分 GPU，以及拓扑感知调度怎样扩缩 vLLM 和 SGLang，面向在线推理。"
 extraTags:
   - Kubernetes
   - GPU Operator

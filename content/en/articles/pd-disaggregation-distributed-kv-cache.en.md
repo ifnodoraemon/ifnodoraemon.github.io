@@ -1,5 +1,5 @@
 ---
-title: "Prefill-Decode (P/D) Disaggregation Architecture: Compute-Memory Decoupling, RDMA Distributed KV Cache Transfer, and Cluster-Scale Pooling"
+title: "Prefill-Decode Split and Distributed KV Transfer"
 slug: pd-disaggregation-distributed-kv-cache
 date: 2026-09-24
 tag: Inference Systems
@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: Inference Systems
 series: llm-inference
 seriesOrder: 8
-description: "Prefill-Decode (P/D) Disaggregation architecture: compute vs memory isolation, MLA cross-node bandwidth modeling, GPUDirect RDMA KV transfers, and queuing theory."
+description: "Why prefill and decode belong on separate pools, how RDMA moves KV cache between those nodes, and how a cluster schedules the pooled cache across the cluster."
 extraTags:
   - Disaggregated Serving
   - KV Cache

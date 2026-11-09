@@ -3,318 +3,318 @@
 <channel>
   <title>LLM Systems Architecture</title>
   <link>https://blog.llmgo.top/en/</link>
-  <description>Focusing on AI foundation models and tech insights</description>
+  <description>Notes for engineers on LLM inference architecture and systems engineering: vLLM serving, MLA attention, InfiniBand fabrics, and production Agent runtimes.</description>
   <language>en</language>
-  <pubDate>Wed, 21 Oct 2026 05:58:37 GMT</pubDate>
+  <pubDate>Mon, 09 Nov 2026 01:45:55 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
-    <title>Inside DeepSeek's Trillion-Token Engine: DeepInfer and deepseek-recipe Architecture from Silicon to Protocol Layer</title>
+    <title>DeepSeek Inference Stack: DeepInfer and deepseek-recipe</title>
     <link>https://blog.llmgo.top/en/articles/deepinfer-deepseek-recipe-architecture/</link>
     <guid>https://blog.llmgo.top/en/articles/deepinfer-deepseek-recipe-architecture/</guid>
     <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Inference Architecture</category>
-    <description>From physical silicon foundations and kernel matrices to 1:1 PD disaggregation topologies, DSpark dynamic speculative decoding, SWA bounded replay, deepseek-recipe protocol layers, and $38/GPU/h unit economics: a complete architectural dissection of DeepSeek's production inference stack.</description>
+    <description>DeepSeek's production inference stack: DeepInfer kernels, prefill-decode split, DSpark speculative decoding, SWA replay, and the deepseek-recipe protocol layer.</description>
     <enclosure url="https://blog.llmgo.top/og/en/deepinfer-deepseek-recipe-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA</title>
+    <title>InfiniBand Production Tuning: OpenSM and NCCL</title>
     <link>https://blog.llmgo.top/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/</link>
     <guid>https://blog.llmgo.top/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/</guid>
     <pubDate>Mon, 05 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Production Ops &amp; NCCL Tuning</category>
-    <description>Production InfiniBand cluster operations: MLNX_OFED driver stacks, OpenSM high availability, ibdiagnet fabric health auditing, and NCCL GPUDirect RDMA tuning.</description>
+    <description>Production InfiniBand setup: install OFED, run OpenSM with a standby, audit the fabric with ibdiagnet, and tune NCCL for GPUDirect RDMA. It finds bad links.</description>
     <enclosure url="https://blog.llmgo.top/og/en/infiniband-production-deployment-opensm-ofed-nccl-tuning.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>InfiniBand AI Cluster Networking in Practice: Fat-Tree Topologies, Rail-Optimized Architecture, Adaptive Routing (AR), and In-Network Reduction (SHARP)</title>
+    <title>InfiniBand Fabrics: Fat-Tree, Rail-Optimized, SHARP</title>
     <link>https://blog.llmgo.top/en/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/</link>
     <guid>https://blog.llmgo.top/en/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/</guid>
     <pubDate>Sun, 04 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Fat-Tree &amp; Adaptive Routing</category>
-    <description>AI cluster fabric topologies: Non-blocking Fat-Trees, Rail-Optimized cabling, Adaptive Routing (AR), SHARP in-network aggregation, and congestion mitigation.</description>
+    <description>How large GPU clusters cable InfiniBand as a fat-tree with rail-optimized planes, and how adaptive routing plus SHARP improve collective communication.</description>
     <enclosure url="https://blog.llmgo.top/og/en/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>InfiniBand Architecture First Principles: Physical Link Rates, Credit-Based Link Flow Control, and Subnet Manager Fabric Orchestration</title>
+    <title>InfiniBand Architecture: Rates, Credits, and OpenSM</title>
     <link>https://blog.llmgo.top/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/</link>
     <guid>https://blog.llmgo.top/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/</guid>
     <pubDate>Sat, 03 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>InfiniBand &amp; Subnet Manager</category>
-    <description>InfiniBand hardware architecture: SDR to NDR/XDR link speeds, 4b/5b to PAM4 modulation, credit-based flow control, Virtual Lanes, and OpenSM subnet management.</description>
+    <description>InfiniBand link rates from HDR through XDR, how credit-based flow control avoids drops, and how OpenSM discovers the fabric and installs forwarding tables.</description>
     <enclosure url="https://blog.llmgo.top/og/en/infiniband-architecture-hardware-rates-credit-flow-subnet-manager.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Linux Kernel Networking Subsystem in Depth: From NIC Drivers, NAPI, and Ring Buffers to eBPF XDP Wire-Speed Forwarding</title>
+    <title>Linux Kernel Networking: NAPI, Rings, and XDP</title>
     <link>https://blog.llmgo.top/en/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/</link>
     <guid>https://blog.llmgo.top/en/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/</guid>
     <pubDate>Fri, 02 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Linux Kernel &amp; eBPF Networking</category>
-    <description>Linux kernel networking internals: NIC RX Ring Buffers, DMA transfers, NAPI hybrid polling, sk_buff lifecycle, RSS multi-queue affinity, and eBPF XDP wire filtering.</description>
+    <description>How a NIC ring, DMA, and NAPI polling receive packets, how sk_buff carries them in the kernel, and where eBPF XDP drops or forwards before the stack, plus RSS.</description>
     <enclosure url="https://blog.llmgo.top/og/en/linux-kernel-networking-napi-ring-buffer-skbuff-xdp.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>RDMA High-Performance Networking Foundations: Kernel Bypass, Zero-Copy, Queue Pairs, and Lossless RoCEv2 (PFC/ECN) Architecture</title>
+    <title>RDMA Basics: Kernel Bypass, Queue Pairs, RoCEv2</title>
     <link>https://blog.llmgo.top/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</link>
     <guid>https://blog.llmgo.top/en/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</guid>
     <pubDate>Fri, 02 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>RDMA &amp; RoCEv2</category>
-    <description>RDMA high-performance networking: Kernel bypass, hardware zero-copy, Queue Pair ibverbs verbs, and lossless RoCEv2 with 802.1Qbb PFC and DCQCN congestion control.</description>
+    <description>How RDMA registers memory, bypasses the kernel, and copies nothing in software; how queue pairs transfer data; and how RoCEv2 uses PFC and ECN plus memory keys.</description>
     <enclosure url="https://blog.llmgo.top/og/en/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Modern Data Center Network Architecture First Principles: Clos Topologies, Leaf-Spine Fabrics, BGP Underlay, and EVPN-VXLAN Large Layer-2 Virtualization</title>
+    <title>Datacenter Networks: Clos, Leaf-Spine, and EVPN</title>
     <link>https://blog.llmgo.top/en/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/</link>
     <guid>https://blog.llmgo.top/en/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/</guid>
     <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Datacenter &amp; Leaf-Spine</category>
-    <description>First-principles guide to datacenter networking: Clos topologies, 2-Tier/3-Tier Leaf-Spine fabrics, RFC 7938 eBGP Underlay, ECMP hashing, and EVPN-VXLAN large Layer-2 Overlay.</description>
+    <description>Why datacenter networks replace a three-tier STP tree with Clos leaf-spine, and how a BGP underlay plus EVPN-VXLAN stretches Layer 2 across racks. See ECMP.</description>
     <enclosure url="https://blog.llmgo.top/og/en/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Application &amp; Transport Layer Bridges: DNS Resolution, Sockets, Ports, and UDP vs TCP Foundations</title>
+    <title>DNS, Sockets, and UDP versus TCP</title>
     <link>https://blog.llmgo.top/en/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/</link>
     <guid>https://blog.llmgo.top/en/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/</guid>
     <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Transport Layer Bridge &amp; DNS</category>
-    <description>Application and transport layer bridges: DNS recursive resolution, Anycast root servers, 5-tuple socket multiplexing, and architectural UDP vs TCP trade-offs.</description>
+    <description>How DNS resolves a name from root to authority, how a socket 5-tuple lets one port serve many flows, and where UDP and TCP choose different guarantees.</description>
     <enclosure url="https://blog.llmgo.top/og/en/transport-bridge-dns-sockets-ports-udp-vs-tcp.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Enterprise LAN Infrastructure: VLAN Segmentation (802.1Q), Dynamic DHCP, and NAT Port Forwarding</title>
+    <title>Enterprise LAN: VLAN, DHCP, and NAT</title>
     <link>https://blog.llmgo.top/en/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/</link>
     <guid>https://blog.llmgo.top/en/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/</guid>
     <pubDate>Wed, 30 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>LAN &amp; VLAN Infrastructure</category>
-    <description>Enterprise LAN infrastructure: IEEE 802.1Q VLAN trunking, DORA DHCP address pools, Router-on-a-Stick, L3 routing, and Linux iptables NAPT port forwarding.</description>
+    <description>How 802.1Q VLANs split one switch into separate broadcast domains, how DHCP DORA leases addresses, and how NAPT forwards ports through a gateway. See relay.</description>
     <enclosure url="https://blog.llmgo.top/og/en/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>TCP Congestion Control Evolution &amp; High-Performance Transport: From Reno and Cubic to BBR Mathematical Models, and HTTP/2 to HTTP/3 (QUIC)</title>
+    <title>TCP Congestion Control: Reno, Cubic, BBR, QUIC</title>
     <link>https://blog.llmgo.top/en/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/</link>
     <guid>https://blog.llmgo.top/en/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/</guid>
     <pubDate>Wed, 30 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Congestion Control &amp; QUIC</category>
-    <description>TCP congestion control evolution: loss-based Reno, Linux default Cubic polynomial curves, Google BBR pacing models, and HTTP/3 QUIC 0-RTT transport.</description>
+    <description>Compare loss-based Reno and Cubic with model-based BBR, then how HTTP/3 carries the same application traffic on QUIC instead of a TCP connection. See pacing.</description>
     <enclosure url="https://blog.llmgo.top/og/en/tcp-congestion-control-reno-cubic-bbr-quic-http3.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>IP Addressing and Subnetting First Principles: Binary Arithmetic, Subnet Masks, CIDR, and Default Gateway Routing</title>
+    <title>IP Addressing: Subnet Masks, CIDR, and Gateways</title>
     <link>https://blog.llmgo.top/en/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/</link>
     <guid>https://blog.llmgo.top/en/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/</guid>
     <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>IP Addressing &amp; Subnet Mask</category>
-    <description>Deep dive into IP addressing: IPv4 32-bit binary representation, bitwise AND subnet masking, CIDR supernetting, default gateways, and Linux routing tables.</description>
+    <description>How subnet masks and CIDR split an IPv4 address into network and host with bitwise AND, and what a default gateway does when traffic leaves the subnet.</description>
     <enclosure url="https://blog.llmgo.top/og/en/ip-addressing-subnet-mask-cidr-default-gateway-routing.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Network &amp; Transport Layers in Depth: IP Routing, CIDR, TCP 11-State Machine, and Sliding Window First Principles</title>
+    <title>IP Routing and the TCP State Machine</title>
     <link>https://blog.llmgo.top/en/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</link>
     <guid>https://blog.llmgo.top/en/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</guid>
     <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>IP Routing &amp; TCP State Machine</category>
-    <description>Layer 3 and Layer 4 networking: IPv4/IPv6 headers, Linux kernel LPM routing, TCP 11-state machine transitions, SYN cookies, and sliding window flow control.</description>
+    <description>How IP picks a next hop with longest-prefix match, how TCP walks its handshake and teardown states, and how the sliding window caps unacknowledged data.</description>
     <enclosure url="https://blog.llmgo.top/og/en/network-layer-transport-layer-ip-routing-tcp-state-machine.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Computer Networking from Scratch: Bits, Physical Media, Hub Collision Domains, and Switch MAC Addressing First Principles</title>
+    <title>Networking Basics: Media, Collision Domains, and MAC</title>
     <link>https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/</link>
     <guid>https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/</guid>
     <pubDate>Mon, 28 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Zero-Foundation Networking &amp; Layer 2</category>
-    <description>Computer networking from scratch: physical voltages, twisted pairs, optical fibers, collision domains, Ethernet frames, Layer-2 switches, and ARP broadcast mechanics.</description>
+    <description>How computer networks start: bits on copper and fiber, hub collision domains, how switches learn MAC addresses, and how ARP resolves an IP to hardware.</description>
     <enclosure url="https://blog.llmgo.top/og/en/network-fundamentals-bits-cables-hubs-switches-mac-arp.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Container Networking Deep Dive: veth-pair, Linux Bridge, iptables NAT, and Cross-Host Topology</title>
+    <title>Container Networking: veth, Bridge, and iptables</title>
     <link>https://blog.llmgo.top/en/articles/container-networking-veth-bridge-iptables/</link>
     <guid>https://blog.llmgo.top/en/articles/container-networking-veth-bridge-iptables/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Container Networking</category>
-    <description>Container networking from scratch: Network Namespaces, veth-pairs, Linux bridge docker0 forwarding, iptables DNAT/SNAT, and Host vs Bridge vs Macvlan comparisons.</description>
+    <description>How a container packet leaves its network namespace on a veth pair, is switched by MAC on a Linux bridge, and reaches the outside through iptables NAT.</description>
     <enclosure url="https://blog.llmgo.top/og/en/container-networking-veth-bridge-iptables.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Docker Internals from First Principles: Linux Namespaces, cgroups v2, and OverlayFS Union Mounts Deep Dive</title>
+    <title>Docker Internals: Namespaces, cgroups, and OverlayFS</title>
     <link>https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/</link>
     <guid>https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Container Internals</category>
-    <description>Docker internals from first principles: Linux Namespaces isolation, cgroups v2 resource limits, OverlayFS layered union mounts with CoW, and OCI runc execution.</description>
+    <description>A container is a restricted Linux process, not a small virtual machine: namespaces limit its view, cgroups v2 limit resources, and OverlayFS stores layers.</description>
     <enclosure url="https://blog.llmgo.top/og/en/docker-internals-namespace-cgroups-overlayfs.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Lightweight Cluster Orchestration: Docker SwarmKit Architecture, Raft Consensus, and Ingress Routing Mesh</title>
+    <title>Docker Swarm: Raft Consensus and Routing Mesh</title>
     <link>https://blog.llmgo.top/en/articles/docker-swarm-architecture-raft-routing-mesh/</link>
     <guid>https://blog.llmgo.top/en/articles/docker-swarm-architecture-raft-routing-mesh/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Cluster Orchestration</category>
-    <description>Docker Swarm architecture deep dive: SwarmKit Raft consensus, VXLAN cross-host overlay networking, IPVS Ingress Routing Mesh, and Kubernetes trade-offs.</description>
+    <description>How Docker SwarmKit splits managers and workers, keeps cluster state consistent with Raft, and publishes services through an IPVS routing mesh. VXLAN included.</description>
     <enclosure url="https://blog.llmgo.top/og/en/docker-swarm-architecture-raft-routing-mesh.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Application Networking on Kubernetes: The gRPC Load Balancing Trap, Service Mesh, and Zero-Downtime Draining Sequences</title>
+    <title>Kubernetes App Networking: gRPC and Drains</title>
     <link>https://blog.llmgo.top/en/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/</link>
     <guid>https://blog.llmgo.top/en/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Application Networking</category>
-    <description>Kubernetes application networking: HTTP/2 gRPC load balancing, Envoy service mesh architecture, xDS control planes, and zero-downtime rolling deployment strategies.</description>
+    <description>Why long-lived gRPC connections stick to one Kubernetes backend, and how a service mesh drains those connections so a rollout does not drop in-flight traffic.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-application-networking-grpc-service-mesh-zero-downtime.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Kubernetes Control Plane Deep Dive: Declarative APIs, etcd Consensus, Scheduler, and Controller Reconciliation Loops</title>
+    <title>Kubernetes Control Plane and Reconciliation</title>
     <link>https://blog.llmgo.top/en/articles/k8s-control-plane-declarative-reconciliation/</link>
     <guid>https://blog.llmgo.top/en/articles/k8s-control-plane-declarative-reconciliation/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>K8s Control Plane</category>
-    <description>Kubernetes control plane architecture: declarative reconciliation loops, informers, workqueue patterns, and optimistic concurrency control with etcd.</description>
+    <description>How Kubernetes stores desired state through a declarative API and etcd, how the scheduler places pods, and how controllers reconcile toward that state.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-control-plane-declarative-reconciliation.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Hacking the Kubernetes Control Plane: WatchCache Internals, Aggregated APIServers, APF Shuffle Sharding, and 10k-Node etcd Sharding</title>
+    <title>Kubernetes Control Plane: Aggregated API and etcd</title>
     <link>https://blog.llmgo.top/en/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/</link>
     <guid>https://blog.llmgo.top/en/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Control Plane Customization</category>
-    <description>Advanced Kubernetes control plane internals: Aggregated API Servers, API Priority and Fairness (APF) flow control, CRD scaling limits, and etcd performance tuning.</description>
+    <description>How WatchCache, an aggregated API server, and APF extend the Kubernetes control plane, and which etcd settings matter once the cluster grows to 10k nodes.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Production Databases and Storage on Kubernetes: Local NVMe Passthrough, RocksDB/WAL Tuning, and Fencing Split-Brain Protection</title>
+    <title>Databases on Kubernetes: Local NVMe and Fencing</title>
     <link>https://blog.llmgo.top/en/articles/k8s-database-storage-local-nvme-tuning-fencing/</link>
     <guid>https://blog.llmgo.top/en/articles/k8s-database-storage-local-nvme-tuning-fencing/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Database Storage</category>
-    <description>Running databases on Kubernetes: Local PV NVMe tuning, page cache dirty ratio optimization, RocksDB/MySQL WAL Direct I/O, and STONITH node fencing.</description>
+    <description>How to place a database on Kubernetes local NVMe, tune RocksDB and WAL flushes, and fence an old primary so it cannot keep writing after a failover event.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-database-storage-local-nvme-tuning-fencing.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 AI Computing Infrastructure: Kubernetes GPU Operator, MIG Partitioning, Topology-Aware Scheduling, and Auto-scaling Inference Engines</title>
+    <title>Kubernetes GPU Scheduling with the GPU Operator</title>
     <link>https://blog.llmgo.top/en/articles/k8s-gpu-operator-ai-inference-scheduling/</link>
     <guid>https://blog.llmgo.top/en/articles/k8s-gpu-operator-ai-inference-scheduling/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>AI GPU Scheduling</category>
-    <description>AI infrastructure on Kubernetes: NVIDIA GPU Operator automation, MIG slicing, Kubelet Topology Manager NUMA alignment, Dynamic Resource Allocation, and KEDA scaling.</description>
+    <description>How the GPU Operator installs drivers and the device plugin, how MIG slices a GPU, and how topology-aware scheduling scales vLLM and SGLang inference services.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-gpu-operator-ai-inference-scheduling.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Kubernetes Networking Panorama: CNI Specification, Calico BGP, Cilium eBPF, and Gateway API Architecture</title>
+    <title>Kubernetes Networking: CNI, Cilium, Gateway API</title>
     <link>https://blog.llmgo.top/en/articles/k8s-networking-cni-cilium-ebpf-gateway-api/</link>
     <guid>https://blog.llmgo.top/en/articles/k8s-networking-cni-cilium-ebpf-gateway-api/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>K8s Networking</category>
-    <description>Kubernetes CNI networking guide: Flannel vs Calico topologies, Cilium eBPF socket redirection to bypass kube-proxy, and modern Gateway API traffic governance.</description>
+    <description>Compare the Flannel, Calico BGP, and Cilium eBPF datapaths, and how the Gateway API lets separate roles manage Kubernetes traffic policy. Replaces iptables.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-networking-cni-cilium-ebpf-gateway-api.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Kubernetes Extensibility: The Operator Pattern, Custom Resource Definitions (CRD), and KubeBuilder in Production</title>
+    <title>Kubernetes Operators: CRDs and KubeBuilder</title>
     <link>https://blog.llmgo.top/en/articles/k8s-operator-pattern-kubebuilder-crd/</link>
     <guid>https://blog.llmgo.top/en/articles/k8s-operator-pattern-kubebuilder-crd/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Operator Pattern</category>
-    <description>Production Kubernetes Operator guide: Kubebuilder architecture, CRD OpenAPI validation, Controller-Runtime reconciliation, and custom Go stateful controllers.</description>
+    <description>How an operator encodes manual operations as a controller, how a CRD registers a new resource, and how KubeBuilder reconcile loops and finalizers clean it up.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-operator-pattern-kubebuilder-crd.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Hacking Kubernetes Nodes &amp; Runtimes: Breaking PLEG Bottlenecks, NRI Plugins, Kata/gVisor Sandboxes, and cgroups v2 Tuning</title>
+    <title>Kubernetes Runtimes: NRI, Kata, gVisor, cgroups</title>
     <link>https://blog.llmgo.top/en/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/</link>
     <guid>https://blog.llmgo.top/en/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Node Runtime Customization</category>
-    <description>Kubernetes node runtime internals: Kubelet syncLoop, Evented PLEG, containerd Node Resource Interface (NRI) plugins, Kata microVMs, and gVisor sandboxing.</description>
+    <description>Why PLEG slows a Kubernetes node, how an NRI plugin changes container setup, and what Kata, gVisor, and cgroups v2 each isolate or limit. Sandboxes differ.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-runtime-nri-kata-gvisor-kernel-tuning.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Hacking the Kubernetes Scheduler: Custom Plugins via Scheduling Framework, Volcano DRF Math, and Descheduler Dynamic Rebalancing</title>
+    <title>Kubernetes Scheduling: Plugins and Gang Scheduling</title>
     <link>https://blog.llmgo.top/en/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/</link>
     <guid>https://blog.llmgo.top/en/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Scheduler Customization</category>
-    <description>Kubernetes custom scheduling: 11 Scheduling Framework extension points, CycleState caching, Volcano DRF algorithms, and Go Gang Scheduling plugin implementation.</description>
+    <description>How the Scheduling Framework loads custom plugins, and how gang scheduling plus the descheduler place a batch job and move pods when the cluster shifts.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-scheduling-framework-custom-plugin-gang-scheduling.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Kubernetes Storage Architecture: CSI Specification, Dynamic PV/PVC Provisioning, and StatefulSet Guarantees</title>
+    <title>Kubernetes Storage: CSI, PV/PVC, and StatefulSet</title>
     <link>https://blog.llmgo.top/en/articles/k8s-storage-csi-statefulset-deep-dive/</link>
     <guid>https://blog.llmgo.top/en/articles/k8s-storage-csi-statefulset-deep-dive/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>K8s Storage</category>
-    <description>Cloud-native storage architecture: StorageClass, PV/PVC decoupling, CSI provision/attach/stage/mount lifecycles, and StatefulSet deterministic volume binding.</description>
+    <description>How the CSI provisions a PV and binds a PVC on demand, and how a StatefulSet gives each pod a stable network name and its own persistent volume. It persists.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-storage-csi-statefulset-deep-dive.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking</title>
+    <title>Continuous Batching and Chunked Prefill</title>
     <link>https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/</link>
     <guid>https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Batching &amp; Scheduling</category>
-    <description>High-throughput LLM serving: Orca iteration-level continuous batching, head-of-line blocking mitigation, and Chunked Prefill with decode piggybacking in vLLM.</description>
+    <description>Why one long prefill still blocks other decode steps after continuous batching, and how chunked prefill splits that work so waiting requests can run too.</description>
     <enclosure url="https://blog.llmgo.top/og/en/continuous-batching-chunked-prefill-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Evolution of Attention Kernels: From FlashAttention-1/2/3 SRAM Tiling to FlashInfer Unified Heterogeneous Serving</title>
+    <title>Attention Kernels: FlashAttention and FlashInfer</title>
     <link>https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/</link>
     <guid>https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Kernel Optimization</category>
-    <description>Deep dive into GPU attention kernels: FlashAttention-1 online softmax, FA-2 parallelism, FA-3 Hopper TMA asynchronous pipelines, and FlashInfer variable-length batching.</description>
+    <description>How FlashAttention computes attention in SRAM tiles instead of materializing the score matrix, and how FlashInfer reads paged KV cache during decode steps.</description>
     <enclosure url="https://blog.llmgo.top/og/en/flashattention-flashinfer-kernel-evolution.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Production LLM Inference Engines Teardown: vLLM v1 vs. SGLang vs. TensorRT-LLM vs. llama.cpp Internals</title>
+    <title>Inference Engines: vLLM, SGLang, TRT-LLM, llama.cpp</title>
     <link>https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/</link>
     <guid>https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Inference Engines</category>
-    <description>Codebase teardown of top LLM inference engines: vLLM multi-step scheduling, SGLang RadixAttention, TensorRT-LLM in-flight batching, and llama.cpp quantization.</description>
+    <description>Compare the scheduler loop and execution backend in vLLM v1, SGLang, TensorRT-LLM, and llama.cpp when choosing an engine for throughput or a latency target.</description>
     <enclosure url="https://blog.llmgo.top/og/en/inference-engines-core-architecture-internals.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence</title>
+    <title>Roofline Model: Why Prefill and Decode Differ</title>
     <link>https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/</link>
     <guid>https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Roofline Modeling</category>
-    <description>Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode.</description>
+    <description>Use the roofline model to see why prefill is compute-bound while decode is memory-bound, and how that splits time-to-first-token from per-token latency.</description>
     <enclosure url="https://blog.llmgo.top/og/en/inference-roofline-prefill-decode.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Model Architecture Driving Inference Systems: From MHA/GQA to DeepSeek MLA Matrix Absorption and Memory Minimalism</title>
+    <title>MHA, GQA, and MLA: Attention and KV Memory</title>
     <link>https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/</link>
     <guid>https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Attention Architecture</category>
-    <description>Attention evolution for LLM serving: MHA memory bottlenecks, GQA grouping trade-offs, DeepSeek MLA low-rank latent projections, Decoupled RoPE, and Matrix Absorption.</description>
+    <description>Compare KV-cache size for MHA, GQA, and DeepSeek MLA, and how matrix absorption during decode stores fewer multi-head tensors and cuts memory traffic.</description>
     <enclosure url="https://blog.llmgo.top/og/en/mha-gqa-mla-matrix-absorption-inference-engine.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -328,43 +328,43 @@
     <enclosure url="https://blog.llmgo.top/og/en/moe-expert-parallelism-inference-engine.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Memory Virtualization in Inference Engines: PagedAttention and the Elimination of Memory Fragmentation</title>
+    <title>PagedAttention: Paged KV Cache without Fragmentation</title>
     <link>https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/</link>
     <guid>https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Memory Virtualization</category>
-    <description>Why did early LLM serving systems waste 60% to 80% of GPU memory? A deep architectural exploration of vLLM's PagedAttention, logical-to-physical block mapping, zero-copy Copy-on-Write sharing, and non-contiguous CUDA attention kernels.</description>
+    <description>How vLLM PagedAttention splits the KV cache into logical blocks on physical GPU memory, reduces fragmentation, and shares a prefix with copy-on-write.</description>
     <enclosure url="https://blog.llmgo.top/og/en/pagedattention-memory-virtualization.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Prefill-Decode (P/D) Disaggregation Architecture: Compute-Memory Decoupling, RDMA Distributed KV Cache Transfer, and Cluster-Scale Pooling</title>
+    <title>Prefill-Decode Split and Distributed KV Transfer</title>
     <link>https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/</link>
     <guid>https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Inference Systems</category>
-    <description>Prefill-Decode (P/D) Disaggregation architecture: compute vs memory isolation, MLA cross-node bandwidth modeling, GPUDirect RDMA KV transfers, and queuing theory.</description>
+    <description>Why prefill and decode belong on separate pools, how RDMA moves KV cache between those nodes, and how a cluster schedules the pooled cache across the cluster.</description>
     <enclosure url="https://blog.llmgo.top/og/en/pd-disaggregation-distributed-kv-cache.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Prefix Caching and State Reuse: From Hash Block Addressing to SGLang RadixAttention and Dynamic Tree Eviction</title>
+    <title>Prefix Caching: Hash Blocks and RadixAttention</title>
     <link>https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/</link>
     <guid>https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Prefix Caching</category>
-    <description>LLM state reuse internals: vLLM hash-chained block caching vs SGLang RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction.</description>
+    <description>How prefix caching reuses computed KV blocks by hash, and how SGLang RadixAttention matches those blocks on a radix tree and evicts leaves with an LRU policy.</description>
     <enclosure url="https://blog.llmgo.top/og/en/prefix-caching-radix-attention-internals.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>The Future of LLM Inference: Test-Time Compute, Reasoning Scheduling, and Tiered Cluster Storage</title>
+    <title>Reasoning Inference: Test-Time Compute and KV Scheduling</title>
     <link>https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/</link>
     <guid>https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Future Architectures</category>
-    <description>Inference architectures for reasoning models: Test-Time Compute scaling, MCTS speculative tree scheduling, thinking budget governors, and tiered KV cache pools.</description>
+    <description>How long reasoning traces increase KV-cache pressure, and what test-time compute, speculative trees, and tiered KV storage change in the serving path.</description>
     <enclosure url="https://blog.llmgo.top/og/en/reasoning-test-time-compute-inference-future.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -388,13 +388,13 @@
     <enclosure url="https://blog.llmgo.top/og/en/agent-loop-state-machine.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Under the Hood of Browser-use (100k+ Stars): DOM Tree Distillation, Vision Grounding, and Production Web Agents</title>
+    <title>Browser-use Architecture: DOM Distillation and Vision</title>
     <link>https://blog.llmgo.top/en/articles/browser-use-agent-architecture/</link>
     <guid>https://blog.llmgo.top/en/articles/browser-use-agent-architecture/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Browser Agents</category>
-    <description>Why do traditional Selenium and Playwright scripts constantly break against modern web frontends? We dissect the architecture of Browser-use, the breakout open-source project with over 100k GitHub stars: DOM tree pruning, Set-of-Mark (SoM) visual coordinate grounding, state machine resilience, and end-to-end production recipes.</description>
+    <description>How Browser-use distills a page's DOM, grounds clickable elements with vision marks, and runs those actions inside a stateful agent loop that can retry.</description>
     <enclosure url="https://blog.llmgo.top/og/en/browser-use-agent-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -408,33 +408,33 @@
     <enclosure url="https://blog.llmgo.top/og/en/sglang-vs-vllm-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Speculative Decoding in Production: From Draft Models to EAGLE-3 Dynamic Trees for 3x-5x Lossless Acceleration</title>
+    <title>Speculative Decoding from Draft Models to EAGLE-3</title>
     <link>https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/</link>
     <guid>https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Speculative Decoding</category>
-    <description>Why is autoregressive LLM decoding fundamentally bottlenecked by memory bandwidth? We dissect the mathematical proof of lossless distribution invariance in speculative decoding, trace its evolution from dual-model drafts to EAGLE-2/3 dynamic draft trees, and provide production configurations in vLLM and SGLang.</description>
+    <description>Why speculative decoding can speed generation without changing the sampling distribution, and how to enable draft models through EAGLE-3 in vLLM and SGLang.</description>
     <enclosure url="https://blog.llmgo.top/og/en/speculative-decoding-eagle-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Test-Time Compute and GRPO in Practice: From PPO to Critic-Free Reinforcement Learning</title>
+    <title>GRPO and Test-Time Compute without a Critic</title>
     <link>https://blog.llmgo.top/en/articles/test-time-compute-grpo/</link>
     <guid>https://blog.llmgo.top/en/articles/test-time-compute-grpo/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>RL &amp; Reasoning</category>
-    <description>A deep dive into the paradigm shift from pre-training scaling laws to test-time compute. We deconstruct the mathematical derivation of DeepSeek-R1's Group Relative Policy Optimization (GRPO), critic-free architecture advantages, emergent self-reflection in long reasoning traces, and a complete, reproducible hands-on implementation.</description>
+    <description>What test-time compute moves into the generation step, and how GRPO removes PPO's critic and updates the policy from advantages inside a sampled group.</description>
     <enclosure url="https://blog.llmgo.top/og/en/test-time-compute-grpo.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Production Deployment of DeepSeek-V4 and Kimi K3: 32-GPU Topologies, Memory Math, and Real-World Troubleshooting</title>
+    <title>DeepSeek-V4 and Kimi K3: 32-GPU Topology and Debugging</title>
     <link>https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/</link>
     <guid>https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Cluster Deployment</category>
-    <description>Comprehensive production guide for hosting DeepSeek-V4-Pro (CSA+HCA) and Kimi K3 (KDA+MLA): covering 4-node/32-GPU and 8-node/64-GPU topologies, per-rank GPU memory budgeting, six hardcore production pitfalls (NUMA crossing, MoE routing skew, CUDAGraph pseudo-OOM, PFC deadlock), Ray and KubeRay orchestration.</description>
+    <description>Deploy DeepSeek-V4 and Kimi K3 on a 4-node 32-GPU topology, budget memory per GPU, and debug NUMA, MoE skew, CUDA Graph false OOM, and PFC deadlock. See Ray.</description>
     <enclosure url="https://blog.llmgo.top/og/en/deepseek-v4-kimi-k3-deployment-guide.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -448,13 +448,13 @@
     <enclosure url="https://blog.llmgo.top/og/en/domestic-llm-comparison-2026.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Beyond Simple Prompts: How Environment Scaling Is Reshaping Autonomous Agents in 2026</title>
+    <title>Agent Environment Scaling: Tasks, Reset, and Checks</title>
     <link>https://blog.llmgo.top/en/articles/environment-scaling-agent-guide/</link>
     <guid>https://blog.llmgo.top/en/articles/environment-scaling-agent-guide/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Environment Scaling</category>
-    <description>Understand agent environment scaling through task diversity, reset and verification, a sourced GLM-5.3 result, and container execution with cleanup after timeouts.</description>
+    <description>What agent environment scaling needs: varied tasks, a resettable state, independent checks, a careful reading of terminal scores, and cleanup after a timeout.</description>
     <enclosure url="https://blog.llmgo.top/og/en/environment-scaling-agent-guide.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -468,23 +468,23 @@
     <enclosure url="https://blog.llmgo.top/og/en/kimi-kda-deepseek-mla-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Evolving Models at Runtime: From Basic Reflection to MCTS-based Test-Time Compute</title>
+    <title>Agent Reflection and Self-Correction with MCTS</title>
     <link>https://blog.llmgo.top/en/articles/agent-reflection-self-correction/</link>
     <guid>https://blog.llmgo.top/en/articles/agent-reflection-self-correction/</guid>
     <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Self-Correction</category>
-    <description>The potential of LLMs extends beyond pre-trained parameters. We dive deep into the frontier of Test-Time Compute: from Actor-Critic architecture to leveraging Monte Carlo Tree Search (MCTS) to decode the limits of Agent self-correction.</description>
+    <description>How an agent checks itself with an actor-critic pair, then searches candidate fixes with Monte Carlo tree search, using test-time compute for self-correction.</description>
     <enclosure url="https://blog.llmgo.top/og/en/agent-reflection-self-correction.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 AI Paradigm Shift: Distributed Agent Orchestration &amp; Evals to Combat Error Compounding</title>
+    <title>Agent Orchestration and Evals for Compounding Error</title>
     <link>https://blog.llmgo.top/en/articles/agent-orchestration-evals/</link>
     <guid>https://blog.llmgo.top/en/articles/agent-orchestration-evals/</guid>
     <pubDate>Wed, 15 Jul 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Orchestration &amp; Evals</category>
-    <description>As LLMs move into complex enterprise production, how do we use distributed orchestration to combat error compounding? How do we build a statistically significant Evals system?</description>
+    <description>How a small per-step error compounds across an agent workflow, and how splitting work with orchestration plus repeatable evals keeps that drift visible.</description>
     <enclosure url="https://blog.llmgo.top/og/en/agent-orchestration-evals.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -588,33 +588,33 @@
     <enclosure url="https://blog.llmgo.top/og/en/ai-history-choices.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>vLLM Online Inference in Production: From Architecture to Token Billing</title>
+    <title>vLLM Online Inference: Architecture, Tuning, and Billing</title>
     <link>https://blog.llmgo.top/en/articles/vllm-serving-guide/</link>
     <guid>https://blog.llmgo.top/en/articles/vllm-serving-guide/</guid>
     <pubDate>Tue, 14 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Serving &amp; Deployment</category>
-    <description>A deep dive into vLLM's core architecture (PagedAttention, continuous batching, APC prefix caching, speculative decoding) for online serving. Covers OpenAI-compatible API setup, performance tuning, token billing systems, and complete Docker deployment with Prometheus monitoring.</description>
+    <description>How to serve online with vLLM: PagedAttention, continuous batching, prefix caching, an OpenAI-compatible API, tuning, token billing, and Docker monitoring.</description>
     <enclosure url="https://blog.llmgo.top/og/en/vllm-serving-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Mapping the NVIDIA GPU Driver Stack: From Kernel Modules to Container Runtimes</title>
+    <title>NVIDIA GPU Driver Stack: Kernel Modules to Containers</title>
     <link>https://blog.llmgo.top/en/articles/nvidia-gpu-package-architecture/</link>
     <guid>https://blog.llmgo.top/en/articles/nvidia-gpu-package-architecture/</guid>
     <pubDate>Sun, 05 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>GPU &amp; Driver Stack</category>
-    <description>A deep dive into the complex Linux NVIDIA GPU driver package structures. Understand the 5-layer architecture bridging nvidia-dkms, libnvidia, nvidia-utils, and driver metapackages. Plus, discover enterprise best practices and troubleshooting guides for 4 core deployment scenarios, including Docker model servers and DGX clusters.</description>
+    <description>How the Linux NVIDIA stack fits together, from nvidia-dkms and userspace libraries to nvidia-utils and the metapackage, on desktops, containers, and DGX hosts.</description>
     <enclosure url="https://blog.llmgo.top/og/en/nvidia-gpu-package-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>LLM Quantization Precision Guide: From FP32 to 1-bit, How Much Quality Do You Actually Lose?</title>
+    <title>LLM Quantization: FP32 to FP8, INT4, and NF4</title>
     <link>https://blog.llmgo.top/en/articles/quantization-precision-guide/</link>
     <guid>https://blog.llmgo.top/en/articles/quantization-precision-guide/</guid>
     <pubDate>Tue, 31 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Quantization Precision</category>
-    <description>Understand FP8, INT8, INT4, and NF4 across weights, activations, and KV cache, with complete memory budgets, speed tradeoffs, calibration, and quality evaluation.</description>
+    <description>How FP8, INT8, INT4, and NF4 apply to weights, activations, or the KV cache, and which measurements separate memory use, speed, and output quality in practice.</description>
     <enclosure url="https://blog.llmgo.top/og/en/quantization-precision-guide.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -688,13 +688,13 @@
     <enclosure url="https://blog.llmgo.top/og/en/rag-in-practice.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</title>
+    <title>2026 Model Comparison: GPT-5.4, Claude 4.6, Gemini</title>
     <link>https://blog.llmgo.top/en/articles/model-comparison-2026/</link>
     <guid>https://blog.llmgo.top/en/articles/model-comparison-2026/</guid>
     <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Model Benchmark</category>
-    <description>Compare GPT-5.4, Claude 4.6, and Gemini 3.1 Pro APIs with sourced capabilities, token prices, SDK examples, fair evaluation rules, and self-hosting cost formulas.</description>
+    <description>Compare GPT-5.4, Claude 4.6, and Gemini 3.1 Pro by API capability, token price, and calling pattern, with checks you can rerun and a self-hosted cost formula.</description>
     <enclosure url="https://blog.llmgo.top/og/en/model-comparison-2026.png" length="150000" type="image/png" />
   </item>
   <item>

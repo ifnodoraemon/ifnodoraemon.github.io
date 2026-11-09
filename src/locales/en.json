@@ -2,8 +2,8 @@
   "meta": {
     "siteName": "LLM Systems Architecture",
     "home": {
-      "title": "LLM Systems Architecture — Frontier AI Engineering & Inference Systems",
-      "desc": "Focusing on AI foundation models research and practice, providing frontier tech insights and exclusive engineering notes on DeepSeek-V4-Pro, Kimi K3, and GPT-6 Astra."
+      "title": "LLM Systems Architecture — Inference & Systems Notes",
+      "desc": "Notes for engineers on LLM inference architecture and systems engineering: vLLM serving, MLA attention, InfiniBand fabrics, and production Agent runtimes."
     },
     "models": {
       "title": "2026 Frontier AI Models Benchmark & Architecture Matrix | LLM Systems Architecture",
@@ -1084,8 +1084,8 @@
   },
   "home": {
     "heroSystem": "LLM ARCHITECTURE & AGENTIC RUNTIMES",
-    "heroTitle": "Frontier <span class=\"gradient-text\">LLM Architecture</span><br>& Agent Systems",
-    "heroDesc": "In-depth engineering notes on Transformer KV-cache topologies, DeepSeek MLA, vLLM high-throughput serving, quantization, and production Agent runtimes.",
+    "heroTitle": "LLM Inference Architecture<br>& <span class=\"gradient-text\">Systems Notes</span>",
+    "heroDesc": "Notes for engineers on LLM inference architecture and systems engineering: vLLM serving, MLA attention, InfiniBand fabrics, and production Agent runtimes.",
     "btnArticles": "Read Articles",
     "btnAbout": "About Author",
     "searchPlaceholder": "Search architectures (vLLM, MLA, MCP, FP8, Agent Loop...)",

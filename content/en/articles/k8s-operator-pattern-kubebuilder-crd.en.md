@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes Extensibility: The Operator Pattern, Custom Resource Definitions (CRD), and KubeBuilder in Production"
+title: "Kubernetes Operators: CRDs and KubeBuilder"
 slug: k8s-operator-pattern-kubebuilder-crd
 date: 2026-09-25
 tag: Operator Pattern
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 12
-description: "Production Kubernetes Operator guide: Kubebuilder architecture, CRD OpenAPI validation, Controller-Runtime reconciliation, and custom Go stateful controllers."
+description: "How an operator encodes manual operations as a controller, how a CRD registers a new resource, and how KubeBuilder reconcile loops and finalizers clean it up."
 extraTags:
   - Kubernetes
   - Operator

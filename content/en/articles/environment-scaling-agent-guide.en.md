@@ -1,5 +1,5 @@
 ---
-title: "Beyond Simple Prompts: How Environment Scaling Is Reshaping Autonomous Agents in 2026"
+title: "Agent Environment Scaling: Tasks, Reset, and Checks"
 slug: environment-scaling-agent-guide
 date: 2026-09-07
 tag: Environment Scaling
@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: AI Agent
 series: ai-agent
 seriesOrder: 10
-description: "Understand agent environment scaling through task diversity, reset and verification, a sourced GLM-5.3 result, and container execution with cleanup after timeouts."
+description: "What agent environment scaling needs: varied tasks, a resettable state, independent checks, a careful reading of terminal scores, and cleanup after a timeout."
 updated: 2026-10-20
 ---
 

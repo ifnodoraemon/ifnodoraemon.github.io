@@ -996,13 +996,13 @@ function generateListingPage(articlesList, isEn = false) {
   const lang = isEn ? 'en' : 'zh-CN';
   const siteName = isEn ? enLocales.meta.siteName : zhLocales.meta.siteName;
   const pageTitle = isEn ? `All Articles & Architecture Deep Dives — ${siteName}` : `全部文章与系统架构专栏 — ${siteName}`;
-  const pageDesc = isEn ? 'All AI technology articles and deep dives.' : `${siteName}全部技术文章列表。涵盖提示工程、AI Agent、RAG、模型微调、多模态等前沿 AI 主题。`;
+  const pageDesc = isEn
+    ? 'Article index grouped by column: inference systems, Agent runtimes, cloud-native platforms, InfiniBand and kernel networking, plus model engineering notes.'
+    : '本站文章索引按专栏组织：推理系统、Agent 运行时、云原生、InfiniBand 与内核网络，以及模型工程笔记。打开页面后可按专栏筛选文章。';
   const canonicalUrl = isEn ? `${SITE_URL}/en/articles/` : `${SITE_URL}/articles/`;
   const heroTag = 'ALL ARTICLES';
   const heroTitle = isEn ? 'All Articles' : '全部文章';
-  const heroDesc = isEn
-    ? 'Deep dives into LLM system architectures, inference engine internals, AI Agents, and production engineering practices.'
-    : '深入大模型底层物理极限、推理引擎内核演进、AI Agent 架构与前沿工程深度实践';
+  const heroDesc = pageDesc;
   const filterAllBtn = isEn ? `All (${articlesList.length})` : `全部 (${articlesList.length})`;
   const searchPlaceholder = locales.models.listingSearchPlaceholder || (isEn ? 'Search articles...' : '搜索文章...');
 
@@ -1255,8 +1255,8 @@ function generateSearchIndex(articlesZh, articlesEn) {
 function generateLlmsTxt(articlesZh, articlesEn) {
   console.log('🤖 Generating /llms.txt and /llms-full.txt for AI engines & GEO...');
 
-  const siteSummaryZh = '专注 AI 大模型系统架构、高并发推理调优、生产级 AI Agent 与前沿工程落地技术博客。';
-  const siteSummaryEn = 'Technical deep dives into LLM systems architecture, high-throughput inference optimization, production AI agents, and enterprise AI engineering.';
+  const siteSummaryZh = '本站是大模型推理架构与系统工程笔记，覆盖 vLLM 服务、DeepSeek MLA、InfiniBand 网络与生产级 Agent 运行时。';
+  const siteSummaryEn = 'Notes for engineers on LLM inference architecture and systems engineering: vLLM serving, MLA attention, InfiniBand fabrics, and production Agent runtimes.';
 
   // 1. Core llms.txt (Concise Markdown Index)
   const seriesZhList = Object.values(SERIES_DEFINITIONS).map(s => 
@@ -1290,7 +1290,7 @@ function generateLlmsTxt(articlesZh, articlesEn) {
 - Author: ifnodoraemon (LLM Systems Architect)
 - GitHub: https://github.com/ifnodoraemon
 - Full Knowledge Base: ${SITE_URL}/llms-full.txt
-- Core Focus: AI Agent Architectures, vLLM / SGLang High-Concurrency Inference, PagedAttention, KV Cache Optimization, Speculative Decoding, RAG Systems, Enterprise Model Fine-Tuning & GRPO.
+- Core Focus: LLM inference architecture (vLLM, MLA, PagedAttention), InfiniBand and kernel networking, and production Agent runtimes.
 
 ## 核心专栏体系 / Topic Series & Clusters
 
@@ -1447,7 +1447,7 @@ function generateRssFeed(articlesList, isEn = false) {
     ? path.join(ROOT, 'public', 'en', 'feed.xml')
     : path.join(ROOT, 'public', 'feed.xml');
   const title = siteName;
-  const desc = isEn ? 'Focusing on AI foundation models and tech insights' : '专注 AI 大模型技术研究与实践的技术博客';
+  const desc = isEn ? enLocales.meta.home.desc : zhLocales.meta.home.desc;
   const lang = isEn ? 'en' : 'zh-CN';
   const pubDate = new Date().toUTCString();
 

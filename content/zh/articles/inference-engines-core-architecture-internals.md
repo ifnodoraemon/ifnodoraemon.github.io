@@ -1,5 +1,5 @@
 ---
-title: "四大主流生产级推理引擎架构横评与调度器源码解密：vLLM v1 vs SGLang vs TensorRT-LLM vs llama.cpp"
+title: "推理引擎对比：vLLM、SGLang、TRT-LLM、llama.cpp"
 slug: inference-engines-core-architecture-internals
 date: 2026-09-24
 tag: 推理引擎
@@ -7,7 +7,7 @@ tagClass: tag-emerald
 category: 推理系统
 series: llm-inference
 seriesOrder: 9
-description: "从 Python 运行时到 C++/Rust 异步执行引擎：深度拆解开源世界四大顶级推理底座的源码设计哲学。对比 vLLM v1 零开销调度器与多步执行、SGLang RadixAttention 树状层级执行环、TensorRT-LLM 原生算子深度融合与 In-Flight Batching，以及 llama.cpp 端侧无依赖极限定量化运行时，奉上生产级全景技术选型指南。"
+description: "对比 vLLM v1、SGLang、TensorRT-LLM 与 llama.cpp 的调度循环和执行后端，方便按吞吐、延迟和硬件条件选择推理引擎。"
 extraTags:
   - vLLM
   - SGLang

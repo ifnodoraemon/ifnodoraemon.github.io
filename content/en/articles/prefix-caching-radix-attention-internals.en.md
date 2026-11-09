@@ -1,5 +1,5 @@
 ---
-title: "Prefix Caching and State Reuse: From Hash Block Addressing to SGLang RadixAttention and Dynamic Tree Eviction"
+title: "Prefix Caching: Hash Blocks and RadixAttention"
 slug: prefix-caching-radix-attention-internals
 date: 2026-09-24
 tag: Prefix Caching
@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
 seriesOrder: 4
-description: "LLM state reuse internals: vLLM hash-chained block caching vs SGLang RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction."
+description: "How prefix caching reuses computed KV blocks by hash, and how SGLang RadixAttention matches those blocks on a radix tree and evicts leaves with an LRU policy."
 extraTags:
   - Prefix Caching
   - RadixAttention

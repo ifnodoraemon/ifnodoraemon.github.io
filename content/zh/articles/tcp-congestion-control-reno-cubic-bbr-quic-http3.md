@@ -1,5 +1,5 @@
 ---
-title: "TCP 拥塞控制演进史与高性能传输：从 Reno、Cubic 到 BBR 数学模型，以及 HTTP/2 到 HTTP/3 (QUIC) 协议栈革命"
+title: "TCP 拥塞控制：Reno、Cubic、BBR 与 QUIC"
 slug: tcp-congestion-control-reno-cubic-bbr-quic-http3
 date: 2026-09-30
 tag: 拥塞控制与QUIC
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 计算机网络
 series: computer-networking
 seriesOrder: 6
-description: "为什么滑动窗口能防冲垮对端内存，却防不住互联网骨干路由器的崩溃？深度剖析拥塞控制三十年演进史：从基于丢包的经典 AIMD、Reno 状态机、Bufferbloat（缓冲区膨胀）到 Linux 默认 Cubic 的三次多项式数学推导；深入解密 Google BBR 基于最大交付率与最小往返时延的瓶颈物理建模（BtlBw/RTprop/Pacing Rate）；并对比分析从 HTTP/1.1、HTTP/2 多路复用线头阻塞（HoL Blocking）到基于 UDP 的 HTTP/3 (QUIC) 零 RTT 握手与连接迁移协议栈大一统革命。"
+description: "比较丢包驱动的 Reno、Cubic 和按带宽时延建模的 BBR，并说明 HTTP/3 如何改用 QUIC 承载原来的 TCP 流量，谈缓冲膨胀。"
 extraTags:
   - Computer Networking
   - Congestion Control

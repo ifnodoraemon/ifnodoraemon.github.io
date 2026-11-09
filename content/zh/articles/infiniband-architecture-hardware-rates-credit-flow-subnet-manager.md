@@ -1,5 +1,5 @@
 ---
-title: "InfiniBand 架构第一性原理：物理链路速率演进、Credit-Based 链路级流控与子网管理器 (Subnet Manager) 全局编排"
+title: "InfiniBand 架构：速率、信用流控与子网管理"
 slug: infiniband-architecture-hardware-rates-credit-flow-subnet-manager
 date: 2026-10-03
 tag: InfiniBand体系与SM
@@ -7,7 +7,7 @@ tagClass: tag-indigo
 category: 计算机网络
 series: computer-networking
 seriesOrder: 10
-description: "为什么在 2026 年全球顶尖的万卡 AI 算力集群与前沿超算中，原生 InfiniBand 依然牢牢统治着智算中心的核心动脉？深度拆解 InfiniBand 分层协议栈与物理层演进史：从 EDR 100G、HDR 200G、NDR 400G（Quantum-2）到 2026 规模量产的 XDR 800G（Quantum-X800/ConnectX-8）；剖析链路层第一性原理：基于 Flit 的 Credit-Based 信用度硬件级流控与 Cut-Through 直通交换纳秒级低时延机理；解密控制中枢子网管理器（Subnet Manager, OpenSM）全网拓扑发现、GUID/LID/LMC 动态编排与 LFT 线性转发表下发控制全流程。"
+description: "讲解 InfiniBand 从 HDR、NDR 到 XDR 的链路速率，基于信用的链路流控如何避免丢包，以及 OpenSM 如何下发转发表。"
 extraTags:
   - Computer Networking
   - InfiniBand

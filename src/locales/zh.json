@@ -2,8 +2,8 @@
   "meta": {
     "siteName": "智算架构志",
     "home": {
-      "title": "智算架构志 — 前沿大模型系统工程与推理架构实战",
-      "desc": "专注 AI 大模型技术研究与实践，覆盖 DeepSeek-V4-Pro、Kimi K3、GPT-6 Astra，分享提示工程、AI Agent、RAG 应用等实战经验。"
+      "title": "智算架构志 — 大模型推理架构与系统工程笔记",
+      "desc": "本站是大模型推理架构与系统工程笔记，覆盖 vLLM 服务、DeepSeek MLA、InfiniBand 网络与生产级 Agent 运行时。"
     },
     "models": {
       "title": "2026前沿大模型全维评测与选型指南 | 智算架构志",
@@ -1084,8 +1084,8 @@
   },
   "home": {
     "heroSystem": "LLM ARCHITECTURE & AGENTIC RUNTIMES",
-    "heroTitle": "大模型底层架构与<br><span class=\"gradient-text\">智能体工程实战</span>",
-    "heroDesc": "深度解构 Transformer 显存拓扑、DeepSeek MLA、vLLM 高吞吐推理、模型量化与生产级 Agent 运行时系统。",
+    "heroTitle": "大模型推理架构与<br><span class=\"gradient-text\">系统工程笔记</span>",
+    "heroDesc": "本站是大模型推理架构与系统工程笔记，覆盖 vLLM 服务、DeepSeek MLA、InfiniBand 网络与生产级 Agent 运行时。",
     "btnArticles": "浏览深度文章",
     "btnAbout": "关于作者",
     "searchPlaceholder": "搜索架构研报：vLLM, MLA, MCP, FP8量化, Agent运行时...",

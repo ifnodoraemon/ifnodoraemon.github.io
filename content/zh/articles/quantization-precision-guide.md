@@ -1,11 +1,11 @@
 ---
-title: 大模型量化精度全景图：从 FP32 到 1-bit，精度损失到底有多大？
+title: "大模型量化精度：从 FP32 到 FP8 与 INT4"
 slug: quantization-precision-guide
 date: 2026-03-31
 tag: 量化理论
 tagClass: tag-cyan
 category: 推理系统
-description: "区分 FP8、INT8、INT4、NF4 的权重、激活与 KV 量化，解释显存预算、加速条件和校准差异，并给出准确率、PPL 与业务验收的可复现评估方法。"
+description: "区分 FP8、INT8、INT4 与 NF4 作用在权重、激活还是 KV 上，并说明显存占用、推理速度和精度应当分别怎么验收，避免只看单一分数。"
 featured: true
 featuredStats:
   - label: 精度格式

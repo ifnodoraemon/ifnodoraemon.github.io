@@ -1,5 +1,5 @@
 ---
-title: 2026 AI 开发范式：对抗复合误差的分布式 Agent 编排与量化 Evals 体系
+title: "Agent 编排与 Evals：控制链路复合误差"
 slug: agent-orchestration-evals
 date: 2026-07-15
 tag: 编排评测
@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: AI Agent
 series: ai-agent
 seriesOrder: 8
-description: 当大模型走向复杂的企业级落地，如何通过分布式编排对抗链路误差复合？如何构建具有统计学置信度的 Evals 评估体系？本文带你从基础概念直击硬核底座。
+description: "说明多步 Agent 会把单步误差乘到整条链路上，以及用分布式编排拆分职责、用可重复的 Evals 衡量结果，怎样把复合误差管住，便于上线前验收。"
 updated: 2026-10-20
 ---
 

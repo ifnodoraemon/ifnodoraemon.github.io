@@ -1,5 +1,5 @@
 ---
-title: "InfiniBand 智算集群组网实战：Fat-Tree 胖树拓扑、Rail-Optimized 轨道优化设计、自适应路由 (AR) 与 SHARP 网内计算"
+title: "InfiniBand 组网：胖树、Rail 优化与 SHARP"
 slug: infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp
 date: 2026-10-04
 tag: 胖树拓扑与自适应路由
@@ -7,7 +7,7 @@ tagClass: tag-pink
 category: 计算机网络
 series: computer-networking
 seriesOrder: 11
-description: "如何将成千上万台配备 8 卡 GPU 的服务器用万根光纤编织成一张无阻塞、零死锁的高性能互联网络？深入剖析万卡 AI 智算中心核心拓扑：从 1985 年 Leiserson 胖树（Fat-Tree）数学模型、端口数 k 与 2-Tier/3-Tier 最大节点数严格推导，到专为 DGX H100/H200/B200 量身定制的 Rail-Optimized（轨道优化）八独立平面物理组网；深入解析 FTree 与 Up/Down 算法如何通过禁止“先下后上”破除信用死锁环路；并解密自适应路由（Adaptive Routing）与 SHARP 交换机网内规约计算如何将 All-Reduce 集合通信带宽效率提升 2 倍。"
+description: "说明万卡 GPU 集群如何用 Fat-Tree 与 Rail-Optimized 布线，以及自适应路由和 SHARP 网内计算如何改善集合通信。"
 extraTags:
   - Computer Networking
   - InfiniBand

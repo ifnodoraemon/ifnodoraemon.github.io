@@ -1,5 +1,5 @@
 ---
-title: "生产级分布式存储与数据库落地：Local NVMe 物理直通、RocksDB/WAL 刷盘调优与 Fencing 防脑裂架构"
+title: "K8s 上的数据库：Local NVMe 与 Fencing"
 slug: k8s-database-storage-local-nvme-tuning-fencing
 date: 2026-09-25
 tag: 业务存储实战
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 8
-description: "为什么绝大多数互联网大厂在将核心数据库搬上 Kubernetes 时，坚决抛弃网络云盘而选用 Local NVMe？深度拆解生产级分布式存储与数据库在 K8s 上的工程落地：从云盘网络跳步瓶颈到 Local PV 裸盘物理直通架构；XFS 格式化参数与 Linux Page Cache 脏页积压引发 cgroups v2 OOM 崩溃的底层剖析；RocksDB 与 MySQL WAL Direct I/O、fdatasync 调优；以及分布式数据库最可怕的物理灾难 —— 节点网络分区脑裂与 Node Fencing / IPMI STONITH 隔离防护硬核防线。"
+description: "说明在 Kubernetes 上用本地 NVMe 跑数据库时，如何调整 RocksDB 与 WAL 刷盘，并用 Fencing 避免旧主继续写入。"
 extraTags:
   - Kubernetes
   - Database
