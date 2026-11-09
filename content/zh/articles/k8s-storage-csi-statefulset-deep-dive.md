@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes 有状态存储中枢：CSI 插件规范、动态 PV/PVC 供给与 StatefulSet 拓扑保证"
+title: "K8s 存储：CSI、PV/PVC 与 StatefulSet"
 slug: k8s-storage-csi-statefulset-deep-dive
 date: 2026-09-25
 tag: K8s 存储
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 6
-description: "为什么在 Kubernetes 上运行有状态数据库曾被视为运维禁区？深度拆解云原生存储体系的底层设计：StorageClass、PV 与 PVC 三层解耦模型与动态存储供给机制；CSI（Container Storage Interface）插件架构四阶段生命周期（Provision、Attach、Stage、Mount）与底层 Linux 挂载机理；StatefulSet 如何通过 Headless Service 确定性 DNS 与 volumeClaimTemplates 保证分布式数据库的拓扑唯一性与数据持久性。"
+description: "说明 CSI 如何按需创建 PV 和 PVC，以及 StatefulSet 怎样为每个 Pod 保持稳定的网络标识和对应的存储卷，重启后仍在。"
 extraTags:
   - Kubernetes
   - CSI

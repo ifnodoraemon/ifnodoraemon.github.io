@@ -1,5 +1,5 @@
 ---
-title: "RDMA 高性能通信基石：Kernel Bypass、Zero-Copy、Queue Pair 机制与无损以太网 RoCEv2 (PFC/ECN) 全景透视"
+title: "RDMA 基础：内核旁路、Queue Pair 与 RoCEv2"
 slug: rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless
 date: 2026-10-02
 tag: RDMA与RoCEv2
@@ -7,7 +7,7 @@ tagClass: tag-emerald
 category: 计算机网络
 series: computer-networking
 seriesOrder: 9
-description: "为什么在 400G/800G 网络时代，传统的 TCP/IP 协议栈彻底沦为算力黑洞？深度拆解 RDMA（远程直接内存访问）第一性原理：Kernel Bypass（内核旁路）、Zero-Copy（硬件级零拷贝）与内存注册（Memory Registration/L_Key/R_Key）；剖析 ibverbs 核心架构：Queue Pair（SQ/RQ）、完成队列（CQ）以及双边操作（Send/Recv）与单边操作（RDMA Read/Write/Atomic）的微秒级机理；解密无损以太网 RoCEv2（UDP 端口 4791）如何通过 PFC 802.1Qbb 八优先级流控反压与 ECN/DCQCN 拥塞控制闭环解决丢包崩溃与死锁难题。"
+description: "讲解 RDMA 如何注册内存、旁路内核并零拷贝，Queue Pair 如何收发，以及 RoCEv2 怎样用 PFC 和 ECN 减少丢包，含原子操作。"
 extraTags:
   - Computer Networking
   - RDMA

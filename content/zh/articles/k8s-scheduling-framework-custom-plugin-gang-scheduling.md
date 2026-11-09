@@ -1,5 +1,5 @@
 ---
-title: "对 K8s 调度器动刀：基于 Scheduling Framework 插件架构定制开发、Gang Scheduling 批处理调度与 Descheduler 重调度"
+title: "K8s 调度扩展：Framework 插件与 Gang"
 slug: k8s-scheduling-framework-custom-plugin-gang-scheduling
 date: 2026-09-25
 tag: 调度内核定制
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 9
-description: "为什么 Kubernetes 默认调度器在面对大规模 AI 训练与分布式批处理时会陷入资源死锁？深度解密如何对 Kubernetes 调度中枢进行二次开发：剖析官方 Scheduling Framework 调度框架 11 大扩展点内部机理与 CycleState 状态共享；深入拆解 Volcano 核心 DRF（主导资源公平调度）数学模型与 PodGroup 状态机；实战编写一个基于 Go 语言的 Gang Scheduling（成组调度 / All-or-Nothing）自定义调度器插件；并深入解析如何利用 Descheduler 在生产集群中基于真实节点负载实施安全的二次动态重平衡。"
+description: "说明 Scheduling Framework 的扩展点如何接入自定义插件，以及 Gang Scheduling 与 Descheduler 处理 Pod。"
 extraTags:
   - Kubernetes
   - Scheduling Framework

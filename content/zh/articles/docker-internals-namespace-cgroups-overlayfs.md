@@ -1,5 +1,5 @@
 ---
-title: "Docker 内核第一性原理：Namespace 进程隔离、cgroups v2 资源配额与 OverlayFS 联合文件系统底层解密"
+title: "Docker 内核：Namespace、cgroups 与 OverlayFS"
 slug: docker-internals-namespace-cgroups-overlayfs
 date: 2026-09-25
 tag: 容器内核
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 1
-description: "为什么说容器根本不是轻量级虚拟机，而是一个被限制了视界与资源的普通 Linux 进程？从第一性原理深度拆解 Docker 底层三大支柱：C 语言系统调用 clone() 与六大 Linux Namespace 进程视界隔离、cgroups v2 单根树统一资源配额与 OOM 机制、OverlayFS 联合挂载分层镜像与写时复制（CoW），并剖析 OCI、containerd 与 runc 调用链路。"
+description: "说明容器不是轻量虚拟机，而是受限的 Linux 进程：Namespace 隔离视野，cgroups v2 限制资源，OverlayFS 存放分层镜像。"
 extraTags:
   - Docker
   - Linux Kernel

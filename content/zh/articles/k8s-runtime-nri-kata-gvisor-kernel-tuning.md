@@ -1,5 +1,5 @@
 ---
-title: "对 K8s 节点与运行时动刀：PLEG 瓶颈突破、NRI 节点资源接口插件、Kata/gVisor 多安全沙箱运行时与 cgroups v2 调优"
+title: "K8s 运行时：NRI、Kata、gVisor 与 cgroups"
 slug: k8s-runtime-nri-kata-gvisor-kernel-tuning
 date: 2026-09-25
 tag: 节点运行时定制
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 10
-description: "为什么共享宿主机内核的传统 runc 容器无法抵御零日漏洞逃逸，物理节点又频频陷入 PLEG is not healthy 假死超时？深度解密对 Kubernetes 工作节点（Worker Node）与容器运行时的深水区内核改造：剖析 Kubelet syncLoop 核心主循环与 Evented PLEG 流式事件驱动革新；深入 containerd/CRI-O 原生 NRI（Node Resource Interface）插件架构并编写 Go 代码实现动态 CPU 绑核与 OCI 拦截；全景对比微虚拟机 Kata Containers 与用户态内核沙箱 gVisor 的底层架构与性能损耗；并掌握通过 RuntimeClass、安全 Sysctl 与 cgroups v2 PSI/memory.high 实施精细化内核防护。"
+description: "讲解节点上 PLEG 为何会拖慢同步，NRI 插件如何改容器配置，以及 Kata、gVisor 和 cgroups v2 各自限制什么，以免拖死。"
 extraTags:
   - Kubernetes
   - Kubelet

@@ -1,5 +1,5 @@
 ---
-title: "Evolution of Attention Kernels: From FlashAttention-1/2/3 SRAM Tiling to FlashInfer Unified Heterogeneous Serving"
+title: "Attention Kernels: FlashAttention and FlashInfer"
 slug: flashattention-flashinfer-kernel-evolution
 date: 2026-09-24
 tag: Kernel Optimization
@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
 seriesOrder: 5
-description: "Deep dive into GPU attention kernels: FlashAttention-1 online softmax, FA-2 parallelism, FA-3 Hopper TMA asynchronous pipelines, and FlashInfer variable-length batching."
+description: "How FlashAttention computes attention in SRAM tiles instead of materializing the score matrix, and how FlashInfer reads paged KV cache during decode steps."
 extraTags:
   - FlashAttention
   - FlashInfer

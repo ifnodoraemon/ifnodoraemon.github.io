@@ -1,5 +1,5 @@
 ---
-title: "The Future of LLM Inference: Test-Time Compute, Reasoning Scheduling, and Tiered Cluster Storage"
+title: "Reasoning Inference: Test-Time Compute and KV Scheduling"
 slug: reasoning-test-time-compute-inference-future
 date: 2026-09-24
 tag: Future Architectures
@@ -7,7 +7,7 @@ tagClass: tag-amber
 category: Inference Systems
 series: llm-inference
 seriesOrder: 10
-description: "Inference architectures for reasoning models: Test-Time Compute scaling, MCTS speculative tree scheduling, thinking budget governors, and tiered KV cache pools."
+description: "How long reasoning traces increase KV-cache pressure, and what test-time compute, speculative trees, and tiered KV storage change in the serving path."
 extraTags:
   - Test-Time Compute
   - Reasoning

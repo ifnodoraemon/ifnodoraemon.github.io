@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes Control Plane Deep Dive: Declarative APIs, etcd Consensus, Scheduler, and Controller Reconciliation Loops"
+title: "Kubernetes Control Plane and Reconciliation"
 slug: k8s-control-plane-declarative-reconciliation
 date: 2026-09-25
 tag: K8s Control Plane
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 4
-description: "Kubernetes control plane architecture: declarative reconciliation loops, informers, workqueue patterns, and optimistic concurrency control with etcd."
+description: "How Kubernetes stores desired state through a declarative API and etcd, how the scheduler places pods, and how controllers reconcile toward that state."
 extraTags:
   - Kubernetes
   - Control Plane

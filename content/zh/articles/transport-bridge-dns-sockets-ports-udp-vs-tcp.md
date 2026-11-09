@@ -1,5 +1,5 @@
 ---
-title: "应用层与传输层枢纽：DNS 解析全流程、Socket 套接字本质与 TCP/UDP 核心对比"
+title: "DNS、Socket 与 TCP/UDP 对比"
 slug: transport-bridge-dns-sockets-ports-udp-vs-tcp
 date: 2026-10-01
 tag: 传输层纽带与DNS
@@ -7,7 +7,7 @@ tagClass: tag-indigo
 category: 计算机网络
 series: computer-networking
 seriesOrder: 4
-description: "当你在浏览器敲下网址并回车时，数据到底是如何精准找到目标机器并钻进指定应用程序的？深度拆解应用层与传输层的衔接纽带：全景透视 DNS 树状解析体系（全球 13 组逻辑根域名服务器 Anycast 任播、TLD 顶级域、权威解析与递归/迭代查询机理）；从第一性原理推导端口（Port）与操作系统 Socket（套接字）本质，解密单台服务器单个 80 端口如何依靠五元组轻松承载百万并发长连接；并全面对比传输层双子星：UDP 8 字节极简报头与 TCP 20 字节可靠字节流的设计哲学分野。"
+description: "说明 DNS 如何从根递归解析到权威服务器，Socket 五元组如何让一个端口承载多条连接，以及 UDP 与 TCP 的取舍，含 Anycast 根。"
 extraTags:
   - Computer Networking
   - DNS

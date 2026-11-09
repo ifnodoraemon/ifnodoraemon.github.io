@@ -1,11 +1,11 @@
 ---
-title: 2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro
+title: "2026 模型比较：GPT-5.4、Claude 4.6 与 Gemini"
 slug: model-comparison-2026
 date: 2026-03-01
 tag: 模型横评
 tagClass: tag-amber
 category: 评测与趋势
-description: "比较 GPT-5.4、Claude Opus/Sonnet 4.6 与 Gemini 3.1 Pro 的 API 能力、Token 价格和工程边界，给出可核验的调用示例、评测方法与自建成本公式。"
+description: "比较 GPT-5.4、Claude 4.6 与 Gemini 3.1 Pro 的 API 能力、Token 价格和调用方式，并给出可核对的评测与成本算法。"
 featured: true
 featuredStats:
   - label: 比较模型

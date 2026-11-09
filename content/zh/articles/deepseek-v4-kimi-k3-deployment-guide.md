@@ -1,11 +1,11 @@
 ---
-title: "2026 DeepSeek-V4 与 Kimi K3 生产级部署实战指南：四机 32 卡拓扑、显存数学与踩坑排障血泪史"
+title: "DeepSeek-V4 与 Kimi K3 部署：32 卡拓扑与排障"
 slug: deepseek-v4-kimi-k3-deployment-guide
 date: 2026-09-07
 tag: 集群部署
 tagClass: tag-cyan
 category: 推理系统
-description: "深入解析 DeepSeek-V4-Pro (CSA+HCA) 与 Kimi K3 (KDA+MLA) 生产级多机部署全流程：涵盖四机 32 卡 / 八机 64 卡硬件拓扑、逐卡显存数学建模、六大生产踩坑排障实录（NUMA穿透、MoE路由倾斜、CUDAGraph伪OOM、PFC死锁）、Ray与KubeRay云原生实战。"
+description: "部署 DeepSeek-V4 与 Kimi K3：四机 32 卡拓扑，并排查 NUMA、MoE 路由、CUDA Graph 伪 OOM 与 PFC 死锁。"
 updated: 2026-10-21
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes 扩展核心：Operator 模式、CRD 自定义资源与 KubeBuilder 生产级实战"
+title: "K8s Operator：CRD 与 KubeBuilder"
 slug: k8s-operator-pattern-kubebuilder-crd
 date: 2026-09-25
 tag: Operator 模式
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 12
-description: "为什么说 Operator 模式是 Kubernetes 能够统治整个现代基础架构软件生态的终极杀手锏？深度拆解 Operator 模式的核心哲学：如何将资深 SRE 的运维专家经验编码为代码；解密 CRD（自定义资源定义）在 apiextensions-apiserver 中的注册机理与 Status/Scale 子资源隔离；深入剖析 Controller-Runtime 与 KubeBuilder 生产级脚手架架构（Manager、Cache、Split Client、Reconcile 调谐与 Finalizer 安全清理机制），并通过完整的 Go 代码实现一个高可用分布式中间件 Operator。"
+description: "说明 Operator 如何把人工运维写成控制器，CRD 如何注册新资源，以及 KubeBuilder 的调谐循环和 Finalizer 如何清理实例。"
 extraTags:
   - Kubernetes
   - Operator

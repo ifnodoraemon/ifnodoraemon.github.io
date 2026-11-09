@@ -1,11 +1,11 @@
 ---
-title: "Production Deployment of DeepSeek-V4 and Kimi K3: 32-GPU Topologies, Memory Math, and Real-World Troubleshooting"
+title: "DeepSeek-V4 and Kimi K3: 32-GPU Topology and Debugging"
 slug: deepseek-v4-kimi-k3-deployment-guide
 date: 2026-09-07
 tag: Cluster Deployment
 tagClass: tag-cyan
 category: Inference Systems
-description: "Comprehensive production guide for hosting DeepSeek-V4-Pro (CSA+HCA) and Kimi K3 (KDA+MLA): covering 4-node/32-GPU and 8-node/64-GPU topologies, per-rank GPU memory budgeting, six hardcore production pitfalls (NUMA crossing, MoE routing skew, CUDAGraph pseudo-OOM, PFC deadlock), Ray and KubeRay orchestration."
+description: "Deploy DeepSeek-V4 and Kimi K3 on a 4-node 32-GPU topology, budget memory per GPU, and debug NUMA, MoE skew, CUDA Graph false OOM, and PFC deadlock. See Ray."
 updated: 2026-10-21
 ---
 

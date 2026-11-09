@@ -1,5 +1,5 @@
 ---
-title: "Modern Data Center Network Architecture First Principles: Clos Topologies, Leaf-Spine Fabrics, BGP Underlay, and EVPN-VXLAN Large Layer-2 Virtualization"
+title: "Datacenter Networks: Clos, Leaf-Spine, and EVPN"
 slug: datacenter-network-clos-leaf-spine-bgp-evpn-vxlan
 date: 2026-10-01
 tag: Datacenter & Leaf-Spine
@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Computer Networking
 series: computer-networking
 seriesOrder: 8
-description: "First-principles guide to datacenter networking: Clos topologies, 2-Tier/3-Tier Leaf-Spine fabrics, RFC 7938 eBGP Underlay, ECMP hashing, and EVPN-VXLAN large Layer-2 Overlay."
+description: "Why datacenter networks replace a three-tier STP tree with Clos leaf-spine, and how a BGP underlay plus EVPN-VXLAN stretches Layer 2 across racks. See ECMP."
 extraTags:
   - Computer Networking
   - Data Center

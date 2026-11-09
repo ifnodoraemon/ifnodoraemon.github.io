@@ -3,318 +3,318 @@
 <channel>
   <title>智算架构志</title>
   <link>https://blog.llmgo.top/</link>
-  <description>专注 AI 大模型技术研究与实践的技术博客</description>
+  <description>本站是大模型推理架构与系统工程笔记，覆盖 vLLM 服务、DeepSeek MLA、InfiniBand 网络与生产级 Agent 运行时。</description>
   <language>zh-CN</language>
-  <pubDate>Wed, 21 Oct 2026 05:58:37 GMT</pubDate>
+  <pubDate>Mon, 09 Nov 2026 01:45:55 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
-    <title>解密 DeepSeek 推理印钞机：DeepInfer 与 deepseek-recipe 从硅基地基到协议顶层的生产全栈拆解</title>
+    <title>DeepSeek 生产推理栈：DeepInfer 与 deepseek-recipe</title>
     <link>https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/</link>
     <guid>https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/</guid>
     <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>推理架构</category>
-    <description>从底层芯片与通信物理地基，到算子内核、PD 极致分离拓扑、DSpark 动态投机解码、SWA 边界重放，再到 deepseek-recipe 协议中间层与百万亿 Token 商业印钞机经济学，全景剖析 DeepSeek 最新开源生产推理全栈。</description>
+    <description>介绍 DeepSeek 生产推理栈：DeepInfer 的算子与 PD 分离、DSpark 投机解码，以及 deepseek-recipe 如何对接上层协议。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/deepinfer-deepseek-recipe-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战</title>
+    <title>InfiniBand 生产调优：OpenSM 与 NCCL</title>
     <link>https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/</link>
     <guid>https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/</guid>
     <pubDate>Mon, 05 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>生产落地与NCCL调优</category>
-    <description>从网络架构设计到万卡 AI 智算中心裸金属物理落地，工程师必须攻克哪些工程深水区？全景拆解 InfiniBand 生产落地实战：Mellanox OFED / DOCA 驱动栈与固件管理工具（flint/mlxlink）；搭建基于 OpenSM 的 Master/Standby 主备高可用子网管理架构；深入实战 ibdiagnet 全网巡检，秒级定位物理层 Symbol Error 脏光纤与降速协商链路；并深入 GPU 通信最底层，实战验证 GPUDirect RDMA（nvidia-peermem 驱动）与 NCCL 核心环境变量（NCCL_IB_HCA / NCCL_NET_GDR_LEVEL=5）极限压测调优。</description>
+    <description>InfiniBand 生产部署要点：OFED 驱动、OpenSM 主备、ibdiagnet 巡检，以及 NCCL 的 GPUDirect RDMA 调优。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/infiniband-production-deployment-opensm-ofed-nccl-tuning.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>InfiniBand 智算集群组网实战：Fat-Tree 胖树拓扑、Rail-Optimized 轨道优化设计、自适应路由 (AR) 与 SHARP 网内计算</title>
+    <title>InfiniBand 组网：胖树、Rail 优化与 SHARP</title>
     <link>https://blog.llmgo.top/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/</link>
     <guid>https://blog.llmgo.top/articles/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp/</guid>
     <pubDate>Sun, 04 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>胖树拓扑与自适应路由</category>
-    <description>如何将成千上万台配备 8 卡 GPU 的服务器用万根光纤编织成一张无阻塞、零死锁的高性能互联网络？深入剖析万卡 AI 智算中心核心拓扑：从 1985 年 Leiserson 胖树（Fat-Tree）数学模型、端口数 k 与 2-Tier/3-Tier 最大节点数严格推导，到专为 DGX H100/H200/B200 量身定制的 Rail-Optimized（轨道优化）八独立平面物理组网；深入解析 FTree 与 Up/Down 算法如何通过禁止“先下后上”破除信用死锁环路；并解密自适应路由（Adaptive Routing）与 SHARP 交换机网内规约计算如何将 All-Reduce 集合通信带宽效率提升 2 倍。</description>
+    <description>说明万卡 GPU 集群如何用 Fat-Tree 与 Rail-Optimized 布线，以及自适应路由和 SHARP 网内计算如何改善集合通信。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>InfiniBand 架构第一性原理：物理链路速率演进、Credit-Based 链路级流控与子网管理器 (Subnet Manager) 全局编排</title>
+    <title>InfiniBand 架构：速率、信用流控与子网管理</title>
     <link>https://blog.llmgo.top/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/</link>
     <guid>https://blog.llmgo.top/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/</guid>
     <pubDate>Sat, 03 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>InfiniBand体系与SM</category>
-    <description>为什么在 2026 年全球顶尖的万卡 AI 算力集群与前沿超算中，原生 InfiniBand 依然牢牢统治着智算中心的核心动脉？深度拆解 InfiniBand 分层协议栈与物理层演进史：从 EDR 100G、HDR 200G、NDR 400G（Quantum-2）到 2026 规模量产的 XDR 800G（Quantum-X800/ConnectX-8）；剖析链路层第一性原理：基于 Flit 的 Credit-Based 信用度硬件级流控与 Cut-Through 直通交换纳秒级低时延机理；解密控制中枢子网管理器（Subnet Manager, OpenSM）全网拓扑发现、GUID/LID/LMC 动态编排与 LFT 线性转发表下发控制全流程。</description>
+    <description>讲解 InfiniBand 从 HDR、NDR 到 XDR 的链路速率，基于信用的链路流控如何避免丢包，以及 OpenSM 如何下发转发表。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/infiniband-architecture-hardware-rates-credit-flow-subnet-manager.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Linux 内核网络子系统硬核剖析：从网卡驱动、NAPI 机制、Ring Buffer 到 eBPF XDP 极速转发</title>
+    <title>Linux 内核网络：NAPI、Ring Buffer 与 XDP</title>
     <link>https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/</link>
     <guid>https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/</guid>
     <pubDate>Fri, 02 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Linux网络与eBPF</category>
-    <description>一个以太网电脉冲是如何最终变成应用程序内存中的数据的？深度剖析 Linux 操作系统内核网络协议栈全流程：从硬件网卡 RX Ring Buffer 描述符、PCIe DMA 零 CPU 搬运，到硬中断触发、NAPI 混合轮询机制与 ksoftirqd 软中断调度；全景透视 Linux 内核最核心的数据结构 sk_buff 指针拓扑与零拷贝内存流转；详解多核网卡 RSS 多队列与 RPS/RFS CPU 亲和性调优；并深入技术最前沿，剖析 eBPF XDP（eXpress Data Path）如何在网卡驱动层实现千万级 PPS 极速包转发与防 DDoS 机制。</description>
+    <description>讲解网卡接收环、DMA 与 NAPI 轮询如何收包，sk_buff 如何在内核中流转，以及 eBPF XDP 在驱动层如何丢弃或转发，也讲 RSS。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/linux-kernel-networking-napi-ring-buffer-skbuff-xdp.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>RDMA 高性能通信基石：Kernel Bypass、Zero-Copy、Queue Pair 机制与无损以太网 RoCEv2 (PFC/ECN) 全景透视</title>
+    <title>RDMA 基础：内核旁路、Queue Pair 与 RoCEv2</title>
     <link>https://blog.llmgo.top/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</link>
     <guid>https://blog.llmgo.top/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/</guid>
     <pubDate>Fri, 02 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>RDMA与RoCEv2</category>
-    <description>为什么在 400G/800G 网络时代，传统的 TCP/IP 协议栈彻底沦为算力黑洞？深度拆解 RDMA（远程直接内存访问）第一性原理：Kernel Bypass（内核旁路）、Zero-Copy（硬件级零拷贝）与内存注册（Memory Registration/L_Key/R_Key）；剖析 ibverbs 核心架构：Queue Pair（SQ/RQ）、完成队列（CQ）以及双边操作（Send/Recv）与单边操作（RDMA Read/Write/Atomic）的微秒级机理；解密无损以太网 RoCEv2（UDP 端口 4791）如何通过 PFC 802.1Qbb 八优先级流控反压与 ECN/DCQCN 拥塞控制闭环解决丢包崩溃与死锁难题。</description>
+    <description>讲解 RDMA 如何注册内存、旁路内核并零拷贝，Queue Pair 如何收发，以及 RoCEv2 怎样用 PFC 和 ECN 减少丢包，含原子操作。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>现代数据中心网络架构第一性原理：Clos 拓扑、Leaf-Spine 组网、BGP Underlay 与 EVPN-VXLAN 大二层虚拟化</title>
+    <title>数据中心网络：Clos、Leaf-Spine 与 EVPN</title>
     <link>https://blog.llmgo.top/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/</link>
     <guid>https://blog.llmgo.top/articles/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan/</guid>
     <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>数据中心与Leaf-Spine</category>
-    <description>为什么传统三层网络与 STP 生成树无法承载现代云计算与 AI 大规模算力集群？深度拆解数据中心网络演进史：从经典三层架构（接入 Access/汇聚 Aggregation/核心 Core）的 STP 阻塞与收敛比失衡痛点，到 1953 年 Charles Clos 电话交换理论与现代无阻塞 2-Tier / 3-Tier Leaf-Spine 拓扑数学建模；详解基于 RFC 7938 的 eBGP Underlay 路由设计、ECMP 等价多路径五元组哈希极化（Hash Polarization）破除方案；全面剖析大二层 Overlay 核心技术：VXLAN 报文 MAC-in-UDP 封装（VNI 24-bit/Jumbo Frame 9000 MTU）与 MP-BGP EVPN 控制平面 Type-2/Type-3/Type-5 路由交换机理。</description>
+    <description>说明数据中心为何用 Clos 与 Leaf-Spine 替代传统三层加 STP，以及 BGP Underlay 和 EVPN-VXLAN 如何延伸二层。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>应用层与传输层枢纽：DNS 解析全流程、Socket 套接字本质与 TCP/UDP 核心对比</title>
+    <title>DNS、Socket 与 TCP/UDP 对比</title>
     <link>https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/</link>
     <guid>https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/</guid>
     <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>传输层纽带与DNS</category>
-    <description>当你在浏览器敲下网址并回车时，数据到底是如何精准找到目标机器并钻进指定应用程序的？深度拆解应用层与传输层的衔接纽带：全景透视 DNS 树状解析体系（全球 13 组逻辑根域名服务器 Anycast 任播、TLD 顶级域、权威解析与递归/迭代查询机理）；从第一性原理推导端口（Port）与操作系统 Socket（套接字）本质，解密单台服务器单个 80 端口如何依靠五元组轻松承载百万并发长连接；并全面对比传输层双子星：UDP 8 字节极简报头与 TCP 20 字节可靠字节流的设计哲学分野。</description>
+    <description>说明 DNS 如何从根递归解析到权威服务器，Socket 五元组如何让一个端口承载多条连接，以及 UDP 与 TCP 的取舍，含 Anycast 根。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/transport-bridge-dns-sockets-ports-udp-vs-tcp.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>局域网企业级基建：VLAN 划分 (802.1Q)、DHCP 动态分配与 NAT 端口映射机制</title>
+    <title>企业局域网：VLAN、DHCP 与 NAT</title>
     <link>https://blog.llmgo.top/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/</link>
     <guid>https://blog.llmgo.top/articles/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding/</guid>
     <pubDate>Wed, 30 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>局域网基建与VLAN</category>
-    <description>为什么一台物理交换机能够切分成几十个互不干扰的虚拟局域网？深度拆解现代企业局域网三大核心基建：从广播风暴危害到 IEEE 802.1Q 帧标签结构（4 字节 Tag、12 位 VID、PCP 优先级）；全面理清 Access 口、Trunk 口与 PVID 剥离/插入全流程，对比单臂路由与三层交换机 SVI 虚接口；深入剖析 DHCP 动态主机配置协议 DORA 四步握手与跨网段 Relay 中继机理；并手把手揭秘 NAPT（网络地址端口转换）、SNAT、DNAT 端口映射与 Linux conntrack 连接跟踪表物理运转真相。</description>
+    <description>说明 802.1Q VLAN 如何把一台交换机划成多个广播域，DHCP 如何用 DORA 分配地址，以及 NAPT 如何做端口映射，含 Access 口。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>TCP 拥塞控制演进史与高性能传输：从 Reno、Cubic 到 BBR 数学模型，以及 HTTP/2 到 HTTP/3 (QUIC) 协议栈革命</title>
+    <title>TCP 拥塞控制：Reno、Cubic、BBR 与 QUIC</title>
     <link>https://blog.llmgo.top/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/</link>
     <guid>https://blog.llmgo.top/articles/tcp-congestion-control-reno-cubic-bbr-quic-http3/</guid>
     <pubDate>Wed, 30 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>拥塞控制与QUIC</category>
-    <description>为什么滑动窗口能防冲垮对端内存，却防不住互联网骨干路由器的崩溃？深度剖析拥塞控制三十年演进史：从基于丢包的经典 AIMD、Reno 状态机、Bufferbloat（缓冲区膨胀）到 Linux 默认 Cubic 的三次多项式数学推导；深入解密 Google BBR 基于最大交付率与最小往返时延的瓶颈物理建模（BtlBw/RTprop/Pacing Rate）；并对比分析从 HTTP/1.1、HTTP/2 多路复用线头阻塞（HoL Blocking）到基于 UDP 的 HTTP/3 (QUIC) 零 RTT 握手与连接迁移协议栈大一统革命。</description>
+    <description>比较丢包驱动的 Reno、Cubic 和按带宽时延建模的 BBR，并说明 HTTP/3 如何改用 QUIC 承载原来的 TCP 流量，谈缓冲膨胀。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/tcp-congestion-control-reno-cubic-bbr-quic-http3.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>IP 寻址全景数学推导：十进制/二进制转换、子网掩码 (Subnet Mask) 计算、CIDR 划分与默认网关第一性原理</title>
+    <title>IP 寻址：子网掩码、CIDR 与默认网关</title>
     <link>https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/</link>
     <guid>https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/</guid>
     <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>IP寻址与子网掩码</category>
-    <description>为什么有了物理 MAC 地址，全世界的计算机依然必须依赖 IP 地址通信？从零基础透视网络层第一性原理：IPv4 32 位二进制与点分十进制的数学本质；深度剖析子网掩码（Subnet Mask）核心机理，手把手推导二进制按位与（Bitwise AND）运算，以 192.168.1.130/26 为例推演网络地址、广播地址与有效主机 IP 范围（2^H - 2 减二真相）；详解 A/B/C 类地址历史缺陷、CIDR 无类别域间路由与私有保留网段；并彻底揭秘跨网段通信时默认网关（Default Gateway）的‘解封换壳’运转本质。</description>
+    <description>用二进制说明子网掩码和 CIDR 如何划分 IPv4 的网络号与主机号，以及数据包离开本网段时默认网关承担什么角色，并算出网络地址与可用主机范围。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/ip-addressing-subnet-mask-cidr-default-gateway-routing.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>网络层与传输层精解：IP 路由选路、CIDR、TCP 三次握手/四次挥手状态机与滑动窗口第一性原理</title>
+    <title>IP 路由与 TCP 状态机、滑动窗口</title>
     <link>https://blog.llmgo.top/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</link>
     <guid>https://blog.llmgo.top/articles/network-layer-transport-layer-ip-routing-tcp-state-machine/</guid>
     <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>IP路由与TCP状态机</category>
-    <description>为什么在不可靠的不可信物理网络上，能够构建出绝对可靠、按序到达的数据流？深度拆解网络层与传输层核心机理：从 IPv4/IPv6 报文结构、CIDR 掩码划分到 Linux 内核最长前缀匹配（LPM）与 FIB/RIB 路由表查找；全景剖析 TCP 经典的 11 种状态变迁机理，深入解析三次握手防串包原理、SYN Flood 与 SYN Cookies 防御、四次挥手与 TIME_WAIT 状态设计哲学；并从第一性原理推导滑动窗口流量控制、零窗口探测与 TCP_NODELAY 生产级网络调优。</description>
+    <description>讲解 IP 如何用最长前缀匹配选路，TCP 十一种状态如何完成握手与挥手，以及滑动窗口怎样限制在途数据，并解释 SYN Cookie 与 TIME_WAIT。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/network-layer-transport-layer-ip-routing-tcp-state-machine.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>从零认识计算机网络：比特信号、网线介质、集线器冲突域到交换机 MAC 寻址第一性原理</title>
+    <title>计算机网络入门：介质、冲突域与 MAC</title>
     <link>https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/</link>
     <guid>https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/</guid>
     <pubDate>Mon, 28 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>零基础网络与二层交换</category>
-    <description>如果对计算机网络一无所知，该如何建立最直观、最坚实的底层认知？从零剖析网络通信第一性原理：计算机如何通过高低电平与光脉冲表示 0 和 1；双绞线为什么要‘拧成麻花’抗干扰、单模光纤与多模光纤的物理特性；集线器（Hub）时代全网共享信道、冲突域（Collision Domain）与 CSMA/CD 载波侦听退避算法；深度揭秘二层交换机（Switch）如何通过 MAC 地址表（CAM）自学习与以太网帧（Frame）彻底消灭冲突域；并详述 ARP 广播请求、单播应答、免费 ARP 与 ARP 欺骗防御机制。</description>
+    <description>从比特、双绞线和光纤讲起，说明集线器冲突域、交换机如何学习 MAC，以及 ARP 怎样把 IP 解析成网卡硬件地址。文中也讲到 CSMA/CD。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/network-fundamentals-bits-cables-hubs-switches-mac-arp.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>容器网络全景解密：veth-pair、Linux Bridge、iptables NAT 与跨主机网络拓扑</title>
+    <title>容器网络：veth、Linux Bridge 与 iptables</title>
     <link>https://blog.llmgo.top/articles/container-networking-veth-bridge-iptables/</link>
     <guid>https://blog.llmgo.top/articles/container-networking-veth-bridge-iptables/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>容器网络</category>
-    <description>为什么隔离在独立 Network Namespace 中的容器能够与外界顺畅通信？深度拆解容器网络协议栈的底层传输机理：veth-pair 虚拟以太网对穿透隔离墙、Linux Bridge (docker0) 二层 MAC 学习与广播域隔离、iptables PREROUTING/POSTROUTING 端口映射与 MASQUERADE 动态源地址转换，全面对比 Host、Bridge、Macvlan 与 Overlay 跨主机网络拓扑性能与开销。</description>
+    <description>说明容器报文如何经 veth-pair 离开网络命名空间，在 Linux Bridge 上按 MAC 交换，再由 iptables NAT 访问外网。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/container-networking-veth-bridge-iptables.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Docker 内核第一性原理：Namespace 进程隔离、cgroups v2 资源配额与 OverlayFS 联合文件系统底层解密</title>
+    <title>Docker 内核：Namespace、cgroups 与 OverlayFS</title>
     <link>https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/</link>
     <guid>https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>容器内核</category>
-    <description>为什么说容器根本不是轻量级虚拟机，而是一个被限制了视界与资源的普通 Linux 进程？从第一性原理深度拆解 Docker 底层三大支柱：C 语言系统调用 clone() 与六大 Linux Namespace 进程视界隔离、cgroups v2 单根树统一资源配额与 OOM 机制、OverlayFS 联合挂载分层镜像与写时复制（CoW），并剖析 OCI、containerd 与 runc 调用链路。</description>
+    <description>说明容器不是轻量虚拟机，而是受限的 Linux 进程：Namespace 隔离视野，cgroups v2 限制资源，OverlayFS 存放分层镜像。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/docker-internals-namespace-cgroups-overlayfs.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>轻量级集群编排：Docker SwarmKit 架构、Raft 分布式共识与 Ingress Routing Mesh 服务发现</title>
+    <title>Docker Swarm：Raft 共识与 Routing Mesh</title>
     <link>https://blog.llmgo.top/articles/docker-swarm-architecture-raft-routing-mesh/</link>
     <guid>https://blog.llmgo.top/articles/docker-swarm-architecture-raft-routing-mesh/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>集群编排</category>
-    <description>为什么在 Kubernetes 一统天下的今天，中小团队依然视 Docker Swarm 为最高效的生产利器？深度拆解 SwarmKit 的架构哲学：Manager 与 Worker 节点拓扑、内置 Raft 协议的分布式强一致状态机、VXLAN 驱动的跨主机 Overlay 覆盖网络，以及基于 IPVS 的 Ingress Routing Mesh 负载均衡与服务发现，全面剖析 Swarm 与 K8s 的工程权衡分水岭。</description>
+    <description>说明 SwarmKit 的 Manager 与 Worker 如何分工，Raft 如何保持集群状态一致，以及 IPVS Routing Mesh 如何发布服务。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/docker-swarm-architecture-raft-routing-mesh.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>业务软件在 K8s 上的网络架构实战：gRPC 长连接负载均衡陷阱、Service Mesh 与零停机平滑切流时序</title>
+    <title>K8s 应用网络：gRPC 均衡与平滑切流</title>
     <link>https://blog.llmgo.top/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/</link>
     <guid>https://blog.llmgo.top/articles/k8s-application-networking-grpc-service-mesh-zero-downtime/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>业务网络实战</category>
-    <description>为什么我们的微服务搬上 Kubernetes 后，滚动发布总会出现偶发 502 报错，gRPC 流量更是死死钉在某一个 Pod 上完全不均衡？深度拆解业务软件在 K8s 上的网络工程实战：HTTP/2 多路复用导致四层 ClusterIP 负载均衡彻底失效的底层根因与 Headless Service / Envoy 网格解法；MaxConnectionAge、JVM DNS TTL 永久缓存与指数退避重连风暴四大生产陷阱；完整复盘 Pod 销毁与 EndpointSlice 异步切流的时序竞态冲突；并给出从 preStop 缓冲、平滑连接排空到 readinessGates 的生产级零停机发布实践。</description>
+    <description>说明 gRPC 长连接为何让 Kubernetes Service 负载倾斜，以及 Service Mesh 如何按连接排空，做到发布时不断流量。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-application-networking-grpc-service-mesh-zero-downtime.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Kubernetes 控制平面深度解密：声明式 API、etcd 状态机、调度器与控制器调谐循环 (Reconciliation Loop)</title>
+    <title>K8s 控制平面：声明式 API 与调谐循环</title>
     <link>https://blog.llmgo.top/articles/k8s-control-plane-declarative-reconciliation/</link>
     <guid>https://blog.llmgo.top/articles/k8s-control-plane-declarative-reconciliation/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>K8s 控制面</category>
-    <description>为什么声明式 API 与控制理论能够成为现代云计算与分布式系统的终极事实标准？深度剖析 Kubernetes 控制平面架构底层：kube-apiserver 请求准入控制流水线（认证、鉴权、双准入 Webhook）、etcd v3 底层 MVCC 与 Watch 机制、kube-scheduler 过滤与打分双阶段调度、Informer 架构（Reflector、DeltaFIFO、Indexer、WorkQueue）与控制器水平触发调谐循环（Reconciliation Loop）工程机理。</description>
+    <description>讲解 Kubernetes 如何用声明式 API 保存期望状态，etcd 如何存储它，调度器如何选节点，控制器如何用调谐循环收敛，含 Informer。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-control-plane-declarative-reconciliation.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>对 K8s 控制面动刀：WatchCache 缓存穿透机理、Aggregated APIServer 聚合扩展、APF 洗牌分片流控与万级节点 etcd 调优</title>
+    <title>K8s 控制面：聚合 APIServer、APF 与 etcd</title>
     <link>https://blog.llmgo.top/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/</link>
     <guid>https://blog.llmgo.top/articles/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>控制面内核定制</category>
-    <description>为什么当自定义资源数量突破数百万级时，CRD 会直接把 etcd 撑爆导致整个 Kubernetes 集群瘫痪？深度拆解对 Kubernetes 控制面中枢的深水区改造：剖析 kube-apiserver 内部 WatchCache 环形缓冲区与 resourceVersion 三大语义机制；构建独立的 Aggregated APIServer（聚合 API 服务器）实现后端存储旁路解耦；深入剖析 API Priority and Fairness（APF）洗牌分片流控数学模型如何化解并发流量雪崩；并全面公开支撑上万节点超大规模集群的 etcd 物理双盘隔离与事件分库极限方案。</description>
+    <description>说明 WatchCache、聚合 APIServer 和 APF 如何扩展 Kubernetes 控制面，以及节点规模变大以后 etcd 需要做哪些调优。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>生产级分布式存储与数据库落地：Local NVMe 物理直通、RocksDB/WAL 刷盘调优与 Fencing 防脑裂架构</title>
+    <title>K8s 上的数据库：Local NVMe 与 Fencing</title>
     <link>https://blog.llmgo.top/articles/k8s-database-storage-local-nvme-tuning-fencing/</link>
     <guid>https://blog.llmgo.top/articles/k8s-database-storage-local-nvme-tuning-fencing/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>业务存储实战</category>
-    <description>为什么绝大多数互联网大厂在将核心数据库搬上 Kubernetes 时，坚决抛弃网络云盘而选用 Local NVMe？深度拆解生产级分布式存储与数据库在 K8s 上的工程落地：从云盘网络跳步瓶颈到 Local PV 裸盘物理直通架构；XFS 格式化参数与 Linux Page Cache 脏页积压引发 cgroups v2 OOM 崩溃的底层剖析；RocksDB 与 MySQL WAL Direct I/O、fdatasync 调优；以及分布式数据库最可怕的物理灾难 —— 节点网络分区脑裂与 Node Fencing / IPMI STONITH 隔离防护硬核防线。</description>
+    <description>说明在 Kubernetes 上用本地 NVMe 跑数据库时，如何调整 RocksDB 与 WAL 刷盘，并用 Fencing 避免旧主继续写入。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-database-storage-local-nvme-tuning-fencing.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 AI 智算调度终局：Kubernetes GPU Operator、MIG 分割、拓扑感知调度与 vLLM/SGLang 集群弹性扩缩容</title>
+    <title>K8s GPU 调度：GPU Operator、MIG 与推理扩缩</title>
     <link>https://blog.llmgo.top/articles/k8s-gpu-operator-ai-inference-scheduling/</link>
     <guid>https://blog.llmgo.top/articles/k8s-gpu-operator-ai-inference-scheduling/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>AI 智算调度</category>
-    <description>为什么传统以 CPU/内存为核心的调度体系在大模型时代全面失效？深入拆解 2026 AI 时代 Kubernetes 智算基础设施调度架构：NVIDIA GPU Operator 驱动与运行时全自动纳管链路、MIG（多实例 GPU）硬件物理分割与时间切片方案；Kubelet Topology Manager 与 DRA（动态资源分配）如何解决跨 NUMA 节点与 NVLink 互联性能断崖；并实战构建基于 P/D 分离、KV Cache 负载指标与 KEDA 的生产级 vLLM / SGLang 大模型推理集群弹性扩缩容架构。</description>
+    <description>说明 GPU Operator 如何安装驱动与设备插件，MIG 如何切分 GPU，以及拓扑感知调度怎样扩缩 vLLM 和 SGLang，面向在线推理。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-gpu-operator-ai-inference-scheduling.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Kubernetes 网络模型全景：CNI 规范演进、Calico BGP、Cilium eBPF 与 Gateway API 架构解密</title>
+    <title>K8s 网络：CNI、Cilium eBPF 与 Gateway API</title>
     <link>https://blog.llmgo.top/articles/k8s-networking-cni-cilium-ebpf-gateway-api/</link>
     <guid>https://blog.llmgo.top/articles/k8s-networking-cni-cilium-ebpf-gateway-api/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>K8s 网络</category>
-    <description>为什么说容器网络是 Kubernetes 中最复杂、最容易踩坑的深水区？深度拆解云原生网络四大公理与 CNI（Container Network Interface）插件规范底层执行机理；全面对比 Flannel VXLAN 覆盖网络与 Calico BGP 纯二层路由性能与开销；深入解密 Cilium 如何利用 Linux 内核 eBPF 与 sockops 套接字重定向彻底革新 kube-proxy 与 iptables 性能瓶颈；并剖析面向未来的 Gateway API 角色分离与流量治理架构。</description>
+    <description>比较 Flannel、Calico BGP 与 Cilium eBPF 的数据面差异，并说明 Gateway API 如何把流量策略拆给不同角色来管理。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-networking-cni-cilium-ebpf-gateway-api.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Kubernetes 扩展核心：Operator 模式、CRD 自定义资源与 KubeBuilder 生产级实战</title>
+    <title>K8s Operator：CRD 与 KubeBuilder</title>
     <link>https://blog.llmgo.top/articles/k8s-operator-pattern-kubebuilder-crd/</link>
     <guid>https://blog.llmgo.top/articles/k8s-operator-pattern-kubebuilder-crd/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Operator 模式</category>
-    <description>为什么说 Operator 模式是 Kubernetes 能够统治整个现代基础架构软件生态的终极杀手锏？深度拆解 Operator 模式的核心哲学：如何将资深 SRE 的运维专家经验编码为代码；解密 CRD（自定义资源定义）在 apiextensions-apiserver 中的注册机理与 Status/Scale 子资源隔离；深入剖析 Controller-Runtime 与 KubeBuilder 生产级脚手架架构（Manager、Cache、Split Client、Reconcile 调谐与 Finalizer 安全清理机制），并通过完整的 Go 代码实现一个高可用分布式中间件 Operator。</description>
+    <description>说明 Operator 如何把人工运维写成控制器，CRD 如何注册新资源，以及 KubeBuilder 的调谐循环和 Finalizer 如何清理实例。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-operator-pattern-kubebuilder-crd.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>对 K8s 节点与运行时动刀：PLEG 瓶颈突破、NRI 节点资源接口插件、Kata/gVisor 多安全沙箱运行时与 cgroups v2 调优</title>
+    <title>K8s 运行时：NRI、Kata、gVisor 与 cgroups</title>
     <link>https://blog.llmgo.top/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/</link>
     <guid>https://blog.llmgo.top/articles/k8s-runtime-nri-kata-gvisor-kernel-tuning/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>节点运行时定制</category>
-    <description>为什么共享宿主机内核的传统 runc 容器无法抵御零日漏洞逃逸，物理节点又频频陷入 PLEG is not healthy 假死超时？深度解密对 Kubernetes 工作节点（Worker Node）与容器运行时的深水区内核改造：剖析 Kubelet syncLoop 核心主循环与 Evented PLEG 流式事件驱动革新；深入 containerd/CRI-O 原生 NRI（Node Resource Interface）插件架构并编写 Go 代码实现动态 CPU 绑核与 OCI 拦截；全景对比微虚拟机 Kata Containers 与用户态内核沙箱 gVisor 的底层架构与性能损耗；并掌握通过 RuntimeClass、安全 Sysctl 与 cgroups v2 PSI/memory.high 实施精细化内核防护。</description>
+    <description>讲解节点上 PLEG 为何会拖慢同步，NRI 插件如何改容器配置，以及 Kata、gVisor 和 cgroups v2 各自限制什么，以免拖死。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-runtime-nri-kata-gvisor-kernel-tuning.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>对 K8s 调度器动刀：基于 Scheduling Framework 插件架构定制开发、Gang Scheduling 批处理调度与 Descheduler 重调度</title>
+    <title>K8s 调度扩展：Framework 插件与 Gang</title>
     <link>https://blog.llmgo.top/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/</link>
     <guid>https://blog.llmgo.top/articles/k8s-scheduling-framework-custom-plugin-gang-scheduling/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>调度内核定制</category>
-    <description>为什么 Kubernetes 默认调度器在面对大规模 AI 训练与分布式批处理时会陷入资源死锁？深度解密如何对 Kubernetes 调度中枢进行二次开发：剖析官方 Scheduling Framework 调度框架 11 大扩展点内部机理与 CycleState 状态共享；深入拆解 Volcano 核心 DRF（主导资源公平调度）数学模型与 PodGroup 状态机；实战编写一个基于 Go 语言的 Gang Scheduling（成组调度 / All-or-Nothing）自定义调度器插件；并深入解析如何利用 Descheduler 在生产集群中基于真实节点负载实施安全的二次动态重平衡。</description>
+    <description>说明 Scheduling Framework 的扩展点如何接入自定义插件，以及 Gang Scheduling 与 Descheduler 处理 Pod。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-scheduling-framework-custom-plugin-gang-scheduling.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Kubernetes 有状态存储中枢：CSI 插件规范、动态 PV/PVC 供给与 StatefulSet 拓扑保证</title>
+    <title>K8s 存储：CSI、PV/PVC 与 StatefulSet</title>
     <link>https://blog.llmgo.top/articles/k8s-storage-csi-statefulset-deep-dive/</link>
     <guid>https://blog.llmgo.top/articles/k8s-storage-csi-statefulset-deep-dive/</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>K8s 存储</category>
-    <description>为什么在 Kubernetes 上运行有状态数据库曾被视为运维禁区？深度拆解云原生存储体系的底层设计：StorageClass、PV 与 PVC 三层解耦模型与动态存储供给机制；CSI（Container Storage Interface）插件架构四阶段生命周期（Provision、Attach、Stage、Mount）与底层 Linux 挂载机理；StatefulSet 如何通过 Headless Service 确定性 DNS 与 volumeClaimTemplates 保证分布式数据库的拓扑唯一性与数据持久性。</description>
+    <description>说明 CSI 如何按需创建 PV 和 PVC，以及 StatefulSet 怎样为每个 Pod 保持稳定的网络标识和对应的存储卷，重启后仍在。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-storage-csi-statefulset-deep-dive.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞</title>
+    <title>连续批处理：Chunked Prefill 与排头阻塞</title>
     <link>https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/</link>
     <guid>https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>并发调度</category>
-    <description>为什么在消除显存碎片后，高并发大模型服务依然会遭遇严重的单字时延（TPOT）剧烈抖动？深度解构从传统静态批处理到 Orca 迭代级连续批处理的状态机演进，揭秘超长 Prefill 霸占 GPU 引发排头阻塞（HoL Blocking）的物理根源，以及 Sarathi-Serve 和 vLLM 借助 Chunked Prefill 实现算力与访存动态拼车（Piggybacking）的底层机制。</description>
+    <description>说明连续批处理之后，一次超长 Prefill 为何仍会挡住其他请求的 Decode，以及 Chunked Prefill 如何把这段计算拆开穿插执行。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/continuous-batching-chunked-prefill-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Attention 算子加速史：从 FlashAttention-1/2/3 的 SRAM Tiling 到 FlashInfer 统一异构核心</title>
+    <title>Attention 算子：FlashAttention 与 FlashInfer</title>
     <link>https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/</link>
     <guid>https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>算子优化</category>
-    <description>为什么标准自注意力计算会随序列长度呈平方级拖垮显存带宽？深度解析现代 Attention 算子加速史：从 FlashAttention-1 的 SRAM 分块分片（Tiling）与 Online Softmax 动态局部重规约，到 FlashAttention-2 循环重构与 Warp 零通信调度，再到 FlashAttention-3 独占 Hopper 架构的 TMA 硬件异步搬运与 WGMMA 异步流水线。最后全面剖析专为大模型在线服务而生的 FlashInfer，揭秘其如何凭借 Paged KV Cache 原生寻址与 Split-K 解码并行，终结长文本 Decode 算力饥饿。</description>
+    <description>回顾 FlashAttention 如何在 SRAM 中分块计算注意力，以及 FlashInfer 如何用同一条内核路径读取分页 KV 并完成 Decode。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/flashattention-flashinfer-kernel-evolution.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>四大主流生产级推理引擎架构横评与调度器源码解密：vLLM v1 vs SGLang vs TensorRT-LLM vs llama.cpp</title>
+    <title>推理引擎对比：vLLM、SGLang、TRT-LLM、llama.cpp</title>
     <link>https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/</link>
     <guid>https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>推理引擎</category>
-    <description>从 Python 运行时到 C++/Rust 异步执行引擎：深度拆解开源世界四大顶级推理底座的源码设计哲学。对比 vLLM v1 零开销调度器与多步执行、SGLang RadixAttention 树状层级执行环、TensorRT-LLM 原生算子深度融合与 In-Flight Batching，以及 llama.cpp 端侧无依赖极限定量化运行时，奉上生产级全景技术选型指南。</description>
+    <description>对比 vLLM v1、SGLang、TensorRT-LLM 与 llama.cpp 的调度循环和执行后端，方便按吞吐、延迟和硬件条件选择推理引擎。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/inference-engines-core-architecture-internals.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的物理撕裂</title>
+    <title>Roofline 模型：Prefill 与 Decode 的差异</title>
     <link>https://blog.llmgo.top/articles/inference-roofline-prefill-decode/</link>
     <guid>https://blog.llmgo.top/articles/inference-roofline-prefill-decode/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>算力建模</category>
-    <description>为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。</description>
+    <description>用 Roofline 模型说明 Prefill 更吃算力、Decode 更吃显存带宽，以及这种差别如何分开 TTFT 和 TPOT 两个延迟。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/inference-roofline-prefill-decode.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>模型架构反哺推理系统：从 MHA/GQA 到 DeepSeek MLA 矩阵吸收与显存极简主义</title>
+    <title>MHA、GQA 与 MLA：注意力和推理显存</title>
     <link>https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/</link>
     <guid>https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>注意力架构</category>
-    <description>为什么无论工程系统如何优化，长上下文推理依然会被海量 KV Cache 逼入绝境？深度解构从传统 MHA 到 GQA 分组折中，再到 DeepSeek 开创性 MLA（多头潜变量注意力）的技术演进。全面剖析低秩潜变量投影、解耦 RoPE 旋转位置编码，以及推理引擎在自回归 Decode 阶段借助矩阵吸收（Matrix Absorption）将 90% 以上多头张量物理凭空抹除的底层数学机理与 FlashMLA 工程落地。</description>
+    <description>比较 MHA、GQA 与 DeepSeek MLA 的 KV Cache 占用，并说明 Decode 时矩阵吸收如何少存多头张量、降低显存带宽压力。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/mha-gqa-mla-matrix-absorption-inference-engine.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -328,43 +328,43 @@
     <enclosure url="https://blog.llmgo.top/og/zh/moe-expert-parallelism-inference-engine.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>显存虚拟化革命：PagedAttention 内存池管理与显存碎片终结</title>
+    <title>PagedAttention：分页 KV Cache 与显存碎片</title>
     <link>https://blog.llmgo.top/articles/pagedattention-memory-virtualization/</link>
     <guid>https://blog.llmgo.top/articles/pagedattention-memory-virtualization/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>显存虚拟化</category>
-    <description>为什么传统大模型推理会浪费 60%~80% 的 GPU 显存？深度剖析 vLLM 开创的 PagedAttention 核心机制，解构逻辑块到物理块映射、动态显存池生命周期、Copy-on-Write 分叉复用与 CUDA 非连续访存内核，彻底终结显存碎片化顽疾。</description>
+    <description>说明 PagedAttention 如何把 KV Cache 分成逻辑块再映射到物理显存，从而减少碎片，并让多个序列以写时复制共享前缀，用于在线服务。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/pagedattention-memory-virtualization.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>P/D 分离 (Prefill-Decode Disaggregation) 架构：计算与访存解耦、RDMA 分布式 KV Cache 传输与集群池化调度</title>
+    <title>P/D 分离：Prefill 与 Decode 解耦及 KV 传输</title>
     <link>https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/</link>
     <guid>https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>推理架构</category>
-    <description>为什么在 128k 超长上下文与长思考链时代，单机混合部署 Prefill 与 Decode 必然走向性能崩溃？深度剖析 P/D 分离 (Disaggregated Serving) 架构：从计算密集与访存密集的空间物理隔离、GQA 与 DeepSeek MLA 跨节点传输带宽推导，到 GPUDirect RDMA 单边零拷贝、全局 KV 池化调度与 P:D 节点最优比例数学建模。</description>
+    <description>说明 Prefill 与 Decode 为什么要分池部署，KV Cache 如何经 RDMA 在节点间传递，以及集群怎样把这些缓存池化调度。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/pd-disaggregation-distributed-kv-cache.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>前缀缓存架构演进：从 Hash 块级寻址到 SGLang RadixAttention 树状缓存与动态驱逐</title>
+    <title>前缀缓存：Hash 块寻址与 RadixAttention</title>
     <link>https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/</link>
     <guid>https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>前缀缓存</category>
-    <description>为什么每次多轮对话或 Agent 交互，GPU 都要重复做成千上万次无意义的长文本前向计算？深度剖析前缀缓存（Prefix Caching）的核心原理，从 vLLM 的链式 Hash 块级寻址与边界惩罚，到 SGLang 独创的 RadixAttention 树状动态匹配、节点分裂与 LRU 叶子驱逐机制，彻底看透大模型状态复用的底层工程极限。</description>
+    <description>说明前缀缓存如何用块哈希复用已算过的 KV，以及 SGLang RadixAttention 如何在基数树上匹配前缀并用 LRU 驱逐叶子。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/prefix-caching-radix-attention-internals.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>长思维链 (Reasoning / Test-Time Compute) 与大集群推理系统的未来终局</title>
+    <title>长思维链推理：Test-Time Compute 与 KV 调度</title>
     <link>https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/</link>
     <guid>https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>终局前瞻</category>
-    <description>当自回归思考步长从数百 Token 飙升至 128k 深度反思，大模型推理系统迎来了颠覆性的物理拐点。深度探讨长思考链 (Test-Time Compute) 时代的系统级重构：KV Cache 爆炸式显存雪崩对抗、树状搜索 (MCTS) 与投机解码协同调度、基于强化学习的动态思考预算治理，以及跨介质多级分层 (SRAM/HBM/CXL/NVMe-oF) 全球 KV 存储池的未来终局。</description>
+    <description>说明变长思维链如何放大 KV Cache 占用，以及测试时计算、投机树调度和分层 KV 存储要在推理系统里解决什么问题。调度策略也要跟着改。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/reasoning-test-time-compute-inference-future.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -388,13 +388,13 @@
     <enclosure url="https://blog.llmgo.top/og/zh/agent-loop-state-machine.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>突破 10 万 Star 的 Browser-use 架构深度剖析：DOM 树提纯、视觉定位与生产级网页 Agent 实战</title>
+    <title>Browser-use 架构：DOM 提纯与视觉定位</title>
     <link>https://blog.llmgo.top/articles/browser-use-agent-architecture/</link>
     <guid>https://blog.llmgo.top/articles/browser-use-agent-architecture/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>浏览器智能体</category>
-    <description>为什么传统 Selenium/Playwright 脚本在动态前端下频频崩溃？深度拆解斩获 10 万+ GitHub Star 的现象级项目 Browser-use 的底层架构：DOM 树智能提纯降噪、Set-of-Mark (SoM) 视觉坐标定位、状态机闭环容错，并手把手构建一个可生产落地的企业级网页自动化智能体。</description>
+    <description>说明 Browser-use 如何精简 DOM、用视觉标记定位可点击元素，并把页面操作放进带状态和重试的 Agent 循环，用于网页自动化。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/browser-use-agent-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -408,33 +408,33 @@
     <enclosure url="https://blog.llmgo.top/og/zh/sglang-vs-vllm-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>投机采样 (Speculative Decoding) 生产实操：从 Draft Model 到 EAGLE-3 动态推测树实现 3x~5x 无损加速</title>
+    <title>投机解码：从 Draft Model 到 EAGLE-3</title>
     <link>https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/</link>
     <guid>https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>投机采样</category>
-    <description>大模型解码阶段的核心物理瓶颈是什么？全面解密投机采样（Speculative Decoding）的数学无损证明、拒绝采样检验机制，深入剖析从双模型投机、Medusa 到清华开源爆款 EAGLE-2/3 动态自适应推测树的架构演进，并提供在 vLLM 与 SGLang 中开启生产级 3x~5x 加速的实操配置。</description>
+    <description>说明投机解码为何可以不改变采样分布，以及从草稿模型、Medusa 到 EAGLE-3，在 vLLM 和 SGLang 里怎样打开这项加速，可对照配置。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/speculative-decoding-eagle-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>推理时扩展 (Test-Time Compute) 与 GRPO 强化学习实战：从 PPO 到无 Critic 策略优化</title>
+    <title>GRPO 与 Test-Time Compute：从 PPO 到无 Critic</title>
     <link>https://blog.llmgo.top/articles/test-time-compute-grpo/</link>
     <guid>https://blog.llmgo.top/articles/test-time-compute-grpo/</guid>
     <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>强化学习</category>
-    <description>深入剖析从预训练 Scaling Law 向推理时算力扩展 (Test-Time Scaling) 的范式转移。全面拆解 DeepSeek-R1 核心的 GRPO 组相对策略优化数学推导、无 Critic 架构优势、长思维链自我反思涌现机制，并提供完整的极简实战代码。</description>
+    <description>说明测试时计算把算力挪到生成阶段之后，GRPO 如何去掉 PPO 的 Critic，改为用同一组采样的相对优势更新策略。文中给出可复现的实现要点。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/test-time-compute-grpo.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 DeepSeek-V4 与 Kimi K3 生产级部署实战指南：四机 32 卡拓扑、显存数学与踩坑排障血泪史</title>
+    <title>DeepSeek-V4 与 Kimi K3 部署：32 卡拓扑与排障</title>
     <link>https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/</link>
     <guid>https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>集群部署</category>
-    <description>深入解析 DeepSeek-V4-Pro (CSA+HCA) 与 Kimi K3 (KDA+MLA) 生产级多机部署全流程：涵盖四机 32 卡 / 八机 64 卡硬件拓扑、逐卡显存数学建模、六大生产踩坑排障实录（NUMA穿透、MoE路由倾斜、CUDAGraph伪OOM、PFC死锁）、Ray与KubeRay云原生实战。</description>
+    <description>部署 DeepSeek-V4 与 Kimi K3：四机 32 卡拓扑，并排查 NUMA、MoE 路由、CUDA Graph 伪 OOM 与 PFC 死锁。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/deepseek-v4-kimi-k3-deployment-guide.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -448,13 +448,13 @@
     <enclosure url="https://blog.llmgo.top/og/zh/domestic-llm-comparison-2026.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>告别单纯 Prompt：2026 年“环境缩放 (Environment Scaling)”如何重塑自主 Agent</title>
+    <title>Agent 环境缩放：任务分布、复位与验收</title>
     <link>https://blog.llmgo.top/articles/environment-scaling-agent-guide/</link>
     <guid>https://blog.llmgo.top/articles/environment-scaling-agent-guide/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>环境缩放</category>
-    <description>解释 Agent 环境缩放的任务分布、状态复位与独立验收，正确解读 GLM-5.3 终端任务成绩，并演示带超时清理的容器执行接口。</description>
+    <description>说明 Agent 环境缩放要准备多样任务、可复位状态和独立验收，如何看待终端任务分数，以及容器超时后怎样清理现场。文中用容器执行接口做演示。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/environment-scaling-agent-guide.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -468,23 +468,23 @@
     <enclosure url="https://blog.llmgo.top/og/zh/kimi-kda-deepseek-mla-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>让模型在运行中进化：从基础反思到基于 MCTS 的 Test-Time Compute 搜索</title>
+    <title>Agent 反思与自我修正：从批评到 MCTS</title>
     <link>https://blog.llmgo.top/articles/agent-reflection-self-correction/</link>
     <guid>https://blog.llmgo.top/articles/agent-reflection-self-correction/</guid>
     <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>自省演进</category>
-    <description>大语言模型的潜力不止于预训练参数。本文带你深入探讨 Test-Time Compute 的前沿：从 Actor-Critic 双边架构，一路深入到利用蒙特卡洛树搜索（MCTS）解码 Agent 的自我纠错极限。</description>
+    <description>说明 Agent 运行时反思如何从 Actor-Critic 的互相检查，走到用蒙特卡洛树搜索展开候选，并把测试时计算用在自我修正上，不改模型权重。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/agent-reflection-self-correction.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 AI 开发范式：对抗复合误差的分布式 Agent 编排与量化 Evals 体系</title>
+    <title>Agent 编排与 Evals：控制链路复合误差</title>
     <link>https://blog.llmgo.top/articles/agent-orchestration-evals/</link>
     <guid>https://blog.llmgo.top/articles/agent-orchestration-evals/</guid>
     <pubDate>Wed, 15 Jul 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>编排评测</category>
-    <description>当大模型走向复杂的企业级落地，如何通过分布式编排对抗链路误差复合？如何构建具有统计学置信度的 Evals 评估体系？本文带你从基础概念直击硬核底座。</description>
+    <description>说明多步 Agent 会把单步误差乘到整条链路上，以及用分布式编排拆分职责、用可重复的 Evals 衡量结果，怎样把复合误差管住，便于上线前验收。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/agent-orchestration-evals.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -588,33 +588,33 @@
     <enclosure url="https://blog.llmgo.top/og/zh/ai-history-choices.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>vLLM 在线推理服务实战：从架构原理到 Token 计费，一文搞定生产部署</title>
+    <title>vLLM 在线推理：架构、调优与 Token 计费</title>
     <link>https://blog.llmgo.top/articles/vllm-serving-guide/</link>
     <guid>https://blog.llmgo.top/articles/vllm-serving-guide/</guid>
     <pubDate>Tue, 14 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>服务部署</category>
-    <description>深入浅出解析 vLLM 核心架构（PagedAttention、连续批处理、APC 前缀缓存、推测解码），面向在线推理服务场景，手把手教你搭建 OpenAI 兼容 API、调优性能参数、搭建 Token 计费体系。附完整 Docker 部署方案与 Prometheus 监控配置。</description>
+    <description>说明如何用 vLLM 做在线推理：PagedAttention、连续批处理、前缀缓存、OpenAI 兼容接口、性能参数、Token 计费与 Docker 监控。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/vllm-serving-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>NVIDIA GPU 驱动栈全视野解析：从内核模块到容器运行时的包关系图谱</title>
+    <title>NVIDIA GPU 驱动栈：内核模块到容器运行时</title>
     <link>https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/</link>
     <guid>https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/</guid>
     <pubDate>Sun, 05 Apr 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>硬件驱动</category>
-    <description>深度拆解 Linux 下 NVIDIA GPU 烦杂的驱动包结构。本文为您详解 nvidia-dkms、libnvidia、nvidia-utils 与 driver metapackage 之间的五层架构，并按「Docker 模型服务器」、「个人桌面」、「DGX 算力集群」等核心场景提供企业级安装最佳实践和避坑指南。</description>
+    <description>梳理 Linux 上 nvidia-dkms、libnvidia、nvidia-utils 与 metapackage 的层次，以及容器和桌面场景如何安装。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/nvidia-gpu-package-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>大模型量化精度全景图：从 FP32 到 1-bit，精度损失到底有多大？</title>
+    <title>大模型量化精度：从 FP32 到 FP8 与 INT4</title>
     <link>https://blog.llmgo.top/articles/quantization-precision-guide/</link>
     <guid>https://blog.llmgo.top/articles/quantization-precision-guide/</guid>
     <pubDate>Tue, 31 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>量化理论</category>
-    <description>区分 FP8、INT8、INT4、NF4 的权重、激活与 KV 量化，解释显存预算、加速条件和校准差异，并给出准确率、PPL 与业务验收的可复现评估方法。</description>
+    <description>区分 FP8、INT8、INT4 与 NF4 作用在权重、激活还是 KV 上，并说明显存占用、推理速度和精度应当分别怎么验收，避免只看单一分数。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/quantization-precision-guide.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -688,13 +688,13 @@
     <enclosure url="https://blog.llmgo.top/og/zh/rag-in-practice.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</title>
+    <title>2026 模型比较：GPT-5.4、Claude 4.6 与 Gemini</title>
     <link>https://blog.llmgo.top/articles/model-comparison-2026/</link>
     <guid>https://blog.llmgo.top/articles/model-comparison-2026/</guid>
     <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>模型横评</category>
-    <description>比较 GPT-5.4、Claude Opus/Sonnet 4.6 与 Gemini 3.1 Pro 的 API 能力、Token 价格和工程边界，给出可核验的调用示例、评测方法与自建成本公式。</description>
+    <description>比较 GPT-5.4、Claude 4.6 与 Gemini 3.1 Pro 的 API 能力、Token 价格和调用方式，并给出可核对的评测与成本算法。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/model-comparison-2026.png" length="150000" type="image/png" />
   </item>
   <item>

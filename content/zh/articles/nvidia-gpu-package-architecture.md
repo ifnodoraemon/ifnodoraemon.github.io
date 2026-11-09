@@ -1,11 +1,11 @@
 ---
-title: NVIDIA GPU 驱动栈全视野解析：从内核模块到容器运行时的包关系图谱
+title: "NVIDIA GPU 驱动栈：内核模块到容器运行时"
 slug: nvidia-gpu-package-architecture
 date: 2026-04-05
 tag: 硬件驱动
 tagClass: tag-cyan
 category: 推理系统
-description: 深度拆解 Linux 下 NVIDIA GPU 烦杂的驱动包结构。本文为您详解 nvidia-dkms、libnvidia、nvidia-utils 与 driver metapackage 之间的五层架构，并按「Docker 模型服务器」、「个人桌面」、「DGX 算力集群」等核心场景提供企业级安装最佳实践和避坑指南。
+description: "梳理 Linux 上 nvidia-dkms、libnvidia、nvidia-utils 与 metapackage 的层次，以及容器和桌面场景如何安装。"
 featured: true
 featuredStats:
   - label: 核心分层

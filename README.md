@@ -36,8 +36,8 @@ Welcome to **LLM Systems Architecture**, an engineering research and experimenta
   👉 English: [MoE Expert Parallelism & All-to-All Overlap](https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/)
 * **[Chapter 08 · P/D 分离架构：计算与访存解耦、RDMA 分布式 KV Cache 传输与集群池化](https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/)**  
   👉 English: [Prefill-Decode Disaggregation Architecture & RDMA KV Cache](https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/)
-* **[Chapter 09 · 四大主流生产级推理引擎架构横评与调度器源码解密：vLLM v1 vs SGLang vs TRT-LLM vs llama.cpp](https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/)**  
-  👉 English: [Production Inference Engines Teardown: vLLM v1 vs SGLang vs TRT-LLM vs llama.cpp](https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/)
+* **[Chapter 09 · 推理引擎对比：vLLM、SGLang、TRT-LLM、llama.cpp](https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/)**  
+  👉 English: [Inference Engines: vLLM, SGLang, TRT-LLM, llama.cpp](https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/)
 * **[Chapter 10 (终局) · 长思维链 (Reasoning / Test-Time Compute) 与大集群推理系统的未来终局](https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/)**  
   👉 English: [Test-Time Compute, Reasoning Scheduling, and Tiered Cluster Storage](https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/)
 
@@ -59,8 +59,8 @@ Welcome to **LLM Systems Architecture**, an engineering research and experimenta
 ---
 
 ### 🔬 更多前沿硬核研报 (High-Throughput Serving & Alignment)
-* **[DeepSeek-V4 与 Kimi K3 生产级部署实战指南：四机 32 卡拓扑与成本推演](https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/))
-* **[Test-Time Compute 与 GRPO 强化学习全景拆解：从自我反思到长思维链落地](https://blog.llmgo.top/articles/test-time-compute-grpo/)** (👉 [English](https://blog.llmgo.top/en/articles/test-time-compute-grpo/))
+* **[DeepSeek-V4 与 Kimi K3 部署：32 卡拓扑与排障](https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/))
+* **[GRPO 与 Test-Time Compute：从 PPO 到无 Critic](https://blog.llmgo.top/articles/test-time-compute-grpo/)** (👉 [English](https://blog.llmgo.top/en/articles/test-time-compute-grpo/))
 * **[SGLang vs vLLM 架构全景深度对比：RadixAttention、PageAttention 与吞吐极限评测](https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/)** (👉 [English](https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/))
 * **[投机解码 (Speculative Decoding) 与 EAGLE 工业级落地实践](https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/))
 * **[大模型量化选型与精度评测全景：从 INT8/FP8 到 AWQ/GPTQ 与显存数学](https://blog.llmgo.top/articles/quantization-precision-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/quantization-precision-guide/))

@@ -1,5 +1,5 @@
 ---
-title: "从零认识计算机网络：比特信号、网线介质、集线器冲突域到交换机 MAC 寻址第一性原理"
+title: "计算机网络入门：介质、冲突域与 MAC"
 slug: network-fundamentals-bits-cables-hubs-switches-mac-arp
 date: 2026-09-28
 tag: 零基础网络与二层交换
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 计算机网络
 series: computer-networking
 seriesOrder: 1
-description: "如果对计算机网络一无所知，该如何建立最直观、最坚实的底层认知？从零剖析网络通信第一性原理：计算机如何通过高低电平与光脉冲表示 0 和 1；双绞线为什么要‘拧成麻花’抗干扰、单模光纤与多模光纤的物理特性；集线器（Hub）时代全网共享信道、冲突域（Collision Domain）与 CSMA/CD 载波侦听退避算法；深度揭秘二层交换机（Switch）如何通过 MAC 地址表（CAM）自学习与以太网帧（Frame）彻底消灭冲突域；并详述 ARP 广播请求、单播应答、免费 ARP 与 ARP 欺骗防御机制。"
+description: "从比特、双绞线和光纤讲起，说明集线器冲突域、交换机如何学习 MAC，以及 ARP 怎样把 IP 解析成网卡硬件地址。文中也讲到 CSMA/CD。"
 extraTags:
   - Computer Networking
   - Physical Layer

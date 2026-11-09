@@ -1,5 +1,5 @@
 ---
-title: "Network & Transport Layers in Depth: IP Routing, CIDR, TCP 11-State Machine, and Sliding Window First Principles"
+title: "IP Routing and the TCP State Machine"
 slug: network-layer-transport-layer-ip-routing-tcp-state-machine
 date: 2026-09-29
 tag: IP Routing & TCP State Machine
@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: Computer Networking
 series: computer-networking
 seriesOrder: 5
-description: "Layer 3 and Layer 4 networking: IPv4/IPv6 headers, Linux kernel LPM routing, TCP 11-state machine transitions, SYN cookies, and sliding window flow control."
+description: "How IP picks a next hop with longest-prefix match, how TCP walks its handshake and teardown states, and how the sliding window caps unacknowledged data."
 extraTags:
   - Computer Networking
   - IP Routing

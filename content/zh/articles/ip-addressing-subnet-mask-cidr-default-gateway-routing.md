@@ -1,5 +1,5 @@
 ---
-title: "IP 寻址全景数学推导：十进制/二进制转换、子网掩码 (Subnet Mask) 计算、CIDR 划分与默认网关第一性原理"
+title: "IP 寻址：子网掩码、CIDR 与默认网关"
 slug: ip-addressing-subnet-mask-cidr-default-gateway-routing
 date: 2026-09-29
 tag: IP寻址与子网掩码
@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: 计算机网络
 series: computer-networking
 seriesOrder: 2
-description: "为什么有了物理 MAC 地址，全世界的计算机依然必须依赖 IP 地址通信？从零基础透视网络层第一性原理：IPv4 32 位二进制与点分十进制的数学本质；深度剖析子网掩码（Subnet Mask）核心机理，手把手推导二进制按位与（Bitwise AND）运算，以 192.168.1.130/26 为例推演网络地址、广播地址与有效主机 IP 范围（2^H - 2 减二真相）；详解 A/B/C 类地址历史缺陷、CIDR 无类别域间路由与私有保留网段；并彻底揭秘跨网段通信时默认网关（Default Gateway）的‘解封换壳’运转本质。"
+description: "用二进制说明子网掩码和 CIDR 如何划分 IPv4 的网络号与主机号，以及数据包离开本网段时默认网关承担什么角色，并算出网络地址与可用主机范围。"
 extraTags:
   - Computer Networking
   - IP Address

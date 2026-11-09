@@ -1,5 +1,5 @@
 ---
-title: "Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA"
+title: "InfiniBand Production Tuning: OpenSM and NCCL"
 slug: infiniband-production-deployment-opensm-ofed-nccl-tuning
 date: 2026-10-05
 tag: Production Ops & NCCL Tuning
@@ -7,7 +7,7 @@ tagClass: tag-red
 category: Computer Networking
 series: computer-networking
 seriesOrder: 12
-description: "Production InfiniBand cluster operations: MLNX_OFED driver stacks, OpenSM high availability, ibdiagnet fabric health auditing, and NCCL GPUDirect RDMA tuning."
+description: "Production InfiniBand setup: install OFED, run OpenSM with a standby, audit the fabric with ibdiagnet, and tune NCCL for GPUDirect RDMA. It finds bad links."
 extraTags:
   - Computer Networking
   - InfiniBand

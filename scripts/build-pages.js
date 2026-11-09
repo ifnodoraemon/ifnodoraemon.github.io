@@ -83,8 +83,9 @@ const zhData = {
 
 // Generate dynamic JSON-LD for index page
 function generateBlogJsonLd(articles, isEn) {
-  const siteName = isEn ? 'LLM Systems Architecture' : '智算架构志';
-  const siteDesc = isEn ? 'LLM systems architecture and high-concurrency inference engineering blog' : '专注大模型系统架构与高性能推理工程实践的技术博客';
+  const locales = readLocale(isEn ? 'en' : 'zh');
+  const siteName = locales.meta.siteName;
+  const siteDesc = locales.meta.home.desc;
   const siteUrl = isEn ? 'https://blog.llmgo.top/en/' : 'https://blog.llmgo.top/';
   const lang = isEn ? 'en' : 'zh-CN';
 
@@ -149,9 +150,9 @@ function generateBlogJsonLd(articles, isEn) {
             'Large Language Models',
             'High-Concurrency LLM Inference',
             'vLLM',
-            'AI Agents',
-            'Retrieval-Augmented Generation (RAG)',
-            'Prompt Engineering'
+            'DeepSeek MLA',
+            'InfiniBand',
+            'AI Agents'
           ]
         },
         publisher: {

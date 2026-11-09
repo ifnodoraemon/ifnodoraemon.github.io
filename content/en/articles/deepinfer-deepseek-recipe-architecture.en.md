@@ -1,11 +1,11 @@
 ---
-title: "Inside DeepSeek's Trillion-Token Engine: DeepInfer and deepseek-recipe Architecture from Silicon to Protocol Layer"
+title: "DeepSeek Inference Stack: DeepInfer and deepseek-recipe"
 slug: deepinfer-deepseek-recipe-architecture
 date: 2026-10-21
 tag: Inference Architecture
 tagClass: tag-purple
 category: Inference Systems
-description: "From physical silicon foundations and kernel matrices to 1:1 PD disaggregation topologies, DSpark dynamic speculative decoding, SWA bounded replay, deepseek-recipe protocol layers, and $38/GPU/h unit economics: a complete architectural dissection of DeepSeek's production inference stack."
+description: "DeepSeek's production inference stack: DeepInfer kernels, prefill-decode split, DSpark speculative decoding, SWA replay, and the deepseek-recipe protocol layer."
 ---
 
 > [!NOTE] Executive Summary (TL;DR)
