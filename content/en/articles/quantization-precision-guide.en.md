@@ -5,6 +5,8 @@ date: 2026-03-31
 tag: Quantization Precision
 tagClass: tag-cyan
 category: Inference Systems
+series: llm-inference
+seriesOrder: 10
 description: "How FP8, INT8, INT4, and NF4 apply to weights, activations, or the KV cache, and which measurements separate memory use, speed, and output quality in practice."
 featured: true
 featuredStats:

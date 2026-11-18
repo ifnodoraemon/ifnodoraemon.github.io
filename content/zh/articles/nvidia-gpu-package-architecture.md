@@ -5,6 +5,8 @@ date: 2026-04-05
 tag: 硬件驱动
 tagClass: tag-cyan
 category: 推理系统
+series: llm-inference
+seriesOrder: 1
 description: "梳理 Linux 上 nvidia-dkms、libnvidia、nvidia-utils 与 metapackage 的层次，以及容器和桌面场景如何安装。"
 featured: true
 featuredStats:

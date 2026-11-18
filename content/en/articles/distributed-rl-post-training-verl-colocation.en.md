@@ -5,6 +5,8 @@ date: 2026-11-18
 tag: Distributed RL
 tagClass: tag-emerald
 category: Model Engineering
+series: llm-post-training
+seriesOrder: 7
 description: "Deep dive into multi-node LLM RL post-training systems: first-principles 72B VRAM math, verl 3D-HybridEngine zero-redundancy resharding, vLLM Sleep Mode cuMemUnmap offloading, DAPO, Partial Rollouts, and production configs."
 featured: true
 featuredStats:

@@ -5,6 +5,8 @@ date: 2026-09-18
 tag: Engine Architecture
 tagClass: tag-cyan
 category: Inference Systems
+series: llm-inference
+seriesOrder: 16
 description: "Compare SGLang RadixAttention and vLLM APC, structured-output backends, minimal serving baselines, and reproducible cold/warm-cache latency and throughput evaluation."
 featured: true
 featuredStats:

@@ -6,7 +6,7 @@ tag: Inference Engines
 tagClass: tag-emerald
 category: Inference Systems
 series: llm-inference
-seriesOrder: 9
+seriesOrder: 15
 description: "Compare the scheduler loop and execution backend in vLLM v1, SGLang, TensorRT-LLM, and llama.cpp when choosing an engine for throughput or a latency target."
 extraTags:
   - vLLM

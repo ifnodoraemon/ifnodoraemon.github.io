@@ -6,7 +6,7 @@ tag: Attention Architecture
 tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
-seriesOrder: 6
+seriesOrder: 8
 description: "Compare KV-cache size for MHA, GQA, and DeepSeek MLA, and how matrix absorption during decode stores fewer multi-head tensors and cuts memory traffic."
 extraTags:
   - MLA

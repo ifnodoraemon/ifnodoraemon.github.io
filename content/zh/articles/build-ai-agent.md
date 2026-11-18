@@ -6,7 +6,7 @@ tag: 智能体构建
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 2
+seriesOrder: 1
 description: 手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。
 ---
 

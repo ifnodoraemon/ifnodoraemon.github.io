@@ -6,7 +6,7 @@ tag: 可观测性
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 9
+seriesOrder: 18
 description: AI Agent 不再是传统软件，调试的是推理过程而非代码。本文详细探讨 Trajectory Evaluation、LLM-as-a-Judge 和主流 Agent 观测工具（LangSmith, Langfuse 等）的实战应用。
 extraTags:
   - Observability

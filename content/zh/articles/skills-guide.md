@@ -6,7 +6,7 @@ tag: Skills 体系
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 5
+seriesOrder: 8
 description: 从核心原理到跨平台实战，完整解析 AI 编程助手的 Skills 系统。涵盖 SKILL.md 机制、六大平台对比、实战编写指南与最佳实践。
 extraTags:
   - Claude Code

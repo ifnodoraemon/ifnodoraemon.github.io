@@ -6,7 +6,7 @@ tag: Environment Scaling
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 10
+seriesOrder: 19
 description: "What agent environment scaling needs: varied tasks, a resettable state, independent checks, a careful reading of terminal scores, and cleanup after a timeout."
 updated: 2026-10-20
 ---

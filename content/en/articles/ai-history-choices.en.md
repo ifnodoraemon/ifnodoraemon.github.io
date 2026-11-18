@@ -5,6 +5,8 @@ date: 2026-04-15
 tag: Tech Evolution
 tagClass: tag-amber
 category: Evaluation & Trends
+series: llm-post-training
+seriesOrder: 12
 description: A retrospective of six pivotal technology crossroads in AI's seventy-year history, dissecting the compute constraints, data dividends, and scalability logic behind each historical choice.
 ---
 

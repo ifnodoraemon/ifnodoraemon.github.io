@@ -6,7 +6,7 @@ tag: 自省演进
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 7
+seriesOrder: 4
 description: "说明 Agent 运行时反思如何从 Actor-Critic 的互相检查，走到用蒙特卡洛树搜索展开候选，并把测试时计算用在自我修正上，不改模型权重。"
 ---
 

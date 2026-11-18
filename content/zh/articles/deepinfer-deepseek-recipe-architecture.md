@@ -5,6 +5,8 @@ date: 2026-10-21
 tag: 推理架构
 tagClass: tag-purple
 category: 推理系统
+series: llm-inference
+seriesOrder: 19
 description: "介绍 DeepSeek 生产推理栈：DeepInfer 的算子与 PD 分离、DSpark 投机解码，以及 deepseek-recipe 如何对接上层协议。"
 ---
 

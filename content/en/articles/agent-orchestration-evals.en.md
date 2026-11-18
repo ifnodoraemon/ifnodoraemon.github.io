@@ -6,7 +6,7 @@ tag: Orchestration & Evals
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 8
+seriesOrder: 17
 description: "How a small per-step error compounds across an agent workflow, and how splitting work with orchestration plus repeatable evals keeps that drift visible."
 updated: 2026-10-20
 ---

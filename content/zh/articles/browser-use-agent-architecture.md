@@ -6,7 +6,7 @@ tag: 浏览器智能体
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 6
+seriesOrder: 14
 description: "说明 Browser-use 如何精简 DOM、用视觉标记定位可点击元素，并把页面操作放进带状态和重试的 Agent 循环，用于网页自动化。"
 featured: true
 featuredStats:

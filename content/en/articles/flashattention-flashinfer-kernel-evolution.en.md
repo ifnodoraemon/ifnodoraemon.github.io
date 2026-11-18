@@ -6,7 +6,7 @@ tag: Kernel Optimization
 tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
-seriesOrder: 5
+seriesOrder: 7
 description: "How FlashAttention computes attention in SRAM tiles instead of materializing the score matrix, and how FlashInfer reads paged KV cache during decode steps."
 extraTags:
   - FlashAttention

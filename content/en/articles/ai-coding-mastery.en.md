@@ -5,6 +5,8 @@ date: 2026-05-04
 tag: AI Coding
 tagClass: tag-purple
 category: AI Agent
+series: ai-agent
+seriesOrder: 15
 description: "Tools don't matter — methodology does. A deep dive into six core methods for mastering AI coding: Spec-Driven Development, Context Engineering, TDD Verification Loops, Multi-Agent Orchestration, Advanced Prompting, and Session Hygiene. Plus a 20+ tool matrix and five anti-patterns to avoid."
 featured: true
 featuredStats:

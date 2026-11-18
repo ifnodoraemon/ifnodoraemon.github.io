@@ -5,6 +5,8 @@ date: 2026-11-18
 tag: 超节点架构
 tagClass: tag-cyan
 category: 推理系统
+series: computer-networking
+seriesOrder: 13
 description: "深度拆解 GB200/GB300 NVL72 铜缆背板与昇腾 CloudMatrix 384 全光超节点拓扑，严格推导 NCCL busbw 数学模型与 NVLS 网内多播规约，剖析 DeepEP IBGDA All-to-All 内核与 MNNVL 压测排障。"
 featured: true
 featuredStats:

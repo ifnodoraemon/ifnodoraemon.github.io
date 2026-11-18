@@ -6,7 +6,7 @@ tag: 记忆架构
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 11
+seriesOrder: 6
 description: "解析 Agent 工作、情景与长期记忆，结合 MemGPT 和 Generative Agents 解释检索与衰减，并补充来源追踪、权限过滤、冲突处理和删除传播的生产边界。"
 extraTags:
   - Agent Memory

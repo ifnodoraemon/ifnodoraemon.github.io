@@ -6,7 +6,7 @@ tag: 环境缩放
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 10
+seriesOrder: 19
 description: "说明 Agent 环境缩放要准备多样任务、可复位状态和独立验收，如何看待终端任务分数，以及容器超时后怎样清理现场。文中用容器执行接口做演示。"
 updated: 2026-10-20
 ---

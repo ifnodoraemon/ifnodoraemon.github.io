@@ -6,7 +6,7 @@ tag: Agent Memory
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 11
+seriesOrder: 6
 description: "Design agent working, episodic, and long-term memory with sourced retrieval concepts, a clearly scoped Python prototype, provenance, ACLs, conflict handling, and deletion."
 extraTags:
   - Agent Memory

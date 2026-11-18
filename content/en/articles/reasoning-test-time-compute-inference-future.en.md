@@ -6,7 +6,7 @@ tag: Future Architectures
 tagClass: tag-amber
 category: Inference Systems
 series: llm-inference
-seriesOrder: 10
+seriesOrder: 20
 description: "How long reasoning traces increase KV-cache pressure, and what test-time compute, speculative trees, and tiered KV storage change in the serving path."
 extraTags:
   - Test-Time Compute

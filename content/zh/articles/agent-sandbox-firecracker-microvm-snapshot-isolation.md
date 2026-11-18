@@ -5,6 +5,8 @@ date: 2026-11-18
 tag: 安全沙箱
 tagClass: tag-purple
 category: AI Agent
+series: ai-agent
+seriesOrder: 10
 description: "深入剖析面向 Coding Agent 与强化学习 Rollout 的 Firecracker MicroVM 安全沙箱架构：横评 gVisor 与硬件虚拟化，详解 Snapshot 与 userfaultfd 毫秒级恢复及状态分叉，并落地 virtio-vsock 零密钥凭证代填网关。"
 featured: true
 featuredStats:

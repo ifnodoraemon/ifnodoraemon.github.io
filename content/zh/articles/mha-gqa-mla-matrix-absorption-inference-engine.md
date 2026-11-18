@@ -6,7 +6,7 @@ tag: 注意力架构
 tagClass: tag-cyan
 category: 推理系统
 series: llm-inference
-seriesOrder: 6
+seriesOrder: 8
 description: "比较 MHA、GQA 与 DeepSeek MLA 的 KV Cache 占用，并说明 Decode 时矩阵吸收如何少存多头张量、降低显存带宽压力。"
 extraTags:
   - MLA

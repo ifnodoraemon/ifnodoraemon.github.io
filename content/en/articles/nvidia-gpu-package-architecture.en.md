@@ -5,6 +5,8 @@ date: 2026-04-05
 tag: GPU & Driver Stack
 tagClass: tag-cyan
 category: Inference Systems
+series: llm-inference
+seriesOrder: 1
 description: "How the Linux NVIDIA stack fits together, from nvidia-dkms and userspace libraries to nvidia-utils and the metapackage, on desktops, containers, and DGX hosts."
 featured: true
 featuredStats:

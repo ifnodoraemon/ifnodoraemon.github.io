@@ -274,4 +274,4 @@ flowchart TD
 不能直接保证。它组合 CPU、内存及设备插件的 NUMA hints 做节点准入，不是任意 NVLink 连通图的调度器。不同服务器拓扑不同；例如 DGX H100 的八张 GPU 经 NVSwitch 全互联，不能一概画成两个四卡岛。使用 `nvidia-smi topo -m` 和厂商文档核对实际连接；需要 GPU/NIC 联合拓扑约束时，确认设备驱动及调度扩展真正提供了对应能力。参见 [DGX H100 硬件说明](https://docs.nvidia.com/dgx/dgxh100-user-guide/introduction-to-dgxh100.html)。
 
 ### Q3: DRA 是否自动解决所有 GPU 与网卡拓扑问题？
-不会。DRA 允许通过 ResourceClaim 和驱动发布的设备属性表达更丰富的选择条件，但可用属性、跨设备约束与分配行为取决于 Kubernetes 版本和驱动实现。必须确认 GPU/NIC 驱动确实公布所需拓扑信息，并验证调度与准入行为；不能仅因启用 DRA 就保证最佳 NVLink 组合或无跨 NUMA 访问。参见 [Kubernetes DRA 文档](https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/)。
+不会。DRA 允许通过 ResourceClaim 和驱动发布的设备属性表达更丰富的选择条件，但可用属性、跨设备约束与分配行为取决于 Kubernetes 版本和驱动实现。必须确认 GPU/NIC 驱动确实公布所需拓扑信息，并验证调度与准入行为；不能仅因启用 DRA 就保证最佳 NVLink 组合或无跨 NUMA 访问。参见 [Kubernetes DRA 文档](https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/)。若需进一步将多机 TP/EP 超节点实例与 KV Cache 感知网关在 Kubernetes 上闭环编排，请继续阅读本专栏终局篇 [K8s AI 推理编排：LeaderWorkerSet、推理网关与 KV 感知路由](/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/)。

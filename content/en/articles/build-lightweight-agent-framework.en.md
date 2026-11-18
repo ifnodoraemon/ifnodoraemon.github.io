@@ -11,7 +11,7 @@ extraTags:
   - Event Stream
   - LangGraph
 category: "AI Agent"
-series: "ai-agent"
+series: ai-agent
 seriesOrder: 12
 updated: 2026-10-20
 ---

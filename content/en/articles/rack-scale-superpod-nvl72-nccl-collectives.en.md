@@ -5,6 +5,8 @@ date: 2026-11-18
 tag: SuperPoD Infra
 tagClass: tag-cyan
 category: Inference Systems
+series: computer-networking
+seriesOrder: 13
 description: "Dissecting NVIDIA GB200/GB300 NVL72 copper backplanes vs. Huawei CloudMatrix 384 optical UnifiedBus, NCCL busbw math, NVLS multimem in-switch reductions, DeepEP IBGDA All-to-All kernels, and MNNVL production tuning."
 featured: true
 featuredStats:

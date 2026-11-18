@@ -5,6 +5,8 @@ date: 2026-03-07
 tag: Tech Trends
 tagClass: tag-amber
 category: Evaluation & Trends
+series: llm-post-training
+seriesOrder: 11
 description: From Thinking reasoning modes to Agentic applications, a deep dive into the top 11 trends in AI foundation models for 2026.
 ---
 

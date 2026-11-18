@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Engineering notes on LLM inference (vLLM, SGLang, DeepInfer, MLA), distributed RL (verl), Firecracker Agent sandboxes, InfiniBand/NVL72 fabrics, and Nov 2026 frontier models.</description>
   <language>en</language>
-  <pubDate>Wed, 18 Nov 2026 04:02:19 GMT</pubDate>
+  <pubDate>Wed, 18 Nov 2026 06:58:21 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Architecting AI Agent Security Sandboxes: Container Escape Defense, Sub-15ms Firecracker MicroVM Snapshots, and Zero-Trust Isolation</title>
@@ -18,6 +18,26 @@
     <enclosure url="https://blog.llmgo.top/og/en/agent-sandbox-firecracker-microvm-snapshot-isolation.png" length="150000" type="image/png" />
   </item>
   <item>
+    <title>AI Agent Security: Indirect Prompt Injection, MCP Poisoning &amp; Least Privilege</title>
+    <link>https://blog.llmgo.top/en/articles/agent-security-prompt-injection-mcp-permission-governance/</link>
+    <guid>https://blog.llmgo.top/en/articles/agent-security-prompt-injection-mcp-permission-governance/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Agent Security</category>
+    <description>Dissecting the Lethal Trifecta, indirect prompt injection, and MCP tool poisoning/rug-pull attacks, with runnable CaMeL taint-tracking and capability-scoped defenses.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/agent-security-prompt-injection-mcp-permission-governance.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Distributed LLM Training: ZeRO/FSDP2, TP, Pipeline &amp; Context Parallelism</title>
+    <link>https://blog.llmgo.top/en/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/</link>
+    <guid>https://blog.llmgo.top/en/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Distributed Training</category>
+    <description>First-principles guide to 4D LLM training: mixed-precision 16Ψ memory math, ZeRO-1/2/3 vs PyTorch FSDP2 DTensor, TP/SP, 1F1B/DualPipe bubbles, and ZigZag Context Parallelism.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp.png" length="150000" type="image/png" />
+  </item>
+  <item>
     <title>Distributed RL Post-Training with verl: Colocation, Weight Resharding &amp; Async Rollouts</title>
     <link>https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/</link>
     <guid>https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/</guid>
@@ -26,6 +46,26 @@
     <category>Distributed RL</category>
     <description>Deep dive into multi-node LLM RL post-training systems: first-principles 72B VRAM math, verl 3D-HybridEngine zero-redundancy resharding, vLLM Sleep Mode cuMemUnmap offloading, DAPO, Partial Rollouts, and production configs.</description>
     <enclosure url="https://blog.llmgo.top/og/en/distributed-rl-post-training-verl-colocation.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>LLM GPU Kernel Engineering: CUDA Warp Primitives to Triton Fused Kernels</title>
+    <link>https://blog.llmgo.top/en/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/</link>
+    <guid>https://blog.llmgo.top/en/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>GPU Kernels</category>
+    <description>Master GPU registers, Shared Memory bank conflicts, and CUDA warp shuffles, then build a production Triton fused Residual + RMSNorm + dynamic FP8 kernel.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/gpu-kernel-engineering-cuda-warp-triton-fused-ops.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Kubernetes AI Serving: LeaderWorkerSet, Inference Gateway &amp; KV Routing</title>
+    <link>https://blog.llmgo.top/en/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/</link>
+    <guid>https://blog.llmgo.top/en/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>AI Serving K8s</category>
+    <description>Why Kubernetes Deployments and round-robin Ingress fail LLMs, and how to deploy multi-node LeaderWorkerSet, Gateway API Inference Extension, and KV-aware routing.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/k8s-ai-inference-gateway-lws-kv-cache-routing.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>Rack-Scale SuperPoD &amp; NCCL Collectives: GB200 NVL72, Optical Fabrics &amp; MoE All-to-All</title>

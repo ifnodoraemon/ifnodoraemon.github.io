@@ -5,6 +5,8 @@ date: 2026-09-07
 tag: Chinese LLMs
 tagClass: tag-amber
 category: Evaluation & Trends
+series: llm-post-training
+seriesOrder: 10
 description: "Engineering comparison of China's November 18, 2026 frontier LLMs—Qwen4-Max, Kimi K3.1 Pro, DeepSeek-V4-Pro / V4.1-Flash, MiniMax M3.1 Flash, and GLM-5.3—covering sparse architectures, matching benchmarks, checkpoint formats, and evaluation plans."
 updated: 2026-11-18
 ---

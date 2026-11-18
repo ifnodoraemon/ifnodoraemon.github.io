@@ -5,6 +5,8 @@ date: 2026-04-14
 tag: 服务部署
 tagClass: tag-cyan
 category: 推理系统
+series: llm-inference
+seriesOrder: 17
 description: "说明如何用 vLLM 做在线推理：PagedAttention、连续批处理、前缀缓存、OpenAI 兼容接口、性能参数、Token 计费与 Docker 监控。"
 featured: true
 featuredStats:

@@ -7,7 +7,7 @@ tag: MCP 协议
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 4
+seriesOrder: 7
 description: 从架构原理到实战开发，完整解析 Model Context Protocol。含 Python SDK 实战、安全机制、生态对比。
 ---
 
@@ -400,7 +400,7 @@ Server 启动后，AI 即可自主决定调用你的笔记管理器。例如当�
 
 ## 安全机制与最佳实践
 
-MCP 提供授权规范和安全建议。应按传输方式与风险实现以下控制，而不是假设协议自动提供全部隔离与人工确认：
+MCP 提供授权规范和安全建议。应按传输方式与风险实现以下控制，而不是假设协议自动提供全部隔离与人工确认（针对间接提示词注入、MCP 工具描述投毒、Rug-Pull 篡改与 CaMeL 污点最小权限控制面的完整防御架构，请结合阅读本专栏安全篇 [AI Agent 安全攻防：间接提示注入、MCP 投毒防御与最小权限架构](/articles/agent-security-prompt-injection-mcp-permission-governance/)）：
 
 ### 1. OAuth 2.1 授权体系
 

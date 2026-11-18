@@ -6,7 +6,7 @@ tag: Roofline Modeling
 tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
-seriesOrder: 1
+seriesOrder: 2
 description: "Use the roofline model to see why prefill is compute-bound while decode is memory-bound, and how that splits time-to-first-token from per-token latency."
 extraTags:
   - Inference Engine
@@ -324,4 +324,4 @@ For comprehensive benchmarks, consult our [Quantization Precision Guide](/en/art
 **FlashAttention's primary innovation is tiling the attention computation to keep intermediate activations ($S, P$) in fast on-chip SRAM, avoiding $O(N^2)$ reads and writes to slow HBM.**
 
 * In **Prefill**, sequence length $N$ is large, resulting in massive $N \times N$ attention matrices. Eliminating quadratic HBM round-trips yields speedups of 2x to 4x.
-* In **Decode**, the query sequence length is strictly ${1}$. The operation is a vector-matrix multiply (${1} \times N$) rather than an $N \times N$ matrix product. The primary cost is streaming the historical KV cache from HBM. Because FlashAttention cannot bypass the physical need to load historical keys and values into SRAM, its relative latency reduction during single-token decode is inherently smaller than in prefill.
+* In **Decode**, the query sequence length is strictly ${1}$. The operation is a vector-matrix multiply (${1} \times N$) rather than an $N \times N$ matrix product. The primary cost is streaming the historical KV cache from HBM. Because FlashAttention cannot bypass the physical need to load historical keys and values into SRAM, its relative latency reduction during single-token decode is inherently smaller than in prefill. To write custom fused GPU kernels (`Residual + RMSNorm + Dynamic FP8`) that eliminate redundant HBM round-trips, see [LLM GPU Kernel Engineering: CUDA Warp Primitives to Triton Fused Kernels](/en/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/).

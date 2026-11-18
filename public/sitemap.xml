@@ -104,7 +104,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-reflection-self-correction/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-reflection-self-correction/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-reflection-self-correction/" />
-    <lastmod>2026-09-24</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -139,6 +139,20 @@
       <image:loc>https://blog.llmgo.top/og/zh/agent-sandbox-firecracker-microvm-snapshot-isolation.png</image:loc>
       <image:title>AI Agent 安全沙箱终极架构：从容器逃逸防御、Firecracker 微虚拟机毫秒级快照恢复到零信任环境隔离</image:title>
       <image:caption>深入剖析面向 Coding Agent 与强化学习 Rollout 的 Firecracker MicroVM 安全沙箱架构：横评 gVisor 与硬件虚拟化，详解 Snapshot 与 userfaultfd 毫秒级恢复及状态分叉，并落地 virtio-vsock 零密钥凭证代填网关。</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/agent-security-prompt-injection-mcp-permission-governance/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-security-prompt-injection-mcp-permission-governance/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-security-prompt-injection-mcp-permission-governance/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-security-prompt-injection-mcp-permission-governance/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/agent-security-prompt-injection-mcp-permission-governance.png</image:loc>
+      <image:title>AI Agent 安全攻防：间接提示注入、MCP 投毒防御与最小权限架构</image:title>
+      <image:caption>拆解智能体致命三角与间接提示注入、MCP 工具投毒与 Rug-Pull 攻击链，落地双模型隔离、CaMeL 污点追踪与最小权限策略引擎。</image:caption>
     </image:image>
   </url>
   <url>
@@ -310,6 +324,20 @@
     </image:image>
   </url>
   <url>
+    <loc>https://blog.llmgo.top/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp.png</image:loc>
+      <image:title>分布式训练第一性原理：ZeRO/FSDP2、TP、PP 与 Context Parallelism</image:title>
+      <image:caption>从混合精度显存账本出发，推导 ZeRO-1/2/3 与 PyTorch FSDP2 DTensor、TP/SP、1F1B/DualPipe 流水线气泡及 ZigZag 环状注意力通信数学与配置。</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/</loc>
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/" />
@@ -422,6 +450,20 @@
     </image:image>
   </url>
   <url>
+    <loc>https://blog.llmgo.top/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/gpu-kernel-engineering-cuda-warp-triton-fused-ops.png</image:loc>
+      <image:title>大模型 GPU 算子编程实战：从 CUDA Warp 规约到 Triton 融合内核</image:title>
+      <image:caption>深入 GPU 寄存器、Shared Memory Bank 冲突与 CUDA Warp 原语，手写融合残差 RMSNorm + 动态 FP8 量化的 Triton 生产级算子并结合 Nsight 调优。</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/</loc>
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/" />
@@ -496,13 +538,27 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/" />
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/ip-addressing-subnet-mask-cidr-default-gateway-routing.png</image:loc>
       <image:title>IP 寻址：子网掩码、CIDR 与默认网关</image:title>
       <image:caption>用二进制说明子网掩码和 CIDR 如何划分 IPv4 的网络号与主机号，以及数据包离开本网段时默认网关承担什么角色，并算出网络地址与可用主机范围。</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/k8s-ai-inference-gateway-lws-kv-cache-routing.png</image:loc>
+      <image:title>K8s AI 推理编排：LeaderWorkerSet、推理网关与 KV 感知路由</image:title>
+      <image:caption>解析传统 Deployment 与轮询网关在大模型服务中的失效根因，实战落地 K8s LeaderWorkerSet 多机编排、Gateway API Inference Extension 与 KV 缓存感知路由。</image:caption>
     </image:image>
   </url>
   <url>
@@ -664,7 +720,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/" />
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -790,7 +846,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/" />
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1042,7 +1098,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/" />
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1167,7 +1223,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-reflection-self-correction/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-reflection-self-correction/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-reflection-self-correction/" />
-    <lastmod>2026-09-24</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1202,6 +1258,20 @@
       <image:loc>https://blog.llmgo.top/og/en/agent-sandbox-firecracker-microvm-snapshot-isolation.png</image:loc>
       <image:title>Architecting AI Agent Security Sandboxes: Container Escape Defense, Sub-15ms Firecracker MicroVM Snapshots, and Zero-Trust Isolation</image:title>
       <image:caption>Architecting zero-trust Firecracker MicroVM sandboxes for Coding Agents and RL rollouts: benchmarking gVisor vs KVM isolation, sub-15ms snapshot forking via userfaultfd and CoW block storage, plus secretless virtio-vsock egress proxies.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/agent-security-prompt-injection-mcp-permission-governance/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-security-prompt-injection-mcp-permission-governance/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-security-prompt-injection-mcp-permission-governance/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-security-prompt-injection-mcp-permission-governance/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/agent-security-prompt-injection-mcp-permission-governance.png</image:loc>
+      <image:title>AI Agent Security: Indirect Prompt Injection, MCP Poisoning &amp; Least Privilege</image:title>
+      <image:caption>Dissecting the Lethal Trifecta, indirect prompt injection, and MCP tool poisoning/rug-pull attacks, with runnable CaMeL taint-tracking and capability-scoped defenses.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1373,6 +1443,20 @@
     </image:image>
   </url>
   <url>
+    <loc>https://blog.llmgo.top/en/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp.png</image:loc>
+      <image:title>Distributed LLM Training: ZeRO/FSDP2, TP, Pipeline &amp; Context Parallelism</image:title>
+      <image:caption>First-principles guide to 4D LLM training: mixed-precision 16Ψ memory math, ZeRO-1/2/3 vs PyTorch FSDP2 DTensor, TP/SP, 1F1B/DualPipe bubbles, and ZigZag Context Parallelism.</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/</loc>
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/" />
@@ -1485,6 +1569,20 @@
     </image:image>
   </url>
   <url>
+    <loc>https://blog.llmgo.top/en/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/gpu-kernel-engineering-cuda-warp-triton-fused-ops.png</image:loc>
+      <image:title>LLM GPU Kernel Engineering: CUDA Warp Primitives to Triton Fused Kernels</image:title>
+      <image:caption>Master GPU registers, Shared Memory bank conflicts, and CUDA warp shuffles, then build a production Triton fused Residual + RMSNorm + dynamic FP8 kernel.</image:caption>
+    </image:image>
+  </url>
+  <url>
     <loc>https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/</loc>
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/" />
@@ -1559,13 +1657,27 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/ip-addressing-subnet-mask-cidr-default-gateway-routing/" />
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/ip-addressing-subnet-mask-cidr-default-gateway-routing.png</image:loc>
       <image:title>IP Addressing: Subnet Masks, CIDR, and Gateways</image:title>
       <image:caption>How subnet masks and CIDR split an IPv4 address into network and host with bitwise AND, and what a default gateway does when traffic leaves the subnet.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/k8s-ai-inference-gateway-lws-kv-cache-routing.png</image:loc>
+      <image:title>Kubernetes AI Serving: LeaderWorkerSet, Inference Gateway &amp; KV Routing</image:title>
+      <image:caption>Why Kubernetes Deployments and round-robin Ingress fail LLMs, and how to deploy multi-node LeaderWorkerSet, Gateway API Inference Extension, and KV-aware routing.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1727,7 +1839,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/linux-kernel-networking-napi-ring-buffer-skbuff-xdp/" />
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1853,7 +1965,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/" />
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2105,7 +2217,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/transport-bridge-dns-sockets-ports-udp-vs-tcp/" />
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>

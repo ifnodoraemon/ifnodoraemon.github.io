@@ -5,6 +5,8 @@ date: 2026-11-18
 tag: 分布式 RL
 tagClass: tag-emerald
 category: 模型工程
+series: llm-post-training
+seriesOrder: 7
 description: "深度剖析百卡级大模型后训练 RL 系统架构：从 Qwen2.5-72B 显存与算力第一性原理账本出发，拆解 verl 3D-HybridEngine 秒级权重重分片、vLLM Sleep Mode 虚拟显存卸载、DAPO 与 Partial Rollout 长尾消除及多机实战配置。"
 featured: true
 featuredStats:

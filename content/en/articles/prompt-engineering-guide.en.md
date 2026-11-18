@@ -5,6 +5,8 @@ date: 2026-03-09
 tag: Prompt Engineering
 tagClass: tag-emerald
 category: Model Engineering
+series: llm-post-training
+seriesOrder: 1
 description: An in-depth exploration of designing effective prompts to improve model output quality. Covers core techniques like Few-Shot, Chain-of-Thought, and ReAct with practical examples.
 extraTags:
   - GPT-5.4

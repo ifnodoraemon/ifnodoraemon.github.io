@@ -5,6 +5,8 @@ date: 2026-03-01
 tag: Model Benchmark
 tagClass: tag-amber
 category: Evaluation & Trends
+series: llm-post-training
+seriesOrder: 9
 description: "Compare Claude Fable 5.2, GPT-6.2 Astra/Sol, Gemini 4 Carbon/Hydrogen, and Meta Muse Wonder as of Nov 18, 2026 across API specs, pricing tiers, SDKs, and TCO formulas."
 featured: true
 featuredStats:

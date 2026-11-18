@@ -6,7 +6,7 @@ tag: Browser Agents
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 6
+seriesOrder: 14
 description: "How Browser-use distills a page's DOM, grounds clickable elements with vision marks, and runs those actions inside a stateful agent loop that can retry."
 featured: true
 featuredStats:

@@ -6,7 +6,7 @@ tag: Self-Correction
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 7
+seriesOrder: 4
 description: "How an agent checks itself with an actor-critic pair, then searches candidate fixes with Monte Carlo tree search, using test-time compute for self-correction."
 ---
 

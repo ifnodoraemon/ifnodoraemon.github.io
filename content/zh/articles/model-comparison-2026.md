@@ -5,6 +5,8 @@ date: 2026-03-01
 tag: 模型横评
 tagClass: tag-amber
 category: 评测与趋势
+series: llm-post-training
+seriesOrder: 9
 description: "截至 2026 年 11 月 18 日的商用大模型选型指南：对比 Claude Fable 5.2、GPT-6.2 Astra/Sol、Gemini 4 Carbon/Hydrogen 与 Muse Wonder 的 API 定价、调用与有效成本公式。"
 featured: true
 featuredStats:

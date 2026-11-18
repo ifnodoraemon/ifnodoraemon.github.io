@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/</link>
   <description>本站是大模型推理架构与系统工程笔记（更新至 2026.11）：覆盖 vLLM/SGLang/DeepInfer 推理、DeepSeek MLA、分布式 RL (verl)、Firecracker 沙箱、InfiniBand/NVL72 网络与前沿模型选型。</description>
   <language>zh-CN</language>
-  <pubDate>Wed, 18 Nov 2026 04:02:19 GMT</pubDate>
+  <pubDate>Wed, 18 Nov 2026 06:58:21 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>AI Agent 安全沙箱终极架构：从容器逃逸防御、Firecracker 微虚拟机毫秒级快照恢复到零信任环境隔离</title>
@@ -18,6 +18,26 @@
     <enclosure url="https://blog.llmgo.top/og/zh/agent-sandbox-firecracker-microvm-snapshot-isolation.png" length="150000" type="image/png" />
   </item>
   <item>
+    <title>AI Agent 安全攻防：间接提示注入、MCP 投毒防御与最小权限架构</title>
+    <link>https://blog.llmgo.top/articles/agent-security-prompt-injection-mcp-permission-governance/</link>
+    <guid>https://blog.llmgo.top/articles/agent-security-prompt-injection-mcp-permission-governance/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Agent 安全</category>
+    <description>拆解智能体致命三角与间接提示注入、MCP 工具投毒与 Rug-Pull 攻击链，落地双模型隔离、CaMeL 污点追踪与最小权限策略引擎。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/agent-security-prompt-injection-mcp-permission-governance.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>分布式训练第一性原理：ZeRO/FSDP2、TP、PP 与 Context Parallelism</title>
+    <link>https://blog.llmgo.top/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/</link>
+    <guid>https://blog.llmgo.top/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>分布式训练</category>
+    <description>从混合精度显存账本出发，推导 ZeRO-1/2/3 与 PyTorch FSDP2 DTensor、TP/SP、1F1B/DualPipe 流水线气泡及 ZigZag 环状注意力通信数学与配置。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp.png" length="150000" type="image/png" />
+  </item>
+  <item>
     <title>大模型后训练分布式强化学习架构实战：基于 verl 与 3D-HybridEngine 的训推混布、秒级重分片与长尾异步调度</title>
     <link>https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/</link>
     <guid>https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/</guid>
@@ -26,6 +46,26 @@
     <category>分布式 RL</category>
     <description>深度剖析百卡级大模型后训练 RL 系统架构：从 Qwen2.5-72B 显存与算力第一性原理账本出发，拆解 verl 3D-HybridEngine 秒级权重重分片、vLLM Sleep Mode 虚拟显存卸载、DAPO 与 Partial Rollout 长尾消除及多机实战配置。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/distributed-rl-post-training-verl-colocation.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>大模型 GPU 算子编程实战：从 CUDA Warp 规约到 Triton 融合内核</title>
+    <link>https://blog.llmgo.top/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/</link>
+    <guid>https://blog.llmgo.top/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>算子工程</category>
+    <description>深入 GPU 寄存器、Shared Memory Bank 冲突与 CUDA Warp 原语，手写融合残差 RMSNorm + 动态 FP8 量化的 Triton 生产级算子并结合 Nsight 调优。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/gpu-kernel-engineering-cuda-warp-triton-fused-ops.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>K8s AI 推理编排：LeaderWorkerSet、推理网关与 KV 感知路由</title>
+    <link>https://blog.llmgo.top/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/</link>
+    <guid>https://blog.llmgo.top/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>AI 推理编排</category>
+    <description>解析传统 Deployment 与轮询网关在大模型服务中的失效根因，实战落地 K8s LeaderWorkerSet 多机编排、Gateway API Inference Extension 与 KV 缓存感知路由。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/k8s-ai-inference-gateway-lws-kv-cache-routing.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>机柜级超节点与集合通信全栈剖析：从 GB200/GB300 NVL72 铜缆背板、昇腾全光互联到 NCCL NVLS 与 MoE All-to-All 极限调优</title>

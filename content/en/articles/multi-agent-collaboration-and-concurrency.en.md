@@ -11,8 +11,8 @@ extraTags:
   - AutoGen
   - Distributed
 category: "AI Agent"
-series: "ai-agent"
-seriesOrder: 14
+series: ai-agent
+seriesOrder: 13
 updated: 2026-10-20
 ---
 

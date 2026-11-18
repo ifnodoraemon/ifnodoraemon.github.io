@@ -45,60 +45,98 @@ const zhLocales = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'locales', '
 const enLocales = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'locales', 'en.json'), 'utf-8'));
 
 const SERIES_DEFINITIONS = {
+  'llm-inference': {
+    id: 'llm-inference',
+    titleZh: '《大模型推理系统全栈：从算子内核、压缩加速到超节点部署》',
+    titleEn: 'Full-Stack LLM Inference Systems: Kernels, Compression, and Supernode Serving',
+    badgeZh: '推理系统专栏',
+    badgeEn: 'Inference Systems Series',
+    descZh: '以第一性原理贯通现代大模型推理全栈：从 GPU 驱动栈、Roofline 物理边界、PagedAttention 与连续批处理，深入 CUDA/Triton 融合算子、FlashAttention/FlashInfer、MLA 与 KDA/CSA 百万上下文缓存，再到 FP8/INT4 量化、EAGLE-3 投机解码、MoE 专家并行、P/D 分离、四大引擎源码与 DeepInfer 超节点生产落地。',
+    descEn: 'First-principles mastery of full-stack LLM inference: GPU driver stacks, Roofline bounds, PagedAttention, continuous batching, CUDA/Triton fused kernels, FlashAttention/FlashInfer, MLA & KDA/CSA caches, FP8/INT4 quantization, EAGLE-3 speculative decoding, MoE EP, P/D disaggregation, and multi-node production serving.',
+    articles: [
+      'nvidia-gpu-package-architecture',
+      'inference-roofline-prefill-decode',
+      'pagedattention-memory-virtualization',
+      'continuous-batching-chunked-prefill-guide',
+      'prefix-caching-radix-attention-internals',
+      'gpu-kernel-engineering-cuda-warp-triton-fused-ops',
+      'flashattention-flashinfer-kernel-evolution',
+      'mha-gqa-mla-matrix-absorption-inference-engine',
+      'kimi-kda-deepseek-mla-architecture',
+      'quantization-precision-guide',
+      'quantization-hands-on-guide',
+      'speculative-decoding-eagle-guide',
+      'moe-expert-parallelism-inference-engine',
+      'pd-disaggregation-distributed-kv-cache',
+      'inference-engines-core-architecture-internals',
+      'sglang-vs-vllm-architecture',
+      'vllm-serving-guide',
+      'deepseek-v4-kimi-k3-deployment-guide',
+      'deepinfer-deepseek-recipe-architecture',
+      'reasoning-test-time-compute-inference-future',
+    ],
+  },
+  'llm-post-training': {
+    id: 'llm-post-training',
+    titleZh: '《大模型分布式训练、强化学习对齐与评估工程手册》',
+    titleEn: 'Distributed LLM Training, RL Post-Training, and Evaluation Engineering',
+    badgeZh: '训练与对齐专栏',
+    badgeEn: 'Training & RL Series',
+    descZh: '打通从基础对齐到百卡强化学习的模型工程闭环：涵盖提示词与多模态基线、企业级 RAG、SFT/LoRA 微调数学、ZeRO/FSDP2/TP/PP/CP 4D 分布式训练第一性原理、GRPO 算法推导、基于 verl 的训推混部与异步 Rollout，以及严谨的 Eval 门禁与 2026.11 海内外前沿模型选型。',
+    descEn: 'End-to-end model engineering from SFT to multi-node RL: prompting & multimodal baselines, enterprise RAG, LoRA/QLoRA fine-tuning, 4D distributed training (ZeRO/FSDP2, TP/SP, 1F1B/DualPipe, Context Parallelism), GRPO math, verl rollout-training colocation, rigorous Evals, and Nov 2026 frontier benchmarks.',
+    articles: [
+      'prompt-engineering-guide',
+      'multimodal-guide',
+      'rag-in-practice',
+      'fine-tuning-guide',
+      'distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp',
+      'test-time-compute-grpo',
+      'distributed-rl-post-training-verl-colocation',
+      'llm-evaluation-guide',
+      'model-comparison-2026',
+      'domestic-llm-comparison-2026',
+      'ai-trends-2026',
+      'ai-history-choices',
+    ],
+  },
   'ai-agent': {
     id: 'ai-agent',
     titleZh: '《AI Agent 生产级架构师手册》',
     titleEn: 'The Production AI Agent Architect Handbook',
     badgeZh: 'AI Agent 架构师专栏',
     badgeEn: 'AI Agent Architect Series',
-    descZh: '系统化掌握 2026 生产级 AI Agent 核心架构：从执行循环、状态机控制流，到 MCP 协议、Skills 扩展、多智能体协作与全链路可观测性。',
-    descEn: 'Master production-grade AI Agent architectures in 2026: from execution loops and state machines to MCP, skills, multi-agent orchestration, and observability.',
+    descZh: '按架构师五阶路径系统掌握生产级 AI Agent：从 Loop 控制面演进、有限状态机与 MCTS 自修正，到 Context RAM 管理与分层记忆，再到 MCP/Skills 协议、Firecracker 微虚机毫秒级快照沙箱、间接提示注入与 CaMeL 污点安全防御、自研多智能体并发框架及 Environment Scaling 评估治理。',
+    descEn: 'Progressive 5-stage handbook for production AI Agents: deterministic FSM control loops & MCTS reflection, Context Engineering & hierarchical memory, MCP/Skills protocols, sub-15ms Firecracker MicroVM sandboxes, indirect prompt-injection & CaMeL taint security, custom concurrent frameworks, and Environment Scaling.',
     articles: [
-      'agent-loop-state-machine',
       'build-ai-agent',
-      'agent-runtime-practices',
+      'loop-engineering',
+      'agent-loop-state-machine',
+      'agent-reflection-self-correction',
+      'context-engineering-guide',
+      'agent-memory-architecture',
       'mcp-guide',
       'skills-guide',
+      'advanced-agent-tool-use-and-function-calling',
+      'agent-sandbox-firecracker-microvm-snapshot-isolation',
+      'agent-security-prompt-injection-mcp-permission-governance',
+      'build-lightweight-agent-framework',
+      'multi-agent-collaboration-and-concurrency',
       'browser-use-agent-architecture',
-      'agent-reflection-self-correction',
+      'ai-coding-mastery',
+      'agent-runtime-practices',
       'agent-orchestration-evals',
       'agent-observability-debugging',
       'environment-scaling-agent-guide',
-      'agent-memory-architecture',
-      'build-lightweight-agent-framework',
-      'advanced-agent-tool-use-and-function-calling',
-      'multi-agent-collaboration-and-concurrency',
-    ],
-  },
-  'llm-inference': {
-    id: 'llm-inference',
-    titleZh: '《大模型推理引擎：从模型演进、内核架构到未来终局》',
-    titleEn: 'Production LLM Inference Engines: Evolution, Architecture, and Future',
-    badgeZh: '推理引擎专栏',
-    badgeEn: 'Inference Engine Series',
-    descZh: '以第一性原理贯穿大模型推理系统：从 Prefill/Decode 物理撕裂与 Roofline 模型推导、KV Cache 与 MLA 显存突围，到 PagedAttention、Continuous Batching、P/D 解耦、四大引擎 (vLLM / SGLang / TRT-LLM / llama.cpp) 源码解密与长思考链调度终局。',
-    descEn: 'Master LLM inference systems from first principles: Roofline modeling of Prefill/Decode, KV Cache & MLA memory optimization, PagedAttention, Continuous Batching, P/D disaggregation, and in-depth engine architectures across vLLM, SGLang, TensorRT-LLM, and llama.cpp.',
-    articles: [
-      'inference-roofline-prefill-decode',
-      'pagedattention-memory-virtualization',
-      'continuous-batching-chunked-prefill-guide',
-      'prefix-caching-radix-attention-internals',
-      'flashattention-flashinfer-kernel-evolution',
-      'mha-gqa-mla-matrix-absorption-inference-engine',
-      'moe-expert-parallelism-inference-engine',
-      'pd-disaggregation-distributed-kv-cache',
-      'inference-engines-core-architecture-internals',
-      'reasoning-test-time-compute-inference-future',
     ],
   },
   'container-k8s': {
     id: 'container-k8s',
-    titleZh: '《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》',
-    titleEn: 'From Docker to Kubernetes: Cloud-Native Container & Cluster Orchestration Handbook',
+    titleZh: '《从 Docker 到 Kubernetes：云原生容器与 AI 智算编排指南》',
+    titleEn: 'From Docker to Kubernetes: Cloud-Native & AI Inference Orchestration Handbook',
     badgeZh: '容器与 K8s 专栏',
     badgeEn: 'Container & K8s Series',
-    descZh: '系统化掌握云原生容器与集群编排体系：从 Linux 内核进程隔离、veth 网络、SwarmKit 共识到 K8s 控制面原理；深入业务软件在 K8s 上的网络（gRPC/Mesh/优雅停机）与存储（Local NVMe/RocksDB/Fencing）工程实战；并进阶对 K8s 本身“动刀”：Scheduling Framework 自定义调度器、NRI/Kata 运行时改造、Aggregated APIServer 与 2026 AI GPU 智算终局。',
-    descEn: 'Master containerization and cluster orchestration from first principles: Linux namespaces, cgroups v2, SwarmKit, K8s control plane; real-world software architecture on K8s (gRPC/zero-downtime, Local NVMe/RocksDB/fencing); hacking K8s internals (Scheduling Framework plugins, NRI runtimes, Aggregated APIServer); and 2026 AI GPU scheduling.',
+    descZh: '从底层内核直达云原生 AI 智算编排：剖析 Linux Namespace/cgroups v2、veth 网桥、SwarmKit Raft 与 K8s 控制面原理；深入 gRPC 平滑切流与本地 NVMe Fencing；进阶定制 Scheduling Framework Gang 插件、NRI/Kata 运行时与聚合 APIServer；最终会师 GPU Operator、LeaderWorkerSet 多机编排与 KV 缓存感知推理网关。',
+    descEn: 'From Linux namespaces, cgroups v2, and K8s control-plane reconciliation to zero-downtime gRPC drains, local NVMe fencing, custom Gang Scheduling plugins, NRI/Kata runtimes, Aggregated APIServers, GPU Operator MIG, multi-node LeaderWorkerSet (LWS), and KV-cache-aware Inference Gateways.',
     articles: [
       'docker-internals-namespace-cgroups-overlayfs',
       'container-networking-veth-bridge-iptables',
@@ -113,16 +151,17 @@ const SERIES_DEFINITIONS = {
       'k8s-control-plane-hacking-aggregated-apiserver-apf-etcd',
       'k8s-operator-pattern-kubebuilder-crd',
       'k8s-gpu-operator-ai-inference-scheduling',
+      'k8s-ai-inference-gateway-lws-kv-cache-routing',
     ],
   },
   'computer-networking': {
     id: 'computer-networking',
-    titleZh: '《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 架构实战》',
-    titleEn: 'Computer Networking Masterclass: From Ethernet Principles to Hyperscale InfiniBand Architecture',
+    titleZh: '《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 与超节点实战》',
+    titleEn: 'Computer Networking Masterclass: Ethernet Principles to InfiniBand & NVL72 SuperPoDs',
     badgeZh: '计算机网络专栏',
     badgeEn: 'Networking Series',
-    descZh: '零基础直通万卡 AI 智算网络：从电信号高低电平、双绞线与光纤、集线器冲突域到交换机广播域与 MAC/ARP 寻址；手把手深入推导 IP 寻址、二进制按位与子网掩码（Subnet Mask）计算、默认网关与 VLAN/DHCP/NAT 企业级基建；解析 DNS、Socket 套接字五元组、TCP 11 状态机与 BBR 拥塞控制；攻坚 Linux 内核 NAPI、sk_buff 与 eBPF XDP 极速转发；穿透现代数据中心传统三层 vs 两层 Spine-Leaf 架构与 EVPN-VXLAN；并最终登顶智算中心通信之巅：RoCEv2 无损以太网、纯血 InfiniBand NDR/XDR 物理速率与信元流控、Rail-Optimized 胖树拓扑、自适应路由、SHARP 网内计算与生产级 OFED/NCCL 极限调优。',
-    descEn: 'A ground-zero masterclass to 10,000-GPU AI networking: from physical voltages, twisted pairs, and optical fibers to hubs, collision domains, switches, and MAC/ARP; step-by-step binary derivations of IP addressing, subnet masks, default gateways, VLANs, DHCP, and NAT; in-depth DNS, Socket 5-tuples, TCP 11-state machines, and BBR congestion control; Linux kernel NAPI, sk_buff, and eBPF XDP; datacenter traditional 3-tier vs 2-tier Spine-Leaf fabrics and EVPN-VXLAN; leading up to AI supercomputing: lossless RoCEv2, native InfiniBand NDR/XDR link speeds, credit flow control, Rail-Optimized Fat-Trees, Adaptive Routing, SHARP, and bare-metal OFED/NCCL performance tuning.',
+    descZh: '零基础直通万卡智算与机柜级超节点：从电光信号、交换机 MAC/ARP、IP/CIDR 二进制推导、VLAN/NAT，到 DNS/Socket、TCP 状态机与 BBR/QUIC、Linux 内核 NAPI/XDP、数据中心 Leaf-Spine EVPN-VXLAN，最终登顶 RoCEv2 无损网络、纯血 InfiniBand 胖树/SHARP/NCCL 与 GB200 NVL72 铜缆/全光超节点集合通信。',
+    descEn: 'Ground-zero to hyperscale AI fabrics: physical layer & MAC/ARP, bitwise IP/CIDR, VLAN/NAT, DNS/Sockets, TCP & BBR/QUIC, Linux NAPI/sk_buff/XDP, Leaf-Spine EVPN-VXLAN, lossless RoCEv2, InfiniBand NDR/XDR Fat-Trees & SHARP, and rack-scale GB200 NVL72 / optical SuperPoD NCCL collectives.',
     articles: [
       'network-fundamentals-bits-cables-hubs-switches-mac-arp',
       'ip-addressing-subnet-mask-cidr-default-gateway-routing',
@@ -136,6 +175,7 @@ const SERIES_DEFINITIONS = {
       'infiniband-architecture-hardware-rates-credit-flow-subnet-manager',
       'infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp',
       'infiniband-production-deployment-opensm-ofed-nccl-tuning',
+      'rack-scale-superpod-nvl72-nccl-collectives',
     ],
   },
 };
@@ -903,17 +943,20 @@ function buildSeriesCardBottom(article, allArticlesInLang, isEn) {
     let completeDescZh = '';
     let completeDescEn = '';
     if (seriesId === 'llm-inference') {
-      completeDescZh = '恭喜读完《大模型推理引擎：从模型演进、内核架构到未来终局》全套 10 篇内容！你已建立起从 Roofline 物理撕裂、PagedAttention、算子内核演进到 P/D 分离、四大引擎源码与长思维链分层存储的完整硬核认知。';
-      completeDescEn = 'Congratulations on completing all 10 chapters of the Production LLM Inference Engines series! You have mastered inference systems from first-principles Roofline modeling and kernel evolutions to P/D disaggregation and tiered cluster storage.';
+      completeDescZh = `恭喜读完《大模型推理系统全栈：从算子内核、压缩加速到超节点部署》全套 ${totalParts} 篇内容！你已建立起从 GPU 驱动栈、Roofline 模型、PagedAttention、CUDA/Triton 融合算子，到 MLA/KDA、量化、EAGLE-3 投机采样、P/D 分离与 DeepInfer 超节点部署的完整硬核认知。`;
+      completeDescEn = `Congratulations on completing all ${totalParts} chapters of Full-Stack LLM Inference Systems! You have mastered the entire serving stack from GPU drivers, Roofline bounds, and CUDA/Triton kernels to MLA/KDA, quantization, EAGLE-3, P/D disaggregation, and supernode production serving.`;
+    } else if (seriesId === 'llm-post-training') {
+      completeDescZh = `恭喜读完《大模型分布式训练、强化学习对齐与评估工程手册》全套 ${totalParts} 篇内容！你已贯通从提示词/RAG/微调基础、ZeRO/FSDP2/TP/PP/CP 4D 分布式训练，到 GRPO 与 verl 百卡训推混部强化学习、严谨评估门禁与前沿模型选型的全链路模型工程体系。`;
+      completeDescEn = `Congratulations on completing all ${totalParts} chapters of Distributed LLM Training, RL Post-Training, and Evaluation Engineering! You have built an end-to-end command of RAG, LoRA/QLoRA, 4D distributed training, GRPO, verl rollout-training colocation, and rigorous evaluation.`;
     } else if (seriesId === 'container-k8s') {
-      completeDescZh = '恭喜读完《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》全套 13 篇硬核内容！你已建立起从 Linux 内核进程隔离、veth 网络、SwarmKit 到 K8s 控制面深水区、业务网络与存储实战、对 K8s 调度器/运行时/控制面深度动刀与 2026 AI GPU 智算调度的完整工业级全景架构。';
-      completeDescEn = 'Congratulations on completing all 13 chapters of the Cloud-Native Container & Cluster Orchestration Handbook! You have mastered container systems from Linux process isolation and K8s control plane to production application networking, storage, hacking K8s scheduling and runtimes, and 2026 AI GPU scheduling.';
+      completeDescZh = `恭喜读完《从 Docker 到 Kubernetes：云原生容器与 AI 智算编排指南》全套 ${totalParts} 篇硬核内容！你已打通从 Linux 内核隔离、K8s 控制面与有状态存储网络，到自定义 Gang 调度插件、NRI/Kata 运行时、GPU Operator 以及 LeaderWorkerSet + KV 缓存感知推理网关的完整架构版图。`;
+      completeDescEn = `Congratulations on completing all ${totalParts} chapters of the Cloud-Native & AI Inference Orchestration Handbook! You have mastered container internals, K8s control planes, stateful NVMe fencing, custom Gang schedulers, NRI/Kata runtimes, LeaderWorkerSet, and KV-aware Inference Gateways.`;
     } else if (seriesId === 'computer-networking') {
-      completeDescZh = '恭喜读完《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 架构实战》全套 12 篇内容！你已打通从物理电光信号、IP/TCP 状态机、Linux 内核 XDP、数据中心 EVPN-VXLAN 到 RoCEv2 无损网络、纯血 InfiniBand 拓扑与生产级 NCCL 极限调优的完整网络知识图谱。';
-      completeDescEn = 'Congratulations on completing all 12 chapters of the Computer Networking Masterclass! You have built a first-principles mental model spanning Ethernet physics, IP/TCP internals, Linux kernel XDP, datacenter EVPN-VXLAN, lossless RoCEv2, and hyperscale InfiniBand + NCCL cluster engineering.';
+      completeDescZh = `恭喜读完《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 与超节点实战》全套 ${totalParts} 篇内容！你已打通从物理电光信号、IP/TCP 状态机、Linux 内核 XDP、数据中心 EVPN-VXLAN 到 RoCEv2、纯血 InfiniBand 胖树/SHARP 以及 GB200 NVL72 超节点集合通信的完整网络知识图谱。`;
+      completeDescEn = `Congratulations on completing all ${totalParts} chapters of the Computer Networking Masterclass! You have built a first-principles mental model spanning Ethernet physics, IP/TCP internals, Linux kernel XDP, EVPN-VXLAN, RoCEv2, InfiniBand Fat-Trees, and GB200 NVL72 SuperPoD NCCL collectives.`;
     } else {
-      completeDescZh = '恭喜读完《AI Agent 生产级架构师手册》全套 14 篇内容！你已建立起从确定性状态机控制流、MCP 协议、Skills 扩展、浏览器智能体到分布式编排、环境缩放、长程记忆、自研框架与高并发多智能体协作的完整工业级认知。';
-      completeDescEn = 'Congratulations on completing all 14 chapters of The Production AI Agent Architect Handbook! You have mastered end-to-end agentic engineering from state machines, MCP, and Skills to distributed orchestration, environment scaling, memory architectures, custom frameworks, and multi-agent concurrency.';
+      completeDescZh = `恭喜读完《AI Agent 生产级架构师手册》全套 ${totalParts} 篇内容！你已建立起从确定性状态机控制流、Context/Memory 架构、MCP/Skills 协议，到 Firecracker 微虚机沙箱、间接提示注入与 CaMeL 污点防御、高并发多智能体框架与环境缩放的完整工业级认知。`;
+      completeDescEn = `Congratulations on completing all ${totalParts} chapters of The Production AI Agent Architect Handbook! You have mastered deterministic FSM loops, Context & Memory systems, MCP/Skills, Firecracker MicroVM sandboxes, CaMeL prompt-injection defense, multi-agent concurrency, and Environment Scaling.`;
     }
 
     bodyHtml = `
@@ -1275,11 +1318,8 @@ function generateLlmsTxt(articlesZh, articlesEn) {
     `- [${s.titleEn}](${SITE_URL}/en/articles/${s.articles[0]}/): ${s.descEn} (${s.articles.length} articles, opening chapter: [${s.articles[0]}](${SITE_URL}/en/articles/${s.articles[0]}/))`
   ).join('\n');
 
-  const extraSeriesZh = `- [《现代大模型实战工程与技术选型手册》](${SITE_URL}/articles/): 系统剖析前沿大模型落地方法论：企业级 RAG、模型全流程微调、Test-Time Compute 扩展与 GRPO 强化学习、拒绝榜单刷分的 Eval 体系以及主流模型横评。`;
-  const extraSeriesEn = `- [Modern Applied LLM Engineering & Selection Guide](${SITE_URL}/en/articles/): Enterprise RAG pipelines, fine-tuning workflows, Test-Time Compute & GRPO, evaluation suites, and multi-model benchmark selections.`;
-
-  const fullSeriesZhList = [seriesZhList, extraSeriesZh].filter(Boolean).join('\n');
-  const fullSeriesEnList = [seriesEnList, extraSeriesEn].filter(Boolean).join('\n');
+  const fullSeriesZhList = seriesZhList;
+  const fullSeriesEnList = seriesEnList;
 
   const articlesZhList = articlesZh.map(a => 
     `- [${a.title}](${SITE_URL}/articles/${a.slug}/): ${a.description}`

@@ -6,7 +6,7 @@ tag: State Machine
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 1
+seriesOrder: 3
 description: "Why prompt chaining and unconstrained ReAct loops fail in production AI systems. A deep architectural dissection of agent failure modes, Finite State Machine (FSM) graph flows, tool-calling resilience, and circuit breakers with runnable code."
 extraTags:
   - Agent Architecture

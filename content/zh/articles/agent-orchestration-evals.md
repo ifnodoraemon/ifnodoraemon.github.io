@@ -6,7 +6,7 @@ tag: 编排评测
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 8
+seriesOrder: 17
 description: "说明多步 Agent 会把单步误差乘到整条链路上，以及用分布式编排拆分职责、用可重复的 Evals 衡量结果，怎样把复合误差管住，便于上线前验收。"
 updated: 2026-10-20
 ---

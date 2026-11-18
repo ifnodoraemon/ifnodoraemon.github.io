@@ -6,7 +6,7 @@ tag: Batching & Scheduling
 tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
-seriesOrder: 3
+seriesOrder: 4
 description: "Why one long prefill still blocks other decode steps after continuous batching, and how chunked prefill splits that work so waiting requests can run too."
 extraTags:
   - Continuous Batching

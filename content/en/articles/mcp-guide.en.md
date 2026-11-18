@@ -6,7 +6,7 @@ tag: MCP Protocol
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 4
+seriesOrder: 7
 description: From architecture to hands-on development, a complete guide to the Model Context Protocol. Includes Python SDK tutorial, security mechanisms, and ecosystem comparison.
 updated: 2026-10-20
 ---
@@ -400,7 +400,7 @@ Once the Server starts, AI can autonomously decide to invoke your note manager. 
 
 ## Security Mechanisms and Best Practices
 
-MCP defines authorization mechanisms and security guidance. Implement controls for the chosen transport and risk level; protocol adoption does not automatically provide isolation or human confirmation:
+MCP defines authorization mechanisms and security guidance. Implement controls for the chosen transport and risk level; protocol adoption does not automatically provide isolation or human confirmation (for defense-in-depth against indirect prompt injection, MCP tool poisoning, rug-pull schema mutations, and CaMeL taint-tracked least privilege, see [AI Agent Security: Indirect Prompt Injection, MCP Poisoning & Least Privilege](/en/articles/agent-security-prompt-injection-mcp-permission-governance/)):
 
 ### 1. OAuth 2.1 Authorization
 

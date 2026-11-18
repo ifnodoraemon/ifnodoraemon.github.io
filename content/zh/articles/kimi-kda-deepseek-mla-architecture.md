@@ -5,6 +5,8 @@ date: 2026-09-07
 tag: 架构演进
 tagClass: tag-cyan
 category: 推理系统
+series: llm-inference
+seriesOrder: 9
 description: "严谨拆解 Kimi Delta Attention (KDA) 门控增量循环状态、DeepSeek MLA 潜变量缓存与 V4 CSA/HCA 序列稀疏压缩，结合 Kimi K3/K3.1 混合层结构推导显存估算公式与可复现测量规范。"
 updated: 2026-11-18
 ---

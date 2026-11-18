@@ -5,6 +5,8 @@ date: 2026-02-25
 tag: 全流程微调
 tagClass: tag-emerald
 category: 模型工程
+series: llm-post-training
+seriesOrder: 4
 description: "深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。" 
 updated: 2026-10-20
 ---
@@ -273,4 +275,4 @@ python -m vllm.entrypoints.openai.api_server \
 工业界普遍以 LoRA 为默认首选，它能在保留基础通用知识的同时节省 80% 以上的显存和算力开销。若本地硬件处于极限受限状态，建议直接采用基于 4-bit 权重的 QLoRA（详见[大模型量化实战指南](/articles/quantization-hands-on-guide/)）。只有在需要重训全新基础底座语言或发生颠覆性结构范式迁移时，才建议启动昂贵的全参数微调。此外，若追求长推理链与复杂逻辑突破，可在 SFT 后结合基于强化学习的测试时扩展优化，详见 [《推理时扩展 (Test-Time Compute) 与 GRPO 强化学习实战》](/articles/test-time-compute-grpo/)。
 
 ### Q4: 微调到底需要多少条训练数据？
-数据的质量和一致性远重于原始数据量。通常准备 500 至 2,000 条严格经过人工核验和去噪的示范样本，就足以训练出高可靠性的业务模型。盲目导入数万条未经清洗的低质语料，极易诱发灾难性遗忘与严重的模型过拟合。
+数据的质量和一致性远重于原始数据量。通常准备 500 至 2,000 条严格经过人工核验和去噪的示范样本，就足以训练出高可靠性的业务模型。盲目导入数万条未经清洗的低质语料，极易诱发灾难性遗忘与严重的模型过拟合。当训练规模从单机 LoRA 迈向多机百亿/千亿全参数继续预训练或 SFT 时，请继续阅读本专栏下一讲 [分布式训练第一性原理：ZeRO/FSDP2、TP、PP 与 Context Parallelism](/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/)。

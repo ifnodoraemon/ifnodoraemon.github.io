@@ -6,7 +6,7 @@ tag: Memory Virtualization
 tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
-seriesOrder: 2
+seriesOrder: 3
 description: "How vLLM PagedAttention splits the KV cache into logical blocks on physical GPU memory, reduces fragmentation, and shares a prefix with copy-on-write."
 extraTags:
   - PagedAttention

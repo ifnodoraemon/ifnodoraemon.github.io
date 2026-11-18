@@ -5,6 +5,8 @@ date: 2026-09-18
 tag: 投机采样
 tagClass: tag-cyan
 category: 推理系统
+series: llm-inference
+seriesOrder: 12
 description: "说明投机解码为何可以不改变采样分布，以及从草稿模型、Medusa 到 EAGLE-3，在 vLLM 和 SGLang 里怎样打开这项加速，可对照配置。"
 featured: true
 featuredStats:

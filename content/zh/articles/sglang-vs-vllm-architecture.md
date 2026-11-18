@@ -5,6 +5,8 @@ date: 2026-09-18
 tag: 引擎架构
 tagClass: tag-cyan
 category: 推理系统
+series: llm-inference
+seriesOrder: 16
 description: "比较 SGLang RadixAttention 与 vLLM APC 的前缀复用机制、结构化输出和部署基线，并给出控制变量、冷暖缓存及延迟吞吐的可复现评测方法。"
 featured: true
 featuredStats:

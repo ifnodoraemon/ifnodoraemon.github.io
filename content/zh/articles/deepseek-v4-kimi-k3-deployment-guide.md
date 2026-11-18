@@ -5,6 +5,8 @@ date: 2026-09-07
 tag: 集群部署
 tagClass: tag-cyan
 category: 推理系统
+series: llm-inference
+seriesOrder: 18
 description: "部署 DeepSeek-V4 与 Kimi K3：四机 32 卡拓扑，并排查 NUMA、MoE 路由、CUDA Graph 伪 OOM 与 PFC 死锁。"
 updated: 2026-10-21
 ---

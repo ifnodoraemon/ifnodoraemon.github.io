@@ -5,6 +5,8 @@ date: 2026-11-18
 tag: Agent Sandbox
 tagClass: tag-purple
 category: AI Agent
+series: ai-agent
+seriesOrder: 10
 description: "Architecting zero-trust Firecracker MicroVM sandboxes for Coding Agents and RL rollouts: benchmarking gVisor vs KVM isolation, sub-15ms snapshot forking via userfaultfd and CoW block storage, plus secretless virtio-vsock egress proxies."
 featured: true
 featuredStats:

@@ -6,7 +6,7 @@ tag: 推理架构
 tagClass: tag-purple
 category: 推理系统
 series: llm-inference
-seriesOrder: 8
+seriesOrder: 14
 description: "说明 Prefill 与 Decode 为什么要分池部署，KV Cache 如何经 RDMA 在节点间传递，以及集群怎样把这些缓存池化调度。"
 extraTags:
   - Disaggregated Serving

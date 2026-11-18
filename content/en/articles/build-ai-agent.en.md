@@ -6,7 +6,7 @@ tag: Agent Building
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 2
+seriesOrder: 1
 description: A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.
 ---
 

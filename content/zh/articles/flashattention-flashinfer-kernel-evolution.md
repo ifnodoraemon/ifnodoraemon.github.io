@@ -6,7 +6,7 @@ tag: 算子优化
 tagClass: tag-cyan
 category: 推理系统
 series: llm-inference
-seriesOrder: 5
+seriesOrder: 7
 description: "回顾 FlashAttention 如何在 SRAM 中分块计算注意力，以及 FlashInfer 如何用同一条内核路径读取分页 KV 并完成 Decode。"
 extraTags:
   - FlashAttention

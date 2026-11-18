@@ -5,6 +5,8 @@ date: 2026-02-25
 tag: Fine-Tuning
 tagClass: tag-emerald
 category: Model Engineering
+series: llm-post-training
+seriesOrder: 4
 description: "Discover how LLM fine-tuning works under the hood, explore proven enterprise use cases (LoRA, QLoRA, Full Fine-Tuning), and learn end-to-end workflows from data preparation to vLLM serving." 
 updated: 2026-10-20
 ---
@@ -273,4 +275,4 @@ The most proven enterprise use cases include: enforcing strict structured JSON/c
 LoRA is the recommended industry default as it slashes VRAM and computational demands by 80%+ while preserving the base model's core intelligence. For severe VRAM constraints, deploy QLoRA as detailed in our [LLM Quantization Hands-On Guide](/en/articles/quantization-hands-on-guide/). Full Fine-Tuning should only be reserved for foundational pre-training or profound domain shifts. Furthermore, for advancing multi-step logic without massive labeled demonstrations, post-SFT reinforcement learning can be integrated via [Test-Time Compute Scaling & GRPO Reinforcement Learning](/en/articles/test-time-compute-grpo/).
 
 ### Q4: How much training data is needed for fine-tuning?
-Data quality and consistency vastly outweigh sheer volume. Preparing 500 to 2,000 clean, rigorously validated instruction pairs is typically enough to achieve superior consistency. Ingesting large volumes of low-quality data risks catastrophic forgetting and degradation of general reasoning.
+Data quality and consistency vastly outweigh sheer volume. Preparing 500 to 2,000 clean, rigorously validated instruction pairs is typically enough to achieve superior consistency. Ingesting large volumes of low-quality data risks catastrophic forgetting and degradation of general reasoning. When scaling beyond single-node LoRA to multi-node full-parameter SFT or continual pre-training, continue to the next chapter in this series: [Distributed LLM Training: ZeRO/FSDP2, TP, Pipeline & Context Parallelism](/en/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/).

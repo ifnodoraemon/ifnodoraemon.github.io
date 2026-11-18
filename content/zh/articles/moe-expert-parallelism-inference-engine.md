@@ -6,7 +6,7 @@ tag: 稀疏计算
 tagClass: tag-cyan
 category: 推理系统
 series: llm-inference
-seriesOrder: 7
+seriesOrder: 13
 description: "为什么 671B 参数的 DeepSeek-V3 每次解码仅激活 37B 参数，吞吐却常受制于跨节点网络？深度剖析稀疏大模型 MoE 推理内核：从动态门控与无辅助损失负载均衡，到专家并行 (EP) All-to-Allv 通信瓶颈，再到 CUTLASS Grouped GEMM 算子融合与 DualPipe 通信计算重叠终极优化。"
 extraTags:
   - MoE

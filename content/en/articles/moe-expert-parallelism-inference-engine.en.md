@@ -6,7 +6,7 @@ tag: MoE & Sparsity
 tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
-seriesOrder: 7
+seriesOrder: 13
 description: "MoE inference internals: DeepSeek-V3 gating, Expert Parallelism (EP) All-to-All communication, CUTLASS Grouped GEMM kernels, and DualPipe overlap schedules."
 extraTags:
   - MoE

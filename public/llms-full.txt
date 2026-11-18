@@ -12,23 +12,27 @@
 ## 核心专栏体系 / Topic Series & Clusters
 
 ### 中文专栏 (Chinese Series)
-- [《AI Agent 生产级架构师手册》](https://blog.llmgo.top/articles/agent-loop-state-machine/): 系统化掌握 2026 生产级 AI Agent 核心架构：从执行循环、状态机控制流，到 MCP 协议、Skills 扩展、多智能体协作与全链路可观测性。 (14 篇文章，开篇：[agent-loop-state-machine](https://blog.llmgo.top/articles/agent-loop-state-machine/))
-- [《大模型推理引擎：从模型演进、内核架构到未来终局》](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/): 以第一性原理贯穿大模型推理系统：从 Prefill/Decode 物理撕裂与 Roofline 模型推导、KV Cache 与 MLA 显存突围，到 PagedAttention、Continuous Batching、P/D 解耦、四大引擎 (vLLM / SGLang / TRT-LLM / llama.cpp) 源码解密与长思考链调度终局。 (10 篇文章，开篇：[inference-roofline-prefill-decode](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/))
-- [《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》](https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/): 系统化掌握云原生容器与集群编排体系：从 Linux 内核进程隔离、veth 网络、SwarmKit 共识到 K8s 控制面原理；深入业务软件在 K8s 上的网络（gRPC/Mesh/优雅停机）与存储（Local NVMe/RocksDB/Fencing）工程实战；并进阶对 K8s 本身“动刀”：Scheduling Framework 自定义调度器、NRI/Kata 运行时改造、Aggregated APIServer 与 2026 AI GPU 智算终局。 (13 篇文章，开篇：[docker-internals-namespace-cgroups-overlayfs](https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/))
-- [《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 架构实战》](https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/): 零基础直通万卡 AI 智算网络：从电信号高低电平、双绞线与光纤、集线器冲突域到交换机广播域与 MAC/ARP 寻址；手把手深入推导 IP 寻址、二进制按位与子网掩码（Subnet Mask）计算、默认网关与 VLAN/DHCP/NAT 企业级基建；解析 DNS、Socket 套接字五元组、TCP 11 状态机与 BBR 拥塞控制；攻坚 Linux 内核 NAPI、sk_buff 与 eBPF XDP 极速转发；穿透现代数据中心传统三层 vs 两层 Spine-Leaf 架构与 EVPN-VXLAN；并最终登顶智算中心通信之巅：RoCEv2 无损以太网、纯血 InfiniBand NDR/XDR 物理速率与信元流控、Rail-Optimized 胖树拓扑、自适应路由、SHARP 网内计算与生产级 OFED/NCCL 极限调优。 (12 篇文章，开篇：[network-fundamentals-bits-cables-hubs-switches-mac-arp](https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/))
-- [《现代大模型实战工程与技术选型手册》](https://blog.llmgo.top/articles/): 系统剖析前沿大模型落地方法论：企业级 RAG、模型全流程微调、Test-Time Compute 扩展与 GRPO 强化学习、拒绝榜单刷分的 Eval 体系以及主流模型横评。
+- [《大模型推理系统全栈：从算子内核、压缩加速到超节点部署》](https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/): 以第一性原理贯通现代大模型推理全栈：从 GPU 驱动栈、Roofline 物理边界、PagedAttention 与连续批处理，深入 CUDA/Triton 融合算子、FlashAttention/FlashInfer、MLA 与 KDA/CSA 百万上下文缓存，再到 FP8/INT4 量化、EAGLE-3 投机解码、MoE 专家并行、P/D 分离、四大引擎源码与 DeepInfer 超节点生产落地。 (20 篇文章，开篇：[nvidia-gpu-package-architecture](https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/))
+- [《大模型分布式训练、强化学习对齐与评估工程手册》](https://blog.llmgo.top/articles/prompt-engineering-guide/): 打通从基础对齐到百卡强化学习的模型工程闭环：涵盖提示词与多模态基线、企业级 RAG、SFT/LoRA 微调数学、ZeRO/FSDP2/TP/PP/CP 4D 分布式训练第一性原理、GRPO 算法推导、基于 verl 的训推混部与异步 Rollout，以及严谨的 Eval 门禁与 2026.11 海内外前沿模型选型。 (12 篇文章，开篇：[prompt-engineering-guide](https://blog.llmgo.top/articles/prompt-engineering-guide/))
+- [《AI Agent 生产级架构师手册》](https://blog.llmgo.top/articles/build-ai-agent/): 按架构师五阶路径系统掌握生产级 AI Agent：从 Loop 控制面演进、有限状态机与 MCTS 自修正，到 Context RAM 管理与分层记忆，再到 MCP/Skills 协议、Firecracker 微虚机毫秒级快照沙箱、间接提示注入与 CaMeL 污点安全防御、自研多智能体并发框架及 Environment Scaling 评估治理。 (19 篇文章，开篇：[build-ai-agent](https://blog.llmgo.top/articles/build-ai-agent/))
+- [《从 Docker 到 Kubernetes：云原生容器与 AI 智算编排指南》](https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/): 从底层内核直达云原生 AI 智算编排：剖析 Linux Namespace/cgroups v2、veth 网桥、SwarmKit Raft 与 K8s 控制面原理；深入 gRPC 平滑切流与本地 NVMe Fencing；进阶定制 Scheduling Framework Gang 插件、NRI/Kata 运行时与聚合 APIServer；最终会师 GPU Operator、LeaderWorkerSet 多机编排与 KV 缓存感知推理网关。 (14 篇文章，开篇：[docker-internals-namespace-cgroups-overlayfs](https://blog.llmgo.top/articles/docker-internals-namespace-cgroups-overlayfs/))
+- [《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 与超节点实战》](https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/): 零基础直通万卡智算与机柜级超节点：从电光信号、交换机 MAC/ARP、IP/CIDR 二进制推导、VLAN/NAT，到 DNS/Socket、TCP 状态机与 BBR/QUIC、Linux 内核 NAPI/XDP、数据中心 Leaf-Spine EVPN-VXLAN，最终登顶 RoCEv2 无损网络、纯血 InfiniBand 胖树/SHARP/NCCL 与 GB200 NVL72 铜缆/全光超节点集合通信。 (13 篇文章，开篇：[network-fundamentals-bits-cables-hubs-switches-mac-arp](https://blog.llmgo.top/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/))
 
 ### 英文专栏 (English Series)
-- [The Production AI Agent Architect Handbook](https://blog.llmgo.top/en/articles/agent-loop-state-machine/): Master production-grade AI Agent architectures in 2026: from execution loops and state machines to MCP, skills, multi-agent orchestration, and observability. (14 articles, opening chapter: [agent-loop-state-machine](https://blog.llmgo.top/en/articles/agent-loop-state-machine/))
-- [Production LLM Inference Engines: Evolution, Architecture, and Future](https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/): Master LLM inference systems from first principles: Roofline modeling of Prefill/Decode, KV Cache & MLA memory optimization, PagedAttention, Continuous Batching, P/D disaggregation, and in-depth engine architectures across vLLM, SGLang, TensorRT-LLM, and llama.cpp. (10 articles, opening chapter: [inference-roofline-prefill-decode](https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/))
-- [From Docker to Kubernetes: Cloud-Native Container & Cluster Orchestration Handbook](https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/): Master containerization and cluster orchestration from first principles: Linux namespaces, cgroups v2, SwarmKit, K8s control plane; real-world software architecture on K8s (gRPC/zero-downtime, Local NVMe/RocksDB/fencing); hacking K8s internals (Scheduling Framework plugins, NRI runtimes, Aggregated APIServer); and 2026 AI GPU scheduling. (13 articles, opening chapter: [docker-internals-namespace-cgroups-overlayfs](https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/))
-- [Computer Networking Masterclass: From Ethernet Principles to Hyperscale InfiniBand Architecture](https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/): A ground-zero masterclass to 10,000-GPU AI networking: from physical voltages, twisted pairs, and optical fibers to hubs, collision domains, switches, and MAC/ARP; step-by-step binary derivations of IP addressing, subnet masks, default gateways, VLANs, DHCP, and NAT; in-depth DNS, Socket 5-tuples, TCP 11-state machines, and BBR congestion control; Linux kernel NAPI, sk_buff, and eBPF XDP; datacenter traditional 3-tier vs 2-tier Spine-Leaf fabrics and EVPN-VXLAN; leading up to AI supercomputing: lossless RoCEv2, native InfiniBand NDR/XDR link speeds, credit flow control, Rail-Optimized Fat-Trees, Adaptive Routing, SHARP, and bare-metal OFED/NCCL performance tuning. (12 articles, opening chapter: [network-fundamentals-bits-cables-hubs-switches-mac-arp](https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/))
-- [Modern Applied LLM Engineering & Selection Guide](https://blog.llmgo.top/en/articles/): Enterprise RAG pipelines, fine-tuning workflows, Test-Time Compute & GRPO, evaluation suites, and multi-model benchmark selections.
+- [Full-Stack LLM Inference Systems: Kernels, Compression, and Supernode Serving](https://blog.llmgo.top/en/articles/nvidia-gpu-package-architecture/): First-principles mastery of full-stack LLM inference: GPU driver stacks, Roofline bounds, PagedAttention, continuous batching, CUDA/Triton fused kernels, FlashAttention/FlashInfer, MLA & KDA/CSA caches, FP8/INT4 quantization, EAGLE-3 speculative decoding, MoE EP, P/D disaggregation, and multi-node production serving. (20 articles, opening chapter: [nvidia-gpu-package-architecture](https://blog.llmgo.top/en/articles/nvidia-gpu-package-architecture/))
+- [Distributed LLM Training, RL Post-Training, and Evaluation Engineering](https://blog.llmgo.top/en/articles/prompt-engineering-guide/): End-to-end model engineering from SFT to multi-node RL: prompting & multimodal baselines, enterprise RAG, LoRA/QLoRA fine-tuning, 4D distributed training (ZeRO/FSDP2, TP/SP, 1F1B/DualPipe, Context Parallelism), GRPO math, verl rollout-training colocation, rigorous Evals, and Nov 2026 frontier benchmarks. (12 articles, opening chapter: [prompt-engineering-guide](https://blog.llmgo.top/en/articles/prompt-engineering-guide/))
+- [The Production AI Agent Architect Handbook](https://blog.llmgo.top/en/articles/build-ai-agent/): Progressive 5-stage handbook for production AI Agents: deterministic FSM control loops & MCTS reflection, Context Engineering & hierarchical memory, MCP/Skills protocols, sub-15ms Firecracker MicroVM sandboxes, indirect prompt-injection & CaMeL taint security, custom concurrent frameworks, and Environment Scaling. (19 articles, opening chapter: [build-ai-agent](https://blog.llmgo.top/en/articles/build-ai-agent/))
+- [From Docker to Kubernetes: Cloud-Native & AI Inference Orchestration Handbook](https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/): From Linux namespaces, cgroups v2, and K8s control-plane reconciliation to zero-downtime gRPC drains, local NVMe fencing, custom Gang Scheduling plugins, NRI/Kata runtimes, Aggregated APIServers, GPU Operator MIG, multi-node LeaderWorkerSet (LWS), and KV-cache-aware Inference Gateways. (14 articles, opening chapter: [docker-internals-namespace-cgroups-overlayfs](https://blog.llmgo.top/en/articles/docker-internals-namespace-cgroups-overlayfs/))
+- [Computer Networking Masterclass: Ethernet Principles to InfiniBand & NVL72 SuperPoDs](https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/): Ground-zero to hyperscale AI fabrics: physical layer & MAC/ARP, bitwise IP/CIDR, VLAN/NAT, DNS/Sockets, TCP & BBR/QUIC, Linux NAPI/sk_buff/XDP, Leaf-Spine EVPN-VXLAN, lossless RoCEv2, InfiniBand NDR/XDR Fat-Trees & SHARP, and rack-scale GB200 NVL72 / optical SuperPoD NCCL collectives. (13 articles, opening chapter: [network-fundamentals-bits-cables-hubs-switches-mac-arp](https://blog.llmgo.top/en/articles/network-fundamentals-bits-cables-hubs-switches-mac-arp/))
 
-## 中文文章索引 / Chinese Technical Articles (74 篇)
+## 中文文章索引 / Chinese Technical Articles (78 篇)
 
 - [AI Agent 安全沙箱终极架构：从容器逃逸防御、Firecracker 微虚拟机毫秒级快照恢复到零信任环境隔离](https://blog.llmgo.top/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/): 深入剖析面向 Coding Agent 与强化学习 Rollout 的 Firecracker MicroVM 安全沙箱架构：横评 gVisor 与硬件虚拟化，详解 Snapshot 与 userfaultfd 毫秒级恢复及状态分叉，并落地 virtio-vsock 零密钥凭证代填网关。
+- [AI Agent 安全攻防：间接提示注入、MCP 投毒防御与最小权限架构](https://blog.llmgo.top/articles/agent-security-prompt-injection-mcp-permission-governance/): 拆解智能体致命三角与间接提示注入、MCP 工具投毒与 Rug-Pull 攻击链，落地双模型隔离、CaMeL 污点追踪与最小权限策略引擎。
+- [分布式训练第一性原理：ZeRO/FSDP2、TP、PP 与 Context Parallelism](https://blog.llmgo.top/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/): 从混合精度显存账本出发，推导 ZeRO-1/2/3 与 PyTorch FSDP2 DTensor、TP/SP、1F1B/DualPipe 流水线气泡及 ZigZag 环状注意力通信数学与配置。
 - [大模型后训练分布式强化学习架构实战：基于 verl 与 3D-HybridEngine 的训推混布、秒级重分片与长尾异步调度](https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/): 深度剖析百卡级大模型后训练 RL 系统架构：从 Qwen2.5-72B 显存与算力第一性原理账本出发，拆解 verl 3D-HybridEngine 秒级权重重分片、vLLM Sleep Mode 虚拟显存卸载、DAPO 与 Partial Rollout 长尾消除及多机实战配置。
+- [大模型 GPU 算子编程实战：从 CUDA Warp 规约到 Triton 融合内核](https://blog.llmgo.top/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/): 深入 GPU 寄存器、Shared Memory Bank 冲突与 CUDA Warp 原语，手写融合残差 RMSNorm + 动态 FP8 量化的 Triton 生产级算子并结合 Nsight 调优。
+- [K8s AI 推理编排：LeaderWorkerSet、推理网关与 KV 感知路由](https://blog.llmgo.top/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/): 解析传统 Deployment 与轮询网关在大模型服务中的失效根因，实战落地 K8s LeaderWorkerSet 多机编排、Gateway API Inference Extension 与 KV 缓存感知路由。
 - [机柜级超节点与集合通信全栈剖析：从 GB200/GB300 NVL72 铜缆背板、昇腾全光互联到 NCCL NVLS 与 MoE All-to-All 极限调优](https://blog.llmgo.top/articles/rack-scale-superpod-nvl72-nccl-collectives/): 深度拆解 GB200/GB300 NVL72 铜缆背板与昇腾 CloudMatrix 384 全光超节点拓扑，严格推导 NCCL busbw 数学模型与 NVLS 网内多播规约，剖析 DeepEP IBGDA All-to-All 内核与 MNNVL 压测排障。
 - [DeepSeek 生产推理栈：DeepInfer 与 deepseek-recipe](https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/): 介绍 DeepSeek 生产推理栈：DeepInfer 的算子与 PD 分离、DSpark 投机解码，以及 deepseek-recipe 如何对接上层协议。
 - [InfiniBand 生产调优：OpenSM 与 NCCL](https://blog.llmgo.top/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/): InfiniBand 生产部署要点：OFED 驱动、OpenSM 主备、ibdiagnet 巡检，以及 NCCL 的 GPUDirect RDMA 调优。
@@ -102,10 +106,14 @@
 - [多模态大模型入门指南](https://blog.llmgo.top/articles/multimodal-guide/): 探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。
 - [大模型微调全流程指南：底层工作原理、高价值落地用例与生产实战](https://blog.llmgo.top/articles/fine-tuning-guide/): 深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。
 
-## 英文文章索引 / English Technical Articles (74 Articles)
+## 英文文章索引 / English Technical Articles (78 Articles)
 
 - [Architecting AI Agent Security Sandboxes: Container Escape Defense, Sub-15ms Firecracker MicroVM Snapshots, and Zero-Trust Isolation](https://blog.llmgo.top/en/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/): Architecting zero-trust Firecracker MicroVM sandboxes for Coding Agents and RL rollouts: benchmarking gVisor vs KVM isolation, sub-15ms snapshot forking via userfaultfd and CoW block storage, plus secretless virtio-vsock egress proxies.
+- [AI Agent Security: Indirect Prompt Injection, MCP Poisoning & Least Privilege](https://blog.llmgo.top/en/articles/agent-security-prompt-injection-mcp-permission-governance/): Dissecting the Lethal Trifecta, indirect prompt injection, and MCP tool poisoning/rug-pull attacks, with runnable CaMeL taint-tracking and capability-scoped defenses.
+- [Distributed LLM Training: ZeRO/FSDP2, TP, Pipeline & Context Parallelism](https://blog.llmgo.top/en/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/): First-principles guide to 4D LLM training: mixed-precision 16Ψ memory math, ZeRO-1/2/3 vs PyTorch FSDP2 DTensor, TP/SP, 1F1B/DualPipe bubbles, and ZigZag Context Parallelism.
 - [Distributed RL Post-Training with verl: Colocation, Weight Resharding & Async Rollouts](https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/): Deep dive into multi-node LLM RL post-training systems: first-principles 72B VRAM math, verl 3D-HybridEngine zero-redundancy resharding, vLLM Sleep Mode cuMemUnmap offloading, DAPO, Partial Rollouts, and production configs.
+- [LLM GPU Kernel Engineering: CUDA Warp Primitives to Triton Fused Kernels](https://blog.llmgo.top/en/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/): Master GPU registers, Shared Memory bank conflicts, and CUDA warp shuffles, then build a production Triton fused Residual + RMSNorm + dynamic FP8 kernel.
+- [Kubernetes AI Serving: LeaderWorkerSet, Inference Gateway & KV Routing](https://blog.llmgo.top/en/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/): Why Kubernetes Deployments and round-robin Ingress fail LLMs, and how to deploy multi-node LeaderWorkerSet, Gateway API Inference Extension, and KV-aware routing.
 - [Rack-Scale SuperPoD & NCCL Collectives: GB200 NVL72, Optical Fabrics & MoE All-to-All](https://blog.llmgo.top/en/articles/rack-scale-superpod-nvl72-nccl-collectives/): Dissecting NVIDIA GB200/GB300 NVL72 copper backplanes vs. Huawei CloudMatrix 384 optical UnifiedBus, NCCL busbw math, NVLS multimem in-switch reductions, DeepEP IBGDA All-to-All kernels, and MNNVL production tuning.
 - [DeepSeek Inference Stack: DeepInfer and deepseek-recipe](https://blog.llmgo.top/en/articles/deepinfer-deepseek-recipe-architecture/): DeepSeek's production inference stack: DeepInfer kernels, prefill-decode split, DSpark speculative decoding, SWA replay, and the deepseek-recipe protocol layer.
 - [InfiniBand Production Tuning: OpenSM and NCCL](https://blog.llmgo.top/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/): Production InfiniBand setup: install OFED, run OpenSM with a standby, audit the fabric with ibdiagnet, and tune NCCL for GPUDirect RDMA. It finds bad links.
@@ -202,6 +210,28 @@
   * Q: Q3: 从同一个母版快照瞬间克隆出 100 个平行 MicroVM 时，为什么会出现 UUID 重复、TLS 握手随机数碰撞以及系统时钟倒流？该如何根治？
     A: 这是快照克隆（Snapshot Cloning）最经典的系统级深坑！当 100 台子虚拟机从同一份 vm.mem 恢复时，它们 Guest 内核中的密码学伪随机数发生器（CSPRNG）熵池以及用户态语言运行时的随机数种子（如 Python random 或 OpenSSL 内部状态）在恢复瞬间字节级完全一致，若不干预就会生成完全相同的临时文件名、UUIDv4 乃至致命的相同 TLS Nonce；同时，由于快照可能创建于数小时前，恢复瞬间 Guest 墙钟时间仍停留在过去，导致 HTTPS 证书有效期校验与 JWT 签名直接报错。生产根治方案包含三步：（1）使用 Firecracker v1.8...
 
+### [AI Agent 安全攻防：间接提示注入、MCP 投毒防御与最小权限架构](https://blog.llmgo.top/articles/agent-security-prompt-injection-mcp-permission-governance/)
+- 发布日期: 2026-11-18 | 标签: Agent 安全 | 预计阅读: 预计阅读 41 分钟 | 字数: 约 10129 字
+- 概述: 拆解智能体致命三角与间接提示注入、MCP 工具投毒与 Rug-Pull 攻击链，落地双模型隔离、CaMeL 污点追踪与最小权限策略引擎。
+- 核心 FAQ 解答:
+  * Q: Q1: 在 `CaMeL` 架构中，既然特权规划模型 `P-LLM` 永远看不到工具返回的原始内容，那遇到“下一步调什么工具取决于上一步搜索结果”的动态任务该怎么处理？
+    A: 这是一个非常核心的工程落地问题！CaMeL 并非退化成死板的静态流水线，而是通过“强类型结构化提取 + 受控条件分支”来支持动态多步任务： 首先，对于绝大多数结构化决策（例如“先搜索工单列表，若存在严重级别为 P0 的工单则呼叫值班工程师”），P-LLM 会在受限 Python 计划中调用 Q-LLM 将不可信工单文本解析为严格受限的 Pydantic 模型（如 class TicketMeta: severity: Literal["P0", "P1", "P2"]; ticket_id: int），随后在解释器中直接编写 if meta.severity == "P0": page_onc...
+  * Q: Q2: 既然 `notifications/tools/list_changed` 容易引发 MCP Rug-Pull 攻击，为什么不直接在客户端代码里彻底禁用动态刷新？合法的动态 MCP 工具该如何兼容锁定机制？
+    A: 在面向高敏企业环境的生产客户端中，默认拒绝未签名的 notifications/tools/list_changed 实时变更确实是最佳实践。但 MCP 协议设计该通知也有合法的工程场景——例如一个数据库调试 MCP Server 在用户切换连接的 Schema 后动态挂载对应的查询辅助工具，或者插件网关按角色权限按需加载工具集。要同时兼顾动态性与防篡改，生产实践采用“预签名清单（Signed Tool Manifest）+ 版本化白名单”机制：企业内部合法动态 Server 在 CI/CD 发布时，由构建流水线使用组织私钥对所有可能动态出现的工具 (name, description, in...
+  * Q: Q3: 大模型厂商已经在训练阶段引入了“指令层级（Instruction Hierarchy，即 System > User > Tool 权重优先级）”，这是否意味着未来不再需要 Dual-LLM 和 `CaMeL` 这类重型架构？
+    A: 恰恰相反，模型内生的指令层级训练与架构级污点隔离是互补关系，前者永远无法替代后者。 OpenAI 与 Anthropic 等团队推进的 Instruction Hierarchy 微调确实显著压低了常规浅层提示注入的成功率，使模型在面对明显的冲突指令（如 Tool 输出要求覆盖 System 规则）时更具韧性。但从计算机安全第一性原理来看，神经网络权重中的优先级本质上仍是高维连续向量空间里的概率偏好（Probabilistic Preference），而非离散数学意义上的访问控制矩阵：一方面，攻击者无需直接对抗 System Prompt，只需把恶意指令伪装成“完成用户当前任务所必需的合法子步...
+
+### [分布式训练第一性原理：ZeRO/FSDP2、TP、PP 与 Context Parallelism](https://blog.llmgo.top/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/)
+- 发布日期: 2026-11-18 | 标签: 分布式训练 | 预计阅读: 预计阅读 50 分钟 | 字数: 约 12261 字
+- 概述: 从混合精度显存账本出发，推导 ZeRO-1/2/3 与 PyTorch FSDP2 DTensor、TP/SP、1F1B/DualPipe 流水线气泡及 ZigZag 环状注意力通信数学与配置。
+- 核心 FAQ 解答:
+  * Q: Q1: 既然 70B 模型的静态状态在 64 卡纯 FSDP2 (`TP=1`) 下单卡只占 16.3 GiB，为什么在 32K 序列长度下经常莫名触发 CUDA OOM，必须开启 `TP=4/8 + SP`？
+    A: 因为压垮单卡显存的往往不是静态分片，而是未分片的瞬态峰值（Transient Peak）！在 TP=1 的纯 FSDP2 下，有两座大山无法靠增大 $N_d$ 消除：第一，单层前反向必须在单卡完整重构当前层的 SwiGLU 中间激活与未检查点张量；第二，也是最致命的输出层词表交叉熵峰值（Vocabulary Logits Spike）——以 Qwen2.5-72B（词表 $V = 152,064$）为例，单条 $s = 32,768$ 序列一旦在输出层物化完整的 [1, 32768, 152064] FP32 Logits 及其反向梯度，瞬时显存便飙升至 $32768 \times 15206...
+  * Q: Q2: 在 FSDP2 或 ZeRO-3 中同时开启激活检查点（Activation Checkpointing），反向传播重算前向时会导致单步通信量从 `3Ψ` 恶化到 `4Ψ` 吗？
+    A: 取决于检查点包装粒度（Wrapping Order）是否与 FSDP 分片单元严格对齐！ 如果你错误地把跨多层的大模块包进一个 checkpoint 块，而内部每层各自做 fully_shard，那么反向传播开始重算这几层时，每层都要额外触发一次 AllGather 并立即释放，等到真正回传梯度时还要再 AllGather 一次，通信量确实会从 $3\Psi$ 劣化至 $4\Psi$！正确做法是：对每一个 TransformerBlock 先套单层激活检查点，再对该 TransformerBlock 调用 fully_shard。此时在反向阶段，FSDP2 针对该层只做 1 次 AllGath...
+  * Q: Q3: 为什么上文代码里将 FSDP2 的 `MixedPrecisionPolicy` 配置为 `reduce_dtype=torch.float32`？这比 `bfloat16` 归约多花了一倍梯度带宽，值得吗？
+    A: 在 64 卡以上的大规模分布式预训练与强化学习后训练中，非常值得，甚至是防发散刚需。当全局数据并行度 $N_d \ge 64$ 时，若采用预除以 $N_d$ 的平均归约或小微批次累加，许多层（尤其是残差深层与 Embedding 层）的单卡局部梯度幅值本身已小至 $10^{-5}\text{--}10^{-4}$；在 BF16 仅有 7 位尾数的限制下，跨 64–256 张卡逐跳累加会产生严重的非结合律截断误差乃至梯度归零。开启 reduce_dtype=torch.float32 虽然将 ReduceScatter 流量从 $2\Psi\text{ Bytes}$ 增至 $4\Psi\tex...
+
 ### [大模型后训练分布式强化学习架构实战：基于 verl 与 3D-HybridEngine 的训推混布、秒级重分片与长尾异步调度](https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/)
 - 发布日期: 2026-11-18 | 标签: 分布式 RL | 预计阅读: 预计阅读 47 分钟 | 字数: 约 11505 字
 - 概述: 深度剖析百卡级大模型后训练 RL 系统架构：从 Qwen2.5-72B 显存与算力第一性原理账本出发，拆解 verl 3D-HybridEngine 秒级权重重分片、vLLM Sleep Mode 虚拟显存卸载、DAPO 与 Partial Rollout 长尾消除及多机实战配置。
@@ -212,6 +242,28 @@
     A: 这是大规模 RL 工程中最隐蔽的深水区问题，根源在于推理引擎与训练框架的算子数值非确定性差异：推理侧使用了融合的 PagedAttention、自定义 RoPE 算子乃至 FP8 权重量化，且动态批处理的归约顺序随并发请求实时变化；而训练侧使用的是 1D 去填充 FlashAttention 与标准 BF16 矩阵乘。在 16k–64k 步自回归累积后，微小的 BF16 舍入误差会导致 $\frac{\pi_\theta}{\pi_{\text{vllm}}}$ 偏离 $1.0$。因此，在严格 On-Policy 模式下，标准做法是在进入阶段二时，用训练侧的 Actor FSDP 模型对已生成...
   * Q: Q3: 启用 `actor.fsdp_config.optimizer_offload=True` 把数千亿字节的 AdamW 状态卸载到 CPU 内存，会不会让 PCIe 带宽成为训练性能瓶颈？
     A: 在 SFT 预训练中确实会，因为 SFT 每步前反向仅耗时 $1\text{--}2\text{ s}$，PCIe 传输占比极高；但在后训练强化学习（尤其是长思维链 GRPO）中完全不会成为瓶颈！算一笔精确的时间账：在 64 卡 H100（PCIe Gen5 $\times 16$，单卡双向带宽 $128\text{ GB/s}$，单向实测约 $50\text{ GB/s}$）上，72.7B 模型的 FP32 主权重 + AdamW 状态分摊到单卡仅为 $(270.83 + 541.66) / 64 \approx 12.70\text{ GiB/GPU}$。每个 PPO Mini-Batch...
+
+### [大模型 GPU 算子编程实战：从 CUDA Warp 规约到 Triton 融合内核](https://blog.llmgo.top/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/)
+- 发布日期: 2026-11-18 | 标签: 算子工程 | 预计阅读: 预计阅读 44 分钟 | 字数: 约 10882 字
+- 概述: 深入 GPU 寄存器、Shared Memory Bank 冲突与 CUDA Warp 原语，手写融合残差 RMSNorm + 动态 FP8 量化的 Triton 生产级算子并结合 Nsight 调优。
+- 核心 FAQ 解答:
+  * Q: Q1: 既然 PyTorch 2.x 自带了 `torch.compile` (TorchInductor) 自动算子融合，为什么生产推理引擎仍然要手写 Triton 与 CUDA C++ 算子？
+    A: torch.compile 底层的 TorchInductor 在处理纯逐元素（Pointwise）链条与简单规约时确实能自动生成不错的 Triton 代码，但在大模型核心推理热路径上仍存在三道难以跨越的鸿沟： 1. 复杂跨流状态与双规约调度局限：在我们的“残差原位/双路写回 + RMSNorm 均方规约 + 动态 AbsMax 二次规约 + e4m3fn 饱和截断”复合图中，通用编译器往往难以稳健地保证在任意批次形状下都将其合并进严格单次 HBM 读取的同一个寄存器生命周期内，稍有图变动便可能退化拆分为两个子内核。 2. 启动编译耗时与动态 Shape 泛化成本：在线服务需要同时应对变长 T...
+  * Q: Q2: 为什么大模型激活量化普遍采用 `float8_e4m3fn`（上限 448.0）配合逐 Token 动态缩放，而不是动态范围更大的 `float8_e5m2` 或静态量化？
+    A: 这源于尾数精度与激活离群值（Activation Outliers）之间的严密数学权衡（详见 [大模型量化精度选型指南](/articles/quantization-precision-guide/)）：  e4m3fn vs e5m2：e5m2 虽然拥有 5 位指数（最大有限值高达 57344.0），但仅剩 2 位尾数，有效相对精度过于粗糙，直接用于前向激活与权重会导致显著的 PPL（困惑度）劣化，因此 e5m2 通常仅用于反向传播梯度；而 e4m3fn 拥有 3 位尾数，精度翻倍，是前向推理的绝对主力。  为什么必须 Per-Token 动态缩放：大模型不同 Token（尤其是句首 BO...
+  * Q: Q3: 如果未来超宽模型的隐藏维度扩展到 32,768 甚至 65,536，超过了单 CTA 寄存器容量上限，本文的 Triton 内核该如何演进？
+    A: 当隐藏维度 $D$ 大到 BLOCK_N = triton.next_power_of_2(D) 无法在单次加载中塞进 SM 的 256 KB 寄存器文件（即触发 n_spills > 0）时，需要将单块全载模式重构为片上分块循环模式（Tiled Column Loop）： 1. 将固定分块设为 BLOCK_N = 2048 或 4096； 2. 第一遍循环（Pass 1）：沿列方向以步长 BLOCK_N 流式读取 x 与 residual，在循环内写出 h_out 并累加标量寄存器 sq_sum += tl.sum(h  h, axis=0)。注意此时 h_out（尺寸仅 $65536 \t...
+
+### [K8s AI 推理编排：LeaderWorkerSet、推理网关与 KV 感知路由](https://blog.llmgo.top/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/)
+- 发布日期: 2026-11-18 | 标签: AI 推理编排 | 预计阅读: 预计阅读 38 分钟 | 字数: 约 9293 字
+- 概述: 解析传统 Deployment 与轮询网关在大模型服务中的失效根因，实战落地 K8s LeaderWorkerSet 多机编排、Gateway API Inference Extension 与 KV 缓存感知路由。
+- 核心 FAQ 解答:
+  * Q: Q1: Envoy 每次请求都通过 ext_proc 调一次 EPP 并解析长 Prompt，EPP 会成为单点故障或显著拖慢延迟吗？
+    A: 不会。首先在延迟层面，EPP 采用 Go 编写并在内存中直接对 UTF-8 字节块或轻量分词前缀计算快速非加密滚动哈希（通常还可配置前缀采样上限，如仅索引前 16K~32K Tokens），配合异步后台拉取 /metrics，单次本地 gRPC Process 耗时稳定在 0.5~1.8 ms，不足大模型数百毫秒 TTFT 的 $0.5\%$。其次在高可用层面，EPP 本身可多副本水平部署，且 InferencePool 原生支持 failureMode: FailOpen——一旦 EPP 升级抖动或不可达，Envoy 会自动绕过外部处理器并无缝退化为对健康 Leader Pods 的常规负载...
+  * Q: Q2: LWS 开启 `RecreateGroupOnPodRestart` 后，单台 Worker 偶发崩溃会连坐重启整组 32 张 GPU，这样代价是不是太大了？
+    A: 恰恰相反，这是由底层 NCCL 集合通信物理机制决定的最优解。在紧耦合张量并行（TP）与流水线并行（PP）中，所有 Rank 共享同步的 CUDA Stream 与 ncclComm_t 通信句柄，并不支持运行期单节点热插拔重连；一旦 Worker 3 发生 Xid 掉卡或进程崩溃，其余 3 台存活节点的 GPU 内核只会无限期阻塞在等待通信对端响应的状态，白白占着 24 张 GPU 却无法产出任何 Token。整组原子重建能在秒级释放僵死句柄，配合本地 NVMe 权重缓存可在 <35s 内拉起全新可用组，期间流量由其余健康 LWS replicas 平滑承接。...
+  * Q: Q3: 在 P/D 分离的 Kubernetes 架构下，Prefill LWS 和 Decode LWS 应该共用同一个扩缩容策略还是独立弹性？
+    A: 必须配置完全独立的 KEDA ScaledObject。因为两池的物理瓶颈正交且随业务形态动态漂移：当线上涌入大量 RAG 长文档阅读（输入 32K、输出仅 200 字）时，算力密集的 Prefill 池队列迅速堆积，此时应根据输入排队数与 TTFT 水位单独横向扩容 prefill-lws；而当流量切换为长思维链代码推理（输入仅 500 字、自回归输出 16K 字）时，Decode 池 HBM KV 占用率（vllm:kv_cache_usage_perc）率先告警，此时只需独立扩容 decode-lws。独立弹性使集群能够全天候动态拟合最优的动态 P:D 配比，相比同构混部节省 $30\%...
 
 ### [机柜级超节点与集合通信全栈剖析：从 GB200/GB300 NVL72 铜缆背板、昇腾全光互联到 NCCL NVLS 与 MoE All-to-All 极限调优](https://blog.llmgo.top/articles/rack-scale-superpod-nvl72-nccl-collectives/)
 - 发布日期: 2026-11-18 | 标签: 超节点架构 | 预计阅读: 预计阅读 59 分钟 | 字数: 约 14651 字
@@ -445,7 +497,7 @@
     A: Pod 健康探针（Liveness/Readiness Probe）只能检测本节点内的容器存活性，它无法区分“节点网络单向中断”与“容器真正死亡”。 在单向网络分区场景下，旧主节点的容器进程实际上还在正常运转，且完全可能继续接收来自同网段客户端的写请求。如果仅靠 K8s 判定其不健康并在新节点拉起新主库，就会导致两个主库同时对不同的数据卷进行写入，造成不可逆的数据冲突破坏。 Node Fencing 的必要性：它在物理或存储控制层面强制掐断旧节点的写入权限（如 IPMI 强制关电或存储锁剥离），确保旧节点在绝对无法写入后，才允许新主库上线。...
 
 ### [K8s GPU 调度：GPU Operator、MIG 与推理扩缩](https://blog.llmgo.top/articles/k8s-gpu-operator-ai-inference-scheduling/)
-- 发布日期: 2026-09-25 | 标签: AI 智算调度 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4835 字
+- 发布日期: 2026-09-25 | 标签: AI 智算调度 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4895 字
 - 概述: 说明 GPU Operator 如何安装驱动与设备插件，MIG 如何切分 GPU，以及拓扑感知调度怎样扩缩 vLLM 和 SGLang，面向在线推理。
 - 核心 FAQ 解答:
   * Q: Q1: vLLM 预分配显存与 Kubernetes OOM 有什么关系？
@@ -453,7 +505,7 @@
   * Q: Q2: Topology Manager 能保证选到同一组 NVLink GPU 吗？
     A: 不能直接保证。它组合 CPU、内存及设备插件的 NUMA hints 做节点准入，不是任意 NVLink 连通图的调度器。不同服务器拓扑不同；例如 DGX H100 的八张 GPU 经 NVSwitch 全互联，不能一概画成两个四卡岛。使用 nvidia-smi topo -m 和厂商文档核对实际连接；需要 GPU/NIC 联合拓扑约束时，确认设备驱动及调度扩展真正提供了对应能力。参见 [DGX H100 硬件说明](https://docs.nvidia.com/dgx/dgxh100-user-guide/introduction-to-dgxh100.html)。...
   * Q: Q3: DRA 是否自动解决所有 GPU 与网卡拓扑问题？
-    A: 不会。DRA 允许通过 ResourceClaim 和驱动发布的设备属性表达更丰富的选择条件，但可用属性、跨设备约束与分配行为取决于 Kubernetes 版本和驱动实现。必须确认 GPU/NIC 驱动确实公布所需拓扑信息，并验证调度与准入行为；不能仅因启用 DRA 就保证最佳 NVLink 组合或无跨 NUMA 访问。参见 [Kubernetes DRA 文档](https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/)。...
+    A: 不会。DRA 允许通过 ResourceClaim 和驱动发布的设备属性表达更丰富的选择条件，但可用属性、跨设备约束与分配行为取决于 Kubernetes 版本和驱动实现。必须确认 GPU/NIC 驱动确实公布所需拓扑信息，并验证调度与准入行为；不能仅因启用 DRA 就保证最佳 NVLink 组合或无跨 NUMA 访问。参见 [Kubernetes DRA 文档](https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/)。若需进一步将多机 TP/EP 超节点实例与 KV Cache...
 
 ### [K8s 网络：CNI、Cilium eBPF 与 Gateway API](https://blog.llmgo.top/articles/k8s-networking-cni-cilium-ebpf-gateway-api/)
 - 发布日期: 2026-09-25 | 标签: K8s 网络 | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4439 字
@@ -544,7 +596,7 @@
     A: 在配备 M 系列芯片的苹果设备（如 Mac Studio / MacBook Pro）上，CPU 与 GPU 共享同一组高带宽物理 LPDDR 内存条（统一内存架构，带宽可达 400~800 GB/s）。 在传统 PC 或数据中心服务器中，模型必须从宿主机内存（Host RAM）经过漫长的 PCIe 总线拷贝到独立的显存（GPU HBM）中才能计算。而在统一内存架构下，llama.cpp 借助操作系统的 mmap() 系统调用，直接让 GPU 核心就地读取内存中的模型权重，完全省去了漫长的加载显存搬运过程，且能直接加载超过单卡独立显存上限（如 128GB 内存跑 70B 模型）的庞大参数。但在...
 
 ### [Roofline 模型：Prefill 与 Decode 的差异](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/)
-- 发布日期: 2026-09-24 | 标签: 算力建模 | 预计阅读: 预计阅读 22 分钟 | 字数: 约 5456 字
+- 发布日期: 2026-09-24 | 标签: 算力建模 | 预计阅读: 预计阅读 23 分钟 | 字数: 约 5529 字
 - 概述: 用 Roofline 模型说明 Prefill 更吃算力、Decode 更吃显存带宽，以及这种差别如何分开 TTFT 和 TPOT 两个延迟。
 - 核心 FAQ 解答:
   * Q: Q1: 既然 Decode 阶段是显存带宽受限，为什么不无限增大 Batch Size 把算力跑满？
@@ -903,7 +955,7 @@
     A: 严禁采用简单的全量历史滑动窗口截断，这会导致关键系统指令或早期事实丢失。推荐采用分级治理：工具调用结果及时摘要化、利用 Working Memory 显式沉淀已验证结论、对早期非核心轮次进行周期性压缩归纳（Digest）。更系统化的上下文治理方案可参阅 [上下文工程全指南](/articles/context-engineering-guide/)。...
 
 ### [MCP 协议深度解析：AI 的「USB-C 接口」](https://blog.llmgo.top/articles/mcp-guide/)
-- 发布日期: 2026-03-12 | 标签: MCP 协议 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4755 字
+- 发布日期: 2026-03-12 | 标签: MCP 协议 | 预计阅读: 预计阅读 20 分钟 | 字数: 约 4829 字
 - 概述: 从架构原理到实战开发，完整解析 Model Context Protocol。含 Python SDK 实战、安全机制、生态对比。
 - 核心 FAQ 解答:
   * Q: Q1: MCP 和传统 API 有什么本质区别？
@@ -985,7 +1037,7 @@
     A: 多模态模型通常基于 Vision Transformer (ViT) 将图片切割为 Patch。高分辨率图像会导致 Token 消耗成倍增加，因此建议在后端执行降采样，以平衡成本和解析精度。...
 
 ### [大模型微调全流程指南：底层工作原理、高价值落地用例与生产实战](https://blog.llmgo.top/articles/fine-tuning-guide/)
-- 发布日期: 2026-02-25 | 标签: 全流程微调 | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4267 字
+- 发布日期: 2026-02-25 | 标签: 全流程微调 | 预计阅读: 预计阅读 18 分钟 | 字数: 约 4323 字
 - 概述: 深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。
 - 核心 FAQ 解答:
   * Q: Q1: 通俗解释大模型微调的底层工作机制是什么？
@@ -1008,6 +1060,28 @@
   * Q: Q3: When cloning 100 sibling MicroVMs from a single snapshot, how do we prevent duplicate UUIDs, TLS nonce collisions, and frozen system clocks?
     A: Snapshot cloning creates an identical byte-for-byte copy of guest RAM—meaning the Linux kernel's CSPRNG entropy pool and user-space PRNG states (Python random, OpenSSL state) start completely identical across all 100 clones, while the guest wall clock wakes up frozen at the timestamp when the snapsh...
 
+### [AI Agent Security: Indirect Prompt Injection, MCP Poisoning & Least Privilege](https://blog.llmgo.top/en/articles/agent-security-prompt-injection-mcp-permission-governance/)
+- Date: 2026-11-18 | Tag: Agent Security | Read: 20 min read | Words: 4763 words
+- Summary: Dissecting the Lethal Trifecta, indirect prompt injection, and MCP tool poisoning/rug-pull attacks, with runnable CaMeL taint-tracking and capability-scoped defenses.
+- Key FAQ Insights:
+  * Q: Q1: In `CaMeL`, if the Privileged Planner (`P-LLM`) never sees raw tool outputs, how can an agent execute dynamic multi-step tasks where the next action depends on previous search or query results?
+    A: CaMeL handles data-dependent workflows without exposing P-LLM to raw untrusted prose through strongly typed schema extraction paired with taint-aware branching. For structured decisions—such as "Fetch open support tickets and page the on-call engineer if any ticket has P0 severity"—P-LLM emits a res...
+  * Q: Q2: Why maintain a SHA-256 MCP lockfile instead of disabling `notifications/tools/list_changed` altogether? How do legitimate dynamic MCP servers work under pinning?
+    A: Disabling unsigned mid-session notifications/tools/list_changed updates by default is indeed the right baseline for high-security production hosts. However, dynamic tool registration has legitimate enterprise use cases—such as a database administration MCP server exposing schema-specific inspection ...
+  * Q: Q3: Model providers now train an "Instruction Hierarchy" (`System > User > Tool`) directly into LLM weights. Does weight-level alignment make Dual-LLM and `CaMeL` obsolete?
+    A: No—weight-level Instruction Hierarchy and architectural taint tracking are complementary layers, never substitutes. Training models to prioritize system instructions over tool outputs meaningfully raises the bar against naive "Ignore previous instructions" payloads and improves everyday robustness. ...
+
+### [Distributed LLM Training: ZeRO/FSDP2, TP, Pipeline & Context Parallelism](https://blog.llmgo.top/en/articles/distributed-llm-training-4d-parallelism-zero-fsdp2-pp-cp/)
+- Date: 2026-11-18 | Tag: Distributed Training | Read: 25 min read | Words: 6085 words
+- Summary: First-principles guide to 4D LLM training: mixed-precision 16Ψ memory math, ZeRO-1/2/3 vs PyTorch FSDP2 DTensor, TP/SP, 1F1B/DualPipe bubbles, and ZigZag Context Parallelism.
+- Key FAQ Insights:
+  * Q: Q1: Since a 70B model's static state takes only 16.3 GiB/GPU under 64-GPU `FSDP2` (`TP=1`), why does it suddenly OOM at 32K sequence length unless we enable `TP=4/8 + SP`?
+    A: Because single-GPU HBM ceilings are broken by unsharded transient spikes, not persistent shards! Under TP=1, increasing $N_d$ cannot shrink two massive per-GPU buffers: first, the active layer's uncheckpointed SwiGLU intermediate tensors reconstructed during backward; second—and most lethal—the outp...
+  * Q: Q2: When combining Activation Checkpointing with `FSDP2` or `ZeRO-3`, does recomputing the forward pass during backward trigger an extra `AllGather` (`4Ψ` instead of `3Ψ`)?
+    A: Only if your checkpoint wrapper spans across multiple fully_shard units! If you wrap a multi-layer sequential stage inside one checkpoint call while applying fully_shard per inner TransformerBlock, backward recomputation must AllGather and free each block's weights once during recompute and again du...
+  * Q: Q3: Why set `reduce_dtype=torch.float32` in `FSDP2` `MixedPrecisionPolicy` when it doubles `ReduceScatter` traffic compared to BF16?
+    A: At data-parallel scales of $N_d \ge 64$, FP32 gradient reduction is critical for numerical stability. When per-rank gradients are pre-divided by $N_d$ or accumulated across microbatches, deep residual and embedding gradients routinely dip to $10^{-5}\text{--}10^{-4}$. Summing 64–256 BF16 tensors (7 ...
+
 ### [Distributed RL Post-Training with verl: Colocation, Weight Resharding & Async Rollouts](https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/)
 - Date: 2026-11-18 | Tag: Distributed RL | Read: 23 min read | Words: 5690 words
 - Summary: Deep dive into multi-node LLM RL post-training systems: first-principles 72B VRAM math, verl 3D-HybridEngine zero-redundancy resharding, vLLM Sleep Mode cuMemUnmap offloading, DAPO, Partial Rollouts, and production configs.
@@ -1018,6 +1092,28 @@
     A: This subtle discrepancy stems from kernel-level numerical non-determinism between inference engines and training frameworks: Rollout engines execute fused PagedAttention kernels, custom RoPE ops, or FP8 weight quantization under dynamically changing continuous-batching reduction orders, whereas Acto...
   * Q: Q3: Does offloading 800+ GiB of AdamW optimizer states via `actor.fsdp_config.optimizer_offload=True` turn PCIe bandwidth into a major bottleneck?
     A: In short-context SFT, yes—because SFT forward/backward steps finish in $1\text{--}2\text{ s}$, making PCIe transfers a major fraction of step time. In Long-CoT RL post-training, however, PCIe overhead is virtually negligible! Let us verify the exact math: across 64× H100 GPUs (PCIe Gen5 $\times 16$,...
+
+### [LLM GPU Kernel Engineering: CUDA Warp Primitives to Triton Fused Kernels](https://blog.llmgo.top/en/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/)
+- Date: 2026-11-18 | Tag: GPU Kernels | Read: 23 min read | Words: 5723 words
+- Summary: Master GPU registers, Shared Memory bank conflicts, and CUDA warp shuffles, then build a production Triton fused Residual + RMSNorm + dynamic FP8 kernel.
+- Key FAQ Insights:
+  * Q: Q1: Since PyTorch 2.x ships `torch.compile` (TorchInductor) for automatic fusion, why do production engines still hand-write Triton and CUDA C++ kernels?
+    A: TorchInductor generates competitive Triton kernels for straightforward pointwise chains, yet falls short on flagship LLM hot paths for three reasons: 1. Multi-Output Stream Mutation + Dual Reductions: In graphs combining residual writeback, FP32 RMS variance reduction, dynamic per-token AbsMax reduc...
+  * Q: Q2: Why does LLM inference standardize on `float8_e4m3fn` (max 448.0) with dynamic per-token scaling rather than wider-range `float8_e5m2` or static tensor scaling?
+    A: This choice reflects the trade-off between mantissa precision and activation outliers (see our [LLM Quantization Precision Guide](/en/articles/quantization-precision-guide/)):  e4m3fn vs. e5m2: While e5m2 offers 5 exponent bits (max finite value 57,344.0), it retains only 2 mantissa bits, introducin...
+  * Q: Q3: How should our Triton `fused_add_rmsnorm_fp8_kernel` evolve if ultra-wide models push hidden dimension to 32,768 or 65,536, exceeding single-CTA register capacity?
+    A: Once $D$ grows large enough that BLOCK_N = triton.next_power_of_2(D) triggers register spills (n_spills > 0), refactor the single-tile kernel into a two-pass L2-resident tiled loop (BLOCK_N = 2048 or 4096): 1. Pass 1 (Tiled Stream + Algebraic Homogeneity Trick): Loop over columns in chunks of BLOCK_...
+
+### [Kubernetes AI Serving: LeaderWorkerSet, Inference Gateway & KV Routing](https://blog.llmgo.top/en/articles/k8s-ai-inference-gateway-lws-kv-cache-routing/)
+- Date: 2026-11-18 | Tag: AI Serving K8s | Read: 19 min read | Words: 4663 words
+- Summary: Why Kubernetes Deployments and round-robin Ingress fail LLMs, and how to deploy multi-node LeaderWorkerSet, Gateway API Inference Extension, and KV-aware routing.
+- Key FAQ Insights:
+  * Q: Q1: Since Envoy invokes EPP over ext_proc on every request, does EPP become a single point of failure or add tail latency on 64K-token prompts?
+    A: No. On latency, EPP is written in Go and computes fast non-cryptographic rolling hashes over UTF-8 chunks or bounded token prefixes (typically configurable to index the first 16K–32K tokens) while scraping /metrics asynchronously in the background—keeping per-request local gRPC Process latency at 0....
+  * Q: Q2: With `RecreateGroupOnPodRestart` enabled on a 4-node LWS, isn't restarting all 32 GPUs when a single Worker crashes overly destructive?
+    A: It is actually the fastest path back to healthy capacity due to how collective GPU communication works. Tightly coupled Tensor and Pipeline Parallelism share synchronized CUDA streams and ncclComm_t rings that cannot dynamically hot-swap a dead rank mid-execution. If Worker 3 suffers an Xid fault or...
+  * Q: Q3: In P/D disaggregated Kubernetes clusters, should Prefill LWS and Decode LWS share one autoscaler or scale independently?
+    A: Always configure independent KEDA ScaledObject policies for each pool because their bottleneck resources are orthogonal and shift dynamically with workload shape. During RAG document ingestion spikes (32K input tokens, 200 output tokens), compute-bound Prefill queues grow rapidly, triggering prefill...
 
 ### [Rack-Scale SuperPoD & NCCL Collectives: GB200 NVL72, Optical Fabrics & MoE All-to-All](https://blog.llmgo.top/en/articles/rack-scale-superpod-nvl72-nccl-collectives/)
 - Date: 2026-11-18 | Tag: SuperPoD Infra | Read: 29 min read | Words: 7201 words
@@ -1251,7 +1347,7 @@
     A: Liveness probes evaluate process health locally within a node; they cannot distinguish between container failure and an asymmetric network partition. If a primary node becomes isolated from the control plane while remaining reachable by local clients, promoting a secondary node without fencing cause...
 
 ### [Kubernetes GPU Scheduling with the GPU Operator](https://blog.llmgo.top/en/articles/k8s-gpu-operator-ai-inference-scheduling/)
-- Date: 2026-09-25 | Tag: AI GPU Scheduling | Read: 10 min read | Words: 2296 words
+- Date: 2026-09-25 | Tag: AI GPU Scheduling | Read: 10 min read | Words: 2323 words
 - Summary: How the GPU Operator installs drivers and the device plugin, how MIG slices a GPU, and how topology-aware scheduling scales vLLM and SGLang inference services.
 - Key FAQ Insights:
   * Q: Q1: How does vLLM VRAM preallocation relate to Kubernetes OOM?
@@ -1350,7 +1446,7 @@
     A: On Apple Silicon devices (e.g., Mac Studio with M-series chips), the CPU and GPU share a unified pool of high-bandwidth LPDDR memory (achieving 400~800 GB/s bandwidth). In standard PC or data center servers, model weights must be copied from host system RAM across the PCIe bus into discrete GPU HBM ...
 
 ### [Roofline Model: Why Prefill and Decode Differ](https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/)
-- Date: 2026-09-24 | Tag: Roofline Modeling | Read: 12 min read | Words: 2836 words
+- Date: 2026-09-24 | Tag: Roofline Modeling | Read: 12 min read | Words: 2865 words
 - Summary: Use the roofline model to see why prefill is compute-bound while decode is memory-bound, and how that splits time-to-first-token from per-token latency.
 - Key FAQ Insights:
   * Q: Q1: If decode is memory-bandwidth bound, why not increase batch size indefinitely to saturate the compute units?
@@ -1709,7 +1805,7 @@
     A: Avoid naive sliding-window truncations that discard foundational system instructions or critical historical constraints. Instead, employ hierarchical context hygiene: prune verbose raw tool outputs into compact summaries, persist stable conclusions into dedicated working memory structures, and perio...
 
 ### [MCP Deep Dive: The USB-C Port for AI](https://blog.llmgo.top/en/articles/mcp-guide/)
-- Date: 2026-03-12 | Tag: MCP Protocol | Read: 11 min read | Words: 2723 words
+- Date: 2026-03-12 | Tag: MCP Protocol | Read: 12 min read | Words: 2752 words
 - Summary: From architecture to hands-on development, a complete guide to the Model Context Protocol. Includes Python SDK tutorial, security mechanisms, and ecosystem comparison.
 - Key FAQ Insights:
   * Q: Q1: How does MCP fundamentally differ from traditional APIs?
@@ -1791,7 +1887,7 @@
     A: Multimodal models typically split images into Patches based on Vision Transformers (ViT). High-resolution images lead to massive token consumption, so performing downsampling in the backend is recommended to balance costs and parsing precision....
 
 ### [LLM Fine-Tuning Guide: How It Works, Real-World Use Cases, and Workflows](https://blog.llmgo.top/en/articles/fine-tuning-guide/)
-- Date: 2026-02-25 | Tag: Fine-Tuning | Read: 10 min read | Words: 2307 words
+- Date: 2026-02-25 | Tag: Fine-Tuning | Read: 10 min read | Words: 2336 words
 - Summary: Discover how LLM fine-tuning works under the hood, explore proven enterprise use cases (LoRA, QLoRA, Full Fine-Tuning), and learn end-to-end workflows from data preparation to vLLM serving.
 - Key FAQ Insights:
   * Q: Q1: How does LLM fine-tuning work in simple terms?

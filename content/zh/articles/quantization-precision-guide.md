@@ -5,6 +5,8 @@ date: 2026-03-31
 tag: 量化理论
 tagClass: tag-cyan
 category: 推理系统
+series: llm-inference
+seriesOrder: 10
 description: "区分 FP8、INT8、INT4 与 NF4 作用在权重、激活还是 KV 上，并说明显存占用、推理速度和精度应当分别怎么验收，避免只看单一分数。"
 featured: true
 featuredStats:

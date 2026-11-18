@@ -5,6 +5,8 @@ date: 2026-04-14
 tag: Serving & Deployment
 tagClass: tag-cyan
 category: Inference Systems
+series: llm-inference
+seriesOrder: 17
 description: "How to serve online with vLLM: PagedAttention, continuous batching, prefix caching, an OpenAI-compatible API, tuning, token billing, and Docker monitoring."
 featured: true
 featuredStats:

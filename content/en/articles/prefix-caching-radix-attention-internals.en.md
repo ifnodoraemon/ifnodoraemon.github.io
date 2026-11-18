@@ -6,7 +6,7 @@ tag: Prefix Caching
 tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
-seriesOrder: 4
+seriesOrder: 5
 description: "How prefix caching reuses computed KV blocks by hash, and how SGLang RadixAttention matches those blocks on a radix tree and evicts leaves with an LRU policy."
 extraTags:
   - Prefix Caching

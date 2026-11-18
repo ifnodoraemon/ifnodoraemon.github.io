@@ -6,7 +6,7 @@ tag: Inference Systems
 tagClass: tag-purple
 category: Inference Systems
 series: llm-inference
-seriesOrder: 8
+seriesOrder: 14
 description: "Why prefill and decode belong on separate pools, how RDMA moves KV cache between those nodes, and how a cluster schedules the pooled cache across the cluster."
 extraTags:
   - Disaggregated Serving

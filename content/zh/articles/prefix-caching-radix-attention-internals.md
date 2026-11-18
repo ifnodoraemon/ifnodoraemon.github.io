@@ -6,7 +6,7 @@ tag: 前缀缓存
 tagClass: tag-cyan
 category: 推理系统
 series: llm-inference
-seriesOrder: 4
+seriesOrder: 5
 description: "说明前缀缓存如何用块哈希复用已算过的 KV，以及 SGLang RadixAttention 如何在基数树上匹配前缀并用 LRU 驱逐叶子。"
 extraTags:
   - Prefix Caching

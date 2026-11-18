@@ -6,7 +6,7 @@ tag: 并发调度
 tagClass: tag-cyan
 category: 推理系统
 series: llm-inference
-seriesOrder: 3
+seriesOrder: 4
 description: "说明连续批处理之后，一次超长 Prefill 为何仍会挡住其他请求的 Decode，以及 Chunked Prefill 如何把这段计算拆开穿插执行。"
 extraTags:
   - Continuous Batching

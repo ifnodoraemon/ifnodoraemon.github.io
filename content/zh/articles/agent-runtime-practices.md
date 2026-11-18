@@ -6,7 +6,7 @@ tag: 运行时规范
 tagClass: tag-purple
 category: AI Agent
 series: ai-agent
-seriesOrder: 3
+seriesOrder: 16
 description: 基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。
 extraTags:
   - Agent Runtime

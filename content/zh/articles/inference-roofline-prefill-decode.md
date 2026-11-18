@@ -6,7 +6,7 @@ tag: 算力建模
 tagClass: tag-cyan
 category: 推理系统
 series: llm-inference
-seriesOrder: 1
+seriesOrder: 2
 description: "用 Roofline 模型说明 Prefill 更吃算力、Decode 更吃显存带宽，以及这种差别如何分开 TTFT 和 TPOT 两个延迟。"
 extraTags:
   - Inference Engine
@@ -331,4 +331,4 @@ graph TD
 **FlashAttention 的核心收益在于通过 Tiling 分块将 $O(N^2)$ 的 Attention 中间结果留在 SRAM（片上高速缓存）中，避免向 HBM 频繁换入换出。**
 
 * 在 **Prefill 阶段**，序列长度 $N$ 很大，$N \times N$ 的 Attention Map 非常巨大，FlashAttention 能砍掉数十倍的 HBM 显存读写，收益极其恐怖；
-* 在 **Decode 阶段**，Query 长度仅仅为 ${1}$，计算实质上是 ${1} \times N$ 的向量矩阵乘法（GEMV），根本不存在庞大的 $N \times N$ 矩阵。Decode 阶段的核心开销是必须完整读取历史长度为 $N$ 的整个 KV Cache。即使使用了 FlashAttention 或 FlashInfer，这部分固定的 HBM $\rightarrow$ SRAM 搬运代价依然无法被消除，因此其对单步 Decode 的相对加速幅度天然弱于 Prefill。
+* 在 **Decode 阶段**，Query 长度仅仅为 ${1}$，计算实质上是 ${1} \times N$ 的向量矩阵乘法（GEMV），根本不存在庞大的 $N \times N$ 矩阵。Decode 阶段的核心开销是必须完整读取历史长度为 $N$ 的整个 KV Cache。即使使用了 FlashAttention 或 FlashInfer，这部分固定的 HBM $\rightarrow$ SRAM 搬运代价依然无法被消除，因此其对单步 Decode 的相对加速幅度天然弱于 Prefill。关于如何亲自使用 CUDA Warp 原语与 OpenAI Triton 编写消除 HBM 冗余往返的融合算子（如 Fused Residual + RMSNorm + FP8 Quant），请参阅专栏算子篇 [大模型 GPU 算子编程实战：从 CUDA Warp 规约到 Triton 融合内核](/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/)。

@@ -5,6 +5,8 @@ date: 2026-09-07
 tag: Architecture Evolution
 tagClass: tag-cyan
 category: Inference Systems
+series: llm-inference
+seriesOrder: 9
 description: "Rigorous breakdown of Kimi Delta Attention (KDA) gated delta-rule recurrent states, DeepSeek MLA latent caches, and V4 CSA/HCA sequence compression, with exact memory formulas for Kimi K3/K3.1 hybrids."
 updated: 2026-11-18
 ---

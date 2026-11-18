@@ -5,6 +5,8 @@ date: 2026-09-07
 tag: 国产大模型
 tagClass: tag-amber
 category: 评测与趋势
+series: llm-post-training
+seriesOrder: 10
 description: "截至 2026 年 11 月 18 日的国产大模型架构与选型指南：对比 Qwen4-Max、Kimi K3.1 Pro、DeepSeek-V4-Pro / V4.1-Flash、MiniMax M3.1 Flash 与 GLM-5.3 的稀疏架构、同版本基准、原生量化格式与生产验收方案。"
 updated: 2026-11-18
 ---

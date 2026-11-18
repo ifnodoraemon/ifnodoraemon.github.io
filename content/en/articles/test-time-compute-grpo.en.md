@@ -5,6 +5,8 @@ date: 2026-09-18
 tag: RL & Reasoning
 tagClass: tag-emerald
 category: Model Engineering
+series: llm-post-training
+seriesOrder: 6
 description: "What test-time compute moves into the generation step, and how GRPO removes PPO's critic and updates the policy from advantages inside a sampled group."
 featured: true
 featuredStats:

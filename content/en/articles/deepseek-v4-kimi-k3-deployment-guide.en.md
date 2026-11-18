@@ -5,6 +5,8 @@ date: 2026-09-07
 tag: Cluster Deployment
 tagClass: tag-cyan
 category: Inference Systems
+series: llm-inference
+seriesOrder: 18
 description: "Deploy DeepSeek-V4 and Kimi K3 on a 4-node 32-GPU topology, budget memory per GPU, and debug NUMA, MoE skew, CUDA Graph false OOM, and PFC deadlock. See Ray."
 updated: 2026-10-21
 ---

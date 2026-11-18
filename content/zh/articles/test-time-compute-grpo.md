@@ -5,6 +5,8 @@ date: 2026-09-18
 tag: 强化学习
 tagClass: tag-emerald
 category: 模型工程
+series: llm-post-training
+seriesOrder: 6
 description: "说明测试时计算把算力挪到生成阶段之后，GRPO 如何去掉 PPO 的 Critic，改为用同一组采样的相对优势更新策略。文中给出可复现的实现要点。"
 featured: true
 featuredStats:

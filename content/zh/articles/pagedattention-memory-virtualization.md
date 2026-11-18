@@ -6,7 +6,7 @@ tag: 显存虚拟化
 tagClass: tag-cyan
 category: 推理系统
 series: llm-inference
-seriesOrder: 2
+seriesOrder: 3
 description: "说明 PagedAttention 如何把 KV Cache 分成逻辑块再映射到物理显存，从而减少碎片，并让多个序列以写时复制共享前缀，用于在线服务。"
 extraTags:
   - PagedAttention

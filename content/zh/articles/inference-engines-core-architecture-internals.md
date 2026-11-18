@@ -6,7 +6,7 @@ tag: 推理引擎
 tagClass: tag-emerald
 category: 推理系统
 series: llm-inference
-seriesOrder: 9
+seriesOrder: 15
 description: "对比 vLLM v1、SGLang、TensorRT-LLM 与 llama.cpp 的调度循环和执行后端，方便按吞吐、延迟和硬件条件选择推理引擎。"
 extraTags:
   - vLLM

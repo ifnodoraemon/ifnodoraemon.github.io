@@ -501,8 +501,8 @@ test('build outputs include valid llms.txt, enriched ItemList schema, and author
   const llmsContent = fs.readFileSync(llmsPath, 'utf-8');
   assert.match(llmsContent, /# 智算架构志 \/ LLM Systems Architecture/);
   assert.match(llmsContent, /AI Agent 生产级架构师手册/);
-  assert.match(llmsContent, /大模型推理引擎/);
-  assert.match(llmsContent, /现代大模型实战工程与技术选型手册/);
+  assert.match(llmsContent, /大模型推理系统全栈/);
+  assert.match(llmsContent, /大模型分布式训练、强化学习对齐与评估工程手册/);
   assert.match(llmsContent, /\/articles\/vllm-serving-guide\//);
   assert.match(llmsContent, /\/en\/articles\/vllm-serving-guide\//);
 

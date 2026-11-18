@@ -11,8 +11,8 @@ extraTags:
   - Sandbox
   - Error Recovery
 category: "AI Agent"
-series: "ai-agent"
-seriesOrder: 13
+series: ai-agent
+seriesOrder: 9
 updated: 2026-10-20
 ---
 

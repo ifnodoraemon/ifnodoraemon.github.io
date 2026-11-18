@@ -5,6 +5,8 @@ date: 2026-09-18
 tag: Speculative Decoding
 tagClass: tag-cyan
 category: Inference Systems
+series: llm-inference
+seriesOrder: 12
 description: "Why speculative decoding can speed generation without changing the sampling distribution, and how to enable draft models through EAGLE-3 in vLLM and SGLang."
 featured: true
 featuredStats:

@@ -5,6 +5,8 @@ date: 2026-10-21
 tag: Inference Architecture
 tagClass: tag-purple
 category: Inference Systems
+series: llm-inference
+seriesOrder: 19
 description: "DeepSeek's production inference stack: DeepInfer kernels, prefill-decode split, DSpark speculative decoding, SWA replay, and the deepseek-recipe protocol layer."
 ---
 
