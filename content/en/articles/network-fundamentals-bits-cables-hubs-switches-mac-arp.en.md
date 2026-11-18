@@ -1,5 +1,5 @@
 ---
-title: "Computer Networking from Scratch: Bits, Physical Media, Hub Collision Domains, and Switch MAC Addressing First Principles"
+title: "Networking Basics: Media, Collision Domains, and MAC"
 slug: network-fundamentals-bits-cables-hubs-switches-mac-arp
 date: 2026-09-28
 tag: Zero-Foundation Networking & Layer 2
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Computer Networking
 series: computer-networking
 seriesOrder: 1
-description: "Computer networking from scratch: physical voltages, twisted pairs, optical fibers, collision domains, Ethernet frames, Layer-2 switches, and ARP broadcast mechanics."
+description: "How computer networks start: bits on copper and fiber, hub collision domains, how switches learn MAC addresses, and how ARP resolves an IP to hardware."
 extraTags:
   - Computer Networking
   - Physical Layer

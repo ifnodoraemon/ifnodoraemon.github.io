@@ -1,5 +1,5 @@
 ---
-title: "容器网络全景解密：veth-pair、Linux Bridge、iptables NAT 与跨主机网络拓扑"
+title: "容器网络：veth、Linux Bridge 与 iptables"
 slug: container-networking-veth-bridge-iptables
 date: 2026-09-25
 tag: 容器网络
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 2
-description: "为什么隔离在独立 Network Namespace 中的容器能够与外界顺畅通信？深度拆解容器网络协议栈的底层传输机理：veth-pair 虚拟以太网对穿透隔离墙、Linux Bridge (docker0) 二层 MAC 学习与广播域隔离、iptables PREROUTING/POSTROUTING 端口映射与 MASQUERADE 动态源地址转换，全面对比 Host、Bridge、Macvlan 与 Overlay 跨主机网络拓扑性能与开销。"
+description: "说明容器报文如何经 veth-pair 离开网络命名空间，在 Linux Bridge 上按 MAC 交换，再由 iptables NAT 访问外网。"
 extraTags:
   - Container Networking
   - veth-pair

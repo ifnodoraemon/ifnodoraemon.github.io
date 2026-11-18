@@ -1,5 +1,5 @@
 ---
-title: "Docker Internals from First Principles: Linux Namespaces, cgroups v2, and OverlayFS Union Mounts Deep Dive"
+title: "Docker Internals: Namespaces, cgroups, and OverlayFS"
 slug: docker-internals-namespace-cgroups-overlayfs
 date: 2026-09-25
 tag: Container Internals
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 1
-description: "Docker internals from first principles: Linux Namespaces isolation, cgroups v2 resource limits, OverlayFS layered union mounts with CoW, and OCI runc execution."
+description: "A container is a restricted Linux process, not a small virtual machine: namespaces limit its view, cgroups v2 limit resources, and OverlayFS stores layers."
 extraTags:
   - Docker
   - Linux Kernel

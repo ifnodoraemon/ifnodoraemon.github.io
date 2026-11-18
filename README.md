@@ -18,15 +18,15 @@ Welcome to **LLM Systems Architecture (智算架构志)** — a bilingual (ZH/EN
 
 ## 🔥 Latest Flagship Architecture Deep Dives (2026.11 最新硬核研报)
 
-* **[大模型分布式强化学习后训练架构：基于 verl 的训推混部 (Colocation)、FSDP2 与 CUDA IPC 零拷贝权重同步实战](https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/)**  
-  👉 English: [Distributed RL Post-Training Architecture: Rollout-Training Colocation, FSDP2 & Zero-Copy Weight Sync with verl](https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/)
-* **[AI Agent 安全执行沙箱架构：基于 Firecracker MicroVM 的毫秒级快照克隆 (`userfaultfd`) 与高并发隔离实战](https://blog.llmgo.top/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/)**  
-  👉 English: [AI Agent Sandbox Architecture: Millisecond Snapshot Cloning & Isolation with Firecracker MicroVMs](https://blog.llmgo.top/en/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/)
-* **[机柜级超节点与集合通信：GB200 NVL72、NVLink 5 铜缆背板与 NCCL SHARP/NVLS 生产架构深度解析](https://blog.llmgo.top/articles/rack-scale-superpod-nvl72-nccl-collectives/)**  
-  👉 English: [Rack-Scale SuperPoD & Collective Communication: GB200 NVL72, NVLink 5 & NCCL Internals](https://blog.llmgo.top/en/articles/rack-scale-superpod-nvl72-nccl-collectives/)
+* **[大模型分布式强化学习后训练架构：基于 verl 的训推混部 (Colocation)、FSDP2 与零冗余权重同步实战](https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/)**  
+  👉 English: [Distributed RL Post-Training with verl: Colocation, Weight Resharding & Async Rollouts](https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/)
+* **[AI Agent 安全执行沙箱架构：基于 Firecracker MicroVM 的毫秒级快照克隆与高并发隔离实战](https://blog.llmgo.top/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/)**  
+  👉 English: [Architecting AI Agent Security Sandboxes: Sub-15ms Firecracker MicroVM Snapshots & Zero-Trust Isolation](https://blog.llmgo.top/en/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/)
+* **[机柜级超节点与集合通信：GB200 NVL72、NVLink 5 铜缆背板与 NCCL NVLS 架构解析](https://blog.llmgo.top/articles/rack-scale-superpod-nvl72-nccl-collectives/)**  
+  👉 English: [Rack-Scale SuperPoD & NCCL Collectives: GB200 NVL72, Optical Fabrics & MoE All-to-All](https://blog.llmgo.top/en/articles/rack-scale-superpod-nvl72-nccl-collectives/)
 * **[深度解构 DeepSeek 推理引擎 DeepInfer 与 deepseek-recipe：从稀疏算子到高并发超节点工程落地](https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/)**  
   👉 English: [Inside DeepSeek's DeepInfer & deepseek-recipe: Sparse Kernels to Wide-EP Supernodes](https://blog.llmgo.top/en/articles/deepinfer-deepseek-recipe-architecture/)
-* **[2026 年 11 月前沿大模型横评：GPT-6.2 Astra vs Claude Fable 5.2 vs Gemini 4 Carbon](https://blog.llmgo.top/articles/model-comparison-2026/)** & **[国产前沿选型：Qwen4-Max、Kimi K3.1 Pro、DeepSeek-V4 与 MiniMax M3.1](https://blog.llmgo.top/articles/domestic-llm-comparison-2026/)**
+* **[2026.11 模型横评：GPT-6.2 Astra、Claude Fable 5.2 与 Gemini 4](https://blog.llmgo.top/articles/model-comparison-2026/)** & **[国产前沿选型：Qwen4-Max、Kimi K3.1 Pro、DeepSeek-V4 与 MiniMax M3.1](https://blog.llmgo.top/articles/domestic-llm-comparison-2026/)**
 
 ---
 
@@ -43,7 +43,7 @@ Welcome to **LLM Systems Architecture (智算架构志)** — a bilingual (ZH/EN
 * **[Ch 06 · MHA/GQA 到 DeepSeek MLA 矩阵吸收](https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/)** (👉 [EN](https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/))
 * **[Ch 07 · 稀疏大模型 MoE 推理内核：专家并行 (EP) 与 All-to-All 通信重叠](https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/)** (👉 [EN](https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/))
 * **[Ch 08 · P/D 分离架构：RDMA 分布式 KV Cache 传输与集群池化](https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/)** (👉 [EN](https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/))
-* **[Ch 09 · 四大生产级推理引擎源码横评：vLLM V1 vs SGLang vs TRT-LLM vs llama.cpp](https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/)** (👉 [EN](https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/))
+* **[Ch 09 · 推理引擎对比：vLLM、SGLang、TRT-LLM、llama.cpp](https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/)** (👉 [EN](https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/))
 * **[Ch 10 · 长思考链与 Test-Time Compute：大模型推理引擎的终局之战](https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/)** (👉 [EN](https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/))
 
 ### 2. 🤖 《AI Agent 生产级架构师手册》 (14 Chapters)
@@ -51,33 +51,33 @@ Welcome to **LLM Systems Architecture (智算架构志)** — a bilingual (ZH/EN
 
 * Representative chapters: [Execution Loop & FSM](https://blog.llmgo.top/articles/agent-loop-state-machine/) · [MCP Guide](https://blog.llmgo.top/articles/mcp-guide/) · [Tool Runtime & Sandboxing](https://blog.llmgo.top/articles/advanced-agent-tool-use-and-function-calling/) · [Lightweight Agent Framework](https://blog.llmgo.top/articles/build-lightweight-agent-framework/) · [Multi-Agent Concurrency](https://blog.llmgo.top/articles/multi-agent-collaboration-and-concurrency/) · [Environment Scaling](https://blog.llmgo.top/articles/environment-scaling-agent-guide/)
 
-### 3. ☸️ 《容器与云原生智算编排底层通关手册》 (13 Chapters)
+### 3. ☸️ 《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》 (13 Chapters)
 *Linux namespaces/cgroups v2, OverlayFS, runc/containerd shimv2, Kubernetes API Server/etcd/Scheduler internals, Volcano/Kueue gang scheduling, K8s 1.32 DRA & CDI GPU topology, Kata/gVisor, and eBPF Cilium.*
 
 * Browse full series: [Container & K8s Architecture Series](https://blog.llmgo.top/articles/#series)
 
-### 4. 🌐 《计算机网络与 AI 智算集群高速互联底层专栏》 (12 Chapters)
+### 4. 🌐 《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 架构实战》 (12 Chapters)
 *PCIe/DMA/RingBuffer, Linux sk_buff/NAPI, TCP BBR, BGP Clos ECMP, VXLAN vs Cilium eBPF, Envoy/gRPC/QUIC, RDMA Verbs/GPUDirect, RoCEv2 PFC/ECN/DCQCN, InfiniBand OpenSM/NCCL, and packet-level troubleshooting.*
 
 * Browse full series: [AI Cluster Networking Series](https://blog.llmgo.top/articles/#series)
 
 ---
 
-## 🚀 Build, Verification & SEO Automation
+## 🚀 Build, Verification & Multi-Channel SEO Automation
 
 ```bash
-# 1. Generate 1200x630 OpenGraph cards & build full bilingual static site
-python3 scripts/generate-article-og.py
+# 1. Build full bilingual static site & 1200x630 OpenGraph cards
 npm run build
 
 # 2. Run end-to-end smoke suite (Python runnable examples, Node tests, Mermaid, KaTeX, SEO)
 npm run test:smoke
 
-# 3. Run Google Search Central Technical SEO Audit (100/100 target)
+# 3. Run Google Search Central Technical SEO Audit (100/100 score)
 npm run seo:google
 
 # 4. Multi-channel syndication & IndexNow instant push
 npm run export:domestic -- --all
+npm run publish:devto --top
 npm run indexnow
 ```
 

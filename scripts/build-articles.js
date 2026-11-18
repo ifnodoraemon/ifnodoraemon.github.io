@@ -1005,14 +1005,12 @@ function generateListingPage(articlesList, isEn = false) {
   const siteName = isEn ? enLocales.meta.siteName : zhLocales.meta.siteName;
   const pageTitle = isEn ? `All Articles & Architecture Deep Dives — ${siteName}` : `全部文章与系统架构专栏 — ${siteName}`;
   const pageDesc = isEn
-    ? `Complete index of ${articlesList.length} engineering deep dives covering high-throughput LLM inference (vLLM, SGLang, DeepInfer), distributed RL post-training (GRPO, verl), production AI Agent runtimes & Firecracker sandboxes, Kubernetes internals, and InfiniBand/SuperPoD networking.`
-    : `${siteName}全部 ${articlesList.length} 篇深度技术文章与四大架构专栏：系统涵盖高并发大模型推理引擎（vLLM/SGLang/DeepInfer）、分布式 RL 后训练（GRPO/verl）、生产级 AI Agent 与 MicroVM 安全沙箱、云原生 Kubernetes 改造及万卡 InfiniBand/超节点网络实战。`;
+    ? `Article index (${articlesList.length} posts) grouped by column: LLM inference (vLLM, SGLang, DeepInfer), distributed RL (GRPO, verl), Agent runtimes & Firecracker sandboxes, Kubernetes, and InfiniBand / NVL72 networking.`
+    : `本站全部 ${articlesList.length} 篇文章按专栏组织：推理系统（vLLM/SGLang/DeepInfer）、分布式 RL（GRPO/verl）、Agent 运行时与 MicroVM 沙箱、云原生 K8s，以及 InfiniBand 与超节点网络。`;
   const canonicalUrl = isEn ? `${SITE_URL}/en/articles/` : `${SITE_URL}/articles/`;
   const heroTag = 'ALL ARTICLES';
   const heroTitle = isEn ? 'All Articles' : '全部文章';
-  const heroDesc = isEn
-    ? 'Deep dives into LLM system architectures, inference engine internals, AI Agents, and production engineering practices.'
-    : '深入大模型底层物理极限、推理引擎内核演进、AI Agent 架构与前沿工程深度实践';
+  const heroDesc = pageDesc;
   const filterAllBtn = isEn ? `All (${articlesList.length})` : `全部 (${articlesList.length})`;
   const searchPlaceholder = locales.models.listingSearchPlaceholder || (isEn ? 'Search articles...' : '搜索文章...');
 
@@ -1265,8 +1263,8 @@ function generateSearchIndex(articlesZh, articlesEn) {
 function generateLlmsTxt(articlesZh, articlesEn) {
   console.log('🤖 Generating /llms.txt and /llms-full.txt for AI engines & GEO...');
 
-  const siteSummaryZh = '专注 AI 大模型系统架构、高并发推理调优、生产级 AI Agent 与前沿工程落地技术博客。';
-  const siteSummaryEn = 'Technical deep dives into LLM systems architecture, high-throughput inference optimization, production AI agents, and enterprise AI engineering.';
+  const siteSummaryZh = '本站是大模型推理架构与系统工程笔记，覆盖 vLLM 服务、DeepSeek MLA、InfiniBand 网络与生产级 Agent 运行时。';
+  const siteSummaryEn = 'Notes for engineers on LLM inference architecture and systems engineering: vLLM serving, MLA attention, InfiniBand fabrics, and production Agent runtimes.';
 
   // 1. Core llms.txt (Concise Markdown Index)
   const seriesZhList = Object.values(SERIES_DEFINITIONS).map(s => 
@@ -1300,7 +1298,7 @@ function generateLlmsTxt(articlesZh, articlesEn) {
 - Author: ifnodoraemon (LLM Systems Architect)
 - GitHub: https://github.com/ifnodoraemon
 - Full Knowledge Base: ${SITE_URL}/llms-full.txt
-- Core Focus: AI Agent Architectures & Firecracker MicroVM Sandboxes, vLLM / SGLang / DeepInfer High-Concurrency Inference, PagedAttention & P/D Disaggregation, Distributed RL Post-Training (GRPO / verl Colocation), Rack-Scale SuperPoD (NVL72) & NCCL Collectives, Cloud-Native Kubernetes Internals, and Hyperscale InfiniBand / RoCEv2 Networking.
+- Core Focus: LLM inference architecture (vLLM, SGLang, DeepInfer, MLA, PagedAttention), distributed RL post-training (GRPO, verl), production Agent runtimes & Firecracker MicroVM sandboxes, Cloud-Native Kubernetes, and InfiniBand / NVL72 SuperPoD networking.
 
 ## 核心专栏体系 / Topic Series & Clusters
 
@@ -1457,9 +1455,7 @@ function generateRssFeed(articlesList, isEn = false) {
     ? path.join(ROOT, 'public', 'en', 'feed.xml')
     : path.join(ROOT, 'public', 'feed.xml');
   const title = siteName;
-  const desc = isEn
-    ? 'In-depth engineering articles on LLM inference systems, distributed RL post-training, autonomous AI agents, Kubernetes internals, and InfiniBand/SuperPoD networking.'
-    : '深耕大模型推理系统、分布式 RL 后训练、生产级 AI Agent、云原生 Kubernetes 与万卡 InfiniBand 智算网络的硬核工程博客';
+  const desc = isEn ? enLocales.meta.home.desc : zhLocales.meta.home.desc;
   const lang = isEn ? 'en' : 'zh-CN';
   const pubDate = new Date().toUTCString();
 

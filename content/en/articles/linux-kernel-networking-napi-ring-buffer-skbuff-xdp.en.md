@@ -1,5 +1,5 @@
 ---
-title: "Linux Kernel Networking Subsystem in Depth: From NIC Drivers, NAPI, and Ring Buffers to eBPF XDP Wire-Speed Forwarding"
+title: "Linux Kernel Networking: NAPI, Rings, and XDP"
 slug: linux-kernel-networking-napi-ring-buffer-skbuff-xdp
 date: 2026-10-02
 tag: Linux Kernel & eBPF Networking
@@ -7,7 +7,7 @@ tagClass: tag-orange
 category: Computer Networking
 series: computer-networking
 seriesOrder: 7
-description: "Linux kernel networking internals: NIC RX Ring Buffers, DMA transfers, NAPI hybrid polling, sk_buff lifecycle, RSS multi-queue affinity, and eBPF XDP wire filtering."
+description: "How a NIC ring, DMA, and NAPI polling receive packets, how sk_buff carries them in the kernel, and where eBPF XDP drops or forwards before the stack, plus RSS."
 extraTags:
   - Computer Networking
   - Linux Kernel

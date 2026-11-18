@@ -1,11 +1,11 @@
 ---
-title: "2026 年 11 月前沿大模型横评：GPT-6.2 Astra vs Claude Fable 5.2 vs Gemini 4 Carbon"
+title: "2026.11 模型横评：GPT-6.2 Astra、Claude Fable 5.2 与 Gemini 4"
 slug: model-comparison-2026
 date: 2026-03-01
 tag: 模型横评
 tagClass: tag-amber
 category: 评测与趋势
-description: "截至 2026 年 11 月 18 日的商用前沿大模型工程选型指南：对比 Claude Fable 5.2、GPT-6.2 Astra/Sol、Gemini 4 Carbon/Hydrogen 与 Muse Wonder 的 API 规格、定价梯度、SDK 调用与有效成本公式。"
+description: "截至 2026 年 11 月 18 日的商用大模型选型指南：对比 Claude Fable 5.2、GPT-6.2 Astra/Sol、Gemini 4 Carbon/Hydrogen 与 Muse Wonder 的 API 定价、调用与有效成本公式。"
 featured: true
 featuredStats:
   - label: 核心模型系

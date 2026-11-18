@@ -1,5 +1,5 @@
 ---
-title: "Application & Transport Layer Bridges: DNS Resolution, Sockets, Ports, and UDP vs TCP Foundations"
+title: "DNS, Sockets, and UDP versus TCP"
 slug: transport-bridge-dns-sockets-ports-udp-vs-tcp
 date: 2026-10-01
 tag: Transport Layer Bridge & DNS
@@ -7,7 +7,7 @@ tagClass: tag-indigo
 category: Computer Networking
 series: computer-networking
 seriesOrder: 4
-description: "Application and transport layer bridges: DNS recursive resolution, Anycast root servers, 5-tuple socket multiplexing, and architectural UDP vs TCP trade-offs."
+description: "How DNS resolves a name from root to authority, how a socket 5-tuple lets one port serve many flows, and where UDP and TCP choose different guarantees."
 extraTags:
   - Computer Networking
   - DNS

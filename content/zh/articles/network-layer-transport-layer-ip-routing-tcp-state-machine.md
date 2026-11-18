@@ -1,5 +1,5 @@
 ---
-title: "网络层与传输层精解：IP 路由选路、CIDR、TCP 三次握手/四次挥手状态机与滑动窗口第一性原理"
+title: "IP 路由与 TCP 状态机、滑动窗口"
 slug: network-layer-transport-layer-ip-routing-tcp-state-machine
 date: 2026-09-29
 tag: IP路由与TCP状态机
@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: 计算机网络
 series: computer-networking
 seriesOrder: 5
-description: "为什么在不可靠的不可信物理网络上，能够构建出绝对可靠、按序到达的数据流？深度拆解网络层与传输层核心机理：从 IPv4/IPv6 报文结构、CIDR 掩码划分到 Linux 内核最长前缀匹配（LPM）与 FIB/RIB 路由表查找；全景剖析 TCP 经典的 11 种状态变迁机理，深入解析三次握手防串包原理、SYN Flood 与 SYN Cookies 防御、四次挥手与 TIME_WAIT 状态设计哲学；并从第一性原理推导滑动窗口流量控制、零窗口探测与 TCP_NODELAY 生产级网络调优。"
+description: "讲解 IP 如何用最长前缀匹配选路，TCP 十一种状态如何完成握手与挥手，以及滑动窗口怎样限制在途数据，并解释 SYN Cookie 与 TIME_WAIT。"
 extraTags:
   - Computer Networking
   - IP Routing

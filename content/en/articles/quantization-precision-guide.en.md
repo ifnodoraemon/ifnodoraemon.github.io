@@ -1,11 +1,11 @@
 ---
-title: "LLM Quantization Precision Guide: From FP32 to 1-bit, How Much Quality Do You Actually Lose?"
+title: "LLM Quantization: FP32 to FP8, INT4, and NF4"
 slug: quantization-precision-guide
 date: 2026-03-31
 tag: Quantization Precision
 tagClass: tag-cyan
 category: Inference Systems
-description: "Understand FP8, INT8, INT4, and NF4 across weights, activations, and KV cache, with complete memory budgets, speed tradeoffs, calibration, and quality evaluation."
+description: "How FP8, INT8, INT4, and NF4 apply to weights, activations, or the KV cache, and which measurements separate memory use, speed, and output quality in practice."
 featured: true
 featuredStats:
   - label: Precision Formats

@@ -1,5 +1,5 @@
 ---
-title: "现代数据中心网络架构第一性原理：Clos 拓扑、Leaf-Spine 组网、BGP Underlay 与 EVPN-VXLAN 大二层虚拟化"
+title: "数据中心网络：Clos、Leaf-Spine 与 EVPN"
 slug: datacenter-network-clos-leaf-spine-bgp-evpn-vxlan
 date: 2026-10-01
 tag: 数据中心与Leaf-Spine
@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: 计算机网络
 series: computer-networking
 seriesOrder: 8
-description: "为什么传统三层网络与 STP 生成树无法承载现代云计算与 AI 大规模算力集群？深度拆解数据中心网络演进史：从经典三层架构（接入 Access/汇聚 Aggregation/核心 Core）的 STP 阻塞与收敛比失衡痛点，到 1953 年 Charles Clos 电话交换理论与现代无阻塞 2-Tier / 3-Tier Leaf-Spine 拓扑数学建模；详解基于 RFC 7938 的 eBGP Underlay 路由设计、ECMP 等价多路径五元组哈希极化（Hash Polarization）破除方案；全面剖析大二层 Overlay 核心技术：VXLAN 报文 MAC-in-UDP 封装（VNI 24-bit/Jumbo Frame 9000 MTU）与 MP-BGP EVPN 控制平面 Type-2/Type-3/Type-5 路由交换机理。"
+description: "说明数据中心为何用 Clos 与 Leaf-Spine 替代传统三层加 STP，以及 BGP Underlay 和 EVPN-VXLAN 如何延伸二层。"
 extraTags:
   - Computer Networking
   - Data Center

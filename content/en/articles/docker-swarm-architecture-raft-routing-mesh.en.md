@@ -1,5 +1,5 @@
 ---
-title: "Lightweight Cluster Orchestration: Docker SwarmKit Architecture, Raft Consensus, and Ingress Routing Mesh"
+title: "Docker Swarm: Raft Consensus and Routing Mesh"
 slug: docker-swarm-architecture-raft-routing-mesh
 date: 2026-09-25
 tag: Cluster Orchestration
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 3
-description: "Docker Swarm architecture deep dive: SwarmKit Raft consensus, VXLAN cross-host overlay networking, IPVS Ingress Routing Mesh, and Kubernetes trade-offs."
+description: "How Docker SwarmKit splits managers and workers, keeps cluster state consistent with Raft, and publishes services through an IPVS routing mesh. VXLAN included."
 extraTags:
   - Docker Swarm
   - SwarmKit

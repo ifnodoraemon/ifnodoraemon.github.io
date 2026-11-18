@@ -1,5 +1,5 @@
 ---
-title: "轻量级集群编排：Docker SwarmKit 架构、Raft 分布式共识与 Ingress Routing Mesh 服务发现"
+title: "Docker Swarm：Raft 共识与 Routing Mesh"
 slug: docker-swarm-architecture-raft-routing-mesh
 date: 2026-09-25
 tag: 集群编排
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 3
-description: "为什么在 Kubernetes 一统天下的今天，中小团队依然视 Docker Swarm 为最高效的生产利器？深度拆解 SwarmKit 的架构哲学：Manager 与 Worker 节点拓扑、内置 Raft 协议的分布式强一致状态机、VXLAN 驱动的跨主机 Overlay 覆盖网络，以及基于 IPVS 的 Ingress Routing Mesh 负载均衡与服务发现，全面剖析 Swarm 与 K8s 的工程权衡分水岭。"
+description: "说明 SwarmKit 的 Manager 与 Worker 如何分工，Raft 如何保持集群状态一致，以及 IPVS Routing Mesh 如何发布服务。"
 extraTags:
   - Docker Swarm
   - SwarmKit

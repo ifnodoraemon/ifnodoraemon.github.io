@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes 控制平面深度解密：声明式 API、etcd 状态机、调度器与控制器调谐循环 (Reconciliation Loop)"
+title: "K8s 控制平面：声明式 API 与调谐循环"
 slug: k8s-control-plane-declarative-reconciliation
 date: 2026-09-25
 tag: K8s 控制面
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 4
-description: "为什么声明式 API 与控制理论能够成为现代云计算与分布式系统的终极事实标准？深度剖析 Kubernetes 控制平面架构底层：kube-apiserver 请求准入控制流水线（认证、鉴权、双准入 Webhook）、etcd v3 底层 MVCC 与 Watch 机制、kube-scheduler 过滤与打分双阶段调度、Informer 架构（Reflector、DeltaFIFO、Indexer、WorkQueue）与控制器水平触发调谐循环（Reconciliation Loop）工程机理。"
+description: "讲解 Kubernetes 如何用声明式 API 保存期望状态，etcd 如何存储它，调度器如何选节点，控制器如何用调谐循环收敛，含 Informer。"
 extraTags:
   - Kubernetes
   - Control Plane

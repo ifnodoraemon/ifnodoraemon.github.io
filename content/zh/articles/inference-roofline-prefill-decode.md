@@ -1,5 +1,5 @@
 ---
-title: "从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的物理撕裂"
+title: "Roofline 模型：Prefill 与 Decode 的差异"
 slug: inference-roofline-prefill-decode
 date: 2026-09-24
 tag: 算力建模
@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: 推理系统
 series: llm-inference
 seriesOrder: 1
-description: "为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。"
+description: "用 Roofline 模型说明 Prefill 更吃算力、Decode 更吃显存带宽，以及这种差别如何分开 TTFT 和 TPOT 两个延迟。"
 extraTags:
   - Inference Engine
   - Roofline Model

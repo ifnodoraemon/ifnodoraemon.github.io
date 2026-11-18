@@ -1,11 +1,11 @@
 ---
-title: "Mapping the NVIDIA GPU Driver Stack: From Kernel Modules to Container Runtimes"
+title: "NVIDIA GPU Driver Stack: Kernel Modules to Containers"
 slug: nvidia-gpu-package-architecture
 date: 2026-04-05
 tag: GPU & Driver Stack
 tagClass: tag-cyan
 category: Inference Systems
-description: A deep dive into the complex Linux NVIDIA GPU driver package structures. Understand the 5-layer architecture bridging nvidia-dkms, libnvidia, nvidia-utils, and driver metapackages. Plus, discover enterprise best practices and troubleshooting guides for 4 core deployment scenarios, including Docker model servers and DGX clusters.
+description: "How the Linux NVIDIA stack fits together, from nvidia-dkms and userspace libraries to nvidia-utils and the metapackage, on desktops, containers, and DGX hosts."
 featured: true
 featuredStats:
   - label: Core Layers

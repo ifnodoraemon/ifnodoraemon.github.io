@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes Storage Architecture: CSI Specification, Dynamic PV/PVC Provisioning, and StatefulSet Guarantees"
+title: "Kubernetes Storage: CSI, PV/PVC, and StatefulSet"
 slug: k8s-storage-csi-statefulset-deep-dive
 date: 2026-09-25
 tag: K8s Storage
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 6
-description: "Cloud-native storage architecture: StorageClass, PV/PVC decoupling, CSI provision/attach/stage/mount lifecycles, and StatefulSet deterministic volume binding."
+description: "How the CSI provisions a PV and binds a PVC on demand, and how a StatefulSet gives each pod a stable network name and its own persistent volume. It persists."
 extraTags:
   - Kubernetes
   - CSI

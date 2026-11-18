@@ -1,5 +1,5 @@
 ---
-title: "IP Addressing and Subnetting First Principles: Binary Arithmetic, Subnet Masks, CIDR, and Default Gateway Routing"
+title: "IP Addressing: Subnet Masks, CIDR, and Gateways"
 slug: ip-addressing-subnet-mask-cidr-default-gateway-routing
 date: 2026-09-29
 tag: IP Addressing & Subnet Mask
@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: Computer Networking
 series: computer-networking
 seriesOrder: 2
-description: "Deep dive into IP addressing: IPv4 32-bit binary representation, bitwise AND subnet masking, CIDR supernetting, default gateways, and Linux routing tables."
+description: "How subnet masks and CIDR split an IPv4 address into network and host with bitwise AND, and what a default gateway does when traffic leaves the subnet."
 extraTags:
   - Computer Networking
   - IP Address

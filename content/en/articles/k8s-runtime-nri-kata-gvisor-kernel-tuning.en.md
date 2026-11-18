@@ -1,5 +1,5 @@
 ---
-title: "Hacking Kubernetes Nodes & Runtimes: Breaking PLEG Bottlenecks, NRI Plugins, Kata/gVisor Sandboxes, and cgroups v2 Tuning"
+title: "Kubernetes Runtimes: NRI, Kata, gVisor, cgroups"
 slug: k8s-runtime-nri-kata-gvisor-kernel-tuning
 date: 2026-09-25
 tag: Node Runtime Customization
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 10
-description: "Kubernetes node runtime internals: Kubelet syncLoop, Evented PLEG, containerd Node Resource Interface (NRI) plugins, Kata microVMs, and gVisor sandboxing."
+description: "Why PLEG slows a Kubernetes node, how an NRI plugin changes container setup, and what Kata, gVisor, and cgroups v2 each isolate or limit. Sandboxes differ."
 extraTags:
   - Kubernetes
   - Kubelet

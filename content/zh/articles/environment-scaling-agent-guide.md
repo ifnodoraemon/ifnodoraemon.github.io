@@ -1,5 +1,5 @@
 ---
-title: "告别单纯 Prompt：2026 年“环境缩放 (Environment Scaling)”如何重塑自主 Agent"
+title: "Agent 环境缩放：任务分布、复位与验收"
 slug: environment-scaling-agent-guide
 date: 2026-09-07
 tag: 环境缩放
@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: AI Agent
 series: ai-agent
 seriesOrder: 10
-description: "解释 Agent 环境缩放的任务分布、状态复位与独立验收，正确解读 GLM-5.3 终端任务成绩，并演示带超时清理的容器执行接口。"
+description: "说明 Agent 环境缩放要准备多样任务、可复位状态和独立验收，如何看待终端任务分数，以及容器超时后怎样清理现场。文中用容器执行接口做演示。"
 updated: 2026-10-20
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "Container Networking Deep Dive: veth-pair, Linux Bridge, iptables NAT, and Cross-Host Topology"
+title: "Container Networking: veth, Bridge, and iptables"
 slug: container-networking-veth-bridge-iptables
 date: 2026-09-25
 tag: Container Networking
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 2
-description: "Container networking from scratch: Network Namespaces, veth-pairs, Linux bridge docker0 forwarding, iptables DNAT/SNAT, and Host vs Bridge vs Macvlan comparisons."
+description: "How a container packet leaves its network namespace on a veth pair, is switched by MAC on a Linux bridge, and reaches the outside through iptables NAT."
 extraTags:
   - Container Networking
   - veth-pair

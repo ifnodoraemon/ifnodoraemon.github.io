@@ -1,5 +1,5 @@
 ---
-title: "Model Architecture Driving Inference Systems: From MHA/GQA to DeepSeek MLA Matrix Absorption and Memory Minimalism"
+title: "MHA, GQA, and MLA: Attention and KV Memory"
 slug: mha-gqa-mla-matrix-absorption-inference-engine
 date: 2026-09-24
 tag: Attention Architecture
@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
 seriesOrder: 6
-description: "Attention evolution for LLM serving: MHA memory bottlenecks, GQA grouping trade-offs, DeepSeek MLA low-rank latent projections, Decoupled RoPE, and Matrix Absorption."
+description: "Compare KV-cache size for MHA, GQA, and DeepSeek MLA, and how matrix absorption during decode stores fewer multi-head tensors and cuts memory traffic."
 extraTags:
   - MLA
   - GQA

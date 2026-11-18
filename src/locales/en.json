@@ -2,8 +2,8 @@
   "meta": {
     "siteName": "LLM Systems Architecture",
     "home": {
-      "title": "LLM Systems Architecture — Frontier AI Engineering & Inference Systems",
-      "desc": "Engineering deep dives into LLM inference (vLLM, SGLang, DeepInfer), distributed RL post-training (GRPO, verl), Firecracker Agent sandboxes, Kubernetes, and InfiniBand/NVL72 SuperPoDs — tracking Nov 2026 frontiers (GPT-6.2 Astra, Claude Fable 5.2, Gemini 4 Carbon, Qwen4-Max, Kimi K3.1 Pro)."
+      "title": "LLM Systems Architecture — Inference & Systems Notes",
+      "desc": "Engineering notes on LLM inference (vLLM, SGLang, DeepInfer, MLA), distributed RL (verl), Firecracker Agent sandboxes, InfiniBand/NVL72 fabrics, and Nov 2026 frontier models."
     },
     "models": {
       "title": "November 2026 Frontier AI Models Benchmark & Pricing Matrix | LLM Systems Architecture",
@@ -1079,8 +1079,8 @@
   },
   "home": {
     "heroSystem": "LLM ARCHITECTURE & AGENTIC RUNTIMES",
-    "heroTitle": "Frontier <span class=\"gradient-text\">LLM Architecture</span><br>& Agent Systems",
-    "heroDesc": "In-depth engineering notes on Transformer KV-cache topologies, DeepSeek MLA, vLLM high-throughput serving, quantization, and production Agent runtimes.",
+    "heroTitle": "LLM Inference Architecture<br>& <span class=\"gradient-text\">Systems Notes</span>",
+    "heroDesc": "Notes for engineers on LLM inference architecture and systems engineering: vLLM serving, MLA attention, InfiniBand fabrics, and production Agent runtimes.",
     "btnArticles": "Read Articles",
     "btnAbout": "About Author",
     "searchPlaceholder": "Search architectures (vLLM, MLA, MCP, FP8, Agent Loop...)",

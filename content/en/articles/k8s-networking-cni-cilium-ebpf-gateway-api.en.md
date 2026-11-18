@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes Networking Panorama: CNI Specification, Calico BGP, Cilium eBPF, and Gateway API Architecture"
+title: "Kubernetes Networking: CNI, Cilium, Gateway API"
 slug: k8s-networking-cni-cilium-ebpf-gateway-api
 date: 2026-09-25
 tag: K8s Networking
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 5
-description: "Kubernetes CNI networking guide: Flannel vs Calico topologies, Cilium eBPF socket redirection to bypass kube-proxy, and modern Gateway API traffic governance."
+description: "Compare the Flannel, Calico BGP, and Cilium eBPF datapaths, and how the Gateway API lets separate roles manage Kubernetes traffic policy. Replaces iptables."
 extraTags:
   - Kubernetes
   - CNI

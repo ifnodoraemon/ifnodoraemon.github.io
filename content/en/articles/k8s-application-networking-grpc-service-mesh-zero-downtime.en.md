@@ -1,5 +1,5 @@
 ---
-title: "Application Networking on Kubernetes: The gRPC Load Balancing Trap, Service Mesh, and Zero-Downtime Draining Sequences"
+title: "Kubernetes App Networking: gRPC and Drains"
 slug: k8s-application-networking-grpc-service-mesh-zero-downtime
 date: 2026-09-25
 tag: Application Networking
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 7
-description: "Kubernetes application networking: HTTP/2 gRPC load balancing, Envoy service mesh architecture, xDS control planes, and zero-downtime rolling deployment strategies."
+description: "Why long-lived gRPC connections stick to one Kubernetes backend, and how a service mesh drains those connections so a rollout does not drop in-flight traffic."
 extraTags:
   - Kubernetes
   - gRPC

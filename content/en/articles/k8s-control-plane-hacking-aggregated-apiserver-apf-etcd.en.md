@@ -1,5 +1,5 @@
 ---
-title: "Hacking the Kubernetes Control Plane: WatchCache Internals, Aggregated APIServers, APF Shuffle Sharding, and 10k-Node etcd Sharding"
+title: "Kubernetes Control Plane: Aggregated API and etcd"
 slug: k8s-control-plane-hacking-aggregated-apiserver-apf-etcd
 date: 2026-09-25
 tag: Control Plane Customization
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 11
-description: "Advanced Kubernetes control plane internals: Aggregated API Servers, API Priority and Fairness (APF) flow control, CRD scaling limits, and etcd performance tuning."
+description: "How WatchCache, an aggregated API server, and APF extend the Kubernetes control plane, and which etcd settings matter once the cluster grows to 10k nodes."
 extraTags:
   - Kubernetes
   - Control Plane

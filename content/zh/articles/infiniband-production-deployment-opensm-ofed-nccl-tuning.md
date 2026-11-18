@@ -1,5 +1,5 @@
 ---
-title: "InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战"
+title: "InfiniBand 生产调优：OpenSM 与 NCCL"
 slug: infiniband-production-deployment-opensm-ofed-nccl-tuning
 date: 2026-10-05
 tag: 生产落地与NCCL调优
@@ -7,7 +7,7 @@ tagClass: tag-red
 category: 计算机网络
 series: computer-networking
 seriesOrder: 12
-description: "从网络架构设计到万卡 AI 智算中心裸金属物理落地，工程师必须攻克哪些工程深水区？全景拆解 InfiniBand 生产落地实战：Mellanox OFED / DOCA 驱动栈与固件管理工具（flint/mlxlink）；搭建基于 OpenSM 的 Master/Standby 主备高可用子网管理架构；深入实战 ibdiagnet 全网巡检，秒级定位物理层 Symbol Error 脏光纤与降速协商链路；并深入 GPU 通信最底层，实战验证 GPUDirect RDMA（nvidia-peermem 驱动）与 NCCL 核心环境变量（NCCL_IB_HCA / NCCL_NET_GDR_LEVEL=5）极限压测调优。"
+description: "InfiniBand 生产部署要点：OFED 驱动、OpenSM 主备、ibdiagnet 巡检，以及 NCCL 的 GPUDirect RDMA 调优。"
 extraTags:
   - Computer Networking
   - InfiniBand

@@ -1,5 +1,5 @@
 ---
-title: "2026 AI Computing Infrastructure: Kubernetes GPU Operator, MIG Partitioning, Topology-Aware Scheduling, and Auto-scaling Inference Engines"
+title: "Kubernetes GPU Scheduling with the GPU Operator"
 slug: k8s-gpu-operator-ai-inference-scheduling
 date: 2026-09-25
 tag: AI GPU Scheduling
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 13
-description: "AI infrastructure on Kubernetes: NVIDIA GPU Operator automation, MIG slicing, Kubelet Topology Manager NUMA alignment, Dynamic Resource Allocation, and KEDA scaling."
+description: "How the GPU Operator installs drivers and the device plugin, how MIG slices a GPU, and how topology-aware scheduling scales vLLM and SGLang inference services."
 extraTags:
   - Kubernetes
   - GPU Operator

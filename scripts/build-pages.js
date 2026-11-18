@@ -83,10 +83,9 @@ const zhData = {
 
 // Generate dynamic JSON-LD for index page
 function generateBlogJsonLd(articles, isEn) {
-  const siteName = isEn ? 'LLM Systems Architecture' : '智算架构志';
-  const siteDesc = isEn
-    ? 'In-depth engineering blog on LLM inference systems (vLLM/SGLang/DeepInfer), distributed RL post-training (GRPO/verl), production AI Agent sandboxes, Kubernetes, and InfiniBand/SuperPoD infrastructure.'
-    : '专注大模型推理系统（vLLM/SGLang/DeepInfer）、分布式 RL 后训练（GRPO/verl）、生产级 AI Agent 沙箱、云原生 Kubernetes 与 InfiniBand/超节点智算网络的硬核技术博客。';
+  const locales = readLocale(isEn ? 'en' : 'zh');
+  const siteName = locales.meta.siteName;
+  const siteDesc = locales.meta.home.desc;
   const siteUrl = isEn ? 'https://blog.llmgo.top/en/' : 'https://blog.llmgo.top/';
   const lang = isEn ? 'en' : 'zh-CN';
 
@@ -151,7 +150,7 @@ function generateBlogJsonLd(articles, isEn) {
             'Large Language Models',
             'High-Concurrency LLM Inference',
             'vLLM & SGLang',
-            'DeepInfer & P/D Disaggregation',
+            'DeepSeek MLA & DeepInfer',
             'Distributed Reinforcement Learning (GRPO / verl)',
             'AI Agents & Firecracker MicroVM Sandboxes',
             'Kubernetes & Cloud-Native Infrastructure',

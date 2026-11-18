@@ -1,5 +1,5 @@
 ---
-title: "From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence"
+title: "Roofline Model: Why Prefill and Decode Differ"
 slug: inference-roofline-prefill-decode
 date: 2026-09-24
 tag: Roofline Modeling
@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: Inference Systems
 series: llm-inference
 seriesOrder: 1
-description: "Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode."
+description: "Use the roofline model to see why prefill is compute-bound while decode is memory-bound, and how that splits time-to-first-token from per-token latency."
 extraTags:
   - Inference Engine
   - Roofline Model

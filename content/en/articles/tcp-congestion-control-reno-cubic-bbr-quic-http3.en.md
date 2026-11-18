@@ -1,5 +1,5 @@
 ---
-title: "TCP Congestion Control Evolution & High-Performance Transport: From Reno and Cubic to BBR Mathematical Models, and HTTP/2 to HTTP/3 (QUIC)"
+title: "TCP Congestion Control: Reno, Cubic, BBR, QUIC"
 slug: tcp-congestion-control-reno-cubic-bbr-quic-http3
 date: 2026-09-30
 tag: Congestion Control & QUIC
@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Computer Networking
 series: computer-networking
 seriesOrder: 6
-description: "TCP congestion control evolution: loss-based Reno, Linux default Cubic polynomial curves, Google BBR pacing models, and HTTP/3 QUIC 0-RTT transport."
+description: "Compare loss-based Reno and Cubic with model-based BBR, then how HTTP/3 carries the same application traffic on QUIC instead of a TCP connection. See pacing."
 extraTags:
   - Computer Networking
   - Congestion Control

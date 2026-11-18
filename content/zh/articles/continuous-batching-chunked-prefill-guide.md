@@ -1,5 +1,5 @@
 ---
-title: "高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞"
+title: "连续批处理：Chunked Prefill 与排头阻塞"
 slug: continuous-batching-chunked-prefill-guide
 date: 2026-09-24
 tag: 并发调度
@@ -7,7 +7,7 @@ tagClass: tag-cyan
 category: 推理系统
 series: llm-inference
 seriesOrder: 3
-description: "为什么在消除显存碎片后，高并发大模型服务依然会遭遇严重的单字时延（TPOT）剧烈抖动？深度解构从传统静态批处理到 Orca 迭代级连续批处理的状态机演进，揭秘超长 Prefill 霸占 GPU 引发排头阻塞（HoL Blocking）的物理根源，以及 Sarathi-Serve 和 vLLM 借助 Chunked Prefill 实现算力与访存动态拼车（Piggybacking）的底层机制。"
+description: "说明连续批处理之后，一次超长 Prefill 为何仍会挡住其他请求的 Decode，以及 Chunked Prefill 如何把这段计算拆开穿插执行。"
 extraTags:
   - Continuous Batching
   - Chunked Prefill

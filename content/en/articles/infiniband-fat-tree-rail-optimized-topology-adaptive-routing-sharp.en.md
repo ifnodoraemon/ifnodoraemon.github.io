@@ -1,5 +1,5 @@
 ---
-title: "InfiniBand AI Cluster Networking in Practice: Fat-Tree Topologies, Rail-Optimized Architecture, Adaptive Routing (AR), and In-Network Reduction (SHARP)"
+title: "InfiniBand Fabrics: Fat-Tree, Rail-Optimized, SHARP"
 slug: infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp
 date: 2026-10-04
 tag: Fat-Tree & Adaptive Routing
@@ -7,7 +7,7 @@ tagClass: tag-pink
 category: Computer Networking
 series: computer-networking
 seriesOrder: 11
-description: "AI cluster fabric topologies: Non-blocking Fat-Trees, Rail-Optimized cabling, Adaptive Routing (AR), SHARP in-network aggregation, and congestion mitigation."
+description: "How large GPU clusters cable InfiniBand as a fat-tree with rail-optimized planes, and how adaptive routing plus SHARP improve collective communication."
 extraTags:
   - Computer Networking
   - InfiniBand

@@ -2,8 +2,8 @@
   "meta": {
     "siteName": "智算架构志",
     "home": {
-      "title": "智算架构志 — 前沿大模型系统工程与推理架构实战",
-      "desc": "专注大模型系统架构与高性能推理工程实战（更新至 2026.11）：覆盖 GPT-6.2 Astra、Claude Fable 5.2、Gemini 4 Carbon、Qwen4-Max、Kimi K3.1 Pro，深度拆解 vLLM/SGLang/DeepInfer、分布式 RL (verl)、MicroVM 沙箱、K8s 与万卡 InfiniBand/NVL72 组网。"
+      "title": "智算架构志 — 大模型推理架构与系统工程笔记",
+      "desc": "本站是大模型推理架构与系统工程笔记（更新至 2026.11）：覆盖 vLLM/SGLang/DeepInfer 推理、DeepSeek MLA、分布式 RL (verl)、Firecracker 沙箱、InfiniBand/NVL72 网络与前沿模型选型。"
     },
     "models": {
       "title": "2026.11 最新前沿大模型全维评测与选型矩阵 | 智算架构志",
@@ -1079,8 +1079,8 @@
   },
   "home": {
     "heroSystem": "LLM ARCHITECTURE & AGENTIC RUNTIMES",
-    "heroTitle": "大模型底层架构与<br><span class=\"gradient-text\">智能体工程实战</span>",
-    "heroDesc": "深度解构 Transformer 显存拓扑、DeepSeek MLA、vLLM 高吞吐推理、模型量化与生产级 Agent 运行时系统。",
+    "heroTitle": "大模型推理架构与<br><span class=\"gradient-text\">系统工程笔记</span>",
+    "heroDesc": "本站是大模型推理架构与系统工程笔记，覆盖 vLLM 服务、DeepSeek MLA、InfiniBand 网络与生产级 Agent 运行时。",
     "btnArticles": "浏览深度文章",
     "btnAbout": "关于作者",
     "searchPlaceholder": "搜索架构研报：vLLM, MLA, MCP, FP8量化, Agent运行时...",

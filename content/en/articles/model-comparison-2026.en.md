@@ -1,11 +1,11 @@
 ---
-title: "November 2026 Frontier LLM Benchmark & API Guide: GPT-6.2 Astra vs Claude Fable 5.2 vs Gemini 4 Carbon"
+title: "Nov 2026 Frontier Models: GPT-6.2 Astra, Claude Fable 5.2 & Gemini 4"
 slug: model-comparison-2026
 date: 2026-03-01
 tag: Model Benchmark
 tagClass: tag-amber
 category: Evaluation & Trends
-description: "Production engineering guide to the November 18, 2026 frontier LLM lineup: comparing Claude Fable 5.2, GPT-6.2 Astra/Sol, Gemini 4 Carbon/Hydrogen, and Meta Muse Wonder across API specs, pricing tiers, SDKs, and TCO formulas."
+description: "Compare Claude Fable 5.2, GPT-6.2 Astra/Sol, Gemini 4 Carbon/Hydrogen, and Meta Muse Wonder as of Nov 18, 2026 across API specs, pricing tiers, SDKs, and TCO formulas."
 featured: true
 featuredStats:
   - label: Frontier Labs

@@ -1,11 +1,11 @@
 ---
-title: "解密 DeepSeek 推理印钞机：DeepInfer 与 deepseek-recipe 从硅基地基到协议顶层的生产全栈拆解"
+title: "DeepSeek 生产推理栈：DeepInfer 与 deepseek-recipe"
 slug: deepinfer-deepseek-recipe-architecture
 date: 2026-10-21
 tag: 推理架构
 tagClass: tag-purple
 category: 推理系统
-description: "从底层芯片与通信物理地基，到算子内核、PD 极致分离拓扑、DSpark 动态投机解码、SWA 边界重放，再到 deepseek-recipe 协议中间层与百万亿 Token 商业印钞机经济学，全景剖析 DeepSeek 最新开源生产推理全栈。"
+description: "介绍 DeepSeek 生产推理栈：DeepInfer 的算子与 PD 分离、DSpark 投机解码，以及 deepseek-recipe 如何对接上层协议。"
 ---
 
 > [!NOTE] 核心速览 (TL;DR)

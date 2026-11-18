@@ -1,5 +1,5 @@
 ---
-title: "Under the Hood of Browser-use (100k+ Stars): DOM Tree Distillation, Vision Grounding, and Production Web Agents"
+title: "Browser-use Architecture: DOM Distillation and Vision"
 slug: browser-use-agent-architecture
 date: 2026-09-18
 tag: Browser Agents
@@ -7,7 +7,7 @@ tagClass: tag-purple
 category: AI Agent
 series: ai-agent
 seriesOrder: 6
-description: "Why do traditional Selenium and Playwright scripts constantly break against modern web frontends? We dissect the architecture of Browser-use, the breakout open-source project with over 100k GitHub stars: DOM tree pruning, Set-of-Mark (SoM) visual coordinate grounding, state machine resilience, and end-to-end production recipes."
+description: "How Browser-use distills a page's DOM, grounds clickable elements with vision marks, and runs those actions inside a stateful agent loop that can retry."
 featured: true
 featuredStats:
   - label: GitHub Stars
