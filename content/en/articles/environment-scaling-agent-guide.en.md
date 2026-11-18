@@ -69,7 +69,7 @@ Record success, incorrect actions, cleanup results, cost, and latency together. 
 No. Containers provide execution capacity. Task diversity, state reset, independent verification, and data isolation determine whether the experiment is meaningful.
 
 ### Q2: Do gVisor or microVMs guarantee zero escape?
-No. They reduce attack surface but still depend on implementation, patches, configuration, and host permissions. A product name is not an absolute isolation guarantee.
+No. They reduce attack surface but still depend on implementation, patches, configuration, and host permissions. A product name is not an absolute isolation guarantee. For hardware-virtualized KVM isolation, millisecond CoW snapshot cloning (`UFFDIO_COPY`), and `jailer` defense-in-depth at high RL rollout concurrency, see [AI Agent Sandbox Architecture with Firecracker MicroVMs](/en/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/) and its companion [Distributed RL Post-Training Architecture with verl](/en/articles/distributed-rl-post-training-verl-colocation/).
 
 ### Q3: Does a timeout prove that a task has stopped?
 No. Perform cleanup and verify state, retain the run ID, and use an independent reaper when daemon communication fails.

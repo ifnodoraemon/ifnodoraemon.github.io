@@ -112,12 +112,16 @@ $$\mathcal{L}_{SFT}(\theta) = - \sum_{t=k}^{N} \log P_\theta(x_t \mid x_{<t})$$
 ### Step 2：配置 LoRA 训练
 
 ```python
+import torch
 from peft import LoraConfig, get_peft_model
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+model_id = "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+
 # 加载基础模型
 model = AutoModelForCausalLM.from_pretrained(
-    "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+    model_id,
     torch_dtype=torch.bfloat16,
     device_map="auto",
 )
@@ -126,7 +130,7 @@ model = AutoModelForCausalLM.from_pretrained(
 lora_config = LoraConfig(
     r=16,                    # rank：8~64，越大能力越强但越慢
     lora_alpha=32,           # 缩放系数，通常设为 2 * r
-    target_modules=[         # 要注入 LoRA 的层
+    target_modules=[         # 注入全部 7 个注意力投影 (q/k/v/o_proj) 与 MLP 线性投影层 (gate/up/down_proj)
         "q_proj", "k_proj", "v_proj", "o_proj",
         "gate_proj", "up_proj", "down_proj",
     ],
@@ -138,7 +142,7 @@ lora_config = LoraConfig(
 # 应用 LoRA
 model = get_peft_model(model, lora_config)
 model.print_trainable_parameters()
-# → trainable params: 13.6M || all params: 109B || 0.012%（若仅注入部分核心注意力投影层）
+# 输出具体可训练参数量与占比（取决于基座稠密层或 MoE 共享线性层结构，通常约为 0.05%~0.5%）
 ```
 
 ### Step 3：大规模多卡训练 (DeepSpeed ZeRO)
@@ -149,29 +153,31 @@ model.print_trainable_parameters()
 - **ZeRO-2**：同时分片优化器状态 + 梯度。适合 8x A100 单机训练，基本不掉速。
 - **ZeRO-3**：将优化器、梯度、**以及模型权重本身**全部分片。适合百亿/千亿参数极限跨机训练，但由于通信极其频繁，如果 RDMA 网络不行，速度会灾难性下降。
 
-```json
+配置文件 `ds_config_zero2.json`：
 
+```json
 {
     "fp16": { "enabled": false },
     "bf16": { "enabled": true },
     "zero_optimization": {
-        "stage": 2, 
+        "stage": 2,
         "allgather_partitions": true,
         "allgather_bucket_size": 2e8,
-        "overlap_comm": true, 
+        "overlap_comm": true,
         "reduce_scatter": true,
         "reduce_bucket_size": 2e8
     },
     "gradient_accumulation_steps": 1,
-    "gradient_clipping": 1.0 
+    "gradient_clipping": 1.0
 }
 ```
 
 训练启动命令：
 ```bash
-# 生产环境必开 --gradient_checkpointing True
+# 生产环境必开 --gradient_checkpointing True，并指定对应的 ds_config_zero2.json
 accelerate launch \
-    --config_file accelerate_deepspeed_config.yaml \
+    --use_deepspeed \
+    --deepspeed_config_file ds_config_zero2.json \
     train.py \
     --gradient_checkpointing True \
     --learning_rate 2e-5
@@ -188,20 +194,28 @@ merged_model.save_pretrained("./merged_model")
 ### Step 5：模型对齐 (DPO 阶段)
 在传统的监督微调(SFT)之后，企业级流程通常会加入**直接偏好优化 (DPO)** 来提升模型的安全性或调整语气偏好：
 ```python
-from trl import DPOTrainer
+from trl import DPOConfig, DPOTrainer
+
+dpo_config = DPOConfig(
+    output_dir="./dpo_output",
+    beta=0.1,
+    learning_rate=5e-6,
+    per_device_train_batch_size=2,
+    gradient_accumulation_steps=4,
+    bf16=True,
+)
 
 dpo_trainer = DPOTrainer(
-    model,
-    ref_model=None, # PEFT 自动处理 reference
-    args=training_args,
-    beta=0.1,
+    model=model,
+    ref_model=None, # 使用 PEFT 适配器时自动共享冻结底座作为 reference
+    args=dpo_config,
     train_dataset=preference_dataset, # 包含 prompt, chosen, rejected 的数据集
-    tokenizer=tokenizer,
+    processing_class=tokenizer,
 )
 dpo_trainer.train()
 ```
 
-### Step 6：生产级部署部署 (vLLM / TGI)
+### Step 6：生产级部署 (vLLM / TGI)
 在企业环境，我们不使用 HuggingFace `pipeline`，而是使用支持**连续批处理 (Continuous Batching)** 和 **PagedAttention** 的高性能推理引擎部署合并后的模型：
 
 ```bash

@@ -191,17 +191,22 @@ The legacy TCP header allocated only 16 bits for the window size, capping the ma
 - Modern networks negotiate **TCP Window Scale (RFC 7323)** during the 3-way handshake, bit-shifting the window value up to 14 bits leftward, expanding the effective sliding window ceiling to **1 GB**;
 - Production requirement: ensure `net.ipv4.tcp_window_scaling = 1` is turned on.
 
-### 3.2 Silly Window Syndrome and TCP_NODELAY in Practice
+### 3.2 Silly Window Syndrome (SWS) vs. the Nagle + Delayed ACK Stall
 
-In low-latency RPC gateways, financial order routing, and gaming backends, engineers frequently suffer from sudden latency spikes. This is almost always caused by the **deadly interaction between Nagle's Algorithm and Delayed ACK**:
-- **Nagle's Algorithm**: Buffers outgoing small packets until a full MSS (Maximum Segment Size) is accumulated or until an outstanding ACK arrives;
-- **Delayed ACK**: The receiver postpones sending ACKs (by 40ms to 200ms), hoping to piggyback the acknowledgment onto an outgoing response payload;
-- **The 40ms Standoff**: The sender waits for an ACK, while the receiver waits for more data. Both nodes stall in silence for 40ms!
-- **Production Standard**: All latency-sensitive TCP sockets (such as gRPC, Redis clients, reverse proxies) must explicitly disable Nagle's algorithm at the socket layer:
-  ```c
-  int flag = 1;
-  setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int));
-  ```
+Two distinct small-packet pathologies are frequently conflated in systems engineering and must be distinguished clearly:
+
+1. **Silly Window Syndrome (SWS)**:
+   Occurs when a slow receiver drains only a few bytes at a time and immediately advertises tiny window increments (e.g., `win=2B`), or a sender transmits 1-byte payloads wrapped in 40-byte TCP/IP headers, collapsing protocol efficiency. Modern stacks solve SWS via **Clark's receiver algorithm** (advertising `win=0` until free buffer space reaches at least `1 MSS` or half the receive buffer) paired with **sender-side min-MSS coalescing**.
+2. **The Nagle's Algorithm + Delayed ACK 40ms Stall**:
+   In low-latency RPC gateways, financial order routing, and gaming backends, sudden tail-latency spikes stem from the interaction between two otherwise independent optimizations:
+   - **Nagle's Algorithm**: Buffers outgoing sub-MSS segments whenever unacknowledged data is already in flight, waiting either to accumulate a full MSS or receive the pending ACK;
+   - **Delayed ACK**: The receiver postpones sending bare ACKs (by 40ms to 200ms), hoping to piggyback the acknowledgment onto an outgoing application reply;
+   - **The 40ms Standoff**: When a request is written in two small chunks, the sender holds the second chunk waiting for the first chunk's ACK, while the receiver waits for the complete request before generating an application response—stalling both endpoints until the 40ms Delayed ACK timer expires!
+   - **Production Standard**: All latency-sensitive TCP sockets (such as gRPC, Redis clients, reverse proxies) must explicitly disable Nagle's algorithm via `TCP_NODELAY`:
+     ```c
+     int flag = 1;
+     setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int));
+     ```
 
 ---
 

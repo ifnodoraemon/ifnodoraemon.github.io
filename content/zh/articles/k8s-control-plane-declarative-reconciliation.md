@@ -123,7 +123,7 @@ etcd 逻辑存储架构:
 - 客户端可以指定从某一个具体的 `revision` 开始监听变更（例如 `Watch(from_revision=8)`）；
 - 如果网络发生临时中断，客户端重连后只需携带上次处理完的 `revision`，etcd 就能将断网期间错过的所有增量事件按序回放给客户端，确保**零事件丢失**。
 
-> **生产避坑要点**：由于 MVCC 持续保留历史版本，etcd 会随着时间推移出现碎片膨胀。生产集群必须定期配置 `auto-compaction`（历史版本压缩）与 `etcdctl defrag`（磁盘碎片整理），并且 etcd 的存储盘必须挂载在高性能 NVMe SSD 上（确保护道 fsync 延迟在 10ms 以内），否则 Raft 心跳超时会导致集群选主震荡。
+> **生产避坑要点**：由于 MVCC 持续保留历史版本，etcd 会随着时间推移出现碎片膨胀。生产集群必须定期配置 `auto-compaction`（历史版本压缩）与 `etcdctl defrag`（磁盘碎片整理），并且 etcd 的存储盘必须挂载在高性能 NVMe SSD 上（确保磁盘 fsync 延迟在 10ms 以内），否则 Raft 心跳超时会导致集群选主震荡。
 
 ---
 
@@ -153,7 +153,7 @@ flowchart TD
         direction TB
         S1["ImageLocality: 节点是否已预拉取该容器镜像？(加分)"]
         S2["NodeResourcesBalancedAllocation: 节点 CPU/内存利用率是否更均衡？(加分)"]
-        S3["NodeAffinityPriority: 软亲和性偏好打分"]
+        S3["NodeAffinity: 软亲和性偏好打分"]
         S1 --> S2 --> S3
     end
 
@@ -250,27 +250,30 @@ func (r *DeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
         return ctrl.Result{}, err
     }
 
-    // 2. 查询当前集群中属于该 Deployment 的真实 ReplicaSet (Observed State)
+    // 2. 查询当前命名空间中属于该 Deployment 的真实 ReplicaSet (Observed State)
     var rsList appsv1.ReplicaSetList
-    if err := r.List(ctx, &rsList, client.MatchingLabels(deployment.Spec.Selector.MatchLabels)); err != nil {
+    if err := r.List(ctx, &rsList, client.InNamespace(req.Namespace), client.MatchingLabels(deployment.Spec.Selector.MatchLabels)); err != nil {
         return ctrl.Result{}, err
     }
 
     // 3. 计算期望副本数与实际存活副本数的偏差 (Diff)
-    desiredReplicas := *deployment.Spec.Replicas
+    desiredReplicas := int32(1)
+    if deployment.Spec.Replicas != nil {
+        desiredReplicas = *deployment.Spec.Replicas
+    }
     currentReplicas := computeActiveReplicas(rsList)
 
     // 4. 误差收敛动作 (Act) - 具备完全幂等性
     if currentReplicas < desiredReplicas {
         // 发现副本不足，发起扩容补齐
         if err := r.scaleUp(ctx, &deployment, desiredReplicas - currentReplicas); err != nil {
-            // 失败后返回错误，WorkQueue 会自动使用指数退避机制重试
-            return ctrl.Result{Requeue: true}, err
+            // 失败后返回非空 err，WorkQueue 会自动使用指数退避机制重新入队重试
+            return ctrl.Result{}, err
         }
     } else if currentReplicas > desiredReplicas {
         // 发现副本冗余，发起优雅缩容
         if err := r.scaleDown(ctx, &deployment, currentReplicas - desiredReplicas); err != nil {
-            return ctrl.Result{Requeue: true}, err
+            return ctrl.Result{}, err
         }
     }
 

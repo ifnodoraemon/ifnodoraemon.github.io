@@ -84,8 +84,9 @@ flowchart TD
 
 1. **TPID（Tag Protocol Identifier，16 位）**：固定为 `0x8100`，告诉网卡与交换机“后面紧跟着的是 802.1Q 标签”；
 2. **PCP（Priority Code Point，3 位）**：定义了 8 个优先级（0~7），用于企业网 QoS 语音/视频流量加急；
-3. **VID（VLAN Identifier，12 位）**：
-   $2^{12} = 4096$。其中 `0` 和 `4095` 保留，**合法可用的 VLAN ID 范围为 $1 \sim 4094$**！
+3. **DEI（Drop Eligible Indicator，丢弃资格指示位，1 位）**：前身为 CFI，配合 PCP 使用，置 `1` 时标识交换机发生拥塞时允许优先丢弃该帧；
+4. **VID（VLAN Identifier，12 位）**：
+   $2^{12} = 4096$。其中 `0` 和 `4095` 保留，**合法可用的 VLAN ID 范围为 $1 \sim 4094$**！（四项合计：$16 + 3 + 1 + 12 = 32\text{ Bits}$）
 
 ### 2.2 交换机端口核心类型：Access 口 vs Trunk 口
 
@@ -124,7 +125,7 @@ sequenceDiagram
 ```
 
 ### 2.3 跨 VLAN 路由：单臂路由 vs 三层交换机（SVI）
-划分了 VLAN 后，如果研发部（VLAN 10）确实需要访问财务部（VLAN 20）的发票系统，怎么连通？
+划分了 VLAN 后，如果研发部（VLAN 20）确实需要访问财务部（VLAN 10）的发票系统，怎么连通？
 - **单臂路由（Router-on-a-stick）**：用一根光纤将交换机的 Trunk 口连到路由器，在路由器物理接口上创建逻辑子接口（如 `eth0.10`、`eth0.20`），由路由器执行三层跨网段路由；
 - **三层交换机（Layer 3 Switch）**：现代企业网标配。交换机硬件内置路由转发表芯片（ASIC），直接在交换机内部为每个 VLAN 配置**虚接口（SVI, Switch Virtual Interface，如 `interface Vlan 10`）**作为网关，以数万兆线速在片上芯片完成跨 VLAN 极速转发！
 

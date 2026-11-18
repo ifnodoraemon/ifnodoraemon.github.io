@@ -84,7 +84,9 @@ const zhData = {
 // Generate dynamic JSON-LD for index page
 function generateBlogJsonLd(articles, isEn) {
   const siteName = isEn ? 'LLM Systems Architecture' : '智算架构志';
-  const siteDesc = isEn ? 'LLM systems architecture and high-concurrency inference engineering blog' : '专注大模型系统架构与高性能推理工程实践的技术博客';
+  const siteDesc = isEn
+    ? 'In-depth engineering blog on LLM inference systems (vLLM/SGLang/DeepInfer), distributed RL post-training (GRPO/verl), production AI Agent sandboxes, Kubernetes, and InfiniBand/SuperPoD infrastructure.'
+    : '专注大模型推理系统（vLLM/SGLang/DeepInfer）、分布式 RL 后训练（GRPO/verl）、生产级 AI Agent 沙箱、云原生 Kubernetes 与 InfiniBand/超节点智算网络的硬核技术博客。';
   const siteUrl = isEn ? 'https://blog.llmgo.top/en/' : 'https://blog.llmgo.top/';
   const lang = isEn ? 'en' : 'zh-CN';
 
@@ -148,10 +150,12 @@ function generateBlogJsonLd(articles, isEn) {
             'Artificial Intelligence',
             'Large Language Models',
             'High-Concurrency LLM Inference',
-            'vLLM',
-            'AI Agents',
-            'Retrieval-Augmented Generation (RAG)',
-            'Prompt Engineering'
+            'vLLM & SGLang',
+            'DeepInfer & P/D Disaggregation',
+            'Distributed Reinforcement Learning (GRPO / verl)',
+            'AI Agents & Firecracker MicroVM Sandboxes',
+            'Kubernetes & Cloud-Native Infrastructure',
+            'InfiniBand, RDMA & SuperPoD NVL72'
           ]
         },
         publisher: {
@@ -160,7 +164,9 @@ function generateBlogJsonLd(articles, isEn) {
           url: 'https://blog.llmgo.top',
           logo: {
             '@type': 'ImageObject',
-            url: 'https://blog.llmgo.top/favicon.svg'
+            url: 'https://blog.llmgo.top/og-image.png',
+            width: 1200,
+            height: 630
           }
         },
         inLanguage: lang,
@@ -227,8 +233,9 @@ zhData.toolsFaqJsonLd = generateToolsFaqJsonLd(zhData.tools);
 function getModelsRelatedArticles(articles, isEn) {
   const preferredSlugs = [
     'domestic-llm-comparison-2026',
-    'model-comparison-2026',
+    'deepinfer-deepseek-recipe-architecture',
     'deepseek-v4-kimi-k3-deployment-guide',
+    'model-comparison-2026',
     'llm-evaluation-guide',
   ];
   const matched = preferredSlugs

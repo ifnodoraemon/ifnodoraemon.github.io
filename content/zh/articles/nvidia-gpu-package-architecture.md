@@ -41,7 +41,7 @@ featuredStats:
 
 ## 剖析到底：NVIDIA 驱动栈全景分层架构
 
-了解了心法，我们来看看当你运行一行 Python PyTorch 当时代码时，信号是如何一层层穿越并到达显卡的。
+了解了心法，我们来看看当你运行一行 PyTorch Python 代码时，信号是如何一层层穿越并到达显卡的。
 
 ```mermaid
 flowchart TD
@@ -85,28 +85,28 @@ flowchart TD
 * **分支 B：动态现编路线 (`nvidia-dkms-xxx`)**：DKMS (动态内核模块支持) 机制的王者。它会自动拉取驱动源码 (`nvidia-kernel-source`) 和你当前内核的头文件 (`linux-headers`) 进行现场编译。**推荐使用，这能极大抵御 Linux 内核更新带来的驱动断裂**。
 
 ### 第二层：用户态驱动库 (Userspace Libraries)
-**包名范例**：`libnvidia-compute-535`, `libnvidia-gl-535`, `libnvidia-decode-535`
+**包名范例**：`libnvidia-compute-570`, `libnvidia-gl-570`, `libnvidia-decode-570`
 你的 AI 框架需要的底层 CUDA Driver API，就是由 `libnvidia-compute` 收口的；搞图形图像的同学则靠 `libnvidia-gl`。
-**避坑警告**：如果因为你的违规操作导致这部分库的版本（比如是 530）和第一层内核模块（比如是 535）对不上时，系统必报恶毒错误：`Driver/library version mismatch`。
+**避坑警告**：如果因为你的违规操作导致这部分库的版本（比如停留在 550）和第一层内核模块（比如已升至 570）对不上时，系统必报经典错误：`Driver/library version mismatch`。
 
 ### 第三层：管理与观测工具层 (Utilities)
-**包名范例**：`nvidia-utils-535` 或 `nvidia-utils-535-server`
+**包名范例**：`nvidia-utils-570` 或 `nvidia-utils-570-server`
 包含平时排错、监控的所有命令行工具。
 
 ### 第四层：版本对齐大总管 (Metapackage)
-**包名范例**：`nvidia-driver-535` 或 `nvidia-driver-535-server`
-平时你只需要通过包管理器告诉它就行了：`apt install nvidia-driver-535-server`。它犹如一位项目经理，会把前面三层所有的依赖按照正确且唯一兼容的版本全部拉扯下来，省去了你一个个手动指定的麻烦。
+**包名范例**：`nvidia-driver-570` 或 `nvidia-driver-570-server`
+平时你只需要通过包管理器告诉它就行了：`apt install nvidia-driver-570-server`。它犹如一位项目经理，会把前面三层所有的依赖按照正确且唯一兼容的版本全部拉扯下来，省去了你一个个手动指定的麻烦。
 
 ### 【特供补丁层】多卡高速公路维护部 (Fabric / NVSwitch)
 **包名范例**：`nvidia-fabricmanager-*`, `libnvidia-nscq-*`
-专门针对拥有 **NVSwitch 芯片**级别的多卡巨兽服务器（HGX / DGX）。
-普通机器不需要装这个。HGX/DGX 如果不单独把 Fabric Manager （后台守护进程）跑起来并把它和具体的 NVIDIA Driver 大版本对齐，昂贵的 NVLink 就相当于一根断掉的光纤，卡与卡之间无法高速通信。
+专门针对拥有 **NVSwitch 芯片**级别的多卡巨兽服务器（HGX H100/H200/B200 或机柜级 [GB200 NVL72 SuperPoD](/articles/rack-scale-superpod-nvl72-nccl-collectives/)）。
+普通 PCIe 机器不需要装这个。HGX/DGX 节点如果不单独把 Fabric Manager（后台守护进程）跑起来并把它和具体的 NVIDIA Driver 版本精确对齐，昂贵的 NVLink 就相当于一根断掉的光纤，卡与卡之间无法高速通信。
 
 ---
 
 ## 核心抉择：带 `-server` 后缀的包 vs 不带后缀的区别
 
-在 `apt search` 结果中，最大的迷茫来自于到底选 `nvidia-driver-535` 还是选 `nvidia-driver-535-server`？一条清晰的准线是：
+在 `apt search` 结果中，最大的迷茫来自于到底选 `nvidia-driver-570` 还是选 `nvidia-driver-570-server`？一条清晰的准线是：
 
 **你的屏幕用来开网页打游戏的，选通用版；你的机器藏在机房里跑矩阵相乘和 Docker 的，选 `-server`。**
 
@@ -134,8 +134,8 @@ flowchart TD
 2. **安装底座 (Metapackage)**： 
    ```bash
    sudo apt update
-   # 强烈建议安装带 -server 后缀的。系统会自动采用预编译或 DKMS 编译内核模块
-   sudo apt install nvidia-driver-535-server
+   # 强烈建议安装带 -server 后缀的生产分支（Hopper / Blackwell 推荐 570+ LTS）
+   sudo apt install nvidia-driver-570-server
    ```
 3. **重启并自检**： 
    ```bash
@@ -152,13 +152,13 @@ flowchart TD
    sudo systemctl restart docker
    ```
 5. **部署真身**：
-   无需在外部安装庞大的 CUDA Toolkit。直接在 Docker 中拉模型（可结合 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 加载 AWQ 或 GPTQ 量化权重，以显著降低显存开销）：
+   无需在外部安装庞大的 CUDA Toolkit。直接在 Docker 中拉模型（可结合 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 加载 FP8、AWQ 或 GPTQ 量化权重，以显著降低显存开销）：
    ```bash
    # 容器内跑通了 nvidia-smi，就意味着所有的链条严丝合缝
-   docker run --rm --gpus all nvidia/cuda:12.1.1-base-ubuntu22.04 nvidia-smi
+   docker run --rm --gpus all nvidia/cuda:12.8.0-base-ubuntu24.04 nvidia-smi
    ```
 
-### 场景 2：个人极客工作站部署 —— "我只有一块 4090，要跑 AI 兼顾写代码"
+### 场景 2：个人极客工作站部署 —— "我只有一块 4090 / 5090，要跑 AI 兼顾写代码"
 
 **特征**：显示器直插在这块显卡上，既需要加载桌面 GUI，又需要在本地终端里直接跑本地模型测试。
 
@@ -167,7 +167,7 @@ flowchart TD
    ```bash
    sudo ubuntu-drivers autoinstall
    # 或者手动指定
-   sudo apt install nvidia-driver-535
+   sudo apt install nvidia-driver-570
    ```
 2. **安装宿主机 CUDA Toolkit**（因为不在 Docker 跑）：
    使用官方网站下载并安装对应版本的 `cuda-toolkit` 即可。这时候编译器 `nvcc` 会被直接种在你主机的 PATH 里。
@@ -177,21 +177,21 @@ flowchart TD
 **特征**：实验室共用机器，多人通过 SSH 登录。因为历史原因没有上容器方案，必须在物理机配置所有炼丹环境。
 
 **部署逻辑**：
-这其实是从**场景1**延伸：先打通这五层驱动栈 (`nvidia-driver-535-server`)。随后，这台物理机还要作为巨大的软件容器，被层层套上去：
+这其实是从**场景1**延伸：先打通这五层驱动栈 (`nvidia-driver-570-server`)。随后，这台物理机还要作为巨大的软件容器，被层层套上去：
 驱动 -> `CUDA Toolkit` -> `cuDNN` -> `TensorRT` -> `Python Env` -> `框架`。
 
-**致命痛点**：因为全部叠在系统层面，一旦张三需要跑 TensorFlow（依赖旧 CUDA），李四需要跑最新的 [vLLM](/articles/vllm-serving-guide/)（依赖最新 CUDA），环境就会发生冲突撕裂。这就是我们疯狂推崇**场景1**的原因。
+**致命痛点**：因为全部叠在系统层面，一旦张三需要跑旧版算子（依赖旧 CUDA），李四需要跑最新的 [vLLM](/articles/vllm-serving-guide/)（依赖 CUDA 12.8+），环境就会发生冲突撕裂。这就是我们强烈推崇**场景1**的原因。
 
 ### 场景 4：数据中心怪兽 —— HGX / DGX NVSwitch 节点
 
-**特征**：一般为昂贵的单节点 8 卡系统。
+**特征**：一般为昂贵的单节点 8 卡 HGX 服务器（以及跨节点扩展的 NVLink 集群，详见 [GB200 NVL72 机柜级超节点与 NCCL 集合通信架构](/articles/rack-scale-superpod-nvl72-nccl-collectives/)）。
 一旦到了这一步，绝不是靠 `apt install nvidia-driver` 就能躺平的。你必须遵循严格的驱动纪律。
 
 1. **部署常规驱动**：按照场景 1 部署并确认模块运行正常。
 2. **部署 Fabric Manager**：
    这一步不仅要装，而且它的版本必须跟当前实际生效的 Driver **极其精准地匹配 (精确到次要版本号)**！
    ```bash
-   sudo apt install nvidia-fabricmanager-535
+   sudo apt install nvidia-fabricmanager-570
    sudo systemctl enable --now nvidia-fabricmanager
    ```
 3. 如果这步失败或版本不匹配，GPU 集群将在日志中抛出 NVSwitch 无法初始化的问题，跨卡大模型张量并行 (TP>1) 将会彻底死机。
@@ -204,9 +204,9 @@ flowchart TD
 
 ### 必修课：如何从低版本驱动跨越升级到高版本？
 
-**场景描述**：你现有的驱动是旧版本（如 `525` 甚至更早），为了跑最新的模型框架或匹配新的 CUDA 12.x 生态，必须要把底座升级到更高的大版本（如 `535` 甚至 `550`）。
+**场景描述**：你现有的驱动是旧版本（如 `535` 或 `550`），为了跑最新的 Blackwell/Hopper 算子或匹配 CUDA 12.8+ 生态，必须要把底座升级到更高的大版本（如 `570`）。
 
-**致命错误**：直接敲 `apt install nvidia-driver-550-server` 覆盖安装。这极容易导致新版本的包试图覆盖旧包时产生依赖死锁，特别是 Userspace 和 Kernel Module 极其容易发生残留混装，导致 `dpkg` 甚至进入无法自我恢复的崩溃状态。
+**致命错误**：直接敲 `apt install nvidia-driver-570-server` 覆盖安装。这极容易导致新版本的包试图覆盖旧包时产生依赖死锁，特别是 Userspace 和 Kernel Module 极其容易发生残留混装，导致 `dpkg` 甚至进入无法自我恢复的崩溃状态。
 
 **真正企业级无损升级四步曲**：
 1. **停机并清理旧战场 (Purge)**：必须将旧分支连根拔起。
@@ -225,27 +225,27 @@ flowchart TD
 3. **犹如新机般安装目标分支**：
    ```bash
    sudo apt update
-   sudo apt install nvidia-driver-550-server   # 填入你需要的目标版本
+   sudo apt install nvidia-driver-570-server   # 填入你需要的目标版本
    ```
-   > 提醒：如果你是多卡 NVSwitch (场景 4) 用户，在此刻必须一并安装 `nvidia-fabricmanager-550`。
+   > 提醒：如果你是多卡 NVSwitch (场景 4) 用户，在此刻必须一并安装 `nvidia-fabricmanager-570`。
 4. **重启生效**：内核驱动层的更迭，唯有彻底重启（`reboot`）方能生效。重启完毕后输入 `nvidia-smi` 验证升级大业。
 
 ### 巨坑 1：内核静默更新导致的 `nvidia-smi` 罢工
 
 **现状描述**：
-机房平时好好的，周末因为安全更新 Ubuntu 偷偷执行了 `apt-get upgrade`，顺手把 Linux Kernel 从 `5.15.0-70` 升到了 `5.15.0-80`，重启后 `nvidia-smi` 失联。
+机房平时好好的，周末因为安全更新 Ubuntu 偷偷执行了 `apt-get upgrade`，顺手把 Linux Kernel 从 `6.8.0-45` 升到了 `6.8.0-51`，重启后 `nvidia-smi` 失联。
 
-**底层原因**：由于使用预编译的 `.ko` 模块，它死死绑在了旧内核目录 `/lib/modules/5.15.0-70/` 下。全新的内核启动后，在自己的目录下找不到 NVIDIA 驱动。
+**底层原因**：由于使用预编译的 `.ko` 模块，它死死绑在了旧内核目录 `/lib/modules/6.8.0-45/` 下。全新的内核启动后，在自己的目录下找不到 NVIDIA 驱动。
 
 **抢救姿势**：
 * 如果你是 DKMS 用户，只需让 DKMS 对着新内核重写即可：
   ```bash
   sudo apt install linux-headers-$(uname -r)
-  sudo dpkg-reconfigure nvidia-dkms-535
+  sudo dpkg-reconfigure nvidia-dkms-570-server
   ```
 * 如果必须走预编译路线，只能补充新包：
   ```bash
-  sudo apt install linux-modules-nvidia-535-$(uname -r)
+  sudo apt install linux-modules-nvidia-570-server-$(uname -r)
   ```
 
 ### 巨坑 2：裸机升级的大忌
@@ -266,7 +266,7 @@ flowchart TD
 | **内核版本** | `uname -r` | 记住这串数字，它是驱动编译的“身份证件”。 |
 | **到底装了啥** | `apt-mark showmanual \| grep nvidia` | 系统目前是受哪个 Meta 手册控制的，有没有多余的死尸包。 |
 | **状态确认** | `nvidia-smi` | 表明这套五层驱动栈从内核穿越用户态，打通了！ |
-| **检验容器底座** | `docker run --rm --gpus all nvidia/cuda:12.1.1-base-ubuntu22.04 nvidia-smi` | 如果跑完输出状态信息，证明你的 Container Toolkit 环境金身大成。 |
+| **检验容器底座** | `docker run --rm --gpus all nvidia/cuda:12.8.0-base-ubuntu24.04 nvidia-smi` | 如果跑完输出状态信息，证明你的 Container Toolkit 环境金身大成。 |
 
 只要你能从“这 5 个层级”的视角俯瞰整个报错信息，你就一定能够像庖丁解牛一样，指哪打哪地解决所有驱动深坑。祝武运昌隆！
 
@@ -274,21 +274,14 @@ flowchart TD
 
 ## 常见问题 (FAQ)
 
-### Q1: nvidia-smi 能够正常显示，但运行 PyTorch 或 CUDA 程序却报错 "CUDA error: no kernel image is available" 或 "No CUDA GPUs are available"，该如何排查？
-首先检查 `nvidia-smi` 右上角显示的 Driver API 版本是否满足上层框架的最低要求。若报错为 "no kernel image"，通常是 PyTorch 编译所支持的 GPU 计算能力（Compute Capability / SM 架构）与当前物理卡不匹配；若报错为 "No CUDA GPUs"，则通常是宿主机 `LD_LIBRARY_PATH` 缺失了 `libnvidia-compute` 的软链接，或者普通用户缺少 `/dev/nvidia*` 字符设备的访问权限。在部署生产级推理服务时，推荐参考 [vLLM 生产级部署全指南](/articles/vllm-serving-guide/) 在标准 Docker 镜像中直接运行。
+### Q1: `nvidia-smi` 能够正常显示，但运行 PyTorch 或 CUDA 程序却报错 "CUDA error: no kernel image is available" 或 "No CUDA GPUs are available"，该如何排查？
+首先检查 `nvidia-smi` 右上角显示的 Driver API 版本是否满足上层框架的最低要求。若报错为 "no kernel image"，通常是 PyTorch 编译所支持的 GPU 计算能力（Compute Capability / SM 架构，例如 Blackwell `sm_100`）高于旧版预编译 Wheel 包支持范围；若报错为 "No CUDA GPUs"，则通常是宿主机 `LD_LIBRARY_PATH` 缺失了 `libnvidia-compute` 的软链接，或者普通用户缺少 `/dev/nvidia*` 字符设备的访问权限。在部署生产级推理服务时，推荐参考 [vLLM 生产级部署全指南](/articles/vllm-serving-guide/) 在标准 Docker 镜像中直接运行。
 
 ### Q2: 宿主机驱动版本（Driver API）与开发环境 CUDA Toolkit（Runtime API）版本之间到底是什么兼容关系？
-Driver API（由内核模块及 `libnvidia-compute` 提供，对应 `nvidia-smi`）严格向下兼容上层 Runtime API（由 `cuda-toolkit` / `nvcc` 提供）。这意味着宿主机只要安装了高版本驱动（如 550.x），无论是在物理机 Conda 环境还是 Docker 容器中，都可以向下兼容运行针对 CUDA 12.1、11.8 编译的各类深度学习镜像。开发时无需在宿主机全局覆盖安装庞大的 CUDA Toolkit，保持宿主机高版本 LTS 驱动即可。
+Driver API（由内核模块及 `libnvidia-compute` 提供，对应 `nvidia-smi`）严格向下兼容上层 Runtime API（由 `cuda-toolkit` / `nvcc` 提供）。这意味着宿主机只要安装了高版本驱动（如 `570.x`），无论是在物理机 Conda 环境还是 Docker 容器中，都可以向下兼容运行针对 CUDA 12.8、12.4 或 11.8 编译的各类深度学习镜像。开发时无需在宿主机全局覆盖安装庞大的 CUDA Toolkit，保持宿主机高版本 LTS 驱动即可。
 
 ### Q3: Docker 容器无法使用 GPU，报错 "Failed to initialize NVML" 或 "could not select device driver"，根因通常是什么？
 此类错误绝大多数发生在系统执行自动补丁更新之后。核心排查顺序为：先验证宿主机 `nvidia-container-toolkit` 是否已通过 `nvidia-ctk runtime configure --runtime=docker` 注入 Docker 守护进程配置并重启服务；再确认宿主机 Linux 内核是否发生静默升级，导致旧内核下的预编译驱动模块无法被新内核加载。如果显卡显存处于极限吃紧状态，也可参考 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 压缩模型显存，避免容器初始化分配显存失败。
 
----
-
-## 常见问题 (FAQ)
-
-### Q1: nvidia-dkms 和 linux-modules-nvidia 有什么核心区别？
-`nvidia-dkms` 会在当前系统内核现场编译驱动模块，对内核升级的兼容性更好；而 `linux-modules-nvidia` 是预编译的，一旦内核升级就会失效。建议在生产环境中结合 [vLLM 生产级部署全指南](/articles/vllm-serving-guide/) 采用 dkms 方式。
-
-### Q2: 出现 "Driver/library version mismatch" 该怎么办？
-这是因为内核态驱动模块和用户态库 (libnvidia-*) 版本不一致导致。需要完全卸载现有驱动并重新安装匹配版本。在进行此类操作前，可以参考 [大模型量化实战指南](/articles/quantization-hands-on-guide/) 了解环境依赖的最佳实践。
+### Q4: `nvidia-dkms` 和 `linux-modules-nvidia` 有什么核心区别？为什么会出现 "Driver/library version mismatch"？
+`nvidia-dkms` 会在当前系统内核现场编译驱动模块，能够抵御小版本内核升级导致的失联；而 `linux-modules-nvidia` 是针对特定内核预编译的二进制模块，内核版本变更即失效。至于 `Driver/library version mismatch`，是因为已加载在内存中的内核态模块版本（`cat /proc/driver/nvidia/version`）与磁盘上新升级的用户态库（`libnvidia-*`）不一致，彻底清理残留包或重启节点加载新内核模块即可恢复。

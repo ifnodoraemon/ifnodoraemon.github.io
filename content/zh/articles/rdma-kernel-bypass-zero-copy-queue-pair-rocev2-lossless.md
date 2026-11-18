@@ -77,7 +77,7 @@ flowchart TD
 
 ### 1.2 零拷贝（Zero-Copy）与内存注册（Memory Registration, MR）
 网卡硬件通过 PCIe DMA（直接内存访问）直接从主机物理内存（或 GPU 显存 HBM）中抓取或灌入数据，无需在系统内核缓冲区暂存：
-- **物理内存锁定（Page Pinning）**：RDMA 驱动调用 `mlock()` 将注册的虚拟内存页锁定在物理 RAM 中，严禁操作系统进行内存换页（Swap Out）；
+- **物理内存锁定（Page Pinning）**：内核 RDMA 驱动 `ib_umem_get` 调用 `pin_user_pages()` 将注册的虚拟内存页锁定在物理 RAM 中，严禁操作系统进行内存换页（Swap Out）或页面迁移；
 - **虚拟-物理地址映射写入网卡缓存**：将虚拟地址与物理页帧的映射表（Page Table）预先上传至网卡硬件缓存；
 - **安全密钥保护（Protection Keys）**：分配本地密钥 `L_Key`（本地网卡访问鉴权）与远程密钥 `R_Key`（允许对端网卡直接向该内存段执行 DMA 写入的授权凭证）。
 
@@ -234,7 +234,7 @@ RDMA 以内核旁路、零拷贝与内存注册三大核心支柱，终结了传
 - **PFC 机制治标不治本**：PFC 是逐跳流控，无法从根源上消除死锁风险，网络调优需要平衡数十个极为苛刻的队列水位参数；
 - **以太网报文开销与抖动**：以太网的非确定性调度和重传开销，在万卡集群中依然会引入尾部时延；
 - **真正为高性能计算而生的原生霸主 —— InfiniBand（IB）**：
-  从物理硬件、Credit-based 物理链路流控、切片交换（Cut-Through Switching），到集中式子网管理器（Subnet Manager）全局路径计算，InfiniBand 为何能做到**零死锁、真正的物理级绝对无损与亚微秒级超低时延**？
+  从物理硬件、Credit-based 物理链路流控、切片交换（Cut-Through Switching），到集中式子网管理器（Subnet Manager）全局无死锁路径计算，InfiniBand 为何能做到**零缓冲溢出丢包、全局路由防死锁与亚微秒级超低时延**？
   从 HDR 200G、NDR 400G 到 2026 年量产的 XDR 800G，InfiniBand 物理信道如何突破极限？
 
 在接下来的**专栏第十讲**中，我们将全面揭开纯血超级算力网络的终极面纱 —— **[InfiniBand 架构第一性原理：物理链路速率演进、Credit-Based 链路级流控与子网管理器 (Subnet Manager) 全局编排](/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/)**！

@@ -35,6 +35,31 @@ updated: 2026-10-20
 
 即使称为 W8A8，也通常有归一化、路由、累加或输出等保留较高精度的部分；应查具体 checkpoint 和 kernel，不能把全部计算描述成同一位宽。
 
+### 主流数值格式位宽布局对照（FP32 → INT4 / NF4）
+
+理解精度损耗与溢出风险的前提，是看清每种数值格式在比特层面的**符号位（Sign）、指数位（Exponent，决定动态范围）与尾数位（Mantissa，决定有效精度）**分配：
+
+| 格式 | 总位宽 | 比特布局 (`S / E / M`) | 可表示数值范围 / 量化网格 | 典型工程定位与开销 |
+| --- | --- | --- | --- | --- |
+| **FP32** | 32-bit | `1S + 8E + 23M` | $\approx \pm 3.4 \times 10^{38}$ | 主权重副本、AdamW 优化器状态与算子高精度累加器（4 Bytes/参数） |
+| **BF16** | 16-bit | `1S + 8E + 7M` | $\approx \pm 3.39 \times 10^{38}$ | 指数位与 FP32 一致，抗激活上溢能力强，现代预训练与推理默认基线（2 Bytes/参数） |
+| **FP16** | 16-bit | `1S + 5E + 10M` | 最大有限正规数 $\pm 65,504$ | 尾数精度高于 BF16，但动态范围窄，大激活易溢出为 `Inf`（2 Bytes/参数） |
+| **FP8 E4M3** | 8-bit | `1S + 4E + 3M` | 最大有限值 $\pm 448$（OCP `e4m3fn`） | 3 位尾数保留较高有效精度，广泛用于 Hopper/Ada/Blackwell 前向权重与激活（1 Byte + Scale） |
+| **FP8 E5M2** | 8-bit | `1S + 5E + 2M` | 最大有限正规数 $\pm 57,344$ | 5 位指数换取宽动态范围，常用于反向梯度或可选 KV Cache 存储格式（1 Byte + Scale） |
+| **INT8** | 8-bit | `8-bit 整数`（无指数位） | 有符号 `[-128, 127]` / 无符号 `[0, 255]` | 均匀线性网格，依赖按张量/通道/Token 的缩放因子 $s$（及零点 $z$）映射离群范围 |
+| **INT4 / NF4** | 4-bit | `4-bit 索引或整数` | `[-8, 7]` 均匀整数（INT4）或 16 级正态分位查找表（NF4） | 需按组（如 `group_size=128`）存储额外 Scale/Zero-Point，实际有效位宽约 `4.15~4.5 bit/参数` |
+
+### Roofline 视角：Weight-Only（AWQ/GPTQ）vs. Weight-Activation（SmoothQuant/FP8）
+
+为什么同样叫“量化”，不同方案在低并发与高并发下的提速表现截然相反？核心取决于 GPU 的 **HBM 显存带宽墙** 与 **Tensor Core 算力屋顶（Roofline）**：
+
+1. **纯权重量化（Weight-Only，`W4A16` / `W8A16`，如 AWQ、GPTQ、GGUF）**：
+   * **硬件执行路径**：权重以 4-bit/8-bit 存储在 HBM 中，读取进片上寄存器/SRAM 时使**权重访存字节数骤降约 2~4 倍**；随后由融合算子（如 Marlin 内核）在片上即时反量化回 FP16/BF16，最终仍在 **FP16/BF16 Tensor Core** 上完成矩阵乘。
+   * **Roofline 收益边界**：在单请求或小 Batch 自回归 **Decode 阶段**（算术强度极低，属于 **HBM 带宽受限 Memory-Bound**），减少权重搬运能直接降低单步耗时；但在大 Batch 高并发或长文本 **Prefill 阶段**（算术强度高，进入 **算力受限 Compute-Bound**），FP16 Tensor Core 峰值算力并未增加，反量化指令开销甚至可能抵消访存收益。
+2. **权重-激活全量化（Weight-Activation，`W8A8` INT8 SmoothQuant / FP8）**：
+   * **硬件执行路径**：权重与激活张量同时以 8-bit 送入硬件原生的 **INT8 或 FP8 Tensor Core**（在 H100/B200 等架构上，FP8 Tensor Core 理论峰值算力是 BF16/FP16 的 **2 倍**）。其中 **SmoothQuant** 通过对角平滑因子 $\mathbf{Y} = (\mathbf{X}\operatorname{diag}(\mathbf{s})^{-1}) \cdot (\operatorname{diag}(\mathbf{s})\mathbf{W})$ 将激活通道的极端离群值等价迁移到权重侧，缓解静态 INT8 激活截断误差；**FP8（E4M3）** 则借助指数位天然容忍更大动态范围，并配合按张量/按通道/按块（1×128, 128×128）缩放稳定精度。
+   * **Roofline 收益边界**：既将权重 HBM 读取减半，又把 Compute-Bound 区间的 Tensor Core 算力天花板翻倍，因而在**高并发在线服务与长序列 Prefill** 中能同时获得显存容量与计算吞吐收益。
+
 ## 一、INT8、FP8 和 BitsAndBytes 的区别
 
 INT8 通常依赖缩放系数把数值映射到有限整数范围；FP8 带指数，但仍需合适的缩放和数值范围处理。动态缩放可以不使用离线校准集，静态量化则可能需要代表性样本；“FP8 全部零校准、任何任务损失小于 1%”不是通用保证。

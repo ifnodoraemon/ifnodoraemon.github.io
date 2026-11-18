@@ -144,24 +144,24 @@ graph TB
 | `.github/copilot-instructions.md` | Copilot 全局指令 | GitHub Copilot | ⭐ |
 | `.goosehints` | Goose 指令 | Goose | ⭐ |
 
-一个好的 `AGENTS.md` 长什么样？以我这个 Hugo 技术博客为例：
+一个好的 `AGENTS.md` 长什么样？以我这个基于 Node + Vite 的双语静态技术博客为例：
 
 ```markdown
-# 项目：ifnodoraemon.github.io（Hugo 技术博客）
+# 项目：ifnodoraemon.github.io（双语静态技术博客）
 
 ## 技术栈
-- Hugo SSG + Vanilla JS + CSS
-- 双语架构：content/zh/ 和 content/en/
+- Node.js 静态生成脚本 + Vite 7 + Vue Islands + 原生 CSS
+- 双语架构：content/zh/articles/*.md 和 content/en/articles/*.en.md
 
 ## 关键命令
-- hugo server -D     # 本地预览
-- npm run build      # 生产构建
+- npm run dev        # 本地开发预览
+- npm run build      # 生产构建（输出至 dist/）
 
 ## 文章规范
 - 中文文章放 content/zh/articles/{slug}.md
 - 英文文章放 content/en/articles/{slug}.en.md
 - frontmatter 必须包含：title / slug / date / tag / tagClass / description
-- tagClass 可选值：tag-blue / tag-green / tag-violet / tag-emerald
+- tagClass 可选值：tag-purple / tag-cyan / tag-blue / tag-emerald / tag-amber
 
 ## 写作风格
 - 开篇用痛点场景引入，不要写"本文将介绍..."
@@ -169,9 +169,9 @@ graph TB
 - 善用 mermaid 图和表格对比
 
 ## 安全边界
-- ❌ 永远不要修改 public/ 目录（构建输出）
-- ❌ 不要引入新的 CSS 框架
-- ❌ 不要修改 .github/workflows/ 中的 CI 配置
+- ❌ 永远不要手动修改 dist/ 目录（构建产物）
+- ❌ 不要引入新的重型 CSS 框架
+- ❌ 不要擅自修改 .github/workflows/ 中的 CI 配置
 ```
 
 > 注意：这个文件只有 25 行。精简是关键——每多一行无用指令，都在稀释真正重要的规则。
@@ -180,7 +180,7 @@ graph TB
 
 1. **控制在 200 行以内** — LLM 存在 ["lost-in-the-middle"](https://arxiv.org/abs/2307.03172) 效应：模型对上下文中间位置的信息关注度最低。超长规则反而被忽略
 2. **只写 AI 推断不出来的内容** — 不要重复 linter 和类型检查已经做的事。"使用 TypeScript" 不用写；"API 路由用 kebab-case" 要写
-3. **通过摩擦迭代** — AI 反复犯同一个错（比如总是忘记给 Hugo 文章加 `tagClass`）？立即编码进规则文件
+3. **通过摩擦迭代** — AI 反复犯同一个错（比如总是忘记给文章 frontmatter 加 `tagClass`）？立即编码进规则文件
 4. **提供标杆文件路径** — 相比千言万语，"新文章请参考 `content/zh/articles/mcp-guide.md` 的格式"一句话胜过一切
 
 跨工具通用是 `AGENTS.md` 的核心优势。无论你用 Cursor、Copilot、Claude Code 还是 Aider，它们都会自动读取项目根目录下的这个文件。一次配置，全平台生效。如果你需要针对特定工作流注入更专业的模块化技能或自动化脚本，可进一步参阅 [Skills 深度解析：给 AI 编程助手装上「专业大脑」](/articles/skills-guide/)。

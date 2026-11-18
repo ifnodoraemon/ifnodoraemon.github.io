@@ -229,7 +229,7 @@ If prefill chunks still require computation, how does slicing them improve overa
 
 The answer lies in the **Roofline Model arithmetic intensity headroom** we derived in Chapter 1:
 
-- **Decode Underutilization**: During autoregressive decoding, even at a batch size of $B=64$, operational intensity lingers around $10 \sim 30\text{ FLOPs/Byte}$, far below an H100 GPU's ridge point ($I_{\text{ridge}} \approx 150\text{ FLOPs/Byte}$). **Tensor Cores spend the majority of their cycles idling while waiting for HBM to deliver weights and KV caches**;
+- **Decode Underutilization**: During autoregressive decoding, even at a batch size of $B=64$, overall operational intensity (accounting for historical KV cache traffic) lingers around $10 \sim 50\text{ FLOPs/Byte}$ (capped at $64\text{ FLOPs/Byte}$ even for pure linear projections), far below an H100 SXM5 GPU's BF16 ridge point ($I_{\text{ridge}} \approx 295\text{ FLOPs/Byte}$, i.e., $989.4\text{ TFLOPS} / 3.35\text{ TB/s}$). **Tensor Cores spend the majority of their cycles idling while waiting for HBM to deliver weights and KV caches**;
 - **Prefill Chunk Compute Saturation**: A 512-token GEMM possesses an arithmetic intensity that comfortably surpasses the ridge point, driving Tensor Cores to peak compute saturation;
 - **Piggybacking**: In each forward step, the scheduler packs **one 512-token Prefill Chunk together with all active Decode sequences (e.g., 64 tokens)** into a single, unified execution batch!
 

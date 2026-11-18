@@ -84,8 +84,9 @@ Standard Ethernet Frame with 802.1Q Tag Inserted:
 
 1. **TPID (Tag Protocol Identifier, 16 bits)**: Set to `0x8100`, indicating an 802.1Q-tagged frame follows;
 2. **PCP (Priority Code Point, 3 bits)**: Provides 8 priority levels (0–7) for Class of Service (QoS) traffic prioritization (e.g., prioritizing VoIP or video over bulk downloads);
-3. **VID (VLAN Identifier, 12 bits)**:
-   $2^{12} = 4096$. Values `0` and `4095` are reserved, leaving **valid VLAN IDs from $1$ to $4094$**.
+3. **DEI (Drop Eligible Indicator, 1 bit)**: Formerly CFI; used alongside PCP to mark frames eligible for preferential dropping during switch congestion;
+4. **VID (VLAN Identifier, 12 bits)**:
+   $2^{12} = 4096$. Values `0` and `4095` are reserved, leaving **valid VLAN IDs from $1$ to $4094$** (totaling $16 + 3 + 1 + 12 = 32\text{ bits}$).
 
 ### 2.2 Switch Port Types: Access vs Trunk
 
@@ -124,7 +125,7 @@ sequenceDiagram
 ```
 
 ### 2.3 Inter-VLAN Routing: Router-on-a-Stick vs Layer 3 Switches (SVI)
-When hosts in Engineering (VLAN 10) need to reach an internal API in Finance (VLAN 20), traffic must be routed:
+When hosts in Engineering (VLAN 20) need to reach an internal API in Finance (VLAN 10), traffic must be routed:
 - **Router-on-a-Stick**: Connects the switch's trunk port to a physical router interface configured with virtual sub-interfaces (e.g., `eth0.10`, `eth0.20`), using the router to perform inter-subnet routing;
 - **Layer 3 Switch (Switch Virtual Interface, SVI)**: The standard enterprise design. The switch uses onboard routing ASICs to terminate VLANs on internal **Switch Virtual Interfaces (SVIs, e.g., `interface Vlan 10`)**, routing between VLANs at wire speed across the internal backplane without sending packets through an external router.
 

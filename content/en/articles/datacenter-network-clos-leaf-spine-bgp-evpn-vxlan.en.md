@@ -75,7 +75,7 @@ flowchart TD
 
 The mathematical foundation of modern data center networking was established in 1953 by Bell Labs mathematician Charles Clos in his seminal paper on multi-stage telephone switches—the **Clos Network**. Modern fabrics implement this as a **2-Tier Leaf-Spine architecture**:
 
-### 1.1 2-Tier Leaf-Spine (Folded Clos Architecture)
+### 2.1 2-Tier Leaf-Spine (Folded Clos Architecture)
 
 ```mermaid
 flowchart TD
@@ -107,9 +107,9 @@ flowchart TD
 #### Topological Rules
 1. **Full Mesh Interconnection**: Every Leaf switch connects directly to every Spine switch;
 2. **Horizontal Tier Isolation**: No Spine-to-Spine links, and no Leaf-to-Leaf links;
-3. **Deterministic Latency**: For Server A in Rack 1 to communicate with Server D in Rack 3, **the packet traversal path is strictly fixed at 3 switch hops (Leaf 1 $\to$ any Spine $\to$ Leaf 3)**, completely eliminating hop-count jitter.
+3. **Deterministic Equidistant Latency**: For Server A in Rack 1 to communicate with Server C in Rack 2 (or any remote rack), **the packet traversal path crosses a fixed 3 switches (Leaf 1 $\to$ any Spine $\to$ Leaf 2, i.e., 2 inter-switch fabric links)**, completely eliminating hop-count jitter.
 
-### 1.2 Non-blocking Fabrics and Oversubscription Ratio Mathematics
+### 2.2 Non-blocking Fabrics and Oversubscription Ratio Mathematics
 
 The standard metric for potential network congestion is the **Oversubscription Ratio ($R$)**:
 
@@ -128,7 +128,7 @@ $$R = \frac{12.8\text{ Tbps}}{12.8\text{ Tbps}} = 1:1$$
 
 ---
 
-## 2. Underlay Routing: eBGP and ECMP Hash Polarization
+## 3. Underlay Routing: eBGP and ECMP Hash Polarization
 
 With physical cabling in place, how do we distribute traffic evenly across all Spine switches without loops? Modern hyperscalers employ **Layer 3 routing down to the Top-of-Rack (ToR) switch**.
 
@@ -150,11 +150,11 @@ flowchart TD
     Leaf2 -- eBGP Session --- Spine1 & Spine2
 ```
 
-### 2.1 Why eBGP Over OSPF/IS-IS?
+### 3.1 Why eBGP Over OSPF/IS-IS?
 1. **Minimal Blast Radius**: OSPF and IS-IS are Link-State protocols using Dijkstra's algorithm. A single flapping optical link triggers fabric-wide LSA floods and shortest-path (SPF) recalculations, risking CPU exhaustion. eBGP is a Path-Vector protocol with built-in route damping and step-by-step filtering;
 2. **Loop Prevention via AS_PATH**: BGP nodes discard any route advertisement containing their own ASN, eliminating routing loops natively.
 
-### 2.2 ECMP and Hash Polarization
+### 3.2 ECMP and Hash Polarization
 
 When forwarding packets toward a remote subnet, a Leaf switch sees multiple equal-cost paths across the Spines. Switch ASICs compute a hash over the packet's **5-tuple (Source IP, Destination IP, Protocol, Source Port, Destination Port)**:
 
@@ -168,11 +168,11 @@ If Leaf switches and Spine switches execute the **identical, unperturbed polynom
 
 ---
 
-## 3. Overlay Virtualization: EVPN-VXLAN in Depth
+## 4. Overlay Virtualization: EVPN-VXLAN in Depth
 
 While the physical Underlay provides high-speed Layer 3 transport, multi-tenant cloud environments and Kubernetes container fabrics require seamless **Layer 2 network abstractions across physical nodes**.
 
-### 3.1 VXLAN: MAC-in-UDP Encapsulation
+### 4.1 VXLAN: MAC-in-UDP Encapsulation
 
 VXLAN (RFC 7348) encapsulates guest Layer-2 Ethernet frames inside standard physical UDP datagrams:
 
@@ -197,7 +197,7 @@ VXLAN Packet Encapsulation Hierarchy:
 2. **ECMP Load Balancing via Outer UDP Source Port**: The VTEP hashes the inner 5-tuple into the outer UDP source port. Intermediate Underlay Spine/Leaf switches do not need to understand VXLAN; standard ECMP distributes encapsulated packets across all spine links;
 3. **Jumbo Frames Best Practice**: The outer headers introduce $14 + 20 + 8 + 8 = 50$ bytes of encapsulation overhead. While RFC 7348 does not strictly mandate Jumbo Frames on the wire (VM MTUs can alternatively be dropped to 1450 over 1500 Underlays), enterprise data center Underlay switch ports are strongly recommended to configure MTUs of 1600+ or 9000/9216 bytes to enable standard 1500 payload transmission without fragmentation!
 
-### 3.2 The Control Plane Solution: MP-BGP EVPN
+### 4.2 The Control Plane Solution: MP-BGP EVPN
 
 Early VXLAN relied on flood-and-learn multicast to discover MAC addresses, frequently flooding the physical fabric with broadcast ARP storms.
 
@@ -222,7 +222,7 @@ sequenceDiagram
 
 ---
 
-## 4. Hands-On: Configuring Native VXLAN on Linux
+## 5. Hands-On: Configuring Native VXLAN on Linux
 
 To establish a point-to-point VXLAN tunnel between two Linux hosts (Host A: `192.168.10.1`, Host B: `192.168.10.2`):
 
@@ -255,7 +255,7 @@ ping 10.100.0.2
 
 ---
 
-## 5. Summary and Next Steps
+## 6. Summary and Next Steps
 
 By combining Clos topologies, eBGP Underlay routing, ECMP load balancing, and EVPN-VXLAN virtualization, modern hyperscale data centers decouple physical infrastructure from logical multi-tenant services.
 

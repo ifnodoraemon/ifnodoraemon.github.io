@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 5
-description: "为什么说容器网络是 Kubernetes 中最复杂、最容易踩坑的深水区？深度拆解云原生网络四大公理与 CNI（Container Network Interface）插件规范底层执行机理；全面对比 Flannel VXLAN 覆盖网络与 Calico BGP 纯二层路由性能与开销；深入解密 Cilium 如何利用 Linux 内核 eBPF 与 sockops 套接字重定向彻底革新 kube-proxy 与 iptables 性能瓶颈；并剖析面向未来的 Gateway API 角色分离与流量治理架构。"
+description: "为什么说容器网络是 Kubernetes 中最复杂、最容易踩坑的深水区？深度拆解云原生网络四大公理与 CNI（Container Network Interface）插件规范底层执行机理；全面对比 Flannel VXLAN 覆盖网络与 Calico 纯三层 (Layer-3) BGP 路由性能与开销；深入解密 Cilium 如何利用 Linux 内核 eBPF 与 sockops 套接字重定向彻底革新 kube-proxy 与 iptables 性能瓶颈；并剖析面向未来的 Gateway API 角色分离与流量治理架构。"
 extraTags:
   - Kubernetes
   - CNI
@@ -62,7 +62,7 @@ Kubernetes 对集群网络施加了非常硬核的“四大网络公理（Axioms
 4. **处于宿主机网络（HostNetwork）的 Pod 与其它 Pod 免 NAT 通信**。
 
 ```text
-经典 Kubernetes 扁平二层网络视界 (Flat Network):
+经典 Kubernetes 扁平三层网络视界 (Flat Layer-3 Network):
 Node A (192.168.1.10)              Node B (192.168.1.20)
 ┌──────────────────────┐          ┌──────────────────────┐
 │ Pod 1 (10.244.1.5)   │          │ Pod 3 (10.244.2.8)   │
@@ -73,7 +73,7 @@ Node A (192.168.1.10)              Node B (192.168.1.20)
         (Src: 10.244.1.5  ──►  Dst: 10.244.2.8)
 ```
 
-这四大公理彻底消除了传统网络中的端口争抢与 NAT 损耗，使 Kubernetes 集群呈现为一个纯净、透明的**扁平二层网络（Flat Layer 3/Layer 2 Network）**。
+这四大公理彻底消除了传统网络中的端口争抢与 NAT 损耗，使 Kubernetes 集群呈现为一个纯净、透明的**扁平三层网络（Flat Layer-3 Network）**。
 
 ---
 
@@ -161,16 +161,16 @@ flowchart TD
 
     subgraph CiliumeBPF["Cilium eBPF 架构 (完全旁路 Netfilter)"]
         direction TB
-        E1["网卡接收报文 (XDP 网卡线速 Hook)"] --> E2["eBPF BPF_MAP B-Tree 查找 (O(1) 极速匹配)"]
+        E1["网卡接收报文 (XDP 网卡线速 Hook)"] --> E2["eBPF BPF_MAP 哈希表查找 (O(1) 极速匹配)"]
         E2 --> E3["直接重写数据包元数据 (完全绕过 conntrack 与 iptables)"]
-        E3 --> E4["<b>sockops / sk_msg: Socket 层直接内存重定向</b>"]
-        E4 --> E5["直接送达容器 Socket (同主机免入 TCP/IP 栈)"]
+        E3 --> E4["<b>tc bpf_redirect_peer (跨网卡直投) / sockops (同机 Socket 短路)</b>"]
+        E4 --> E5["直接送达目标容器 (免过冗长 Netfilter 链)"]
     end
 ```
 
 #### Cilium eBPF 的三大黑科技：
 1. **$O(1)$ 常数级寻址**：使用高效的内核 BPF Map 哈希表维护服务路由，无论集群内有 10 个还是 100,000 个 Service，分发耗时完全恒定；
-2. **完全剔除 kube-proxy 与 iptables**：在 `kube-proxy-replacement=strict` 模式下，宿主机无需启动任何 kube-proxy，iptables 规则表保持绝对清爽；
+2. **完全剔除 kube-proxy 与 iptables**：在 `kubeProxyReplacement=true`（Cilium v1.16+）模式下，宿主机无需启动任何 kube-proxy，iptables 规则表保持绝对清爽；
 3. **`sockops` 套接字层直接短路**：当同一台宿主机上的两个 Pod 进行 TCP 通信时，Cilium 在套接字层（Socket Layer）直接捕获 `sendmsg`，通过内核指针直接将数据包写入目标容器的 Socket 接收队列，**彻底绕过了 veth-pair、网卡驱动和整个下层 TCP/IP 协议栈**，性能提升高达 300%！
 
 ---
@@ -239,11 +239,11 @@ Kubernetes 网络体系的演进，本质上是云原生软件栈对 Linux 操�
 **解决方案**：
 必须确保 CNI 插件（如 Flannel 或 Cilium）将容器网卡的 MTU 正确设置为物理网卡 MTU 减去 50（即 `1450`），并确保 Linux 内核启用了标准的 TCP MSS Clamping。
 
-### Q2: Cilium 在完全替代 kube-proxy（`kube-proxy-replacement=strict`）后，底层究竟是如何处理 NodePort 流量的？
+### Q2: Cilium 在完全替代 kube-proxy（`kubeProxyReplacement=true`）后，底层究竟是如何处理 NodePort 流量的？
 Cilium 在底层依靠 **eBPF XDP (eXpress Data Path) 与 tc (Traffic Control) 子系统**：
-1. 当外部客户端访问宿主机的 `NodePort`（如 `30080`）时，网卡驱动刚收到数据包，挂载在网络驱动最底层的 **XDP eBPF 程序**便在内核分配 `sk_buff` 之前极速捕获该包；
-2. Cilium 在内核 BPF Map 中执行 $O(1)$ 查找，确定该 NodePort 对应的健康后备 Pod IP；
-3. 如果目标 Pod 在本机，eBPF 直接修改目标 IP 并通过 `sockops` 重定向交付；如果目标 Pod 在远端节点，Cilium 自动进行 DSR（Direct Server Return，直接服务器返回）或者快速 SNAT 封装转发，**整个过程完全绕过了 Linux 内核 conntrack 连接跟踪表与 iptables**，耗时仅微秒级。
+1. 当外部客户端访问宿主机的 `NodePort`（如 `30080`）时，网卡驱动收到数据包后，挂载在物理网卡上的 **XDP / tc ingress eBPF 程序**在进入 Netfilter 之前极速捕获该包；
+2. Cilium 在内核 BPF Map 哈希表中执行 $O(1)$ 查找，确定该 NodePort 对应的健康后备 Pod IP；
+3. 如果目标 Pod 在本机，eBPF 在 `tc` 层直接完成 DNAT 改写目标 IP，并通过 `bpf_redirect_peer` / `bpf_redirect_neigh` 快速直投至本机目标 Pod 的虚拟网卡（注：`sockops` 则专门用于加速同机 Pod 间的本地 Socket 到 Socket 流量）；如果目标 Pod 在远端节点，Cilium 自动进行 DSR（Direct Server Return，直接服务器返回）或者快速 SNAT 封装转发，**整个过程完全绕过了 Linux 内核 conntrack 连接跟踪表与 iptables**，耗时仅微秒级。
 
 ### Q3: 生产集群何时应当从传统的 Ingress 全面迁移到 Gateway API？
 如果你的业务满足以下任意一个场景，应尽早规划迁移：

@@ -10,9 +10,9 @@ updated: 2026-10-21
 ---
 
 > [!NOTE] 核心速览 (TL;DR)
-> - **模型架构与权重规格**：DeepSeek-V4 采用 CSA（压缩稀疏注意力）＋ HCA（重度压缩注意力）混合注意力与 FP8/FP4 混合 MoE 架构；Kimi K3（官方标识 `moonshotai/Kimi-K3`）采用 69 层 KDA（递归状态衰减）+ 24 层 Gated MLA 混合长序列架构，基于原生 MXFP4 权重与 MXFP8 激活。
-> - **集群拓扑与网络规划**：对于 600B+ 超大参数 MoE 模型，机内必须采用 TP8（NVLink 全互联，双向带宽 900 GB/s），跨机采用 PP2/PP4 与 EP（专家并行）混合切分；节点间强制要求 8x 400Gbps InfiniBand (NDR) 或 RoCEv2 轨道优化组网，杜绝跨机 TP 带来的通信灾难。
-> - **六大生产踩坑与实战解决**：系统攻克跨 NUMA 总线吞吐骤降、MoE 专家路由倾斜（Straggler 慢节点）、CUDAGraph 动态捕获伪 OOM、无损网络 PFC 级联死锁、KDA 递归状态会话漂移以及 Raylet 节点假死等核心隐患。
+> - **模型架构与权重规格**：DeepSeek-V4 采用 CSA（压缩稀疏注意力）＋ HCA（重度压缩注意力）混合注意力与 FP8/FP4 混合 MoE 架构；Kimi K3（官方标识 `moonshotai/Kimi-K3`）采用 69 层 **Kimi Delta Attention (KDA)**（通道级门控增量线性递归注意力）+ 24 层 Gated MLA 混合长序列架构，基于原生 MXFP4 权重与 MXFP8 激活，两者均原生支持 **1M** 超长上下文窗口。
+> - **集群拓扑与网络规划**：对于 600B+ 超大参数 MoE 模型，机内必须采用 TP8（H100 NVLink 4 单卡双向 900 GB/s / 单向 450 GB/s，8 卡 NVSwitch 聚合单向 3.6 TB/s、双向 7.2 TB/s；H800 8 卡聚合双向 3.2 TB/s），跨机采用 PP2/PP4 与 EP（专家并行）混合切分；节点间强制要求 8x 400Gbps InfiniBand (NDR) 或 RoCEv2 轨道优化组网，杜绝跨机 TP 带来的通信灾难。
+> - **六大生产踩坑与实战解决**：系统攻克跨 NUMA 总线吞吐骤降、MoE 专家路由倾斜（Straggler 慢节点）、CUDAGraph 动态捕获伪 OOM、RoCEv2 无损以太网 PFC 级联死锁（严格区分原生 InfiniBand 信用流控）、KDA 递归状态会话漂移以及 Raylet 节点假死等核心隐患。
 > - **关联技术深入**：网络通信与 NCCL 调优参见 [InfiniBand 高性能组网实践](/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/) 与 [RDMA 零拷贝 QP 通信](/articles/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless/)；底层注意力机制原理参见 [KDA 与 DeepSeek MLA 对比](/articles/kimi-kda-deepseek-mla-architecture/)；推理调度引擎参见 [vLLM 生产指南](/articles/vllm-serving-guide/) 与 [SGLang 对比](/articles/sglang-vs-vllm-architecture/)。
 
 ---
@@ -45,7 +45,7 @@ graph TD
     end
 
     subgraph Kimi_K3["Kimi K3 架构 (93 Layers)"]
-        K_In["输入序列"] --> K_KDA["69 层 KDA 动态注意力<br/>(类似线性递归，状态恒定/亚线性增长)"]
+        K_In["输入序列"] --> K_KDA["69 层 KDA 增量线性注意力<br/>(通道级门控 Delta 规则，O(1) 恒定状态显存)"]
         K_KDA --> K_GMLA["24 层 Gated MLA 注意力<br/>(门控多头潜在注意力，捕获长程关键跳跃)"]
         K_GMLA --> K_MoE["MoE 稀疏专家层<br/>(MXFP4 权重，MXFP8 激活)"]
     end
@@ -55,7 +55,7 @@ graph TD
   * 采用 **CSA (Compressed Sparse Attention)** 与 **HCA (Heavily Compressed Attention)**。CSA 对常规 token 进行局部密集注意力与关键 token 稀疏采样；HCA 则通过极高比例的低秩压缩（比 V3 的 MLA 压缩率更高）进一步削减 KV Cache 体积。
   * 专家层采用细粒度多专家路由，激活参数控制在 ~49B，但全部 1.6T 权重必须在集群显存中全量可达。
 * **Kimi K3 (官方配置 93 层)**：
-  * 采用 **69 层 KDA + 24 层 Gated MLA** 的混合注意力架构。KDA（Kimi Dynamic Attention）具备线性递归更新特性，前 69 层的状态存储开销不随序列长度线性暴增；后 24 层的 Gated MLA 则负责精确的跨文本检索与关联。
+  * 采用 **69 层 KDA + 24 层 Gated MLA** 的混合注意力架构。**KDA（Kimi Delta Attention）** 采用通道级门控增量规则（Channel-wise Gated Delta Rule）维护固定维度的矩阵递归状态，前 69 层的状态存储开销相对于序列长度为 $O(1)$ 恒定大小；其余 24 层的 Gated MLA 则负责精确的跨文本全局关联检索。
   * 官方采用量化感知训练（QAT）原生的 **MXFP4 权重与 MXFP8 激活**，大幅压低了单参数显存开销。
 
 ### 2. 核心规格参数与官方模型资产对照表
@@ -66,8 +66,8 @@ graph TD
 | **总参数量 / 单步激活** | 约 1.6T / 49B | 约 2.8T / 104B |
 | **层数结构** | 61 Layers (CSA + HCA) | 93 Layers (69 KDA + 24 Gated MLA) |
 | **原生权重精度** | 专家权重 FP4，主干参数 FP8 | 原生 MXFP4 权重，MXFP8 激活 |
-| **原生上下文支持** | 128k (原生窗口) | 200k (原生窗口) |
-| **计算引擎推荐后端** | vLLM v1 / SGLang FlashInfer | vLLM (带 FlashKDA 插件) / 专用定制运行时 |
+| **原生上下文支持** | **1M** (1,048,576 原生窗口) | **1M** (1,048,576 原生窗口) |
+| **计算引擎推荐后端** | vLLM v1 / SGLang FlashInfer | vLLM (`--kda-prefill-backend flashkda` / `triton`) |
 
 > [!CAUTION] 避坑红线：关于参数量与显存的常识错误
 > 1. **激活参数不等于显存占用**：激活参数（如 49B 或 104B）仅决定单次前向传递的计算 FLOPs；由于动态路由机制，**所有专家权重必须完全驻留在显存中**，否则每次推理触发主机内存换入将导致系统停摆。
@@ -136,17 +136,17 @@ flowchart TB
 
 在分布式推理中，并行维度的分配遵循严格的物理规则：
 * **机内 张量并行 (Tensor Parallelism, TP = 8)**：
-  每个多头注意力层与 MLP 层的稠密矩阵乘法在机内 8 张卡间切分。由于每个 Token 的每一层都必须进行机内 `All-Reduce` 通信，必须完全跑在 3.2 TB/s（双向 900 GB/s）的机内全互联 NVSwitch 上。**绝对禁止跨物理机设置 TP > 8**，否则每生成一个 Token 触发数十次跨机网络同步，延迟将直接从毫秒级飙升至秒级。
+  每个多头注意力层与稠密层矩阵乘法在机内 8 张卡间切分。由于每个 Token 的每一层都必须进行机内 `All-Reduce` 通信，必须完全跑在机内全互联 NVSwitch 上——**H100 SXM5 的 NVLink 4 单卡双向带宽为 900 GB/s（单向 450 GB/s），8 卡 NVSwitch 整机聚合单向 3.6 TB/s、双向 7.2 TB/s**（而 8× H800 SXM 单卡双向 400 GB/s，整机聚合双向带宽为 3.2 TB/s）。**绝对禁止跨物理机设置 TP > 8**，否则每生成一个 Token 触发数十次跨机网络同步，延迟将直接从毫秒级飙升至秒级。
 * **跨机 流水线并行 (Pipeline Parallelism, PP = 2 或 4)**：
-  将模型的深层结构（如 61 层或 93 层）纵向切分至不同物理机。跨节点只需在 Stage 边界传递激活张量（Activation Tensors），通信数据量极小，完全适配 400Gbps InfiniBand 网络。
+  将模型的深层结构（如 61 层或 93 层）纵向切分至不同物理机。跨节点只需在 Stage 边界传递激活张量（Activation Tensors），通信数据量极小，完全适配 400Gbps InfiniBand / RoCEv2 网络。
 * **专家并行 (Expert Parallelism, EP)**：
-  将 MoE 层的候选专家离散打散到不同节点。Token 路由时通过 `All-to-All` 集合通信完成调度。为了掩盖 All-to-All 通信时延，推理引擎必须具备通信与前向计算重叠（Compute-Communication Overlapping）能力。
+  在 vLLM 中开启 `--enable-expert-parallel` 后，MoE 层的候选专家不再按 TP 切分权重矩阵，而是按完整专家粒度打散到并行组各卡（四机 `TP=8, PP=4` 下单 Stage 内形成 `EP=8`；若在八机 64 卡采用 `DP=2, TP=8, PP=4` 则形成跨机 `EP=16`）。Token 路由时通过 `All-to-All` 集合通信完成分发与归并，配合 DeepEP 后端可实现通信与计算重叠掩盖。
 
 ---
 
 ## 三、逐卡显存预算与容量推导（严密数学建模）
 
-在规划集群容量时，决不能仅看“32 卡 × 80GB = 2560GB”的总显存，而必须针对最瓶颈的单个 GPU Rank 进行精细的显存预算推导。
+在规划集群容量时，决不能仅看“$32 \times 80\text{ GB} = 2560\text{ GB} = 2.56\text{ TB}$（按二进制 $80\text{ GiB}$ 计为 $2560\text{ GiB} = 2.5\text{ TiB}$）”的名义总显存，而必须针对最瓶颈的单个 GPU Rank 进行精细的显存预算推导。
 
 ### 1. 单卡显存物理构成模型
 
@@ -167,16 +167,16 @@ $$M_{\text{rank}} = M_{\text{weight}} + M_{\text{activation}} + M_{\text{kv\_cac
 
 ### 2. 四机 32 卡 (32x H100 80GB) 逐卡显存测算表
 
-以四机 32 卡（TP=8, PP=2, EP=2 混合拓扑）部署 DeepSeek-V4-Pro 为例，推演单卡（以负载最重的 Stage 0 Rank 0 为准）的显存分配：
+以四机 32 卡（与第五章启动脚本完全一致的 **`TP=8, PP=4` + `--enable-expert-parallel`（Stage 内 `EP=8`）** 拓扑）部署 DeepSeek-V4-Pro 为例，推演负载最重的 Stage 0 Rank 0 单卡显存分配：
 
 | 显存分项 | 显存占用推导与依据 | 单卡占用估算 (80GB H100) |
 | :--- | :--- | :--- |
-| **权重驻留 ($M_{\text{weight}}$)** | 1.6T MoE 模型经 FP8/FP4 混合量化后全量体积约 950GB；经 32 卡拓扑切分后 | **约 32.5 GB** |
-| **通信缓冲 ($M_{\text{comm\_buffer}}$)** | NCCL All-to-All 双缓冲 + All-Reduce 环形队列配置 | **约 4.0 GB** |
-| **CUDA 与 CUDAGraph** | 基础驱动上下文 + 常用 Batch 梯度的 CUDA Graph 静态捕获 | **约 3.5 GB** |
-| **激活峰值 ($M_{\text{activation}}$)** | Chunked Prefill (512 token budget) 算子中间张量峰值 | **约 6.0 GB** |
-| **引擎预留与碎片防线** | 设置 `gpu_memory_utilization = 0.90` (实际可用 72GB) | **预留 8.0 GB** |
-| **可用 KV Cache 池 ($M_{\text{kv\_cache}}$)** | 72GB - 32.5GB - 4.0GB - 3.5GB - 6.0GB = **有效 KV 空间** | **约 26.0 GB / 卡** |
+| **权重驻留 ($M_{\text{weight}}$)** | 1.6T MoE 经 FP8/FP4 混合量化全量约 950GB；32 卡均摊约 29.7GB + Stage 0 词表嵌入与 EPLB 冗余专家槽位 | **约 32.5 GB** |
+| **通信缓冲 ($M_{\text{comm\_buffer}}$)** | NCCL / DeepEP All-to-All 双缓冲 + All-Reduce 环形队列配置 | **约 4.0 GB** |
+| **CUDA 与 CUDAGraph** | 基础驱动上下文 + 约束 `max_cudagraph_capture_size=64` 的静态捕获池 | **约 3.5 GB** |
+| **激活峰值 ($M_{\text{activation}}$)** | Chunked Prefill (`--max-num-batched-tokens 4096`) 算子中间张量峰值 | **约 6.0 GB** |
+| **引擎预留与碎片防线** | 设置 `gpu_memory_utilization = 0.90` (实际可用预算 72.0 GB) | **预留 8.0 GB** |
+| **可用 KV Cache 池 ($M_{\text{kv\_cache}}$)** | $72.0 - 32.5 - 4.0 - 3.5 - 6.0 =$ **有效 KV 空间** | **约 26.0 GB / 卡** |
 
 > [!NOTE] 真实吞吐容量结论
 > 在单卡预留 **26.0 GB** 纯净 KV Cache 空间的前提下，得益于 DeepSeek-V4 的 CSA+HCA 高度压缩特性（平均每 Token KV 仅占传统 MHA 的 1/5 左右），整套 32 卡集群可轻松支撑 **超过 160,000 个活跃上下文 Token**，完全满足数百并发下的企业生产级长文本 SLA。
@@ -198,21 +198,23 @@ $$M_{\text{rank}} = M_{\text{weight}} + M_{\text{activation}} + M_{\text{kv\_cac
 
 ```bash
 #!/usr/bin/env bash
-# 1. 检查各 HCA 网卡所归属的真实物理 NUMA 节点
+# 1. 检查各 RDMA HCA 网卡 (如 mlx5_0) 所归属的真实物理 NUMA 节点 (注: ibstat -l 返回 HCA 名，需读取 /sys/class/infiniband)
 for dev in $(ibstat -l); do
-    numa=$(cat /sys/class/net/${dev}/device/numa_node)
-    pci=$(cat /sys/class/net/${dev}/device/uevent | grep PCI_SLOT_NAME | cut -d= -f2)
-    echo "Device ${dev} (PCI: ${pci}) -> NUMA Node: ${numa}"
+    numa=$(cat /sys/class/infiniband/${dev}/device/numa_node)
+    pci=$(grep PCI_SLOT_NAME /sys/class/infiniband/${dev}/device/uevent | cut -d= -f2)
+    echo "HCA ${dev} (PCI: ${pci}) -> NUMA Node: ${numa}"
 done
 
-# 2. 导出 NCCL XML 拓扑并锁定 GPUDirect 级别 (Level 5 代表强制 NVLink + NIC 之间走直接 PCIe 交换机穿透)
-export NCCL_NET_GDR_LEVEL=5
+# 2. 导出 NCCL XML 拓扑并收敛 GPUDirect RDMA 拓扑距离上限：
+# PIX (或 PHB) 将 GDR 严格限制在同一 PCIe Switch (或同一 CPU Socket Host Bridge) 内，阻止跨 Socket UPI/xGMI 绕行；
+# 切勿盲目设为 SYS (数值 5)，因为 SYS/5 的真实语义恰恰是“强制允许跨 NUMA / 跨 Socket 的远程 GDR”！
+export NCCL_NET_GDR_LEVEL=PIX
 export NCCL_TOPO_DUMP_FILE=/tmp/nccl_topo.xml
 export NCCL_SET_STACK_SIZE=1
 
 # 3. 在启动对应 GPU 的 Worker 进程时，强制使用 numactl 绑定对应的 Socket 与内存通道
 # 例如 GPU 0~3 严格绑定在 NUMA 0，GPU 4~7 严格绑定在 NUMA 1
-numactl --cpunodebind=0 --membind=0 python3 -m vllm.entrypoints.openai.api_server ...
+numactl --cpunodebind=0 --membind=0 vllm serve ...
 ```
 
 ---
@@ -222,17 +224,18 @@ numactl --cpunodebind=0 --membind=0 python3 -m vllm.entrypoints.openai.api_serve
 * **故障现象**：
   服务运行初期一切顺畅，但在特定专业业务场景（如全量跑 SQL 生成或医学问答 Prompt）时，TPOT（单 Token 生成耗时）频繁出现 200ms~400ms 的长尾毛刺，GPU 利用率呈现锯齿状忽高忽低。
 * **底层根因**：
-  MoE 门控路由网络在接收到同质化较强的批量输入时，大部分 Token 会集中路由到少数 1~2 个专业 Expert。在四机 32 卡的专家并行 (EP) 切分下，承载热门专家的 GPU Rank 计算负荷直接拉满，而分配到冷门专家的其他 GPU Rank 早在 5ms 内就完成了局部计算。然而，由于 Transformer 后续层需要执行全局 `all_to_all_v` 集合通信，**所有卡必须停等最慢的那张卡计算完毕才能同步**，形成严重的木桶效应（Straggler Problem）。
+  MoE 门控路由网络在接收到同质化较强的批量输入时，大部分 Token 会集中路由到少数 1~2 个专业 Expert。在专家并行 (EP) 切分下，承载热门专家的 GPU Rank 计算负荷直接拉满，而分配到冷门专家的其他 GPU Rank 早在 5ms 内就完成了局部计算。然而，由于 Transformer 后续层需要执行全局 `All-to-All` 集合通信，**所有卡必须停等最慢的那张卡计算完毕才能同步**，形成严重的木桶效应（Straggler Problem）。
 * **彻底根治方案**：
-  1. **配置动态容量因子与残差直通 (Capacity Factor)**：
-     在 vLLM 启动中加入 `--moe-capacity-factor 1.25`，限制单个 Expert 在一个 Batch 中处理的最大 Token 数量，超出容量上限的溢出 Token 通过残差连接直通下一层，杜绝单卡无限算力堆叠。
-  2. **专家热点冗余多副本部署 (Expert Replication)**：
-     基于业务离线日志统计出最高频的 Top-4 专家，将其全量复制在所有节点上原地计算，消除跨节点 All-to-All：
+  1. **开启 vLLM 官方专家并行动态负载均衡（EPLB）与冗余专家槽位**：
+     vLLM 原生提供 `--enable-eplb` 与 `--eplb-config`，按滑动窗口实时追踪各专家激活热度，并在空闲卡槽上自动重排与复制高频热点专家（`num_redundant_experts`），从根源上摊平单卡峰值算力。
+  2. **切换高性能 DeepEP All-to-All 通信后端**：
+     通过 `--all2all-backend` 选择针对低延迟解码（兼容 CUDA Graph）的 `deepep_low_latency` 或针对大吞吐预填充的 `deepep_high_throughput`：
      ```bash
-     # 开启专家副本与非阻塞通信流水线
+     # vLLM 真实生产参数：开启 EP、EPLB 动态热点专家副本与 DeepEP 通信后端
      --enable-expert-parallel \
-     --moe-redundant-experts 4 \
-     --moe-async-all-to-all
+     --all2all-backend deepep_low_latency \
+     --enable-eplb \
+     --eplb-config '{"window_size": 1000, "step_interval": 3000, "num_redundant_experts": 32}'
      ```
 
 ---
@@ -242,7 +245,7 @@ numactl --cpunodebind=0 --membind=0 python3 -m vllm.entrypoints.openai.api_serve
 * **故障现象**：
   启动服务并进行短序列预热一切正常。但在压测并发注入长文本（16k~32k tokens）时，GPU 突然抛出 `torch.cuda.OutOfMemoryError` 闪退崩溃，而此时通过 `nvidia-smi` 查看显存使用率，发现明明还有 12GB~15GB 的物理空闲显存。
 * **底层根因**：
-  1. **图捕获的中间激活私有复制**：vLLM 为优化 Decode 阶段小矩阵乘法，默认会对 Batch Size 为 1, 2, 4, 8, 16, 32, 64, 128 等梯度全量进行 CUDAGraph 静态录制。针对 1.6T 庞大架构，每一个 Graph 捕获都会克隆一份完整的中间激活张量与通信 Buffer，叠加消耗高达 10GB+ 显存。
+  1. **图捕获的中间激活私有复制**：vLLM 为优化 Decode 阶段小矩阵乘法，默认会对一系列大跨度 Batch Size 梯度进行 CUDAGraph 静态录制。针对 1.6T 庞大架构，过高的捕获上限会克隆多份中间激活张量与通信 Buffer，叠加消耗数 GB 至 10GB+ 显存。
   2. **PyTorch 原生内存分配器的外碎片化 (External Fragmentation)**：在变长序列持续交替请求下，显存被切分成大量不连续的碎片小块（如无数个 16MB 块），当引擎突然需要申请一个连续的 2GB 通信临时空间时，因找不到单一物理连续内存段而触发“伪 OOM”。
 * **彻底根治方案**：
   1. **开启 PyTorch 可扩展内存段分配器**：
@@ -250,31 +253,33 @@ numactl --cpunodebind=0 --membind=0 python3 -m vllm.entrypoints.openai.api_serve
      # 允许非连续物理页在虚拟地址空间中无缝拼接，彻底消除外部显存碎片
      export PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True,max_split_size_mb:128"
      ```
-  2. **控制 CUDAGraph 捕获的最大 Batch 步长**：
-     在启动参数中显式约束图捕获范围：`--cuda-graph-max-batch-size 64`，并设定 `--max-num-seqs 128`，避免生成过多高阶捕获图。
+  2. **通过 `--compilation-config` 约束 CUDAGraph 最大捕获步长**：
+     在启动参数中使用 `--compilation-config '{"max_cudagraph_capture_size": 64}'`（或 `--max-cudagraph-capture-size 64`）并配合 `--max-num-seqs 256`，避免录制超大 Batch 静态图侵占 KV 预算。
 
 ---
 
-### 4. InfiniBand PFC 死锁与 RoCEv2 Slow Receiver 拥塞风暴
+### 4. RoCEv2 无损以太网 PFC 死锁与原生 InfiniBand 流控辨析
 
 * **故障现象**：
-  高压力打流 10~15 分钟后，全集群 32 张卡无任何报警提示下全部停摆。所有进程卡死在 NCCL 内核调用处，CPU 使用率为 0%，GPU 利用率卡死在 100%（处于自旋锁 Spinlock 忙等待）。`dmesg` 日志刷出大量 `mlx5_core: async event 0x4`（端口通信停滞）。
-* **底层根因**：
-  在基于 RoCEv2 或无损（Lossless）InfiniBand 搭建的集群中，当某台 Node 发生微秒级 GC 或显存抖动时，其网卡 RX 队列打满，网卡自动向上级 Leaf 交换机发出 **PFC Pause（优先级流控暂停帧）**。如果多个节点间的 All-to-All 集合通信流量在交换机内部形成交叉环路依赖，Pause 帧将逐级向上向外扩散，导致所有交换机端口全被挂起，引发分布式 **PFC 死锁 (PFC Deadlock)**。
-* **彻底根治方案**：
-  1. **开启网卡硬件级 PFC 死锁自动检测与泄流定时器 (DLD)**：
+  在基于 **RoCEv2 无损以太网** 组网的集群中，高压力打流 10~15 分钟后，全集群 32 张卡无任何报警提示下全部停摆。所有进程卡死在 NCCL 内核调用处，CPU 使用率为 0%，GPU 利用率卡死在 100%（处于自旋锁 Spinlock 忙等待）。`dmesg` 日志刷出大量 `mlx5_core: async event 0x4`（端口通信停滞）。
+* **底层根因（严禁混淆原生 InfiniBand 与 RoCEv2！）**：
+  * **原生 InfiniBand (Native IB)**：链路层原生采用 **基于信用的流控（Credit-Based Flow Control）**，发送端仅在确认对端接收缓冲区有足够 Credit 时才发包，天然无损，**根本不存在以太网 PFC Pause 帧**，且 NCCL 默认使用 `NCCL_IB_GID_INDEX=0`。
+  * **RoCEv2 无损以太网（UDP 4791 封装）**：依赖二层 **IEEE 802.1Qbb PFC（优先级流控 Pause 帧）** 与三层 **DSCP ECN + DCQCN** 拥塞控制，且必须指定 RoCEv2 IPv4 GID（通常 `NCCL_IB_GID_INDEX=3`）。当某台节点发生微秒级抖动导致网卡 RX 缓冲逼近水位时，会向上游 Leaf 交换机持续发送 PFC Pause 帧；若多机 All-to-All 流量在交换机缓冲形成交叉环路依赖，Pause 帧将逐级向上扩散锁死整网端口，引发 **RoCEv2 PFC 级联死锁**。
+* **彻底根治方案（针对 RoCEv2 集群）**：
+  1. **开启网卡与交换机硬件级 PFC 死锁检测与泄流定时器 (PFC Watchdog / DLD)**：
      ```bash
-     # 对所有 ConnectX-7 网卡开启 PFC 死锁恢复检测机制 (检测到暂停超过阈值时强制丢弃老化包防止死锁)
+     # 在 RoCEv2 环境中对 ConnectX-7 网卡开启 PFC 死锁恢复检测机制
      for dev in $(ls /dev/mst/*_pciconf0); do
          mstconfig -d ${dev} set PFC_DEADLOCK_DETECTION_EN=1
          mstconfig -d ${dev} set PFC_DEADLOCK_DETECTION_TIMER=100
      done
      ```
-  2. **在交换机与宿主机强制开启 ECN 拥塞标记与 DCQCN**：
-     在网络发生丢包前通过 IP 报头 ECN 标记通知发送端自主降速，避免触发硬件级的粗暴 PFC Pause：
+  2. **在网卡 QoS 与交换机侧配置硬件级 DSCP ECN / DCQCN（切勿误以为 `tcp_ecn` 能控制 RoCEv2！）**：
+     注意 Linux 内核的 `net.ipv4.tcp_ecn=1` **仅对内核态 TCP 协议栈生效**，对硬件卸载的 RoCEv2（UDP 4791）完全无效！必须在交换机端口配置 ECN 水位标记，并在宿主机通过 `mlnx_qos` 将对应优先级（如 Priority 3）设为无损 PFC + DCQCN：
      ```bash
-     sysctl -w net.ipv4.tcp_ecn=1
-     # 锁定 NCCL 集合通信算法为 Tree 并指定 Simple 协议规避拥塞敏感模式
+     # 将 RoCEv2 流量映射至 Priority 3 开启 PFC，并在网卡硬件寄存器启用 DCQCN 拥塞控制
+     sudo mlnx_qos -i eth_rdma0 --pfc 0,0,0,1,0,0,0,0 --trust dscp
+     # 规避极端拥塞敏感路径时可固定 NCCL 协议与算法
      export NCCL_ALGO=Tree
      export NCCL_PROTO=Simple
      ```
@@ -335,7 +340,7 @@ numactl --cpunodebind=0 --membind=0 python3 -m vllm.entrypoints.openai.api_serve
 nvidia-smi
 nvidia-smi topo -m
 
-# 2. 确认 8 张 InfiniBand 网卡处于 Active 状态且速率为 400 Gbps (NDR)
+# 2. 确认 8 张 RDMA 网卡 (原生 InfiniBand NDR 或 RoCEv2) 处于 Active 状态且速率为 400 Gbps
 ibstat | grep -E "(CA '|State:|Physical state:|Rate:)"
 
 # 3. 确保宿主机 /dev/shm 充足 (大模型分布式通信要求共享内存至少 64GB)
@@ -388,18 +393,24 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
 export NCCL_DEBUG=INFO
 export NCCL_IB_DISABLE=0
 export NCCL_IB_HCA=mlx5_0,mlx5_1,mlx5_2,mlx5_3,mlx5_4,mlx5_5,mlx5_6,mlx5_7
-export NCCL_IB_GID_INDEX=3
+# 原生 InfiniBand 设为 0；RoCEv2 无损以太网需设为 IPv4 RoCEv2 对应的 GID (通常为 3)
+export NCCL_IB_GID_INDEX=0
+export NCCL_NET_GDR_LEVEL=PIX
 export NCCL_CROSS_NIC=1
 export NCCL_SOCKET_IFNAME=eth0
 export VLLM_HOST_IP=192.168.10.101
 export PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True,max_split_size_mb:128"
 
-# 启动 DeepSeek-V4-Pro 生产服务
+# 启动 DeepSeek-V4-Pro 生产服务 (与第三章逐卡显存表完全一致: TP=8, PP=4, Stage 内 EP=8)
 vllm serve deepseek-ai/DeepSeek-V4-Pro \
     --host 0.0.0.0 \
     --port 8000 \
     --tensor-parallel-size 8 \
     --pipeline-parallel-size 4 \
+    --enable-expert-parallel \
+    --all2all-backend deepep_low_latency \
+    --enable-eplb \
+    --eplb-config '{"window_size": 1000, "step_interval": 3000, "num_redundant_experts": 32}' \
     --distributed-executor-backend ray \
     --dtype auto \
     --quantization fp8 \
@@ -408,18 +419,19 @@ vllm serve deepseek-ai/DeepSeek-V4-Pro \
     --max-num-seqs 256 \
     --enable-chunked-prefill \
     --max-num-batched-tokens 4096 \
+    --compilation-config '{"max_cudagraph_capture_size": 64}' \
     --trust-remote-code \
     --disable-log-requests
 ```
 
 > [!TIP] 启动参数实战要点解析
 > * `--dtype auto` 与 `--quantization fp8`：切勿写成 `--dtype fp8`。vLLM 内部计算精度采用 `auto`（保持模型定义的计算精度），量化加载采用 `--quantization fp8` 自动解析权重中的缩放因子（scale）。
-> * `--enable-chunked-prefill`：开启分块 Prefill，限制单步最大处理 4096 tokens，有效杜绝长文本输入导致正在进行自回归生成的 Decode 请求发生 TPOT 尖刺。
-> * `--pipeline-parallel-size 4`：在四机 32 卡场景下，TP8（机内 8 卡）× PP4（跨机 4 节点）= 32 卡全量激活，完全消除跨机 TP 通信。
+> * `--enable-chunked-prefill` 与 `--max-num-batched-tokens 4096`：与第三章激活峰值预算（6.0 GB）严格对应，限制单步最大处理 4096 tokens，杜绝长文本输入阻塞正在生成的 Decode 请求。
+> * `--tensor-parallel-size 8 --pipeline-parallel-size 4 --enable-expert-parallel`：在四机 32 卡场景下，TP8（机内 8 卡）× PP4（跨机 4 节点）= 32 卡全量分摊权重，并在每个 Stage 内启用 8 路专家并行（EP=8）与 EPLB 动态负载均衡，彻底消除跨机 TP 通信。
 
 ### 4. 步骤四：Kimi K3 的专有后端启动（带 FlashKDA 支持）
 
-对于采用 KDA + Gated MLA 的 Kimi K3，启动需指定专用的递归状态算子后端：
+对于采用 69 层 KDA + 24 层 Gated MLA 的 Kimi K3，在 Hopper/Blackwell GPU 上可通过 `--kda-prefill-backend flashkda`（或回退兼容路径 `triton`）指定分块线性增量状态预填充算子：
 
 ```bash
 #!/usr/bin/env bash
@@ -430,9 +442,10 @@ vllm serve moonshotai/Kimi-K3 \
     --port 8000 \
     --tensor-parallel-size 8 \
     --pipeline-parallel-size 4 \
+    --enable-expert-parallel \
     --distributed-executor-backend ray \
     --dtype auto \
-    --kda-prefill-backend triton \
+    --kda-prefill-backend flashkda \
     --gpu-memory-utilization 0.92 \
     --max-model-len 65536 \
     --trust-remote-code
@@ -464,7 +477,7 @@ spec:
           node.kubernetes.io/instance-type: hgx-h100-8gpu
         containers:
         - name: ray-head
-          image: vllm/vllm-openai:v0.6.3
+          image: vllm/vllm-openai:v0.29.0
           resources:
             limits:
               nvidia.com/gpu: 8
@@ -500,7 +513,7 @@ spec:
           node.kubernetes.io/instance-type: hgx-h100-8gpu
         containers:
         - name: ray-worker
-          image: vllm/vllm-openai:v0.6.3
+          image: vllm/vllm-openai:v0.29.0
           resources:
             limits:
               nvidia.com/gpu: 8
@@ -520,6 +533,9 @@ spec:
           persistentVolumeClaim:
             claimName: nfs-model-weights-pvc
 ```
+
+> [!IMPORTANT] 共享内存（`/dev/shm`）配置红线
+> 必须挂载基于 `medium: Memory` 的 `emptyDir`（建议 $\ge 128\text{Gi}$）至 `/dev/shm`。NCCL 机内多进程集合通信重度依赖 POSIX 共享内存做 GPU 间 IPC 映射，Kubernetes 容器默认的 64MB 限制会在启动阶段立即触发 `Bus error (core dumped)` 崩溃。
 
 ---
 
@@ -616,20 +632,20 @@ flowchart LR
 ## 常见问题 (FAQ)
 
 ### Q1: 32 张 H100 80GB 能否部署全量 FP8 精度的 Kimi K3？
-**不能。** Kimi K3 拥有 2.8T 庞大参数，若全部以 FP8 格式（每参数 1 字节）加载，仅裸权重就达到 2.8TB，直接超出了 32 张 80GB 显卡的名义总容量（$32 \times 80 = 2560\text{GB} = 2.5\text{TB}$），根本无法留出空间给工作区、通信缓冲与 KV Cache。Kimi K3 的四机 32 卡方案前提是采用官方量化感知训练的原生 **MXFP4 权重格式**（每参数约 0.5 字节，全量权重约 1.4TB），才能在 32 卡上正常装载并提供充足的 KV Cache 空间。
+**不能。** Kimi K3 拥有 2.8T 庞大参数，若全部以 FP8 格式（每参数 1 字节）加载，仅裸权重就达到 2.8 TB，直接超出了 32 张 80GB 显卡的名义总容量（十进制 $32 \times 80\text{ GB} = 2560\text{ GB} = 2.56\text{ TB}$；按二进制 $80\text{ GiB}$ 核算为 $2560\text{ GiB} = 2.5\text{ TiB}$），根本无法留出空间给工作区、通信缓冲与 KV Cache。Kimi K3 的四机 32 卡方案前提是采用官方量化感知训练的原生 **MXFP4 权重格式**（每参数约 0.5 字节，全量权重约 1.4 TB），才能在 32 卡上正常装载并提供约 1 TB 的集群 KV Cache 与状态空间。
 
 ### Q2: 为什么跨物理机部署时，绝对不能将 Tensor Parallelism 设置为 16 或 32？
-张量并行（TP）在 Transformer 的每一层 Linear 运算后，都要求并行组内的所有 GPU 进行两次高频的 `All-Reduce` 集合通信。在机内，这依托 900 GB/s 的 NVLink 互联，通信耗时在微秒级；但一旦跨越物理机，即使配备了顶级的 400Gbps InfiniBand 网络，跨机单向带宽也仅约 50 GB/s，比 NVLink 慢了整整 18 倍，且包含网络协议栈时延。跨节点设置 TP 会导致 GPU Tensor Core 90% 以上的周期都在停等网络传输，推理延迟成倍暴增。因此，**跨节点只能使用通信频次极低的 Pipeline Parallelism (PP) 或经过精心重叠掩盖的 Expert Parallelism (EP)**。
+张量并行（TP）在 Transformer 的每一层 Linear 运算后，都要求并行组内的所有 GPU 进行两次高频的 `All-Reduce` 集合通信。在机内，这依托 900 GB/s（单卡双向）的 NVLink 4 互联，通信耗时在微秒级；但一旦跨越物理机，即使配备了顶级的 400Gbps InfiniBand 网络，单网卡单向带宽也仅约 50 GB/s，且包含跨机交换与协议栈时延。跨节点设置 TP 会导致 GPU Tensor Core 90% 以上的周期都在停等网络传输，推理延迟成倍暴增。因此，**跨节点只能使用通信频次极低的 Pipeline Parallelism (PP) 或经过重叠掩盖的 Expert Parallelism (EP)**。
 
 ### Q3: DeepSeek-V4 的 CSA+HCA 注意力与 V3 的 MLA 有何本质区别？
-DeepSeek-V3 的 MLA（多头潜在注意力）是将全量 Keys 和 Values 投影到单一固定维度的低秩潜在向量 $c_t^{KV}$，再在推理端通过矩阵吸收消解 Decode 阶段的展开显存；而 DeepSeek-V4-Pro 的 CSA（Compressed Sparse Attention）和 HCA（Heavily Compressed Attention）是针对超长序列的分层异构设计：CSA 仅针对关键信息保留稀疏的全局注意力路径，其余普通序列采用局部滑窗与近邻压缩；HCA 则对背景上下文实施更高阶的极低秩压缩。两者混合不仅进一步压低了 KV Cache 显存消耗，还显著提升了超长文本下的首字编码速度 (Prefill Throughput)。
+DeepSeek-V3 的 MLA（多头潜在注意力）是将全量 Keys 和 Values 投影到单一固定维度的低秩潜在向量 $c_t^{KV}$，再在推理端通过矩阵吸收消解 Decode 阶段的展开显存；而 DeepSeek-V4-Pro 的 CSA（Compressed Sparse Attention）和 HCA（Heavily Compressed Attention）是针对 **1M 超长序列**的分层异构设计：CSA 仅针对关键信息保留稀疏的全局注意力路径，其余普通序列采用局部滑窗与近邻压缩；HCA 则对背景上下文实施更高阶的极低秩压缩。两者混合不仅进一步压低了 KV Cache 显存消耗，还显著提升了百万级长文本下的首字编码速度 (Prefill Throughput)。
 
 ### Q4: 如何在生产环境中监控并排查 MoE 专家的负载倾斜 (Routing Imbalance)？
-在 MoE 模型分布式推理中，若特定请求的 Token 集中路由给某几个专家，分配这些专家的 GPU Rank 计算耗时将远高于其他卡，从而拖慢整体 All-to-All 步调。在生产中，需在引擎中导出专家路由直方图指标（例如通过 Prometheus 采集每秒各 Expert 接收的 Token 数量）。若发现方差过大（严重倾斜），需核对系统提示词（System Prompt）是否存在引发固定专家偏置的特殊引导词，并在调度层开启动态路由负载均衡因子或启用冗余专家副本机制。
+在 MoE 模型分布式推理中，若特定请求的 Token 集中路由给某几个专家，分配这些专家的 GPU Rank 计算耗时将远高于其他卡，从而拖慢整体 All-to-All 步调。在生产中，需在引擎中导出专家路由分布指标，并开启 vLLM 原生的 **EPLB（`--enable-eplb --eplb-config`）** 实时统计窗口内热点专家并自动部署冗余专家副本（`num_redundant_experts`），同时核对系统提示词是否存在引发固定专家偏置的异常模式。
 
 ### Q5: 跨机多节点启动时，NCCL 报错 `Watchdog caught collective operation timeout` 应如何系统化排查？
 这是最常见的分布式集合通信超时报错，其本质通常不是 NCCL 本身 Bug，而是网络硬件故障或某张 GPU 掉算导致的同步死锁。排查步骤如下：
 1. **统一环境变量**：设置 `NCCL_DEBUG=INFO` 与 `NCCL_DEBUG_SUBSYS=INIT,ENV,COLL`，重试并定位超时的具体算子是 `AllGather` 还是 `AlltoAll`；
-2. **检查网卡 GID 与端口**：运行 `ibstat` 确保每台机器的指定网卡端口均处于 `Active`，且配置了相同的 `NCCL_IB_GID_INDEX=3`（RoCEv2 推荐）；
+2. **区分 IB 与 RoCEv2 检查 GID**：运行 `ibstat` 确保每台机器指定端口均处于 `Active`，并严格按组网类型统一 GID——**原生 InfiniBand 设为 `NCCL_IB_GID_INDEX=0`，RoCEv2 无损以太网设为 IPv4 RoCEv2 对应的 `NCCL_IB_GID_INDEX=3`**；
 3. **点对点带宽打流测试**：使用 `ib_write_bw` 对各节点网卡进行两两点对点打流压测，排查是否存在交换机光模块脏污导致的非对称降速（如 400G 掉速为 100G）；
 4. **共享内存排查**：检查所有容器内的 `/dev/shm` 空间是否被填满，共享内存不足会偶发性阻塞机内 IPC 握手。

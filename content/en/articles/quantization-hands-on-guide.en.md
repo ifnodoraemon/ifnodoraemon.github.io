@@ -133,64 +133,72 @@ You need to do this yourself when:
 - You need domain-specific calibration for maximum accuracy
 - You want to fully understand what quantization actually does
 
-### 2.1 AWQ Quantization (Recommended First Choice)
+### 2.1 AWQ Quantization (Recommended First Choice via `llm-compressor`)
 
-AWQ (Activation-Aware Weight Quantization) analyzes activation statistics to protect the most critical 1% of weights—currently the best precision-preserving weight-only quantization method.
+AWQ (Activation-Aware Weight Quantization) analyzes activation statistics to protect the most critical ~1% of salient weight channels—remaining one of the strongest precision-preserving weight-only (`W4A16`) quantization methods.
+
+> ⚠️ **2025–2026 Ecosystem Update**: The standalone **`AutoAWQ` repository was officially deprecated in 2025** and no longer adds support for new model architectures (though existing pre-quantized `AutoAWQ` checkpoints continue to run natively in vLLM and Transformers). Official AWQ quantization maintenance moved into vLLM's unified quantization toolkit, **[llm-compressor](https://github.com/vllm-project/llm-compressor)**, via `AWQModifier` + `oneshot()`.
 
 ```bash
-pip install autoawq
+# Install vLLM's official quantization toolkit
+pip install llmcompressor
 ```
 
 ```python
-from awq import AutoAWQForCausalLM
-from transformers import AutoTokenizer
+import torch
 from datasets import load_dataset
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from llmcompressor import oneshot
+from llmcompressor.modifiers.awq import AWQModifier
 
 # ====== Configuration ======
-model_path = "Qwen/Qwen3-8B"
-quant_path = "./Qwen3-8B-AWQ"
-quant_config = {
-    "zero_point": True,       # Enable zero-point quantization (higher precision)
-    "q_group_size": 128,      # 128 weights share one scaling factor
-    "w_bit": 4,               # Quantize to 4-bit
-    "version": "GEMM",        # GEMM kernel (best compatibility)
-}
+model_id = "Qwen/Qwen3-8B"              # HuggingFace model ID or local path
+quant_path = "./Qwen3-8B-AWQ-W4A16"     # Output directory for quantized checkpoint
 
 # ====== Load model and tokenizer ======
-model = AutoAWQForCausalLM.from_pretrained(model_path)
-tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(
+    model_id, torch_dtype=torch.bfloat16, device_map="auto"
+)
+tokenizer = AutoTokenizer.from_pretrained(model_id)
 
-# ====== Prepare calibration data ======
-# AWQ is very efficient—128-256 samples are enough!
-def get_calibration_data():
-    data = load_dataset(
-        "databricks/databricks-dolly-15k",
-        split="train[:128]"
-    )
-    return [
-        f"{x['instruction']}\n{x['context']}\n{x['response']}"
-        for x in data
-    ]
-
-calib_data = get_calibration_data()
-
-# ====== Quantize ======
-model.quantize(
-    tokenizer=tokenizer,
-    quant_config=quant_config,
-    calib_data=calib_data,
+# ====== Prepare calibration data (128-256 samples are sufficient for AWQ) ======
+ds = load_dataset("databricks/databricks-dolly-15k", split="train[:256]")
+ds = ds.map(
+    lambda x: {
+        "text": tokenizer.apply_chat_template(
+            [{"role": "user", "content": f"{x['instruction']}\n{x['context']}"},
+             {"role": "assistant", "content": x["response"]}],
+            tokenize=False,
+        )
+    }
 )
 
-# ====== Save ======
-model.save_quantized(quant_path)
+# ====== Define W4A16 AWQ Recipe (group_size=128 asymmetric weights, keep lm_head unquantized) ======
+recipe = [
+    AWQModifier(
+        ignore=["lm_head"],
+        scheme="W4A16_ASYM",            # 4-bit asymmetric weights with zero-point (group_size=128)
+        targets=["Linear"],
+    )
+]
+
+# ====== Run one-shot calibration & quantization ======
+oneshot(
+    model=model,
+    dataset=ds,
+    recipe=recipe,
+    output_dir=quant_path,
+    max_seq_length=2048,
+    num_calibration_samples=256,
+)
 tokenizer.save_pretrained(quant_path)
-print(f"✅ AWQ quantization complete, saved to {quant_path}")
+print(f"✅ AWQ quantization via llm-compressor complete, saved to {quant_path}")
 ```
 
 **Calibration data tips**:
-- **Quantity**: 128-256 samples are sufficient. AWQ only needs activation distribution statistics
-- **Representativeness**: Calibration data should match your actual use case. Chinese model → Chinese data
-- **OOM fallback**: Add `max_calib_seq_len=512` to `model.quantize()` if you run out of memory
+- **Quantity**: 128–256 samples are sufficient. AWQ only needs channel-wise activation distribution statistics
+- **Representativeness**: Match your production language and domain distribution (e.g., Chinese dialogue prompts for a Chinese chat service)
+- **OOM fallback**: Lower `max_seq_length` to `512` or `1024` inside `oneshot()` if calibration runs out of VRAM
 
 ### 2.2 GPTQ Quantization (GPTQModel)
 
@@ -279,6 +287,14 @@ python convert_hf_to_gguf.py ../models/Qwen3-8B/ \
   ../models/Qwen3-8B-f16.gguf \
   ../models/Qwen3-8B-Q4_K_M.gguf \
   Q4_K_M
+
+# Common GGUF quantization tiers:
+# Q8_0    → Virtually lossless, ~50% the size of FP16
+# Q6_K    → Near lossless when VRAM headroom permits
+# Q5_K_M  → High precision, slightly larger than Q4
+# Q4_K_M  → ⭐ Best accuracy-to-size sweet spot
+# Q3_K_M  → Tight-VRAM compromise (pair with imatrix)
+# Q2_K    → Extreme compression, noticeable quality degradation
 ```
 
 **Advanced: Using imatrix for better low-bit quality**
@@ -311,7 +327,8 @@ If you're running high-concurrency inference on H100/H800 in a data center, stop
 ### 3.1 vLLM FP8 Zero-Calibration (Fastest Setup)
 
 ```bash
-vllm serve Qwen/Qwen3-32B-Instruct \
+# Single flag for FP8 dynamic quantization (official Qwen3 repo is Qwen/Qwen3-32B, unifying instruct & thinking modes)
+vllm serve Qwen/Qwen3-32B \
   --quantization fp8 \
   --dtype auto \
   --gpu-memory-utilization 0.90 \
@@ -340,7 +357,7 @@ from llmcompressor import oneshot
 from datasets import load_dataset
 from transformers import AutoTokenizer
 
-model_id = "Qwen/Qwen3-32B-Instruct"
+model_id = "Qwen/Qwen3-32B"
 output_dir = "./Qwen3-32B-FP8-Static"
 
 tokenizer = AutoTokenizer.from_pretrained(model_id)
@@ -386,7 +403,7 @@ vllm serve ./Qwen3-32B-FP8-Static \
 ### 3.4 KV Cache Quantization—The Hidden Accelerator
 
 ```bash
-vllm serve Qwen/Qwen3-32B-Instruct \
+vllm serve Qwen/Qwen3-32B \
   --quantization fp8 \
   --kv-cache-dtype fp8_e5m2 \
   --enable-prefix-caching
@@ -418,10 +435,9 @@ from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     BitsAndBytesConfig,
-    TrainingArguments,
 )
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
-from trl import SFTTrainer
+from trl import SFTConfig, SFTTrainer
 from datasets import load_dataset
 
 # ====== 4-bit quantization config ======
@@ -465,12 +481,12 @@ model.print_trainable_parameters()
 # ====== Load training data ======
 dataset = load_dataset("your-dataset-here", split="train")
 
-# ====== Train ======
+# ====== Train (using modern TRL SFTConfig + processing_class API) ======
 trainer = SFTTrainer(
     model=model,
     train_dataset=dataset,
-    tokenizer=tokenizer,
-    args=TrainingArguments(
+    processing_class=tokenizer,
+    args=SFTConfig(
         output_dir="./qlora-output",
         per_device_train_batch_size=4,
         gradient_accumulation_steps=4,
@@ -515,33 +531,73 @@ Deploying without validation is gambling. Three levels of verification:
 pip install lm-eval
 
 lm_eval --model hf \
-  --model_args pretrained=./Qwen3-8B-AWQ \
+  --model_args pretrained=./Qwen3-8B-AWQ-W4A16 \
   --tasks mmlu,hellaswag,arc_challenge \
   --batch_size auto \
   --output_path ./eval_results/
+
+# For GGUF models: launch llama-server first, then evaluate via the local-completions / openai-chat API
 ```
 
 ### Level 3: Business Data Testing (Most Critical)
 
-High benchmark scores don't guarantee performance on your specific use case. Always test with 50-100 real business questions.
+High generic benchmark scores never guarantee reliability on your domain-specific edge cases:
+
+```python
+# Prepare 50-100 representative production queries + reference answers,
+# run both the unquantized baseline and quantized candidate, and compare via human review or LLM-as-a-Judge:
+
+import json
+
+with open("business_test_cases.json", encoding="utf-8") as f:
+    test_cases = json.load(f)
+# [{"question": "...", "expected_answer": "..."}, ...]
+
+for case in test_cases:
+    original_answer = call_model(original_model, case["question"])
+    quantized_answer = call_model(quantized_model, case["question"])
+    # Compare schema compliance, numeric accuracy, and factual recall
+```
 
 > **Rule of thumb**: If your workload involves code generation or mathematical reasoning, anything below 4-bit may have perceptible degradation. Always validate with real data.
 
 ---
 
-## Troubleshooting Guide
+## Troubleshooting Guide: Four Common Pitfalls
 
-### Pitfall 1: Model collapses after quantization
-**Causes**: Mismatched calibration data, bit-width too low for small models (<7B), unsupported architecture.
+### Pitfall 1: Model Collapses or Outputs Gibberish After Quantization
 
-### Pitfall 2: Memory usage didn't decrease
-**Cause**: Weight-only quantization (GPTQ/AWQ) still uses FP16 activations + KV Cache. Enable `--kv-cache-dtype fp8_e5m2` and reduce `--max-model-len`.
+**Symptoms**: Garbled characters, infinite repetition loops, or severe topic drift.
 
-### Pitfall 3: Inference isn't faster
-**Cause**: Weight-only quantization saves memory, not compute. For actual speedup, use FP8 full quantization with high concurrency.
+**Causes & Fixes**:
+- **Insufficient or mismatched calibration data**: Calibrating a Chinese or code-heavy model purely on English prose misses salient activation channels. Re-quantize using 128–512 samples matching your target language and domain.
+- **Bit-width too aggressive for small models**: Sub-7B models have less parameter redundancy and degrade faster at 4-bit or below; step up to `Q5_K_M` / `Q6_K` or FP8.
+- **Architecture incompatibility**: Verify that your model family is explicitly supported by the installed `llm-compressor` / `GPTQModel` / `llama.cpp` release.
 
-### Pitfall 4: AutoGPTQ errors
-AutoGPTQ is unmaintained. Migrate to **GPTQModel**:
+### Pitfall 2: GPU Memory Usage Barely Decreased
+
+**Symptoms**: You switched to 4-bit weights, yet `nvidia-smi` reports nearly the same total VRAM allocation.
+
+**Causes & Fixes**:
+- **Weight-only quantization (`W4A16`) leaves activations and KV Cache in FP16/BF16**—and serving engines like vLLM pre-allocate the remaining budget up to `gpu_memory_utilization` for the KV block pool!
+- **Fix**: Inspect startup logs to confirm weight footprint dropped as expected, enable KV Cache quantization (`--kv-cache-dtype fp8_e5m2` where validated), or tighten `--max-model-len` / `--gpu-memory-utilization`.
+
+### Pitfall 3: Inference Speed Didn't Improve
+
+**Symptoms**: Token throughput looks similar to—or slightly slower than—FP16.
+
+**Causes & Fixes**:
+- **Weight-only quantization reduces memory traffic, not Tensor Core math**: `W4A16` weights are dequantized back to FP16/BF16 on-chip before matrix multiplication, so compute-bound large-batch workloads see little or no speedup (and non-fused fallback kernels can even regress).
+- **Underutilized single-stream runs**: Ensure Marlin / fused `W4A16` kernels are active for low-batch decode, or switch to **full `FP8` quantization (`--quantization fp8`)** on Hopper/Ada/Blackwell GPUs to unlock native 2× FP8 Tensor Core throughput at high concurrency.
+
+### Pitfall 4: `AutoGPTQ` Import or Build Failures
+
+```text
+ModuleNotFoundError: No module named 'auto_gptq'
+```
+
+`AutoGPTQ` is unmaintained. Migrate to **GPTQModel** (which remains backward-compatible with existing GPTQ checkpoints):
+
 ```bash
 pip uninstall auto-gptq
 pip install -U gptqmodel --no-build-isolation
@@ -553,14 +609,14 @@ pip install -U gptqmodel --no-build-isolation
 
 | Tool | Type | Precision | Status | Best Paired With |
 |------|------|-----------|--------|-----------------|
-| **AutoAWQ** | Weight-only | INT4 | ✅ Active | vLLM / Transformers |
+| **llm-compressor** | Full + Weight-only | W4A16 (AWQ/GPTQ), FP8, INT8 | ✅ Very active | Official vLLM production toolkit (succeeds AutoAWQ) |
 | **GPTQModel** | Weight-only | INT4, INT8 | ✅ Active | vLLM / Transformers |
 | **llama.cpp** | Weight-only | Q2-Q8 | ✅ Very active | Ollama / LM Studio |
 | **BitsAndBytes** | Weight-only | NF4, INT8 | ✅ Active | QLoRA fine-tuning |
-| **llm-compressor** | Full quant | FP8, INT8 | ✅ Active | vLLM production |
-| **torchao** | Full quant | INT4, INT8, FP8 | ✅ Active | PyTorch native |
+| **torchao** | Full + Weight-only | INT4, INT8, FP8 | ✅ Active | PyTorch native |
 | **HQQ** | Weight-only | INT2-INT8 | ✅ Active | Ultra-low-bit research |
 | **AQLM** | Weight-only | 2-bit | ⚡ Frontier | Extreme compression |
+| ~~AutoAWQ~~ | ~~Weight-only~~ | ~~INT4~~ | ⚠️ **Deprecated (2025)** | ~~Adopted into `llm-compressor` (legacy checkpoints still load)~~ |
 | ~~AutoGPTQ~~ | ~~Weight-only~~ | ~~INT4, INT8~~ | ❌ **Deprecated** | ~~Replaced by GPTQModel~~ |
 
 ---
@@ -583,7 +639,7 @@ For Linux inference servers running high-throughput engines, choose **AWQ** (bes
 Weight-only quantization (W4A16) dequantizes weights back to FP16/BF16 in SRAM/registers during matrix multiplication, so compute latency is not reduced. The speedup from weight-only quantization comes primarily from overcoming memory-bandwidth bottlenecks in single-batch or small-batch regimes. For multi-batch acceleration, use full FP8 or W8A8 quantization to exploit specialized Tensor Cores.
 
 ### Q3: How can I verify that my quantized model hasn't suffered accuracy collapse?
-Follow a three-stage validation pipeline: first, measure PPL (Perplexity) on a clean benchmark such as WikiText-2 (a degradation delta under 0.2 is standard); second, run generic benchmark evaluations (e.g. MMLU, GSM8k); third, execute automated regression tests on domain-specific prompts to prevent formatting regressions. See our [LLM Evaluation Guide](/en/articles/llm-evaluation-guide/) for test harnesses.
+Follow a three-stage validation pipeline: first, measure PPL (Perplexity, e.g. on WikiText-2) under identical tokenizer and sliding-window settings against the unquantized baseline as a rapid smoke test—note that PPL scales with corpus and tokenization so **there is no universal `0.1–0.2` delta deployment rule**, though sharp spikes immediately expose catastrophic collapse; second, run standard capability suites (e.g., MMLU, GSM8K); third, enforce explicit business acceptance thresholds on domain-specific regression prompts covering math, code, long-context recall, and JSON formatting. See our [LLM Evaluation Guide](/en/articles/llm-evaluation-guide/) for test harnesses.
 
 ### Q4: How do I download and run Qwen3-8B-Q4_K_M.gguf locally?
 To download and run `Qwen3-8B-Q4_K_M.gguf`, use `huggingface-cli download bartowski/Qwen3-8B-GGUF --include "Qwen3-8B-Q4_K_M.gguf" --local-dir ./models`. You can then launch it with llama.cpp using `./llama-cli -m ./models/Qwen3-8B-Q4_K_M.gguf -p "Hello" -n 256` or import it directly into Ollama via a custom `Modelfile` (`FROM ./models/Qwen3-8B-Q4_K_M.gguf`). With an active VRAM footprint around 5.2GB, the Q4_K_M quantization level retains over 99% of dense FP16 perplexity while fitting comfortably on modern 8GB GPUs and Apple Silicon.

@@ -39,7 +39,7 @@ updated: 2026-10-20
 2. **Kubelet PLEG 周期轮询引发的“节点假死震荡”**：
    在单机运行上百个 Pod 的高密计算节点上，或者在镜像拉取与磁盘 I/O 高峰期，Kubelet 会频繁抛出令 SRE 闻风丧胆的告警：`PLEG is not healthy: pleg was last seen active 3m5s ago; threshold is 3m0s`。紧接着，物理节点状态瞬间翻转为 `NotReady`，触发控制平面大规模驱逐级联故障。
 3. **全局内核参数（Sysctl）与 cgroups 粗暴 OOM 的治理失控**：
-   高并发服务需要将 TCP 半连接队列 `somaxconn` 调大至 4096，而默认的 Linux 内存限制 `memory.max` 在突发流量下会无情触发 OOMKilled，导致进程瞬间死绝，缺乏平滑缓冲手段。
+   高并发服务需要将 TCP 监听队列 `somaxconn` 调大至 8192（Linux 5.4+ 默认值已从早期 128 提升至 4096），而默认的 Linux 内存限制 `memory.max` 在突发流量下会无情触发 OOMKilled，导致进程瞬间死绝，缺乏平滑缓冲手段。
 
 要彻底解决这些工业级痛点，平台架构师必须深入 Worker 节点底层，**对 Kubelet 核心机制与容器运行时（CRI & OCI）进行彻底的二次定制与架构重塑**。
 
@@ -116,7 +116,6 @@ package main
 
 import (
     "context"
-    "fmt"
     "log"
 
     "github.com/containerd/nri/pkg/api"
@@ -265,7 +264,7 @@ Kubernetes 将内核 Sysctl 参数严格划分为两类：
      securityContext:
        sysctls:
        - name: net.core.somaxconn
-         value: "8192"           # 将 TCP 监听队列上限从默认的 128 提升至 8192!
+         value: "8192"           # 将 TCP 监听队列上限调大至 8192（Linux 5.4+ 默认已从早期 128 升至 4096）
        - name: net.ipv4.tcp_tw_reuse
          value: "1"
      containers:

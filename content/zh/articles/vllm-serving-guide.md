@@ -463,7 +463,15 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
 - 设小（8192）→ 延迟平稳，预填充被充分分块
 - 在线服务推荐 `8192 ~ 16384`
 
-#### [7-8] 权重与 KV 量化应分别验证
+#### [5] `--enable-chunked-prefill`：分块预填充开关
+
+将超长输入 Prompt 按 `--max-num-batched-tokens` 预算拆分为多个迭代块，与正在执行的 Decode 请求交错调度（vLLM V1 引擎已默认开启，显式声明可防止跨版本配置漂移），避免长文档输入造成在线流式输出卡顿（ITL 毛刺）。
+
+#### [6] `--enable-prefix-caching`：自动前缀缓存（APC）开关
+
+启用基于链式块哈希的全局 KV 块复用（vLLM V1 引擎默认开启）。在共享 System Prompt、多轮对话与固定文档问答场景中可直接跳过已命中前缀块的重复 Prefill 计算；建议同步开启 `--enable-prompt-tokens-details` 以便网关精确采集 `cached_tokens`。
+
+#### [7-8] `--quantization` 与 `--kv-cache-dtype`：权重与 KV 量化应分别验证
 
 FP8、AWQ、GPTQ 与 NVFP4 需要相应 GPU、checkpoint 布局和 kernel 支持。不能按 GPU 型号直接承诺“固定 1% 以内损失”或“固定两倍吞吐”。仅权重量化可减少访存；大 batch 下反量化与计算开销可能抵消收益。
 
@@ -725,7 +733,7 @@ vllm serve /models/Qwen2.5-72B-Instruct \
 ```
 
 ```text
-✅ --max-model-len 切勿用默认值（一个参数可能让并发翻 10 倍）
+✅ --max-model-len 按业务真实上下文 SLA 上限设置，并结合启动 KV 容量画像与长请求压测核验（切勿盲信“缩小长度即可让并发固定翻 10 倍”）
 ✅ 多卡部署: 最小 TP 数 + 多实例 + 前置负载均衡
 ✅ 低延迟场景按需开启推测解码
 ✅ 多租户按需开启 Multi-LoRA

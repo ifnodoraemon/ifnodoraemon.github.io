@@ -78,14 +78,17 @@ flowchart TD
 ### 2.1 物理盘初始化：消除 XFS 元数据与锁竞争
 在物理机挂载 NVMe 盘时，必须采用针对高并发 I/O 深度优化的 XFS 参数格式化：
 ```bash
-# 格式化企业级 NVMe 磁盘
+# 格式化企业级 NVMe 磁盘：
+# -n ftype=1    : 强制开启 ftype=1（OverlayFS 和容器运行时依赖项）
+# -l size=128m  : 将磁盘上的 XFS 日志区（On-disk Journal/Log Section）设为 128MB，缓解高频 WAL 刷盘时的元数据日志锁争用
+# -d agcount=32 : 将分配组（Allocation Groups）增至 32，最大化并行写入分配并发度
 mkfs.xfs -f \
-  -n ftype=1 \          # 强制开启 ftype=1 (OverlayFS 和容器运行时依赖项)
-  -l size=128m \        # 增大日志区 (Log Buffer) 至 128MB，消除高频 WAL 刷盘时的元数据日志锁争用
-  -d agcount=32 \       # 增加分配组 (Allocation Groups) 至 32，最大化并行写入分配并发度
+  -n ftype=1 \
+  -l size=128m \
+  -d agcount=32 \
   /dev/nvme0n1
 
-# 生产级挂载参数
+# 生产级挂载参数（其中 logbufs=8,logbsize=256k 用于设置内存中的日志缓冲区 In-memory Log Buffers）
 mkdir -p /mnt/disks/nvme0n1
 mount -o noatime,nodiratime,allocsize=64M,logbufs=8,logbsize=256k /dev/nvme0n1 /mnt/disks/nvme0n1
 ```
@@ -181,7 +184,7 @@ sequenceDiagram
     
     Critical 物理双主脑裂灾难！
         Client->>NodeB: 客户端向 Node B 发起事务写操作 (生成事务 ID 101)
-        Client->>NodeA: 网络-partitioned 客户端仍向 Node A 发起事务写操作 (生成冲突事务 ID 101)
+        Client->>NodeA: 发生网络分区的（Network-partitioned）客户端仍向 Node A 发起事务写操作 (生成冲突事务 ID 101)
         Note over NodeA,NodeB: 两个实例同时向各自磁盘写入互斥数据，底层一致性彻底覆灭！
     end
 ```
@@ -225,7 +228,7 @@ sequenceDiagram
 采用 Local PV 时，写入直接走宿主机本地 PCIe 总线，读写延迟仅需数十微秒，且消除了云盘昂贵的网络 IOPS 账单。
 
 ### Q2: 为什么在格式化用于数据库持久化的 XFS 磁盘时，必须指定 `-l size=128m`？
-XFS 的内部架构包含专门的日志区域（Journaling Area）。默认情况下，XFS 的日志缓冲区大小较小（仅几兆字节）。在高吞吐并发写入事务日志（如 RocksDB WAL 或 MySQL Binlog）时，由于大量事务同时提交，XFS 的内部日志锁（Log Ticket Lock）会发生极其严重的争用，导致线程在内核态卡死。将日志区显式扩大到 128MB，可以为并发事务日志提交提供极大的缓冲队列，消除 80% 以上的元数据提交锁等待。
+XFS 在磁盘上划分有专门的日志区（On-disk Journal/Log Section，区别于挂载参数 `logbufs=8,logbsize=256k` 控制的内存日志缓冲区）。在中小型卷或默认配置下，磁盘日志区可能偏小；在高吞吐并发写入事务日志（如 RocksDB WAL 或 MySQL Binlog）时，大量并发元数据事务会争抢日志空间与内部日志票据锁（Log Ticket / Grant Head），导致线程在内核态阻塞等待。在格式化时显式将磁盘日志区固定为 128MB，并配合挂载期的 `logbufs=8,logbsize=256k` 内存日志缓冲，可显著降低高频元数据提交的锁等待与尾延迟。
 
 ### Q3: 什么是 Node Fencing，为什么仅凭 Kubernetes 的 Pod 健康探针无法彻底解决主从数据库的脑裂问题？
 Pod 健康探针（Liveness/Readiness Probe）只能检测本节点内的容器存活性，它无法区分“节点网络单向中断”与“容器真正死亡”。

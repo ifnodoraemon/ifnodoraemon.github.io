@@ -87,7 +87,7 @@ graph TD
     end
 ```
 
-在 70B 模型训练中，仅仅 Actor + Critic 的模型参数、梯度和 AdamW 优化器状态，就需要消耗超过 **600GB 显存**，训练集群必须配置复杂的数据并行与流水线并行。关于多卡互联与驱动显存通信优化，可参考 [NVIDIA GPU 驱动栈与显存架构解析](/articles/nvidia-gpu-package-architecture/)。
+在 70B 规模的混合精度 PPO 训练中，仅可训练的 Actor（70B）+ Critic（70B）两套参数、梯度与 FP32 主权重及 AdamW 一阶/二阶动量状态（约 `16 Bytes/param × 140B ≈ 2.24 TB`），再加上冻结的 Reference 与 Reward 模型（BF16 约 `280 GB`）及长序列激活值，即便开启 ZeRO-3/FSDP 分片与重计算，集群总显存水位仍轻松突破 **1 TB 以上**。关于分布式强化学习中基于 `verl` 的训推混部（Colocation）与显存卸载工程架构，可深入阅读 [大模型分布式强化学习后训练架构：基于 verl 的训推混部与异步权重同步实战](/articles/distributed-rl-post-training-verl-colocation/)；底层多卡驱动栈解析见 [NVIDIA GPU 驱动栈与显存架构解析](/articles/nvidia-gpu-package-architecture/)。
 
 ### 2. 价值估计漂移与长思维链的灾难
 在复杂数学定理证明或万行代码生成中，思维链长度往往超过 8,000 到 16,000 Token。Critic 价值模型需要在如此漫长的前向过程中，准确估计每一个中间 Token 的全局期望回报，这在数学上极度困难。Critic 的频繁误判会导致梯度方差巨大，引发训练崩溃（Loss 发散至 NaN）。
@@ -169,7 +169,7 @@ No, 9.9 is larger than 9.11.
 
 ## 五、动手实战：构建最小可运行的 GRPO 训练流水线
 
-下面我们使用基于 HuggingFace **TRL (Transformer Reinforcement Learning)** 的开源框架，展示如何针对一个轻量级基础模型（如 Qwen2.5-1.5B-Base）启动极简的 GRPO 训练。
+下面我们使用基于 HuggingFace **TRL (Transformer Reinforcement Learning)** 的开源框架，展示如何针对一个轻量级指令模型（如 `Qwen/Qwen2.5-1.5B-Instruct`）启动极简的 GRPO 训练。
 
 ### 1. 安装核心依赖
 ```bash
@@ -257,6 +257,7 @@ training_args = GRPOConfig(
 # 5. 启动 GRPO 训练循环
 trainer = GRPOTrainer(
     model=model_id,
+    processing_class=tokenizer,
     reward_funcs=[correctness_reward_func, format_reward_func],
     args=training_args,
     train_dataset=dataset,

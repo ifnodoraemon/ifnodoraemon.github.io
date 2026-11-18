@@ -91,7 +91,7 @@ mlxlink -d /dev/mst/mt4129_pciconf0 -m
 
 ## 2. High-Availability Subnet Manager (OpenSM HA) Architecture
 
-As explored in Chapter 6, the **Subnet Manager (SM)** is the control plane for the InfiniBand fabric. If a standalone SM crashes, existing connections continue forwarding, but the network loses the ability to adapt to topology changes.
+As explored in Chapter 10, the **Subnet Manager (SM)** is the control plane for the InfiniBand fabric. If a standalone SM crashes, existing connections continue forwarding, but the network loses the ability to adapt to topology changes.
 
 Production environments address this by deploying **Master/Standby OpenSM instances across redundant head nodes (Head01 and Head02)**:
 
@@ -102,11 +102,11 @@ flowchart TD
     end
 
     subgraph Head01["Head Node 01"]
-        SM1["<b>OpenSM (Master)</b><br/>Priority = 15 (Highest)<br/>Generates LFTs and scans topology"]
+        SM1["<b>OpenSM (Master)</b><br/>sm_priority = 15 (Highest)<br/>Generates LFTs and scans topology"]
     end
 
     subgraph Head02["Head Node 02"]
-        SM2["<b>OpenSM (Standby)</b><br/>Priority = 1 (Standby)<br/>Monitors fabric in passive mode"]
+        SM2["<b>OpenSM (Standby)</b><br/>sm_priority = 1 (Standby)<br/>Monitors fabric in passive mode"]
     end
 
     SM1 ===|"Active Control Plane (SMPs)"| SwitchFabric
@@ -119,24 +119,23 @@ flowchart TD
 On the primary head node (Head01), configure high priority:
 ```ini
 # 1. Arbitration priority (0–15; higher values take precedence)
-priority 15
+sm_priority 15
 
-# 2. Enforce deadlock-free FTree Fat-Tree routing engine
-routing_engine ftree,updn
+# 2. Enforce Adaptive Routing Fat-Tree engine (fallback to ftree, then updn)
+routing_engine ar_ftree,ftree,updn
 
 # 3. Subnet sweep interval in seconds
 sweep_interval 3
 
-# 4. Enable hardware Adaptive Routing and SHARP
-ar_enable 1
-sharp_enable 1
+# 4. Enable hardware SHARP aggregation support (0: Ignore, 1: Disable, 2: Enable)
+sharp_enabled 2
 
 # 5. Diagnostic and forwarding table dump directories
 log_file /var/log/opensm.log
 dump_files_dir /var/log/opensm_dump/
 ```
 
-On the secondary head node (Head02), configure an identical file, changing only `priority 1`.
+On the secondary head node (Head02), configure an identical file, changing only `sm_priority 1`.
 
 ### 2.2 Verifying Election Status
 Query the current active Master SM using `sminfo`:
@@ -159,14 +158,14 @@ In fabrics with tens of thousands of optical links, cable bends, loose connector
 flowchart LR
     Run["<b>Execute ibdiagnet</b>"] --> Scan["Fabric-Wide SMP Management Sweep"]
     Scan --> Report1["<b>ibdiagnet2.net_dump</b><br/>Fabric Topology & Link Graph"]
-    Scan --> Report2["<b>ibdiagnet2.pm_info</b><br/>Physical Performance & Error Counters"]
+    Scan --> Report2["<b>ibdiagnet2.pm</b><br/>Physical Performance & Error Counters"]
     Scan --> Report3["<b>ibdiagnet2.log</b><br/>Critical Health Warnings & Degraded Links"]
 ```
 
 ### 3.1 Executing a Fabric-Wide Audit
 ```bash
-# Run a physical layer sweep targeting mlx5_0 and output results to a log directory
-ibdiagnet -c 50000 -v -o /var/log/ibdiagnet_report/
+# Run a physical layer sweep targeting mlx5_0 with 10s counter sampling and output to a report directory
+ibdiagnet -i mlx5_0 -P all=1 --pm_pause_time 10 -o /var/log/ibdiagnet_report/
 ```
 
 ### 3.2 Key Indicators in Audit Logs
@@ -302,7 +301,7 @@ Set `export NCCL_DEBUG=INFO` before launching the benchmark.
 2. Check for speed negotiation issues:
    Search `ibdiagnet2.log` for `speed mismatch` or `width mismatch`. This highlights ports configured for 4X NDR (400G) that degraded to 2X width or 200G HDR speeds, identifying the exact switch GUID and port number;
 3. Check for high error rates:
-   In `ibdiagnet2.pm_info`, locate ports with elevated `SymbolErrorCounter` values.
+   In `ibdiagnet2.pm` (or the `[PM_INFO]` section of `ibdiagnet2.db_csv`), locate ports with elevated or climbing `SymbolErrorCounter` values.
 Technicians can then inspect, clean, or replace the specific transceivers identified in the log without disrupting the rest of the fabric.
 
 ### Q3: In a dual-OpenSM HA deployment, what mechanism prevents split-brain scenarios if the management link between the nodes fails?

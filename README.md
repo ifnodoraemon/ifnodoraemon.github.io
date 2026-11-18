@@ -1,114 +1,88 @@
 # 智算架构志 (LLM Systems Architecture)
 
 [![Live Site](https://img.shields.io/badge/Live_Site-blog.llmgo.top-6366f1?style=flat-square&logo=google-chrome)](https://blog.llmgo.top/)
+[![Bilingual Articles](https://img.shields.io/badge/Bilingual_Articles-74_Pairs_(148_Docs)-8b5cf6?style=flat-square)](https://blog.llmgo.top/articles/)
 [![Technical SEO](https://img.shields.io/badge/Google_SEO-100%2F100-10b981?style=flat-square&logo=google)](https://blog.llmgo.top/)
 [![Robots.txt](https://img.shields.io/badge/Robots.txt-RFC_9309-blue?style=flat-square)](https://blog.llmgo.top/robots.txt)
 [![IndexNow](https://img.shields.io/badge/IndexNow-Enabled-0ea5e9?style=flat-square)](https://blog.llmgo.top/sitemap.xml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-Welcome to **LLM Systems Architecture**, an engineering research and experimental publication platform tracking the frontier evolution of AI Agents, Inference Engines, and Large Language Model architectures.
+Welcome to **LLM Systems Architecture (智算架构志)** — a bilingual (ZH/EN) systems engineering publication featuring **74 deep-dive technical articles (148 bilingual Markdown documents)** across **LLM Inference Engines, Distributed RL Post-Training, Autonomous AI Agent Infrastructure, Cloud-Native Kubernetes Scheduling, and RDMA/NVLink Cluster Networking**.
 
 🌐 **Live Blog (Chinese):** [blog.llmgo.top](https://blog.llmgo.top/)  
 🌐 **English Portal:** [blog.llmgo.top/en/](https://blog.llmgo.top/en/)  
-📊 **2026 Frontier Models Benchmark Matrix:** [Frontier Models](https://blog.llmgo.top/models/)  
-🛠️ **LLM Developer Toolbox:** [Interactive Tools Suite](https://blog.llmgo.top/tools/)
+📊 **Nov 2026 Frontier Models Matrix:** [Frontier Models (`GPT-6.2 Astra`, `Claude Fable 5.2`, `Gemini 4 Carbon`, `Qwen4-Max`, `Kimi K3.1 Pro`)](https://blog.llmgo.top/models/)  
+🛠️ **LLM Developer Toolbox:** [Interactive Token, VRAM & RAG Chunking Suite](https://blog.llmgo.top/tools/)
 
 ---
 
-## 📚 Featured Technical Series & Research (精选体系专栏与深度长文)
+## 🔥 Latest Flagship Architecture Deep Dives (2026.11 最新硬核研报)
 
-### ⚡ 旗舰专栏：《大模型推理引擎：从模型演进、内核架构到未来终局》
-*以底层硬件第一性原理贯穿现代大模型推理系统：从 Roofline 模型推导、算子加速，到 PagedAttention、MLA、MoE 并行与 P/D 解耦池化。*
-
-* **[Chapter 01 · Roofline 模型与 Prefill/Decode 物理撕裂](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/)**  
-  👉 English: [Roofline Modeling of Prefill vs. Decode Disruption](https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/)
-* **[Chapter 02 · PagedAttention 显存池管理与分页虚拟化](https://blog.llmgo.top/articles/pagedattention-memory-virtualization/)**  
-  👉 English: [PagedAttention Memory Virtualization & Block Management](https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/)
-* **[Chapter 03 · Continuous Batching 与 Chunked Prefill 消除排头阻塞](https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/)**  
-  👉 English: [Continuous Batching & Chunked Prefill Deep Dive](https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/)
-* **[Chapter 04 · 前缀缓存演进：从 Hash 寻址到 SGLang RadixAttention 树状缓存](https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/)**  
-  👉 English: [Prefix Caching & RadixAttention Internals](https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/)
-* **[Chapter 05 · Attention 算子加速史：FlashAttention-1/2/3 到 FlashInfer 统一异构核心](https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/)**  
-  👉 English: [FlashAttention to FlashInfer Kernel Evolution](https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/)
-* **[Chapter 06 · 模型架构反哺推理系统：MHA/GQA 到 DeepSeek MLA 矩阵吸收](https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/)**  
-  👉 English: [MHA/GQA to DeepSeek MLA Matrix Absorption](https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/)
-* **[Chapter 07 · 稀疏大模型 MoE 推理内核：专家并行 (EP) 与 All-to-All 通信重叠](https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/)**  
-  👉 English: [MoE Expert Parallelism & All-to-All Overlap](https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/)
-* **[Chapter 08 · P/D 分离架构：计算与访存解耦、RDMA 分布式 KV Cache 传输与集群池化](https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/)**  
-  👉 English: [Prefill-Decode Disaggregation Architecture & RDMA KV Cache](https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/)
-* **[Chapter 09 · 四大主流生产级推理引擎架构横评与调度器源码解密：vLLM v1 vs SGLang vs TRT-LLM vs llama.cpp](https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/)**  
-  👉 English: [Production Inference Engines Teardown: vLLM v1 vs SGLang vs TRT-LLM vs llama.cpp](https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/)
-* **[Chapter 10 (终局) · 长思维链 (Reasoning / Test-Time Compute) 与大集群推理系统的未来终局](https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/)**  
-  👉 English: [Test-Time Compute, Reasoning Scheduling, and Tiered Cluster Storage](https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/)
+* **[大模型分布式强化学习后训练架构：基于 verl 的训推混部 (Colocation)、FSDP2 与 CUDA IPC 零拷贝权重同步实战](https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/)**  
+  👉 English: [Distributed RL Post-Training Architecture: Rollout-Training Colocation, FSDP2 & Zero-Copy Weight Sync with verl](https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/)
+* **[AI Agent 安全执行沙箱架构：基于 Firecracker MicroVM 的毫秒级快照克隆 (`userfaultfd`) 与高并发隔离实战](https://blog.llmgo.top/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/)**  
+  👉 English: [AI Agent Sandbox Architecture: Millisecond Snapshot Cloning & Isolation with Firecracker MicroVMs](https://blog.llmgo.top/en/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/)
+* **[机柜级超节点与集合通信：GB200 NVL72、NVLink 5 铜缆背板与 NCCL SHARP/NVLS 生产架构深度解析](https://blog.llmgo.top/articles/rack-scale-superpod-nvl72-nccl-collectives/)**  
+  👉 English: [Rack-Scale SuperPoD & Collective Communication: GB200 NVL72, NVLink 5 & NCCL Internals](https://blog.llmgo.top/en/articles/rack-scale-superpod-nvl72-nccl-collectives/)
+* **[深度解构 DeepSeek 推理引擎 DeepInfer 与 deepseek-recipe：从稀疏算子到高并发超节点工程落地](https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/)**  
+  👉 English: [Inside DeepSeek's DeepInfer & deepseek-recipe: Sparse Kernels to Wide-EP Supernodes](https://blog.llmgo.top/en/articles/deepinfer-deepseek-recipe-architecture/)
+* **[2026 年 11 月前沿大模型横评：GPT-6.2 Astra vs Claude Fable 5.2 vs Gemini 4 Carbon](https://blog.llmgo.top/articles/model-comparison-2026/)** & **[国产前沿选型：Qwen4-Max、Kimi K3.1 Pro、DeepSeek-V4 与 MiniMax M3.1](https://blog.llmgo.top/articles/domestic-llm-comparison-2026/)**
 
 ---
 
-### 🤖 旗舰专栏：《AI Agent 生产级架构师手册》
-*系统掌握 2026 生产级 AI Agent 核心架构：从执行循环、状态机，到 MCP 协议、Skills 扩展、多智能体协作与全链路可观测性。*
+## 📚 Four Curated Engineering Series (四大体系化技术专栏)
 
-* **[Agent 执行循环与状态机设计：从 ReAct 到确定性控制流](https://blog.llmgo.top/articles/agent-loop-state-machine/)** (👉 [English](https://blog.llmgo.top/en/articles/agent-loop-state-machine/))
-* **[MCP 协议完全指南：连接 LLM 与本地世界的统一标准](https://blog.llmgo.top/articles/mcp-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/mcp-guide/))
-* **[突破 10 万 Star 的 Browser-use 架构深度剖析](https://blog.llmgo.top/articles/browser-use-agent-architecture/)** (👉 [English](https://blog.llmgo.top/en/articles/browser-use-agent-architecture/))
-* **[AI Agent 记忆系统设计：从工作记忆到分层 Graph RAG](https://blog.llmgo.top/articles/agent-memory-architecture/)** (👉 [English](https://blog.llmgo.top/en/articles/agent-memory-architecture/))
-* **[对抗复合误差的分布式 Agent 编排与量化 Evals 体系](https://blog.llmgo.top/articles/agent-orchestration-evals/)** (👉 [English](https://blog.llmgo.top/en/articles/agent-orchestration-evals/))
-* **[AI 编程驾驭指南：从「帮我写个 XX」到架构编排者](https://blog.llmgo.top/articles/ai-coding-mastery/)** (👉 [English](https://blog.llmgo.top/en/articles/ai-coding-mastery/))
-* **[工具调用与 Function Calling 进阶：从 MCP 自动注册到沙箱执行与自愈循环](https://blog.llmgo.top/articles/advanced-agent-tool-use-and-function-calling/)** (👉 [English](https://blog.llmgo.top/en/articles/advanced-agent-tool-use-and-function-calling/))
-* **[从零构建轻量级 Agent 框架：有限状态机、事件流与人机协同 (Human-in-the-Loop)](https://blog.llmgo.top/articles/build-lightweight-agent-framework/)** (👉 [English](https://blog.llmgo.top/en/articles/build-lightweight-agent-framework/))
-* **[多智能体协作与并发控制：Actor 模型、状态共享与死锁防护](https://blog.llmgo.top/articles/multi-agent-collaboration-and-concurrency/)** (👉 [English](https://blog.llmgo.top/en/articles/multi-agent-collaboration-and-concurrency/))
+### 1. ⚡ 《大模型推理引擎：从模型演进、内核架构到未来终局》 (10 Chapters)
+*First-principles GPU systems series spanning Roofline modeling, PagedAttention, FlashAttention-3/FlashInfer, MLA matrix absorption, Wide-EP MoE, and RDMA Prefill-Decode disaggregation.*
+
+* **[Ch 01 · Roofline 模型与 Prefill/Decode 物理撕裂](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/)** (👉 [EN](https://blog.llmgo.top/en/articles/inference-roofline-prefill-decode/))
+* **[Ch 02 · PagedAttention 显存池管理与分页虚拟化](https://blog.llmgo.top/articles/pagedattention-memory-virtualization/)** (👉 [EN](https://blog.llmgo.top/en/articles/pagedattention-memory-virtualization/))
+* **[Ch 03 · Continuous Batching 与 Chunked Prefill 消除排头阻塞](https://blog.llmgo.top/articles/continuous-batching-chunked-prefill-guide/)** (👉 [EN](https://blog.llmgo.top/en/articles/continuous-batching-chunked-prefill-guide/))
+* **[Ch 04 · 前缀缓存演进：从块哈希寻址到 SGLang RadixAttention 树状缓存](https://blog.llmgo.top/articles/prefix-caching-radix-attention-internals/)** (👉 [EN](https://blog.llmgo.top/en/articles/prefix-caching-radix-attention-internals/))
+* **[Ch 05 · Attention 算子加速史：FlashAttention-1/2/3 到 FlashInfer 统一内核](https://blog.llmgo.top/articles/flashattention-flashinfer-kernel-evolution/)** (👉 [EN](https://blog.llmgo.top/en/articles/flashattention-flashinfer-kernel-evolution/))
+* **[Ch 06 · MHA/GQA 到 DeepSeek MLA 矩阵吸收](https://blog.llmgo.top/articles/mha-gqa-mla-matrix-absorption-inference-engine/)** (👉 [EN](https://blog.llmgo.top/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/))
+* **[Ch 07 · 稀疏大模型 MoE 推理内核：专家并行 (EP) 与 All-to-All 通信重叠](https://blog.llmgo.top/articles/moe-expert-parallelism-inference-engine/)** (👉 [EN](https://blog.llmgo.top/en/articles/moe-expert-parallelism-inference-engine/))
+* **[Ch 08 · P/D 分离架构：RDMA 分布式 KV Cache 传输与集群池化](https://blog.llmgo.top/articles/pd-disaggregation-distributed-kv-cache/)** (👉 [EN](https://blog.llmgo.top/en/articles/pd-disaggregation-distributed-kv-cache/))
+* **[Ch 09 · 四大生产级推理引擎源码横评：vLLM V1 vs SGLang vs TRT-LLM vs llama.cpp](https://blog.llmgo.top/articles/inference-engines-core-architecture-internals/)** (👉 [EN](https://blog.llmgo.top/en/articles/inference-engines-core-architecture-internals/))
+* **[Ch 10 · 长思考链与 Test-Time Compute：大模型推理引擎的终局之战](https://blog.llmgo.top/articles/reasoning-test-time-compute-inference-future/)** (👉 [EN](https://blog.llmgo.top/en/articles/reasoning-test-time-compute-inference-future/))
+
+### 2. 🤖 《AI Agent 生产级架构师手册》 (14 Chapters)
+*State machines, MCP & Skills, hierarchical memory, sandboxing, Environment Scaling, concurrency control, OpenTelemetry observability, and prompt-injection defense.*
+
+* Representative chapters: [Execution Loop & FSM](https://blog.llmgo.top/articles/agent-loop-state-machine/) · [MCP Guide](https://blog.llmgo.top/articles/mcp-guide/) · [Tool Runtime & Sandboxing](https://blog.llmgo.top/articles/advanced-agent-tool-use-and-function-calling/) · [Lightweight Agent Framework](https://blog.llmgo.top/articles/build-lightweight-agent-framework/) · [Multi-Agent Concurrency](https://blog.llmgo.top/articles/multi-agent-collaboration-and-concurrency/) · [Environment Scaling](https://blog.llmgo.top/articles/environment-scaling-agent-guide/)
+
+### 3. ☸️ 《容器与云原生智算编排底层通关手册》 (13 Chapters)
+*Linux namespaces/cgroups v2, OverlayFS, runc/containerd shimv2, Kubernetes API Server/etcd/Scheduler internals, Volcano/Kueue gang scheduling, K8s 1.32 DRA & CDI GPU topology, Kata/gVisor, and eBPF Cilium.*
+
+* Browse full series: [Container & K8s Architecture Series](https://blog.llmgo.top/articles/#series)
+
+### 4. 🌐 《计算机网络与 AI 智算集群高速互联底层专栏》 (12 Chapters)
+*PCIe/DMA/RingBuffer, Linux sk_buff/NAPI, TCP BBR, BGP Clos ECMP, VXLAN vs Cilium eBPF, Envoy/gRPC/QUIC, RDMA Verbs/GPUDirect, RoCEv2 PFC/ECN/DCQCN, InfiniBand OpenSM/NCCL, and packet-level troubleshooting.*
+
+* Browse full series: [AI Cluster Networking Series](https://blog.llmgo.top/articles/#series)
 
 ---
 
-### 🔬 更多前沿硬核研报 (High-Throughput Serving & Alignment)
-* **[DeepSeek-V4 与 Kimi K3 生产级部署实战指南：四机 32 卡拓扑与成本推演](https://blog.llmgo.top/articles/deepseek-v4-kimi-k3-deployment-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/deepseek-v4-kimi-k3-deployment-guide/))
-* **[Test-Time Compute 与 GRPO 强化学习全景拆解：从自我反思到长思维链落地](https://blog.llmgo.top/articles/test-time-compute-grpo/)** (👉 [English](https://blog.llmgo.top/en/articles/test-time-compute-grpo/))
-* **[SGLang vs vLLM 架构全景深度对比：RadixAttention、PageAttention 与吞吐极限评测](https://blog.llmgo.top/articles/sglang-vs-vllm-architecture/)** (👉 [English](https://blog.llmgo.top/en/articles/sglang-vs-vllm-architecture/))
-* **[投机解码 (Speculative Decoding) 与 EAGLE 工业级落地实践](https://blog.llmgo.top/articles/speculative-decoding-eagle-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/speculative-decoding-eagle-guide/))
-* **[大模型量化选型与精度评测全景：从 INT8/FP8 到 AWQ/GPTQ 与显存数学](https://blog.llmgo.top/articles/quantization-precision-guide/)** (👉 [English](https://blog.llmgo.top/en/articles/quantization-precision-guide/))
-* **[2026 主流前沿大模型全景横评：GPT-5.4、Claude 4.6、Gemini 3 与开源双雄](https://blog.llmgo.top/articles/model-comparison-2026/)** (👉 [English](https://blog.llmgo.top/en/articles/model-comparison-2026/))
-* **[生产级 RAG 检索增强全景演进：向量数据库、混合检索与重排序优化](https://blog.llmgo.top/articles/rag-in-practice/)** (👉 [English](https://blog.llmgo.top/en/articles/rag-in-practice/))
-
----
-
-## 🚀 Multi-Channel Syndication & SEO Automation (多渠道分发与外链建设)
-
-本仓库内置高度自动化的多平台内容同步与规范反链属性脚本：
+## 🚀 Build, Verification & SEO Automation
 
 ```bash
-# 1. 批量导出适合国内平台 (掘金、知乎、微信公众号) 的规范 Markdown (带首发版权与反向内链)
-npm run export:domestic -- --all
+# 1. Generate 1200x630 OpenGraph cards & build full bilingual static site
+python3 scripts/generate-article-og.py
+npm run build
 
-# 2. 自动化将顶流英文技术专栏发布至 DEV.to (具备官方 canonical_url 权威反链继承)
-npm run publish:devto --top
+# 2. Run end-to-end smoke suite (Python runnable examples, Node tests, Mermaid, KaTeX, SEO)
+npm run test:smoke
 
-# 3. 运行全站 Technical SEO 审计与 Google Search Central 合规校验 (100/100 满分)
+# 3. Run Google Search Central Technical SEO Audit (100/100 target)
 npm run seo:google
 
-# 4. 执行毫秒级搜索引擎 IndexNow 协议主动推流 (Bing / Yandex / Seznam)
+# 4. Multi-channel syndication & IndexNow instant push
+npm run export:domestic -- --all
 npm run indexnow
 ```
 
 ---
 
-## 👨‍💻 About The Author
+## 👨‍💻 Author & License
 
-I am **ifnodoraemon**, a developer and AI researcher passionate about exploring the capabilities and boundaries of modern LLMs.
-
-- 🌐 **Blog:** [blog.llmgo.top](https://blog.llmgo.top)
-- 🐙 **GitHub:** [@ifnodoraemon](https://github.com/ifnodoraemon)
-- 𝕏 **X (Twitter):** [@ifnodoraemon](https://x.com/ifnodoraemon)
-- ✉️ **Email:** ifnodoraemon@gmail.com
-
----
-
-## 🛠️ Tech Stack
-
-This site is built with a focus on speed, minimalism, and a sci-fi cyber aesthetic:
-- **Vite** for ultra-fast generation and bundling.
-- **Handlebars** for lightweight static templating.
-- **Marked & KaTeX** for high-speed Markdown parsing and LaTeX math formula rendering.
-- Native CSS variables for consistent, scalable theming without heavy frameworks.
-- Automated **Technical SEO & Sitemap Auditing** with Google Search Console API integration.
-
-## 📄 License
-
-This repository is licensed under the MIT License.
+Built and maintained by **ifnodoraemon** ([blog.llmgo.top](https://blog.llmgo.top) · [@ifnodoraemon](https://github.com/ifnodoraemon) · [X](https://x.com/ifnodoraemon)). Licensed under the MIT License.

@@ -85,7 +85,7 @@ graph TD
     end
 ```
 
-In a 70B parameter setup, loading the Actor and Critic alongside their respective AdamW optimizer states easily demands over **600GB of VRAM**. This forces teams to deploy complex tensor and pipeline parallelism merely to fit the training loop. For low-level driver and memory bus topology guidelines, consult our [NVIDIA GPU Package Architecture Deep Dive](/en/articles/nvidia-gpu-package-architecture/).
+In a 70B mixed-precision PPO setup, just the trainable Actor (70B) and Critic (70B) parameters, gradients, FP32 master weights, and AdamW first/second moments consume ~`16 Bytes/param × 140B ≈ 2.24 TB` before sharding—plus ~`280 GB` in BF16 for the frozen Reference and Reward models and long-context activations—easily exceeding **1 TB+ of aggregate cluster HBM** even under ZeRO-3/FSDP sharding and activation checkpointing. For multi-node rollout-training colocation and zero-copy CUDA IPC weight synchronization in production RL clusters, see our deep dive on [Distributed RL Post-Training Architecture with verl](/en/articles/distributed-rl-post-training-verl-colocation/); for host driver stack fundamentals, consult [Mapping the NVIDIA GPU Driver Stack](/en/articles/nvidia-gpu-package-architecture/).
 
 ### 2. Value Function Drift Across Long Horizons
 When a model reasons through intricate mathematical proofs, trajectories stretch across 8,000 to 16,000 tokens. Training a Critic to accurately predict the expected discounted return at every intermediate token is mathematically fragile. Critic errors amplify gradient variance, causing loss values to explode into NaNs.
@@ -251,6 +251,7 @@ training_args = GRPOConfig(
 # 5. Launch the Critic-Free Trainer
 trainer = GRPOTrainer(
     model=model_id,
+    processing_class=tokenizer,
     reward_funcs=[correctness_reward_func, format_reward_func],
     args=training_args,
     train_dataset=dataset,

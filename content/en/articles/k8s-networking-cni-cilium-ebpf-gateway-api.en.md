@@ -164,14 +164,14 @@ flowchart TD
         direction TB
         E1["NIC Packet Receipt (XDP Hook)"] --> E2["BPF Map Hash Table Lookup (O(1) Instant)"]
         E2 --> E3["Direct packet header rewrite (No conntrack lock)"]
-        E3 --> E4["<b>sockops / sk_msg: Socket-level memory redirection</b>"]
-        E4 --> E5["Direct Delivery to Container Socket"]
+        E3 --> E4["<b>tc bpf_redirect_peer (Fast NIC Redirect) / sockops (Local Socket Bypass)</b>"]
+        E4 --> E5["Direct Delivery to Target Container"]
     end
 ```
 
 #### Cilium eBPF Innovations:
 1. **$O(1)$ Hash Table Lookups**: Maintains service routing tables inside BPF Maps. Whether a cluster hosts 10 or 100,000 Services, route resolution takes constant time;
-2. **Total Removal of kube-proxy & iptables**: With `kube-proxy-replacement=strict`, host nodes run without kube-proxy, leaving iptables tables clean and performant;
+2. **Total Removal of kube-proxy & iptables**: With `kubeProxyReplacement=true` (Cilium v1.16+), host nodes run without kube-proxy, leaving iptables tables clean and performant;
 3. **`sockops` Socket-Level Short-Circuiting**: When two Pods residing on the same host communicate over TCP, Cilium intercepts socket calls via `sockops` and copies payloads directly between socket queues in kernel memory, **bypassing the veth-pair, device drivers, and the entire TCP/IP network stack**, boosting performance by up to 300%!
 
 ---
@@ -240,11 +240,11 @@ If the Pod's virtual interface (`eth0`) remains at the default MTU of 1500 bytes
 **Remedy**:
 Configure the CNI plugin (Flannel or Cilium) to automatically set container MTU to `1450` (Physical MTU minus 50), and verify that TCP MSS Clamping is active in the host kernel.
 
-### Q2: How does Cilium handle NodePort traffic without running kube-proxy or iptables?
+### Q2: How does Cilium handle NodePort traffic with `kubeProxyReplacement=true` (without running kube-proxy or iptables)?
 Cilium utilizes **eBPF XDP (eXpress Data Path) and tc (Traffic Control) hooks**:
-1. When ingress traffic hits a host `NodePort` (e.g., port `30080`), the attached **XDP eBPF program** captures the frame at the network card driver level before allocating a `sk_buff` buffer;
-2. Cilium performs an $O(1)$ lookup in its in-kernel BPF Map to locate healthy backend Pod endpoints;
-3. If the destination Pod runs locally, eBPF rewrites the destination IP and redirects it via `sockops`. If the Pod resides on a remote node, Cilium forwards it using Direct Server Return (DSR) or SNAT, **completely bypassing the Linux netfilter connection tracker and iptables tables**.
+1. When ingress traffic hits a host `NodePort` (e.g., port `30080`), the attached **XDP / tc ingress eBPF program** captures the packet on the physical NIC before entering Netfilter;
+2. Cilium performs an $O(1)$ lookup in its in-kernel BPF Map hash table to locate healthy backend Pod endpoints;
+3. If the destination Pod runs locally, eBPF performs DNAT at the `tc` layer and delivers the packet directly to the local Pod interface via `bpf_redirect_peer` / `bpf_redirect_neigh` (whereas `sockops` accelerates local socket-to-socket Pod traffic). If the Pod resides on a remote node, Cilium forwards it using Direct Server Return (DSR) or SNAT, **completely bypassing the Linux netfilter connection tracker and iptables tables**.
 
 ### Q3: When should engineering teams transition from classic Ingress to the Gateway API?
 Organizations should consider migrating when encountering these operational requirements:

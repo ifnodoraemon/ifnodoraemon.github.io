@@ -113,7 +113,7 @@ When the Docker daemon starts, it instantiates the `docker0` bridge on the host 
 When a container is started via `docker run`:
 1. Docker creates a new `veth-pair`;
 2. Peer B is moved into the container namespace, renamed `eth0`, and assigned a private IP (e.g., `172.17.0.2`) alongside a virtual MAC address;
-3. Peer A (e.g., `vethXXXX`) remains in the host namespace and **attaches directly to `docker0` as a virtual switch port**.
+3. Peer A (e.g., `vethXXXX`) remains in the host namespace and **attaches directly to `docker0` as a virtual switch port** via Netlink (`ip link set ... master docker0`), invoking the kernel bridging function `br_add_if()`.
 
 ```mermaid
 flowchart TD

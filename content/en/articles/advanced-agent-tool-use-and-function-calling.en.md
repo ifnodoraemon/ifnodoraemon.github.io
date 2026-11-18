@@ -17,9 +17,9 @@ updated: 2026-10-20
 ---
 
 > [!NOTE] Executive Summary (TL;DR)
-> - **Dynamic Discovery & Container Sandboxing**: Advances beyond hardcoded function calling toward MCP-based runtime discovery, strict JSON Schema validation, and gVisor container isolation.
-> - **Closed-Loop Self-Healing**: Captures execution tracebacks and feeds structured errors back to the model for reflection, raising tool execution success rates by over 40%.
-> - **Runnable Codebases**: Includes verified production Python examples; pairs with [Building a Lightweight Agent Framework](/en/articles/build-lightweight-agent-framework/).
+> - **Dynamic Discovery & Container Sandboxing**: Advances beyond hardcoded function calling toward domain-filtered retrieval, full-lifecycle MCP pagination discovery, and gVisor container execution with guaranteed `finally` cleanup.
+> - **Bounded Self-Healing Recovery**: Captures execution stderr tails and feeds errors back to the model for up to `max_retries=2` repair attempts (at most 3 total runs), halting early when identical errors repeat.
+> - **Runnable Codebases**: Includes verified Python runtime reference examples; pairs with [Building a Lightweight Agent Framework](/en/articles/build-lightweight-agent-framework/).
 
 ## Bound discovery and execution as tool catalogs grow
 

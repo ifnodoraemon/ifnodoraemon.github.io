@@ -148,7 +148,7 @@
               <span class="radar-pills-label">{{models.radarSelectHint}}</span>
               <div class="radar-presets">
                 <button type="button" class="preset-btn" id="presetTop">{{#if isEn}}Top Frontier{{else}}顶级巅峰{{/if}}</button>
-                <button type="button" class="preset-btn" id="presetChina">{{#if isEn}}China Top 4{{else}}国产四强{{/if}}</button>
+                <button type="button" class="preset-btn" id="presetChina">{{#if isEn}}China Frontier{{else}}国产领军{{/if}}</button>
                 <button type="button" class="preset-btn" id="presetOpen">{{#if isEn}}Open Weights{{else}}开源标杆{{/if}}</button>
                 <button type="button" class="preset-btn" id="presetSpeed">{{#if isEn}}Speed & Value{{else}}极速性价比{{/if}}</button>
                 <button type="button" class="preset-btn" id="presetAll">{{#if isEn}}All Models{{else}}全选对比{{/if}}</button>
@@ -434,28 +434,28 @@
     const presetTop = document.getElementById('presetTop');
     if (presetTop) {
       presetTop.addEventListener('click', () => {
-        setVisibility(ds => ['Claude Opus 5.5', 'Gemini 4 Argon', 'GPT-6 Astra', 'Claude Sonnet 5.5', 'GPT-6.1 Sol', 'Kimi K3'].includes(ds.label));
+        setVisibility(ds => ['Claude Fable 5.2', 'GPT-6.2 Astra', 'Gemini 4 Carbon', 'Claude Opus 5.5', 'Qwen4-Max', 'Kimi K3.1 Pro'].includes(ds.label));
       });
     }
 
     const presetChina = document.getElementById('presetChina');
     if (presetChina) {
       presetChina.addEventListener('click', () => {
-        setVisibility(ds => ['Kimi K3', 'DeepSeek-V4-Pro', 'DeepSeek-V4.1-Flash', 'GLM-5.3', 'Qwen3.8-Max'].includes(ds.label));
+        setVisibility(ds => ['Qwen4-Max', 'Kimi K3.1 Pro', 'DeepSeek-V4-Pro', 'DeepSeek-V4.1-Flash', 'GLM-5.3', 'MiniMax M3.1 Flash'].includes(ds.label));
       });
     }
 
     const presetOpen = document.getElementById('presetOpen');
     if (presetOpen) {
       presetOpen.addEventListener('click', () => {
-        setVisibility(ds => ['DeepSeek-V4.1-Flash', 'DeepSeek-V4-Pro', 'Kimi K3', 'GLM-5.3'].includes(ds.label));
+        setVisibility(ds => ['Kimi K3.1 Pro', 'DeepSeek-V4-Pro', 'DeepSeek-V4.1-Flash', 'GLM-5.3', 'MiniMax M3.1 Flash'].includes(ds.label));
       });
     }
 
     const presetSpeed = document.getElementById('presetSpeed');
     if (presetSpeed) {
       presetSpeed.addEventListener('click', () => {
-        setVisibility(ds => ['Claude Haiku 5.5', 'Gemini 3.8 Flash', 'DeepSeek-V4.1-Flash', 'GLM-5.3'].includes(ds.label));
+        setVisibility(ds => ['Gemini 4 Hydrogen', 'MiniMax M3.1 Flash', 'DeepSeek-V4.1-Flash', 'Claude Haiku 5.5', 'Muse Ember'].includes(ds.label));
       });
     }
 

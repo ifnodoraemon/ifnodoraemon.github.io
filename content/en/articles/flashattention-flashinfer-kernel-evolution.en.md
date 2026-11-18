@@ -227,7 +227,7 @@ Because data movement (TMA) and compute (WGMMA) run asynchronously in hardware, 
 
 Through ping-pong double buffering, while consumers calculate tile $K$, the producer loads tile $K+1$ via TMA. **Memory latency is hidden behind active compute cycles.**
 
-Incorporating FP8 low-precision support with block quantization, FlashAttention-3 achieves sustained performance of **700 to 800 TFLOPS on an H100 SXM5**, reaching 75%~85% of physical hardware limits.
+On an H100 SXM5, FlashAttention-3 reaches **~740–840 TFLOPS in FP16/BF16** (~75%–85% of the H100's 989.4 TFLOPS FP16/BF16 peak), and with **FP8** plus block scaling it achieves **~1.2 PFLOPS (~1,200 TFLOPS)**.
 
 ---
 
@@ -320,7 +320,7 @@ On modern accelerators like the A100 and H100, compute throughput has scaled far
 ### Q2: Given that FlashAttention-3 achieves exceptional TFLOPS benchmarks on H100 GPUs, why do serving frameworks frequently prefer FlashInfer for token generation?
 
 Because **benchmark evaluation conditions diverge sharply from real-world online inference workloads**:
-- FlashAttention-3's benchmark scores (700+ TFLOPS) are measured on **large, dense prefill matrices (e.g., $L_q = 4096, L_k = 4096$)** where Tensor Cores remain fully saturated;
+- FlashAttention-3's benchmark scores (~740–840 TFLOPS in FP16/BF16 and ~1.2 PFLOPS in FP8 on H100) are measured on **large, dense prefill matrices (e.g., $L_q = 4096, L_k = 4096$)** where Tensor Cores remain fully saturated;
 - In production serving, engines spend the vast majority of time in **autoregressive decode ($L_q = 1$)**, where the bottleneck is not Tensor Core speed, but low concurrency per sequence causing SM underutilization;
 - FlashInfer is engineered around inference-specific access patterns: native indirection for Paged KV caches, variable-length hybrid batching, and **Split-K multi-SM parallel decoding**. In real-world serving benchmarks, FlashInfer consistently delivers lower P99 TPOT tail latency and higher concurrent capacity.
 

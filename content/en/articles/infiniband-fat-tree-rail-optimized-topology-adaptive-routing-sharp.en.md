@@ -234,20 +234,18 @@ sequenceDiagram
 Configuring routing engines and hardware acceleration in `/etc/opensm/opensm.conf`:
 
 ```ini
-# 1. Enable FTree routing engine (fallback to updn for non-symmetric fabrics)
-routing_engine ftree,updn
+# 1. Enable Adaptive Routing Fat-Tree engine ar_ftree (fallback to ftree, then updn)
+# Note: OpenSM configures Adaptive Routing via ar_ftree / ar_updn routing engines and the armgr plugin
+routing_engine ar_ftree,ftree,updn
 
-# 2. Enable Adaptive Routing (AR) support
-ar_enable 1
-
-# 3. Configure subnet sweep interval (in seconds, for fast fault convergence)
+# 2. Configure subnet sweep interval (in seconds, for fast fault convergence)
 sweep_interval 3
 
-# 4. Enable multipath load balancing (assign multiple LIDs per port)
+# 3. Enable multipath load balancing (assign 2^lmc LIDs per port)
 lmc 2
 
-# 5. Enable SHARP hardware tree building
-sharp_enable 1
+# 4. Enable SHARP hardware aggregation management (0: Ignore, 1: Disable, 2: Enable)
+sharp_enabled 2
 ```
 
 ---

@@ -98,7 +98,7 @@ $$y = E_{\text{shared}}(x) + \sum_{i \in \text{TopK}(S, K)} s_i E_i(x)$$
 
 我们在 [专栏第一讲](/articles/inference-roofline-prefill-decode/) 中深入推导了 Roofline 模型：**算术强度（Arithmetic Intensity）$I = \frac{\text{FLOPs}}{\text{Memory Access Bytes}}$ 决定了硬件运行在算力受限区还是访存受限区**。
 
-在 Dense 模型中，若 Batch Size 为 $B$，隐层维度为 $h$，前向计算权重访存量为 $W$ 字节，计算量为 $2 B W$ FLOPs，算术强度约为 $I_{\text{dense}} \approx \frac{2 B W}{W} = 2B$（与参数量大小无关，只与 $B$ 成正比）。
+在 Dense 模型（BF16 精度，每参数占 2 字节）中，若激活 Token 批大小为 $B$，参数量为 $P$，则前向权重访存量为 $W = 2P$ 字节，乘加计算量为 $2 B P = B W$ FLOPs，算术强度约为 $I_{\text{dense}} \approx \frac{2 B P}{2 P} = B\text{ FLOPs/Byte}$（与参数量大小无关，只与同时处理的 Token 数 $B$ 成正比）。
 
 但在 MoE 架构中，情况发生了剧变：
 假设每层有 $E$ 个专家，每个 Token 激活 $k$ 个专家。如果推理引擎正在处理并发较小的自回归解码请求（如 $B=8$），激活的 Token 总分配数为 $B \times k = 8 \times 8 = 64$ 个任务分配。
@@ -109,16 +109,16 @@ $$y = E_{\text{shared}}(x) + \sum_{i \in \text{TopK}(S, K)} s_i E_i(x)$$
 当一个 GPU 节点上的专家只分到一个 Token 时，GPU 必须从 HBM 显存完整加载该专家的全部权重矩阵（$W_{\text{gate}}, W_{\text{up}}, W_{\text{down}}$），却只对单向量做了一次矩阵-向量乘法（GEMV）！
 
 ```text
-MoE 单专家算术强度对比：
+MoE 单专家算术强度对比 (以 BF16 权重为例):
 - Prefill 阶段 (长上下文 S=4096, B=4):
   总分配 Token 数 = 4096 * 4 * 8 = 131,072
   每专家平均分配 Token 数 M_e ≈ 131,072 / 256 = 512
-  -> 标准大 GEMM, 算术强度 I ≈ 2 * 512 = 1024 FLOPs/Byte (打满 Tensor Core 算力受限区)
+  -> 标准大 GEMM, 算术强度 I ≈ 512 FLOPs/Byte (远超 H100 ~295 拐点，打满 Tensor Core 算力受限区)
 
 - Decode 阶段 (低并发 B=4):
   总分配 Token 数 = 4 * 8 = 32
-  每专家平均分配 Token 数 M_e ≈ 32 / 256 = 0.125
-  -> 退化为 GEMV, 算术强度 I ≈ 2 * 1 = 2 FLOPs/Byte (被死死锁在 HBM 访存受限区底端)
+  每专家平均分配 Token 数 M_e ≈ 32 / 256 = 0.125 (被激活专家通常仅分到 M_e = 1 个 Token)
+  -> 退化为 GEMV, 算术强度 I ≈ 1 FLOPs/Byte (被死死锁在 HBM 访存受限区底端)
 ```
 
 **结论一：MoE 架构在大幅降低单 Token 理论计算量的同时，将自回归 Decode 阶段推向了更为极致的“访存受限区”。如果没有足够的 Batch Size 聚合 Token，MoE 的实际加速比将大打折扣！**
@@ -173,7 +173,7 @@ flowchart LR
     
     SIG --> MASK["根据 Top-K 索引掩码原始得分"]
     TOPK -.-> MASK
-    MASK --> NORM["Softmax / 归一化权重 s_i (无偏置影响)"]
+    MASK --> NORM["Sigmoid 亲和度与 Top-K 归一化权重 s_i (无偏置影响)"]
     NORM --> OUT["用于最终输出加权"]
 ```
 
@@ -266,7 +266,7 @@ flowchart TD
 - 单 Token 单层通信总量约为 **224 KB**。
 
 若模型有 60 层 MoE，生成单个 Token 跨网络传输的数据量高达 $60 \times 224 \text{ KB} \approx 13.1 \text{ MB}$！若系统吞吐要求达到每秒 1000 Token，双向网络吞吐要求将突破 **$13.1 \text{ GB/s} \times 8 \approx 105 \text{ Gbps}$**！
-这就是为什么 **DeepSeek-V3 必须依赖 8 节点 64 卡全双工 3.2Tbps InfiniBand / RoCE 网络** 的物理根因。
+这就是为什么 **DeepSeek-V3 必须依赖 8 节点 64 卡全双工 3.2Tbps InfiniBand / RoCE 网络** 的物理根因（而在新一代 Blackwell 机房中，更进一步演进为 72 卡铜缆直连的单一 NVLink 域——详见 [机柜级超节点与集合通信：GB200 NVL72、NVLink 5 与 NCCL 架构解析](/articles/rack-scale-superpod-nvl72-nccl-collectives/)）。
 
 ---
 
@@ -458,7 +458,7 @@ out_routed_chunk0 = grouped_gemm_experts(dispatch_handle_chunk0.result)
 flowchart TD
     Q1{"模型参数规模与集群规模?"}
     
-    Q1 -- "8卡以内 (单机 NVLink 域)" --> DEC_TP["推荐: 纯 TP (Tensor Parallelism)<br/>• 架构简单, 无动态 All-to-All 负载倾斜<br/>• 适配 Mixtral-8x7B, Qwen2.5-MoE-57B"]
+    Q1 -- "8卡以内 (单机 NVLink 域)" --> DEC_TP["推荐: 纯 TP (Tensor Parallelism)<br/>• 架构简单, 无动态 All-to-All 负载倾斜<br/>• 适配 Mixtral-8x7B, Qwen2-57B-A14B"]
     
     Q1 -- "8卡以上跨节点 (如 64卡 H100/H800)" --> Q2{"首要业务优化指标?"}
     
@@ -495,6 +495,6 @@ flowchart TD
 **必须依据物理网络的互联拓扑（Topology-Aware Hierarchy）来严格决定：**
 - **黄金原则**：**将通信频次极高的张量并行（TP）锁死在单机内部的 NVLink 高速总线域内（通常单机 8 卡，带宽高达 900GB/s）；将专家并行（EP）放在跨节点的网络拓扑上（InfiniBand / RoCE）**。
 - 如果你有 4 台 8 卡机器（共 32 卡）：
-  - 若选择 **TP=4 + EP=8**：每台机器切分为 2 个独立的 TP=4 组（走片内 NVLink），跨越 8 个节点走 EP。通信量更加分散，是目前多数长序列高并发集群的主流配置；
+  - 若选择 **TP=4 + EP=8**：每台 8 卡机器切分为 2 个独立的机内 TP=4 组（走片内 NVLink），4 台物理节点合计构成 **8 个 TP=4 专家并行组（EP=8）**。每个专家并行分片承载的专家权重减半、通信更加分散，是目前多数长序列高并发集群的主流配置；
   - 若选择 **TP=8 + EP=4**：每台机器整机作为 1 个 TP=8 组，4 个物理节点构成 EP=4。虽然跨机通信量极小，但 TP=8 带来的机内 All-Reduce 延迟在 Batch 较小时会增加 Kernel 启动等待。
 系统工程师应结合具体硬件网络测速（`all_reduce_perf` vs `all_to_all_perf`）进行基准压测定夺。

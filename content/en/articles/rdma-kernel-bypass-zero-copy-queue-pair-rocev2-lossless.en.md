@@ -77,7 +77,7 @@ Applications interact directly with the Host Channel Adapter (HCA) hardware usin
 
 ### 1.2 Zero-Copy and Memory Registration (MR)
 The HCA hardware reads from and writes directly to physical RAM (or GPU High Bandwidth Memory, HBM) via PCIe DMA without buffering in kernel memory:
-- **Page Pinning**: The RDMA driver invokes `mlock()` to lock registered virtual memory pages into physical RAM, forbidding the OS from swapping them out to disk;
+- **Page Pinning**: The kernel RDMA driver (`ib_umem_get`) invokes `pin_user_pages()` to pin registered virtual memory pages directly in physical RAM, forbidding the OS from swapping or migrating them;
 - **Address Translation Caching**: The virtual-to-physical page table is cached directly on the HCA ASIC;
 - **Protection Keys**: The HCA generates a Local Key (`L_Key`) for local access control and a Remote Key (`R_Key`) to authorize remote HCAs to execute DMA transfers directly into that memory segment.
 
@@ -235,7 +235,7 @@ However, in massive 10,000-GPU distributed training environments, RoCEv2 still r
 - **PFC Complexity**: Reactive hop-by-hop pause frames carry deadlock risks and require intricate queue threshold tuning;
 - **Ethernet Packet Overhead**: Variable scheduling and standard Ethernet frame overhead introduce tail latency at scale;
 - **The Dedicated High-Performance Alternative — InfiniBand (IB)**:
-  How does InfiniBand achieve **zero-deadlock, physically guaranteed lossless transport with sub-microsecond latency** using hardware credit-based link flow control and centralized Subnet Managers?
+  How does InfiniBand achieve **buffer-overflow-free lossless transport, deadlock-free centralized routing, and sub-microsecond latency** using hardware credit-based link flow control and Subnet Managers?
   How do link rates scale from HDR 200G to NDR 400G and the 2026 generation of XDR 800G?
 
 In Chapter 10 of our masterclass, we explore dedicated high-performance fabrics: **[InfiniBand Architecture First Principles: Physical Link Rates, Credit-Based Link Flow Control, and Subnet Manager Fabric Orchestration](/en/articles/infiniband-architecture-hardware-rates-credit-flow-subnet-manager/)**!
@@ -259,7 +259,7 @@ When network topologies or multipath routing create buffer loops, circular depen
 ### Q3: What is the architectural difference between RoCEv2 and native InfiniBand at the link layer?
 1. **Flow Control Mechanism**:
    - RoCEv2 runs over lossy Ethernet and relies on reactive **PFC Pause frames**, which react to congestion after buffers fill, carrying deadlock risks;
-   - InfiniBand employs proactive **Credit-Based Link Flow Control**. A sender transmits only if it holds buffer credits explicitly granted by the receiver. If credits are zero, transmission halts before buffers fill, guaranteeing lossless operation at the physical layer;
+   - InfiniBand employs proactive **Credit-Based Link Flow Control**. A sender transmits only if it holds buffer credits explicitly granted by the receiver. If credits are zero, transmission halts before buffers fill—preventing buffer overflow drops, though routing/configuration credit loops and link faults must still be managed;
 2. **Header Overhead and Forwarding Latency**:
    - RoCEv2 incurs standard Ethernet, IPv4, and UDP headers (42 bytes minimum overhead), with typical switch latencies in the hundreds of nanoseconds;
    - InfiniBand uses lightweight Local Route Headers (LRH) and cut-through switching, keeping forwarding latency under 100 nanoseconds.

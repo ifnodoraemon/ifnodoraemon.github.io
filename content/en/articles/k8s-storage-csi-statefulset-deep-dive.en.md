@@ -102,19 +102,20 @@ sequenceDiagram
     participant APIServer as kube-apiserver
     participant ExtProv as csi-provisioner
     participant ExtAttach as csi-attacher
+    participant CSIController as CSI Controller Plugin
     participant Kubelet as Kubelet (Target Host)
     participant CSINode as CSI Node Plugin
     participant Kernel as Host OS / Block Subsystem
 
-    Note over APIServer,ExtProv: Phase 1: Provision
+    Note over APIServer,CSIController: Phase 1: Provision
     ExtProv->>APIServer: Detect unbound PVC with StorageClass
-    ExtProv->>CSINode: Invoke CSI CreateVolume()
-    Note over ExtProv: Cloud API allocates cloud disk (e.g., 100Gi NVMe) & creates PV
+    ExtProv->>CSIController: Invoke CSI CreateVolume()
+    Note over CSIController: Cloud API allocates cloud disk (e.g., 100Gi NVMe) & ExtProv creates PV
 
-    Note over APIServer,ExtAttach: Phase 2: Attach
+    Note over APIServer,CSIController: Phase 2: Attach
     APIServer->>ExtAttach: Scheduler assigns Pod, creates VolumeAttachment
-    ExtAttach->>CSINode: Invoke CSI ControllerPublishVolume()
-    Note over ExtAttach: Cloud API attaches virtual disk to host bus (e.g., /dev/vdb)
+    ExtAttach->>CSIController: Invoke CSI ControllerPublishVolume()
+    Note over CSIController: Cloud API attaches virtual disk to host bus (e.g., /dev/vdb)
 
     Note over Kubelet,Kernel: Phase 3: Stage
     Kubelet->>CSINode: Invoke CSI NodeStageVolume()

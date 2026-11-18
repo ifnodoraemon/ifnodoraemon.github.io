@@ -1,126 +1,178 @@
 ---
-title: 2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro
+title: "2026 年 11 月前沿大模型横评：GPT-6.2 Astra vs Claude Fable 5.2 vs Gemini 4 Carbon"
 slug: model-comparison-2026
 date: 2026-03-01
 tag: 模型横评
 tagClass: tag-amber
 category: 评测与趋势
-description: "比较 GPT-5.4、Claude Opus/Sonnet 4.6 与 Gemini 3.1 Pro 的 API 能力、Token 价格和工程边界，给出可核验的调用示例、评测方法与自建成本公式。"
+description: "截至 2026 年 11 月 18 日的商用前沿大模型工程选型指南：对比 Claude Fable 5.2、GPT-6.2 Astra/Sol、Gemini 4 Carbon/Hydrogen 与 Muse Wonder 的 API 规格、定价梯度、SDK 调用与有效成本公式。"
 featured: true
 featuredStats:
-  - label: 比较模型
-    value: 4
-  - label: 评测维度
-    value: 4
-  - label: 顶级模型
-    value: 3
-updated: 2026-10-20
+  - label: 核心模型系
+    value: 4大阵营
+  - label: 基准截止
+    value: 2026.11.18
+  - label: 上下文基线
+    value: 1M+
+updated: 2026-11-18
 ---
 
 > [!NOTE] 核心速览 (TL;DR)
-> - **2026 前沿闭源三强与开源双雄**：深度横评 GPT-5.4、Claude 4.6、Gemini 3 与开源旗舰 DeepSeek-V4、Kimi K3 的基准评测、价格梯度与工程适用场景。
-> - **准确规格核查**：Claude Opus 4.6 官方标准定价为 $5 / $25 每百万 Token；GPT-5.4 支持文本与视觉输入，官方文档明确标示 API 模型暂不支持 Fine-tuning。
-> - **国内开源对比**：针对国产自研模型细化对比，可继续参阅 [2026 国产自研大模型综合横评研报](/articles/domestic-llm-comparison-2026/)。
+> - **2026 年 11 月最新格局**：2026 年 10 月下旬至 11 月中旬，海外四大实验室密集完成跨代升级——Anthropic 发布 **`Claude Fable 5.2`**（11 月 9 日，AA v5 智商指数登顶 `~64.6`），OpenAI 越过 6.1 直接发布 **`GPT-6.2 Astra` 与 `GPT-6.2 Sol`**（11 月 17 日，领跑 *Agents' Last Exam* 与 *Terminal-Bench-Science*），Google 正式全量开放 **`Gemini 4 Carbon`**（11 月 10 日 GA，LMArena 盲测总榜第一 `~1526 Elo`）与 **`Gemini 4 Hydrogen`**（11 月 12 日），Meta Superintelligence Labs 则推出具备跨周主动记忆的 **`Muse Wonder`** 与极致低价蒸馏版 **`Muse Ember`**（11 月 9 日）。
+> - **工程选型双轨制**：重度架构重构、跨百文件自主 SWE 与科研仿真优先采用 `$8 / $40` 旗舰档（`Claude Fable 5.2` / `GPT-6.2 Astra`）；高频日常编码与生产 API 主力则落位于 `$1.50~$4.00` 黄金性价比档（`Claude Opus 5.5`、`GPT-6.2 Sol`、`Gemini 4 Carbon/Hydrogen`）。
+> - **国产与开放权重联动**：针对 11 月最新发布的阿里 `Qwen4-Max`、月之暗面 `Kimi K3.1 Pro`、`DeepSeek-V4-Pro / V4.1-Flash` 与 `MiniMax M3.1 Flash`，请继续参阅姊妹篇 [2026 年 11 月国产前沿大模型工程选型](/articles/domestic-llm-comparison-2026/) 及站内交互式 [前沿模型全景对比矩阵](/models/)。
 
-## 比较范围与证据
+## 比较范围与核查准则
 
-本文保留 GPT-5.4、Claude Opus／Sonnet 4.6、Gemini 3.1 Pro 这一组模型，讨论 API 工程选型，不把它们称为今天所有模型中的最新版本。规格依据厂商文档；没有统一复测记录的分数不用于排名。国产开放权重模型见 [Kimi／GLM／DeepSeek 比较](/articles/domestic-llm-comparison-2026/)。
+本文时间锚点严格对齐至 **2026 年 11 月 18 日**，梳理海外四大商用闭源旗舰在生产 API 接入中的能力边界、官方挂牌定价、自适应推理控制参数与有效成本模型。所有规格与价格均基于各厂商官方开发者文档及公开权威榜单（Artificial Analysis Intelligence Index v5、LMArena 盲测 Elo）；由于不同评测 Harness（如 Claude Code、Codex CLI、自定义沙箱）对工具通过率影响极大，本文明确区分**公开权威基线**与**企业内部受控验收方案**。
 
-## 一、能力和 API 边界
+---
 
-| 模型 | 输入与输出 | 上下文说明 | 工程关注点 |
-| --- | --- | --- | --- |
-| GPT-5.4 | 文本、图像输入；文本输出，不直接接收音频 | 1.05M 总窗口，最大输出 128K；输入与输出共享预算 | reasoning effort、Responses 工具、计算机操作 |
-| Claude Opus／Sonnet 4.6 | 文本与图像输入；PDF 由文档处理能力支持 | 1M 上下文的适用条件见对应模型文档 | Adaptive Thinking、工具参数、平台可用版本 |
-| Gemini 3.1 Pro Preview | 多模态理解模型；接口支持按模型文档核对 | 长上下文及输出限制按具体 Preview ID 查询 | 预览版 ID、媒体计量、工具及 thinking 配置 |
+## 一、2026 年 11 月海外四大旗舰 API 规格全景表
 
-资料：[GPT-5.4](https://developers.openai.com/api/docs/models/gpt-5.4)、[Opus 4.6](https://platform.claude.com/docs/en/models/opus-4-6/overview)、[Sonnet 4.6](https://platform.claude.com/docs/en/models/sonnet-4-6/overview)、[Gemini 3.1 Pro Preview](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-pro-preview)。
+| 维度 | Claude Fable 5.2 *(及 Opus 5.5 / Haiku 5.5)* | GPT-6.2 Astra *(及 GPT-6.2 Sol)* | Gemini 4 Carbon *(及 Hydrogen)* | Meta Muse Wonder *(及 Muse Ember)* |
+| --- | --- | --- | --- | --- |
+| **发布 / GA 节点** | `Fable 5.2`: 2026-11-09<br>`Haiku 5.5`: 2026-10-07<br>`Opus 5.5`: 2026-09-22 | `GPT-6.2 Astra / Sol`: 2026-11-17<br>*(跳过 6.1 Astra 直升)* | `Carbon`: 2026-11-10 GA<br>`Hydrogen`: 2026-11-12 | `Muse Wonder`: 2026-10-12<br>`Muse Ember`: 2026-11-09 |
+| **上下文 / 最大输出** | `1M` 输入 / `128K` 输出 | `1.05M` 总窗口<br>(`922K` 最大输入 / `128K` 输出) | `1M` 原生五模态输入 / 支持异步最高 `1M` 长解码输出 | `1M` 全模态上下文 + 跨会话持久 **Active Memory** |
+| **输入 / 输出模态** | 文本 + 高清图像/PDF 图表理解 → 文本/代码 | 原生全模态（文本、图像、音频、视频帧）+ Intelligent UI 组件生成 | 原生五模态统一编码（文本、图像、音频、长视频、3D/空间文档） | 原生全模态理解与语音/视觉实时交互 |
+| **官方标准定价**<br>*(每百万 Token, In / Out)* | • `Fable 5.2`: **`$8.00 / $40.00`**<br>• `Opus 5.5`: **`$4.00 / $20.00`**<br>• `Haiku 5.5`: **`$0.20 / $0.80`** | • `GPT-6.2 Astra`: **`$8.00 / $40.00`** *(缓存读取 `$0.40`)*<br>• `GPT-6.2 Sol`: **`$2.00 / $10.00`** *(缓存读取 `$0.10`)* | • `Carbon`: **`$2.00 / $10.00`** *(11月尝鲜价，12月1日起恢复 `$4.00 / $20.00`)*<br>• `Hydrogen`: **`$1.50 / $7.50`** *(缓存 `$0.075`)* | • `Wonder`: **`$1.25–$4.00 / $4.25–$20.00`** *(分层计费)*<br>• `Ember`: **`$0.10 / $0.50`** *(≤200K；超长 `$0.30/$1.50`)* |
+| **长上下文计费阶梯** | 标准 `1M` 窗口，配合 Prompt Cache TTL 降低长仓库驻留成本 | 单次输入 `> 272K` Token 触发长上下文倍率计费；强烈建议固定静态前缀命中 `$0.40/$0.10` 缓存 | `Hydrogen` 缓存读取低至 `$0.075/1M`；长视频抽帧需按每秒视觉 Token 帧率核算 | `Ember` 在 `200K` 阈值处存在 3 倍价格阶梯，分块检索优于盲目塞满 1M |
+| **权威榜单定位** | **AA v5 综合智商第 1 (`~64.6`)**；生成速度较 5.1 提升约 30%，支持可选 2.5× Fast Mode | **AA v5 第 2 (`~62.0`)**；*Agents' Last Exam* 与 *Terminal-Bench-Science* 刷新纪录 | **LMArena 盲测总榜第 1 (`~1526 Elo`)**，AA v5 第 3 (`~60.0`)；长视频与多模态霸主 | `Wonder` 位居 **LMArena 第 3 (`~1511 Elo`)**；`Ember` 主打极致低延迟路由与分类 |
 
-ChatGPT 产品中的 Thinking 名称不等于一个 `gpt-5.4-thinking` API ID；Claude Code 的 Agent Teams 也不是裸模型 API 自动提供的协作系统。Gemini 的模型 thinking 参数与独立产品模式需要分别核对，不能仅用“Deep Think”概括全部接口。
+> [!IMPORTANT]
+> **计费隐性乘数警示**：自 2025–2026 思考模型普及以来，所有厂商的 **Output Token 账单均包含内部推理思维链（Reasoning / Thinking Tokens）**。在开启高强度推理预算（如 `effort="xhigh"`）时，一条仅返回 400 字 JSON 的请求可能在后台消耗 `8,000 ~ 25,000` 个按输出单价（如 `$40/1M`）计费的思考 Token！务必通过站内 [Token 成本与吞吐换算器](/tools/) 将思考膨胀系数纳入预算。
 
-## 二、可追溯的 Token 价格
+---
 
-以下为标准 Token 价格示例，单位美元／百万 Token。长上下文、缓存写入、批处理、地区和工具费用需另行核算，不应只比较输入单价。
+## 二、自适应推理预算控制与生产 SDK 调用范式
 
-| 模型 | 输入 | 输出 | 缓存输入 |
-| --- | --- | --- | --- |
-| GPT-5.4 | 2.50 | 15.00 | 0.25 |
-| Claude Opus 4.6 | 5.00 | 25.00 | 0.50（缓存读取） |
-| Claude Sonnet 4.6 | 3.00 | 15.00 | 0.30（缓存读取） |
-| Gemini 3.1 Pro Preview | 按输入长度档位核对 | 按输入长度档位核对 | 按缓存及存储计费核对 |
+2026 年下半年商用 API 最核心的工程演进是**“同一模型端点内的连续推理努力度控制（Adjustable Reasoning Effort）”**，彻底取代了早期将“普通模型”与“思考模型”割裂为两套互不兼容 API 的做法。
 
-出处：[OpenAI 模型价格](https://developers.openai.com/api/docs/models/gpt-5.4)、[Claude 模型文档](https://platform.claude.com/docs/en/models/overview)、[Gemini 价格表](https://ai.google.dev/gemini-api/docs/pricing)。GPT-5.4 超过 272K 输入 Token 时有整次请求的长上下文计费倍率，不能把标准价用于所有百万上下文请求。
+### 1. OpenAI `GPT-6.2 Astra / Sol`（Responses API + Prompt Caching）
 
-## 三、如何公平比较推理、编码和 Agent 能力
-
-SWE-bench Verified、HumanEval、OSWorld 和数学任务衡量不同能力，不能将 Opus 成绩放在 Sonnet 列，也不能把某个厂商脚手架结果写成所有模型共享同一 harness 的实测。
-
-自己的选型评测至少固定模型快照、推理预算、上下文、工具权限、Agent harness、超时和重试次数。对同一任务保留补丁、执行日志和独立验收结果，再比较质量、延迟及成本；详细方法见 [LLM 评估指南](/articles/llm-evaluation-guide/)。
-
-| 场景 | 主要验收项 |
-| --- | --- |
-| 仓库代码修改 | 隐藏测试通过率、补丁范围、重复运行稳定性 |
-| 长文档抽取 | 数值准确率、引用出处、跨段检索与拒答质量 |
-| 计算机操作 | 环境复位、操作成功率、越权动作与任务耗时 |
-| 视频／音频理解 | 对应输入模态、时间定位、转录／理解质量与费用 |
-
-窗口容量不能证明模型读懂整个仓库，某项“少幻觉百分比”也不能推广为所有业务的固定改善。
-
-## 四、API 调用示例
-
-示例需要各厂商 SDK、账号和 API 密钥；本次站点验证不向外部模型发请求。
+在 `GPT-6.2` 系列中，务必将系统指令、工具 JSON Schema 与代码库静态索引置于消息最前端，以触发高达 **95% 折扣**的自动前缀缓存（Astra 缓存输入仅 `$0.40/1M`，Sol 仅 `$0.10/1M`），同时避免单次未缓存输入越过 `272K` 阶梯线：
 
 ```python
 from openai import OpenAI
 
 client = OpenAI()
+
 response = client.responses.create(
-    model="gpt-5.4",
-    input="解释量子计算的基本原理",
-    reasoning={"effort": "high"},
-    max_output_tokens=4096,
+    model="gpt-6.2-astra",          # 日常高吞吐生产流可无缝切换为 "gpt-6.2-sol"
+    reasoning={"effort": "high"},   # 支持 low / medium / high，按任务复杂度动态路由
+    max_output_tokens=16384,        # 同时约束隐式思考链 + 最终可见输出的总预算上限
+    input=[
+        {
+            "role": "developer",
+            "content": "You are a principal distributed-systems auditor. Cite exact file:line evidence."
+        },
+        {
+            "role": "user",
+            "content": "Audit the NCCL watchdog timeout path under rank failure and propose a minimal patch."
+        }
+    ],
 )
+
 print(response.output_text)
+print("Usage:", response.usage)     # 重点监控 input_tokens_details.cached_tokens 与 reasoning_tokens
 ```
+
+### 2. Anthropic `Claude Fable 5.2` 与 `Haiku 5.5`（自适应思考与显式缓存锚点）
+
+Anthropic 的产品分层极为清晰：复杂多步架构推演调用 `Claude Fable 5.2`（追求极致交互速度时可开启可选 Fast Mode），日常 CLI 结对编程主力使用性价比更高的 `Claude Opus 5.5`（`$4/$20`），而子智能体工具路由与日志初筛则交由支持 **Adjustable Effort** 的 `Claude Haiku 5.5`（`$0.20/$0.80`）：
 
 ```python
 import anthropic
 
 client = anthropic.Anthropic()
-response = client.messages.create(
-    model="claude-sonnet-4-6",
-    max_tokens=4096,
-    messages=[{"role": "user", "content": "解释量子计算的基本原理"}],
+
+message = client.messages.create(
+    model="claude-fable-5-2",
+    max_tokens=16000,
+    thinking={"type": "enabled", "budget_tokens": 8192},
+    system=[
+        {
+            "type": "text",
+            "text": "<LARGE_REPO_ARCHITECTURE_CONTEXT_AND_TOOL_SCHEMAS>",
+            "cache_control": {"type": "ephemeral"},  # 锁定长上下文前缀缓存，规避重复 $8/1M 输入计费
+        }
+    ],
+    messages=[
+        {"role": "user", "content": "Synthesize a zero-downtime shard migration plan with rollback invariants."}
+    ],
 )
-print(response.content)
 ```
+
+### 3. Google `Gemini 4 Carbon / Hydrogen`（四档推理梯度与五模态原生接入）
+
+2026 年 11 月 12 日发布的 `Gemini 4 Hydrogen` 原生提供 `low`、`medium`、`high`、`xhigh` 四档推理努力度，且缓存读取低至 **`$0.075 / 1M`**，非常适合挂载整套音视频会议录像或百万字技术手册做高频检索问答；需要最高跨模态推理上限时则切向 `Gemini 4 Carbon`：
 
 ```python
 from google import genai
+from google.genai import types
 
 client = genai.Client()
-response = client.models.generate_content(
-    model="gemini-3.1-pro-preview",
-    contents="解释量子计算的基本原理",
+
+resp = client.models.generate_content(
+    model="gemini-4-hydrogen",      # 复杂多模态综合研判可切换至 "gemini-4-carbon"
+    contents="Extract every SLA violation timestamp and root-cause subsystem from this incident bundle.",
+    config=types.GenerateContentConfig(
+        thinking_config=types.ThinkingConfig(thinking_level="high"),  # low | medium | high | xhigh
+        max_output_tokens=8192,
+        temperature=0.2,
+    ),
 )
-print(response.text)
+print(resp.text)
 ```
 
-使用实际账号的模型列表确认 ID 和可用性；请求模型与平台 UI 名称应分开记录。多厂商路由还需统一错误分类、超时、工具 Schema 和用量统计。
+---
 
-## 五、自建盈亏平衡与 KV 预算
+## 三、有效 Token 成本模型与自建开源集群盈亏平衡方程
 
-若仅作算术假设：服务器每小时 $30，API 混合价格 $5／百万 Token，则忽略其他成本时交叉点约为 `30 / 5 × 1e6 / 3600 = 1,667 Token/s`。这不是已测容量，也不代表两个模型质量相同；输入／输出比例、利用率、额外扩容及人工成本都会改变结果。见 [部署成本估算](/articles/deepseek-v4-kimi-k3-deployment-guide/)。
+### 1. 计入缓存命中率与思考膨胀的真实单次请求成本
 
-缓存量也必须按架构计算。以普通 GQA、80 层、8 个 KV 头、head_dim=128、FP16 为例，每 Token 为 `2×80×8×128×2=327,680` 字节，百万 Token 约 327.68GB（305.18GiB）。这是指定配置的算例，不是对所有 70B 或混合注意力模型的结论。PagedAttention 改善分配与复用，不会改变每个未压缩 KV 元素的大小。
+在生产网关中，切勿直接用挂牌输入价对比模型，而应使用**有效请求成本公式（Effective Cost per Request）**：
+
+$$C_{\text{req}} = \frac{N_{\text{in}}}{10^6}\Big[(1 - h)\,P_{\text{in}} + h\,P_{\text{cache}}\Big] + \frac{N_{\text{think}} + N_{\text{vis}}}{10^6}\,P_{\text{out}}$$
+
+其中：
+- $h \in [0, 1]$ 为实际生产流量的 **Prompt Cache 命中率**（在固定代码库上下文的 SWE Agent 中通常可达 `0.75 ~ 0.92`）；
+- $N_{\text{think}}$ 为隐式思维链消耗量，$N_{\text{vis}}$ 为最终可见输出量。
+
+**实战算例对比**：假设某代码审查 Agent 平均每次请求输入 $N_{\text{in}} = 100,000$ Token（缓存命中率 $h = 0.85$），思考 $N_{\text{think}} = 3,000$ Token，输出补丁 $N_{\text{vis}} = 1,000$ Token：
+- **`GPT-6.2 Astra`（`$8 / $0.40 / $40`）**：输入费 $= 0.1 \times (0.15 \times 8 + 0.85 \times 0.40) = \$0.154$，输出费 $= 0.004 \times 40 = \$0.160$，单次总计 **`$0.314`**；
+- **`GPT-6.2 Sol`（`$2 / $0.10 / $10`）**：输入费 $= \$0.0385$，输出费 $= \$0.040$，单次总计仅 **`$0.0785`**（成本立降 **75%**！）。
+这也是为什么 2026 年主流多智能体架构普遍采用**“1 个旗舰 Planner（`Fable 5.2` / `GPT-6.2 Astra`）+ N 个高速 Worker（`GPT-6.2 Sol` / `Gemini 4 Hydrogen` / `Claude Haiku 5.5`）”**的异构编排模式（详见 [多智能体协作与并发控制](/articles/multi-agent-collaboration-and-concurrency/)）。
+
+### 2. 商用闭源 API vs. 自建开放权重集群的 ROI 临界线
+
+当企业日均 Token 消耗攀升至百亿级，或受限于严格的数据不出域合规要求时，团队往往评估自建 `DeepSeek-V4-Pro`、`Kimi K3.1 Pro` 或 `Qwen4-Max` 兼容私有集群。自建集群每百万有效 Token 的摊销成本为：
+
+$$C_{\text{self\_host}} = \frac{N_{\text{GPU}} \times p_{\text{GPU\_hour}}}{3600 \times \text{Goodput}_{\text{tok/s}} \times u_{\text{cluster}}} \times 10^6$$
+
+其中 $p_{\text{GPU\_hour}}$ 为包含机房电力与网络的每卡时综合成本，$\text{Goodput}_{\text{tok/s}}$ 为满足业务 TTFT/TPOT SLO 下的有效生成吞吐，$u_{\text{cluster}}$ 为全天波峰波谷平均有效利用率（潮汐业务若不做离线任务混部，$u_{\text{cluster}}$ 常低于 `0.35`，会导致实际单位成本翻三倍）。完整自建算力测算可结合站内 [GPU 显存容量计算器](/tools/) 与 [DeepSeek-V4 / Kimi K3 部署指南](/articles/deepseek-v4-kimi-k3-deployment-guide/) 交叉核验。
+
+---
+
+## 四、公平的企业级模型验收四步法
+
+在将业务从旧版 `GPT-5.4 / Claude 4.6 / Gemini 3.1` 迁移至 2026 年 11 月新一代旗舰前，建议执行以下受控评测（完整方法论见 [大模型评估体系实战指南](/articles/llm-evaluation-guide/)）：
+
+1. **锁定离线黄金回放集（50~200 条真实脱敏轨迹）**：覆盖简单路由、长文档带页码抽取、跨文件 Bug 修复与边界拒答四类真实分布，严禁用公开刷榜题替代业务私有集；
+2. **对齐同一工具沙箱与推理预算上限**：所有候选模型挂载完全一致的函数签名、超时阈值与容器沙箱（安全执行隔离见 [基于 Firecracker MicroVM 的 AI Agent 沙箱隔离架构](/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/)），并分别在同成本档（如统一限制单题成本 $\le \$0.10$）下对比通过率，而非让高价模型无上限堆叠思考 Token；
+3. **用确定性状态探针替代纯 LLM-as-a-Judge**：代码修改直接看隐藏单元测试通过率与静态检查零回归，数据抽取直接核对字段精确匹配与原文跨度引用；
+4. **验证网关多活降级（Fallback）**：由于新发布旗舰（如 11 月刚上线的 `GPT-6.2 Astra` 与 `Gemini 4 Carbon`）在流量高峰期可能触发组织级 TPM/RPM 限流，生产网关必须配置跨厂商结构化输出等价回退链路。
 
 ## 常见问题 (FAQ)
 
-### Q1: 哪个模型代码能力最强？
-需在相同仓库任务、工具与预算下比较。厂商成绩用于筛选候选，不能替代自己的独立验收。
+### Q1: 为什么 OpenAI 在 2026 年 11 月 17 日直接发布了 `GPT-6.2 Astra / Sol`，而市面上没有看到公开的 `6.1 Astra`？
+根据 OpenAI 2026 年 11 月中旬的发布节奏，其在完成面向生命科学的专有模型 `GPT-6 Rosalind`（10 月底）与内部 `6.1` 阶段的后训练迭代后，直接将合并了科学终端推理与长程智能体规划突破的版本以 **`GPT-6.2 Astra`**（旗舰）和 **`GPT-6.2 Sol`**（高性价比主力）推向 API 生产环境。选型时直接对接 `6.2` 系列端点即可。
 
-### Q2: 百万上下文是否等于百万 Token 都能正确检索？
-不是。容量、检索质量、引用可靠性和成本是不同指标，应分别测量。
+### Q2: `Claude Fable 5.2` 与 `Claude Opus 5.5` 在定位和价格上应该如何搭配？
+两者并非简单的“新替旧”，而是**梯度互补**：`Claude Fable 5.2`（`$8 / $40`）代表 Anthropic 当前最高推理上限（AA v5 `~64.6`），适合核心系统架构设计、疑难根因定位与高价值科研推演；而 `Claude Opus 5.5`（`$4 / $20`）价格仅为前者一半，在日常高频 CLI 代理编码、PR 审查与常规工具编排中依然具备极佳的单位美元产出比，搭配 `$0.20 / $0.80` 的 `Claude Haiku 5.5` 可组成完整的三层成本漏斗。
 
-### Q3: 如何在成本与可靠性间选择？
-先设置最低任务质量和 SLA，再比较达到标准的有效成本。使用 [Token 换算器](/tools/) 核算输入、输出和缓存费用，并保留回退路径。
+### Q3: `Gemini 4 Carbon` 在 2026 年 11 月与 12 月的计费有什么变化？工程预算该按哪个算？
+Google 为 `Gemini 4 Carbon`（11 月 10 日 GA）提供了截至 **2026 年 11 月 30 日**的限时推广价（`$2.00 / $10.00` 每百万 Token），并明确自 **2026 年 12 月 1 日**起恢复 `$4.00 / $20.00` 标准挂牌价。因此，做年度生产 ROI 与长期合同测算时必须按 **`$4.00 / $20.00`** 建模，同时对延迟敏感或成本敏感的常规多模态流水线优先评估长期定价 `$1.50 / $7.50`（缓存读取 `$0.075`）的 `Gemini 4 Hydrogen`。
+
+### Q4: Meta 新推出的 `Muse Wonder` 和 `Muse Ember` 最适合切入什么工程场景？
+`Muse Wonder` 的核心差异化在于原生全模态交互与跨数周会话持续演进的 **Active Memory（主动记忆层）**，适合需要长期记忆用户偏好与项目上下文的伴随式助手；而 11 月 9 日发布的蒸馏轻量模型 `Muse Ember` 在 `200K` 上下文以内仅售 **`$0.10 / $0.50`**，非常适合替代高成本大模型承担意图路由、安全护栏过滤、批量工单标签化与轻量 RAG 重排。

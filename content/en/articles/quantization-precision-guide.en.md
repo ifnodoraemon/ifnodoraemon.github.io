@@ -35,6 +35,31 @@ Quantization maps selected values to lower-bit representations to reduce capacit
 
 Even W8A8 implementations often retain higher-precision normalization, routing, accumulation, or output operations. Inspect the actual checkpoint and kernels.
 
+### Bit-Layout Reference Across Precision Formats (FP32 → INT4 / NF4)
+
+Understanding overflow sensitivity and quantization noise starts with how each format partitions **Sign (`S`), Exponent (`E`, governing dynamic range), and Mantissa (`M`, governing significand precision)** bits:
+
+| Format | Total Bits | Bit Layout (`S / E / M`) | Representable Range / Quantization Grid | Primary Engineering Role & Footprint |
+| --- | --- | --- | --- | --- |
+| **FP32** | 32-bit | `1S + 8E + 23M` | $\approx \pm 3.4 \times 10^{38}$ | Master training weights, AdamW optimizer states, and Tensor Core accumulators (4 Bytes/elem) |
+| **BF16** | 16-bit | `1S + 8E + 7M` | $\approx \pm 3.39 \times 10^{38}$ | Matches FP32 dynamic range to resist activation overflow; modern training/serving baseline (2 Bytes/elem) |
+| **FP16** | 16-bit | `1S + 5E + 10M` | Max finite normal $\pm 65,504$ | Finer mantissa precision than BF16, but narrow exponent range risks `Inf` overflow on spiky activations (2 Bytes/elem) |
+| **FP8 E4M3** | 8-bit | `1S + 4E + 3M` | Max finite value $\pm 448$ (OCP `e4m3fn`) | 3-bit mantissa preserves accuracy for forward weights & activations on Hopper/Ada/Blackwell (1 Byte + scale) |
+| **FP8 E5M2** | 8-bit | `1S + 5E + 2M` | Max finite normal $\pm 57,344$ | 5-bit exponent provides wider range for backward gradients or optional KV Cache storage (1 Byte + scale) |
+| **INT8** | 8-bit | `8-bit integer` (0 exponent) | Signed `[-128, 127]` or unsigned `[0, 255]` | Uniform linear grid requiring per-tensor/channel/token scale $s$ (and optional zero-point $z$) |
+| **INT4 / NF4** | 4-bit | `4-bit int or LUT index` | Uniform `[-8, 7]` grid (INT4) or 16-level normal-quantile LUT (NF4) | Requires groupwise scales/zero-points (e.g., `group_size=128`), yielding ~`4.15–4.5 effective bits/param` |
+
+### Roofline Mechanics: Weight-Only (AWQ/GPTQ) vs. Weight-Activation (SmoothQuant/FP8)
+
+Why do two quantized checkpoints behave completely differently across batch sizes? The answer lies in whether the workload is **HBM Memory-Bandwidth-Bound** or **Tensor-Core Compute-Bound** on the hardware Roofline:
+
+1. **Weight-Only Quantization (`W4A16` / `W8A16`, e.g., AWQ, GPTQ, GGUF)**:
+   * **Hardware Execution Path**: Weights reside in HBM as 4-bit/8-bit values, slashing **HBM-to-SRAM weight read traffic by ~2×–4×**. Fused kernels (such as Marlin) dequantize weights in registers/SRAM on the fly, executing the actual matrix multiplication on **FP16/BF16 Tensor Cores**.
+   * **Roofline Regime**: During small-batch autoregressive **Decode** (low arithmetic intensity, strictly **HBM bandwidth-bound**), moving fewer weight bytes directly reduces step latency. At large batch sizes or during long-prompt **Prefill** (high arithmetic intensity, **compute-bound**), peak FP16 Tensor Core TFLOPS remain unchanged and dequantization instructions can erode or negate speedups.
+2. **Weight-Activation Quantization (`W8A8` INT8 SmoothQuant / FP8)**:
+   * **Hardware Execution Path**: Both weights and activations enter native **INT8 or FP8 Tensor Cores** (delivering **2× peak Tensor Core TOPS/TFLOPS** over FP16/BF16 on Hopper/Ada/Blackwell). **SmoothQuant** migrates severe activation-channel outliers into weights via an equivalent diagonal scaling $\mathbf{Y} = (\mathbf{X}\operatorname{diag}(\mathbf{s})^{-1}) \cdot (\operatorname{diag}(\mathbf{s})\mathbf{W})$ so static INT8 grids do not clip spikes; **FP8 (`E4M3`)** uses floating-point exponents paired with per-tensor, per-channel, or blockwise (`1×128`, `128×128`) scales.
+   * **Roofline Regime**: Simultaneously halves HBM weight traffic **and** doubles the compute-bound Tensor Core ceiling, making it the preferred path for **high-concurrency serving and compute-heavy Prefill**.
+
 ## 1. INT8, FP8, and BitsAndBytes
 
 INT8 uses scales to map values into an integer range. FP8 has an exponent but still needs numerical range management. Dynamic scaling can avoid offline calibration; static schemes may need representative data. Universal calibration-free FP8 with less than 1% degradation is not guaranteed.

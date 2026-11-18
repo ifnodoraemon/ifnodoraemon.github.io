@@ -3,10 +3,40 @@
 <channel>
   <title>智算架构志</title>
   <link>https://blog.llmgo.top/</link>
-  <description>专注 AI 大模型技术研究与实践的技术博客</description>
+  <description>深耕大模型推理系统、分布式 RL 后训练、生产级 AI Agent、云原生 Kubernetes 与万卡 InfiniBand 智算网络的硬核工程博客</description>
   <language>zh-CN</language>
-  <pubDate>Wed, 21 Oct 2026 05:58:37 GMT</pubDate>
+  <pubDate>Wed, 18 Nov 2026 03:51:05 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>AI Agent 安全沙箱终极架构：从容器逃逸防御、Firecracker 微虚拟机毫秒级快照恢复到零信任环境隔离</title>
+    <link>https://blog.llmgo.top/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/</link>
+    <guid>https://blog.llmgo.top/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>安全沙箱</category>
+    <description>深入剖析面向 Coding Agent 与强化学习 Rollout 的 Firecracker MicroVM 安全沙箱架构：横评 gVisor 与硬件虚拟化，详解 Snapshot 与 userfaultfd 毫秒级恢复及状态分叉，并落地 virtio-vsock 零密钥凭证代填网关。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/agent-sandbox-firecracker-microvm-snapshot-isolation.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>大模型后训练分布式强化学习架构实战：基于 verl 与 3D-HybridEngine 的训推混布、秒级重分片与长尾异步调度</title>
+    <link>https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/</link>
+    <guid>https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>分布式 RL</category>
+    <description>深度剖析百卡级大模型后训练 RL 系统架构：从 Qwen2.5-72B 显存与算力第一性原理账本出发，拆解 verl 3D-HybridEngine 秒级权重重分片、vLLM Sleep Mode 虚拟显存卸载、DAPO 与 Partial Rollout 长尾消除及多机实战配置。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/distributed-rl-post-training-verl-colocation.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>机柜级超节点与集合通信全栈剖析：从 GB200/GB300 NVL72 铜缆背板、昇腾全光互联到 NCCL NVLS 与 MoE All-to-All 极限调优</title>
+    <link>https://blog.llmgo.top/articles/rack-scale-superpod-nvl72-nccl-collectives/</link>
+    <guid>https://blog.llmgo.top/articles/rack-scale-superpod-nvl72-nccl-collectives/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>超节点架构</category>
+    <description>深度拆解 GB200/GB300 NVL72 铜缆背板与昇腾 CloudMatrix 384 全光超节点拓扑，严格推导 NCCL busbw 数学模型与 NVLS 网内多播规约，剖析 DeepEP IBGDA All-to-All 内核与 MNNVL 压测排障。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/rack-scale-superpod-nvl72-nccl-collectives.png" length="150000" type="image/png" />
+  </item>
   <item>
     <title>解密 DeepSeek 推理印钞机：DeepInfer 与 deepseek-recipe 从硅基地基到协议顶层的生产全栈拆解</title>
     <link>https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/</link>
@@ -174,7 +204,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>业务网络实战</category>
-    <description>为什么我们的微服务搬上 Kubernetes 后，滚动发布总会出现偶发 502 报错，gRPC 流量更是死死钉在某一个 Pod 上完全不均衡？深度拆解业务软件在 K8s 上的网络工程实战：HTTP/2 多路复用导致四层 ClusterIP 负载均衡彻底失效的底层根因与 Headless Service / Envoy 网格解法；MaxConnectionAge、JVM DNS TTL 永久缓存与指数退避重连风暴四大生产陷阱；完整复盘 Pod 销毁与 EndpointSlice 异步切流的时序竞态冲突；并给出从 preStop 缓冲、平滑连接排空到 readinessGates 的生产级零停机发布实践。</description>
+    <description>为什么我们的微服务搬上 Kubernetes 后，滚动发布总会出现偶发 502 报错，gRPC 流量更是死死钉在某一个 Pod 上完全不均衡？深度拆解业务软件在 K8s 上的网络工程实战：HTTP/2 多路复用导致四层 ClusterIP 负载均衡彻底失效的底层根因与 Headless Service / Envoy 网格解法；MaxConnectionAge、JVM DNS TTL 缓存机制与指数退避重连风暴四大生产陷阱；完整复盘 Pod 销毁与 EndpointSlice 异步切流的时序竞态冲突；并给出从 preStop 缓冲、平滑连接排空到 readinessGates 的生产级零停机发布实践。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-application-networking-grpc-service-mesh-zero-downtime.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -224,7 +254,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>K8s 网络</category>
-    <description>为什么说容器网络是 Kubernetes 中最复杂、最容易踩坑的深水区？深度拆解云原生网络四大公理与 CNI（Container Network Interface）插件规范底层执行机理；全面对比 Flannel VXLAN 覆盖网络与 Calico BGP 纯二层路由性能与开销；深入解密 Cilium 如何利用 Linux 内核 eBPF 与 sockops 套接字重定向彻底革新 kube-proxy 与 iptables 性能瓶颈；并剖析面向未来的 Gateway API 角色分离与流量治理架构。</description>
+    <description>为什么说容器网络是 Kubernetes 中最复杂、最容易踩坑的深水区？深度拆解云原生网络四大公理与 CNI（Container Network Interface）插件规范底层执行机理；全面对比 Flannel VXLAN 覆盖网络与 Calico 纯三层 (Layer-3) BGP 路由性能与开销；深入解密 Cilium 如何利用 Linux 内核 eBPF 与 sockops 套接字重定向彻底革新 kube-proxy 与 iptables 性能瓶颈；并剖析面向未来的 Gateway API 角色分离与流量治理架构。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-networking-cni-cilium-ebpf-gateway-api.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -254,7 +284,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>调度内核定制</category>
-    <description>为什么 Kubernetes 默认调度器在面对大规模 AI 训练与分布式批处理时会陷入资源死锁？深度解密如何对 Kubernetes 调度中枢进行二次开发：剖析官方 Scheduling Framework 调度框架 11 大扩展点内部机理与 CycleState 状态共享；深入拆解 Volcano 核心 DRF（主导资源公平调度）数学模型与 PodGroup 状态机；实战编写一个基于 Go 语言的 Gang Scheduling（成组调度 / All-or-Nothing）自定义调度器插件；并深入解析如何利用 Descheduler 在生产集群中基于真实节点负载实施安全的二次动态重平衡。</description>
+    <description>为什么 Kubernetes 默认调度器在面对大规模 AI 训练与分布式批处理时会陷入资源死锁？深度解密如何对 Kubernetes 调度中枢进行二次开发：剖析官方 Scheduling Framework 调度框架 12 大核心扩展点内部机理与 CycleState 状态共享；深入拆解 Volcano 核心 DRF（主导资源公平调度）数学模型与 PodGroup 状态机；实战编写一个基于 Go 语言的 Gang Scheduling（成组调度 / All-or-Nothing）自定义调度器插件；并深入解析如何利用 Descheduler 在生产集群中实施安全的二次动态重平衡。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/k8s-scheduling-framework-custom-plugin-gang-scheduling.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -294,7 +324,7 @@
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>推理引擎</category>
-    <description>从 Python 运行时到 C++/Rust 异步执行引擎：深度拆解开源世界四大顶级推理底座的源码设计哲学。对比 vLLM v1 零开销调度器与多步执行、SGLang RadixAttention 树状层级执行环、TensorRT-LLM 原生算子深度融合与 In-Flight Batching，以及 llama.cpp 端侧无依赖极限定量化运行时，奉上生产级全景技术选型指南。</description>
+    <description>从多进程异步隔离架构到 C++ 算子深度融合：深度拆解开源世界四大顶级推理底座的源码设计哲学。对比 vLLM v1 多进程 EngineCore 与统一零开销调度器、SGLang RadixAttention 树状层级执行环、TensorRT-LLM 原生算子深度融合与 In-Flight Batching，以及 llama.cpp 端侧无依赖极限定量化运行时，奉上生产级全景技术选型指南。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/inference-engines-core-architecture-internals.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -438,13 +468,13 @@
     <enclosure url="https://blog.llmgo.top/og/zh/deepseek-v4-kimi-k3-deployment-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 国产大模型比较：Kimi K3、GLM-5.3 与 DeepSeek-V4 工程选型</title>
+    <title>2026 年 11 月国产前沿大模型工程选型：Qwen4-Max、Kimi K3.1 Pro、DeepSeek-V4 与 MiniMax M3.1 / GLM-5.3</title>
     <link>https://blog.llmgo.top/articles/domestic-llm-comparison-2026/</link>
     <guid>https://blog.llmgo.top/articles/domestic-llm-comparison-2026/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>国产大模型</category>
-    <description>依据官方模型卡比较 Kimi K3、GLM-5.3 与 DeepSeek-V4-Pro 的架构、同版本基准和原生量化格式，提供长文档、终端排障与仓库修改的评测方案。</description>
+    <description>截至 2026 年 11 月 18 日的国产大模型架构与选型指南：对比 Qwen4-Max、Kimi K3.1 Pro、DeepSeek-V4-Pro / V4.1-Flash、MiniMax M3.1 Flash 与 GLM-5.3 的稀疏架构、同版本基准、原生量化格式与生产验收方案。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/domestic-llm-comparison-2026.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -464,7 +494,7 @@
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>架构演进</category>
-    <description>区分 KDA 循环状态、MLA 潜变量缓存与 DeepSeek-V4 CSA/HCA 序列压缩，结合 Kimi K3 混合层结构推导显存估算边界与可比较的测试方法。</description>
+    <description>严谨拆解 Kimi Delta Attention (KDA) 门控增量循环状态、DeepSeek MLA 潜变量缓存与 V4 CSA/HCA 序列稀疏压缩，结合 Kimi K3/K3.1 混合层结构推导显存估算公式与可复现测量规范。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/kimi-kda-deepseek-mla-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -688,13 +718,13 @@
     <enclosure url="https://blog.llmgo.top/og/zh/rag-in-practice.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 年主流大模型横评：GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</title>
+    <title>2026 年 11 月前沿大模型横评：GPT-6.2 Astra vs Claude Fable 5.2 vs Gemini 4 Carbon</title>
     <link>https://blog.llmgo.top/articles/model-comparison-2026/</link>
     <guid>https://blog.llmgo.top/articles/model-comparison-2026/</guid>
     <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>模型横评</category>
-    <description>比较 GPT-5.4、Claude Opus/Sonnet 4.6 与 Gemini 3.1 Pro 的 API 能力、Token 价格和工程边界，给出可核验的调用示例、评测方法与自建成本公式。</description>
+    <description>截至 2026 年 11 月 18 日的商用前沿大模型工程选型指南：对比 Claude Fable 5.2、GPT-6.2 Astra/Sol、Gemini 4 Carbon/Hydrogen 与 Muse Wonder 的 API 规格、定价梯度、SDK 调用与有效成本公式。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/model-comparison-2026.png" length="150000" type="image/png" />
   </item>
   <item>

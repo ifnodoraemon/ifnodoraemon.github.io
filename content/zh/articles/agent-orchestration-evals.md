@@ -32,6 +32,8 @@ updated: 2026-10-20
 *   **状态检查点持久化（Checkpointer）**：以 LangGraph 的 `PostgresSaver` 或 Temporal 的事件日志为范例，Agent 的当前图节点（Node）、局部变量与上下文增量必须在每个 Superstep 步进前后，原子化序列化保存到持久化存储（如 Postgres、Redis 或 SQLite）中，确保进程意外挂死后能无损断点续跑。
 *   **业务侧幂等性（Idempotency）保障**：分布式编排引擎（如 Temporal/Cadence）在面对网络超时时会对 Activity 采取自动重试（本质属于 **At-Least-Once** 至少一次执行）。外部副作用（如“扣减用户积分”、“调用支付接口”）**无法自动获得 Exactly-Once**，必须在工具调用与业务网关层实现显式幂等机制，基于唯一的 `Task_ID + Step_ID` 注入幂等键（Idempotency Key），防止重复执行产生脏数据。关于工具边界隔离与运行时状态设计，可参考 [做 AI Agent 的 7 条运行时实践](/articles/agent-runtime-practices/)。
 
+审批、支付等副作用的幂等键必须在同一步骤的所有重试中保持稳定；不要加入 `Attempt`。业务网关应持久化键与执行结果，并明确区分重试与新的业务操作。参见 [Temporal Activity 幂等性说明](https://docs.temporal.io/activity-definition)。
+
 ### 2. 动态自愈路由 (Self-Healing Routing)
 普通的 Router 只是根据输入写死分支条件。高阶的编排中，Router 本身也是一个带有置信度判定机制的模型：
 1. Router 收到上游结果，并要求附带 Logprobs（生成词的概率分布对数）。
@@ -92,12 +94,10 @@ def calibrated_judge(answer_A, answer_B, rubric):
 优先使用校准后的多轮盲测打分（如交换输入顺序以对消位置偏见），并结合 G-Eval 的 Token Logprob 加权获得平滑连续的浮点评分；对于核心业务场景，定期抽取 5%~10% 的自动评分结果交由领域专家进行混淆矩阵比对与对齐校准。深入了解裁判模型的数学偏差与实操技巧，请参考 [大模型业务评估体系建设指南](/articles/llm-evaluation-guide/)。
 
 ### Q3: 生产级分布式 Agent 编排为什么普遍选用 Temporal 等外部工作流引擎而非纯内存状态机？
-纯内存状态机在面对网络波动、Pod 重启或大模型 API 速率限制时缺乏持久化韧性，极易导致正在进行的长流程任务状态丢失或重复扣费。基于事件驱动的外部工作流引擎提供持久化定时器、确定性重试队列与状态序列化机制，能够天然保障分布式任务的幂等性与 Exactly-Once 执行。
+纯内存状态机在面对网络波动、Pod 重启或大模型 API 速率限制时缺乏持久化韧性，极易导致正在进行的长流程任务状态丢失或重复请求。基于事件驱动的外部工作流引擎提供持久化定时器、确定性重试队列与状态序列化重放机制，再配合业务网关层的稳定幂等键设计，即可可靠保障分布式长流程任务的容灾恢复与外部副作用安全。
 
 ### Q4: 如何解决模型评估中成本过高的问题？
 建议在关键路径上使用更强（且更贵）的模型进行评估，而在普通的次要路径上，可以使用蒸馏后的小模型结合特定的 [LLM 评估指标](/articles/llm-evaluation-guide/) 进行批量自动化测试。
 
 ### Q5: 为什么不能完全依赖公共榜单？
 公共榜单的数据极易被模型在预训练或微调阶段“刷榜”污染。构建自己私有业务场景下的 Evals 体系才能真实反映系统的可用性，具体可参考 [大模型业务评估指南](/articles/llm-evaluation-guide/)。
-
-审批、支付等副作用的幂等键必须在同一步骤的所有重试中保持稳定；不要加入 `Attempt`。业务网关应持久化键与执行结果，并明确区分重试与新的业务操作。参见 [Temporal Activity 幂等性说明](https://docs.temporal.io/activity-definition)。

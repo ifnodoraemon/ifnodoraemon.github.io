@@ -167,7 +167,7 @@ test('build outputs include IndexNow key and articles with FAQPage / TechArticle
   const vllmHtml = fs.readFileSync(path.join(ROOT, 'dist', 'articles', 'vllm-serving-guide', 'index.html'), 'utf-8');
   assert.match(vllmHtml, /"@type":\s*"TechArticle"/);
   assert.match(vllmHtml, /"@type":\s*"FAQPage"/);
-  assert.match(vllmHtml, /"url":\s*"https:\/\/blog\.llmgo\.top\/favicon\.svg"/);
+  assert.match(vllmHtml, /"url":\s*"https:\/\/blog\.llmgo\.top\/og-image\.png"/);
 
   const distArticles = [
     ...fs.readdirSync(path.join(ROOT, 'dist', 'articles')).map(d => path.join(ROOT, 'dist', 'articles', d, 'index.html')),

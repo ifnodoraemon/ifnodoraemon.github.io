@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: Cloud Native
 series: container-k8s
 seriesOrder: 9
-description: "Kubernetes custom scheduling: 11 Scheduling Framework extension points, CycleState caching, Volcano DRF algorithms, and Go Gang Scheduling plugin implementation."
+description: "Kubernetes custom scheduling: 12 core Scheduling Framework extension points, CycleState caching, Volcano DRF algorithms, and Go Gang Scheduling plugin implementation."
 extraTags:
   - Kubernetes
   - Scheduling Framework
@@ -41,11 +41,11 @@ As the ninth chapter of **From Docker to Kubernetes: Cloud-Native Container & Cl
 
 ---
 
-## 1. The Scheduling Framework: 11 Extension Points Panorama
+## 1. The Scheduling Framework: 12 Core Extension Points Panorama
 
 Early Kubernetes versions supported external webhooks (Scheduler Extenders), but issuing remote HTTP JSON calls during high-frequency scheduling cycles crippled placement throughput.
 
-To deliver performant extensibility, Kubernetes introduced the **Scheduling Framework** directly inside `kube-scheduler`. It decomposes the placement pipeline across two distinct phases and **11 Extension Points**:
+To deliver performant extensibility, Kubernetes introduced the **Scheduling Framework** directly inside `kube-scheduler`. It decomposes the placement pipeline across two distinct phases and **12 Core Extension Points**:
 
 ```mermaid
 flowchart TD
@@ -131,11 +131,13 @@ package gang
 import (
     "context"
     "fmt"
+    "strconv"
     "sync"
     "time"
 
     v1 "k8s.io/api/core/v1"
     "k8s.io/apimachinery/pkg/runtime"
+    "k8s.io/apimachinery/pkg/types"
     "k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
@@ -145,19 +147,20 @@ const PluginName = "CustomGangScheduling"
 type GangPlugin struct {
     handle framework.Handle
     mu     sync.Mutex
-    // Tracks pods that reached the Permit phase per gang group
+    // Keyed by "namespace/gangName" to isolate gangs across namespaces
     gangTable map[string]*GangGroup
 }
 
 type GangGroup struct {
     MinAvailable int
-    WaitingPods  []string
+    WaitingPods  map[types.UID]types.NamespacedName
 }
 
 var _ framework.PermitPlugin = &GangPlugin{}
 var _ framework.ReservePlugin = &GangPlugin{}
 
-func New(_ runtime.Object, h framework.Handle) (framework.Plugin, error) {
+// New matches the Kubernetes 1.29+ PluginFactory signature
+func New(ctx context.Context, _ runtime.Object, h framework.Handle) (framework.Plugin, error) {
     return &GangPlugin{
         handle:    h,
         gangTable: make(map[string]*GangGroup),
@@ -166,6 +169,15 @@ func New(_ runtime.Object, h framework.Handle) (framework.Plugin, error) {
 
 func (gp *GangPlugin) Name() string {
     return PluginName
+}
+
+func getMinAvailable(p *v1.Pod) int {
+    if val, ok := p.Annotations["gang.example.com/min-available"]; ok {
+        if n, err := strconv.Atoi(val); err == nil && n > 0 {
+            return n
+        }
+    }
+    return 1
 }
 
 // Reserve extension point: tracks optimistic node reservation
@@ -179,20 +191,22 @@ func (gp *GangPlugin) Unreserve(ctx context.Context, state *framework.CycleState
     if !exists {
         return
     }
+    gangKey := p.Namespace + "/" + gangName
 
     gp.mu.Lock()
     defer gp.mu.Unlock()
 
-    if group, ok := gp.gangTable[gangName]; ok {
+    if group, ok := gp.gangTable[gangKey]; ok {
         // A gang member failed: abort all currently waiting siblings to eliminate deadlocks
-        for _, podName := range group.WaitingPods {
-            gp.handle.IterateOverWaitingPods(func(waitingPod framework.WaitingPod) {
-                if waitingPod.GetPod().Name == podName {
+        for uid, nn := range group.WaitingPods {
+            if waitingPod := gp.handle.GetWaitingPod(uid); waitingPod != nil {
+                wp := waitingPod.GetPod()
+                if wp.Namespace == nn.Namespace && wp.Name == nn.Name {
                     waitingPod.Reject(PluginName, "Gang member unreserved or timed out")
                 }
-            })
+            }
         }
-        delete(gp.gangTable, gangName)
+        delete(gp.gangTable, gangKey)
     }
 }
 
@@ -204,39 +218,41 @@ func (gp *GangPlugin) Permit(ctx context.Context, state *framework.CycleState, p
         return framework.NewStatus(framework.Success), 0
     }
 
-    minAvailable := getMinAvailable(p) // Extracted from pod annotation, e.g., 4
+    minAvailable := getMinAvailable(p) // Parsed from pod annotation, e.g., 4
+    gangKey := p.Namespace + "/" + gangName
 
     gp.mu.Lock()
     defer gp.mu.Unlock()
 
-    group, exists := gp.gangTable[gangName]
+    group, exists := gp.gangTable[gangKey]
     if !exists {
         group = &GangGroup{
             MinAvailable: minAvailable,
-            WaitingPods:  make([]string, 0),
+            WaitingPods:  make(map[types.UID]types.NamespacedName),
         }
-        gp.gangTable[gangName] = group
+        gp.gangTable[gangKey] = group
     }
 
-    group.WaitingPods = append(group.WaitingPods, p.Name)
+    group.WaitingPods[p.UID] = types.NamespacedName{Namespace: p.Namespace, Name: p.Name}
 
     // Check if the gang quorum is satisfied
     if len(group.WaitingPods) >= group.MinAvailable {
         // Quorum reached! Unblock all waiting pods in this gang
-        for _, podName := range group.WaitingPods {
-            gp.handle.IterateOverWaitingPods(func(waitingPod framework.WaitingPod) {
-                if waitingPod.GetPod().Name == podName {
+        for uid, nn := range group.WaitingPods {
+            if waitingPod := gp.handle.GetWaitingPod(uid); waitingPod != nil {
+                wp := waitingPod.GetPod()
+                if wp.Namespace == nn.Namespace && wp.Name == nn.Name {
                     waitingPod.Allow(PluginName) // Permit to enter Binding Cycle!
                 }
-            })
+            }
         }
-        delete(gp.gangTable, gangName) // Clean up state
+        delete(gp.gangTable, gangKey) // Clean up state
         return framework.NewStatus(framework.Success), 0
     }
 
     // Quorum incomplete: suspend this pod in Permit state for up to 60 seconds
     timeout := 60 * time.Second
-    return framework.NewStatus(framework.Wait, fmt.Sprintf("Waiting for gang %s to complete", gangName)), timeout
+    return framework.NewStatus(framework.Wait, fmt.Sprintf("Waiting for gang %s to complete", gangKey)), timeout
 }
 ```
 
@@ -252,11 +268,11 @@ To introduce dynamic liquidity, Kubernetes provides the **Descheduler**.
 
 ```mermaid
 flowchart LR
-    Prometheus["Prometheus / Metrics Server<br/>Monitors live node CPU & Memory usage"] --> Descheduler
+    MetricsSource["Pod Requests / Allocatable (Default)<br/>or Metrics Server / Prometheus (metricsUtilization)"] --> DeschedulerEngine
 
     subgraph DeschedulerEngine["Descheduler Daemon (CronJob / Control Loop)"]
         direction TB
-        Strat1["<b>LowNodeUtilization Strategy</b><br/>Identify hot nodes (>80%)<br/>Identify underutilized nodes (<20%)"]
+        Strat1["<b>LowNodeUtilization Strategy</b><br/>Identify hot nodes (>70%)<br/>Identify underutilized nodes (<20%)"]
         Strat2["<b>RemoveDuplicates Strategy</b><br/>Prune identical Deployment pods co-located on one host"]
         Strat3["<b>RemovePodsViolatingTopologySpread</b><br/>Correct topology skew"]
         Strat1 --> Strat2 --> Strat3
@@ -282,8 +298,12 @@ profiles:
       targetThresholds:
         "cpu": 70
         "memory": 70
+  plugins:
+    balance:
+      enabled:
+      - "LowNodeUtilization"
 ```
-- **Operation**: The Descheduler periodically audits the cluster. When it detects nodes exceeding target thresholds (e.g., 70% CPU) alongside nodes below lower thresholds (e.g., 20% CPU), it selects non-critical Pods from saturated hosts for eviction.
+- **Operation**: The Descheduler periodically audits the cluster. Note that **by default, `LowNodeUtilization` evaluates Pod `requests / allocatable` ratios** rather than live CPU/memory consumption, unless `metricsProviders` and `metricsUtilization` are explicitly enabled to query Prometheus or Metrics Server. When it detects nodes exceeding target thresholds (`>70%`) alongside nodes below lower thresholds (`<20%`), it selects evictable Pods from over-allocated/hot hosts for eviction.
 
 ### 4.2 Production Safety: Eviction API and PDBs
 The Descheduler **never executes un-gated `kubectl delete pod` calls**:
@@ -297,7 +317,7 @@ The Descheduler **never executes un-gated `kubectl delete pod` calls**:
 ## 5. Summary and Transition
 
 Customizing the Kubernetes scheduler marks a maturity leap in platform engineering:
-- **The Scheduling Framework** provides 11 decoupled extension points and `CycleState` shared caching, allowing custom placement algorithms without maintaining downstream forks of core Kubernetes;
+- **The Scheduling Framework** provides 12 decoupled core extension points and `CycleState` shared caching, allowing custom placement algorithms without maintaining downstream forks of core Kubernetes;
 - **Volcano and DRF** establish rigorous mathematical equilibrium across multi-dimensional, heterogeneous computing resources;
 - **Gang Scheduling** eliminates deadlocks in distributed batch and AI computing;
 - **The Descheduler** breaks static placement constraints, continuously rebalancing runtime workloads.

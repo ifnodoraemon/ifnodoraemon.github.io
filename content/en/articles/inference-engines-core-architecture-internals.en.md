@@ -7,7 +7,7 @@ tagClass: tag-emerald
 category: Inference Systems
 series: llm-inference
 seriesOrder: 9
-description: "Codebase teardown of top LLM inference engines: vLLM multi-step scheduling, SGLang RadixAttention, TensorRT-LLM in-flight batching, and llama.cpp quantization."
+description: "Codebase teardown of top LLM inference engines: vLLM v1 multiprocess EngineCore & unified scheduler, SGLang RadixAttention, TensorRT-LLM in-flight batching, and llama.cpp quantization."
 extraTags:
   - vLLM
   - SGLang
@@ -41,7 +41,7 @@ While clean and educational, running raw PyTorch loops in high-concurrency produ
 4. **Memory Bandwidth Choke**: Independent kernel invocations bounce tensors between High Bandwidth Memory (HBM) and SRAM, plunging Model FLOPs Utilization (MFU) below $15\%$.
 
 To extract maximum performance from modern accelerators, open-source communities and hardware vendors engineered four industry-standard inference engines:
-- **vLLM (UC Berkeley / LMSYS)**: The pioneer that standardized modern inference via PagedAttention memory virtualization, now fundamentally overhauled with its **vLLM v1** C++ engine core;
+- **vLLM (UC Berkeley / LMSYS / vLLM Community)**: The pioneer that standardized modern inference via PagedAttention memory virtualization, now fundamentally re-architected in **vLLM v1** around an isolated multiprocess `EngineCore`, unified token-budget scheduler, and persistent `InputBatch` state;
 - **SGLang (LMSYS / Stanford)**: Tailored for multi-turn agentic interactions, pioneering **RadixAttention tree-based caching** with low-overhead execution loops;
 - **TensorRT-LLM (NVIDIA)**: NVIDIA's high-performance powerhouse, deeply fusing CUTLASS and FlashAttention kernels with static engine graphs for peak hardware throughput;
 - **llama.cpp (Georgi Gerganov)**: The minimalist Swiss Army knife built in pure zero-dependency C/C++, introducing the GGUF container standard and dominating edge and on-device computing.
@@ -58,9 +58,9 @@ To evaluate these runtimes fairly, one must first recognize their contrasting **
 flowchart TD
     subgraph ArchComparison["Core Topological Comparison of Leading Inference Engines"]
         subgraph VLLM["vLLM v1 Architecture"]
-            V_IN["HTTP / gRPC Ingress"] --> V_ENG["C++ Async Engine Core (Zero-Overhead)"]
-            V_ENG --> V_SCHED["Multi-Step Batch Scheduler"]
-            V_SCHED --> V_RUN["Worker Runner (CUDA Graph + PagedAttn)"]
+            V_IN["HTTP / Tokenizer Process"] -->|"ZeroMQ IPC"| V_ENG["EngineCore Process (Python)"]
+            V_ENG --> V_SCHED["Unified Token-Budget Scheduler"]
+            V_SCHED --> V_RUN["Persistent InputBatch + torch.compile / CUDA Graph"]
         end
 
         subgraph SGL["SGLang Architecture"]
@@ -86,67 +86,109 @@ flowchart TD
 | Dimension | vLLM v1 | SGLang | TensorRT-LLM | llama.cpp |
 | :--- | :--- | :--- | :--- | :--- |
 | **Primary Goal** | High-throughput, universally extensible standard ecosystem | Multi-turn agent loops, structured decoding, and prefix reuse | Peak hardware throughput and energy efficiency on NVIDIA silicon | Zero-dependency, ultra-quantized portability across edge devices |
-| **Language Stack** | C++ core scheduler + Python ecosystem extensions | Python scheduler + C++/CUDA kernels (SGL-Kernel) | Pure C++ engine runtime + Python build-time declarations | Pure C/C++ (Zero external library dependencies) |
+| **Language Stack** | Multiprocess Python `EngineCore` (ZeroMQ IPC) + C++/CUDA/Triton kernels | Python scheduler + C++/CUDA kernels (SGL-Kernel) | Pure C++ engine runtime + Python build-time declarations | Pure C/C++ (Zero external library dependencies) |
 | **Memory Architecture**| PagedAttention virtual block memory pool | RadixAttention tree-structured prefix caching pool | Static pre-allocated flat memory + In-Flight Paged KV | Memory-mapped (`mmap`) unified memory with split tensors |
 | **Target Hardware** | NVIDIA GPU, AMD ROCm, Intel Gaudi, Ascend NPU | NVIDIA GPU, AMD ROCm | NVIDIA Silicon Exclusively (Hopper, Blackwell, Ada) | Apple Silicon, x86 CPU, ARM Mobile, embedded SoCs |
 
 ---
 
-## 2. vLLM v1: Escaping the Python Bottleneck with C++ Core Engines
+## 2. vLLM v1: Multiprocess EngineCore Isolation and the Unified Zero-Overhead Scheduler
 
-### 2.1 The Latency Penalty of the v0 Architecture
+### 2.1 The Control-Plane Bottleneck of the v0 Architecture
 
-In early vLLM v0 iterations, despite revolutionary memory improvements via PagedAttention, the scheduler operated within Python's Global Interpreter Lock (GIL). 
+In early vLLM v0 releases, despite revolutionary memory efficiency via PagedAttention, the control plane suffered severe Python overhead as GPU execution speeds accelerated.
 
-On modern accelerators (e.g., H100/H800), a single autoregressive decoding step executes in **$1.5 \sim 3 \text{ ms}$**. However, the Python scheduling loop consumed **$2 \sim 4 \text{ ms}$** of CPU time per step updating sequence metadata, checking block allocations, and dispatching tensors. The GPU continually stalled waiting for the CPU scheduler, bottlenecking Model FLOPs Utilization (MFU).
+On modern accelerators (e.g., H100/H200), a single autoregressive decoding step executes on the GPU in **$1.5 \sim 3 \text{ ms}$**. However, v0 colocated HTTP handling, tokenization, detokenization, heavy `SequenceGroup` Python objects, separate prefill/decode queues, and from-scratch CPU batch tensor construction within shared Python GIL paths—consuming **$2 \sim 4 \text{ ms}$** of CPU time per step (even v0's transitional multi-step scheduling workaround introduced brittle state complexity). The GPU continually stalled waiting for CPU input preparation, capping Model FLOPs Utilization (MFU).
 
-### 2.2 Deep Dive into v1: Zero-Overhead C++ Schedulers and Multi-Step Execution
+### 2.2 Inside vLLM v1: EngineCore, Unified Token-Budget Scheduling, and Persistent InputBatch
 
-The **vLLM v1** redesign migrated the core scheduler and request lifecycle managers into a high-performance C++ async engine, introducing **Multi-Step Scheduling**.
+Rather than rewriting the scheduler in rigid C++ and sacrificing Python's rapid model-onboarding velocity, **vLLM v1** eliminated CPU overhead through three foundational systems redesigns:
 
-In traditional step-by-step engines, CPU and GPU synchronize after every single generated token:
+1. **Multiprocess `EngineCore` Isolation over ZeroMQ IPC**:
+   HTTP ingress, prompt tokenization, and incremental detokenization are decoupled into dedicated front-end processes communicating asynchronously over **ZeroMQ IPC** with an isolated Python `EngineCore` process, completely shielding the scheduling and GPU execution loop from GIL contention;
+2. **Unified Token-Budget Scheduler (`vllm/v1/core/sched/scheduler.py`)**:
+   vLLM v1 completely removes v0's heavyweight `SequenceGroup` hierarchy and separate prefill/decode scheduling branches. Every request tracks `num_computed_tokens` against its total tokens, and each step outputs a single unified dictionary `num_scheduled_tokens: dict[str, int]`. Decode naturally schedules `1` token (or `1 + k` tokens under speculative decoding), chunked prefill schedules `min(remaining_tokens, token_budget)`, and zero-overhead Automatic Prefix Caching (`get_computed_blocks`) is integrated natively by default;
+3. **Persistent `InputBatch` Diffs, Piecewise `torch.compile` + CUDA Graphs, and Async Overlap**:
+   Instead of rebuilding batch tensors from scratch every iteration, `GPUModelRunner` maintains a **persistent `InputBatch`** CPU tensor state and applies only incremental per-step diffs (added/removed requests and newly sampled tokens). Forward execution combines **piecewise `torch.compile`** with **CUDA Graphs**, while asynchronous scheduling and output processing overlap step $t+1$ CPU preparation directly behind step $t$ GPU execution.
+
 ```text
-Traditional Step-by-Step Execution:
-[CPU: Schedule Step 1] -> [GPU: Kernel Launch] -> [CPU Wait & Sync] -> [CPU: Schedule Step 2] ...
+vLLM v1 Asynchronous Overlapped Pipeline:
+CPU EngineCore : [Schedule Step t] -> [Schedule & Diff InputBatch Step t+1] -> [Schedule Step t+2]
+GPU ModelRunner:                      [Execute Piecewise Compiled + CUDA Graph Step t] -> [Execute Step t+1]
 ```
 
-In vLLM v1, the scheduler pre-checks memory capacity and dispatches execution plans for the next $N$ steps (e.g., $N=8$ or $16$) in a single batch:
+Below is an accurate Python breakdown of vLLM v1's unified `Scheduler.schedule()` loop (`vllm/v1/core/sched/scheduler.py`):
 
-```cpp
-// vLLM v1 Core Scheduling Decision Logic (Scheduler::schedule)
-SchedulerOutputs Scheduler::schedule() {
-    // 1. Prioritize active decoding sequences in the Running Queue
-    std::vector<SequenceGroup*> running_batch;
-    for (auto& seq_group : running_queue_) {
-        // Pre-allocate blocks for the next num_steps iterations
-        if (block_allocator_->can_allocate_multi_steps(seq_group, num_steps_)) {
-            block_allocator_->allocate_for_multi_steps(seq_group, num_steps_);
-            running_batch.push_back(seq_group);
-        } else {
-            // Memory pressure threshold reached: trigger preemptive swap-out
-            preempt(seq_group);
-        }
-    }
+```python
+# Simplified from vllm/v1/core/sched/scheduler.py (Unified Token-Budget Scheduler)
+class Scheduler:
+    def schedule(self) -> SchedulerOutput:
+        scheduled_running: list[Request] = []
+        scheduled_new: list[Request] = []
+        preempted_reqs: list[Request] = []
+        # Unified scheduling map: req_id -> tokens scheduled in this iteration (prefill & decode alike)
+        num_scheduled_tokens: dict[str, int] = {}
+        token_budget = self.max_num_scheduled_tokens
 
-    // 2. Consume remaining token budget with pending prefill requests
-    std::vector<SequenceGroup*> prefill_batch;
-    size_t remaining_token_budget = max_num_batched_tokens_ - get_num_tokens(running_batch);
-    while (!waiting_queue_.empty() && remaining_token_budget > 0) {
-        auto next_req = waiting_queue_.front();
-        if (can_prefill(next_req, remaining_token_budget)) {
-            prefill_batch.push_back(next_req);
-            remaining_token_budget -= next_req->get_prompt_len();
-            waiting_queue_.pop_front();
-        } else {
-            break;
-        }
-    }
+        # 1. Schedule active requests in `running` queue first (decode or continuation of chunked prefill)
+        req_idx = 0
+        while req_idx < len(self.running) and token_budget > 0:
+            request = self.running[req_idx]
+            num_new_tokens = request.num_tokens_with_spec - request.num_computed_tokens
+            num_new_tokens = min(num_new_tokens, token_budget)
 
-    return SchedulerOutputs(running_batch, prefill_batch, num_steps_);
-}
+            # Allocate KV blocks incrementally; preempt lowest-priority tail requests on memory pressure
+            while True:
+                new_blocks = self.kv_cache_manager.allocate_slots(request, num_new_tokens)
+                if new_blocks is not None:
+                    break
+                preempted = self.running.pop()
+                self.kv_cache_manager.free(preempted)
+                preempted.num_computed_tokens = 0
+                self.waiting.appendleft(preempted)
+                preempted_reqs.append(preempted)
+                if preempted is request:
+                    break
+
+            if new_blocks is None:
+                break  # Current request itself was preempted
+
+            scheduled_running.append(request)
+            num_scheduled_tokens[request.request_id] = num_new_tokens
+            token_budget -= num_new_tokens
+            req_idx += 1
+
+        # 2. If no preemption occurred, admit requests from `waiting` queue with remaining token budget
+        if not preempted_reqs:
+            while self.waiting and token_budget > 0 and len(self.running) < self.max_num_running_reqs:
+                request = self.waiting[0]
+                # Native zero-overhead prefix cache block lookup
+                computed_blocks, num_cached_tokens = self.kv_cache_manager.get_computed_blocks(request)
+                num_new_tokens = request.num_prompt_tokens - num_cached_tokens
+                num_new_tokens = min(num_new_tokens, token_budget)
+
+                new_blocks = self.kv_cache_manager.allocate_slots(
+                    request, num_new_tokens, new_computed_blocks=computed_blocks
+                )
+                if new_blocks is None:
+                    break  # Insufficient free KV blocks; keep waiting
+
+                self.waiting.popleft()
+                self.running.append(request)
+                request.num_computed_tokens = num_cached_tokens
+                scheduled_new.append(request)
+                num_scheduled_tokens[request.request_id] = num_new_tokens
+                token_budget -= num_new_tokens
+
+        return SchedulerOutput(
+            scheduled_new_reqs=scheduled_new,
+            scheduled_cached_reqs=scheduled_running,
+            num_scheduled_tokens=num_scheduled_tokens,
+            preempted_reqs=preempted_reqs,
+        )
 ```
 
-By executing multiple iterations directly on the GPU within persistent CUDA Graph streams, CPU scheduling overhead is amortized across $N$ steps. **This delivers a $30\% \sim 50\%$ throughput increase under low-batch conditions.**
+By combining ZeroMQ multiprocess isolation, a unified token-budget scheduler, persistent `InputBatch` state diffs, and async CPU/GPU overlap, vLLM v1 hides virtually all Python control-plane latency and achieves **up to $1.7\times+$ higher end-to-end throughput** on high-concurrency and long-context workloads.
 
 ---
 
@@ -284,7 +326,7 @@ flowchart TD
     C3 ==> R_SGL["Select: SGLang (RadixTree caching, lightweight execution)"]
     
     START --> C4["General-purpose Model-as-a-Service (MaaS) / Multi-hardware (AMD, Ascend)"]
-    C4 ==> R_VLLM["Select: vLLM v1 (C++ core, broadest model ecosystem)"]
+    C4 ==> R_VLLM["Select: vLLM v1 (Isolated EngineCore, unified scheduler, broadest ecosystem)"]
 ```
 
 ### Comprehensive Technical Evaluation Matrix (1 to 5 Stars)
@@ -302,7 +344,7 @@ flowchart TD
 
 ## Summary and Series Finale Outlook
 
-From vLLM v1's C++ zero-overhead scheduler to SGLang's dynamic Radix Trees, TensorRT-LLM's fused kernel pipelines, and llama.cpp's edge minimalism, modern inference runtimes represent specialized trade-offs across the compute landscape.
+From vLLM v1's multiprocess `EngineCore` and unified zero-overhead scheduler to SGLang's dynamic Radix Trees, TensorRT-LLM's fused kernel pipelines, and llama.cpp's edge minimalism, modern inference runtimes represent specialized trade-offs across the compute landscape.
 
 With our examination of kernel architectures, batching schedulers, and runtime engines complete, we arrive at the frontier of serving systems. In the **tenth and final chapter of this series**, we investigate: **The Future of LLM Inference: Test-Time Compute, Reasoning Scheduling, and Tiered Cluster Storage**, exploring how long reasoning chains (16k~128k generated thinking tokens) will redefine memory hierarchies and speculative decoding schedulers.
 

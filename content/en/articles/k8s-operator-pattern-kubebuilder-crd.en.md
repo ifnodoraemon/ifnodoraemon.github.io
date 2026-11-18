@@ -167,7 +167,6 @@ type RedisClusterStatus struct {
 // +kubebuilder:printcolumn:name="Replicas",type="integer",JSONPath=".spec.replicas"
 // +kubebuilder:printcolumn:name="Ready",type="integer",JSONPath=".status.readyReplicas"
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
-
 // RedisCluster is the Schema for the redisclusters API
 type RedisCluster struct {
     metav1.TypeMeta   `json:",inline"`
@@ -175,6 +174,14 @@ type RedisCluster struct {
 
     Spec   RedisClusterSpec   `json:"spec,omitempty"`
     Status RedisClusterStatus `json:"status,omitempty"`
+}
+
+// +kubebuilder:object:root=true
+// RedisClusterList contains a list of RedisCluster
+type RedisClusterList struct {
+    metav1.TypeMeta `json:",inline"`
+    metav1.ListMeta `json:"metadata,omitempty"`
+    Items           []RedisCluster `json:"items"`
 }
 ```
 
@@ -187,10 +194,8 @@ package controllers
 
 import (
     "context"
-    "fmt"
     "time"
 
-    corev1 "k8s.io/api/core/v1"
     "k8s.io/apimachinery/pkg/api/errors"
     ctrl "sigs.k8s.io/controller-runtime"
     "sigs.k8s.io/controller-runtime/pkg/client"

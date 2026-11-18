@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 7
-description: "为什么我们的微服务搬上 Kubernetes 后，滚动发布总会出现偶发 502 报错，gRPC 流量更是死死钉在某一个 Pod 上完全不均衡？深度拆解业务软件在 K8s 上的网络工程实战：HTTP/2 多路复用导致四层 ClusterIP 负载均衡彻底失效的底层根因与 Headless Service / Envoy 网格解法；MaxConnectionAge、JVM DNS TTL 永久缓存与指数退避重连风暴四大生产陷阱；完整复盘 Pod 销毁与 EndpointSlice 异步切流的时序竞态冲突；并给出从 preStop 缓冲、平滑连接排空到 readinessGates 的生产级零停机发布实践。"
+description: "为什么我们的微服务搬上 Kubernetes 后，滚动发布总会出现偶发 502 报错，gRPC 流量更是死死钉在某一个 Pod 上完全不均衡？深度拆解业务软件在 K8s 上的网络工程实战：HTTP/2 多路复用导致四层 ClusterIP 负载均衡彻底失效的底层根因与 Headless Service / Envoy 网格解法；MaxConnectionAge、JVM DNS TTL 缓存机制与指数退避重连风暴四大生产陷阱；完整复盘 Pod 销毁与 EndpointSlice 异步切流的时序竞态冲突；并给出从 preStop 缓冲、平滑连接排空到 readinessGates 的生产级零停机发布实践。"
 extraTags:
   - Kubernetes
   - gRPC
@@ -104,15 +104,17 @@ func newProductionGRPCServer() *grpc.Server {
 }
 ```
 
-### 陷阱 2：Java JVM DNS TTL 默认“永久缓存”惨案
-在 Java (Spring Boot) 微服务中，JVM 默认的安全策略（Security Manager）会将 **DNS 解析结果永久缓存在内存中（TTL = -1）**！
-- 当后端的 Kubernetes Pod 发生故障漂移或重启后，IP 已经变成了新的 `10.244.2.18`；
-- 但 Java 客户端由于永久缓存，依然持续向已销毁的旧 IP 发送数据，引发海量超时崩溃！
-- **生产必配启动参数**：在容器启动脚本中强制覆盖 JVM 参数：
+### 陷阱 2：Java JVM DNS TTL 缓存陷阱与配置误区
+在 Java (Spring Boot) 微服务中，DNS 解析缓存存在两重隐蔽陷阱：
+- **默认缓存窗口过长**：历史上启用 `SecurityManager` 时，JVM 会将正向 DNS 解析结果永久缓存（`TTL = -1`）；即便在未启用 `SecurityManager` 的现代 OpenJDK 中，默认正向缓存时间仍高达 **30 秒**。当后端 Kubernetes Pod 发生重启或漂移切换到新 IP（如 `10.244.2.18`）时，30 秒（乃至永久）的旧 IP 缓存足以触发海量请求超时！
+- **`-Dnetworkaddress.cache.ttl` 被静默忽略的经典乌龙**：`networkaddress.cache.ttl` 是一个 **Java Security Property（安全属性）**，而非普通的 JVM 系统属性（System Property）！直接在启动命令中传入 `-Dnetworkaddress.cache.ttl=5` 会被 JVM **完全静默忽略**！
+- **生产正确配置姿势**：
+  1. 通过自定义安全配置文件（例如包含 `networkaddress.cache.ttl=5` 与 `networkaddress.cache.negative.ttl=1` 的 `custom.security`）挂载启动，或在 `main()` 入口发起任何网络调用前执行 `java.security.Security.setProperty("networkaddress.cache.ttl", "5")`：
   ```bash
-  -Dsun.net.inetaddr.ttl=5 -Dnetworkaddress.cache.ttl=5
+  # 通过 java.security.properties 注入安全属性（同时附带 OpenJDK 兜底系统属性 sun.net.inetaddr.ttl）
+  java -Djava.security.properties=/etc/java/custom.security -Dsun.net.inetaddr.ttl=5 -jar app.jar
   ```
-  将 DNS 缓存时间硬性限制在 5 秒以内，确保容器漂移后客户端能够秒级感知新 IP。
+  将正向 DNS 缓存硬性限制在 5 秒以内，确保 Pod 漂移后客户端秒级感知新 IP。
 
 ### 陷阱 3：重连风暴（Thundering Herd on Reconnect）
 当某个后端 Pod 崩溃或主动重启断开连接时，成百上千个并发客户端如果同时瞬间发起重连，会导致刚刚拉起的健康 Pod 瞬间遭遇“连接洪峰”，直接将新 Pod 再次压垮击穿！
@@ -125,11 +127,16 @@ $$t_{\text{sleep}} = \text{random}(0, \min(t_{\text{max}}, t_{\text{base}} \time
 利用 Kubernetes **Headless Service（无头服务，`clusterIP: None`）** 搭配客户端负载均衡，是性能损耗最低的官方推荐解法：
 
 ```go
-// 生产级 Go 客户端直连 Headless Service 并开启轮询
+import (
+    "google.golang.org/grpc"
+    "google.golang.org/grpc/credentials/insecure"
+)
+
+// 生产级 Go 客户端直连 Headless Service 并开启轮询 (grpc-go 现代 API)
 target := "dns:///my-service-headless.default.svc.cluster.local:50051"
-conn, err := grpc.Dial(
+conn, err := grpc.NewClient(
     target,
-    grpc.WithInsecure(),
+    grpc.WithTransportCredentials(insecure.NewCredentials()),
     // 强制声明使用 round_robin 轮询算法，而非单一连接
     grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`),
 )
@@ -292,7 +299,7 @@ func main() {
 
 在云原生网络体系中，纯粹的基础设施转发只是舞台，业务系统在应用层的适配才是主角：
 - **gRPC 的长连接与 HTTP/2 多路复用** 撕裂了传统的 L4 代理模式，必须通过 Headless Service 客户端解析或 Envoy 七层网格来实现细粒度流控；
-- **微服务连接治理四大陷阱**（MaxConnectionAge、JVM DNS TTL 永久缓存、重连风暴抖动退避）是每一个高可用系统必须筑牢的防线；
+- **微服务连接治理四大陷阱**（MaxConnectionAge、JVM DNS TTL 安全属性调优、重连风暴抖动退避、Headless 客户端轮询）是每一个高可用系统必须筑牢的防线；
 - **Pod 销毁与网络规则更新的异步竞态** 是生产发布 502 抖动的万恶之源，通过 `preStop` 强制注入时延缓冲配合业务内层优雅停机，是保障业务 99.999% SLA 的终极法宝。
 
 然而，网络只是业务软件在 K8s 上遇到的第一个拦路虎。当软件本身包含持久化状态与核心数据库（MySQL, TiDB, RocksDB, Kafka）时：

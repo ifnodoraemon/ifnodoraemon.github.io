@@ -101,6 +101,7 @@ MCP 协议定义了三种核心能力向量——**Tools、Resources、Prompts**
 Tools 是 AI 可以调用的**可执行函数**。每个 Tool 都有严格的 JSON Schema 定义其输入输出格式。
 
 ```python
+import httpx
 from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("天气服务")
@@ -147,6 +148,13 @@ sequenceDiagram
 Resources 是 AI 可以读取的**结构化数据源**，如文件内容、数据库记录、API 响应等。它提供上下文信息，而不执行副作用操作。
 
 ```python
+import json
+from pathlib import Path
+from typing import Any
+
+# 假设生产环境已注入异步数据库连接池 (如 asyncpg.Pool)
+db: Any = ...
+
 @mcp.resource("file://project/{path}")
 async def read_project_file(path: str) -> str:
     """读取项目文件内容"""
@@ -156,11 +164,13 @@ async def read_project_file(path: str) -> str:
     return file_path.read_text(encoding="utf-8")
 
 @mcp.resource("db://users/{user_id}")
-async def get_user_profile(user_id: int) -> dict:
-    """获取用户档案信息"""
+async def get_user_profile(user_id: int) -> str:
+    """获取用户档案信息（返回 JSON 字符串）"""
     async with db.acquire() as conn:
         user = await conn.fetchrow("SELECT * FROM users WHERE id = $1", user_id)
-        return dict(user)
+        if user is None:
+            raise ValueError(f"用户不存在: {user_id}")
+        return json.dumps(dict(user), ensure_ascii=False)
 ```
 
 | 对比维度 | Tools | Resources |
@@ -200,17 +210,30 @@ MCP 的底层通信基于 **JSON-RPC 2.0** 标准，支持两种传输机制：
 
 适用于**本地进程**通信，Host 直接 fork 一个子进程作为 Server：
 
+请求（调用工具）：
+
 ```json
-// 请求：调用工具
-{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
     "name": "get_weather",
     "arguments": {"city": "北京", "unit": "celsius"}
-}}
+  }
+}
+```
 
-// 响应：返回结果
-{"jsonrpc": "2.0", "id": 1, "result": {
+响应（返回结果）：
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
     "content": [{"type": "text", "text": "北京：22°C，晴"}]
-}}
+  }
+}
 ```
 
 ### 2. Streamable HTTP
@@ -265,8 +288,9 @@ pip install "mcp[cli]"
 
 ```python
 # note_server.py
-from mcp.server.fastmcp import FastMCP
+import json
 from datetime import datetime
+from mcp.server.fastmcp import FastMCP
 
 # 初始化 MCP Server
 mcp = FastMCP("笔记管理器")
@@ -276,7 +300,7 @@ notes: dict[str, dict] = {}
 
 # ── Tool：创建笔记 ──
 @mcp.tool()
-async def create_note(title: str, content: str, tags: list[str] = []) -> dict:
+async def create_note(title: str, content: str, tags: list[str] | None = None) -> dict:
     """创建一条新笔记。
 
     Args:
@@ -284,6 +308,7 @@ async def create_note(title: str, content: str, tags: list[str] = []) -> dict:
         content: 笔记正文内容 (支持 Markdown)
         tags: 标签列表，用于分类检索
     """
+    tags = tags or []
     note_id = f"note_{len(notes) + 1}"
     notes[note_id] = {
         "id": note_id,
@@ -315,11 +340,11 @@ async def search_notes(keyword: str = "", tag: str = "") -> list[dict]:
 
 # ── Resource：获取笔记详情 ──
 @mcp.resource("note://{note_id}")
-async def get_note(note_id: str) -> dict:
-    """获取指定笔记的完整内容"""
+async def get_note(note_id: str) -> str:
+    """获取指定笔记的完整内容（返回 JSON 字符串）"""
     if note_id not in notes:
         raise ValueError(f"笔记 {note_id} 不存在")
-    return notes[note_id]
+    return json.dumps(notes[note_id], ensure_ascii=False)
 
 # ── Prompt：笔记总结模板 ──
 @mcp.prompt()
@@ -349,8 +374,8 @@ if __name__ == "__main__":
   "mcpServers": {
     "notes": {
       "command": "python",
-      "args": ["/path/to/your/project/note_server.py"],
-      }
+      "args": ["/path/to/your/project/note_server.py"]
+    }
   }
 }
 ```

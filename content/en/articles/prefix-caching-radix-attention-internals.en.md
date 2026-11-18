@@ -154,31 +154,41 @@ When a new request arrives with input sequence `req_tokens`:
 3. All physical KV cache blocks associated with matched nodes are immediately reused. **The actual prefill computation required for this request collapses to the remaining unmatched suffix!**
 
 ```python
-# Simplified abstraction of RadixTree prefix matching
-def match_prefix(self, req_tokens: List[int]) -> Tuple[List[int], List[int]]:
+# Simplified RadixTree prefix matching (shown for page_size=1 token-slot indexing; block-paged mode aligns to page_size)
+def _shared_prefix_len(a: List[int], b: List[int]) -> int:
+    limit = min(len(a), len(b))
+    i = 0
+    while i < limit and a[i] == b[i]:
+        i += 1
+    return i
+
+def match_prefix(self, req_tokens: List[int]) -> Tuple[List[int], List[int], TreeNode]:
     curr_node = self.root
     matched_kv_indices = []
     idx = 0
-    
+
     while idx < len(req_tokens):
-        matched_child = None
-        for child in curr_node.children:
-            edge_len = len(child.token_ids)
-            # Check if child edge matches current prompt slice
-            if req_tokens[idx : idx + edge_len] == child.token_ids:
-                matched_child = child
-                break
-        
-        if matched_child:
-            matched_kv_indices.extend(matched_child.kv_indices)
-            idx += len(matched_child.token_ids)
-            curr_node = matched_child
-        else:
-            # Partial match on edge requires node splitting
+        first_token = req_tokens[idx]
+        child = curr_node.children.get(first_token)
+        if child is None:
             break
-            
+
+        # Compute shared prefix length along the matched child edge
+        prefix_len = _shared_prefix_len(req_tokens[idx:], child.token_ids)
+        if prefix_len < len(child.token_ids):
+            # Partial edge match: split child at divergence point and reuse matched prefix KV slots
+            curr_node = self._split_node(child, prefix_len)
+            matched_kv_indices.extend(curr_node.kv_indices)
+            idx += prefix_len
+            break
+
+        # Full edge match: append KV slots and descend further
+        matched_kv_indices.extend(child.kv_indices)
+        idx += prefix_len
+        curr_node = child
+
     unmatched_suffix = req_tokens[idx:]
-    return matched_kv_indices, unmatched_suffix
+    return matched_kv_indices, unmatched_suffix, curr_node
 ```
 
 ### 3.2 Primitive 2: Node Splitting (`split_node`)
@@ -304,7 +314,7 @@ In production environments, cache-aware routing routinely lifts cluster-wide cac
 | **Branching Contexts** | Inefficient | Redundant hash entries | **Native (direct tree isomorphism)** |
 | **Eviction Mechanics** | Immediate upon sequence finish | Coarse LRU block eviction | **Reference counting + Leaf-priority recursive LRU** |
 | **Multi-Turn TTFT** | Degrades linearly or quadratically | Substantially reduced (block-aligned)| **Slashed to 5ms-20ms (suffix-only compute)** |
-| **Computational Overhead** | $O(L_{\text{prompt}}^2)$ | $O(\text{Hash}) + O(L_{\text{suffix}}^2)$ | $O(\text{Tree Depth}) + O(L_{\text{suffix}}^2)$ |
+| **Computational Overhead** | $O(L_{\text{prompt}}^2)$ | $O(\text{Hash}) + O(L_{\text{suffix}} \cdot L_{\text{prompt}})$ | $O(\text{Tree Depth}) + O(L_{\text{suffix}} \cdot L_{\text{prompt}})$ |
 | **Cluster Routing** | Standard Round-Robin | Consistent Hashing fallback | **Cache-Aware Gateway Routing** |
 
 ---

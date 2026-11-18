@@ -3,10 +3,40 @@
 <channel>
   <title>LLM Systems Architecture</title>
   <link>https://blog.llmgo.top/en/</link>
-  <description>Focusing on AI foundation models and tech insights</description>
+  <description>In-depth engineering articles on LLM inference systems, distributed RL post-training, autonomous AI agents, Kubernetes internals, and InfiniBand/SuperPoD networking.</description>
   <language>en</language>
-  <pubDate>Wed, 21 Oct 2026 05:58:37 GMT</pubDate>
+  <pubDate>Wed, 18 Nov 2026 03:51:05 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Architecting AI Agent Security Sandboxes: Container Escape Defense, Sub-15ms Firecracker MicroVM Snapshots, and Zero-Trust Isolation</title>
+    <link>https://blog.llmgo.top/en/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/</link>
+    <guid>https://blog.llmgo.top/en/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Agent Sandbox</category>
+    <description>Architecting zero-trust Firecracker MicroVM sandboxes for Coding Agents and RL rollouts: benchmarking gVisor vs KVM isolation, sub-15ms snapshot forking via userfaultfd and CoW block storage, plus secretless virtio-vsock egress proxies.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/agent-sandbox-firecracker-microvm-snapshot-isolation.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Distributed RL Post-Training with verl: Colocation, Weight Resharding &amp; Async Rollouts</title>
+    <link>https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/</link>
+    <guid>https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Distributed RL</category>
+    <description>Deep dive into multi-node LLM RL post-training systems: first-principles 72B VRAM math, verl 3D-HybridEngine zero-redundancy resharding, vLLM Sleep Mode cuMemUnmap offloading, DAPO, Partial Rollouts, and production configs.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/distributed-rl-post-training-verl-colocation.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Rack-Scale SuperPoD &amp; NCCL Collectives: GB200 NVL72, Optical Fabrics &amp; MoE All-to-All</title>
+    <link>https://blog.llmgo.top/en/articles/rack-scale-superpod-nvl72-nccl-collectives/</link>
+    <guid>https://blog.llmgo.top/en/articles/rack-scale-superpod-nvl72-nccl-collectives/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>SuperPoD Infra</category>
+    <description>Dissecting NVIDIA GB200/GB300 NVL72 copper backplanes vs. Huawei CloudMatrix 384 optical UnifiedBus, NCCL busbw math, NVLS multimem in-switch reductions, DeepEP IBGDA All-to-All kernels, and MNNVL production tuning.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/rack-scale-superpod-nvl72-nccl-collectives.png" length="150000" type="image/png" />
+  </item>
   <item>
     <title>Inside DeepSeek's Trillion-Token Engine: DeepInfer and deepseek-recipe Architecture from Silicon to Protocol Layer</title>
     <link>https://blog.llmgo.top/en/articles/deepinfer-deepseek-recipe-architecture/</link>
@@ -44,7 +74,7 @@
     <pubDate>Sat, 03 Oct 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>InfiniBand &amp; Subnet Manager</category>
-    <description>InfiniBand hardware architecture: SDR to NDR/XDR link speeds, 4b/5b to PAM4 modulation, credit-based flow control, Virtual Lanes, and OpenSM subnet management.</description>
+    <description>InfiniBand hardware architecture: SDR to NDR/XDR link speeds, 8b/10b to PAM4 modulation, credit-based flow control, Virtual Lanes, and OpenSM subnet management.</description>
     <enclosure url="https://blog.llmgo.top/og/en/infiniband-architecture-hardware-rates-credit-flow-subnet-manager.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -254,7 +284,7 @@
     <pubDate>Fri, 25 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Scheduler Customization</category>
-    <description>Kubernetes custom scheduling: 11 Scheduling Framework extension points, CycleState caching, Volcano DRF algorithms, and Go Gang Scheduling plugin implementation.</description>
+    <description>Kubernetes custom scheduling: 12 core Scheduling Framework extension points, CycleState caching, Volcano DRF algorithms, and Go Gang Scheduling plugin implementation.</description>
     <enclosure url="https://blog.llmgo.top/og/en/k8s-scheduling-framework-custom-plugin-gang-scheduling.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -294,7 +324,7 @@
     <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Inference Engines</category>
-    <description>Codebase teardown of top LLM inference engines: vLLM multi-step scheduling, SGLang RadixAttention, TensorRT-LLM in-flight batching, and llama.cpp quantization.</description>
+    <description>Codebase teardown of top LLM inference engines: vLLM v1 multiprocess EngineCore &amp; unified scheduler, SGLang RadixAttention, TensorRT-LLM in-flight batching, and llama.cpp quantization.</description>
     <enclosure url="https://blog.llmgo.top/og/en/inference-engines-core-architecture-internals.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -438,13 +468,13 @@
     <enclosure url="https://blog.llmgo.top/og/en/deepseek-v4-kimi-k3-deployment-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Kimi K3 vs GLM-5.3 vs DeepSeek-V4: Architecture, Benchmarks and Deployment</title>
+    <title>November 2026 Chinese Frontier LLMs: Qwen4-Max, Kimi K3.1 Pro, DeepSeek-V4, MiniMax M3.1 &amp; GLM-5.3</title>
     <link>https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/</link>
     <guid>https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Chinese LLMs</category>
-    <description>Compare Kimi K3, GLM-5.3, and DeepSeek-V4-Pro with sourced architecture facts, matching benchmark versions, checkpoint formats, and workload evaluation plans.</description>
+    <description>Engineering comparison of China's November 18, 2026 frontier LLMs—Qwen4-Max, Kimi K3.1 Pro, DeepSeek-V4-Pro / V4.1-Flash, MiniMax M3.1 Flash, and GLM-5.3—covering sparse architectures, matching benchmarks, checkpoint formats, and evaluation plans.</description>
     <enclosure url="https://blog.llmgo.top/og/en/domestic-llm-comparison-2026.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -458,13 +488,13 @@
     <enclosure url="https://blog.llmgo.top/og/en/environment-scaling-agent-guide.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>Kimi KDA, DeepSeek MLA and V4 CSA/HCA: Long-Context Cache and GPU Memory</title>
+    <title>Kimi KDA, DeepSeek MLA and V4 CSA/HCA: Long-Context Cache Math and GPU Memory</title>
     <link>https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/</link>
     <guid>https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/</guid>
     <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Architecture Evolution</category>
-    <description>Understand KDA recurrent state, MLA latent caches, and DeepSeek-V4 CSA/HCA sequence compression, with explicit memory formulas and reproducible measurement rules.</description>
+    <description>Rigorous breakdown of Kimi Delta Attention (KDA) gated delta-rule recurrent states, DeepSeek MLA latent caches, and V4 CSA/HCA sequence compression, with exact memory formulas for Kimi K3/K3.1 hybrids.</description>
     <enclosure url="https://blog.llmgo.top/og/en/kimi-kda-deepseek-mla-architecture.png" length="150000" type="image/png" />
   </item>
   <item>
@@ -688,13 +718,13 @@
     <enclosure url="https://blog.llmgo.top/og/en/rag-in-practice.png" length="150000" type="image/png" />
   </item>
   <item>
-    <title>2026 Mainstream Foundation Models Comparison: GPT-5.4 vs Claude Opus 4.6 vs Gemini 3.1 Pro</title>
+    <title>November 2026 Frontier LLM Benchmark &amp; API Guide: GPT-6.2 Astra vs Claude Fable 5.2 vs Gemini 4 Carbon</title>
     <link>https://blog.llmgo.top/en/articles/model-comparison-2026/</link>
     <guid>https://blog.llmgo.top/en/articles/model-comparison-2026/</guid>
     <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
     <dc:creator>ifnodoraemon</dc:creator>
     <category>Model Benchmark</category>
-    <description>Compare GPT-5.4, Claude 4.6, and Gemini 3.1 Pro APIs with sourced capabilities, token prices, SDK examples, fair evaluation rules, and self-hosting cost formulas.</description>
+    <description>Production engineering guide to the November 18, 2026 frontier LLM lineup: comparing Claude Fable 5.2, GPT-6.2 Astra/Sol, Gemini 4 Carbon/Hydrogen, and Meta Muse Wonder across API specs, pricing tiers, SDKs, and TCO formulas.</description>
     <enclosure url="https://blog.llmgo.top/og/en/model-comparison-2026.png" length="150000" type="image/png" />
   </item>
   <item>

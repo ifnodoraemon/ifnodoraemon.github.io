@@ -33,30 +33,26 @@ updated: 2026-10-20
 
 然而，在 2026 年大语言模型（LLM）、多模态大模型与具身智能全面爆发的智算时代，**这套天真的标量调度假设被彻底撕得粉碎**：
 1. **极致的硬件昂贵度与拓扑敏感性**：一台配备 8 张 NVIDIA H100/H200/B200 的算力节点价值数百万人民币；
-2. **NUMA 与 NVLink 跨拓扑“性能深渊”**：在进行张量并行（Tensor Parallelism, TP=4）推理时，如果调度器随意挑选中了 4 张并未处于同一组 NVSwitch 直连拓扑下的 GPU、或者跨越了 CPU NUMA 内存节点，跨卡通信延迟将暴增 5 到 10 倍，导致大模型 Token 生成速度（Tokens/s）遭遇断崖式下跌；
+2. **NUMA 与 NVLink 跨拓扑“性能深渊”**：在进行张量并行（Tensor Parallelism, TP=4）或跨机 RDMA 推理时，如果在非全互联（如双路 PCIe 或 4 卡孤岛）机型上随意挑选中了跨拓扑边界的 4 张 GPU，或者即便在 NVSwitch 全互联机型上让 GPU 与异侧 NUMA 节点的 CPU / InfiniBand 网卡错配，跨插槽通信与 Host-to-Device / GPUDirect RDMA 延迟都将急剧恶化，导致大模型 Token 生成速度（Tokens/s）遭遇断崖式下跌；
 3. **资源粒度的非标化**：全卡独占极易造成算力闲置，而轻量任务需要更细粒度的硬件级物理切片（MIG）与安全多租户隔离。
 
 ```mermaid
 flowchart TD
-    subgraph GPUHost["现代 8 卡 AI 算力宿主机物理拓扑"]
+    subgraph GPUHost["现代 8 卡 HGX B200 算力宿主机物理拓扑 (对比双路 PCIe 跨 NUMA 瓶颈)"]
         direction TB
-        subgraph NUMA0["NUMA Socket 0 (CPU 0 + Memory 0)"]
-            GPU0["GPU 0 (B200)"] <== "NVLink (900 GB/s)" ==> GPU1["GPU 1 (B200)"]
-            GPU2["GPU 2 (B200)"] <== "NVLink (900 GB/s)" ==> GPU3["GPU 3 (B200)"]
-            GPU0 <==> GPU2
-            GPU1 <==> GPU3
-            NIC0["InfiniBand / RoCE NIC 0<br/>(PCIe Switch 直连 GPU 0-3)"]
+        subgraph NUMA0["NUMA Socket 0 (CPU 0 + Memory 0 + PCIe Switch 0)"]
+            GPU03["GPU 0 ~ GPU 3 (4x B200)"] <== "PCIe Gen5 直连 (GPUDirect RDMA)" ==> NIC0["InfiniBand / RoCE NICs 0-3"]
         end
 
-        subgraph NUMA1["NUMA Socket 1 (CPU 1 + Memory 1)"]
-            GPU4["GPU 4 (B200)"] <== "NVLink (900 GB/s)" ==> GPU5["GPU 5 (B200)"]
-            GPU6["GPU 6 (B200)"] <== "NVLink (900 GB/s)" ==> GPU7["GPU 7 (B200)"]
-            GPU4 <==> GPU6
-            GPU5 <==> GPU7
-            NIC1["InfiniBand / RoCE NIC 1<br/>(PCIe Switch 直连 GPU 4-7)"]
+        subgraph NUMA1["NUMA Socket 1 (CPU 1 + Memory 1 + PCIe Switch 1)"]
+            GPU47["GPU 4 ~ GPU 7 (4x B200)"] <== "PCIe Gen5 直连 (GPUDirect RDMA)" ==> NIC1["InfiniBand / RoCE NICs 4-7"]
         end
 
-        NUMA0 <-.->|"跨 NUMA UPI/QPI 总线 (低速瓶颈: 32-64 GB/s)"| NUMA1
+        NVSW["<b>NVSwitch 全互联交换平面</b><br/>NVLink 5: 单卡双向 1,800 GB/s (8 卡全互通；双路纯 PCIe / 4 卡孤岛机型无此层)"]
+        GPU03 <== "NVLink 5 (1,800 GB/s)" ==> NVSW
+        NVSW <== "NVLink 5 (1,800 GB/s)" ==> GPU47
+
+        NUMA0 <-.->|"跨 NUMA UPI / Infinity Fabric (32-64 GB/s：跨插槽 CPU/NIC 访问与 PCIe 机型跨卡瓶颈)"| NUMA1
     end
 ```
 
@@ -110,17 +106,17 @@ flowchart LR
 | **DRA (动态资源分配)** | Kubernetes 1.30+ 引入的声明式 Claim 资源分配模型。解耦简单的标量计数，支持参数化请求。 | **支持多维拓扑声明**。可直接请求“2 张具备 NVLink 互联的 GPU”并附带特定带宽策略。 | 大语言模型分布式训练、混合拓扑异构推理集群。 |
 
 ```text
-NVIDIA MIG 硬件物理切片拓扑 (以 H100 80GB 为例):
-┌─────────────────────────────────────────────────────────────┐
-│ 物理 NVIDIA H100 80GB HBM3 GPU                              │
-├──────────────────┬──────────────────┬───────────────────────┤
-│ Instance 1       │ Instance 2       │ Instance 3            │
-│ Profile: 3g.40gb │ Profile: 2g.20gb │ Profile: 1g.10gb (x2) │
-│ • 42 个 SM 单元  │ • 28 个 SM 单元  │ • 14 个 SM 单元       │
-│ • 40GB 独占显存  │ • 20GB 独占显存  │ • 10GB 独占显存       │
-│ • 1.6 TB/s 带宽  │ • 800 GB/s 带宽  │ • 400 GB/s 带宽       │
-│ (部署 14B LLM)   │ (部署 7B LLM)    │ (部署 BGE-Embedding)  │
-└──────────────────┴──────────────────┴───────────────────────┘
+NVIDIA MIG 硬件物理切片拓扑 (以 H100 80GB SXM5 为例，总计 132 SMs / 3.35 TB/s HBM3):
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 物理 NVIDIA H100 80GB SXM5 GPU (注：A100 80GB 对应 42 / 28 / 14 SMs)     │
+├──────────────────────┬──────────────────────┬───────────────────────────┤
+│ Instance 1           │ Instance 2           │ Instance 3                │
+│ Profile: 3g.40gb     │ Profile: 2g.20gb     │ Profile: 1g.10gb (x2)     │
+│ • 3/7 计算切片(56 SM) │ • 2/7 计算切片(32 SM) │ • 1/7 计算切片(各 16 SM)   │
+│ • 40GB 独占显存(4/8)  │ • 20GB 独占显存(2/8)  │ • 10GB 独占显存(各 1/8)    │
+│ • ~1.68 TB/s 带宽    │ • ~838 GB/s 带宽     │ • ~419 GB/s 带宽          │
+│ (部署 14B LLM)       │ (部署 7B LLM)        │ (部署 BGE-Embedding)      │
+└──────────────────────┴──────────────────────┴───────────────────────────┘
 ```
 
 通过配置 GPU Operator 的 `mig.strategy=mixed`，集群管理员可以通过 YAML 声明将不同物理卡划分为各种尺寸的独立 MIG 设备（例如 `nvidia.com/mig-3g.40gb: 2`），由 Kubernetes 调度器当作原生不可挤占的物理设备进行精准分配。
@@ -186,7 +182,7 @@ flowchart TD
 
 ### 4.1 生产级 KEDA 弹性伸缩配置清单 (ScaledObject)
 
-以下是针对生产级 vLLM 推理 Pod 的KEDA 伸缩配置示例：
+以下是针对生产级 vLLM 推理 Pod 的 KEDA 伸缩配置示例：
 
 ```yaml
 apiVersion: keda.sh/v1alpha1
@@ -232,13 +228,16 @@ spec:
       threshold: '0.80'     # 当集群的 KV Cache 平均使用率突破 80% (0.80) 时，提前扩容防止换入换出卡顿
 ```
 
+> [!NOTE]
+> **指标归一化与预热注意事项**：KEDA 示例中的 `qwen-72b` 应与 vLLM 的 `--served-model-name` 保持一致（实际标签名以 `/metrics` 暴露为准）。排队请求总量使用默认的 `AverageValue` 让各副本共同分担负载，而集群平均缓存比例显式声明 `metricType: Value`，避免被 HPA 再次按副本数重复归一化。上述阈值仅作示例，生产扩容还需综合考量可用 GPU 库存、模型权重冷启动加载耗时及缓存预热预算。
+
 ---
 
 ## 五、 全专栏终局知识体系回顾与全景总结
 
 行文至此，**《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》**全套 13 篇深度技术长文正式完整收官！
 
-让我们重新审视这一贯穿整套专栏的系统性认知认知阶梯：
+让我们重新审视这一贯穿整套专栏的系统性认知阶梯：
 
 ```mermaid
 flowchart TD
@@ -276,6 +275,3 @@ flowchart TD
 
 ### Q3: DRA 是否自动解决所有 GPU 与网卡拓扑问题？
 不会。DRA 允许通过 ResourceClaim 和驱动发布的设备属性表达更丰富的选择条件，但可用属性、跨设备约束与分配行为取决于 Kubernetes 版本和驱动实现。必须确认 GPU/NIC 驱动确实公布所需拓扑信息，并验证调度与准入行为；不能仅因启用 DRA 就保证最佳 NVLink 组合或无跨 NUMA 访问。参见 [Kubernetes DRA 文档](https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/)。
-
-
-KEDA 示例的 `qwen-72b` 应与 vLLM 的 `--served-model-name` 一致；实际标签名以 `/metrics` 为准。队列总量使用 `AverageValue` 让副本数分担负载，而集群平均缓存比例使用 `metricType: Value`，避免被 HPA 再次按副本数归一化。阈值只作示例，扩容还需可用 GPU、启动时间及缓存预热预算。

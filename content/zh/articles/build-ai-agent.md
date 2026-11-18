@@ -42,7 +42,7 @@ graph LR
 ### Step 1：安装依赖
 
 ```bash
-pip install langchain langchain-anthropic langgraph tavily-python
+pip install langchain langchain-anthropic langgraph langgraph-checkpoint-redis tavily-python
 ```
 
 ### Step 2：定义工具
@@ -82,8 +82,9 @@ def execute_python(code: str) -> str:
 ```python
 from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, END
+from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
-from langchain_core.messages import AnyMessage, add_messages
+from langchain_core.messages import AnyMessage
 from langchain_anthropic import ChatAnthropic
 
 # 1. 严格定义 Agent 的全局状态 (State Schema)
@@ -91,11 +92,12 @@ class AgentState(TypedDict):
     messages: Annotated[list[AnyMessage], add_messages]
     current_task: str
 
-# 2. 节点逻辑：模型推理节点
+# 2. 绑定工具集与推理模型
+tools = [get_current_time, search_web, execute_python]
+llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm_with_tools = llm.bind_tools(tools)
+
 def call_model(state: AgentState):
-    llm = ChatAnthropic(model="claude-sonnet-5-5")
-    tools = [get_current_time, search_web, execute_python]
-    llm_with_tools = llm.bind_tools(tools)
     response = llm_with_tools.invoke(state["messages"])
     return {"messages": [response]}
 
@@ -127,9 +129,9 @@ for event in app.stream(inputs, stream_mode="values"):
 
 | 需求 | 推荐模型 | 原因 |
 |------|----------|------|
-| 复杂 Agent 任务 | Claude Opus 5.5 | 顶尖的自主规划、多步工具调用与 Computer Use |
-| 日常 Agent 开发 | Claude Sonnet 5.5 | 极高智能度、快速响应与工程落地的最佳平衡 |
-| 需要深度推理的 Agent | OpenAI o3 / GPT-6 | 透明的深度思考链，复杂数理逻辑与符号推演 |
+| 复杂 Agent 任务 | Claude Opus 4.6 | 顶尖的自主规划、多步工具调用与 Computer Use |
+| 日常 Agent 开发 | Claude Sonnet 4.6 | 极高智能度、快速响应与工程落地的最佳平衡 |
+| 需要深度推理的 Agent | OpenAI o3 / GPT-5.4 | 透明的深度思考链，复杂数理逻辑与符号推演 |
 | 高调用量生产环境 | Gemini 3.1 Flash-Lite | 极低单次延迟与最高性价比的轻量基座 |
 
 ## 最佳实践
@@ -150,13 +152,13 @@ for event in app.stream(inputs, stream_mode="values"):
 
 ```python
 from langgraph.checkpoint.redis import RedisSaver
-import redis
 
-# 建立底层 Redis 连接池
-redis_conn = redis.Redis(host='localhost', port=6379, db=0)
+DB_URI = "redis://localhost:6379"
+inputs = {"messages": [("user", "帮我查一下大模型的最新发布时间。")]}
 
-# 使用持久化编译 Graph
-with RedisSaver(redis_conn) as checkpointer:
+# 通过 from_conn_string 建立连接并初始化持久化编译 Graph
+with RedisSaver.from_conn_string(DB_URI) as checkpointer:
+    checkpointer.setup() # 首次运行时初始化 Redis 检索索引
     app = workflow.compile(
         checkpointer=checkpointer,
         interrupt_before=["tools"] # 在调用核心工具前实现硬中断，等待人工二次确认

@@ -24,13 +24,13 @@ updated: 2026-10-20
 
 In the rapid evolution of large language models, context window boundaries continue to expand—scaling from 8K and 32K tokens to 1M and beyond. Many engineers starting their journey in agent design arrive at an intuitive assumption: *"If the LLM can ingest millions of tokens in a single forward pass, why build complex memory systems? Can't we simply dump the entire conversation history into the prompt?"*
 
-In high-concurrency production deployments, this brute-force approach invariably breaks down within weeks.
+Full-history prompts can increase cost, latency, and contextual noise; whether stratified memory is required depends on workload and budget rather than any fixed "breaks down within weeks" rule.
 
 The underlying architectural fallacy is simple: **Context capacity is not memory.** Appending hundreds of thousands of raw conversational tokens and verbose tool traces creates crushing latency penalties, exorbitant token billing, severe **attention dilution ("Lost in the Middle")**, and irreconcilable temporal contradictions.
 
 Human cognition functions effectively across decades of continuous experience because our brains evolved **hierarchical memory architectures** and **memory consolidation** routines.
 
-As the 11th comprehensive chapter in **《The Production AI Agent Architect Handbook》**, this guide deconstructs modern agent memory systems—exploring **Working Memory**, **Episodic Memory**, and **Temporal Graph RAG**—and provides a production-grade Python memory manager equipped with recency decay curves and dynamic reflection.
+As the 11th comprehensive chapter in **《The Production AI Agent Architect Handbook》**, this guide deconstructs modern agent memory systems—exploring **Working Memory**, **Episodic Memory**, and **Temporal Graph RAG**—and walks through a clearly scoped in-memory Python prototype demonstrating composite ranking and recency decay alongside its production boundaries.
 
 ---
 
@@ -52,7 +52,7 @@ In continuous enterprise engagements, facts possess **temporal validity**:
 If both conversational episodes remain indiscriminately stacked inside the prompt, probabilistic sampling produces oscillating hallucinations—generating code that mixes incompatible Python and Rust constructs. A production memory system must support **temporal invalidation, versioning, and state overwriting**.
 
 ### 4. Absence of Abstraction & Insight Consolidation
-Raw operational experience consists of low-level signals. Actionable intelligence requires distilling low-level observations into **high-level procedural insights**. Encountering ten rate-limit timeouts from a downstream API should not preserve ten verbose HTTP 429 response bodies in the prompt; it should consolidate into a single authoritative heuristic: *"This endpoint enforces a 60 RPM quota; apply exponential backoff."*
+Raw operational experience consists of low-level signals. Actionable intelligence requires distilling low-level observations into **high-level procedural insights**. Encountering repeated HTTP 429 errors across ten calls to a downstream API should not preserve ten verbose raw response bodies in the prompt; it should consolidate into a concise operational rule: *"On HTTP 429 from this endpoint, inspect documentation, rate-limit headers, and `Retry-After` before configuring backoff; do not infer a fixed per-minute quota from a few errors alone."*
 
 ---
 
@@ -87,7 +87,7 @@ Borrowing from cognitive science and the "LLM as an Operating System" paradigm p
 - **Contents**:
   - **Core Memory**: Immutable agent identity, persistent user constraints (e.g., *"User is a principal architect; output concise code without basic explanations"*), and hard security guardrails.
   - **Working Memory**: Ephemeral variables for the active execution node. As established in [Agentic Loops & State Machine Design](/en/articles/agent-loop-state-machine/), once the active node validates its output, raw verbose payloads are purged, leaving only compact typed entities.
-- **Lifecycle**: Milliseconds to seconds.
+- **Lifecycle**: Working memory is typically cleared across step transitions, whereas Core Memory can persist across steps or sessions—they do not share the same lifetime.
 
 ### 2. Short-Term Episodic Memory
 - **Role**: The operational narrative of the current active session.
@@ -175,7 +175,7 @@ Pure vector stores lack understanding of **multi-hop entity relationships** and 
 (User) --[owns_tech_stack {valid_from: "2026-03-15", valid_to: infinity}]--> (Rust)
 ```
 
-In a temporal knowledge graph, mutating events close the `valid_to` timestamp of earlier edges. When an agent formulates an execution plan, the graph traverser filters strictly for active edges where `valid_to == infinity`, eliminating hallucinations caused by contradictory historical records.
+Application logic can transactionally close an older fact's `valid_to` after resolving entities and supersession rules, then filter by task time at query time. A graph engine does not automatically understand whether a preference change supersedes every prior statement; that requires explicit conflict rules, provenance, and verification. Filtering reduces stale-fact interference, though it does not guarantee zero hallucinations.
 
 ---
 
@@ -188,8 +188,7 @@ Recency uses the last-access time. Frequent retrieval does not make an obsolete 
 ```python
 """
 demo_agent_memory.py
-Production-grade hierarchical agent memory engine featuring exponential recency decay,
-multi-factor hybrid retrieval, and automated consolidation reflection.
+Teaching prototype: in-memory list, keyword-overlap scoring, and synchronous fixed-text reflection.
 """
 
 import math
@@ -360,7 +359,7 @@ Research background: [Generative Agents](https://arxiv.org/abs/2304.03442) studi
 
 Memory architecture and state machine topologies represent the **twin cornerstones** of dependable autonomous systems. The state machine enforces **deterministic step execution**, while the memory hierarchy provides **temporal continuity and context hygiene**.
 
-Explore the first 11 chapters across this production handbook:
+Explore all 14 chapters across this production handbook:
 
 1. **[Part 1 · Agentic Loops & State Machine Design: From ReAct to Deterministic Control Flows](/en/articles/agent-loop-state-machine/)**  
    *Foundational state machine topologies, transition guards, and circuit breaker patterns.*
@@ -373,17 +372,23 @@ Explore the first 11 chapters across this production handbook:
 5. **[Part 5 · Deep Dive into Skills: Giving AI Coding Agents a Specialized Brain](/en/articles/skills-guide/)**  
    *Progressive context loading mechanisms and modular coding agent architectures.*
 6. **[Part 6 · Under the Hood of Browser-use: DOM Distillation & Vision Grounding](/en/articles/browser-use-agent-architecture/)**  
-   *Crossing from API calls to visual web automation with 110k+ star architecture insights.*
+   *Crossing from API calls to visual web automation with 100k+ star architecture insights.*
 7. **[Part 7 · Evolving Models at Runtime: From Basic Reflection to MCTS-based Test-Time Compute](/en/articles/agent-reflection-self-correction/)**  
    *Reflexion loops, iterative verification, and Monte Carlo Tree Search at inference time.*
 8. **[Part 8 · 2026 AI Paradigm Shift: Distributed Agent Orchestration & Evals](/en/articles/agent-orchestration-evals/)**  
    *Multi-agent swarms, combating compounding error rates, and automated benchmark evals.*
 9. **[Part 9 · Agent Observability & Debugging: From Black Box to White Box](/en/articles/agent-observability-debugging/)**  
    *OpenTelemetry, LangSmith, and trajectory replay for complete execution transparency.*
-10. **[Part 10 · How Environment Scaling Reshapes Autonomous Agents: Sandboxing & RL](/en/articles/environment-scaling-agent-guide/)**  
+10. **[Part 10 · Beyond Simple Prompts: How Environment Scaling Is Reshaping Autonomous Agents](/en/articles/environment-scaling-agent-guide/)**  
     *Post-training environment exploration, sandbox lifecycle, cleanup, and sourced benchmark interpretation.*
 11. **[Part 11 (Current) · AI Agent Memory Architecture: From Working Memory to Hierarchical Graph RAG](/en/articles/agent-memory-architecture/)**  
-    *Constructing persistent memory pyramids, Ebbinghaus decay, and temporal causal graphs.*
+    *Constructing persistent memory pyramids, Ebbinghaus decay, provenance, and temporal causal graphs.*
+12. **[Part 12 · Building a Lightweight Agent Framework from Scratch: State Machines and Event Streams](/en/articles/build-lightweight-agent-framework/)**  
+    *SQLite-backed approval checkpoints, single-use claims, worker restart recovery, and async event streams.*
+13. **[Part 13 · Advanced Tool Use in Agent Architecture: Dynamic Discovery, Sandboxing, and Self-Healing Recovery](/en/articles/advanced-agent-tool-use-and-function-calling/)**  
+    *Domain-scoped tool retrieval, paginated MCP discovery, gVisor container cleanup, and bounded recovery.*
+14. **[Part 14 · Communication Protocols and Concurrency Control in Multi-Agent Systems](/en/articles/multi-agent-collaboration-and-concurrency/)**  
+    *In-process asyncio actor mailboxes, bounded backpressure, CAS optimistic locking, and token-bucket rate limiting.*
 
 ---
 

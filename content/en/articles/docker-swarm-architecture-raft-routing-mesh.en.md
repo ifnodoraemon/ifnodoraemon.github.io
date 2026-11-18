@@ -109,7 +109,7 @@ Admin Command: docker service scale web=5
        └──► Manager 3 confirms write
        │
        ▼ (Quorum Reached: 3/3 acknowledgments)
- 3. Commit Entry to In-Memory Store & Persist WAL to Disk (/var/lib/docker/swarm/raft)
+ 3. Commit Entry to In-Memory Store & Persist Encrypted WAL/Snapshots (/var/lib/docker/swarm/raft/)
        │
        ▼
  4. Internal Orchestrator diffs Desired State (5) vs Observed State (3)
@@ -118,7 +118,10 @@ Admin Command: docker service scale web=5
  5. Scheduler allocates 2 new Tasks to eligible Worker Nodes via gRPC
 ```
 
-### Key Advantages of SwarmKit's Raft Implementation:
+> [!NOTE]
+> **Manager vs. Worker Persistence**: Manager nodes persist Raft state as encrypted WAL and snapshot files under `/var/lib/docker/swarm/raft/`, whereas Worker nodes do not participate in Raft and use a local BoltDB store (`/var/lib/docker/swarm/worker/tasks.db`) to cache assigned task metadata.
+
+### 2.1 Built-in Resilience and Cryptographic Security
 1. **Zero External Plumbing**: Zero dedicated etcd clusters or Consul agents to deploy, monitor, or manage.
 2. **Native Cryptographic Auto-Locking**: Swarm supports native data-at-rest encryption (`docker swarm update --autolock=true`). The encryption keys protecting Raft WAL logs and TLS certificates are decoupled, requiring a unlock key during daemon reboots to prevent compromised disk theft.
 3. **Automatic Internal PKI & mTLS**: SwarmKit incorporates an integrated Certificate Authority (CA). When a new worker or manager joins the swarm via join-token, node certificates are automatically issued and rotated without manual intervention.
@@ -127,29 +130,29 @@ Admin Command: docker service scale web=5
 
 ## 3. Cross-Host Overlay Networking: VXLAN Decapsulation Mechanics
 
-In [Container Networking Deep Dive: veth-pair, Linux Bridge, iptables NAT, and Cross-Host Topologies](/en/articles/container-networking-veth-bridge-iptables/), we mastered single-host networking with Linux Bridges and veth-pairs.
+In [Container Networking Deep Dive: veth-pair, Linux Bridge, iptables NAT, and Cross-Host Topology](/en/articles/container-networking-veth-bridge-iptables/), we mastered single-host networking with Linux Bridges and veth-pairs.
 
-How does Docker Swarm enable containers on Node A (e.g., `10.0.0.5`) to communicate transparently with containers on Node B (e.g., `10.0.0.9`) across distinct underlying physical subnets? The answer is **VXLAN (Virtual Extensible LAN, RFC 7348)**:
+How does Docker Swarm enable containers on Node 1 (e.g., `10.0.0.2`) to communicate transparently with containers on Node 2 (e.g., `10.0.0.3`) across distinct underlying physical subnets? The answer is **VXLAN (Virtual Extensible LAN, RFC 7348)**:
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant CA as Container A (10.0.0.5)
-    participant VA as VTEP on Node A (192.168.1.10)
+    participant CA as Container 1 (10.0.0.2)
+    participant VA as VTEP on Node 1 (192.168.1.10)
     participant Switch as Physical Switch / Underlay
-    participant VB as VTEP on Node B (192.168.1.20)
-    participant CB as Container B (10.0.0.9)
+    participant VB as VTEP on Node 2 (192.168.1.20)
+    participant CB as Container 2 (10.0.0.3)
 
-    CA->>VA: L2 Frame: Src=10.0.0.5, Dst=10.0.0.9 (MAC_A -> MAC_B)
-    Note over VA: Lookup FDB Table (MAC_B mapped to Node B IP)<br/>Encapsulate with VXLAN Header (VNI 4096)<br/>Wrap into UDP Packet (Port 4789)
+    CA->>VA: L2 Frame: Src=10.0.0.2, Dst=10.0.0.3 (MAC_1 -> MAC_2)
+    Note over VA: Lookup FDB Table (MAC_2 mapped to Node 2 IP)<br/>Encapsulate with VXLAN Header (VNI 4096)<br/>Wrap into UDP Packet (Port 4789)
     VA->>Switch: Outer IP: 192.168.1.10 -> 192.168.1.20 (UDP 4789)
     Switch->>VB: Deliver UDP Datagram over Underlay Network
     Note over VB: Strip UDP & VXLAN Header<br/>Restore Original Layer 2 Frame
-    VB->>CB: Deliver Native Inner Ethernet Frame to Container B
+    VB->>CB: Deliver Native Inner Ethernet Frame to Container 2
 ```
 
 ### 3.1 Packet Encapsulation Structure
-When Container A sends an IP packet to Container B, the Linux kernel network stack wraps the original payload inside an outer transport envelope:
+When Container 1 sends an IP packet to Container 2, the Linux kernel network stack wraps the original payload inside an outer transport envelope:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -161,19 +164,21 @@ When Container A sends an IP packet to Container B, the Linux kernel network sta
 ├───────────────────┴───────────────────┴────────────────────────────────┤
 │                        Inner Ethernet Header                          │
 ├────────────────────────────────────────────────────────────────────────┤
-│ Inner IP Header (Src: 10.0.0.5, Dst: 10.0.0.9)                         │
+│ Inner IP Header (Src: 10.0.0.2, Dst: 10.0.0.3)                         │
 ├────────────────────────────────────────────────────────────────────────┤
 │ Application Payload (HTTP / gRPC)                                      │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
-By adding a standard 50-byte header overhead (Outer IP + UDP + VXLAN), Docker Swarm projects a flat, multi-tenant virtual Layer 2 broadcast network over arbitrary Layer 3 physical topology.
+By adding a standard 50-byte header overhead (Outer Ethernet + Outer IP + UDP + VXLAN), Docker Swarm projects a flat, multi-tenant virtual Layer 2 broadcast network over arbitrary Layer 3 physical topology.
 
 ---
 
 ## 4. Ingress Routing Mesh: Kernel-Level IPVS Load Balancing
 
-One of Swarm's most user-friendly features is the **Ingress Routing Mesh**. 
+One of Swarm's most user-friendly features is the **Ingress Routing Mesh**.
+
+### 4.1 Any-Node Ingress Access
 
 When an engineer exposes a service port across the cluster via:
 ```bash
@@ -197,7 +202,7 @@ flowchart TD
     OVERLAY --> NODE_D["<b>Node D</b><br/>Web Container 3 (Running)"]
 ```
 
-### 4.1 Kernel Implementation: Dedicated Network Namespaces & IPVS
+### 4.2 Kernel Implementation: Dedicated Network Namespaces & IPVS
 Swarm achieves this without user-space proxy overhead (such as Nginx or Envoy):
 1. Swarm instantiates a hidden dedicated network namespace on each node named **`ingress_sbox`**;
 2. When ingress traffic hits port `8080` on the physical interface, host `iptables` rules divert the stream into `ingress_sbox`;

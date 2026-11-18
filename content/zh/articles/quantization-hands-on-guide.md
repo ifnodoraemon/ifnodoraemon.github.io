@@ -133,65 +133,72 @@ llama-server \
 - 你需要针对特定业务数据做校准，榨出最高精度
 - 你就是想彻底搞懂量化到底在干什么
 
-### 2.1 AWQ 量化实战（推荐首选）
+### 2.1 AWQ 量化实战（推荐首选：已迁移至 `llm-compressor`）
 
-AWQ（Activation-Aware Weight Quantization）通过分析激活值统计信息来保护最关键的 1% 权重，是目前精度保持最优的仅权重量化方案。
+AWQ（Activation-Aware Weight Quantization）通过分析激活值统计信息来保护最关键的 ~1% 显著权重通道，是目前精度保持极佳的仅权重量化（W4A16）方案。
+
+> ⚠️ **2025–2026 工具链重要演进**：早期独立的 **`AutoAWQ` 仓库已于 2025 年正式宣布停止维护（Deprecated）**，不再适配新发布的模型架构（但已有历史 AWQ 权重仍可在 vLLM / Transformers 中正常推理加载）。目前 AWQ 算法已被正式并入 vLLM 官方统一量化工具包 **[llm-compressor](https://github.com/vllm-project/llm-compressor)**，新模型请统一使用 `AWQModifier` + `oneshot()` 进行量化。
 
 ```bash
-# 安装 AutoAWQ
-pip install autoawq
+# 安装 vLLM 官方量化工具包 llm-compressor
+pip install llmcompressor
 ```
 
 ```python
-from awq import AutoAWQForCausalLM
-from transformers import AutoTokenizer
+import torch
 from datasets import load_dataset
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from llmcompressor import oneshot
+from llmcompressor.modifiers.awq import AWQModifier
 
 # ====== 配置 ======
-model_path = "Qwen/Qwen3-8B"           # HuggingFace 模型 ID 或本地路径
-quant_path = "./Qwen3-8B-AWQ"           # 量化后的输出目录
-quant_config = {
-    "zero_point": True,                  # 启用零点量化（精度更高）
-    "q_group_size": 128,                 # 每 128 个权重共享一个缩放因子
-    "w_bit": 4,                          # 量化到 4-bit
-    "version": "GEMM",                   # 使用 GEMM 内核（兼容性最好）
-}
+model_id = "Qwen/Qwen3-8B"              # HuggingFace 模型 ID 或本地路径
+quant_path = "./Qwen3-8B-AWQ-W4A16"     # 量化后的输出目录
 
-# ====== 加载模型和分词器 ======
-model = AutoAWQForCausalLM.from_pretrained(model_path)
-tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+# ====== 加载模型与分词器 ======
+model = AutoModelForCausalLM.from_pretrained(
+    model_id, torch_dtype=torch.bfloat16, device_map="auto"
+)
+tokenizer = AutoTokenizer.from_pretrained(model_id)
 
-# ====== 准备校准数据 ======
-# AWQ 非常高效，128~256 条样本就够了！
-def get_calibration_data():
-    data = load_dataset(
-        "databricks/databricks-dolly-15k",
-        split="train[:128]"
-    )
-    return [
-        f"{x['instruction']}\n{x['context']}\n{x['response']}"
-        for x in data
-    ]
-
-calib_data = get_calibration_data()
-
-# ====== 执行量化 ======
-model.quantize(
-    tokenizer=tokenizer,
-    quant_config=quant_config,
-    calib_data=calib_data,
+# ====== 准备校准数据（AWQ 仅需 128~256 条代表性样本） ======
+ds = load_dataset("databricks/databricks-dolly-15k", split="train[:256]")
+ds = ds.map(
+    lambda x: {
+        "text": tokenizer.apply_chat_template(
+            [{"role": "user", "content": f"{x['instruction']}\n{x['context']}"},
+             {"role": "assistant", "content": x["response"]}],
+            tokenize=False,
+        )
+    }
 )
 
-# ====== 保存结果 ======
-model.save_quantized(quant_path)
+# ====== 定义 W4A16 AWQ Recipe（每 128 个权重共享缩放因子，保护输出头） ======
+recipe = [
+    AWQModifier(
+        ignore=["lm_head"],
+        scheme="W4A16_ASYM",            # 4-bit 非对称权重（含 zero_point，group_size=128）
+        targets=["Linear"],
+    )
+]
+
+# ====== 执行一键校准与压缩 ======
+oneshot(
+    model=model,
+    dataset=ds,
+    recipe=recipe,
+    output_dir=quant_path,
+    max_seq_length=2048,
+    num_calibration_samples=256,
+)
 tokenizer.save_pretrained(quant_path)
-print(f"✅ AWQ 量化完成，已保存到 {quant_path}")
+print(f"✅ 基于 llm-compressor 的 AWQ 量化完成，已保存到 {quant_path}")
 ```
 
 **校准数据要点**：
-- **数量**：128~256 条足够。AWQ 只需要统计激活值的分布特征，不需要海量数据
+- **数量**：128~256 条足够。AWQ 只需要统计激活值的通道分布特征，不需要海量数据
 - **代表性**：校准数据应该尽量接近你的实际使用场景。如果你的模型主要跑中文对话，就用中文对话数据校准
-- **OOM 兜底**：如果校准时爆显存，可以在 `model.quantize()` 中加 `max_calib_seq_len=512` 限制序列长度
+- **OOM 兜底**：如果校准时爆显存，可将 `oneshot()` 中的 `max_seq_length` 下调至 `512` 或 `1024`
 
 ### 2.2 GPTQ 量化实战（GPTQModel）
 
@@ -323,8 +330,8 @@ python convert_hf_to_gguf.py ../models/Qwen3-8B/ \
 ### 3.1 vLLM FP8 零校准（最快上手）
 
 ```bash
-# 一行参数搞定 FP8 量化
-vllm serve Qwen/Qwen3-32B-Instruct \
+# 一行参数搞定 FP8 量化（Qwen3 官方仓库统一命名为 Qwen/Qwen3-32B，原生融合思考与对话能力）
+vllm serve Qwen/Qwen3-32B \
   --quantization fp8 \
   --dtype auto \
   --gpu-memory-utilization 0.90 \
@@ -354,7 +361,7 @@ from llmcompressor import oneshot
 from datasets import load_dataset
 from transformers import AutoTokenizer
 
-model_id = "Qwen/Qwen3-32B-Instruct"
+model_id = "Qwen/Qwen3-32B"
 output_dir = "./Qwen3-32B-FP8-Static"
 
 # 准备少量校准数据（512 条即可）
@@ -404,7 +411,7 @@ vllm serve ./Qwen3-32B-FP8-Static \
 除了模型权重，KV Cache 也是显存大户。vLLM 支持对 KV Cache 做 FP8 压缩：
 
 ```bash
-vllm serve Qwen/Qwen3-32B-Instruct \
+vllm serve Qwen/Qwen3-32B \
   --quantization fp8 \
   --kv-cache-dtype fp8_e5m2 \   # KV Cache 从 BF16 压缩为 FP8
   --enable-prefix-caching
@@ -422,7 +429,7 @@ vllm serve Qwen/Qwen3-32B-Instruct \
 
 ```text
 QLoRA 的天才设计：
-  1. 用 NF4（NormalFloat 4-bit）量化基座模型 → 70B 模型从 140GB 压缩到 ~35GB
+  1. 用 NF4（NormalFloat 4-bit）量化基座模型 → 32B 模型从 64GB 压缩到 ~16GB（可塞进 24GB RTX 4090）
   2. 冻结量化后的基座权重（不训练！）
   3. 在旁边附加微小的 LoRA 适配器（通常只有几十 MB）
   4. 只训练 LoRA 适配器，显存开销极低
@@ -436,10 +443,9 @@ from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     BitsAndBytesConfig,
-    TrainingArguments,
 )
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
-from trl import SFTTrainer
+from trl import SFTConfig, SFTTrainer
 from datasets import load_dataset
 
 # ====== 4-bit 量化配置 ======
@@ -483,12 +489,12 @@ model.print_trainable_parameters()
 # ====== 加载训练数据 ======
 dataset = load_dataset("your-dataset-here", split="train")
 
-# ====== 开始训练 ======
+# ====== 开始训练（使用新版 TRL SFTConfig + processing_class 接口） ======
 trainer = SFTTrainer(
     model=model,
     train_dataset=dataset,
-    tokenizer=tokenizer,
-    args=TrainingArguments(
+    processing_class=tokenizer,
+    args=SFTConfig(
         output_dir="./qlora-output",
         per_device_train_batch_size=4,
         gradient_accumulation_steps=4,
@@ -624,14 +630,14 @@ GPTQModel 兼容 AutoGPTQ 格式的模型文件，老模型可以直接加载。
 
 | 工具 | 类型 | 支持精度 | 维护状态 | 最佳搭配 |
 |------|------|---------|---------|---------|
-| **AutoAWQ** | 仅权重量化 | INT4 | ✅ 活跃 | vLLM / Transformers |
+| **llm-compressor** | 全量化 + 权重量化 | W4A16 (AWQ/GPTQ), FP8, INT8 | ✅ 极活跃 | vLLM 官方生产量化套件（承接原 AutoAWQ） |
 | **GPTQModel** | 仅权重量化 | INT4, INT8 | ✅ 活跃 | vLLM / Transformers |
 | **llama.cpp** | 仅权重量化 | Q2~Q8 | ✅ 极活跃 | Ollama / LM Studio |
 | **BitsAndBytes** | 仅权重量化 | NF4, INT8 | ✅ 活跃 | QLoRA 微调 |
-| **llm-compressor** | 全量化 | FP8, INT8 | ✅ 活跃 | vLLM 生产部署 |
-| **torchao** | 全量化 | INT4, INT8, FP8 | ✅ 活跃 | PyTorch 原生生态 |
+| **torchao** | 全量化 + 权重量化 | INT4, INT8, FP8 | ✅ 活跃 | PyTorch 原生生态 |
 | **HQQ** | 仅权重量化 | INT2~INT8 | ✅ 活跃 | 超低比特研究 |
 | **AQLM** | 仅权重量化 | 2-bit | ⚡ 前沿 | 极限压缩研究 |
+| ~~AutoAWQ~~ | ~~仅权重量化~~ | ~~INT4~~ | ⚠️ **2025 已弃用** | ~~已并入 `llm-compressor`（旧权重仍可推理）~~ |
 | ~~AutoGPTQ~~ | ~~仅权重量化~~ | ~~INT4, INT8~~ | ❌ **已弃用** | ~~已被 GPTQModel 替代~~ |
 
 ---
@@ -656,7 +662,7 @@ GPTQModel 兼容 AutoGPTQ 格式的模型文件，老模型可以直接加载。
 权重量化（W4A16）在计算时需要在 GPU 显存或 SRAM 中将 4-bit 权重临时反量化（Dequantize）回 FP16/BF16，因此计算延迟（Compute-bound）并未减少。量化的提速收益主要体现在显存带宽受限（Memory-bound）的单 Batch 或低并发场景；若在高并发批处理场景下，推荐采用 W8A8 或 FP8 全量化方案以调用专用 Tensor Core。
 
 ### Q3: 量化后的模型如何评估是否有严重精度受损？
-标准工程评测分为三步：第一步运行 PPL（Perplexity 困惑度测试，如 WikiText-2），若困惑度增量在 0.2 以内属于安全范围；第二步运行通用评测集（如 MMLU、GSM8k）；第三步必须在具体业务 Prompt 测试集中进行回归校验，防范代码与 JSON 格式化输出崩坏。更多评测工具配置可参考 [大模型系统化评测指南](/articles/llm-evaluation-guide/)。
+标准工程评测分为三步：第一步在同一分词器、语料与滑窗设置下对照未量化基线运行 PPL（困惑度，如 WikiText-2）做快速冒烟体检——注意 PPL 数值高度依赖语料与切词，**业界不存在“增量小于 0.1~0.2 即通用达标”的刚性绝对红线**，主要用于快速揪出灾难性量化崩塌；第二步运行通用能力基准（如 MMLU、GSM8K）；第三步必须在具体业务真实 Prompt 回归测试集上设定明确的业务准入阈值，重点防范长上下文检索、数学计算与 JSON 结构化输出退化。更多评测工具配置可参考 [大模型系统化评测指南](/articles/llm-evaluation-guide/)。
 
 ### Q4: 如何在本地快速下载并运行 Qwen3-8B-Q4_K_M.gguf 模型？
 使用 `huggingface-cli download bartowski/Qwen3-8B-GGUF --include "Qwen3-8B-Q4_K_M.gguf" --local-dir ./models` 即可高速下载。随后可通过 `./llama-cli -m ./models/Qwen3-8B-Q4_K_M.gguf -p "你好" -n 256` 运行命令行对话，或在目录下新建单行 `Modelfile`（内容为 `FROM ./models/Qwen3-8B-Q4_K_M.gguf`）后通过 `ollama create qwen3-8b -f Modelfile` 导入 Ollama。该量化版本运行时显存仅需约 5.2GB，在保留 99% 以上 FP16 精度基准的同时，可流畅运行于消费级 8GB 显卡和 Apple Silicon 设备。

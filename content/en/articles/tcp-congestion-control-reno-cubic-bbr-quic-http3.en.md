@@ -71,7 +71,7 @@ stateDiagram-v2
 #### The Fatal Flaw: Bufferbloat
 Algorithms like Reno assume that "loss equals congestion." As a result, the sender continuously inflates `cwnd`, **filling up the deep buffers of intermediate routers**. While no packets are dropped initially, packets languish in router queues for hundreds of milliseconds or even seconds, producing **severe RTT inflation and devastating queueing delays** that destroy interactive real-time performance!
 
-### 1.2 TCP Cubic: Cubic Polynomial Curve and RTT Independence
+### 1.2 TCP Cubic: Cubic Polynomial Curve and Time-Driven Window Evolution
 
 Over high-bandwidth, high-latency (High-BDP) optical networks, Reno's linear 1 MSS per RTT increment is painfully sluggish—taking hours to saturate a 10 Gbps transoceanic link.
 
@@ -85,16 +85,17 @@ Where:
 - $C$ is a scaling constant (typically ~0.4), and $\beta$ is the multiplicative decrease factor specified by RFC 8312 / RFC 9438 (default 0.7, yielding an initial window reduction of $1 - \beta = 0.3$).
 
 ```text
-Cubic Window Growth Curve (Concave and Convex Phases):
-      cwnd ^                                    / (Convex Phase: Probing New Capacity)
-           |                                  /
-           |                                /
-   W_max --+---------------------+        /
-           |   (Concave Phase)     \    /
-           |   (Rapid Catch-up)     \  /
-           |                         \/
-           +---------------------------------------------> Time t
-                                  t = K
+Cubic Window Growth Curve W(t) = C(t - K)^3 + W_max (Concave -> Plateau -> Convex):
+      cwnd ^                                           / (Convex Phase t > K: Probing New Capacity)
+           |                                         /
+           |                                      .-'
+   W_max --+ - - - - - - - - - - -.- - - - - . - '  <-- Inflection Plateau (t = K, slope -> 0)
+           |                . - '
+           |            . '   (Concave Phase t < K: Rapid Catch-up & Deceleration)
+0.7*W_max -+----------.'
+           |          |
+           +----------+-------------------+--------------> Time t
+                    t = 0               t = K
 ```
 
 - **Concave Phase**: Following packet loss, the window climbs rapidly, decelerating as it nears $W_{max}$ to gently approximate past capacity;
@@ -213,7 +214,7 @@ sysctl net.ipv4.tcp_available_congestion_control
 
 # 2. Append production configuration
 cat << 'EOF' >> /etc/sysctl.conf
-# BBR pacing strictly requires the Fair Queueing (FQ) packet scheduler
+# fq is recommended for hardware/qdisc pacing, though modern Linux TCP also provides internal pacing
 net.core.default_qdisc = fq
 # Set TCP congestion control to BBR
 net.ipv4.tcp_congestion_control = bbr

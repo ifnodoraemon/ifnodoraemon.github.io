@@ -83,6 +83,8 @@ web_docs = web_loader.load()
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai import OpenAIEmbeddings
 
+raw_text = "\n\n".join(doc.page_content for doc in docs)
+
 # 使用基于语义相似度滑窗的切分器
 semantic_splitter = SemanticChunker(
     OpenAIEmbeddings(model="text-embedding-3-small"),
@@ -124,11 +126,20 @@ chunks = semantic_splitter.create_documents([raw_text])
 ### 检索策略
 
 ```python
-from langchain_community.vectorstores import Weaviate
 import weaviate
+from langchain_weaviate import WeaviateVectorStore
+from langchain_openai import OpenAIEmbeddings
 
-# 连接向量数据库
+# 连接向量数据库 (Weaviate v4 客户端)
 client = weaviate.connect_to_local()
+
+# 绑定集合与 Embedding 模型实例化 VectorStore
+vectorstore = WeaviateVectorStore(
+    client=client,
+    index_name="EnterpriseDocs",
+    text_key="content",
+    embedding=OpenAIEmbeddings(model="text-embedding-3-small"),
+)
 
 # 创建多样性检索器（MMR: 最大边际相关性，平衡相关度与召回多样性去重）
 retriever = vectorstore.as_retriever(

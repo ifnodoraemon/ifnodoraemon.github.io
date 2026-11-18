@@ -227,7 +227,7 @@ graph TD
 
 通过双缓冲（Ping-Pong Double Buffering）机制，当消费者正在计算第 $K$ 块时，生产者早已借助 TMA 把第 $K+1$ 块静默搬入 SRAM。**数据搬运可与计算重叠，实际隐藏程度取决于块尺寸、负载和硬件**！
 
-结合最新的 FP8 低精度与块级自适应缩放（Block Scaling），FlashAttention-3 在 H100 SXM5 上狂飙出 **700~800 TFLOPS** 的吞吐极限，将硬件利用率拉至逼近理论物理极值的 75%~85%。
+在 H100 SXM5 上，FlashAttention-3 在 **FP16 / BF16** 精度下即可达到 **~740–840 TFLOPS** 的实测吞吐（相当于 H100 989.4 TFLOPS FP16/BF16 理论峰值的 **75%~85%**）；结合 **FP8** 低精度与块级量化缩放（Block Scaling）后，其前向吞吐更是进一步飙升至 **~1.2 PFLOPS（约 1,200 TFLOPS）**。
 
 ---
 
@@ -320,7 +320,7 @@ graph TD
 ### Q2: 在大模型推理服务中，既然 FlashAttention-3 在 H100 上跑分极高，为什么许多框架在生成阶段依然选择 FlashInfer？
 
 因为**基准测试的跑分条件（Benchmark）与真实在线推理的物理形态存在巨大的结构性错位**：
-- FlashAttention-3 的惊人跑分（700+ TFLOPS）主要是在**大输入长度的 Prefill（例如 $L_q = 4096, L_k = 4096$）**稠密矩阵下取得的，此时 Tensor Cores 被充分喂饱；
+- FlashAttention-3 的惊人跑分（H100 上 FP16/BF16 达 740~840 TFLOPS，FP8 达 ~1.2 PFLOPS）主要是在**大输入长度的 Prefill（例如 $L_q = 4096, L_k = 4096$）**稠密矩阵下取得的，此时 Tensor Cores 被充分喂饱；
 - 但在在线推理的大多数时间里，系统处于 **自回归 Decode 阶段（$L_q = 1$）**。此时的问题根本不是“Tensor Core 算得够不够快”，而是“单 Query 根本跑不满硬件并发”；
 - FlashInfer 的核心价值在于其**针对推理微架构的精巧工程**：原生支持 PagedAttention 的离散块寻址、针对变长多轮请求的批处理融合、以及针对长上下文 Decode 的 **Split-K 多 SM 联合切片加速**。在真实的端到端在线服务压测中，FlashInfer 能够提供更平稳的 P99 单字输出时延与更高的服务并发容量。
 

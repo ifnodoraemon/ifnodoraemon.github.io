@@ -234,20 +234,18 @@ sequenceDiagram
 在主控节点的 `/etc/opensm/opensm.conf` 中配置生产级无死锁与加速引擎：
 
 ```ini
-# 1. 强制启用 FTree 路由引擎 (若非严格对称胖树，回退到 updn)
-routing_engine ftree,updn
+# 1. 启用支持自适应路由的 Fat-Tree 引擎 ar_ftree (若拓扑不对称则依次回退至 ftree 或 updn)
+# 注：OpenSM 通过 ar_ftree / ar_updn 路由引擎及 armgr 插件下发自适应路由，而非独立的 ar_enable 指令
+routing_engine ar_ftree,ftree,updn
 
-# 2. 启用自适应路由 (Adaptive Routing) 支持
-ar_enable 1
-
-# 3. 配置子网轮巡周期 (单位秒，保持对物理链路微秒级故障的快速收敛)
+# 2. 配置子网轮巡周期 (单位秒，保持对物理链路故障的快速收敛)
 sweep_interval 3
 
-# 4. 优化多路径均衡 (配置每个端口的 LID 掩码计数，开启多 LID 硬件分流)
+# 3. 优化多路径均衡 (配置每个端口的 LID 掩码计数，开启多 LID 硬件分流)
 lmc 2
 
-# 5. 开启 SHARP 集合通信硬件拓扑树构建
-sharp_enable 1
+# 4. 开启 SHARP 集合通信硬件拓扑树管理 (0: 忽略, 1: 禁用, 2: 启用)
+sharp_enabled 2
 ```
 
 ---

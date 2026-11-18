@@ -98,7 +98,7 @@ where $s_i$ denotes the normalized routing score assigned to expert $i$.
 
 In [Chapter 01](/en/articles/inference-roofline-prefill-decode/), we derived the Roofline Model: **Arithmetic Intensity $I = \frac{\text{FLOPs}}{\text{Memory Access Bytes}}$ dictates whether hardware operates in the compute-bound or memory-bound regime**.
 
-For dense models with batch size $B$, hidden size $h$, and weight bytes $W$, forward pass arithmetic intensity is $I_{\text{dense}} \approx \frac{2 B W}{W} = 2B$ (independent of model weight size, scaling strictly with $B$).
+For dense models in BF16 (2 bytes per parameter), given batch token count $B$, parameter count $P$, and weight traffic $W = 2P$ bytes, forward FLOPs equal $2 B P = B W$, yielding an arithmetic intensity of $I_{\text{dense}} \approx \frac{2 B P}{2 P} = B\text{ FLOPs/Byte}$ (independent of parameter count, scaling strictly with $B$).
 
 In an MoE model with $E$ experts activating $k$ experts per token, consider a decode scenario with low concurrency (e.g., $B=8$ requests):
 The total assigned tokens across all experts is $B \times k = 8 \times 8 = 64$.
@@ -109,16 +109,16 @@ With $E=256$ total experts:
 When an expert processes a single token, the GPU must stream its entire set of weight matrices ($W_{\text{gate}}, W_{\text{up}}, W_{\text{down}}$) from HBM into SRAM, only to execute a single matrix-vector multiplication (GEMV):
 
 ```text
-MoE Per-Expert Arithmetic Intensity:
+MoE Per-Expert Arithmetic Intensity (BF16 Weights):
 - Prefill Phase (Long Context S=4096, B=4):
   Total assigned tokens = 4096 * 4 * 8 = 131,072
   Tokens per expert M_e ≈ 131,072 / 256 = 512
-  -> Large GEMM, I ≈ 2 * 512 = 1024 FLOPs/Byte (Saturating Tensor Core Compute-Bound zone)
+  -> Large GEMM, I ≈ 512 FLOPs/Byte (Comfortably above H100's ~295 ridge point, saturating Tensor Cores)
 
 - Decode Phase (Low Concurrency B=4):
   Total assigned tokens = 4 * 8 = 32
-  Tokens per expert M_e ≈ 32 / 256 = 0.125
-  -> Collapses to GEMV, I ≈ 2 * 1 = 2 FLOPs/Byte (Choked in HBM Memory-Bound zone)
+  Tokens per expert M_e ≈ 32 / 256 = 0.125 (Active experts typically process M_e = 1 token)
+  -> Collapses to GEMV, I ≈ 1 FLOPs/Byte (Choked in HBM Memory-Bound zone)
 ```
 
 **Takeaway 1: While MoE drastically reduces theoretical FLOPs per token, it shifts low-batch autoregressive decode deeper into the memory-bandwidth wall. Without sufficient concurrency to batch tokens across experts, MoE throughput gains degrade rapidly.**
@@ -173,7 +173,7 @@ flowchart LR
     
     SIG --> MASK["Mask Original Scores by Top-K Indices"]
     TOPK -.-> MASK
-    MASK --> NORM["Normalize Weights s_i (Zero Bias Pollution)"]
+    MASK --> NORM["Sigmoid Affinity & Top-K Normalized Weights s_i (Zero Bias Pollution)"]
     NORM --> OUT["Apply to Expert Output Combination"]
 ```
 
@@ -266,7 +266,7 @@ For hidden size $h = 7168$, BF16 (2 bytes/element), and $k = 8$ active experts:
 - Total communication per token per layer: **~224 KB**.
 
 Across 60 MoE layers, generating a single token transmits $60 \times 224 \text{ KB} \approx 13.1 \text{ MB}$ over the network fabric! At 1,000 tokens/sec cluster throughput, bi-directional fabric bandwidth must exceed **$13.1 \text{ GB/s} \times 8 \approx 105 \text{ Gbps}$**.
-This explains why **DeepSeek-V3 deployments mandate 8-node clusters connected by 3.2Tbps InfiniBand / RoCE fabrics**.
+This explains why **DeepSeek-V3 deployments mandate 8-node clusters connected by 3.2Tbps InfiniBand / RoCE fabrics**—and why next-generation Blackwell clusters consolidate 72 GPUs into a single rack-scale NVLink 5 copper domain (see [Rack-Scale SuperPoD & Collective Communication: GB200 NVL72, NVLink 5 & NCCL Internals](/en/articles/rack-scale-superpod-nvl72-nccl-collectives/)).
 
 ---
 
@@ -453,7 +453,7 @@ Deploying MoE architectures requires choosing the appropriate parallelism model 
 flowchart TD
     Q1{"Parameter Scale & Cluster Size?"}
     
-    Q1 -- "Up to 8 GPUs (Single-Node NVLink)" --> DEC_TP["Recommendation: Pure TP (Tensor Parallelism)<br/>• Simple deployment, no ragged All-to-All routing<br/>• Ideal for Mixtral-8x7B, Qwen2.5-MoE-57B"]
+    Q1 -- "Up to 8 GPUs (Single-Node NVLink)" --> DEC_TP["Recommendation: Pure TP (Tensor Parallelism)<br/>• Simple deployment, no ragged All-to-All routing<br/>• Ideal for Mixtral-8x7B, Qwen2-57B-A14B"]
     
     Q1 -- "Multi-Node Scale (e.g. 64x H100/H800)" --> Q2{"Primary Service Objective?"}
     
@@ -490,6 +490,6 @@ This represents a **Pareto-optimal architectural decision**:
 **Topology-aware placement dictates this choice:**
 - **Golden Rule**: **Confine high-frequency, latency-sensitive Tensor Parallelism (TP) strictly within single-node NVLink domains (900 GB/s bandwidth); assign Expert Parallelism (EP) to inter-node network fabrics (InfiniBand / RoCE)**.
 - Across 4 nodes with 8 GPUs each:
-  - **TP=4 + EP=8**: Each 8-GPU node is split into two independent TP=4 groups over NVLink, spanning 8 nodes via EP. This configuration provides superior network load distribution and is the standard choice for long-context, high-concurrency workloads;
+  - **TP=4 + EP=8**: Each 8-GPU node is split into two independent intra-node TP=4 groups over NVLink, forming **8 TP=4 expert-parallel groups (`EP=8`) across the 4 physical nodes**. This configuration provides finer expert load distribution and is a common choice for long-context, high-concurrency workloads;
   - **TP=8 + EP=4**: Each node forms a full TP=8 group, with EP distributed across 4 nodes. While inter-node token dispatch volume is lower, TP=8 All-Reduce latency within the node can degrade small-batch decode latency.
 Benchmark using cluster diagnostics (`all_reduce_perf` vs `all_to_all_perf`) to determine optimal sizing for your physical fabric.

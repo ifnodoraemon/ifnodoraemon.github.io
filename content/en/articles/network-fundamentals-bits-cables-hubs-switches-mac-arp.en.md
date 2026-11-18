@@ -83,7 +83,7 @@ When link distances exceed 100 meters (the physical limit of copper Ethernet) or
 | **Limiting Factor** | **Modal Dispersion** (pulse spreading over distance) | Near-zero modal dispersion |
 | **Wavelength** | 850 nm | 1310 nm / 1550 nm |
 | **Reach** | Tens to hundreds of meters (intra-datacenter racks) | Kilometers to tens of kilometers (campus backbones, metro/WAN) |
-| **Jacket Color** | Aqua / Orange (OM3/OM4) | Yellow (OS1/OS2) |
+| **Jacket Color** | Orange (OM1/OM2) or Aqua (OM3/OM4) | Yellow (OS1/OS2) |
 
 ---
 

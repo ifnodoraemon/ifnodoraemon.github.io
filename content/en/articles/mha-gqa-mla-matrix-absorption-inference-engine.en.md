@@ -36,10 +36,10 @@ Yet, as the industry scales into **128k, 1M, and multi-turn agent contexts**, se
 During autoregressive decoding, the memory footprint generated per token is dictated strictly by the model's structural parameters:
 $$\text{KV Cache Bytes per Token} = 2 \times n_{\text{layers}} \times n_{\text{kv\_heads}} \times d_{\text{head}} \times \text{sizeof(dtype)}$$
 
-For a standard 70B parameter model (80 layers, 64 attention heads, head dimension 128, stored in FP16):
-- Each generated token requires $2 \times 80 \times 64 \times 128 \times 2 = 2.62\text{ MB}$ of KV cache;
-- When a context window stretches to 128k tokens, **a single request's KV cache monopolizes a staggering 335 GB of VRAM!**
-- This means that even on a premium server equipped with 8x 80GB NVIDIA H100 GPUs (640 GB total HBM), **the entire node cannot support even two concurrent requests at 128k context!**
+For a standard 70B-scale dense MHA model (80 layers, 64 attention heads, head dimension 128, stored in FP16):
+- Each generated token requires $2 \times 80 \times 64 \times 128 \times 2 = 2,621,440\text{ Bytes} = 2.5\text{ MiB}$ ($2.62\text{ MB}$ decimal) of KV cache;
+- When a context window stretches to $128\text{k}$ ($131,072$ tokens), **a single request's KV cache monopolizes a staggering $320\text{ GiB}$ ($343.6\text{ GB}$) of VRAM!**
+- This means that even on a premium server equipped with 8x 80GB NVIDIA H100 GPUs (640 GB total HBM, leaving ~500 GB after ~140 GB of static FP16 weights), **the entire node cannot support even two concurrent requests at 128k context!**
 
 When software and kernel optimizations reach the physical limits of memory bandwidth and hardware capacity, the only remaining path forward is: **The model architecture itself must evolve to rescue the inference engine.**
 
@@ -100,7 +100,7 @@ In 2023, Ainslie et al. introduced Grouped-Query Attention (GQA), which became t
 - With $n_{\text{kv\_heads}} = 8$, GQA delivers an **8x compression** over MHA while preserving model quality across standard benchmarks.
 
 **Yet, is an 8x reduction sufficient?**
-For an enterprise 70B model, single-token KV cache storage still requires roughly **400 KB**. At 128k context, a single session consumes 50 GB. To run cost-effective large-scale serving, the industry required a more radical architectural leap.
+For an enterprise 70B model (such as LLaMA-3-70B with 80 layers, 8 KV heads, head dim 128, in FP16), single-token KV cache storage under GQA still requires **$320\text{ KiB}$ ($327.68\text{ KB}$)**. At $128\text{k}$ ($131,072$ tokens) context, a single session still consumes **$40\text{ GiB}$ ($42.95\text{ GB}$)**. To run cost-effective large-scale serving, the industry required a more radical architectural leap.
 
 ---
 
@@ -303,7 +303,7 @@ Consequently, modern engines execute prefill using uncompressed GEMM kernels, sw
 
 ### Q3: If MLA compresses the KV cache by over 90%, why do clusters still encounter memory constraints under extreme concurrency?
 
-While MLA dramatically compresses dynamic KV cache memory, large-scale serving clusters face additional physical baselines:
+While MLA compresses dynamic KV cache memory down to just $1,152\text{ Bytes}$ ($1.13\text{ KiB}$ / $1.15\text{ KB}$) **per layer per token** ($70,272\text{ Bytes} \approx 68.6\text{ KiB}$ per token across all 61 layers of DeepSeek-V3), large-scale serving clusters face additional physical baselines under hundreds or thousands of concurrent streams:
 
 1. **Static Parameter Footprint**:
    In frontier models like DeepSeek-V3 (671B MoE with 37B active parameters), model weights occupy approximately **671 GB** in FP8 (or ~**350 GB** in 4-bit quantization with metadata), consuming significant baseline VRAM across the cluster;

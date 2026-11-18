@@ -91,7 +91,7 @@ mlxlink -d /dev/mst/mt4129_pciconf0 -m
 
 ## 二、 子网管理器双机热备（OpenSM HA）高可用架构
 
-在专栏第六讲中，我们知道 **Subnet Manager（SM）** 是整个 InfiniBand 织网的神经中枢。如果集群中唯一的 SM 节点掉电，虽然现存连接不受影响，但网络将彻底丧失拓扑自愈能力。
+在专栏第十讲中，我们知道 **Subnet Manager（SM）** 是整个 InfiniBand 织网的神经中枢。如果集群中唯一的 SM 节点掉电，虽然现存连接不受影响，但网络将彻底丧失拓扑自愈能力。
 
 在生产环境中，必须在两台独立的物理主控节点（Head01 与 Head02）上配置 **Master / Standby 仲裁高可用**：
 
@@ -102,11 +102,11 @@ flowchart TD
     end
 
     subgraph Head01["主控节点 01 (Head Node 1)"]
-        SM1["<b>OpenSM (Master)</b><br/>优先级 priority = 15 (最高)<br/>负责生成 LFT / 拓扑扫描"]
+        SM1["<b>OpenSM (Master)</b><br/>优先级 sm_priority = 15 (最高)<br/>负责生成 LFT / 拓扑扫描"]
     end
 
     subgraph Head02["主控节点 02 (Head Node 2)"]
-        SM2["<b>OpenSM (Standby)</b><br/>优先级 priority = 1 (备用)<br/>处于待命状态 / 实时监听"]
+        SM2["<b>OpenSM (Standby)</b><br/>优先级 sm_priority = 1 (备用)<br/>处于待命状态 / 实时监听"]
     end
 
     SM1 ===|"全权主导管理 (SMPs)"| SwitchFabric
@@ -119,24 +119,23 @@ flowchart TD
 在主节点 Head01 上配置高优先级：
 ```ini
 # 1. 仲裁优先级 (取值范围 0 ~ 15，值越大优先级越高)
-priority 15
+sm_priority 15
 
-# 2. 指定无死锁 FTree 胖树路由算法
-routing_engine ftree,updn
+# 2. 指定支持自适应路由的无死锁胖树引擎 (依次回退至 ftree, updn)
+routing_engine ar_ftree,ftree,updn
 
 # 3. 子网轮巡周期 (秒)
 sweep_interval 3
 
-# 4. 启用硬件级自适应路由与 SHARP
-ar_enable 1
-sharp_enable 1
+# 4. 启用 SHARP 硬件级集合通信树支持 (0: 忽略, 1: 禁用, 2: 启用)
+sharp_enabled 2
 
 # 5. 日志与转发表输出路径
 log_file /var/log/opensm.log
 dump_files_dir /var/log/opensm_dump/
 ```
 
-在备用节点 Head02 上，除配置 `priority 1` 外，其余参数保持完全对称。
+在备用节点 Head02 上，除配置 `sm_priority 1` 外，其余参数保持完全对称。
 
 ### 2.2 验证主备选举状态
 通过 `sminfo` 命令实时查询当前子网选举出的 Master SM：
@@ -159,14 +158,14 @@ sminfo
 flowchart LR
     Run["<b>执行 ibdiagnet</b>"] --> Scan["全网定向管理包 (SMP) 扫描"]
     Scan --> Report1["<b>ibdiagnet2.net_dump</b><br/>全网拓扑与连通性图谱"]
-    Scan --> Report2["<b>ibdiagnet2.pm_info</b><br/>物理层性能计数器与误码率"]
+    Scan --> Report2["<b>ibdiagnet2.pm</b><br/>物理层性能计数器与误码率"]
     Scan --> Report3["<b>ibdiagnet2.log</b><br/>严重告警清单 (降速/错误统计)"]
 ```
 
 ### 3.1 运行全网深度体检
 ```bash
-# 针对 mlx5_0 端口执行全网物理层扫描并输出到指定目录
-ibdiagnet -c 50000 -v -o /var/log/ibdiagnet_report/
+# 针对 mlx5_0 端口执行全网物理层扫描与 10 秒计数器采样，并输出到指定目录
+ibdiagnet -i mlx5_0 -P all=1 --pm_pause_time 10 -o /var/log/ibdiagnet_report/
 ```
 
 ### 3.2 揪出物理层隐患的核心指标
@@ -233,7 +232,7 @@ export NCCL_NET_GDR_LEVEL=5
 # 4. 优化环形缓冲区内存大小 (NDR 400G / XDR 800G 推荐设置为 8MB，大幅提升并发流吞吐)
 export NCCL_BUFFSIZE=8388608
 
-# 5. 开启自适应路由协同与 SHARP 支持 (在支持的集群中)
+# 5. 开启 GPUDirect RDMA Read 与 SHARP 硬件集合通信卸载
 export NCCL_NET_GDR_READ=1
 export NCCL_COLLNET_ENABLE=1
 ```
@@ -304,7 +303,7 @@ flowchart TD
 2. 过滤降速协商（Speed Mismatch）：
    在输出的 `ibdiagnet2.log` 中搜索字符串 `speed mismatch` 或 `width mismatch`。此项会直接列出本应运行在 4X NDR (400G) 却意外降速协商在 2X 或 HDR (200G) 的具体交换机 GUID 与端口号；
 3. 过滤高误码端口（Symbol Errors）：
-   在 `ibdiagnet2.pm_info` 中，查找 `SymbolErrorCounter` 计数器非零且数值最大的端口。
+   在 `ibdiagnet2.pm`（或结构化文件 `ibdiagnet2.db_csv` 的 `[PM_INFO]` 段）中，查找 `SymbolErrorCounter` 计数器非零且持续增长的端口。
 定位后，运维工程师直接携带光纤清洁笔或备用光模块，按照报告给出的机架位置精确定向更换，无需盲目排查全网。
 
 ### Q3: 在双机 OpenSM（主备 HA）部署中，如果两台主控节点之间的网络出现异常，如何防止“脑裂（Split-Brain）”引发全网震荡？

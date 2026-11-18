@@ -75,7 +75,7 @@ flowchart TD
 
 现代数据中心网络物理架构的数学基石，源于贝尔实验室数学家 Charles Clos 在 1953 年发表的电话交换网络研究 —— **Clos 网络（Clos Network）**。现代网络将其折叠实现为 **两层 Leaf-Spine 架构**：
 
-### 1.1 2-Tier Leaf-Spine（折叠 Clos 拓扑）
+### 2.1 2-Tier Leaf-Spine（折叠 Clos 拓扑）
 
 ```mermaid
 flowchart TD
@@ -107,9 +107,9 @@ flowchart TD
 #### 拓扑铁律
 1. **全互联（Full Mesh）**：每一台 Leaf 交换机必须且仅连接到所有的 Spine 交换机；
 2. **同层隔离**：Spine 之间禁止互联，Leaf 之间禁止互联；
-3. **两跳确定性时延（Deterministic 2-Hop Latency）**：任意机架的 Server A 到任意异构机架的 Server B，**数据包跨越交换机的路径永远且严格等于 3 跳（Leaf 1 $\to$ 任一 Spine $\to$ Leaf 2）**，消除了传统网络的跳数不确定性。
+3. **确定性等距时延（Deterministic Equidistant Latency）**：任意机架的 Server A 到任意异构机架的 Server C（如跨机架通信），**数据包固定经过 3 台交换机（Leaf 1 $\to$ 任一 Spine $\to$ Leaf 2，即 2 段交换机间骨干链路）**，彻底消除了传统网络的跳数不确定性。
 
-### 1.2 无阻塞（Non-blocking）与收敛比（Oversubscription Ratio）数学推导
+### 2.2 无阻塞（Non-blocking）与收敛比（Oversubscription Ratio）数学推导
 
 衡量数据中心网络是否会出现拥塞的核心指标是**收敛比（Oversubscription Ratio）**：
 
@@ -128,7 +128,7 @@ $$R = \frac{12.8\text{Tbps}}{12.8\text{Tbps}} = 1:1$$
 
 ---
 
-## 二、 Underlay 底层网络：eBGP 路由与 ECMP 五元组哈希极化
+## 三、 Underlay 底层网络：eBGP 路由与 ECMP 五元组哈希极化
 
 物理连线搞定后，如何在无环的前提下把流量均摊到所有 Spine 交换机？数据中心普遍采用 **L3 路由到机柜顶（Routing on the Host / ToR）**。
 
@@ -150,11 +150,11 @@ flowchart TD
     Leaf2 -- eBGP Session --- Spine1 & Spine2
 ```
 
-### 2.1 为什么是 eBGP 而非 OSPF/IS-IS？
+### 3.1 为什么是 eBGP 而非 OSPF/IS-IS？
 1. **故障爆炸半径最小化**：OSPF/IS-IS 是链路状态协议（Link-State），单根光纤抖动会触发全网洪泛计算 SPF，极易引发全网 CPU 占满雪崩；eBGP 是距离矢量路径协议（Path Vector），天然具备精准路由衰减与步步过滤机制；
 2. **环路预防极简**：利用 BGP 属性 `AS_PATH`，只要发现路径包含自身 ASN 立刻丢弃，天然杜绝路由环路。
 
-### 2.2 ECMP 等价多路径与“哈希极化（Hash Polarization）”灾难
+### 3.2 ECMP 等价多路径与“哈希极化（Hash Polarization）”灾难
 
 Leaf 交换机到达目标目的 IP 时，拥有去往多个 Spine 的等价路由。交换机 ASIC 硬件通过计算报文的**五元组散列（五元组：源 IP、目的 IP、协议号、源端口、目的端口）**：
 
@@ -168,11 +168,11 @@ $$\text{Egress Port} = \text{Hash}(\text{SrcIP, DstIP, Protocol, SrcPort, DstPor
 
 ---
 
-## 三、 Overlay 虚拟化网络：EVPN-VXLAN 深度解密
+## 四、 Overlay 虚拟化网络：EVPN-VXLAN 深度解密
 
 物理 Underlay 虽好，但它是一个纯三层（L3）路由网络。而多租户云计算、容器跨节点漂移、K8s CNI 大二层通信，强烈要求在不同的物理宿主机之间保持**虚拟局域网（L2）的连通性**。
 
-### 3.1 VXLAN：MAC-in-UDP 报文物理封装透视
+### 4.1 VXLAN：MAC-in-UDP 报文物理封装透视
 
 VXLAN（RFC 7348）将虚拟机的二层 MAC 帧直接打包塞入标准物理 UDP 报文中：
 
@@ -197,7 +197,7 @@ VXLAN 数据包物理层层嵌套结构:
 2. **UDP 源端口哈希**：VXLAN 将内层报文五元组计算出的 Hash 写入外层 UDP 的源端口（SrcPort），**使得物理网络中的 Spine/Leaf 交换机无需感知 VXLAN 内容，即可天然通过标准 ECMP 将同一个虚拟机的不同流均摊到所有物理光缆上！**
 3. **Jumbo Frame（巨型帧）工程最佳实践**：外层封装额外增加了 $14 + 20 + 8 + 8 = 50$ 字节开销。虽然 RFC 7348 协议本身并不强制要求底层开启巨型帧（可通过将虚机/容器内部 MTU 降至 1450 来适配 1500 Underlay），但在生产数据中心中，强烈推荐将 Underlay 交换机物理端口 MTU 统一调大至 1600+ 或 9000/9216 字节，使虚拟机无需降 MTU 即可无分片跑满 1500 载荷；
 
-### 3.2 控制平面救星：MP-BGP EVPN
+### 4.2 控制平面救星：MP-BGP EVPN
 
 早期的传统 VXLAN 没有独立的控制平面，只能采用洪泛学习（Flood and Learn）机制，把 ARP 请求以组播方式广播给全网所有的 VTEP，极易造成大二层网络瘫痪。
 
@@ -222,7 +222,7 @@ sequenceDiagram
 
 ---
 
-## 四、 Linux 宿主机原生 VXLAN 实战配置
+## 五、 Linux 宿主机原生 VXLAN 实战配置
 
 在两台物理宿主机（Host A: `192.168.10.1`, Host B: `192.168.10.2`）之间手工拉起 VXLAN 互通隧道：
 
@@ -255,7 +255,7 @@ ping 10.100.0.2
 
 ---
 
-## 五、 总结与进阶预告
+## 六、 总结与进阶预告
 
 从 Clos 网络拓扑的数学收敛比推导，到 eBGP Underlay 与 ECMP 哈希极化破除，再到 EVPN-VXLAN 的 MAC-in-UDP 报文隧道化与控制平面信令，现代数据中心网络完成了对物理拓扑与逻辑业务的彻底解耦。
 

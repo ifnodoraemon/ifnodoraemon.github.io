@@ -71,7 +71,7 @@
               <td>
                 <div class="model-name-cell">
                   <span class="model-name-title">{{ m.name }}</span>
-                  <span class="model-provider-sub">{{ m.provider }} · <span class="model-chip">{{ m.badge }}</span></span>
+                  <span class="model-provider-sub">{{ m.provider }} · <span class="model-chip">{{ isEn ? m.badgeEn : m.badgeZh }}</span></span>
                 </div>
               </td>
               <td>
@@ -109,16 +109,20 @@ const outputTokens = ref(800);
 const batchCalls = ref(1000);
 
 const MODEL_PRICING = [
-  { id: 'claude-haiku-5.5', name: 'Claude Haiku 5.5', provider: 'Anthropic', inputPerM: 0.20, outputPerM: 0.80, contextWindow: 500000, badge: '极速可调思考' },
-  { id: 'gemini-3.8-flash', name: 'Gemini 3.8 Flash', provider: 'Google', inputPerM: 0.15, outputPerM: 0.60, contextWindow: 2000000, badge: '240 TPS极速' },
-  { id: 'deepseek-v4.1-flash', name: 'DeepSeek-V4.1-Flash', provider: 'DeepSeek', inputPerM: 0.12, outputPerM: 0.48, contextWindow: 262144, badge: '高质价比MoE' },
-  { id: 'kimi-k3', name: 'Kimi K3 (2.8T)', provider: 'Moonshot AI', inputPerM: 1.20, outputPerM: 4.80, contextWindow: 1000000, badge: 'KDA长文' },
-  { id: 'glm-5.3', name: 'GLM-5.3', provider: 'Zhipu AI', inputPerM: 0.50, outputPerM: 2.00, contextWindow: 1000000, badge: 'Agent环境' },
-  { id: 'claude-sonnet-5.5', name: 'Claude Sonnet 5.5', provider: 'Anthropic', inputPerM: 3.00, outputPerM: 15.00, contextWindow: 1000000, badge: '生产级主力' },
-  { id: 'gpt-6.1-sol', name: 'GPT-6.1 Sol', provider: 'OpenAI', inputPerM: 2.00, outputPerM: 8.00, contextWindow: 1100000, badge: '1.1M窗口推荐' },
-  { id: 'gemini-4-argon', name: 'Gemini 4 Argon', provider: 'Google', inputPerM: 3.00, outputPerM: 12.00, contextWindow: 2000000, badge: 'Google新旗舰' },
-  { id: 'gpt-6-astra', name: 'GPT-6 Astra', provider: 'OpenAI', inputPerM: 3.50, outputPerM: 14.00, contextWindow: 1000000, badge: '全能博弈推理' },
-  { id: 'claude-opus-5.5', name: 'Claude Opus 5.5', provider: 'Anthropic', inputPerM: 9.00, outputPerM: 36.00, contextWindow: 1000000, badge: 'SWE 91.2%王座' }
+  { id: 'muse-ember', name: 'Muse Ember (Meta)', provider: 'Meta', inputPerM: 0.10, outputPerM: 0.50, contextWindow: 1000000, badgeZh: '2026.11极速编排', badgeEn: 'High-Volume Agentic' },
+  { id: 'minimax-m3.1-flash', name: 'MiniMax M3.1 Flash', provider: 'MiniMax', inputPerM: 0.15, outputPerM: 0.60, contextWindow: 1000000, badgeZh: '23B激活开源操控', badgeEn: 'Open Computer-Use' },
+  { id: 'claude-haiku-5.5', name: 'Claude Haiku 5.5', provider: 'Anthropic', inputPerM: 0.20, outputPerM: 0.80, contextWindow: 1000000, badgeZh: '1M窗口可调思考', badgeEn: '1M Adjustable Effort' },
+  { id: 'deepseek-v4.1-flash', name: 'DeepSeek-V4.1-Flash-1017', provider: 'DeepSeek', inputPerM: 0.30, outputPerM: 1.20, contextWindow: 1000000, badgeZh: '552B原生多模态', badgeEn: '552B Multimodal MoE' },
+  { id: 'deepseek-v4-pro', name: 'DeepSeek-V4-Pro', provider: 'DeepSeek', inputPerM: 0.30, outputPerM: 1.20, contextWindow: 1000000, badgeZh: '1.6T开源旗舰(峰时)', badgeEn: '1.6T Open-Weights' },
+  { id: 'glm-5.3', name: 'GLM-5.3', provider: 'Zhipu AI', inputPerM: 0.50, outputPerM: 2.00, contextWindow: 1000000, badgeZh: '753B环境缩放强化', badgeEn: '753B Env Scaling' },
+  { id: 'qwen4-max', name: 'Qwen4-Max (~2.4T)', provider: 'Alibaba', inputPerM: 1.50, outputPerM: 4.50, contextWindow: 1000000, badgeZh: '11.16全模态旗舰', badgeEn: 'Nov 16 Omnimodal' },
+  { id: 'gemini-4-hydrogen', name: 'Gemini 4 Hydrogen', provider: 'Google', inputPerM: 1.50, outputPerM: 7.50, contextWindow: 1000000, badgeZh: '11.12四档思考执行', badgeEn: '4-Tier Fast Exec' },
+  { id: 'kimi-k3.1-pro', name: 'Kimi K3.1 Pro (2.8T)', provider: 'Moonshot AI', inputPerM: 2.00, outputPerM: 10.00, contextWindow: 1048576, badgeZh: 'Gated-DSA+KDA开源', badgeEn: '2.8T Gated-DSA Open' },
+  { id: 'gpt-6.2-sol', name: 'GPT-6.2 Sol', provider: 'OpenAI', inputPerM: 2.00, outputPerM: 10.00, contextWindow: 1050000, badgeZh: '11.17生产级主力', badgeEn: '1.05M SWE Workhorse' },
+  { id: 'gemini-4-carbon', name: 'Gemini 4 Carbon', provider: 'Google', inputPerM: 2.00, outputPerM: 10.00, contextWindow: 1000000, badgeZh: 'LMArena#1(11月特惠)', badgeEn: '#1 Arena (Nov Promo)' },
+  { id: 'claude-opus-5.5', name: 'Claude Opus 5.5', provider: 'Anthropic', inputPerM: 4.00, outputPerM: 20.00, contextWindow: 1000000, badgeZh: '日常SWE与终端标杆', badgeEn: 'Daily CLI & SWE' },
+  { id: 'claude-fable-5.2', name: 'Claude Fable 5.2', provider: 'Anthropic', inputPerM: 8.00, outputPerM: 40.00, contextWindow: 1000000, badgeZh: '11.09 AA智能榜首', badgeEn: '#1 AA v5 (64.6)' },
+  { id: 'gpt-6.2-astra', name: 'GPT-6.2 Astra', provider: 'OpenAI', inputPerM: 8.00, outputPerM: 40.00, contextWindow: 1050000, badgeZh: '11.17全能科研旗舰', badgeEn: 'Nov 17 Flagship' }
 ];
 
 // Heuristic BPE token estimator

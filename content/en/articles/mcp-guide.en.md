@@ -101,6 +101,7 @@ MCP defines three core capability vectors — **Tools, Resources, and Prompts** 
 Tools are **executable functions** that AI can invoke. Each Tool has a strict JSON Schema defining its input/output format.
 
 ```python
+import httpx
 from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("Weather Service")
@@ -146,6 +147,13 @@ sequenceDiagram
 Resources are **structured data sources** that AI can read — file contents, database records, API responses, etc. They provide contextual information without side effects.
 
 ```python
+import json
+from pathlib import Path
+from typing import Any
+
+# Assume an initialized async database pool in production (e.g., asyncpg.Pool)
+db: Any = ...
+
 @mcp.resource("file://project/{path}")
 async def read_project_file(path: str) -> str:
     """Read project file contents"""
@@ -155,11 +163,13 @@ async def read_project_file(path: str) -> str:
     return file_path.read_text(encoding="utf-8")
 
 @mcp.resource("db://users/{user_id}")
-async def get_user_profile(user_id: int) -> dict:
-    """Get user profile information"""
+async def get_user_profile(user_id: int) -> str:
+    """Get user profile information as a JSON string"""
     async with db.acquire() as conn:
         user = await conn.fetchrow("SELECT * FROM users WHERE id = $1", user_id)
-        return dict(user)
+        if user is None:
+            raise ValueError(f"User not found: {user_id}")
+        return json.dumps(dict(user))
 ```
 
 | Comparison | Tools | Resources |
@@ -200,17 +210,30 @@ MCP's underlying communication is based on the **JSON-RPC 2.0** standard, suppor
 
 For **local process** communication — the Host directly forks a child process as the Server:
 
+Request (call a tool):
+
 ```json
-// Request: call a tool
-{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
     "name": "get_weather",
     "arguments": {"city": "New York", "unit": "fahrenheit"}
-}}
+  }
+}
+```
 
-// Response: return result
-{"jsonrpc": "2.0", "id": 1, "result": {
+Response (return result):
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
     "content": [{"type": "text", "text": "New York: 72°F, Sunny"}]
-}}
+  }
+}
 ```
 
 ### 2. Streamable HTTP
@@ -233,7 +256,7 @@ sequenceDiagram
 
 **Key features:**
 - **Session management** via `Mcp-Session-Id` header
-- Short operations return direct JSON responses; long operations auto-upgrade to **SSE streaming**
+- A Streamable HTTP `POST` response can be either JSON or SSE; it is not an automatic duration-based protocol guarantee
 - Support for resumable connections and reconnection
 
 ## MCP vs Function Calling: Evolution, Not Replacement
@@ -265,8 +288,9 @@ pip install "mcp[cli]"
 
 ```python
 # note_server.py
-from mcp.server.fastmcp import FastMCP
+import json
 from datetime import datetime
+from mcp.server.fastmcp import FastMCP
 
 # Initialize MCP Server
 mcp = FastMCP("Note Manager")
@@ -276,7 +300,7 @@ notes: dict[str, dict] = {}
 
 # ── Tool: Create a note ──
 @mcp.tool()
-async def create_note(title: str, content: str, tags: list[str] = []) -> dict:
+async def create_note(title: str, content: str, tags: list[str] | None = None) -> dict:
     """Create a new note.
 
     Args:
@@ -284,6 +308,7 @@ async def create_note(title: str, content: str, tags: list[str] = []) -> dict:
         content: Note body content (supports Markdown)
         tags: Tag list for categorization and search
     """
+    tags = tags or []
     note_id = f"note_{len(notes) + 1}"
     notes[note_id] = {
         "id": note_id,
@@ -315,11 +340,11 @@ async def search_notes(keyword: str = "", tag: str = "") -> list[dict]:
 
 # ── Resource: Get note details ──
 @mcp.resource("note://{note_id}")
-async def get_note(note_id: str) -> dict:
-    """Get the full content of a specified note"""
+async def get_note(note_id: str) -> str:
+    """Get the full content of a specified note as a JSON string"""
     if note_id not in notes:
         raise ValueError(f"Note {note_id} does not exist")
-    return notes[note_id]
+    return json.dumps(notes[note_id])
 
 # ── Prompt: Note summary template ──
 @mcp.prompt()
@@ -349,8 +374,8 @@ Register the Server in Claude Desktop's `claude_desktop_config.json`:
   "mcpServers": {
     "notes": {
       "command": "python",
-      "args": ["/path/to/your/project/note_server.py"],
-      }
+      "args": ["/path/to/your/project/note_server.py"]
+    }
   }
 }
 ```

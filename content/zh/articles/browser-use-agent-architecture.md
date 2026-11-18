@@ -155,7 +155,7 @@ Browser-use 采用了顶级的 **Set-of-Mark (SoM) 视觉标记法**：
 
 ### 1. 安装核心依赖
 ```bash
-pip install browser-use playwright langchain-openai
+pip install browser-use playwright
 playwright install chromium
 ```
 
@@ -164,40 +164,31 @@ playwright install chromium
 ```python
 import os
 import asyncio
-from browser_use import Agent, Browser, BrowserConfig
-from browser_use.browser.context import BrowserContextConfig
-from langchain_openai import ChatOpenAI
+from browser_use import Agent, BrowserProfile, BrowserSession, ChatOpenAI
 
 # 1. 配置具备视觉能力的多模态大模型底座
-# 生产环境强烈推荐使用具备强大视觉定位能力的模型 (如 GPT-4o, Claude 3.7 Sonnet 或 Qwen2.5-VL)
+# 生产环境强烈推荐使用具备强大视觉定位能力的模型 (如 GPT-5.4、Claude Sonnet 4.6、Gemini 3.1 Pro 或 Qwen2.5-VL)
 llm = ChatOpenAI(
-    model="gpt-4o",
+    model="gpt-5.4",
     temperature=0.0,
-    api_key=os.getenv("OPENAI_API_KEY")
+    api_key=os.getenv("OPENAI_API_KEY"),
 )
 
-# 2. 工业级浏览器环境防封与稳定性配置
-browser_config = BrowserConfig(
+# 2. 工业级浏览器环境防封与稳定性配置 (browser-use 1.0+ BrowserProfile)
+profile = BrowserProfile(
     headless=False,            # 调试阶段设为 False 观察执行过程，生产部署可配置为 True
     disable_security=True,     # 忽略企业内网自签名 SSL 证书报错
-    extra_chromium_args=[
+    window_size={"width": 1920, "height": 1080},
+    record_video_dir="./recordings", # 录制每一步操作视频用于审计排错
+    args=[
         "--disable-blink-features=AutomationControlled", # 抹除 Webdriver 自动化标记
         "--no-sandbox",
-        "--window-size=1920,1080"
-    ]
-)
-
-# 3. 配置持久化用户会话与存储上下文
-context_config = BrowserContextConfig(
-    viewport={"width": 1920, "height": 1080},
-    save_recording_path="./recordings", # 录制每一步操作视频用于审计排错
-    locale="zh-CN"
+    ],
 )
 
 async def run_enterprise_workflow():
-    # 初始化受控浏览器实例
-    browser = Browser(config=browser_config)
-    context = await browser.new_context(config=context_config)
+    # 3. 初始化受控浏览器会话
+    browser_session = BrowserSession(browser_profile=profile)
 
     # 4. 定义具备自然语言业务意图的复杂目标
     task_prompt = """
@@ -208,25 +199,25 @@ async def run_enterprise_workflow():
     5. 等待下载完成，并验证屏幕上是否弹出 '导出成功' 提示
     """
 
-    # 5. 实例化 Browser-use 智能体
-    agent = Agent(
-        task=task_prompt,
-        llm=llm,
-        browser_context=context,
-        use_vision=True,               # 开启 SoM 视觉截图双模态定位
-        max_failures=3,                # 允许单步连续失败的最大重试次数
-        max_actions_per_step=4         # 允许单轮循环中执行复合动作以提升速度
-    )
+    try:
+        # 5. 实例化 Browser-use 智能体
+        agent = Agent(
+            task=task_prompt,
+            llm=llm,
+            browser_session=browser_session,
+            use_vision=True,               # 开启 SoM 视觉截图双模态定位
+            max_failures=3,                # 允许单步连续失败的最大重试次数
+            max_actions_per_step=4,        # 允许单轮循环中执行复合动作以提升速度
+        )
 
-    print("🚀 启动 Browser-use 企业级自主网页智能体...")
-    history = await agent.run(max_steps=25)
+        print("🚀 启动 Browser-use 企业级自主网页智能体...")
+        history = await agent.run(max_steps=25)
 
-    print("\n✅ 任务执行报告汇总:")
-    print(history.final_result())
-
-    # 清理并安全关闭会话
-    await context.close()
-    await browser.close()
+        print("\n✅ 任务执行报告汇总:")
+        print(history.final_result())
+    finally:
+        # 清理并安全关闭会话
+        await browser_session.stop()
 
 if __name__ == "__main__":
     asyncio.run(run_enterprise_workflow())

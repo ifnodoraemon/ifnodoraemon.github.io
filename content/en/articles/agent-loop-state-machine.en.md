@@ -441,7 +441,7 @@ For deep dives into external retrieval and context hygiene, explore our practica
 
 Deterministic control flows form the **first essential pillar** of production-grade agent engineering. Once the deterministic skeleton is locked in, advanced reasoning capabilities can be deployed safely without jeopardizing business reliability.
 
-Explore the complete curriculum across the 10 chapters of this handbook:
+Explore the complete curriculum across all 14 chapters of this handbook:
 
 1. **[Part 1 (Current) · Agentic Loops & State Machine Design: From ReAct to Deterministic Control Flows](/en/articles/agent-loop-state-machine/)**  
    *Foundational state machine topologies, transition guards, and circuit breaker patterns.*
@@ -461,10 +461,16 @@ Explore the complete curriculum across the 10 chapters of this handbook:
    *Multi-agent swarms, combating compounding error rates, and automated benchmark evals.*
 9. **[Part 9 · Agent Observability & Debugging: From Black Box to White Box](/en/articles/agent-observability-debugging/)**  
    *OpenTelemetry, LangSmith, and trajectory replay for complete execution transparency.*
-10. **[Part 10 · How Environment Scaling Reshapes Autonomous Agents: Sandboxing & RL](/en/articles/environment-scaling-agent-guide/)**  
-    *Post-training environment exploration, zero-escape container sandboxing, and benchmark dominance.*
-11. **[Part 11 · AI Agent Memory Architecture: Working Memory, Short-Term Buffers, and Long-Term Episodic Storage](/en/articles/agent-memory-architecture/)**  
-    *Deep architectural breakdown of ephemeral scratchpads, checkpointer persistence, and vector/graph episodic memory.*
+10. **[Part 10 · Beyond Simple Prompts: How Environment Scaling Is Reshaping Autonomous Agents](/en/articles/environment-scaling-agent-guide/)**  
+    *Resettable task environments, independent verifiers, sandbox lifecycle cleanup, and sourced benchmark analysis.*
+11. **[Part 11 · AI Agent Memory Architecture: From Working Memory to Episodic Memory & Hierarchical Graph RAG](/en/articles/agent-memory-architecture/)**  
+    *Ephemeral scratchpads, provenance, ACLs, temporal conflict handling, and cascading deletion.*
+12. **[Part 12 · Building a Lightweight Agent Framework from Scratch: State Machines and Event Streams](/en/articles/build-lightweight-agent-framework/)**  
+    *SQLite-backed approval checkpoints, single-use claims, worker restart recovery, and async event streams.*
+13. **[Part 13 · Advanced Tool Use in Agent Architecture: Dynamic Discovery, Sandboxing, and Self-Healing Recovery](/en/articles/advanced-agent-tool-use-and-function-calling/)**  
+    *Domain-scoped tool retrieval, paginated MCP discovery, gVisor container cleanup, and bounded recovery.*
+14. **[Part 14 · Communication Protocols and Concurrency Control in Multi-Agent Systems](/en/articles/multi-agent-collaboration-and-concurrency/)**  
+    *In-process asyncio actor mailboxes, bounded backpressure, CAS optimistic locking, and token-bucket rate limiting.*
 
 ---
 

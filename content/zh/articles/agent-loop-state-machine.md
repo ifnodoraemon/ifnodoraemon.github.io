@@ -186,7 +186,6 @@ deterministic_agent_fsm.py
 工业级确定性 Agent 状态机引擎（包含熔断器、严格参数校验与状态隔离）
 """
 
-import json
 import logging
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
@@ -457,7 +456,7 @@ if __name__ == "__main__":
 
 状态机控制流是构筑高可靠生产 Agent 的**第一块基石**。只有锁死了确定性控制骨架，大模型的高阶推理与工具调用能力才能真正发挥工业级威力。
 
-本专栏后续章节将沿着工业级智能体落地演进的全流程展开，读者可按照以下技术脉络深入研读：
+本专栏共 14 篇深度实战指南，沿着工业级智能体落地演进的全流程展开，读者可按照以下技术脉络深入研读：
 
 1. **[第 1 篇（本文）· Agent 执行循环与状态机设计：从 ReAct 到确定性控制流](/articles/agent-loop-state-machine/)**  
    *确立状态机、拓扑迁移与熔断降级的控制流基石。*
@@ -477,10 +476,16 @@ if __name__ == "__main__":
    *从单 Agent 走向多智能体团队协作，剖析 LangGraph、Swarm 与生产级可靠性基准评测。*
 9. **[第 9 篇 · Agent 可观测性与调试：从黑盒到白盒的进阶之路](/articles/agent-observability-debugging/)**  
    *引入 OpenTelemetry、LangSmith 与 Langfuse，建立全链路 Trajectory 评估与执行回放。*
-10. **[第 10 篇 · 环境缩放 (Environment Scaling) 如何重塑自主 Agent：沙箱博弈与强化学习](/articles/environment-scaling-agent-guide/)**  
-    *进阶探索后训练时代的环境交互扩展，掌握零逃逸安全容器沙箱与自主探索智能体。*
-11. **[第 11 篇 · AI Agent 记忆架构体系：工作记忆、短期会话与长期记忆工程落地](/articles/agent-memory-architecture/)**  
-    *深度拆解短期工作记忆 (Scratchpad)、Checkpointer 任务快照持久化与向量/图数据库长程情节记忆。*
+10. **[第 10 篇 · 环境缩放 (Environment Scaling) 如何重塑自主 Agent](/articles/environment-scaling-agent-guide/)**  
+    *聚焦可重置交互环境、独立验收器、容器生命周期清理与终端基准科学解读。*
+11. **[第 11 篇 · AI Agent 记忆系统设计：从工作记忆、情景记忆到分层 Graph RAG](/articles/agent-memory-architecture/)**  
+    *深度拆解短期工作记忆 (Scratchpad)、Checkpointer 快照与带权限/冲突治理的长程记忆。*
+12. **[第 12 篇 · 从零手搓轻量级 Agent 框架：基于状态机与事件流的设计模式](/articles/build-lightweight-agent-framework/)**  
+    *基于 Python 标准库与 SQLite 实现审批检查点、单次消费恢复与异步事件流引擎。*
+13. **[第 13 篇 · Agent 开发中的 Tool Use 进阶：动态发现、沙箱隔离与错误恢复](/articles/advanced-agent-tool-use-and-function-calling/)**  
+    *落地动态工具检索、MCP 分页发现、gVisor 容器超时清理与有界异常修复。*
+14. **[第 14 篇 · 多 Agent 协作系统中的通信协议与并发控制实践](/articles/multi-agent-collaboration-and-concurrency/)**  
+    *基于 asyncio 实现 Actor 私有邮箱、有界投递背压、CAS 乐观锁提交与令牌桶限流。*
 
 ---
 

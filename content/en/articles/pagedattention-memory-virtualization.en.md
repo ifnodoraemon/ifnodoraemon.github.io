@@ -267,7 +267,7 @@ __global__ void paged_attention_kernel(
 
 Engineers often ask whether the pointer indirection of block lookups degrades GPU memory efficiency through cache misses:
 1. **Intra-Block Memory Coalescing**: Within each physical block of 16 or 32 tokens, data is stored contiguously. A 32-thread GPU warp accesses data aligned to 128-byte transactions, maintaining high memory bus efficiency.
-2. **Metadata Locality**: For a 4096-token sequence with $B = 16$, the block table contains only 256 32-bit integers (1 KB of memory). This metadata resides in high-speed GPU **L1/L2 caches**, introducing minimal overhead relative to multi-gigabyte HBM streaming operations.
+2. **Metadata Locality**: For a 4096-token sequence with $B = 16$, the block table contains only $4096 / 16 = 256$ 32-bit integers (1,024 bytes, or `1 KiB` of memory). This metadata resides in high-speed GPU **L1/L2 caches**, introducing minimal overhead relative to multi-gigabyte HBM streaming operations.
 
 ---
 

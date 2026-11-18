@@ -113,8 +113,11 @@ SwarmKit 内存状态机存储流水线:
            超过半数 (Quorum) 节点 ACK 确认
                        │
                        ▼
-   正式提交并持久化至本地 BoltDB (/var/lib/docker/swarm/)
+   正式提交至内存状态机，并将加密 WAL 与快照持久化至磁盘 (/var/lib/docker/swarm/raft/)
 ```
+
+> [!NOTE]
+> **Manager 与 Worker 的本地持久化分工**：Manager 节点将 Raft 状态机的预写日志（WAL）与快照以加密文件形式持久化在 `/var/lib/docker/swarm/raft/` 目录下；而 Worker 节点不参与 Raft 共识，仅通过本地 BoltDB（`/var/lib/docker/swarm/worker/tasks.db`）缓存分配给自身的任务元数据。
 
 ### 2.1 极简容灾与安全加密
 

@@ -129,7 +129,7 @@ flowchart TD
 | :--- | :--- | :--- |
 | **调度基本粒度** | 请求生命周期 (Request-level) | 单步生成迭代 (Iteration-level) |
 | **Padding 气泡开销** | 极高（由批次内最长序列决定，常年浪费 50%~80%） | 接近 0（序列结束立即退出，无须填充） |
-| **GPU 算力利用率** | 随执行时间推移快速衰减，呈锯齿状锯齿暴跌 | 全程高位平稳，批次槽位动态填满 |
+| **GPU 算力利用率** | 随执行时间推移快速衰减，呈锯齿状暴跌 | 全程高位平稳，批次槽位动态填满 |
 | **系统有效吞吐量** | 基线（1.0x） | **大幅提升 3x ~ 10x** |
 | **新请求入队排队延迟** | 极差（必须等待整批请求生成结束） | **极优（下一个 Step 即可插队抢占槽位）** |
 
@@ -230,7 +230,7 @@ graph TD
 
 答案隐藏在我们在第 1 讲所推导的 **Roofline 模型算力余量** 中。
 
-- **Decode 的算力悲剧**：在自回归解码时，即使批大小达到 $B=64$，其算术强度（Operational Intensity）通常依然在 $10 \sim 30\text{ FLOPs/Byte}$ 之间，远远低于 H100 的物理转折点（$I_{\text{ridge}} \approx 150\text{ FLOPs/Byte}$）。此时，**GPU 的 Tensor Cores 大部分时间都在闲置等待 HBM 显存颗粒搬运数据**；
+- **Decode 的算力悲剧**：在自回归解码时，即使批大小达到 $B=64$，计入历史 KV Cache 访存后的综合算术强度（Operational Intensity）通常依然在 $10 \sim 50\text{ FLOPs/Byte}$ 之间（纯线性层上限也仅为 $64\text{ FLOPs/Byte}$），远远低于 H100 SXM5（BF16）的硬件拐点（$I_{\text{ridge}} \approx 295\text{ FLOPs/Byte}$，即 $989.4\text{ TFLOPS} / 3.35\text{ TB/s}$）。此时，**GPU 的 Tensor Cores 大部分时间都在闲置等待 HBM 显存颗粒搬运数据**；
 - **Prefill Chunk 的算力饱和**：单次处理 512 个 Token 的 GEMM 矩阵乘法，其算术强度足以直接越过 Ridge Point，将 Tensor Cores 的计算管线彻底塞满；
 - **拼车效应（Piggybacking）**：调度器在一个 Step 中，**同时打包“1 个 Prefill Chunk（如 512 tokens）”和“所有的活跃 Decode 序列（如 64 个 tokens）”**！
 

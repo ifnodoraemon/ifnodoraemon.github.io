@@ -70,7 +70,7 @@ Linux Namespace 解决的核心命题是：**如何让一个普通进程以为�
 | **Network (net)** | Linux 2.6.29 | 网络协议栈、设备、路由、端口 | 拥有独立的 `eth0`、IP 地址、`iptables` 规则表与端口监听空间 |
 | **UTS (UNIX Timesharing)**| Linux 2.6.19 | 主机名（Hostname）与域名 | 容器可以拥有独立的自定义 Hostname，不污染宿主机主机名 |
 | **IPC (Inter-Process)**| Linux 2.6.19 | 进程间通信（共享内存、信号量） | 阻止不同容器之间通过 SysV 消息队列或 POSIX 共享内存窥探通信 |
-| **User** | Linux 3.8 | 用户与用户组 ID (UID/GID) | 容器内部的 `root` 用户在宿主机映射为非特权普通普通用户（安全加固） |
+| **User** | Linux 3.8 | 用户与用户组 ID (UID/GID) | 容器内部的 `root` 用户在宿主机映射为非特权普通用户（安全加固） |
 
 ### 1.2 系统调用第一性原理：用 30 行 C 语言手写一个容器
 
@@ -151,7 +151,7 @@ ls -l /proc/18423/ns/
 
 cgroups 并不是在进程外部运行监控守护进程，而是**直接内嵌在 Linux 内核的物理调度器（如 CFS 完全公平调度器）与内存子系统中**：
 - **CPU 限制**：通过在 CFS 调度器中为 cgroup 分配配额（Quota）与时间周期（Period）。如果一个容器被限制使用 1 个核心，CFS 在每一个周期（默认 $100\text{ms}$）内最多只允许该容器内的所有线程执行 $100\text{ms}$ 的 CPU 时间。配额耗尽后，该容器的所有线程会被调度器强制移出运行队列（Throttled），直到下一个周期到来；
-- **内存限制**：在内核物理页帧分配函数 `alloc_pages()` 中插入计数钩子。当 cgroup 申请的物理内存总量（RSS + Swap + Page Cache）达到上限时，内核会立刻触发局部页面回收（Page Reclaim）；若仍不足，直接对该 cgroup 内部的进程唤醒 **OOM Killer（Out of Memory Killer）** 给予致命的 `SIGKILL` 终止，而宿主机的其他进程安然无恙。
+- **内存限制**：在内核物理页帧分配函数 `alloc_pages()` 中插入计数钩子。当 cgroup 申请的物理内存总量（Anonymous RSS + Page Cache + Kernel Slab；而 Swap 空间在 cgroups v2 中通过 `memory.swap.max` 独立管控）达到 `memory.max` 上限时，内核会立刻触发局部页面回收（Page Reclaim）；若仍不足，直接对该 cgroup 内部的进程唤醒 **OOM Killer（Out of Memory Killer）** 给予致命的 `SIGKILL` 终止，而宿主机的其他进程安然无恙。
 
 ### 2.2 cgroups v1 的致命设计缺陷
 

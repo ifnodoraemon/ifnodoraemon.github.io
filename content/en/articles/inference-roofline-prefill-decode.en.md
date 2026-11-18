@@ -193,7 +193,7 @@ $$\text{Compute Efficiency} = \frac{3.35 \text{ TFLOPS}}{989.4 \text{ TFLOPS}} \
 
 **This provides mathematical proof for why profilers capture near-zero Tensor Core utilization during generation. At batch size 1, 99.66% of the compute hardware is physically stalled.**
 
-Even if an enterprise server pools traffic to achieve a concurrency of $B = 32$, an arithmetic intensity of ${3}2 \text{ FLOPs/Byte}$ remains far below the 295.3 FLOPs/Byte threshold, leaving the system deeply memory-bandwidth bound.
+Even if an enterprise server pools traffic to achieve a concurrency of $B = 32$, an arithmetic intensity of $32 \text{ FLOPs/Byte}$ remains far below the 295.3 FLOPs/Byte threshold, leaving the system deeply memory-bandwidth bound.
 
 ---
 
@@ -254,11 +254,11 @@ $$\text{TTFT} \approx \frac{2 \cdot P \cdot L_{\text{prompt}}}{\text{Achieved FL
 * **User Perception**: High TTFT makes the application feel unresponsive or frozen.
 
 ### 2. Time Per Output Token (TPOT / ITL)
-The incremental latency between successive streaming tokens during generation:
+The incremental latency between successive streaming tokens during generation, corresponding to the latency of a single decode step:
 
-$$\text{TPOT} \approx \frac{\text{Bytes}_{\text{Weights}} + \text{Bytes}_{\text{KV\_Cache}}(L_{\text{ctx}})}{\text{Achieved Memory Bandwidth}} \times \frac{1}{B}$$
+$$\text{TPOT} \approx \frac{\text{Bytes}_{\text{Weights}} + B \cdot \text{Bytes}_{\text{KV\_per\_seq}}(L_{\text{ctx}})}{\text{Achieved Memory Bandwidth}} + T_{\text{overhead}}$$
 
-* **Key Drivers**: **HBM Memory Bandwidth**, quantization precision, and KV cache compaction.
+* **Key Drivers**: **HBM Memory Bandwidth**, quantization precision, batch concurrency $B$, and per-sequence KV cache footprint (plus compute and kernel launch overhead $T_{\text{overhead}}$). Because model weights are streamed once per step while aggregate KV cache traffic grows with $B$, per-request **TPOT increases as $B$ grows**, whereas cluster-wide token throughput scales as $\text{Throughput} = \frac{B}{\text{TPOT}}$.
 * **User Perception**: Dictates reading fluency. Standard reading speed requires 10–20 tokens/sec (TPOT of 50ms–100ms). Latency exceeding 150ms creates noticeable stuttering.
 
 ### 3. The Production Dilemma

@@ -7,7 +7,7 @@ tagClass: tag-blue
 category: 云原生
 series: container-k8s
 seriesOrder: 9
-description: "为什么 Kubernetes 默认调度器在面对大规模 AI 训练与分布式批处理时会陷入资源死锁？深度解密如何对 Kubernetes 调度中枢进行二次开发：剖析官方 Scheduling Framework 调度框架 11 大扩展点内部机理与 CycleState 状态共享；深入拆解 Volcano 核心 DRF（主导资源公平调度）数学模型与 PodGroup 状态机；实战编写一个基于 Go 语言的 Gang Scheduling（成组调度 / All-or-Nothing）自定义调度器插件；并深入解析如何利用 Descheduler 在生产集群中基于真实节点负载实施安全的二次动态重平衡。"
+description: "为什么 Kubernetes 默认调度器在面对大规模 AI 训练与分布式批处理时会陷入资源死锁？深度解密如何对 Kubernetes 调度中枢进行二次开发：剖析官方 Scheduling Framework 调度框架 12 大核心扩展点内部机理与 CycleState 状态共享；深入拆解 Volcano 核心 DRF（主导资源公平调度）数学模型与 PodGroup 状态机；实战编写一个基于 Go 语言的 Gang Scheduling（成组调度 / All-or-Nothing）自定义调度器插件；并深入解析如何利用 Descheduler 在生产集群中实施安全的二次动态重平衡。"
 extraTags:
   - Kubernetes
   - Scheduling Framework
@@ -41,11 +41,11 @@ extraTags:
 
 ---
 
-## 一、 Scheduling Framework 架构：11 大扩展点全景图
+## 一、 Scheduling Framework 架构：12 大核心扩展点全景图
 
 早期的 Kubernetes 支持通过外部 Webhook（Scheduler Extender）扩展调度，但由于每次调度决策都需要跨网络发起 HTTP JSON 调用，性能极差。
 
-为了给调度器注入极致的扩展能力，社区在 `kube-scheduler` 内部设计了 **Scheduling Framework（调度框架）**。它将整个调度流水线细分为严格的两个大阶段与 **11 个扩展点（Extension Points）**：
+为了给调度器注入极致的扩展能力，社区在 `kube-scheduler` 内部设计了 **Scheduling Framework（调度框架）**。它将整个调度流水线细分为严格的两个大阶段与 **12 个核心扩展点（Extension Points）**：
 
 ```mermaid
 flowchart TD
@@ -129,11 +129,13 @@ package gang
 import (
     "context"
     "fmt"
+    "strconv"
     "sync"
     "time"
 
     v1 "k8s.io/api/core/v1"
     "k8s.io/apimachinery/pkg/runtime"
+    "k8s.io/apimachinery/pkg/types"
     "k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
@@ -143,19 +145,20 @@ const PluginName = "CustomGangScheduling"
 type GangPlugin struct {
     handle framework.Handle
     mu     sync.Mutex
-    // 记录每个任务组已经到达 Permit 阶段的 Pod 集合
+    // 按 "namespace/gangName" 记录每个任务组已到达 Permit 阶段的 Pod 集合
     gangTable map[string]*GangGroup
 }
 
 type GangGroup struct {
     MinAvailable int
-    WaitingPods  []string
+    WaitingPods  map[types.UID]types.NamespacedName
 }
 
 var _ framework.PermitPlugin = &GangPlugin{}
 var _ framework.ReservePlugin = &GangPlugin{}
 
-func New(_ runtime.Object, h framework.Handle) (framework.Plugin, error) {
+// New 遵循 Kubernetes 1.29+ PluginFactory 签名
+func New(ctx context.Context, _ runtime.Object, h framework.Handle) (framework.Plugin, error) {
     return &GangPlugin{
         handle:    h,
         gangTable: make(map[string]*GangGroup),
@@ -164,6 +167,15 @@ func New(_ runtime.Object, h framework.Handle) (framework.Plugin, error) {
 
 func (gp *GangPlugin) Name() string {
     return PluginName
+}
+
+func getMinAvailable(p *v1.Pod) int {
+    if val, ok := p.Annotations["gang.example.com/min-available"]; ok {
+        if n, err := strconv.Atoi(val); err == nil && n > 0 {
+            return n
+        }
+    }
+    return 1
 }
 
 // Reserve 扩展点: 记录预占资源
@@ -177,20 +189,22 @@ func (gp *GangPlugin) Unreserve(ctx context.Context, state *framework.CycleState
     if !exists {
         return
     }
+    gangKey := p.Namespace + "/" + gangName
 
     gp.mu.Lock()
     defer gp.mu.Unlock()
 
-    if group, ok := gp.gangTable[gangName]; ok {
+    if group, ok := gp.gangTable[gangKey]; ok {
         // 组内有成员失败，通知所有仍在等待的同组 Pod 放弃等待，避免死锁
-        for _, podName := range group.WaitingPods {
-            gp.handle.IterateOverWaitingPods(func(waitingPod framework.WaitingPod) {
-                if waitingPod.GetPod().Name == podName {
+        for uid, nn := range group.WaitingPods {
+            if waitingPod := gp.handle.GetWaitingPod(uid); waitingPod != nil {
+                wp := waitingPod.GetPod()
+                if wp.Namespace == nn.Namespace && wp.Name == nn.Name {
                     waitingPod.Reject(PluginName, "Gang member unreserved or timed out")
                 }
-            })
+            }
         }
-        delete(gp.gangTable, gangName)
+        delete(gp.gangTable, gangKey)
     }
 }
 
@@ -202,39 +216,41 @@ func (gp *GangPlugin) Permit(ctx context.Context, state *framework.CycleState, p
         return framework.NewStatus(framework.Success), 0
     }
 
-    minAvailable := getMinAvailable(p) // 从 annotation 中获取最少副本数，例如 4
+    minAvailable := getMinAvailable(p) // 从 annotation 中解析最少成组副本数，例如 4
+    gangKey := p.Namespace + "/" + gangName
 
     gp.mu.Lock()
     defer gp.mu.Unlock()
 
-    group, exists := gp.gangTable[gangName]
+    group, exists := gp.gangTable[gangKey]
     if !exists {
         group = &GangGroup{
             MinAvailable: minAvailable,
-            WaitingPods:  make([]string, 0),
+            WaitingPods:  make(map[types.UID]types.NamespacedName),
         }
-        gp.gangTable[gangName] = group
+        gp.gangTable[gangKey] = group
     }
 
-    group.WaitingPods = append(group.WaitingPods, p.Name)
+    group.WaitingPods[p.UID] = types.NamespacedName{Namespace: p.Namespace, Name: p.Name}
 
     // 检查当前任务组是否已经全员到齐？
     if len(group.WaitingPods) >= group.MinAvailable {
         // 全员到齐！唤醒之前所有处于挂起等待状态的同组 Pod
-        for _, podName := range group.WaitingPods {
-            gp.handle.IterateOverWaitingPods(func(waitingPod framework.WaitingPod) {
-                if waitingPod.GetPod().Name == podName {
+        for uid, nn := range group.WaitingPods {
+            if waitingPod := gp.handle.GetWaitingPod(uid); waitingPod != nil {
+                wp := waitingPod.GetPod()
+                if wp.Namespace == nn.Namespace && wp.Name == nn.Name {
                     waitingPod.Allow(PluginName) // 批准进入 Binding Cycle!
                 }
-            })
+            }
         }
-        delete(gp.gangTable, gangName) // 清理状态
+        delete(gp.gangTable, gangKey) // 清理状态
         return framework.NewStatus(framework.Success), 0
     }
 
     // 人数未凑齐：将当前 Pod 挂起，最长等待 60 秒
     timeout := 60 * time.Second
-    return framework.NewStatus(framework.Wait, fmt.Sprintf("Waiting for gang %s to complete", gangName)), timeout
+    return framework.NewStatus(framework.Wait, fmt.Sprintf("Waiting for gang %s to complete", gangKey)), timeout
 }
 ```
 
@@ -250,11 +266,11 @@ func (gp *GangPlugin) Permit(ctx context.Context, state *framework.CycleState, p
 
 ```mermaid
 flowchart LR
-    Prometheus["Prometheus / Metrics Server<br/>监控真实物理节点 CPU/内存利用率"] --> Descheduler
+    MetricsSource["Pod Requests / Allocatable (默认)<br/>或 Metrics Server / Prometheus (metricsUtilization)"] --> DeschedulerEngine
 
     subgraph DeschedulerEngine["Descheduler 重调度守护进程 (CronJob / Loop)"]
         direction TB
-        Strat1["<b>LowNodeUtilization 策略</b><br/>找出利用率 >80% 的热点节点<br/>找出利用率 <20% 的空闲节点"]
+        Strat1["<b>LowNodeUtilization 策略</b><br/>找出水位 >70% 的热点节点<br/>找出水位 <20% 的空闲节点"]
         Strat2["<b>RemoveDuplicates 策略</b><br/>驱逐同一 Deployment 聚集在同节点的 Pod"]
         Strat3["<b>RemovePodsViolatingTopologySpread</b><br/>修复拓扑分布偏斜"]
         Strat1 --> Strat2 --> Strat3
@@ -265,7 +281,7 @@ flowchart LR
     KubeAPIServer -.->|"重新入队待调度队列"| CustomScheduler["kube-scheduler (重新均匀分配)"]
 ```
 
-### 4.1 核心策略：`LowNodeUtilization` (基于真实负载的重平衡)
+### 4.1 核心策略：`LowNodeUtilization`（Requests 水位与实时指标重平衡）
 ```yaml
 apiVersion: "descheduler/v1alpha2"
 kind: "DeschedulerPolicy"
@@ -280,8 +296,12 @@ profiles:
       targetThresholds:
         "cpu": 70
         "memory": 70
+  plugins:
+    balance:
+      enabled:
+      - "LowNodeUtilization"
 ```
-- **工作机理**：Descheduler 定期扫描全集群。当发现某些节点的实际利用率超过目标阈值（70%），而另一些节点低于利用率阈值（20%）时，它会自动挑选高负载节点上的 Pod 发起驱逐。
+- **工作机理**：Descheduler 定期扫描全集群。注意：**默认情况下，`LowNodeUtilization` 评估的是节点上已分配 Pod 的 `requests / allocatable` 账面请求水位**，而非物理机实时 CPU/内存使用率；若需基于 Prometheus 或 Metrics Server 的真实运行时负载驱逐，必须在策略顶层额外开启 `metricsProviders` 并在插件参数中启用 `metricsUtilization`。当发现某些节点水位超过目标阈值（`>70%`），而另一些节点低于空闲阈值（`<20%`）时，它会自动挑选高负载节点上的可驱逐 Pod 发起迁移。
 
 ### 4.2 生产级防震荡与 PDB 保护
 为了防止 Descheduler 把同一个 Pod 在两个节点之间反复踢皮球（Ping-Pong 震荡）：
@@ -293,7 +313,7 @@ profiles:
 ## 五、 总结与进阶预告
 
 对 Kubernetes 调度器动刀，标志着平台工程从“使用者”向“掌控者”的关键蜕变：
-- **Scheduling Framework** 以高度正交的 11 大扩展点与 `CycleState` 共享容器，让我们可以在不用 Fork 维护官方代码库的前提下，以原生插件方式注入极致的调度智力；
+- **Scheduling Framework** 以高度正交的 12 大核心扩展点与 `CycleState` 共享容器，让我们可以在不用 Fork 维护官方代码库的前提下，以原生插件方式注入极致的调度智力；
 - **Volcano 与 DRF** 用严密的数学模型解决了多维异构资源环境下的主导资源公平调度难题；
 - **Gang Scheduling** 解决了分布式训练全员成组调度的死锁痛点；
 - **Descheduler** 打破了静态绑定的魔咒，通过运行时的负反馈驱逐赋予了集群自我平衡的流动生命力。

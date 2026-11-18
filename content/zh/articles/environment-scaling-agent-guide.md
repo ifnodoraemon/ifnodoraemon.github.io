@@ -69,7 +69,7 @@ print(result)
 不是。容器是执行载体；任务多样性、状态复位、独立验收与数据隔离才决定实验是否有意义。
 
 ### Q2: 使用 gVisor 或微虚拟机能保证零逃逸吗？
-不能。隔离机制降低攻击面，仍依赖实现、补丁、配置及宿主权限。不要把隔离产品名作为绝对安全承诺。
+不能。隔离机制降低攻击面，仍依赖实现、补丁、配置及宿主权限。不要把隔离产品名作为绝对安全承诺。关于如何在大规模强化学习 Rollout 与多租户代码沙箱中实现毫秒级 KVM 微虚机快照克隆与 `jailer` 纵深防御，请参阅 [AI Agent 安全执行沙箱架构：基于 Firecracker MicroVM 的毫秒级快照克隆与隔离实战](/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/)；对应的分布式强化学习训推混部架构见 [大模型分布式强化学习后训练架构（verl 实战）](/articles/distributed-rl-post-training-verl-colocation/)。
 
 ### Q3: 超时之后如何判断任务真正停止？
 等待 API 超时不能证明远程进程停止。必须执行清理并验证状态，保留运行 ID，在 daemon 断连等故障下由独立回收器继续处理。

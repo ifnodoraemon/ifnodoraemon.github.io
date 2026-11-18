@@ -33,30 +33,26 @@ Throughout the first decade of cloud-native evolution, the core resource abstrac
 
 However, in the 2026 era of Large Language Models (LLMs), multimodal foundation models, and embodied intelligence, **these simplistic scalar scheduling assumptions collapse**:
 1. **Capital Expenditure & Extreme Topology Sensitivity**: An 8x NVIDIA H100/H200/B200 computing node represents significant hardware investment;
-2. **The "Topology Cliff" of NUMA and NVLink Interconnects**: When executing Tensor Parallelism (TP=4) across multiple GPUs, if the scheduler assigns 4 GPUs split across disparate NVSwitch interconnect groups or across CPU NUMA boundaries, cross-device communication latency increases by $5\times$ to $10\times$, degrading token generation rates (Tokens/s);
+2. **The "Topology Cliff" of NUMA and NVLink Interconnects**: When executing Tensor Parallelism (TP=4) or multi-node RDMA inference, assigning GPUs across separate PCIe/NVLink islands on non-NVSwitch servers—or pairing GPUs with cross-NUMA CPUs and RDMA NICs even on NVSwitch hosts—severely degrades Host-to-Device and GPUDirect RDMA bandwidth, hurting token generation rates (Tokens/s);
 3. **Sub-Device Granularity**: Dedicated full-GPU allocation under-utilizes hardware for auxiliary workloads, requiring hardware-enforced Multi-Instance GPU (MIG) physical slicing with strict multi-tenant isolation.
 
 ```mermaid
 flowchart TD
-    subgraph GPUHost["Physical Topology of Modern 8-GPU AI Node"]
+    subgraph GPUHost["Physical Topology of Modern 8-GPU HGX B200 Node (vs. Dual-Root PCIe NUMA Bottleneck)"]
         direction TB
-        subgraph NUMA0["NUMA Socket 0 (CPU 0 + Memory 0)"]
-            GPU0["GPU 0 (B200)"] <== "NVLink (900 GB/s)" ==> GPU1["GPU 1 (B200)"]
-            GPU2["GPU 2 (B200)"] <== "NVLink (900 GB/s)" ==> GPU3["GPU 3 (B200)"]
-            GPU0 <==> GPU2
-            GPU1 <==> GPU3
-            NIC0["InfiniBand / RoCE NIC 0<br/>(PCIe Switch Direct to GPU 0-3)"]
+        subgraph NUMA0["NUMA Socket 0 (CPU 0 + Memory 0 + PCIe Switch 0)"]
+            GPU03["GPU 0 ~ GPU 3 (4x B200)"] <== "PCIe Gen5 Direct (GPUDirect RDMA)" ==> NIC0["InfiniBand / RoCE NICs 0-3"]
         end
 
-        subgraph NUMA1["NUMA Socket 1 (CPU 1 + Memory 1)"]
-            GPU4["GPU 4 (B200)"] <== "NVLink (900 GB/s)" ==> GPU5["GPU 5 (B200)"]
-            GPU6["GPU 6 (B200)"] <== "NVLink (900 GB/s)" ==> GPU7["GPU 7 (B200)"]
-            GPU4 <==> GPU6
-            GPU5 <==> GPU7
-            NIC1["InfiniBand / RoCE NIC 1<br/>(PCIe Switch Direct to GPU 4-7)"]
+        subgraph NUMA1["NUMA Socket 1 (CPU 1 + Memory 1 + PCIe Switch 1)"]
+            GPU47["GPU 4 ~ GPU 7 (4x B200)"] <== "PCIe Gen5 Direct (GPUDirect RDMA)" ==> NIC1["InfiniBand / RoCE NICs 4-7"]
         end
 
-        NUMA0 <-.->|"Cross-NUMA UPI/QPI Interconnect (Bottleneck: 32-64 GB/s)"| NUMA1
+        NVSW["<b>NVSwitch All-to-All Fabric</b><br/>NVLink 5: 1,800 GB/s per GPU (8-GPU Full Mesh; absent on dual-root PCIe / 4-GPU island servers)"]
+        GPU03 <== "NVLink 5 (1,800 GB/s)" ==> NVSW
+        NVSW <== "NVLink 5 (1,800 GB/s)" ==> GPU47
+
+        NUMA0 <-.->|"Cross-NUMA UPI / Infinity Fabric (32-64 GB/s: Cross-Socket CPU/NIC & PCIe-Server GPU Bottleneck)"| NUMA1
     end
 ```
 
@@ -110,17 +106,17 @@ Not all AI tasks require an entire 80GB or 140GB HBM GPU. To maximize hardware u
 | **DRA (Dynamic Resource Allocation)** | Kubernetes 1.30+ claim-based allocation model replacing scalar integer counters. | **Topology-Aware Claims**. Requests specific device pairings (e.g., "Pair 2 GPUs connected via NVLink"). | Large-scale LLM training, disaggregated heterogeneous inference clusters. |
 
 ```text
-NVIDIA MIG Physical Partitioning (Example: H100 80GB):
-┌─────────────────────────────────────────────────────────────┐
-│ Physical NVIDIA H100 80GB HBM3 GPU                          │
-├──────────────────┬──────────────────┬───────────────────────┤
-│ Instance 1       │ Instance 2       │ Instance 3            │
-│ Profile: 3g.40gb │ Profile: 2g.20gb │ Profile: 1g.10gb (x2) │
-│ • 42 SM Units    │ • 28 SM Units    │ • 14 SM Units         │
-│ • 40GB VRAM      │ • 20GB VRAM      │ • 10GB VRAM           │
-│ • 1.6 TB/s Band  │ • 800 GB/s Band  │ • 400 GB/s Band       │
-│ (Deploy 14B LLM) │ (Deploy 7B LLM)  │ (Deploy Embedding)    │
-└──────────────────┴──────────────────┴───────────────────────┘
+NVIDIA MIG Physical Partitioning (H100 80GB SXM5: 132 Total SMs, 3.35 TB/s HBM3):
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Physical NVIDIA H100 80GB SXM5 GPU (Note: A100 80GB maps to 42/28/14 SM)│
+├──────────────────────┬──────────────────────┬───────────────────────────┤
+│ Instance 1           │ Instance 2           │ Instance 3                │
+│ Profile: 3g.40gb     │ Profile: 2g.20gb     │ Profile: 1g.10gb (x2)     │
+│ • 3/7 Compute(56 SM) │ • 2/7 Compute(32 SM) │ • 1/7 Compute(16 SM each) │
+│ • 40GB VRAM (4/8)    │ • 20GB VRAM (2/8)    │ • 10GB VRAM (1/8 each)    │
+│ • ~1.68 TB/s BW      │ • ~838 GB/s BW       │ • ~419 GB/s BW            │
+│ (Deploy 14B LLM)     │ (Deploy 7B LLM)      │ (Deploy Embedding)        │
+└──────────────────────┴──────────────────────┴───────────────────────────┘
 ```
 
 Configuring `mig.strategy=mixed` within the GPU Operator enables declarative partitioning of physical cards into distinct MIG profiles (such as `nvidia.com/mig-3g.40gb: 2`), which the Kubernetes scheduler treats as non-preemptible hardware assets.
@@ -230,6 +226,9 @@ spec:
       threshold: '0.80'     # Triggers expansion when KV cache saturation crosses 80%
 ```
 
+> [!NOTE]
+> **Metric Normalization & Warmup Notes**: In the KEDA example above, `qwen-72b` must match vLLM's `--served-model-name` (verify actual exported label names at `/metrics`). Total queue depth uses the default `AverageValue` so work divides across replicas, whereas the cluster-average KV cache fraction explicitly sets `metricType: Value` to prevent HPA from dividing an already-averaged ratio by replica count again. Thresholds are illustrative—production scaling also requires accounting for spare GPU inventory, model weight cold-load duration, and cache-warmup budgets.
+
 ---
 
 ## 5. Comprehensive Series Review: Full Curriculum Retrospective
@@ -274,6 +273,3 @@ No. It combines NUMA hints from CPU, memory, and device managers for node admiss
 
 ### Q3: Does DRA automatically solve every GPU and NIC topology problem?
 No. ResourceClaims and driver-published device attributes can express richer selection criteria, but available properties, cross-device constraints, and allocation behavior depend on Kubernetes and driver versions. Verify that GPU/NIC drivers expose the required topology and validate scheduling and admission behavior. Enabling DRA alone does not guarantee an optimal NVLink group or eliminate cross-NUMA traffic. See [Kubernetes DRA](https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/).
-
-
-In the KEDA example, `qwen-72b` must match vLLM `--served-model-name`; verify labels at `/metrics`. A total queue uses `AverageValue` to divide work among replicas; a cluster-average cache fraction uses `metricType: Value` to avoid an extra per-replica normalization. Thresholds are illustrative and require available GPUs, startup time, and cache-warmup planning.

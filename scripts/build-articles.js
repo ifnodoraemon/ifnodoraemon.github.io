@@ -241,7 +241,12 @@ validateArticlesOrExit(rawArticles);
 
 try {
   console.log('🎨 Generating per-article raster OG images (1200x630)...');
-  execSync('python3 ' + path.join(__dirname, 'generate-article-og.py'), { stdio: 'inherit' });
+  const ogScript = path.join(__dirname, 'generate-article-og.py');
+  try {
+    execSync(`python3 "${ogScript}"`, { stdio: 'inherit' });
+  } catch {
+    execSync(`uv run --with pillow "${ogScript}"`, { stdio: 'inherit' });
+  }
 } catch (e) {
   console.warn('⚠️ Could not run generate-article-og.py:', e.message);
 }
@@ -581,7 +586,7 @@ function writeArticles(list, isEn) {
     });
   </script>` : '';
 
-    const tagList = [article.tag, ...(article.extraTags || []), isEn ? 'AI Agent' : 'AI智能体', article.slug.replace(/-/g, ' ')]
+    const tagList = [article.tag, article.category, ...(article.extraTags || []), article.slug.replace(/-/g, ' ')]
       .filter(Boolean);
     const uniqueTags = [...new Set(tagList)];
     const articleTagsMeta = uniqueTags
@@ -903,9 +908,12 @@ function buildSeriesCardBottom(article, allArticlesInLang, isEn) {
     } else if (seriesId === 'container-k8s') {
       completeDescZh = '恭喜读完《从 Docker 到 Kubernetes：云原生容器与集群编排架构指南》全套 13 篇硬核内容！你已建立起从 Linux 内核进程隔离、veth 网络、SwarmKit 到 K8s 控制面深水区、业务网络与存储实战、对 K8s 调度器/运行时/控制面深度动刀与 2026 AI GPU 智算调度的完整工业级全景架构。';
       completeDescEn = 'Congratulations on completing all 13 chapters of the Cloud-Native Container & Cluster Orchestration Handbook! You have mastered container systems from Linux process isolation and K8s control plane to production application networking, storage, hacking K8s scheduling and runtimes, and 2026 AI GPU scheduling.';
+    } else if (seriesId === 'computer-networking') {
+      completeDescZh = '恭喜读完《深入浅出计算机网络：从以太网原理到万卡 InfiniBand 架构实战》全套 12 篇内容！你已打通从物理电光信号、IP/TCP 状态机、Linux 内核 XDP、数据中心 EVPN-VXLAN 到 RoCEv2 无损网络、纯血 InfiniBand 拓扑与生产级 NCCL 极限调优的完整网络知识图谱。';
+      completeDescEn = 'Congratulations on completing all 12 chapters of the Computer Networking Masterclass! You have built a first-principles mental model spanning Ethernet physics, IP/TCP internals, Linux kernel XDP, datacenter EVPN-VXLAN, lossless RoCEv2, and hyperscale InfiniBand + NCCL cluster engineering.';
     } else {
-      completeDescZh = '恭喜读完《AI Agent 生产级架构师手册》全套 11 篇内容！你已建立起从执行循环、状态机控制流到 MCP 协议、Skills 扩展、分布式编排、环境缩放与长程记忆的完整工业级认知。';
-      completeDescEn = 'Congratulations on completing all 11 chapters of The Production AI Agent Architect Handbook! You have mastered end-to-end agentic engineering from state machines and MCP to distributed orchestration, environment scaling, and memory systems.';
+      completeDescZh = '恭喜读完《AI Agent 生产级架构师手册》全套 14 篇内容！你已建立起从确定性状态机控制流、MCP 协议、Skills 扩展、浏览器智能体到分布式编排、环境缩放、长程记忆、自研框架与高并发多智能体协作的完整工业级认知。';
+      completeDescEn = 'Congratulations on completing all 14 chapters of The Production AI Agent Architect Handbook! You have mastered end-to-end agentic engineering from state machines, MCP, and Skills to distributed orchestration, environment scaling, memory architectures, custom frameworks, and multi-agent concurrency.';
     }
 
     bodyHtml = `
@@ -996,7 +1004,9 @@ function generateListingPage(articlesList, isEn = false) {
   const lang = isEn ? 'en' : 'zh-CN';
   const siteName = isEn ? enLocales.meta.siteName : zhLocales.meta.siteName;
   const pageTitle = isEn ? `All Articles & Architecture Deep Dives — ${siteName}` : `全部文章与系统架构专栏 — ${siteName}`;
-  const pageDesc = isEn ? 'All AI technology articles and deep dives.' : `${siteName}全部技术文章列表。涵盖提示工程、AI Agent、RAG、模型微调、多模态等前沿 AI 主题。`;
+  const pageDesc = isEn
+    ? `Complete index of ${articlesList.length} engineering deep dives covering high-throughput LLM inference (vLLM, SGLang, DeepInfer), distributed RL post-training (GRPO, verl), production AI Agent runtimes & Firecracker sandboxes, Kubernetes internals, and InfiniBand/SuperPoD networking.`
+    : `${siteName}全部 ${articlesList.length} 篇深度技术文章与四大架构专栏：系统涵盖高并发大模型推理引擎（vLLM/SGLang/DeepInfer）、分布式 RL 后训练（GRPO/verl）、生产级 AI Agent 与 MicroVM 安全沙箱、云原生 Kubernetes 改造及万卡 InfiniBand/超节点网络实战。`;
   const canonicalUrl = isEn ? `${SITE_URL}/en/articles/` : `${SITE_URL}/articles/`;
   const heroTag = 'ALL ARTICLES';
   const heroTitle = isEn ? 'All Articles' : '全部文章';
@@ -1043,7 +1053,7 @@ ${Object.entries(SERIES_DEFINITIONS).map(([id, s]) => {
   const desc = isEn ? s.descEn : s.descZh;
   const badge = isEn ? s.badgeEn : s.badgeZh;
   const actionText = isEn ? 'Start Reading →' : '开始阅读 →';
-  return `            <div class="series-showcase-card">
+  return `            <div class="series-showcase-card" data-series-id="${escapeHtml(id)}">
               <div class="series-showcase-card-header">
                 <span class="tag tag-series">📚 ${escapeHtml(badge)}</span>
                 <span class="series-count-badge">${isEn ? `${articleCount} Articles` : `全套 ${articleCount} 篇`}</span>
@@ -1290,7 +1300,7 @@ function generateLlmsTxt(articlesZh, articlesEn) {
 - Author: ifnodoraemon (LLM Systems Architect)
 - GitHub: https://github.com/ifnodoraemon
 - Full Knowledge Base: ${SITE_URL}/llms-full.txt
-- Core Focus: AI Agent Architectures, vLLM / SGLang High-Concurrency Inference, PagedAttention, KV Cache Optimization, Speculative Decoding, RAG Systems, Enterprise Model Fine-Tuning & GRPO.
+- Core Focus: AI Agent Architectures & Firecracker MicroVM Sandboxes, vLLM / SGLang / DeepInfer High-Concurrency Inference, PagedAttention & P/D Disaggregation, Distributed RL Post-Training (GRPO / verl Colocation), Rack-Scale SuperPoD (NVL72) & NCCL Collectives, Cloud-Native Kubernetes Internals, and Hyperscale InfiniBand / RoCEv2 Networking.
 
 ## 核心专栏体系 / Topic Series & Clusters
 
@@ -1447,7 +1457,9 @@ function generateRssFeed(articlesList, isEn = false) {
     ? path.join(ROOT, 'public', 'en', 'feed.xml')
     : path.join(ROOT, 'public', 'feed.xml');
   const title = siteName;
-  const desc = isEn ? 'Focusing on AI foundation models and tech insights' : '专注 AI 大模型技术研究与实践的技术博客';
+  const desc = isEn
+    ? 'In-depth engineering articles on LLM inference systems, distributed RL post-training, autonomous AI agents, Kubernetes internals, and InfiniBand/SuperPoD networking.'
+    : '深耕大模型推理系统、分布式 RL 后训练、生产级 AI Agent、云原生 Kubernetes 与万卡 InfiniBand 智算网络的硬核工程博客';
   const lang = isEn ? 'en' : 'zh-CN';
   const pubDate = new Date().toUTCString();
 
@@ -1644,19 +1656,25 @@ function generateFaqSchema(markdown, frontmatterFaq) {
     }
   }
 
-  const faqSectionRegex = /##\s+(?:常见问题|FAQ|Frequently Asked Questions|常见疑问)[\s\S]*?(?=(?:^##\s+[^\n#])|$)/i;
-  const sectionMatch = markdown.match(faqSectionRegex);
-  if (!sectionMatch) return '';
+  const faqSectionRegex = /^##\s+(?:常见问题|FAQ|Frequently Asked Questions|常见疑问)[^\n]*\n([\s\S]*?)(?=(?:^##\s+[^\n#])|(?![\s\S]))/gim;
+  const sectionMatches = [...markdown.matchAll(faqSectionRegex)];
+  if (sectionMatches.length === 0) return '';
 
-  const targetText = sectionMatch[0];
   const qaPairs = [];
-  const qRegex = /###\s+(?:Q\d*[:：]\s*|问题\d*[:：]\s*)?([^\n]+)\n+([\s\S]*?)(?=(?:^###\s+)|$)/gm;
-  let match;
-  while ((match = qRegex.exec(targetText)) !== null) {
-    const question = match[1].trim();
-    const answer = cleanFaqAnswer(match[2]);
-    if (question && answer) {
-      qaPairs.push({ question, answer });
+  const seenQuestions = new Set();
+  const qRegex = /^###\s+(?:Q\d*[:：]\s*|问题\d*[:：]\s*)?([^\n]+)\n+([\s\S]*?)(?=(?:^###\s+)|(?![\s\S]))/gm;
+
+  for (const sec of sectionMatches) {
+    const targetText = sec[1];
+    qRegex.lastIndex = 0;
+    let match;
+    while ((match = qRegex.exec(targetText)) !== null) {
+      const question = match[1].trim();
+      const answer = cleanFaqAnswer(match[2]);
+      if (question && answer && !seenQuestions.has(question)) {
+        seenQuestions.add(question);
+        qaPairs.push({ question, answer });
+      }
     }
   }
 
@@ -1677,8 +1695,8 @@ function cleanFaqAnswer(raw) {
     .replace(/\s*\n+\s*/g, ' ')
     .trim();
 
-  if (answer.length > 300) {
-    answer = answer.slice(0, 300) + '...';
+  if (answer.length > 600) {
+    answer = answer.slice(0, 600) + '...';
   }
   return answer;
 }

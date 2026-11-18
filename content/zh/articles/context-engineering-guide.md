@@ -54,7 +54,7 @@ extraTags:
 类似于操作系统的垃圾回收，Agent 的上下文也需要定期清理。长时间的交互会产生大量的闲聊、中间确认和报错重试的痕迹。
 
 **实践原则：**
-- **Rolling Window & Summarization（滚动窗口与总结）**：当对话轮次超过设定阈值，触发一个后台任务，将前 N 轮对话交给一个小模型（如 Gemini 3.5 Flash）进行提炼，生成一个 `Current State & Goals Summary`，用这段几百 token 的总结替换掉数千 token 的原始对话日志。
+- **Rolling Window & Summarization（滚动窗口与总结）**：当对话轮次超过设定阈值，触发一个后台任务，将前 N 轮对话交给一个小模型（如 Gemini 3.1 Flash-Lite）进行提炼，生成一个 `Current State & Goals Summary`，用这段几百 token 的总结替换掉数千 token 的原始对话日志。
 - **Squashing Tool Calls（折叠工具调用）**：如果 Agent 为了解决一个 bug 连续调用了 10 次报错的终端命令，最终在第 11 次成功了。在后续的上下文中，应该把前 10 次失败的细节折叠为一条："*Failed 10 times due to syntax errors, ultimately resolved by doing X.*"
 
 ### 4. Isolate：上下文隔离，防火墙机制

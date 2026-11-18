@@ -276,12 +276,17 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
 
 ### Structured Output & Guided Decoding
 
-Online services often require **strictly formatted JSON** output. vLLM has built-in **Guided Decoding** support:
+Online services often require **strictly formatted JSON** output (such as function-call arguments or typed API payloads). vLLM has built-in **Guided Decoding** support:
 
 ```python
+from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:8000/v1", api_key="key")
+
 response = client.chat.completions.create(
     model="Qwen/Qwen2.5-72B-Instruct",
     messages=[{"role": "user", "content": "Extract names and locations"}],
+    # vLLM extension: enforce output conforming to JSON Schema
     extra_body={
         "guided_json": {
             "type": "object",
@@ -295,20 +300,65 @@ response = client.chat.completions.create(
 )
 ```
 
-Four constraint formats: `guided_json`, `guided_regex`, `guided_choice`, `guided_grammar`. Powered by **XGrammar** (pushdown automata-based), with **<5% latency impact**.
+vLLM supports four constraint formats:
 
-### Multi-LoRA Serving
+| Parameter | Constraint Type | Example |
+|------|---------|------|
+| `guided_json` | JSON Schema | `{"type": "object", ...}` |
+| `guided_regex` | Regular Expression | `"\\d{4}-\\d{2}-\\d{2}"` |
+| `guided_choice` | Enumerated Choices | `["positive", "negative", "neutral"]` |
+| `guided_grammar` | EBNF Grammar | Custom context-free grammar |
 
-Serve multiple fine-tuned adapters on a single base model:
+Under the hood, vLLM uses the **XGrammar** engine (pushdown automata-based), compiling and caching grammar masks with **< 5%** output latency overhead.
+
+### Tool Calling
+
+vLLM natively supports OpenAI-compatible function calling paired with guided decoding to guarantee valid argument schemas:
+
+```python
+response = client.chat.completions.create(
+    model="Qwen/Qwen2.5-72B-Instruct",
+    messages=[{"role": "user", "content": "What will the weather in Beijing be tomorrow?"}],
+    tools=[{
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "city": {"type": "string"},
+                    "date": {"type": "string"}
+                },
+                "required": ["city", "date"]
+            }
+        }
+    }],
+)
+```
+
+> **Tip**: Set `parallel_tool_calls=false` to force 0–1 tool calls per turn for models not trained on parallel tool invocations.
+
+### Multi-LoRA Serving: One Base Model for Multiple Tenants
+
+In commercial multi-tenant deployments, dedicating separate full-model instances per fine-tuned customer checkpoint wastes massive VRAM. vLLM dynamically loads **multiple LoRA adapters atop a single shared base model**:
 
 ```bash
 vllm serve Qwen/Qwen2.5-72B-Instruct \
   --enable-lora \
   --max-loras 8 \
-  --lora-modules customer-a=/path/to/lora-a customer-b=/path/to/lora-b
+  --lora-modules customer-a=/path/to/lora-a \
+                  customer-b=/path/to/lora-b
 ```
 
-Uses **batched GEMM** to dynamically group sequences using different adapters. Each LoRA adapter is typically only tens of MB vs. hundreds of GB for the base model.
+```python
+# Route each tenant to its dedicated LoRA adapter via the model field
+response = client.chat.completions.create(
+    model="customer-a",
+    messages=[{"role": "user", "content": "Draft a follow-up email"}],
+)
+```
+
+Under the hood, vLLM uses **batched GEMM** kernels to group sequences targeting different LoRA adapters within the same continuous batch at minimal overhead. Each LoRA adapter typically consumes tens of MBs compared to over 100 GB for the base model.
 
 ### Docker Production Deployment
 
@@ -330,7 +380,7 @@ docker run -d \
   --enable-prompt-tokens-details    # Expose cached_tokens for billing
 ```
 
-> **⚠️ Always use `--ipc=host`**: vLLM uses PyTorch shared memory for multi-process communication. Without this flag, you'll get errors inside containers. This is the #1 beginner mistake.
+> Multi-process tensor-parallel communication requires adequate shared memory: you can either pass `--ipc=host` or keep an isolated IPC namespace with an explicit `--shm-size` (or a memory-backed `/dev/shm` `emptyDir` in Kubernetes), depending on your container security boundaries.
 
 ---
 
@@ -371,12 +421,39 @@ A value of 0.90 budgets a fraction of total VRAM for weights, activations, graph
 
 This constrains request length and participates in KV-capacity checks and some runtime planning. The KV pool is primarily sized from memory budget and startup profiling, rather than reserving a full maximum window per request. Changing 131072 to 8192 does not imply a sixteenfold pool reduction or a fixed concurrency gain. Set business length limits and verify startup logs and long-request measurements.
 
-#### [3-4] Concurrency & Token Budget
+#### [3] `--max-num-seqs`: Maximum Concurrent Sequences
 
-- **Online chat** (latency-first): `max-num-seqs 64-256`, `max-num-batched-tokens 8192-16384`
-- **Batch processing** (throughput-first): `max-num-seqs 2048-4096`, `max-num-batched-tokens 32768`
+Controls the maximum number of active sequences scheduled per iteration:
 
-#### [7-8] Validate Weight and KV Quantization Separately
+```text
+Online chat (latency-first): 64 ~ 256
+  → Preserves per-request compute budget for low ITL
+
+Offline / batch inference (throughput-first): 2048 ~ 4096
+  → Saturates GPU compute, trading higher per-request latency for throughput
+
+Adaptive tuning via vllm:num_requests_waiting:
+  → Sustained > 0: requests are queueing; raise max-num-seqs or scale out replicas
+  → Sustained = 0 with low GPU utilization: workload is light; lower cap to bound tail spikes
+```
+
+#### [4] `--max-num-batched-tokens`: Per-Iteration Token Budget
+
+Governs the chunked-prefill token budget processed in a single scheduler step:
+
+- Larger (`32768`) → higher prefill throughput, but long prompts occupy longer steps
+- Smaller (`8192`) → smoother ITL, splitting long prefills into finer chunks
+- Recommended online range: `8192 ~ 16384`
+
+#### [5] `--enable-chunked-prefill`: Chunked Prefill Toggle
+
+Splits long incoming prompts across multiple scheduler iterations bounded by `--max-num-batched-tokens` alongside active decode steps (enabled by default in the vLLM V1 engine; declaring it explicitly prevents configuration drift across upgrades).
+
+#### [6] `--enable-prefix-caching`: Automatic Prefix Caching (APC) Toggle
+
+Enables global chained-hash KV block reuse across shared system prompts, multi-turn histories, and repeated RAG documents (enabled by default in vLLM V1). Pair with `--enable-prompt-tokens-details` so billing middleware can inspect `cached_tokens`.
+
+#### [7-8] `--quantization` & `--kv-cache-dtype`: Validate Weight and KV Quantization Separately
 
 FP8, AWQ, GPTQ, and NVFP4 require compatible hardware, checkpoint layouts, and kernels. GPU names alone cannot guarantee a fixed accuracy loss or twofold throughput. Weight-only quantization can reduce traffic, while dequantization and compute overhead may offset gains at large batch sizes.
 
@@ -402,11 +479,21 @@ Add this fragment to a serving command only after checking target/draft tokenize
 
 ## Layer 5: Disaggregated Serving — Architecture for Scale
 
-At **hundreds to thousands of QPS**, Prefill and Decode interfere with each other:
+At **hundreds to thousands of QPS**, compute-bound Prefill and memory-bandwidth-bound Decode interfere with each other when co-located on the same GPU:
+
+```text
+Prefill: Compute-bound, demands high Tensor Core FLOPs
+Decode:  Memory-bandwidth-bound, demands high HBM bandwidth
+
+Co-locating both phases on the same GPU → suboptimal hardware utilization & tail-latency interference
+```
+
+vLLM supports **Disaggregated Prefill-Decode Serving**:
 
 ```text
                     ┌──────────────────┐
                     │   Request Router  │
+                    │  (Service Proxy)  │
                     └──────┬───────────┘
               ┌────────────┼────────────┐
               ▼                         ▼
@@ -415,22 +502,34 @@ At **hundreds to thousands of QPS**, Prefill and Decode interfere with each othe
     │  (Compute GPUs)   │     │  (Bandwidth GPUs) │
     │  H100 SXM / B200  │     │  L40S / A100      │
     └────────┬─────────┘     └────────▲─────────┘
+             │                        │
              └────── KV Cache Transfer ───┘
                    (NIXL / RDMA)
 ```
 
-**Core advantages**: Independent scaling, hardware heterogeneity (cost savings), eliminated cross-phase interference.
+**KV Cache Transfer**: Once prefill finishes, the resulting KV blocks stream across the network to Decode instances via NVIDIA **NIXL** (Inference Xfer Library) over GPUDirect RDMA within a few milliseconds.
+
+**Core advantages**:
+1. **Independent autoscaling**: Scale Prefill and Decode pools separately according to input/output traffic mix.
+2. **Hardware heterogeneity**: Match compute-dense GPUs (H100/B200) to Prefill and cost-effective bandwidth GPUs to Decode.
+3. **Zero cross-phase interference**: Long-prompt prefills never stall active decode streams.
+
+> This disaggregated topology is standard across hyperscale LLM serving platforms (such as Anyscale, AWS, and ByteDance).
 
 ---
 
-## Layer 6: Token Billing — The Business Lifeline
+## Layer 6: Token Billing & Metering — The Business Lifeline
 
-### Usage Data
+If you operate an OpenAI-compatible commercial API, accurate token metering is the backbone of your billing ledger.
 
-vLLM returns `usage` in every response. With `--enable-prompt-tokens-details`, it also includes cache hit details:
+### Usage Data Returned by vLLM
+
+vLLM returns `usage` in every response. With `--enable-prompt-tokens-details`, it also exposes prefix-cache hit counts:
 
 ```json
 {
+  "id": "chatcmpl-abc123",
+  "choices": [{ "message": { "content": "..." } }],
   "usage": {
     "prompt_tokens": 3000,
     "completion_tokens": 423,
@@ -444,50 +543,99 @@ vLLM returns `usage` in every response. With `--enable-prompt-tokens-details`, i
 
 ### Billing Architecture
 
-```text
-User → [API Gateway (auth/rate-limit)] → [vLLM Engine]
-                  ↓                              ↓
-         [Billing Middleware] ←──── Extract usage from response
-                  ↓
-         Billing DB (user_id, org_id, prompt_tokens, completion_tokens, timestamp)
-```
-
-### Prometheus Metrics
+Core challenge: **vLLM knows how many tokens were consumed, not which tenant consumed them.** Place an authentication and metering proxy ahead of vLLM:
 
 ```text
-# Token metering
-vllm:prompt_tokens_total / vllm:generation_tokens_total
-
-# Cache efficiency (V1, replaces deprecated gpu_prefix_cache_hit_rate)
-vllm:prefix_cache_hits_total / vllm:prefix_cache_queries_total
-# PromQL: (rate(vllm:prefix_cache_hits_total[5m]) / rate(vllm:prefix_cache_queries_total[5m])) * 100
-
-# Latency
-vllm:time_to_first_token_seconds / vllm:inter_token_latency_seconds
-
-# Saturation
-vllm:kv_cache_usage_perc / vllm:num_requests_waiting / vllm:num_preemptions_total
+User → [API Gateway] → [vLLM Engine]
+             ↓                ↓
+      Auth / Rate Limit   Generate response + usage
+             ↓                ↓
+      [Billing Middleware] ←── Extract usage
+             ↓
+      Write to Time-Series Billing DB
+      (user_id, org_id, prompt_tokens, completion_tokens, model, timestamp)
 ```
 
-> The standard vLLM server normally initializes multiprocess metric storage. Custom launchers must manage its lifecycle for the installed version and avoid stale process data.
+**Recommended Three-Tier Stack:**
+
+| Tier | Technology Choices | Responsibility |
+|------|---------|------|
+| **API Gateway** | Nginx / Kong / Traefik | API key auth, rate limiting, routing, multi-instance load balancing |
+| **Billing Middleware** | Custom Python/Go microservice | Intercept responses, extract `usage` + `cached_tokens`, attribute to tenant, persist records |
+| **Billing Platform** | Stripe Billing / Lago / Custom | Invoicing, quota enforcement, usage dashboards, webhook alerts |
+
+### Prometheus Metrics (`http://localhost:8000/metrics`)
+
+```text
+# ─── Token Metering ───
+vllm:prompt_tokens_total            # Cumulative prompt tokens (Counter)
+vllm:generation_tokens_total        # Cumulative generated tokens (Counter)
+vllm:request_prompt_tokens          # Per-request prompt token distribution (Histogram)
+vllm:request_generation_tokens      # Per-request output token distribution (Histogram)
+
+# ─── Prefix Cache Efficiency ─── (V1 counters replacing deprecated gpu_prefix_cache_hit_rate)
+vllm:prefix_cache_hits_total        # Cached tokens hit (Counter)
+vllm:prefix_cache_queries_total     # Cached tokens queried (Counter)
+vllm:prompt_tokens_cached_total     # Total cached prompt tokens
+
+# ─── Latency ───
+vllm:time_to_first_token_seconds    # TTFT distribution (Histogram)
+vllm:inter_token_latency_seconds    # ITL distribution (Histogram)
+vllm:e2e_request_latency_seconds    # End-to-end request latency (Histogram)
+
+# ─── Saturation & Preemption ───
+vllm:kv_cache_usage_perc            # KV Cache block utilization (0~1; near 1 signals block pressure, not total GPU VRAM %)
+vllm:num_requests_running           # Active running sequences
+vllm:num_requests_waiting           # Queued waiting requests
+vllm:num_preemptions_total          # Cumulative KV preemptions (frequent > 0 signals KV block exhaustion)
+```
+
+> The standard vLLM server initializes multiprocess metric storage automatically; custom process launchers must manage `PROMETHEUS_MULTIPROC_DIR` lifecycle for the installed version to avoid stale process files.
+
+**Recommended Grafana Panels**:
+
+| Panel | PromQL | Alert Reference | Operational Meaning |
+|------|--------|---------|------|
+| **🔥 Prefix Cache Hit Rate** | `rate(vllm:prefix_cache_hits_total[5m]) / rate(vllm:prefix_cache_queries_total[5m]) * 100` | <50% for 10m (workload-dependent) | Reduced prefix reuse efficiency |
+| Token Throughput | `rate(vllm:generation_tokens_total[5m])` | Drop >50% | Potential engine stall or upstream drop |
+| KV Cache Usage | `vllm:kv_cache_usage_perc` | >0.95 | High KV block pressure; evaluate alongside queueing & preemptions |
+| Waiting Queue Depth | `vllm:num_requests_waiting` | >100 for 1m | Scale out replicas |
+| P99 TTFT | `histogram_quantile(0.99, rate(vllm:time_to_first_token_seconds_bucket[5m]))` | >3s | User-perceived responsiveness degradation |
+| Preemption Rate | `rate(vllm:num_preemptions_total[5m])` | Sustained >0 | KV block pool exhausted under load |
 
 ### Five Token Billing Pitfalls
 
-**Pitfall 1: Treating cache hits as profit**
+**Pitfall 1: Treating cache hits as pure profit**
 
-A request with 3000 input tokens and 2800 cache hits has 200 uncached input tokens. It still incurs decoding, KV-memory traffic, and fixed costs. Cache pricing is a contractual choice, not an industry-wide full-price rule. Compare measured GPU time, latency, and total serving cost under the same traffic.
+A request with 3000 input tokens and 2800 cache hits has 200 uncached input tokens. Prefix hits avoid redundant prefill FLOPs, but still incur decode steps, KV-memory reads, residency, and fixed cluster costs. Whether cached tokens receive discounted billing is defined by your customer contract—there is no universal industry rule. Evaluate savings using measured GPU time, latency, and total machine cost under identical traffic.
 
-**Pitfall 2: Streaming usage needs explicit handling.** Enable `stream_options={"include_usage": True}`. The final usage chunk can have empty `choices`; inspect `chunk.usage` rather than `finish_reason`. Interrupted streams may never receive final usage, so track incomplete accounting separately.
+**Pitfall 2: Streaming usage needs explicit handling**
 
-**Pitfall 3: Speculative decoding waste tokens.** vLLM's `completion_tokens` automatically excludes rejected draft tokens.
+Enable `stream_options={"include_usage": True}` in streaming requests. Before stream termination, vLLM emits an extra summary chunk carrying cumulative `usage` whose `choices` list may be empty. Do not gate metering on `finish_reason`; inspect `chunk.usage` directly, and log prematurely disconnected streams separately:
 
-**Pitfall 4: `/tokenize` endpoint mismatches.** Chat Template special tokens (`<|im_start|>`) are included. Ensure your billing tokenizer matches vLLM's exactly.
+```python
+# ❌ Wrong: reading usage from the first chunk or gating only on finish_reason
+# ✅ Right: inspect chunk.usage across the stream
+async for chunk in response:
+    if chunk.usage is not None:
+        final_usage = chunk.usage  # Only the final summary chunk carries complete usage
+```
 
-**Pitfall 5: Multimodal token counting.** Images encode as hundreds-to-thousands of visual tokens reflected in `prompt_tokens`. Consider separate pricing.
+**Pitfall 3: Speculative decoding rejected draft tokens**
+
+During speculative decoding, draft candidates rejected by the target model consume GPU compute but never appear in the final output. vLLM's `usage.completion_tokens` **automatically excludes rejected draft tokens**, so no manual deduction is required.
+
+**Pitfall 4: `/tokenize` endpoint special-token mismatches**
+
+vLLM's `/tokenize` endpoint counts Chat Template control tokens (such as `<|im_start|>` and `<|im_end|>`). Ensure your external billing pre-estimator uses the exact same tokenizer and chat template as vLLM to prevent invoice discrepancies.
+
+**Pitfall 5: Multimodal visual token accounting**
+
+For vision-language models (such as Qwen-VL), each image encodes into hundreds or thousands of visual tokens included inside `prompt_tokens`. Factor multimodal token expansion into your pricing tiers explicitly.
 
 ---
 
-## Cost Analysis: Build vs Buy
+## Layer 7: Cost Analysis — Build vs. Buy
 
 First verify both options meet the same acceptance criteria. Equal token volume from models with different capabilities is not an equivalent service.
 
@@ -506,27 +654,46 @@ Keep rates consistently per token or per million tokens. Use measured SLO-compli
 
 | Item | Recommended | Notes |
 |------|------------|-------|
-| GPU | H100 SXM 80GB / A100 80GB | H100 supports FP8 zero-calibration |
-| Interconnect | NVLink 4.0 / NVSwitch | TP GPUs must be NVLink (not PCIe) |
-| CPU | ≥ (2 + N) physical cores (N=GPU count) | Engine Core is CPU-sensitive |
-| RAM | ≥ model file size × 2 | For model loading |
+| GPU | H100 SXM 80GB / A100 80GB | Validate cost-efficiency against model, precision, SLO, and pricing |
+| Interconnect | NVLink 4.0 / NVSwitch | Verify TP interconnect topology and measured bandwidth |
+| CPU | ≥ (2 + N) physical cores (N=GPU count) | Engine Core is CPU-sensitive; starvation inflates scheduling latency |
+| RAM | ≥ model file size × 2 | Host memory staging during checkpoint loading |
+
+```text
+✅ Inspect GPU topology: nvidia-smi topo -m (verify TP ranks share direct NVLink paths)
+✅ Configure NVIDIA Container Toolkit (Docker GPU passthrough)
+✅ Multi-node NCCL tuning: set NCCL_IB_HCA=mlx5 on InfiniBand/RoCE hosts
+```
 
 ### II. Storage & Model Loading
 
 | Item | Recommended | Notes |
 |------|------------|-------|
-| Model storage | Local NVMe SSD / fast NFS | Cold start from HuggingFace is too slow |
-| K8s | PersistentVolume + InitContainer | Pre-download via Job |
+| Model storage | Local NVMe SSD / high-throughput NFS | Cold-pulling 70B+ checkpoints from HuggingFace takes >10 min |
+| Model versioning | Pre-staged versioned directories | `/models/v1/`, `/models/v2/` for canary rollouts |
+| Kubernetes | PersistentVolume + InitContainer | Pre-populate PV via Job to avoid concurrent pod download storms |
+
+```text
+✅ Mount pre-downloaded checkpoints into containers (-v /path/to/models:/models)
+✅ Verify SHA256 checksums on weight shards to prevent silent corruption
+```
 
 ### III. Network & Security
 
 | Item | Recommended | Notes |
 |------|------------|-------|
-| Multi-node | InfiniBand RDMA / RoCE | Required for disaggregated inference |
-| External | Reverse proxy (Nginx/Kong) | vLLM’s `--api-key` isn’t production security |
-| Isolation | Private VPC | vLLM inter-node comms are unencrypted by default |
+| Multi-node fabric | InfiniBand RDMA / RoCEv2 | Low-latency transport required for disaggregated KV transfer |
+| External ingress | Reverse proxy (Nginx/Kong/Traefik) | Built-in `--api-key` is basic auth only, not full gateway security |
+| Isolation | Private VPC / dedicated subnet | Inter-node vLLM traffic is unencrypted by default |
+| `VLLM_HOST_IP` | Bind to private interface IP | Avoid exposing internal RPC sockets on public interfaces |
 
-### IV. vLLM Engine Params
+```text
+✅ Provision sufficient shared memory in Docker (--ipc=host or explicit --shm-size)
+✅ Terminate TLS, authentication, and rate limiting at the reverse proxy
+✅ Set VLLM_HOST_IP to the private network interface address
+```
+
+### IV. vLLM Engine Parameters
 
 ```bash
 vllm serve /models/Qwen2.5-72B-Instruct \
@@ -536,48 +703,114 @@ vllm serve /models/Qwen2.5-72B-Instruct \
   --enable-prefix-caching \
   --enable-prompt-tokens-details \
   --max-num-seqs 256 \
+  --max-num-batched-tokens 16384 \
   --quantization fp8 \
   --kv-cache-dtype fp8_e5m2 \
-  --tensor-parallel-size 2
+  --tensor-parallel-size 2                  # Minimal TP + multi-replica DP
 ```
 
-### V. Monitoring
+```text
+✅ Set --max-model-len according to business SLA bounds and verify startup KV profiling logs (lowering it does not guarantee a fixed 10x concurrency jump)
+✅ Multi-GPU serving: minimal TP size + multiple replicas behind a load balancer
+✅ Enable speculative decoding selectively for low-latency regimes after SLO benchmarking
+✅ Enable Multi-LoRA for multi-tenant fine-tuned adapters
+✅ Configure XGrammar guided decoding where strict schema compliance is required
+```
 
-| Component | Recommended | Key Panels |
-|-----------|------------|------------|
-| Metrics | Prometheus | Cache hit rate, KV Cache %, queue depth |
-| Dashboards | Grafana | 6 panels: cache hits, throughput, latency, queue, preemptions, TTFT P99 |
-| Logging | ELK / Loki | Request-level traces |
-| Tracing | OpenTelemetry | End-to-end latency |
+### V. Monitoring & Observability
+
+| Component | Recommended | Notes |
+|-----------|------------|-------|
+| Metrics | Prometheus | Scrape vLLM `/metrics` endpoint |
+| Dashboards | Grafana | Operational panels + alert rules |
+| Logging | ELK / Loki | Request-level structured trace logs |
+| Tracing | OpenTelemetry | End-to-end latency breakdown (Gateway → vLLM → Response) |
+
+```text
+✅ Verify multiprocess metric directory lifecycle across restarts
+✅ Track the 6 essential Grafana panels:
+   - Prefix cache hit rate: rate(vllm:prefix_cache_hits_total[5m]) / rate(vllm:prefix_cache_queries_total[5m])
+   - KV Cache usage: vllm:kv_cache_usage_perc (>0.95 alert)
+   - Token throughput: rate(vllm:generation_tokens_total[5m])
+   - Waiting queue depth: vllm:num_requests_waiting (>100 alert)
+   - P99 TTFT: histogram_quantile(0.99, ...) (>3s alert)
+   - Preemptions: rate(vllm:num_preemptions_total[5m]) (>0 alert)
+```
 
 ### VI. Billing & Business
 
 | Component | Recommended | Notes |
 |-----------|------------|-------|
-| Gateway | Kong / Nginx / Traefik | Auth, rate limiting, routing |
-| Billing middleware | Custom Python/Go | Extract `usage` + `cached_tokens` |
-| Database | TimescaleDB / ClickHouse | Time-series billing records |
+| API Gateway | Kong / Nginx / Traefik | API key validation, rate limiting, routing |
+| Billing middleware | Custom Python/Go microservice | Intercept `usage` + `cached_tokens` |
+| Billing platform | Stripe / Lago / Custom | Invoicing and quota management |
+| Database | TimescaleDB / ClickHouse | Time-series usage ledger |
+
+```text
+✅ Persist both prompt_tokens and cached_tokens in billing middleware
+   → prompt_tokens = contractual customer metering basis
+   → cached_tokens = infrastructure cache-efficiency telemetry
+   → Combine with GPU-hours and fixed TCO to evaluate true margin
+✅ Inspect chunk.usage on the final summary chunk for streaming responses
+✅ Keep billing tokenizer and chat template strictly identical to vLLM
+```
 
 ### VII. High Availability
 
 | Item | Recommended | Notes |
 |------|------------|-------|
-| Load balancer | Nginx / Traefik / K8s Service | Multi-replica traffic |
-| Health checks | Active inference probes | Don’t just check process liveness |
-| Orchestration | Kubernetes + KEDA | Autoscale on queue depth |
-| Rolling updates | Start new before stopping old | Model loading takes 30s+ |
+| Load balancer | Nginx / Traefik / K8s Service | Multi-replica traffic distribution (prefix-aware where applicable) |
+| Health checks | Active inference probes | Do not rely solely on TCP/process liveness |
+| Orchestration | Kubernetes + KEDA | Autoscale on `vllm:num_requests_waiting` queue depth |
+| Rolling updates | Surge new pods before draining old | Checkpoint loading takes tens of seconds to several minutes |
+
+```text
+✅ Kubernetes: mount emptyDir with medium: Memory at /dev/shm (isolated alternative to --ipc=host)
+✅ Liveness probe: check process responsiveness
+✅ Readiness probe: send a lightweight inference request to confirm engine warmup completion
+✅ Maintain local pre-staged model caches with explicit version directories
+```
 
 ---
 
 ## Summary
 
+```text
+                         ┌─────────────────────┐
+                         │   API Gateway Tier   │
+                         │ Auth / Limit / Route │
+                         └──────────┬──────────┘
+                                    │
+                         ┌──────────▼──────────┐
+                         │  vLLM Serving Engine │
+                         │                     │
+                         │  PagedAttention      │ ← Validate gains & limits per workload
+                         │  Continuous Batching │ ← Validate gains & limits per workload
+                         │  Chunked Prefill     │ ← Validate gains & limits per workload
+                         │  APC Prefix Caching  │ ← Validate gains & limits per workload
+                         │  FP8 Quantization    │ ← Validate gains & limits per workload
+                         │  KV Cache FP8        │ ← Validate gains & limits per workload
+                         │  Speculative Decode  │ ← Validate gains & limits per workload
+                         │  Multi-LoRA          │ ← One base model for multi-tenant serving
+                         │  Guided Decoding     │ ← Validate gains & limits per workload
+                         │                     │
+                         └──────────┬──────────┘
+                                    │
+                    ┌───────────────┼───────────────┐
+                    │               │               │
+           ┌────────▼──────┐ ┌─────▼──────┐ ┌──────▼───────┐
+           │ Prometheus     │ │ Billing    │ │ Application  │
+           │ + Grafana      │ │ Middleware │ │ (OpenAI SDK) │
+           └───────────────┘ └────────────┘ └──────────────┘
+```
+
 **Key action items:**
 
-1. **Get running first, tune later**: Start with a simple `vllm serve`, validate business logic, then optimize.
-2. **`max-model-len` is priority #1**: This single parameter may outweigh all other optimizations combined.
-3. **Monitor first**: Set up Prometheus + Grafana. `gpu_cache_usage_perc` is the single most important metric.
-4. **Measure cache savings**: Track cache hits together with GPU time and serving cost, and optimize static prefixes and routing.
-5. **Bill at the gateway**: Don't modify vLLM source code. Intercept `usage` at the gateway layer.
+1. **Get running first, tune systematically**: Start with a clean `vllm serve` baseline, verify business behavior, then layer quantization and concurrency tuning.
+2. **Size context and concurrency budgets from business SLAs**: Combine `--max-model-len` limits with startup KV profiling logs and long-context stress tests to pinpoint true bottlenecks.
+3. **Monitor first**: Stand up Prometheus + Grafana before tuning. Evaluate `vllm:kv_cache_usage_perc` alongside TTFT, queue depth (`vllm:num_requests_waiting`), and preemptions (`vllm:num_preemptions_total`).
+4. **Measure cache savings empirically**: Track `cached_tokens` together with GPU time and total serving cost, optimizing static prefix layout and affinity routing.
+5. **Bill at the gateway**: Keep vLLM unmodified and intercept `usage` cleanly at the gateway middleware layer.
 
 Stay updated via [official docs](https://docs.vllm.ai/) and [GitHub Releases](https://github.com/vllm-project/vllm/releases).
 

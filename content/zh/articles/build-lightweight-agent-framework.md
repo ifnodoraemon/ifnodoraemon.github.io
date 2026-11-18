@@ -17,9 +17,9 @@ updated: 2026-10-20
 ---
 
 > [!NOTE] 核心速览 (TL;DR)
-> - **轻量生产级架构**：不依赖臃肿的重型框架，用纯 Python 异步有限状态机（FSM）构建具备规划、工具分发、反思与流式事件派发能力的极简 Agent 核心。
-> - **人机协同与持久化恢复**：实现高危工具调用的人工审批（Human-in-the-Loop）中断机制，支持状态序列化落盘与跨进程无损重启恢复。
-> - **体系演进**：单智能体架构成型后，可进一步探索 [多智能体协作与并发控制](/articles/multi-agent-collaboration-and-concurrency/) 实现分布式多角色协同。
+> - **轻量级事件流状态机**：仅用 Python 标准库与 SQLite 构建异步 `StateGraph` 有限状态机，提供条件边路由、步数预算上限（`max_steps`）以及实时异步事件流（`AgentEvent`）派发。
+> - **单次消费审批与断点恢复**：通过 `SqliteCheckpointer` 记录挂起节点、步数与业务状态，支持高风险节点前的人工审批（Human-in-the-Loop）硬中断、防重放原子领取及跨进程重启恢复。
+> - **体系演进**：单智能体控制流成型后，可进一步结合 [Tool Use 进阶](/articles/advanced-agent-tool-use-and-function-calling/) 与 [多智能体协作与并发控制](/articles/multi-agent-collaboration-and-concurrency/) 扩展工具隔离与多角色协同。
 
 ## 为什么需要显式的 Agent 状态机？
 

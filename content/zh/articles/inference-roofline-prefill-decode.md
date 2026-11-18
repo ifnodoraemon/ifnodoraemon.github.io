@@ -191,7 +191,6 @@ $$I_{\text{decode}} = 1 \text{ FLOPs/Byte} \lll 295.3 \text{ FLOPs/Byte}$$
 $$P_{\text{attainable}} = I_{\text{decode}} \times B_{\text{mem}} = 1 \text{ FLOPs/Byte} \times 3,350 \text{ GB/s} = 3.35 \text{ TFLOPS}$$
 
 $$\text{算力利用率} = \frac{3.35 \text{ TFLOPS}}{989.4 \text{ TFLOPS}} \approx \mathbf{0.34\%}$$
-！
 
 **这就是为什么开头 Profiler 抓出的 Tensor Core 利用率常年徘徊在冰点的数学铁证。在单并发 Decode 阶段，即使是全球最昂贵的高性能芯片，99.66% 的算力也是被硬生生闲置的！**
 
@@ -258,11 +257,11 @@ $$\text{TTFT} \approx \frac{2 \cdot P \cdot L_{\text{prompt}}}{\text{Achieved FL
 * **业务体感**：TTFT 过长会让用户觉得系统“卡死”或反应迟钝。
 
 ### 2. 词间延迟 (Time Per Output Token, TPOT / ITL)
-输出流式打印时，每两个相邻 Token 之间的间隔延迟，对应单个 Decode 步骤：
+输出流式打印时，每两个相邻 Token 之间的间隔延迟，对应单个 Decode 步骤的执行耗时：
 
-$$\text{TPOT} \approx \frac{\text{Bytes}_{\text{Weights}} + \text{Bytes}_{\text{KV\_Cache}}(L_{\text{ctx}})}{\text{Achieved Memory Bandwidth}} \times \frac{1}{B}$$
+$$\text{TPOT} \approx \frac{\text{Bytes}_{\text{Weights}} + B \cdot \text{Bytes}_{\text{KV\_per\_seq}}(L_{\text{ctx}})}{\text{Achieved Memory Bandwidth}} + T_{\text{overhead}}$$
 
-* **决定性因素**：**HBM 物理显存带宽**、模型量化位宽、KV Cache 压缩率。
+* **决定性因素**：**HBM 物理显存带宽**、模型量化位宽、并发批大小 $B$ 与单序列 KV Cache 体积（另含算子启动与计算开销 $T_{\text{overhead}}$）。注意单步权重只需读取一次，而总 KV Cache 读取量随并发数 $B$ 线性增长，因此单请求感知的 **TPOT 会随 $B$ 增大而升高**；与之相对，集群整体输出吞吐量为 $\text{Throughput} = \frac{B}{\text{TPOT}}$。
 * **业务体感**：TPOT 决定了阅读时的“吐字打字机速度”。正常人阅读速度约为 10~20 Token/s（TPOT 为 50ms~100ms），一旦 TPOT 超过 150ms，就会产生肉眼可见的卡顿顿挫感。
 
 ### 3. 不可调和的工程拉扯

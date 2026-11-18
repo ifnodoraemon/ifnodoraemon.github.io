@@ -226,7 +226,7 @@ export async function runAgentLoop(state: AgentState): Promise<string> {
 
 ## 3. 数学理论与注意力衰减
 
-长程记忆检索相关度衰减公式采用双曲余弦权重：
+长程记忆检索相关度采用指数时间衰减权重（Exponential Time Decay）：
 
 $$S(q, k) = \\frac{q \\cdot k^T}{\\sqrt{d_k}} \\cdot \\exp\\left( -\\lambda \\cdot \\Delta t \\right)$$
 
@@ -234,14 +234,15 @@ $$S(q, k) = \\frac{q \\cdot k^T}{\\sqrt{d_k}} \\cdot \\exp\\left( -\\lambda \\cd
 
 ---
 
-## 4. 2026 前沿模型架构基准横评
+## 4. 2026.11 前沿模型架构基准横评
 
-| 模型架构 | 上下文窗口 | SWE-bench 解决率 | 典型推理延迟 (TTFT) | 单百万 Token 成本 |
-| :--- | :--- | :--- | :--- | :--- |
-| **DeepSeek-V4-Pro** | 128K | 84.5% | 180ms | $0.25 |
-| **Kimi K3 (2.8T)** | 256K | 83.2% | 210ms | $0.20 |
-| **Claude Fable 5.1** | 200K | 86.1% | 240ms | $1.80 |
-| **GPT-6 Astra** | 512K | 88.0% | 310ms | $3.50 |
+| 模型架构 | 上下文窗口 | 核心定位与优势 | 输入 / 输出费率 (/1M Tokens) |
+| :--- | :--- | :--- | :--- |
+| **Claude Fable 5.2** | 1M | AA 智能指数 v5 全球第一 (64.6) / 极限科研 | $8.00 / $40.00 |
+| **GPT-6.2 Astra** | 1.05M | 11.17 发布 / 科学终端与复杂多步推理旗舰 | $8.00 / $40.00 (缓存 $0.40) |
+| **Gemini 4 Carbon** | 1M | LMArena 盲测第一 (~1526 Elo) / 全五模态 | $2.00 / $10.00 (11月特惠; 标准 $4/$20) |
+| **Qwen4-Max** | 1M | 11.16 发布 / ~2.4T 稀疏 MoE 图文视频与科学 | $1.50 / $4.50 (缓存 $0.075) |
+| **Kimi K3.1 Pro** | 1.04M | 2.8T 开放权重 Gated-DSA + KDA 长文旗舰 | $2.00 / $10.00 (缓存 $0.20) |
 
 ---
 

@@ -151,7 +151,7 @@ To enforce hard physical boundaries, the Linux kernel provides **cgroups (Contro
 
 cgroups are implemented not as external daemons, but as **hooks directly embedded within the kernel's process scheduler (such as the Completely Fair Scheduler, CFS) and memory allocators**:
 - **CPU Quotas**: Implemented by tracking CFS runtime credits. If a container is restricted to 1 CPU core, the CFS scheduler assigns it a maximum quota of $100\text{ms}$ execution time within each $100\text{ms}$ scheduling period. Once exhausted, the scheduler throttles the container's threads by descheduling them until the next replenishment window;
-- **Memory Limits**: Implemented via counter checks in kernel page frame allocations (`alloc_pages()`). When a cgroup's aggregate physical memory usage reaches its configured threshold, the kernel triggers synchronous memory reclamation. If memory pressure remains critical, the kernel invokes the **OOM Killer** to terminate offending processes with `SIGKILL`, safeguarding the remaining host infrastructure.
+- **Memory Limits**: Implemented via counter checks in kernel page frame allocations (`alloc_pages()`). When a cgroup's aggregate physical memory usage (`Anonymous RSS + Page Cache + Kernel Slab`, while Swap is governed separately via `memory.swap.max` in cgroups v2) reaches its configured `memory.max` threshold, the kernel triggers synchronous memory reclamation. If memory pressure remains critical, the kernel invokes the **OOM Killer** to terminate offending processes with `SIGKILL`, safeguarding the remaining host infrastructure.
 
 ### 2.2 The Structural Flaws of cgroups v1
 

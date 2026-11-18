@@ -40,17 +40,17 @@ graph LR
     subgraph WithSkills["With Skills"]
         U2["Developer"] -- "Normal conversation" --> A2["AI Assistant"]
         S["Skills Handbook"] -- "Auto-inject expertise" --> A2
-        A2 -- "Standardized output" --> R2["Consistently high quality"]
+        A2 -- "Standardized output" --> R2["Consistent review workflow"]
     end
 ```
 
-Skills are **modular capability extensions for AI coding assistants** — structured Markdown files that inject your team's coding standards, best practices, and workflows into the AI's working context with a "write once, apply forever" approach. They don't change the AI's "IQ," but dramatically boost its "professionalism."
+Skills are **modular capability extensions for AI coding assistants** — structured Markdown files that inject your team's coding standards, best practices, and workflows into the AI's working context, maintained alongside the project and loaded on demand. They don't change the AI's "IQ," but dramatically boost its "professionalism."
 
 ## Why Do You Need Skills?
 
 | Pain Point | Without Skills | With Skills |
 |------------|---------------|-------------|
-| **Repetitive instructions** | Repeat "use 4-space indentation" and "functions under 50 lines" every conversation | Write Skills once, automatically enforced forever |
+| **Repetitive instructions** | Repeat "use 4-space indentation" and "functions under 50 lines" every conversation | Shared maintainable instructions paired with automated checks |
 | **Inconsistent output** | Same Code Review task yields different review dimensions each time | Strictly follows Skills-defined checklists |
 | **Context amnesia** | AI doesn't remember your project uses FastAPI + PostgreSQL | Skills auto-inject project tech stack context |
 | **Team collaboration** | Each team member must individually train their AI | Skills ship with the repo, entire team stays aligned |

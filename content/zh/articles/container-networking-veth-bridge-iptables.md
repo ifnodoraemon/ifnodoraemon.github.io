@@ -115,7 +115,7 @@ ping -c 2 192.168.100.2
 每当你使用 `docker run` 启动一个新容器时：
 1. Docker 创建一对 `veth-pair`；
 2. 一端塞进容器并改名为 `eth0`，分配 IP（如 `172.17.0.2`）与专属虚拟 MAC 地址；
-3. 另一端（通常名为 `vethXXXX`）保留在宿主机，并通过内核命令 `br_add_if` **直接插上 `docker0` 网桥的虚拟端口上**。
+3. 另一端（通常名为 `vethXXXX`）保留在宿主机，并通过 Netlink 命令 `ip link set ... master docker0` 调用内核桥接函数 `br_add_if()`，**直接挂载到 `docker0` 网桥的虚拟端口上**。
 
 ```mermaid
 flowchart TD
@@ -213,7 +213,7 @@ sequenceDiagram
     Note over Netfilter: 匹配 DOCKER 链规则: 触发 DNAT!<br/>改写目标地址: Dst 改为 172.17.0.2:80
     Netfilter->>Bridge: 内核根据新目标地址查路由表, 递交 docker0
     Bridge->>Container: 通过 veth-pair 单播送达容器
-    Container-->>Bridge: 响应 ACK 回包 [Src: 172.17.0.2:80, Dst: 10.0.0.5:54321]
+    Container-->>Bridge: 响应 SYN-ACK 回包 [Src: 172.17.0.2:80, Dst: 10.0.0.5:54321]
     Bridge-->>Netfilter: 触发 Conntrack 反向 NAT 还原
     Note over Netfilter: 将源地址改回宿主机物理 IP: 192.168.1.100:8080
     Netfilter-->>HostNIC: 递交物理网卡发送

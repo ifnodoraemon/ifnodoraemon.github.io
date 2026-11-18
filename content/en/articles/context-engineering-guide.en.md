@@ -54,7 +54,7 @@ This is an extension of traditional [Retrieval-Augmented Generation (RAG)](/en/a
 Just like an OS's garbage collection, an Agent's context needs regular cleanup. Lengthy interactions generate traces of small talk, intermediate confirmations, and error retries.
 
 **Best Practices:**
-- **Rolling Window & Summarization:** When conversation turns exceed a set threshold, trigger a background task to pass the earlier turns to a smaller model (like Gemini 3.5 Flash). Have it generate a `Current State & Goals Summary`, and replace thousands of tokens of raw logs with this brief summary.
+- **Rolling Window & Summarization:** When conversation turns exceed a set threshold, trigger a background task to pass the earlier turns to a smaller model (like Gemini 3.1 Flash-Lite). Have it generate a `Current State & Goals Summary`, and replace thousands of tokens of raw logs with this brief summary.
 - **Squashing Tool Calls:** If an Agent calls a terminal command 10 times with errors trying to fix a bug, and finally succeeds on the 11th try, the details of the first 10 failures should be squashed into a single line for future context: "*Failed 10 times due to syntax errors, ultimately resolved by doing X.*"
 
 ### 4. Isolate: Context Isolation, Firewall Mechanism

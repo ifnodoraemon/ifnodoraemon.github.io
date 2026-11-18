@@ -78,14 +78,17 @@ Using Local PVs in Kubernetes requires avoiding raw `hostPath` volumes. Dedicate
 ### 2.1 Disk Initialization: Tuning XFS Formatting
 When formatting physical NVMe drives, optimize XFS parameters to prevent metadata write lock contention:
 ```bash
-# Format enterprise NVMe SSD
+# Format enterprise NVMe SSD:
+# -n ftype=1    : Enable directory entry filetype tracking (required by OverlayFS and container runtimes)
+# -l size=128m  : Set the on-disk XFS Journal/Log section size to 128MB to reduce log space contention during WAL flushes
+# -d agcount=32 : Set allocation groups to 32 to maximize parallel write allocation concurrency
 mkfs.xfs -f \
-  -n ftype=1 \          # Mandatory: ftype=1 (Prerequisite for container runtimes and OverlayFS)
-  -l size=128m \        # Enlarge log buffer to 128MB to eliminate journal lock contention during WAL flushes
-  -d agcount=32 \       # Increase allocation groups to 32 to maximize parallel write allocation
+  -n ftype=1 \
+  -l size=128m \
+  -d agcount=32 \
   /dev/nvme0n1
 
-# Production mount parameters
+# Production mount parameters (in-memory log buffers are configured here via logbufs=8,logbsize=256k)
 mkdir -p /mnt/disks/nvme0n1
 mount -o noatime,nodiratime,allocsize=64M,logbufs=8,logbsize=256k /dev/nvme0n1 /mnt/disks/nvme0n1
 ```
@@ -126,6 +129,9 @@ provisioner: kubernetes.io/no-provisioner
 # Mandatory requirement: defer volume binding!
 volumeBindingMode: WaitForFirstConsumer
 ```
+
+- **Scheduler Co-Design**: `volumeBindingMode: WaitForFirstConsumer` ensures `kube-scheduler` jointly evaluates node CPU/memory headroom alongside the physical topology of local disks before binding;
+- Once a database Pod binds to this Local PV, Kubernetes permanently pins that Pod to that physical host—across any number of restarts, it consistently reads and writes the exact same high-speed local NVMe SSD.
 
 ---
 
@@ -193,7 +199,7 @@ Three tiers of Fencing mechanisms are deployed in production:
 2. **Node Fencing (STONITH - Shoot The Other Node In The Head)**:
    When the control plane flags Node A as failed, automated agents issue power-cutoff commands via server out-of-band management interfaces (IPMI, iLO, or Redfish APIs), cutting power to the chassis.
 3. **Software Lease Fencing**:
-   The primary process maintains a short-lived distributed lease in memory (e.g., a Kubernetes `Lease` object or Raft consensus lease refreshed every 2 seconds). If the primary loses contact with the cluster and fails to renew the lease within 5 seconds, **it must execute an immediate process abort/panic**, halting disk write routines.
+   The primary process maintains a short-lived distributed lease in memory (e.g., a Kubernetes `Lease` object or Raft consensus lease with a 5-second TTL, renewed every 1 second). If the primary loses contact with the cluster and fails to renew the lease within 5 seconds, **it must execute an immediate process abort/panic**, halting disk write routines.
 
 ---
 
@@ -220,7 +226,7 @@ In Chapter 09, **[Hacking the Kubernetes Scheduler: Custom Plugins via Schedulin
 These distributed platforms implement data redundancy at the application layer via Raft, ISR, or primary-replica topologies. Running them atop 3x replicated network block storage multiplies every write operation into two network transit phases and nine separate disk writes. Local PVs leverage direct host PCIe buses, reducing latencies to microseconds while eliminating network transfer charges.
 
 ### Q2: Why is configuring `-l size=128m` critical when formatting XFS volumes for database workloads?
-XFS maintains an internal journaling area for filesystem transactions. By default, this log buffer is restricted to a few megabytes. Under high-frequency concurrent writes (such as RocksDB WAL flushes or MySQL Binlog writes), multiple threads concurrently submitting transaction commits saturate the internal XFS log ticket lock, freezing threads in kernel space. Expanding the log buffer to 128MB provides sufficient queuing capacity to eliminate up to 80% of metadata lock contention.
+XFS maintains a dedicated on-disk journal/log section for filesystem metadata transactions (distinct from in-memory log buffers configured at mount time via `logbufs=8,logbsize=256k`). On smaller or default-formatted volumes, a undersized on-disk log section can bottleneck under high-frequency concurrent writes (such as RocksDB WAL flushes or MySQL Binlog writes), causing threads to stall waiting on XFS log space reservations (grant head / log ticket locks). Explicitly sizing the on-disk journal section to 128MB—paired with `logbufs=8,logbsize=256k` at mount—minimizes metadata journal contention and tail latency.
 
 ### Q3: What is Node Fencing, and why are Kubernetes Liveness Probes insufficient to prevent database split-brain conditions?
 Liveness probes evaluate process health locally within a node; they cannot distinguish between container failure and an asymmetric network partition. If a primary node becomes isolated from the control plane while remaining reachable by local clients, promoting a secondary node without fencing causes both instances to accept writes simultaneously. Node Fencing guarantees that the original node is cut off from storage or power before the new primary is promoted.

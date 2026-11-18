@@ -18,7 +18,7 @@ featuredStats:
 
 > [!NOTE] Executive Summary (TL;DR)
 > - **Mathematical Underpinnings**: A lightweight draft model generates $K$ candidate tokens, verified in parallel by the target model in a single forward pass under rejection sampling to preserve exact output distribution equivalence.
-> - **EAGLE Tree Attention**: EAGLE operates across hidden feature representations with tree attention verification, achieving acceptance lengths of 2.5-3.5 tokens for real-world 2x-3x speedups.
+> - **EAGLE Tree Attention**: EAGLE operates across hidden feature representations with tree attention verification—delivering 2.5–3.5 accepted tokens (2x–3x speedups) under general online serving and 3.5–4.8 accepted tokens (3x–5x peak speedups) with EAGLE-3 dynamic trees on low-concurrency code/JSON workloads.
 > - **Production Integration**: Speculative decoding is pivotal when hosting massive models like [DeepSeek-V4 and Kimi K3](/en/articles/deepseek-v4-kimi-k3-deployment-guide/) on [vLLM and SGLang](/en/articles/sglang-vs-vllm-architecture/).
 
 ## Introduction: The Memory-Bandwidth Curse of Autoregressive Decoding
@@ -129,23 +129,22 @@ Here is how to deploy EAGLE speculative decoding for `Qwen/Qwen2.5-72B-Instruct`
 
 ### 1. Deploying with vLLM
 
-vLLM natively integrates EAGLE via the `--speculative-model` parameter:
+vLLM V1 consolidates speculative execution parameters under the structured `--speculative-config` JSON flag (replacing the deprecated standalone `--speculative-model` / `--num-speculative-tokens` flags):
 
 ```bash
 vllm serve Qwen/Qwen2.5-72B-Instruct \
   --tensor-parallel-size 4 \
   --gpu-memory-utilization 0.90 \
   --max-model-len 8192 \
-  --speculative-model yuhuili/EAGLE-Qwen2.5-72B-Instruct \
-  --num-speculative-tokens 5 \
-  --speculative-draft-tensor-parallel-size 1 \
+  --speculative-config '{"method": "eagle", "model": "yuhuili/EAGLE-Qwen2.5-72B-Instruct", "num_speculative_tokens": 5, "draft_tensor_parallel_size": 1}' \
   --port 8000
 ```
 
-**Key Flag Rationale**:
-* `--speculative-model`: Points to the dedicated EAGLE lightweight head weights on HuggingFace (~500MB to 1GB);
-* `--num-speculative-tokens 5`: Drafting 5 tokens balances verification throughput with GPU latency;
-* `--speculative-draft-tensor-parallel-size 1`: The draft head is small enough to run on a single GPU without cross-GPU communication overhead.
+**Key Configuration Fields**:
+* `"method": "eagle"` (or `"eagle3"` for Gen-4 multi-scale EAGLE-3 checkpoints): Selects the feature-level speculative backend;
+* `"model"`: Points to the dedicated EAGLE lightweight head weights on HuggingFace (~500MB to 1GB);
+* `"num_speculative_tokens": 5`: Drafting 5 tokens balances verification compute against per-step latency;
+* `"draft_tensor_parallel_size": 1`: Runs the compact draft head on a single rank without cross-GPU AllReduce overhead.
 
 ### 2. Deploying with SGLang
 

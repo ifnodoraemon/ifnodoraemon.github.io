@@ -18,7 +18,7 @@ featuredStats:
 
 > [!NOTE] 核心速览 (TL;DR)
 > - **投机解码数学原理**：利用轻量级 Draft 模型以低时延快速生成 $K$ 个候选 Token，Target 大模型单次前向完成并行验证，利用拒绝采样保证输出概率分布与单模型严格数学等价。
-> - **EAGLE 架构演进**：EAGLE 在特征层进行下一轮预测，利用树状注意力 (Tree Attention) 同时验证多条生成分支，实际平均接受长度提升至 2.5~3.5 tokens，实现 2x~3x 推理加速。
+> - **EAGLE 架构演进**：EAGLE 在特征层进行下一轮自回归预测并结合树状注意力（Tree Attention）并行验证多条生成分支，常规在线中等并发下平均接受长度达 2.5~3.5 tokens（提速 2x~3x），而在代码/JSON 等低并发强结构化场景中 EAGLE-3 动态树平均接受 3.5~4.8 tokens，峰值提速达 3x~5x。
 > - **落地支撑**：投机解码在超大参数场景下与 [DeepSeek / Kimi 部署方案](/articles/deepseek-v4-kimi-k3-deployment-guide/) 和 [推理引擎架构对比](/articles/sglang-vs-vllm-architecture/) 紧密契合。
 
 ## 引言：自回归生成的内存带宽诅咒
@@ -129,24 +129,23 @@ EAGLE 将这颗包含多个候选分支的推测树，扁平化展开为一个 S
 
 ### 1. 在 vLLM 中启用 EAGLE 投机采样
 
-vLLM 原生支持 `--speculative-model` 参数接入 EAGLE 权重：
+vLLM V1 引擎统一通过结构化的 `--speculative-config` JSON 参数接入 EAGLE 草稿头权重（旧版分散的 `--speculative-model` / `--num-speculative-tokens` 参数已在 V1 中废弃收拢）：
 
 ```bash
-# 启动 vLLM + EAGLE-2 投机采样服务
+# 启动 vLLM V1 + EAGLE 投机采样服务
 vllm serve Qwen/Qwen2.5-72B-Instruct \
   --tensor-parallel-size 4 \
   --gpu-memory-utilization 0.90 \
   --max-model-len 8192 \
-  --speculative-model yuhuili/EAGLE-Qwen2.5-72B-Instruct \
-  --num-speculative-tokens 5 \
-  --speculative-draft-tensor-parallel-size 1 \
+  --speculative-config '{"method": "eagle", "model": "yuhuili/EAGLE-Qwen2.5-72B-Instruct", "num_speculative_tokens": 5, "draft_tensor_parallel_size": 1}' \
   --port 8000
 ```
 
 **关键生产参数深度解析**：
-* `--speculative-model`：指定匹配的 EAGLE 专用轻量草稿头模型路径（从 HuggingFace 下载，体积通常仅数百 MB 至 1GB 左右）；
-* `--num-speculative-tokens 5`：单步推测的 Token 长度。对于结构化代码与通用文本，5 是延迟与算力开销的最佳黄金平衡点；
-* `--speculative-draft-tensor-parallel-size 1`：草稿头参数极小，无需跨卡分布式通信，单张卡独立运行可消除多卡同步开销。
+* `"method": "eagle"`（或针对第三代多尺度草稿头设为 `"eagle3"`）：显式指定启用 EAGLE 特征外推投机后端；
+* `"model"`：指定匹配的 EAGLE 专用轻量草稿头模型路径（从 HuggingFace 下载，体积通常仅数百 MB 至 1GB 左右）；
+* `"num_speculative_tokens": 5`：单步推测的 Token 长度。对于结构化代码与通用文本，5 是延迟与算力开销的黄金平衡点；
+* `"draft_tensor_parallel_size": 1`：草稿头参数极小，无需跨卡分布式通信，单张卡独立运行可消除多卡 AllReduce 同步开销。
 
 ### 2. 在 SGLang 中启用 EAGLE 动态树加速
 

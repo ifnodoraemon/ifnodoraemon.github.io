@@ -74,11 +74,11 @@ In [Chapter 01](/en/articles/inference-roofline-prefill-decode/) and [Chapter 02
 
 Consider the memory footprint when a single request generates **64k (65,536) thinking tokens**:
 
-Using **LLaMA-3-70B** (80 layers, 8 KV heads, 128 head dim, FP16 precision), the per-token KV footprint across all layers is $320 \text{ KB}$.
-For a single request reasoning across 64k steps:
-$$\text{VRAM}_{\text{req}} = 320 \text{ KB} \times 65,536 \approx 20.97 \text{ GB}!$$
+Using **LLaMA-3-70B** (80 layers, 8 KV heads, 128 head dim, FP16 precision), the per-token KV footprint across all layers is $327,680 \text{ Bytes} = 320 \text{ KiB}$ ($327.68 \text{ KB}$).
+For a single request reasoning across 64k ($65,536$) steps:
+$$\text{VRAM}_{\text{req}} = 320 \text{ KiB} \times 65,536 = 20.0 \text{ GiB} \quad (\approx 21.47 \text{ GB})!$$
 
-**A single user session monopolizes nearly 21 GB of dedicated GPU HBM!**
+**A single user session monopolizes 20.0 GiB (21.47 GB) of dedicated GPU HBM!**
 On an 8x H100 node (640 GB total HBM, with ~500 GB remaining after weights), the cluster historically accommodated hundreds of concurrent streams. Under long reasoning workloads, **just 20 concurrent thinking sessions completely exhaust the memory pool.**
 
 Serving concurrency drops by an entire order of magnitude, driving inference Total Cost of Ownership (TCO) upward exponentially.
@@ -164,7 +164,7 @@ Inference infrastructure is shifting fundamentally — **from compute-centric cl
 flowchart TD
     subgraph StoragePyramid["Future LLM Inference Tiered Storage Pyramid"]
         L1["L1: On-Chip SRAM (SM Registers / L1 / L2 Cache)<br/>Capacity: Tens of MB | Bandwidth: > 10 TB/s | Role: Fused Kernels"]
-        L2["L2: Device Physical Memory (HBM3e / HBM4)<br/>Capacity: 80 ~ 192 GB | Bandwidth: 3 ~ 4 TB/s | Role: Active Working Set"]
+        L2["L2: Device Physical Memory (HBM3e / HBM4)<br/>Capacity: 80 ~ 192+ GB | Bandwidth: 4.8 ~ 8.0+ TB/s | Role: Active Working Set"]
         L3["L3: Host System Memory (Host DRAM via CXL 3.0 / PCIe 5.0)<br/>Capacity: 1 ~ 4 TB | Bandwidth: 200 ~ 500 GB/s | Role: Warm Tree Caches"]
         L4["L4: Local NVMe Storage (NVMe-oF PCIe 5.0 All-Flash Arrays)<br/>Capacity: 16 ~ 64 TB | Bandwidth: 30 ~ 60 GB/s | Role: Cold System Prompts"]
         L5["L5: Distributed Fabric RDMA KV Pool (Mooncake Interconnect)<br/>Capacity: Multi-PB Fabric | Bandwidth: 800 Gbps Fabric | Role: Cross-Node Disaggregation"]
@@ -245,6 +245,6 @@ In reasoning tasks, the model engages in rigorous deductive logic, code generati
 ### Q3: Does the adoption of CXL 3.0 memory pooling eliminate the need for expensive GPU HBM?
 **No. CXL expands memory capacity; it does not replace HBM.**
 The physical functions of both tiers remain distinct:
-- **HBM remains indispensable**: HBM3e/HBM4 delivers **$3 \sim 4 \text{ TB/s}$** of memory bandwidth, which is essential to saturate high-throughput decode GEMV operations;
+- **HBM remains indispensable**: Modern HBM3e and next-generation HBM4 deliver **$4.8 \sim 8.0+ \text{ TB/s}$** of memory bandwidth (4.8 TB/s on H200 HBM3e, 8.0 TB/s on B200, and >8 TB/s on next-gen HBM4), which is essential to saturate high-throughput decode GEMV operations;
 - **CXL 3.0 provides scalable capacity**: Over PCIe fabrics, CXL offers hundreds of gigabytes per second of bandwidth with low latency. While insufficient for active inner-loop attention execution, it provides an ideal tier for warm historical prefix blocks and dormant search branches.
 Moving data dynamically between HBM and CXL enables serving massive concurrent long-context queries at manageable hardware costs.

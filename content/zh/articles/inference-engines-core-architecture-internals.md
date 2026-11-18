@@ -7,7 +7,7 @@ tagClass: tag-emerald
 category: 推理系统
 series: llm-inference
 seriesOrder: 9
-description: "从 Python 运行时到 C++/Rust 异步执行引擎：深度拆解开源世界四大顶级推理底座的源码设计哲学。对比 vLLM v1 零开销调度器与多步执行、SGLang RadixAttention 树状层级执行环、TensorRT-LLM 原生算子深度融合与 In-Flight Batching，以及 llama.cpp 端侧无依赖极限定量化运行时，奉上生产级全景技术选型指南。"
+description: "从多进程异步隔离架构到 C++ 算子深度融合：深度拆解开源世界四大顶级推理底座的源码设计哲学。对比 vLLM v1 多进程 EngineCore 与统一零开销调度器、SGLang RadixAttention 树状层级执行环、TensorRT-LLM 原生算子深度融合与 In-Flight Batching，以及 llama.cpp 端侧无依赖极限定量化运行时，奉上生产级全景技术选型指南。"
 extraTags:
   - vLLM
   - SGLang
@@ -41,7 +41,7 @@ for _ in range(max_new_tokens):
 4. **算子之间频繁进行全局内存（HBM）读写往返，算力利用率（MFU）通常不足 $15\%$**。
 
 为了将 GPU 硬件的算力与显存带宽压榨到物理极致，开源社区与硬件巨头们在过去的三年中展开了史诗级的工程突围，孕育出当今支撑全球 AI 工业运转的四大顶级推理引擎底座：
-- **vLLM（加州大学伯克利分校 LMSYS）**：凭借开创性的 PagedAttention 显存虚拟化奠定了现代推理系统标准，并在全新的 **vLLM v1** 架构中彻底重构了底层 C++ 执行引擎；
+- **vLLM（加州大学伯克利分校 LMSYS / vLLM 社区）**：凭借开创性的 PagedAttention 显存虚拟化奠定了现代推理系统标准，并在全新的 **vLLM v1** 架构中通过多进程 `EngineCore` 隔离、统一 Token 预算调度器与持久化 `InputBatch` 状态重塑了零开销执行管线；
 - **SGLang（LMSYS / 斯坦福大学）**：针对多轮复杂 Agent 交互与长系统提示，独创了 **RadixAttention 前缀树缓存** 与极致敏捷的高并发调度器；
 - **TensorRT-LLM（NVIDIA）**：NVIDIA 官方倾力打造的“性能怪兽”，深度融合底层 CUTLASS、FMHA 算子与静态显存编排，代表了特定绿厂硬件上的吞吐极限；
 - **llama.cpp（Georgi Gerganov）**：极致的极简主义瑞士军刀，纯 C/C++ 零依赖开发，开创了 GGUF 格式与端侧极限整数量化，统治了边缘计算与个人终端设备。
@@ -58,9 +58,9 @@ for _ in range(max_new_tokens):
 flowchart TD
     subgraph ArchComparison["四大主流推理引擎核心拓扑对比"]
         subgraph VLLM["vLLM v1 架构"]
-            V_IN["HTTP / gRPC 请求"] --> V_ENG["C++ Async Engine (Zero-Overhead)"]
-            V_ENG --> V_SCHED["Multi-Step Scheduler 批量调度器"]
-            V_SCHED --> V_RUN["Worker Runner (CUDA Graph + PagedAttn)"]
+            V_IN["HTTP / Tokenize 前端进程"] -->|"ZeroMQ IPC"| V_ENG["EngineCore 核心进程 (Python)"]
+            V_ENG --> V_SCHED["Unified Token-Budget 统一调度器"]
+            V_SCHED --> V_RUN["Persistent InputBatch + torch.compile / CUDA Graph"]
         end
 
         subgraph SGL["SGLang 架构"]
@@ -86,68 +86,110 @@ flowchart TD
 | 引擎维度 | vLLM v1 | SGLang | TensorRT-LLM | llama.cpp |
 | :--- | :--- | :--- | :--- | :--- |
 | **首要目标** | 生态通用性与高吞吐兼备的标准底座 | 多轮 Agent 对话、结构化输出与前缀重用 | NVIDIA 硬件上的极限吞吐与极致能效 | 跨平台零依赖极简运行与端侧极限界量化 |
-| **核心语言栈** | C++ 核心调度器 + Python 灵活生态接入 | Python 调度编排 + C++/CUDA 算子 (SGL-Kernel) | 纯 C++ 核心引擎 + Python 构建期声明 | 纯 C/C++ (零外部第三方库依赖) |
+| **核心语言栈** | Python 多进程 `EngineCore`（ZeroMQ 隔离）+ C++/CUDA/Triton 算子 | Python 调度编排 + C++/CUDA 算子 (SGL-Kernel) | 纯 C++ 核心引擎 + Python 构建期声明 | 纯 C/C++ (零外部第三方库依赖) |
 | **显存管理** | PagedAttention 显存分页池 | RadixAttention 树状层级前缀缓存池 | 预分配静态平铺显存池 + In-Flight Paged KV | 统一内存直接内存映射 (mmap) 与张量切分 |
 | **硬件主战场** | NVIDIA GPU、AMD ROCm、Intel Gaudi、昇腾等主流算力 | NVIDIA GPU、AMD ROCm | NVIDIA 独占 (Hopper, Blackwell, Ada) | Apple Silicon、x86 CPU、ARM 手机、低功耗边缘芯片 |
 
 ---
 
-## 二、 vLLM v1：从 Python 泥潭到零开销 C++ 引擎重构
+## 二、 vLLM v1：多进程 EngineCore 隔离与统一零开销调度器
 
-### 2.1 v0 架构的“隐性原罪”：Python 调度瓶颈
+### 2.1 v0 架构的“隐性原罪”：单进程 GIL 争抢与全量张量重建
 
-在早期广为人知的 vLLM v0 版本中，尽管其首创的 PagedAttention 彻底解决了显存碎片问题，但随着硬件计算速度的成倍跃升（如 H100/H800 的到来），系统暴露出了严重的 CPU 瓶颈：
+在早期的 vLLM v0 版本中，尽管其首创的 PagedAttention 彻底解决了显存碎片问题，但随着 GPU 计算速度的成倍跃升（如 H100/H200 的到来），系统暴露出了严重的 CPU 控制面瓶颈：
 
-在自回归解码阶段，单步 GPU Kernel 执行时间可能仅需 **$1.5 \sim 3 \text{ ms}$**。然而，v0 版本的 Python 调度循环在 CPU 侧需要执行繁重的请求状态维护、字典查找、Block 映射更新以及张量组装，这往往需要消耗 **$2 \sim 4 \text{ ms}$** 的 CPU 时间！
-结果就是：**GPU 跑得比 CPU 调度器还要快，GPU 算力长期处于饥饿等待状态，硬件 MFU 遭遇天花板。**
+在自回归解码阶段，单步 GPU Kernel 执行时间可能仅需 **$1.5 \sim 3 \text{ ms}$**。然而，v0 版本将 HTTP 服务、分词/反分词（Tokenization/Detokenization）与核心调度混杂受制于 Python GIL，且每一步都在操作沉重的 `SequenceGroup` 对象、区分独立的 Prefill/Decode 队列，并在每次迭代从零重新构建整批输入张量（`input_ids`、`positions`、`block_tables`），往往消耗 **$2 \sim 4 \text{ ms}$** 的 CPU 时间（即便 v0 后期曾短暂引入过渡性的 Multi-Step Scheduling 缓解开销，也带来了极高的状态耦合复杂度）！
+结果就是：**GPU 跑得比 CPU 控制循环还要快，算力核心频繁空转等待，硬件 MFU 遭遇天花板。**
 
-### 2.2 v1 核心源码拆解：Zero-Overhead C++ 调度器与 Multi-Step 执行
+### 2.2 v1 核心架构与源码拆解：EngineCore、统一 Token 预算调度与持久化 InputBatch
 
-为了彻底粉碎这一瓶颈，社区推出了全新的 **vLLM v1** 架构。v1 将原本用 Python 编写的调度核心与请求生命周期管理器全量下沉到了高效的 C++ 异步引擎中，并引入了核心杀手锏 —— **多步调度（Multi-Step Scheduling）**。
+为了在不牺牲 Python 极佳模型开发生态的前提下彻底粉碎 CPU 开销，**vLLM v1** 并未盲目将调度器重写为僵化的 C++，而是从系统架构层面实施了三大外科手术式重构：
 
-在传统单步引擎中，CPU 必须与 GPU 在每一个生成的 Token 之间进行一次同步与状态轮询：
+1. **多进程 `EngineCore` 异步隔离（ZeroMQ IPC）**：
+   将 HTTP 接入、Prompt 分词与增量流式反分词彻底剥离到独立的前端 I/O 进程中，通过高速 **ZeroMQ IPC** 与后台专职的 Python `EngineCore` 核心进程异步通信，确保模型调度与 GPU 发射主循环实现零 GIL 干扰；
+2. **统一 Token 预算调度器（`vllm/v1/core/sched/scheduler.py`）**：
+   彻底废除 v0 时代臃肿的 `SequenceGroup` 抽象以及割裂的 Prefill/Decode 双队列分支！v1 将所有请求统一简化为“已完成计算的 Token 数（`num_computed_tokens`）”与“目标总 Token 数”，每一步调度输出简化为一个极简字典 `num_scheduled_tokens: dict[str, int]`。在此抽象下，自回归 Decode 自然等价于本步调度 `1` 个 Token（投机解码下为 `1 + k` 个），Chunked Prefill 自然等价于调度 `min(剩余未算 Token, token_budget)` 个 Token，且默认内建零开销前缀缓存块查找（Automatic Prefix Caching）；
+3. **持久化 `InputBatch` 状态更新、分段 `torch.compile` 与异步重叠**：
+   Worker 侧维护常驻内存的 **`InputBatch` 持久化 CPU 张量缓冲**，每步仅对新加入/刚退出的请求与上一步采样出的单个 Token 应用增量状态差分（State Diff），彻底告别每步全量张量拼接；模型前向默认启用分段 **`torch.compile`（Piecewise Compilation）+ CUDA Graphs** 自动算子融合，并通过异步输出处理将第 $t+1$ 步的 CPU 调度完全重叠隐藏在第 $t$ 步的 GPU Kernel 执行周期之内。
+
 ```text
-传统单步调度流 (Step-by-Step):
-[CPU: Schedule Step 1] -> [GPU: Kernel Launch] -> [CPU Wait & Sync] -> [CPU: Schedule Step 2] ...
+vLLM v1 异步重叠执行流水线:
+CPU EngineCore : [Schedule Step t] -> [Schedule & Diff InputBatch Step t+1] -> [Schedule Step t+2]
+GPU ModelRunner:                      [Execute Piecewise Compiled + CUDA Graph Step t] -> [Execute Step t+1]
 ```
 
-而在 vLLM v1 中，调度器能够基于当前显存余量一次性预测并向 GPU 下发未来 $N$ 步（例如 $N=8$ 或 $16$）的执行计划：
+下面拆解 `vllm/v1/core/sched/scheduler.py` 中统一调度核心的真实逻辑骨架：
 
-```cpp
-// vLLM v1 核心调度决策伪代码拆解 (Scheduler::schedule)
-SchedulerOutputs Scheduler::schedule() {
-    // 1. 优先推进正在运行的解码请求 (Running Queue)
-    std::vector<SequenceGroup*> running_batch;
-    for (auto& seq_group : running_queue_) {
-        // 一次性预检未来 num_steps 步的显存块需求
-        if (block_allocator_->can_allocate_multi_steps(seq_group, num_steps_)) {
-            block_allocator_->allocate_for_multi_steps(seq_group, num_steps_);
-            running_batch.push_back(seq_group);
-        } else {
-            // 显存承载告急，触发抢占并换出至 CPU (Preempt & Swap Out)
-            preempt(seq_group);
-        }
-    }
+```python
+# vLLM v1 统一 Token 预算调度器核心逻辑简化拆解 (vllm/v1/core/sched/scheduler.py)
+class Scheduler:
+    def schedule(self) -> SchedulerOutput:
+        scheduled_running: list[Request] = []
+        scheduled_new: list[Request] = []
+        preempted_reqs: list[Request] = []
+        # 核心统一抽象：req_id -> 本轮迭代分配计算的 Token 数量 (不区分 Prefill 与 Decode)
+        num_scheduled_tokens: dict[str, int] = {}
+        token_budget = self.max_num_scheduled_tokens
 
-    // 2. 检查是否有算力余量容纳新的等待队列请求 (Waiting Queue - Prefill)
-    std::vector<SequenceGroup*> prefill_batch;
-    size_t remaining_token_budget = max_num_batched_tokens_ - get_num_tokens(running_batch);
-    while (!waiting_queue_.empty() && remaining_token_budget > 0) {
-        auto next_req = waiting_queue_.front();
-        if (can_prefill(next_req, remaining_token_budget)) {
-            prefill_batch.push_back(next_req);
-            remaining_token_budget -= next_req->get_prompt_len();
-            waiting_queue_.pop_front();
-        } else {
-            break;
-        }
-    }
+        # 1. 优先推进 running 队列中的活跃请求 (Decode 或未算完的 Chunked Prefill 切片)
+        req_idx = 0
+        while req_idx < len(self.running) and token_budget > 0:
+            request = self.running[req_idx]
+            num_new_tokens = request.num_tokens_with_spec - request.num_computed_tokens
+            num_new_tokens = min(num_new_tokens, token_budget)
 
-    return SchedulerOutputs(running_batch, prefill_batch, num_steps_);
-}
+            # 增量申请 KV Cache 物理块；若显存池耗尽则从队尾低优先级请求触发抢占回收
+            while True:
+                new_blocks = self.kv_cache_manager.allocate_slots(request, num_new_tokens)
+                if new_blocks is not None:
+                    break
+                preempted = self.running.pop()
+                self.kv_cache_manager.free(preempted)
+                preempted.num_computed_tokens = 0
+                self.waiting.appendleft(preempted)
+                preempted_reqs.append(preempted)
+                if preempted is request:
+                    break
+
+            if new_blocks is None:
+                break  # 当前请求自身被抢占挂起，退出本轮 running 扫描
+
+            scheduled_running.append(request)
+            num_scheduled_tokens[request.request_id] = num_new_tokens
+            token_budget -= num_new_tokens
+            req_idx += 1
+
+        # 2. 若未发生显存抢占且仍有 Token 预算余量，从 waiting 队列吸纳新请求
+        if not preempted_reqs:
+            while self.waiting and token_budget > 0 and len(self.running) < self.max_num_running_reqs:
+                request = self.waiting[0]
+                # 原生零开销前缀缓存匹配，跳过已驻留显存的公共前缀块
+                computed_blocks, num_cached_tokens = self.kv_cache_manager.get_computed_blocks(request)
+                num_new_tokens = request.num_prompt_tokens - num_cached_tokens
+                num_new_tokens = min(num_new_tokens, token_budget)
+
+                new_blocks = self.kv_cache_manager.allocate_slots(
+                    request, num_new_tokens, new_computed_blocks=computed_blocks
+                )
+                if new_blocks is None:
+                    break  # 剩余空闲物理块不足，留待下一轮调度
+
+                self.waiting.popleft()
+                self.running.append(request)
+                request.num_computed_tokens = num_cached_tokens
+                scheduled_new.append(request)
+                num_scheduled_tokens[request.request_id] = num_new_tokens
+                token_budget -= num_new_tokens
+
+        return SchedulerOutput(
+            scheduled_new_reqs=scheduled_new,
+            scheduled_cached_reqs=scheduled_running,
+            num_scheduled_tokens=num_scheduled_tokens,
+            preempted_reqs=preempted_reqs,
+        )
 ```
 
-通过将 $N$ 步的执行循环直接固化在 GPU 端驱动运行（结合持久化的 CUDA Graph 执行链），CPU 只需在 $N$ 步执行完毕后接收一次输出回调。**CPU 开销被稀释了近 $N$ 倍，端到端吞吐量在小 Batch 场景下直接激增 $30\% \sim 50\%$！**
+凭借“多进程 ZMQ 隔离 + 统一百行级极简调度器 + 持久化 `InputBatch` 差分更新 + 异步 CPU/GPU 重叠”，vLLM v1 将单步未隐藏的 CPU 开销压降至近乎为零，在长上下文与高并发场景下实现了高达 **$1.7\times$ 以上的端到端吞吐跃升**！
 
 ---
 
@@ -288,7 +330,7 @@ flowchart TD
     C3 ==> R_SGL["首选: SGLang (RadixTree 树状缓存, 敏捷执行环)"]
     
     START --> C4["通用多模型综合平台 / 异构芯片支持 (AMD/昇腾/Intel) / 云原生微服务标准"]
-    C4 ==> R_VLLM["首选: vLLM v1 (C++ 核心, 生态最强, 多步调度)"]
+    C4 ==> R_VLLM["首选: vLLM v1 (EngineCore 多进程隔离, 统一调度, 生态最强)"]
 ```
 
 ### 生产级多维度选型评分表 (1~5 星)
@@ -306,7 +348,7 @@ flowchart TD
 
 ## 总结与专栏终局预告
 
-从 vLLM v1 的 C++ 零开销重构，到 SGLang 的 Radix 树状动态前缀，再到 TensorRT-LLM 的极限算子融合与 llama.cpp 的端侧极简主义 —— 现代开源大模型推理引擎并非彼此割裂，而是在相互借鉴与融合中飞速演进。
+从 vLLM v1 的多进程 `EngineCore` 与统一零开销调度重构，到 SGLang 的 Radix 树状动态前缀，再到 TensorRT-LLM 的极限算子融合与 llama.cpp 的端侧极简主义 —— 现代开源大模型推理引擎并非彼此割裂，而是在相互借鉴与融合中飞速演进。
 
 至此，我们已经完整走过了算子、显存、批处理、缓存、稀疏并行、P/D 物理隔离与引擎内核源码的全部核心版图。在接下来的**专栏第十章（全专栏终局之作）**中，我们将站在整个行业的最前沿，直面即将重塑所有推理系统的终极变革：**《长思维链 (Reasoning / Test-Time Compute) 与大集群推理系统的未来终局》**，全面探讨面对拥有数万 Token 思考过程的长推理模型时代，底层的调度器、投机采样与多级分层存储体系将迎来怎样的颠覆与重构！
 
@@ -320,7 +362,7 @@ flowchart TD
 - **将 SGLang 专门挂载在 Agent 与多轮对话业务线**：例如连接了复杂系统提示词（System Prompt 往往包含上千字约束与几十个工具描述）的 Coding Agent 或客服机器人，充分利用 RadixAttention 对相同前缀的高达 $90\%+$ 命中率，将交互延迟和并发计算开销降低数倍。
 
 ### Q2: TensorRT-LLM 既然性能如此优越，为什么没有彻底垄断开源界？
-TensorRT-LLM 的性能是以极高的**工程工程代价（Engineering Trade-off）**换取的：
+TensorRT-LLM 的性能是以极高的**工程代价（Engineering Trade-off）**换取的：
 1. **编译部署极其沉重**：构建一个 TRT-LLM 引擎需要根据具体显卡架构、Tensor Parallelism 数量和最大 Batch 显式编译几十甚至上百分钟，一旦更换不同硬件或调整上下文上限，往往需要重新构建；
 2. **源码黑盒与调试困难**：其核心全部封装在极深的 C++ 与闭源 TensorRT 驱动内部，一旦线上遇到非标输入引发崩溃，外部工程师几乎无法通过常规手段打断点调试排查；
 3. **新模型支持滞后**：当学界或开源界发布全新的注意力机制（如 DeepSeek MLA 或 KDA）时，vLLM 和 SGLang 通常在 48 小时内就能由社区合入 Python/Triton 支持，而 TRT-LLM 往往需要等待 NVIDIA 官方团队重写底层 C++ 融合插件。

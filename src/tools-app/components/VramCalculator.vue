@@ -504,7 +504,10 @@ const syncedModelMeta = ref({
 
 // Top Popular Hugging Face Models
 const POPULAR_HF_MODELS = [
-  { id: 'deepseek-ai/DeepSeek-V4.1-Flash', name: 'DeepSeek V4.1 Flash (MoE 552B)', org: 'deepseek-ai', params: '552B', downloads: '1.4M', likes: 4520 },
+  { id: 'moonshotai/Kimi-K3.1-Pro', name: 'Kimi K3.1 Pro (MoE 2.8T)', org: 'moonshotai', params: '2800B', downloads: '620K', likes: 3890 },
+  { id: 'deepseek-ai/DeepSeek-V4.1-Flash', name: 'DeepSeek V4.1 Flash 1017 (MoE 552B)', org: 'deepseek-ai', params: '552B', downloads: '2.1M', likes: 5640 },
+  { id: 'deepseek-ai/DeepSeek-V4-Pro', name: 'DeepSeek V4 Pro (MoE 1.6T)', org: 'deepseek-ai', params: '1600B', downloads: '1.8M', likes: 6420 },
+  { id: 'MiniMaxAI/MiniMax-M3.1-Flash', name: 'MiniMax M3.1 Flash (428B/23B)', org: 'MiniMaxAI', params: '428B', downloads: '540K', likes: 2310 },
   { id: 'Qwen/Qwen-Image-2.1', name: 'Qwen-Image-2.1 (7B Multimodal)', org: 'Qwen', params: '7.3B', downloads: '850K', likes: 2130 },
   { id: 'Qwen/Qwen3.8-Omni-Flash', name: 'Qwen3.8 Omni Flash', org: 'Qwen', params: '180B', downloads: '920K', likes: 2680 },
   { id: 'moonshotai/Kimi-K2.8-Preview', name: 'Kimi K2.8 Preview (Vision)', org: 'moonshotai', params: 'MoE', downloads: '410K', likes: 1850 },
@@ -525,7 +528,10 @@ const POPULAR_HF_MODELS = [
 
 // Top Curated ModelScope (魔搭社区) Models
 const POPULAR_MS_MODELS = [
-  { id: 'deepseek-ai/DeepSeek-V4.1-Flash', name: 'DeepSeek-V4.1-Flash', nameZh: '深度求索 V4.1 Flash (552B MoE)', org: 'deepseek-ai', params: '552B', downloads: '48.5K', stars: 890 },
+  { id: 'moonshotai/Kimi-K3.1-Pro', name: 'Kimi-K3.1-Pro', nameZh: '月之暗面 Kimi K3.1 Pro (2.8T Gated-DSA)', org: 'moonshotai', params: '2800B', downloads: '412K', stars: 1680 },
+  { id: 'deepseek-ai/DeepSeek-V4.1-Flash', name: 'DeepSeek-V4.1-Flash', nameZh: '深度求索 V4.1 Flash 1017 (552B MoE)', org: 'deepseek-ai', params: '552B', downloads: '128K', stars: 1490 },
+  { id: 'deepseek-ai/DeepSeek-V4-Pro', name: 'DeepSeek-V4-Pro', nameZh: '深度求索 V4 Pro (1.6T 开放权重)', org: 'deepseek-ai', params: '1600B', downloads: '215K', stars: 2340 },
+  { id: 'MiniMax/MiniMax-M3.1-Flash', name: 'MiniMax-M3.1-Flash', nameZh: 'MiniMax M3.1 Flash (428B/23B激活)', org: 'MiniMax', params: '428B', downloads: '96.4K', stars: 920 },
   { id: 'qwen/Qwen-Image-2.1', name: 'Qwen-Image-2.1', nameZh: '通义千问 图像生成与编辑 2.1 (7B)', org: 'qwen', params: '7.3B', downloads: '65.2K', stars: 740 },
   { id: 'qwen/Qwen3.8-Omni-Flash', name: 'Qwen3.8-Omni-Flash', nameZh: '通义千问 3.8 全模态极速版', org: 'qwen', params: '180B', downloads: '88.1K', stars: 1420 },
   { id: 'moonshotai/Kimi-K2.8-Preview', name: 'Kimi-K2.8-Preview', nameZh: '月之暗面 Kimi K2.8 视觉推理', org: 'moonshotai', params: 'MoE', downloads: '52.3K', stars: 620 },
@@ -541,7 +547,6 @@ const POPULAR_MS_MODELS = [
   { id: 'qwen/Qwen3.8-Flash-Next', name: 'Qwen3.8-Flash-Next', nameZh: '千问 3.8 Flash Next', org: 'qwen', params: '180B', downloads: '65.4K', stars: 1264 },
   { id: 'deepseek-ai/DeepSeek-V3', name: 'DeepSeek-V3', nameZh: '深度求索 DeepSeek-V3 (MoE 671B)', org: 'deepseek-ai', params: '671B', downloads: '2.6M', stars: 6540 },
   { id: 'deepseek-ai/DeepSeek-R1', name: 'DeepSeek-R1', nameZh: '深度求索 DeepSeek-R1 推理', org: 'deepseek-ai', params: '671B', downloads: '3.1M', stars: 7890 },
-  { id: 'deepseek-ai/DeepSeek-V4.1-Flash', name: 'DeepSeek-V4.1-Flash', nameZh: '深度求索 V4.1 Flash', org: 'deepseek-ai', params: '484B', downloads: '19.0K', stars: 384 },
   { id: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-7B', name: 'DeepSeek-R1-Distill-Qwen-7B', nameZh: 'DeepSeek R1 蒸馏 Qwen 7B', org: 'deepseek-ai', params: '7.6B', downloads: '980K', stars: 1120 },
   { id: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-32B', name: 'DeepSeek-R1-Distill-Qwen-32B', nameZh: 'DeepSeek R1 蒸馏 Qwen 32B', org: 'deepseek-ai', params: '32.5B', downloads: '1.4M', stars: 1650 },
   { id: 'baichuan-inc/Baichuan2-7B-Chat', name: 'Baichuan2 7B Chat', nameZh: '百川 Baichuan2 7B 对话', org: 'baichuan-inc', params: '7B', downloads: '450K', stars: 320 },

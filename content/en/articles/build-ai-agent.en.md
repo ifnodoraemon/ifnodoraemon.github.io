@@ -42,7 +42,7 @@ graph LR
 ### Step 1: Install Dependencies
 
 ```bash
-pip install langchain langchain-anthropic langgraph tavily-python
+pip install langchain langchain-anthropic langgraph langgraph-checkpoint-redis tavily-python
 ```
 
 ### Step 2: Define Tools
@@ -82,8 +82,9 @@ Production-grade Agents in 2026 have completely abandoned black-box `AgentExecut
 ```python
 from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, END
+from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
-from langchain_core.messages import AnyMessage, add_messages
+from langchain_core.messages import AnyMessage
 from langchain_anthropic import ChatAnthropic
 
 # 1. Strictly define the Agent's global state (State Schema)
@@ -91,11 +92,12 @@ class AgentState(TypedDict):
     messages: Annotated[list[AnyMessage], add_messages]
     current_task: str
 
-# 2. Node Logic: The Model Reasoning Node
+# 2. Bind Tools and Reasoning Model
+tools = [get_current_time, search_web, execute_python]
+llm = ChatAnthropic(model="claude-sonnet-4-6")
+llm_with_tools = llm.bind_tools(tools)
+
 def call_model(state: AgentState):
-    llm = ChatAnthropic(model="claude-sonnet-5-5")
-    tools = [get_current_time, search_web, execute_python]
-    llm_with_tools = llm.bind_tools(tools)
     response = llm_with_tools.invoke(state["messages"])
     return {"messages": [response]}
 
@@ -127,9 +129,9 @@ for event in app.stream(inputs, stream_mode="values"):
 
 | Requirements | Recommended Model | Reason |
 |------|----------|------|
-| Complex Agent tasks | Claude Opus 5.5 | State-of-the-art autonomous planning, tool orchestration, and Computer Use |
-| Daily Agent development | Claude Sonnet 5.5 | Premier balance between high intelligence, latency, and engineering ergonomics |
-| Agents requiring deep reasoning | OpenAI o3 / GPT-6 | Transparent chain-of-thought, symbolic deduction, and multi-step reasoning |
+| Complex Agent tasks | Claude Opus 4.6 | State-of-the-art autonomous planning, tool orchestration, and Computer Use |
+| Daily Agent development | Claude Sonnet 4.6 | Premier balance between high intelligence, latency, and engineering ergonomics |
+| Agents requiring deep reasoning | OpenAI o3 / GPT-5.4 | Transparent chain-of-thought, symbolic deduction, and multi-step reasoning |
 | High-volume production environments | Gemini 3.1 Flash-Lite | Ultra-low per-token latency and optimal throughput cost-efficiency |
 
 ## Best Practices
@@ -150,13 +152,13 @@ To ensure an Agent remembers a user's context even after server restarts, or to 
 
 ```python
 from langgraph.checkpoint.redis import RedisSaver
-import redis
 
-# Establish the underlying Redis connection pool
-redis_conn = redis.Redis(host='localhost', port=6379, db=0)
+DB_URI = "redis://localhost:6379"
+inputs = {"messages": [("user", "Help me find the latest release date for foundation models.")]}
 
-# Compile the Graph with Persistence
-with RedisSaver(redis_conn) as checkpointer:
+# Compile the Graph with Redis persistence via from_conn_string
+with RedisSaver.from_conn_string(DB_URI) as checkpointer:
+    checkpointer.setup() # Initialize required Redis search indices on first run
     app = workflow.compile(
         checkpointer=checkpointer,
         interrupt_before=["tools"] # Implement hard interruption before calling tools to wait for approval

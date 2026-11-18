@@ -156,7 +156,7 @@ Here is a complete, runnable script configuring Browser-use with multimodal mode
 
 ### 1. Environment Installation
 ```bash
-pip install browser-use playwright langchain-openai
+pip install browser-use playwright
 playwright install chromium
 ```
 
@@ -165,39 +165,31 @@ playwright install chromium
 ```python
 import os
 import asyncio
-from browser_use import Agent, Browser, BrowserConfig
-from browser_use.browser.context import BrowserContextConfig
-from langchain_openai import ChatOpenAI
+from browser_use import Agent, BrowserProfile, BrowserSession, ChatOpenAI
 
 # 1. Configure the multimodal vision backbone
-# For production, utilize models with strong spatial grounding (GPT-4o, Claude 3.7 Sonnet, or Qwen2.5-VL)
+# For production, utilize models with strong spatial grounding (GPT-5.4, Claude Sonnet 4.6, Gemini 3.1 Pro, or Qwen2.5-VL)
 llm = ChatOpenAI(
-    model="gpt-4o",
+    model="gpt-5.4",
     temperature=0.0,
-    api_key=os.getenv("OPENAI_API_KEY")
+    api_key=os.getenv("OPENAI_API_KEY"),
 )
 
-# 2. Production browser resilience configuration
-browser_config = BrowserConfig(
+# 2. Production browser resilience configuration (browser-use 1.0+ BrowserProfile)
+profile = BrowserProfile(
     headless=False,            # Set to True for unattended production deployment
     disable_security=True,     # Disregard self-signed intranet SSL certificates
-    extra_chromium_args=[
+    window_size={"width": 1920, "height": 1080},
+    record_video_dir="./recordings",  # Record video artifacts for auditing and triage
+    args=[
         "--disable-blink-features=AutomationControlled",  # Scrub webdriver automation flag
         "--no-sandbox",
-        "--window-size=1920,1080"
-    ]
-)
-
-# 3. Session isolation and recording configuration
-context_config = BrowserContextConfig(
-    viewport={"width": 1920, "height": 1080},
-    save_recording_path="./recordings",  # Record video artifacts for auditing and triage
-    locale="en-US"
+    ],
 )
 
 async def run_enterprise_workflow():
-    browser = Browser(config=browser_config)
-    context = await browser.new_context(config=context_config)
+    # 3. Initialize browser session with profile
+    browser_session = BrowserSession(browser_profile=profile)
 
     # 4. Define high-level business objective
     task_prompt = """
@@ -208,24 +200,24 @@ async def run_enterprise_workflow():
     5. Wait for the download to complete and confirm that a success modal appears
     """
 
-    # 5. Initialize the Browser-use Agent
-    agent = Agent(
-        task=task_prompt,
-        llm=llm,
-        browser_context=context,
-        use_vision=True,                # Enable Set-of-Mark visual grounding
-        max_failures=3,                 # Maximum retry attempts per step
-        max_actions_per_step=4          # Allow compound actions per turn to reduce latency
-    )
+    try:
+        # 5. Initialize the Browser-use Agent
+        agent = Agent(
+            task=task_prompt,
+            llm=llm,
+            browser_session=browser_session,
+            use_vision=True,                # Enable Set-of-Mark visual grounding
+            max_failures=3,                 # Maximum retry attempts per step
+            max_actions_per_step=4,         # Allow compound actions per turn to reduce latency
+        )
 
-    print("🚀 Launching enterprise autonomous Browser-use agent...")
-    history = await agent.run(max_steps=25)
+        print("🚀 Launching enterprise autonomous Browser-use agent...")
+        history = await agent.run(max_steps=25)
 
-    print("\n✅ Execution Summary:")
-    print(history.final_result())
-
-    await context.close()
-    await browser.close()
+        print("\n✅ Execution Summary:")
+        print(history.final_result())
+    finally:
+        await browser_session.stop()
 
 if __name__ == "__main__":
     asyncio.run(run_enterprise_workflow())

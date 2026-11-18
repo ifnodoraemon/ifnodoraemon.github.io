@@ -83,6 +83,8 @@ The underlying algorithm logic is:
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai import OpenAIEmbeddings
 
+raw_text = "\n\n".join(doc.page_content for doc in docs)
+
 # Using a semantic similarity sliding window splitter
 semantic_splitter = SemanticChunker(
     OpenAIEmbeddings(model="text-embedding-3-small"),
@@ -124,11 +126,20 @@ If budget constraints prevent keeping all vectors in memory, you must enable **I
 ### Retrieval Strategy
 
 ```python
-from langchain_community.vectorstores import Weaviate
 import weaviate
+from langchain_weaviate import WeaviateVectorStore
+from langchain_openai import OpenAIEmbeddings
 
-# Connect to the vector database
+# Connect to the vector database (Weaviate v4 client)
 client = weaviate.connect_to_local()
+
+# Instantiate the VectorStore over the target collection
+vectorstore = WeaviateVectorStore(
+    client=client,
+    index_name="EnterpriseDocs",
+    text_key="content",
+    embedding=OpenAIEmbeddings(model="text-embedding-3-small"),
+)
 
 # Create diversity retriever (MMR: Maximal Marginal Relevance, balancing relevance and redundancy)
 retriever = vectorstore.as_retriever(

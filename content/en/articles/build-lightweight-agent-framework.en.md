@@ -17,9 +17,9 @@ updated: 2026-10-20
 ---
 
 > [!NOTE] Executive Summary (TL;DR)
-> - **Lightweight Production Core**: Avoids bloated generic frameworks by implementing an asynchronous Python FSM with planning, tool dispatching, reflection, and streaming events.
-> - **Human-in-the-Loop & State Recovery**: Implements native interruption workflows for high-risk actions, coupled with checkpoint persistence for seamless process restart recovery.
-> - **Next Step**: Extend this foundational runtime into [Multi-Agent Collaboration & Concurrency](/en/articles/multi-agent-collaboration-and-concurrency/) for multi-actor swarms.
+> - **Event-Driven FSM Runtime**: Implements a zero-dependency asynchronous Python `StateGraph` finite state machine featuring conditional edge routing, hard step budgets (`max_steps`), and streaming `AgentEvent` emissions.
+> - **Durable Checkpoints & Human-in-the-Loop**: Uses `SqliteCheckpointer` to persist the suspended node, step count, and state, enforcing single-use atomic approval claims, explicit rejection handling, and worker restart recovery.
+> - **Next Step**: Pair this control-flow core with [Advanced Tool Execution](/en/articles/advanced-agent-tool-use-and-function-calling/) and [Multi-Agent Collaboration & Concurrency](/en/articles/multi-agent-collaboration-and-concurrency/).
 
 ## Why make agent state explicit?
 

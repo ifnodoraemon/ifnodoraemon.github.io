@@ -9,10 +9,10 @@ description: "从底层芯片与通信物理地基，到算子内核、PD 极致
 ---
 
 > [!NOTE] 核心速览 (TL;DR)
-> - **硅基与内核物理地基**：DeepInfer 深度协同英伟达 SM100 (Blackwell, NVLink 5) 与华为昇腾 950 (Ascend 950 NPU, HCCS)，依托 FlashMLA（潜在低秩注意力）、DeepGEMM（FP8/FP4 混合矩阵乘）、DeepEP（零气泡 All-to-All 专家通信）与 TileKernels（TileLang 领域特定算子）构建异构硬件统一底层。
-> - **集群拓扑与 PD 极致分离**：打破单机时分复用瓶颈，构建 8 卡紧凑型 Prefill 节点池（算力受限，高 FLOPs 密度）与 64~128 卡 Wide-EP Decode 超节点池（访存受限，大显存带宽），配比保持 1:1，搭配独立的 Vision Encoder 异步分块流水线。
-> - **三大核心算法加速引擎**：首创 **DSpark 动态置信度投机解码**（Confidence Head 动态预测自适应验证树，净提速 4%~7%）、**SWA Bounded Replay 边界重放**（彻底消解滑动窗口在超长上下文下的二次 Prefill 开销），以及**动静结合 MoE 负载均衡**（常驻专家 + 动态冗余副本消除跨机 Straggler 慢节点木桶效应）。
-> - **协议层革命与商业经济学**：官方权重彻底废黜传统 Jinja 模板，开源 Rust 核心的 `deepseek-recipe` 抹平 OpenAI 与 Anthropic 协议、零拷贝剥离 `<think>` 思考链与 Tool Calling；知乎生产报告揭秘单集群 155 万亿 Token/天、77K 均长、**96% KV Cache 命中率** 与每卡每小时 **$38 美元（~254 元/卡/时）** 谷价营收的商业印钞机真相。
+> - **硅基与内核物理地基**：DeepInfer 深度协同英伟达 SM100 (Blackwell, NVLink 5) 与华为昇腾 950 系列（Ascend 950PR / 950DT，UnifiedBus / HCCS 高达 2.0 TB/s），依托 FlashMLA（潜在低秩注意力）、DeepGEMM（FP8/FP4 混合矩阵乘）、DeepEP（零气泡 All-to-All 专家通信）与 TileKernels（TileLang 领域特定算子）构建异构硬件统一底层。
+> - **集群拓扑与 PD 极致分离**：打破单机时分复用瓶颈，构建 8 卡紧凑型 Prefill 节点池（算力受限，高 FLOPs 密度）与 64~128 卡 Wide-EP Decode 超节点池（访存受限，高聚合 HBM 带宽）。基于排队论稳态平衡，宏观 P/D 卡数配比随有效输入输出比动态收敛（77K 输入、96% 缓存命中高并发工况下收敛于 1:1，长上下文常规起步验证集群常取 1:2），搭配独立的 Vision Encoder 异步分块流水线。
+> - **三大核心算法加速引擎**：针对 **DeepSeek-V4.1-Flash（552B 总参数非对称 MoE，40 层 Causal Encoder-Decoder，Prefill 激活 8B / Decode 激活 16B）**，首创 **DSpark 动态置信度投机解码**（Confidence Head 动态预测自适应验证树，净提速 4%~7%）、**CSA2 + SWA Bounded Replay 边界重放**（维持恒定滑窗显存，外部持久化省去局部 SWA KV，未命中时仅对固定后缀窗口 $n_{\text{win}}$ 执行有界重算），以及**动静结合 MoE 负载均衡**（常驻专家 + 动态冗余副本消除跨机 Straggler 慢节点木桶效应）。
+> - **协议层革命与商业经济学**：官方权重彻底废黜传统 Jinja 模板，开源 Rust 核心的 `deepseek-recipe` 抹平 OpenAI 与 Anthropic 协议、流式剥离 `<think>` 思考链与 Tool Calling；知乎生产报告揭秘单集群 155 万亿 Token/天、77K 均长、**96% KV Cache 命中率** 与每卡每小时 **$38 美元（~254 元/卡/时）** 谷价营收的商业印钞机真相。
 > - **关联技术深入**：跨机 RDMA 传输参见 [P/D 分离架构与分布式 KV Cache](/articles/pd-disaggregation-distributed-kv-cache/)；传统投机解码原理参见 [EAGLE 投机解码实践](/articles/speculative-decoding-eagle-guide/)；底层注意力数学推导参见 [MLA 矩阵吸收原理](/articles/mha-gqa-mla-matrix-absorption-inference-engine/) 与 [MoE 专家并行设计](/articles/moe-expert-parallelism-inference-engine/)；集群组网调优参见 [InfiniBand 高性能组网实践](/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/)。
 
 ---
@@ -32,32 +32,39 @@ description: "从底层芯片与通信物理地基，到算子内核、PD 极致
 
 ---
 
-## 架构全景：DeepSeek 生产级推理全栈全景图
+## 架构全景：DeepSeek 生产级推理九层垂直技术栈
 
-在深入微观细节前，首先通过全景架构图鸟瞰 DeepInfer 与 deepseek-recipe 的八层垂直技术栈：
+在深入微观细节前，首先通过全景架构图鸟瞰 DeepInfer 与 `deepseek-recipe` 从物理硅基到商业交付的**九层垂直技术栈**（严格对应下文第一层至第九层章节）：
 
 ```mermaid
 flowchart TD
-    subgraph Layer_Protocol["第七层：协议与 API 中间层 (deepseek-recipe)"]
-        REC_In["OpenAI Chat / Anthropic Messages / Tool Call 请求"] --> REC_Core["deepseek-recipe (Rust 核心引擎)"]
-        REC_Core --> REC_Parse["&lt;think&gt; 思考链隔离 / Tool Calling 参数提取 / 格式化 Prompt"]
+    subgraph Layer_Ops["第六至九层：商业经济学、横向评估、高危排障与工程交付"]
+        L9["第九层：裸金属到 KubeRay 端到端交付蓝图"]
+        L8["第八层：Wide-EP 哈希极化 / RDMA 竞态 / 驱逐风暴排障"]
+        L7["第七层：DeepInfer vs vLLM / SGLang / TRT-LLM 对决矩阵"]
+        L6["第六层：TCO 成本模型与 $38/GPU/h 单位经济学"]
     end
 
-    subgraph Layer_Scheduling["第六层：算法优化与调度加速引擎"]
+    subgraph Layer_Protocol["第五层：协议与 API 中间层 (deepseek-recipe)"]
+        REC_In["OpenAI Chat & Responses / Anthropic Messages 请求"] --> REC_Core["deepseek-recipe (Rust 核心 + PyO3)"]
+        REC_Core --> REC_Parse["DeepseekV41Encoding 渲染 / StreamProcessor 思考链与工具解析"]
+    end
+
+    subgraph Layer_Scheduling["第四层：三大核心算法加速引擎与分层缓存"]
         SCH_DSpark["DSpark 动态置信度投机解码<br/>(Confidence Head 自适应验证树)"]
-        SCH_SWA["SWA Bounded Replay<br/>(滑动窗口边界精准重放)"]
-        SCH_MoE["MoE 动静动态负载均衡<br/>(常驻高频专家 + 动态冗余副本)"]
-        SCH_KV["72h+ 分层 KV Cache 治理<br/>(96% 命中率 / 内存-NVMe 梯级换入换出)"]
+        SCH_SWA["CSA2 + SWA Bounded Replay<br/>(恒定滑窗显存 + 固定后缀窗口 n_win 有界重算)"]
+        SCH_MoE["MoE 动静结合负载均衡<br/>(常驻高频专家 + 动态冗余副本)"]
+        SCH_KV["72h+ 分层 KV Cache 治理<br/>(96% 命中率 / HBM-DRAM-NVMe 梯级置换)"]
     end
 
-    subgraph Layer_Disaggregation["第五层：PD 极致分离物理集群 (1:1 配比)"]
+    subgraph Layer_Disaggregation["第三层：集群拓扑与 PD 极致分离架构"]
         PD_Prefill["Prefill 集群池 (8 卡紧凑节点)<br/>算力密集型 / 高 FLOPs 密度 / 吞吐海量 Context"]
-        PD_Decode["Decode 超节点池 (64~128 卡 Wide-EP)<br/>访存密集型 / 超大显存带宽 / 突破单机带宽墙"]
-        PD_Vision["独立 Vision Encoder 模块<br/>Patch 粒度解耦异步解码"]
-        PD_Prefill -- "RDMA 单边零拷贝直推 KV Cache" --> PD_Decode
+        PD_Decode["Decode 超节点池 (64~128 卡 Wide-EP)<br/>访存密集型 / 聚合 HBM 带宽 / 突破单机带宽墙"]
+        PD_Vision["独立 Vision Encoder 模块<br/>Patch 粒度解耦异步编码"]
+        PD_Prefill -- "RDMA 1-to-1 单边零拷贝直推 KV Cache" --> PD_Decode
     end
 
-    subgraph Layer_Kernel["第四层：高性能算子与领域专用编译 (The Deep* Matrix)"]
+    subgraph Layer_Kernel["第二层：高性能算子与编译地基 (The Deep* Matrix)"]
         K_FlashMLA["FlashMLA (低秩潜在注意力解码核)"]
         K_DeepGEMM["DeepGEMM (FP8 / MXFP4 块级缩放矩阵乘)"]
         K_DeepEP["DeepEP (低延迟 All-to-All 专家通信内核)"]
@@ -65,12 +72,13 @@ flowchart TD
         K_DeepSelect["DeepSelect (动态门控 Top-K 专家路由)"]
     end
 
-    subgraph Layer_Hardware["第三层：硅基芯片与机间拓扑地基"]
-        HW_NV["NVIDIA SM100 (Blackwell)<br/>NVLink 5 (1.8TB/s) / FP4 Tensor Core"]
-        HW_Ascend["华为昇腾 950 (Ascend 950 NPU)<br/>HCCS 互联 / DaVinci Cube+Vector"]
+    subgraph Layer_Hardware["第一层：硅基芯片与通信互联的物理地基"]
+        HW_NV["NVIDIA SM100 (Blackwell)<br/>NVLink 5 (1.8 TB/s) / FP4 Tensor Core"]
+        HW_Ascend["华为昇腾 950PR / 950DT<br/>UnifiedBus / HCCS (高达 2.0 TB/s) / HiBL 1.0 & HiZQ 2.0"]
         HW_Net["8x 400G/800G NDR InfiniBand & 无损 RoCEv2 (Leaf-Spine 拓扑)"]
     end
 
+    Layer_Ops --> Layer_Protocol
     Layer_Protocol --> Layer_Scheduling
     Layer_Scheduling --> Layer_Disaggregation
     Layer_Disaggregation --> Layer_Kernel
@@ -83,24 +91,24 @@ flowchart TD
 
 大模型推理不是空中楼阁，其算力瓶颈与访存墙直接受制于半导体物理定律。DeepInfer 的核心设计哲学是：**不写任何脱离具体芯片微架构的通用抽象代码**。
 
-### 1. 异构双轨算力矩阵：Blackwell SM100 vs. 华为昇腾 950
+### 1. 异构双轨算力矩阵：Blackwell SM100 vs. 华为昇腾 950 (950PR / 950DT)
 
-在 DeepSeek 的生产实践中，官方首次系统性支持了英伟达与华为昇腾两大算力生态：
+在 DeepSeek 的生产实践中，官方首次系统性支持了英伟达与华为昇腾两大算力生态，其中昇腾 950 系列原生按 Prefill 与 Decode/Training 工况拆分为 **Ascend 950PR** 与 **Ascend 950DT** 两款芯片：
 
-| 硬件维度 | NVIDIA Blackwell (SM100) | 华为昇腾 950 (Ascend 950 NPU) |
+| 硬件维度 | NVIDIA Blackwell (SM100) | 华为昇腾 950 系列 (Ascend 950PR / 950DT) |
 | :--- | :--- | :--- |
-| **制程与封装** | TSMC 4NP 双芯片 CoWoS-L 封装 | 7nm / 多芯粒先进系统封装 (SiP) |
-| **片上互联带宽** | 10 TB/s 高带宽芯片间互联 (NV-HBI) | 超宽片内总线 |
-| **机内 P2P 带宽** | NVLink 5 (单卡双向 1.8 TB/s) | HCCS (单卡双向 1.2 TB/s) |
-| **内存规格** | 192GB ~ 288GB HBM3e (8.0 TB/s 带宽) | 128GB ~ 192GB HBM3 (3.8 TB/s 带宽) |
+| **制程与封装** | TSMC 4NP 双芯片 CoWoS-L 封装 | 多芯粒先进系统级封装 (SiP，共享基础计算 Die) |
+| **片上互联带宽** | 10 TB/s 高带宽芯片间互联 (NV-HBI) | 超宽片内芯粒互联总线 |
+| **机内/超节点互联** | NVLink 5 (单卡双向 1.8 TB/s) | UnifiedBus (UB) / HCCS (互联带宽高达 2.0 TB/s) |
+| **内存规格** | 192GB ~ 288GB HBM3e (8.0 TB/s 带宽) | **950PR**：128GB HiBL 1.0 (~1.6 TB/s，面向 Prefill)<br/>**950DT**：144GB HiZQ 2.0 (~4.0 TB/s，面向 Decode/训练) |
 | **核心计算单元** | 第五代 Tensor Core (原生支持 FP4 / FP8) | DaVinci 架构 Cube (矩阵) + Vector (向量) |
 | **底层编程体系** | CUDA 13.x / PTX / TileLang JIT | CANN 8.x / Ascend C / TileLang JIT |
 
 ```mermaid
 graph LR
     subgraph Chip_Interconnect["物理互联带宽阶梯 (数量级断层)"]
-        L_SRAM["片上 SRAM 缓存<br/>~20-30 TB/s 极速访存"] --> L_HBM["片上 HBM3e 显存<br/>3.8 - 8.0 TB/s 内存带宽"]
-        L_HBM --> L_NVLINK["机内 NVLink 5 / HCCS<br/>1.2 - 1.8 TB/s 双向互联"]
+        L_SRAM["片上 SRAM 缓存<br/>~20-30 TB/s 极速访存"] --> L_HBM["片上高带宽存储 (HBM3e / HiZQ / HiBL)<br/>1.6 - 8.0 TB/s 内存带宽"]
+        L_HBM --> L_NVLINK["机内/超节点 NVLink 5 / UnifiedBus<br/>1.8 - 2.0 TB/s 高速互联"]
         L_NVLINK --> L_NIC["跨机 400G/800G RDMA 网卡<br/>50 - 100 GB/s 网络吞吐"]
     end
 ```
@@ -143,7 +151,7 @@ flowchart TD
 
 ### 2. DeepGEMM：精细分块缩放的 FP8/MXFP4 矩阵乘法
 
-万亿 MoE 模型全量部署必须引入极致量化。但粗粒度的全张量量化会导致模型在数学推理与代码任务上精度崩溃。
+超大规模稀疏 MoE 模型（如 552B 总参数的 DeepSeek-V4.1-Flash 乃至万亿级旗舰模型）全量部署必须引入极致量化。但粗粒度的全张量量化会导致模型在数学推理与代码任务上精度崩溃。
 - **Block-Level Scaling 架构**：DeepGEMM 采用细粒度的按块量化（如 1x128 块或 128x128 块），每个块维护独立的 FP8 E8M0 缩放因子（Scale Factor）。
 - **硬件对齐优化**：
   在 NVIDIA Blackwell 上，DeepGEMM 直接调用原生的 **MXFP4 (Microscaling FP4)** 与 FP8 Tensor Core 硬件指令；
@@ -209,55 +217,42 @@ flowchart TB
 
 ---
 
-### 2. 严密排队论与 Roofline 证明：为什么宏观卡数必然收敛于 1:1？
+### 2. 严密排队论与利特尔法则（Little's Law）推导：`N_P : N_D` 配比如何由有效输入输出比决定？
 
-读者必然会产生第二个更深度的疑问：*“Prefill 处理只需要几十毫秒（极短），Decode 逐字吐出 800 个 Token 却要持续数秒（长达数十倍时间）。按照直觉，长任务应该占大头，卡数难道不应该配比成 1:10 甚至 1:50 吗？为什么算出来反而是 1:1？”*
+读者必然会产生第二个更深度的疑问：*“Prefill 处理只需要几十毫秒（极短），Decode 逐字吐出 800 个 Token 却要持续数秒（长达数十倍时间）。为什么有的集群采用 1:8，第九层的 96 卡起步集群采用 1:2（32P:64D），而知乎报告的满载生产集群又呈现出 1:1？”*
 
-答案隐藏在**96% 的超高 KV Cache 命中率与单单元并发承载能力（Concurrency）的数学乘积中**。
+答案隐藏在**利特尔法则（Little's Law）下的单卡请求服务速率（req/s/GPU）、有效未命中 Prefill 长度 $L_{\text{eff}}$ 与 Decode 连续批处理并发度 $B_D$ 的精确平衡方程**中。
 
-#### (1) 系统参数与输入工况（知乎报告实测数据）
-* 平均输入 Prompt 长度：$L_{\text{prompt}} = 77,000$ tokens；
-* 线上实测 KV Cache 命中率：$H = 96\%$；
-* 单请求**实际未命中、需要 GPU 执行算力计算的有效 Prefill 长度**：
-  $$L_{\text{eff}} = L_{\text{prompt}} \times (1 - H) = 77,000 \times (1 - 0.96) = 3,080 \text{ tokens}$$
-* 平均生成输出长度：$L_{\text{gen}} \approx 800$ tokens；
-* 全局请求到达率：设为 $\lambda$（req/s）。
+#### (1) 稳态吞吐平衡通用公式
+设集群共配置 $N_P$ 张 Prefill GPU（拆分为 $N_P / 8$ 台独立 8 卡 P-Node）与 $N_D$ 张 Decode GPU（拆分为 $N_D / 64$ 个 64 卡 D-Supernode），全局到达率为 $\lambda$（req/s）：
+* **单台 8 卡 P-Node 服务速率**：设瞬时并发度为 $B_P$，处理单请求有效未命中长度 $L_{\text{eff}} = L_{\text{in}} \cdot (1 - H)$ 的计算耗时为 $T_P(L_{\text{eff}})$，则：
+  $$\mu_{P\_node} = \frac{B_P}{T_P}, \quad \text{单卡预填充速率 } r_P = \frac{\mu_{P\_node}}{8} = \frac{B_P}{8 \cdot T_P} \text{ req/(s}\cdot\text{GPU)}$$
+* **单个 64 卡 D-Supernode 服务速率**：64 张卡将 **DeepSeek-V4.1-Flash（552B 总参数非对称 MoE，40 层 Causal Encoder-Decoder，Prefill 激活 8B / Decode 激活 16B）** 的全部权重分散驻留，单步解码聚合带宽在 64× H800/H100 上约为 **$214\text{ TB/s}$**，在 64× Blackwell B200 上高达 **$512\text{ TB/s}$**。设单超节点 Continuous Batching 并发序列数为 $B_D$，输出长度 $L_{\text{out}}$，单流生成速度 $V_D$，则单请求驻留时间 $T_D = L_{\text{out}} / V_D$：
+  $$\mu_{D\_node} = \frac{B_D}{T_D}, \quad \text{单卡解码速率 } r_D = \frac{\mu_{D\_node}}{64} = \frac{B_D}{64 \cdot T_D} \text{ req/(s}\cdot\text{GPU)}$$
+* **全集群无积压稳态平衡方程（$\lambda = \mu_{P\_pool} = \mu_{D\_pool}$）**：
+  $$N_P \cdot r_P = N_D \cdot r_D \iff \frac{N_P}{8} \cdot \frac{B_P}{T_P} = \frac{N_D}{64} \cdot \frac{B_D}{T_D} \implies \frac{N_P}{N_D} = \frac{r_D}{r_P} = \frac{B_D \cdot T_P(L_{\text{eff}})}{8 \cdot B_P \cdot T_D(L_{\text{out}})}$$
 
-#### (2) Prefill 节点的物理吞吐极限与耗时推导
-在 Prefill 阶段（算力受限，Compute-bound）：
-* 单台 8 卡 HGX 节点运行 DeepSeek-V4.1-Flash，机内 NVLink TP=8，借助 FP8/FP4 Tensor Core 爆发峰值算力；
-* 计算 $L_{\text{eff}} = 3,080$ 个 Token 的全注意力与 FFN 矩阵乘，耗时极短：
-  $$T_P \approx 50 \text{ ms} = 0.05 \text{ s}$$
-* 但在 77K 极长上下文场景下，每处理一个请求，片上中间激活与临时通信显存会达到数十 GB，**单台 8 卡节点在物理显存峰值限制下，瞬时并发处理度被锁死在 $B_P \approx 1$（最多 2）**；
-* 因此，**单台 8 卡 Prefill 节点的请求服务速率**为：
-  $$\mu_{P\_node} = \frac{B_P}{T_P} = \frac{1 \text{ req}}{0.05 \text{ s}} = 20 \text{ req/s}$$
-* 32 台 Prefill 节点池（共 256 卡）的**集群总预填充服务能力**：
-  $$\mu_{P\_pool} = 32 \times \mu_{P\_node} = 32 \times 20 = 640 \text{ req/s}$$
+#### (2) 三种真实工况下的数学精确解（消除“固定配比”误区）
 
-#### (3) Decode 超节点的物理吞吐极限与耗时推导
-在 Decode 阶段（访存受限，Memory-bound）：
-* 单个 64 卡超节点由 8 台物理机组网而成，将万亿 MoE 专家的庞大权重分散驻留在 64 张卡中，单步生成能瞬间唤醒超过 $1,000 \text{ TB/s}$ 的全集群聚合 HBM 带宽；
-* 线上 Decode 平均生成速度为 $V_D = 250 \text{ tokens/s}$，生成 800 个 Token 的单请求服务生命周期：
-  $$T_D = \frac{L_{\text{gen}}}{V_D} = \frac{800 \text{ tokens}}{250 \text{ tokens/s}} = 3.2 \text{ s}$$
-* 虽然 $T_D (3.2\text{s})$ 是 $T_P (0.05\text{s})$ 的整整 **64 倍**，但是！**64 卡超节点拥有 64 张卡的超大显存池，通过 MLA 矩阵吸收将 KV 压缩到极致后，单个超节点可以轻松维持 $B_D = 64$（甚至 128）的高并发 Continuous Batching 并行度**！
-* 因此，**单个 64 卡 Decode 超节点的请求服务速率**为：
-  $$\mu_{D\_node} = \frac{B_D}{T_D} = \frac{64 \text{ req}}{3.2 \text{ s}} = 20 \text{ req/s}$$
-* 4 个 Decode 超节点（共 256 卡）的**集群总解码服务能力**：
-  $$\mu_{D\_pool} = 4 \times \mu_{D\_node} = 4 \times 20 = 80 \text{ req/s}$$
-  *(若充分调度将并发度拉满至 $B_D = 128 \sim 256$，并配合连续批处理重叠，4 个超节点池的饱和吞吐将达到 $160 \sim 320 \text{ req/s}$，且在长尾排队下稳定匹配)*。
+将不同业务场景的实测参数代入上式，可以清晰看到 $N_P : N_D$ 如何随 $L_{\text{eff}} : L_{\text{out}}$ 与并发度动态迁移：
 
-#### (4) 稳态收敛与配比结论
-建立全系统无队列堆积的稳态吞吐平衡方程：
+1. **工况 A：短有效输入 + 中等并发长输出（如 $L_{\text{eff}} \approx 3\text{k}\text{--}4\text{k}$ 输入，$800\text{--}1\text{k}$ 输出，$B_D = 64$）**
+   * 单台 8 卡 P-Node（$B_P = 1, T_P = 0.05\text{ s}$）：$\mu_{P\_node} = 20\text{ req/s}$（$r_P = 2.5\text{ req/s/GPU}$），若配 32 台（256 卡）则 $\mu_{P\_pool} = 640\text{ req/s}$；
+   * 单个 64 卡 D-Supernode 在保守并发 $B_D = 64$、$V_D = 250\text{ tokens/s}$、$L_{\text{out}} = 800$（$T_D = 3.2\text{ s}$）下：$\mu_{D\_node} = \frac{64}{3.2} = 20\text{ req/s}$（$r_D = 0.3125\text{ req/s/GPU}$），4 个超节点（256 卡）仅能消化 $\mu_{D\_pool} = 80\text{ req/s}$！
+   * 此时真实稳态配比为 $\frac{N_P}{N_D} = \frac{0.3125}{2.5} = \mathbf{1 : 8}$（仅需 4 台共 32 卡 Prefill 即可喂饱 256 卡 Decode）。
+2. **工况 B：长上下文常规缓存命中 / 企业起步验证单元（对应第九层 96 卡集群：32P : 64D = 1 : 2）**
+   * 企业私有化初期缓存命中率较低（例如有效未命中计算量 $L_{\text{eff}} \approx 10\text{k}\text{--}16\text{k}$ tokens，$T_P \approx 0.16\text{ s}, B_P = 1 \implies \mu_{P\_node} = 6.25\text{ req/s}, r_P \approx 0.78\text{ req/s/GPU}$）；
+   * 配合单个 64 卡 Decode 超节点运行 $B_D = 80, T_D = 3.2\text{ s}$（$\mu_{D\_node} = 25\text{ req/s}, r_D \approx 0.39\text{ req/s/GPU}$）：
+   * 4 台 P-Node（32 卡，$\mu_{P\_pool} = 25\text{ req/s}$）恰好严丝合缝匹配 1 个 D-Supernode（64 卡，$\mu_{D\_pool} = 25\text{ req/s}$），精确导出 $\frac{N_P}{N_D} = \frac{0.3906}{0.7813} = \mathbf{1 : 2}$！（同理，在 $32\text{k}\text{--}64\text{k}$ 重算力输入、$512\text{--}1\text{k}$ 输出的重度长文档分析场景下，$N_P : N_D$ 会进一步逼近 **1:1 至 1:2**）。
+3. **工况 C：DeepSeek 线上满载生产工况（77K 输入、96% 缓存命中 + CSA2 超高并发 $B_D = 512$，收敛于 1 : 1）**
+   * 线上平均输入 $L_{\text{in}} = 77,000$ tokens，命中率 $H = 96\%$，单请求有效未命中计算长度 $L_{\text{eff}} = 77,000 \times (1 - 0.96) = 3,080$ tokens，$T_P \approx 0.05\text{ s}, B_P = 1 \implies \mu_{P\_node} = 20\text{ req/s}$（$r_P = 2.5\text{ req/s/GPU}$），32 台 P-Node（256 卡）总吞吐 $\mu_{P\_pool} = 640\text{ req/s}$；
+   * 在 Decode 侧，得益于 **CSA2 将全局 HBM KV Cache 极致压缩至仅 890 Bytes/token**，64 卡超节点显存池可同时并发承载 **$B_D = 512$ 条长序列会话**（平均每卡仅 8 条并发流），在 $T_D = 3.2\text{ s}$ 下单超节点服务速率跃升至 $\mu_{D\_node} = \frac{512}{3.2} = 160\text{ req/s}$（$r_D = 2.5\text{ req/s/GPU}$），4 个超节点（256 卡）总吞吐恰为 $\mu_{D\_pool} = 4 \times 160 = 640\text{ req/s}$！
+   * 代入平衡方程（无需任何人为修正系数）：
+     $$\frac{N_P}{8} \times \frac{1}{0.05} = \frac{N_D}{64} \times \frac{512}{3.2} \iff 2.5 N_P = 2.5 N_D \iff N_P : N_D = \mathbf{1 : 1}$$
 
-$$\mu_{P\_pool} \approx \mu_{D\_pool} \iff \frac{N_P \text{ (卡数)}}{8} \times \frac{B_P}{T_P} = \frac{N_D \text{ (卡数)}}{64} \times \frac{B_D}{T_D}$$
-
-代入物理实测参数：
-
-$$\frac{N_P}{8} \times \frac{1}{0.05} = \frac{N_D}{64} \times \frac{64}{3.2} \implies N_P \times 2.5 = N_D \times 0.3125 \times 8 \implies N_P \approx N_D$$
-
-> [!IMPORTANT] 物理真相：1:1 是 96% 命中率下的“数学巧合与工程必然”
-> - **如果 KV Cache 命中率为 0%**：$L_{\text{eff}} = 77,000$ tokens，Prefill 耗时将从 50ms 暴增至 1,200ms（暴涨 24 倍！）。此时系统如果还要维持 1:1 配比，Prefill 队列将瞬间被打崩雪崩，Prefill 卡数必须扩张为 Decode 的 10 倍以上！
-> - **正是由于 96% 的超高命中率**，将海量长文本 Prefill 的有效计算量削减了 96%，才使得仅占 50% 物理卡数的 Prefill 节点池能够刚好喂饱 50% 卡数的 Decode 超节点池。**1:1 不是拍脑袋定的对称，而是长缓存命中率与访存带宽在排队论上的精确稳态交点！**
+> [!IMPORTANT] 物理真相：P/D 配比由 $L_{\text{eff}} : L_{\text{out}}$ 与 KV 压缩率共同锁定
+> - **如果线上 KV Cache 命中率跌至 0%**：$L_{\text{eff}} = 77,000$ tokens，Prefill 耗时将从 50ms 暴增至 ~1,200ms（膨胀 24 倍，$r_P$ 跌至 $0.104\text{ req/s/GPU}$）。若仍维持高并发 Decode，Prefill 队列将瞬间雪崩，Prefill 卡数必须扩张至 Decode 的数十倍！
+> - **正是“96% 缓存命中削减 24 倍 Prefill 算力”与“CSA2 压缩支撑单超节点 512 并发 Decode”两股力量在排队论上的交汇**，才造就了宏观 256 卡 Prefill 对 256 卡 Decode 的 1:1 稳态平衡；而在缓存命中率较低或中等并发的企业私有集群中，按上式实测标定为 **1:2 ~ 1:4** 才是科学的容量规划方法。
 
 ---
 
@@ -363,16 +358,16 @@ $$\text{Depth}(T) = \max \left\{ m \in [1, K_{\max}] \;\middle|\; \prod_{j=1}^{m
 
 ---
 
-### 2. SWA Bounded Replay（滑动窗口注意力边界重放）
+### 2. CSA2 + SWA Bounded Replay（滑动窗口注意力有界重放）
 
-DeepSeek-V4.1-Flash 架构广泛采用了**滑动窗口注意力 (Sliding Window Attention, SWA)**，以在长序列下维持高效计算。然而在多轮对话与自回归解码中，SWA 会带来一个严重的工程痛点：**边界状态断裂引发的全量重算（Re-computation Shock）**。
+**DeepSeek-V4.1-Flash** 采用 **552B 总参数的非对称 MoE 架构（40 层 Causal Encoder-Decoder，即 20 层因果编码器 + 20 层解码器，Prefill 阶段仅激活 8B 参数，Decode 阶段激活 16B 参数）**，并在注意力层融合了 **CSA2（Compressed Sparse Attention 2）** 与 **滑动窗口注意力（Sliding Window Attention, SWA）**：
+- **CSA2 跨层共享与 FP4 量化**：将全局注意力层的 HBM KV Cache 极致压缩至 **890 Bytes/token**（约为上一代 V4-Flash 的 1/4）；
+- **SWA 外部缓存持久化痛点**：在线上解码期间，SWA 层在 GPU HBM 中仅需维护固定窗口大小 $n_{\text{win}}$ 的环形 KV 缓冲区（显存占用为常数 $O(n_{\text{win}})$）。但在 72h 分层前缀缓存（Host DRAM / NVMe SSD）中，若为了支持任意前缀截断命中而将所有历史位置的局部 SWA 状态全量落盘，外部缓存容量与 PCIe/RDMA 带宽开销将反超全局 CSA2 状态数倍；反之若直接丢弃 SWA 状态，传统引擎在缓存未对齐时会被迫触发整段 77K 上下文的全量重算。
 
-当上下文窗口向前滑动超出窗口长度 $W$ 时，新进入的 Token 无法再感知窗口外被抛弃的 Token。若不对边界进行特殊处理，一旦系统需要对历史上下文重新做局部验证或回溯，必须对这部分输入重新做一次昂贵的 Prefill。
-
-**SWA Bounded Replay 算法** 的实现机制：
-1. **边界显式锚点（Boundary Anchors）**：每隔固定窗口跨度 $W$，算子在片上显式抓取并固化边界处的归约注意力状态指纹（Attention Sink State Fingerprint）；
-2. **轻量级局部重放（Localized Replay）**：当需要回溯或跨窗口迁移时，系统仅从最近的边界锚点处重放极小片段（通常少于 128 Tokens）的激活值，而无需重新计算整段 77K 上下文。
-3. **收益**：将动态变长对话中的二次 Prefill 冗余计算量削减了 **85% 以上**。
+**SWA Bounded Replay 算法** 的真实工程实现机制：
+1. **外部存储零 SWA 持久化（CSA2-Only Persistence）**：Tier 2/3 外部缓存池**仅持久化高度压缩的全局 CSA2 KV 状态**，彻底不落盘局部 SWA 窗口的冗余状态（绝非每隔 $W$ 个 Token 周期性存储全量“边界锚点”），使单 Token 外部持久化 KV 体积骤降至上一代的 **1/8**；
+2. **固定后缀窗口有界重放（Bounded Suffix Replay）**：当多轮对话或智能体请求在任意前缀位置命中缓存（或发生未对齐截断）时，由于任一位置的 SWA 窗口状态仅严格依赖最近 $n_{\text{win}}$ 个 Token 的前序表示，引擎利用已命中的全局 CSA2 缓存，仅对末尾长度严格受限于 $\le n_{\text{win}}$ 的后缀窗口执行一次轻量级局部重算，即可无损重建完整的 SWA 激活状态；
+3. **收益**：在维持运行期恒定滑窗 HBM 占用的同时，将缓存恢复的最坏重算复杂度严格锁定在常数上界 $O(n_{\text{win}})$，彻底消除了随总上下文长度 $L$ 线性膨胀的二次 Prefill 开销。
 
 ---
 
@@ -441,97 +436,89 @@ flowchart LR
 
 ### 3. 实战接入代码：协议抹平、思考链剥离与 Tool Calling
 
-通过 `pip install deepseek-recipe` 安装后，在推理网关层可实现极简且严格的一致性接入。以下是一段标准的生产级桥接示例：
+通过 `pip install deepseek-recipe` 安装后，其 Python 绑定直接暴露了 `ChatCompletionRequest` / `ResponsesRequest`、`ConversionOptions`、`DeepseekV41Encoding`（含 `render_conversation()`）以及流式状态机 `StreamProcessor`。以下为严格对齐官方 `deepseek_recipe` API 的生产级桥接示例：
 
 ```python
 """
 production_gateway_recipe.py
-基于 deepseek-recipe 实现生产级 API 协议统一转换与思考链/工具调用分离
+基于官方 deepseek-recipe 实现生产级 API 协议统一转换与 <think> / Tool Call 流式解耦
 """
 
-from typing import Dict, Any, List
-import deepseek_recipe as ds_recipe
+from typing import Dict, Any, Iterable, List
+from deepseek_recipe import (
+    ChatCompletionRequest,
+    ConversionOptions,
+    DeepseekV41Encoding,
+    InferenceChunk,
+    InferenceFinishReason,
+    PromptUsage,
+    StreamProcessor,
+)
 
-def handle_chat_completion_request(payload: Dict[str, Any]) -> ds_recipe.RenderedInput:
+# 全局复用无状态 V4.1 协议编码器
+V41_ENCODING = DeepseekV41Encoding()
+
+
+def render_openai_request(payload: Dict[str, Any]) -> Dict[str, Any]:
     """
-    接收标准 OpenAI 格式的请求体，通过 deepseek-recipe 编译为原生 Token 流
+    接收标准 OpenAI Chat Completions 请求体（含 tools、reasoning_effort、历史 reasoning_content），
+    通过 deepseek-recipe Rust 内核转换为统一 Conversation 并渲染为原生模型输入。
     """
-    # 1. 构造统一的结构化对话模型
-    conversation = ds_recipe.Conversation()
+    # 1. 解析并校验协议请求（若是 OpenAI Responses 协议可替换为 ResponsesRequest）
+    request = ChatCompletionRequest(payload)
 
-    # 2. 注入系统提示词与思考模式约束
-    # DeepSeek V4.1 原生区分 reasoning_effort 与常规生成
-    enable_thinking = payload.get("enable_thinking", True)
-    conversation.set_reasoning_mode(enable_thinking)
+    # 2. 按协议转换选项归一化为内部统一 Conversation 结构与解析策略
+    converted = request.convert(ConversionOptions())
 
-    # 3. 动态绑定工具调用定义 (Function Calling)
-    if "tools" in payload:
-        for tool in payload["tools"]:
-            conversation.register_tool(
-                name=tool["function"]["name"],
-                description=tool["function"].get("description", ""),
-                parameters=tool["function"].get("parameters", {})
-            )
+    # 3. 使用 DeepSeek-V4.1 专用编码器渲染精确 Prompt（绑定 PromptTokenizer 时可直接产出 token_ids）
+    rendered = V41_ENCODING.render_conversation(converted.conversation)
 
-    # 4. 逐轮注入多轮消息历史
-    for msg in payload["messages"]:
-        role = msg["role"]
-        content = msg["content"]
-        
-        if role == "system":
-            conversation.add_system_message(content)
-        elif role == "user":
-            conversation.add_user_message(content)
-        elif role == "assistant":
-            # 精准恢复历史回复中的思考链与普通正文
-            reasoning_content = msg.get("reasoning_content", None)
-            tool_calls = msg.get("tool_calls", None)
-            conversation.add_assistant_message(
-                content=content,
-                reasoning_content=reasoning_content,
-                tool_calls=tool_calls
-            )
-        elif role == "tool":
-            conversation.add_tool_result(
-                tool_call_id=msg["tool_call_id"],
-                result=content
-            )
-
-    # 5. 高性能 Rust 核心渲染：输出底层引擎消费的 Token 数组与注意力 Mask
-    rendered_input = conversation.render_for_engine(
-        tokenizer_model="deepseek-ai/DeepSeek-V4.1-Flash",
-        add_generation_prompt=True
-    )
-    
-    return rendered_input
-
-
-def parse_engine_stream_output(raw_token_stream: List[int]) -> Dict[str, Any]:
-    """
-    流式反序列化模型输出：状态机无缝解耦 <think>...</think> 与 Tool Call
-    """
-    parser = ds_recipe.StreamOutputParser(tokenizer_model="deepseek-ai/DeepSeek-V4.1-Flash")
-    
-    parsed_result = {
-        "reasoning_chunk": "",
-        "content_chunk": "",
-        "detected_tool_calls": []
+    return {
+        "converted": converted,
+        "prompt": rendered.prompt,
     }
 
-    for token_id in raw_token_stream:
-        event = parser.step(token_id)
-        
-        if event.is_reasoning():
-            # 属于思考链内容 (<think> 内部文本)
-            parsed_result["reasoning_chunk"] += event.text()
-        elif event.is_content():
-            # 属于交付给用户的正文
-            parsed_result["content_chunk"] += event.text()
-        elif event.is_tool_call_completed():
-            # 完整解析出结构化工具调用
-            parsed_result["detected_tool_calls"].append(event.get_tool_call())
 
-    return parsed_result
+def stream_engine_chunks_to_sse(
+    converted: Any,
+    request_id: str,
+    model_name: str,
+    prompt_tokens: int,
+    cache_hit_tokens: int,
+    text_deltas: Iterable[str],
+) -> List[str]:
+    """
+    流式反序列化模型输出：StreamProcessor 状态机自动剥离 <think>...</think> 与结构化 Tool Call，
+    并直接产出兼容 OpenAI ChatCompletionChunk 的 JSON 事件流。
+    """
+    chunk_gen = ChatCompletionRequest.chunk_generator(
+        converted, request_id, model_name
+    )
+    processor = StreamProcessor(chunk_gen, converted.parsing_options)
+    sse_events: List[str] = []
+
+    # 1. 推送首包就绪信号与前缀缓存命中统计
+    ready_events = processor.push(
+        InferenceChunk.ready(
+            prompt_usage=PromptUsage(
+                prompt_tokens=prompt_tokens,
+                prompt_cache_hit_tokens=cache_hit_tokens,
+            )
+        )
+    )
+    sse_events.extend(ev.to_json() for ev in ready_events)
+
+    # 2. 逐块喂入后端生成的文本或 Token 流（InferenceChunk.tokens / InferenceChunk.text）
+    for delta in text_deltas:
+        for ev in processor.push(InferenceChunk.text(delta, token_count=1)):
+            sse_events.append(ev.to_json())
+
+    # 3. 推送结束原因并冲刷状态机尾缓冲
+    for ev in processor.push(InferenceChunk.finish(InferenceFinishReason.Stop)):
+        sse_events.append(ev.to_json())
+    processor.finish()
+
+    return sse_events
 ```
 
 - **安全边界保障**：`deepseek-recipe` 的 Rust 内核对所有输入执行严格的语法树校验，即便客户端恶意构造畸形的 `<|fim_begin|>`、`<think>` 标签，也会在词法阶段被安全转义，彻底消除了提示词注入（Prompt Injection）导致的引擎崩溃。
@@ -612,19 +599,22 @@ pie title 单集群日均综合财务构成 ($466,944 / Day)
 - **故障表象**：当 Decode 超节点扩展至 128 卡（跨越 16 台物理机、多台 Leaf 交换机）时，NCCL All-to-All 吞吐突然暴跌 70%，网卡重传计数器（`rx_prio0_drop`）急剧上升。
 - **底层根因**：超大规模 All-to-All 产生密集交叉数据流，数据中心等价多路径路由（ECMP）在根据五元组哈希分流时发生**哈希极化（Hash Polarization）**，多条跨节点数据流被硬塞进同一根 Spine 物理链路上，引发局部拥塞风暴。
 - **排障方案**：
-  在 InfiniBand 交换机上强制启用**自适应路由（Adaptive Routing, AR）**，动态检测链路负载打散热点包；若采用 RoCEv2，必须配置交换机与网卡的 DSCP 优先级映射与 PFC 硬件死锁检测定时器（`PFC_DEADLOCK_DETECTION_EN=1`）。
+  在 InfiniBand 交换机上强制启用**自适应路由（Adaptive Routing, AR）**，动态检测链路负载打散热点包；若采用 RoCEv2，必须配置交换机与网卡的 DSCP 优先级映射与 PFC 硬件死锁检测定时器（`PFC_DEADLOCK_DETECTION_EN=1`）。关于机柜级 72 卡全互连 NVLink 铜缆超节点如何从物理拓扑上消解跨机 All-to-All 瓶颈及 NCCL SHARP/NVLS 调优，请进一步参阅 [机柜级超节点与集合通信：GB200 NVL72、NVLink 5 与 NCCL 生产架构解析](/articles/rack-scale-superpod-nvl72-nccl-collectives/)。
 
 ### 2. DSpark 草稿模型与主模型在长思考链下的置信度失真
 - **故障表象**：在线上跑复杂的推理性代码生成任务时，DSpark 投机加速比从原本的 1.6x 骤跌至 0.9x（反而比不开启投机更慢）。
 - **底层根因**：长思考链（Reasoning Chain）中，模型频繁输出高度严谨的伪代码或数学变量名，此时草稿模型的隐藏层向量分布发生语义漂移，导致 Confidence Head 误判，错误放行了大量不可行候选分支，频繁触发大模型的全面回退重滚（Rollback）。
 - **排障方案**：
-  在推理服务启动配置中，加入针对特定任务的置信度门控硬约束：
-  ```bash
-  --dspark-confidence-threshold 0.85 \
-  --dspark-max-draft-tokens 4 \
-  --dspark-abort-on-rollback-rate 0.30
+  在内部 Decode 工作节点调度配置中，加入针对长思考链任务的置信度门控硬约束（收紧最大草稿步长 `max_draft_tokens: 4` 并配置回退熔断阈值）：
+  ```yaml
+  # 内部 Decode 控制面 DSpark 熔断保护配置示意 (Reference Control-Plane Spec)
+  dspark:
+    enabled: true
+    confidence_threshold: 0.85
+    max_draft_tokens: 4
+    abort_on_rollback_rate: 0.30
   ```
-  当单会话连续 3 次发生投机回退时，调度器动态降级为纯自回归单步生成，保护系统吞吐下限。
+  当单会话连续 3 次发生投机回退率超 30% 时，调度器动态降级为纯自回归单步生成，保护系统吞吐下限。
 
 ### 3. 跨机 RDMA 传输与 Decode 算子显存竞态写冲突
 - **故障表象**：Prefill 节点将 KV Cache 通过 RDMA 异步直推到 Decode 节点的显存块时，Decode 节点偶发性生成乱码或报 `CUDA illegal memory access`。
@@ -657,7 +647,7 @@ flowchart LR
 
 ### 阶段一：物理硬件选型、机柜规划与无损网络布线
 
-打造一套支持 DeepSeek-V4.1-Flash 万亿参数 MoE 的生产推理集群，推荐以 **96 卡物理集群（12 台 8-GPU 物理机）** 作为标准起步验证单元（包含 4 台 Prefill 节点与 8 台组成的单个 64 卡 Decode 超节点）：
+打造一套支持 **DeepSeek-V4.1-Flash（552B 总参数非对称 MoE，40 层 Causal Encoder-Decoder，Prefill 激活 8B / Decode 激活 16B）** 的生产推理集群，推荐以 **96 卡物理集群（12 台 8-GPU 物理机）** 作为标准起步验证单元（包含 4 台共 32 卡 Prefill 节点与 8 台组成的单个 64 卡 Decode 超节点，对应前文第三层推导的 **1:2 起步验证配比**）：
 
 #### 1. 硬件配置选型清单 (BOM)
 * **计算节点（12 台 HGX H100/H800/B200 或华为昇腾 950 8 卡服务器）**：
@@ -688,10 +678,9 @@ flowchart LR
 
 在所有 12 台物理节点上统一配置底层系统参数。
 
-#### 1. 内核网络与虚拟内存优化 (`/etc/sysctl.d/99-ai-infra.conf`)
+#### 1. 内核网络、虚拟内存与透明大页（THP）优化
+首先写入 `/etc/sysctl.d/99-ai-infra.conf` 调优套接字缓冲与虚拟内存映射上限：
 ```ini
-# 禁用透明大页碎片整理（防止内存重排卡死 GPU Pinned Memory）
-vm.transparent_hugepage = never
 # 调大网络接收队列与套接字读写缓冲区
 net.core.rmem_max = 134217728
 net.core.wmem_max = 134217728
@@ -699,12 +688,18 @@ net.core.rmem_default = 67108864
 net.core.wmem_default = 67108864
 net.core.optmem_max = 67108864
 net.core.netdev_max_backlog = 250000
-# 开启 ECN 协同降速
+# 开启控制面 TCP ECN 协商 (注：RoCEv2 UDP-4791 硬件 ECN/DCQCN 需在网卡 QoS 与交换机侧独立启用)
 net.ipv4.tcp_ecn = 1
-# 允许最大内存映射区域数
+# 允许最大内存映射区域数（支撑超大模型权重 mmap 与多级缓存映射）
 vm.max_map_count = 2621440
 ```
-执行激活：`sudo sysctl --system`
+执行激活，并通过 Linux `sysfs` 接口配置透明大页（THP 并非 `sysctl` 键值，切勿写入 `sysctl.conf`）：
+```bash
+sudo sysctl --system
+# 设为 madvise 按需启用，并彻底关闭同步内存碎片整理以防卡死 GPU Pinned Memory
+echo madvise | sudo tee /sys/kernel/mm/transparent_hugepage/enabled
+echo never | sudo tee /sys/kernel/mm/transparent_hugepage/defrag
+```
 
 #### 2. 硬件拓扑与 GPUDirect RDMA 校验
 在宿主机运行自检命令，确保 8 张网卡全绿且处于最高速率：
@@ -712,11 +707,11 @@ vm.max_map_count = 2621440
 # 1. 验证 InfiniBand / RoCEv2 网卡状态与速率 (400 Gbps Active)
 ibstat | grep -E "(CA '|State:|Physical state:|Rate:)"
 
-# 2. 验证 GPU 机内拓扑 (必须全部为 NV18 / NV9 全互联，严禁走 SYS / NODE)
+# 2. 验证 Hopper/Blackwell 8-GPU 机内拓扑 (NVSwitch 全互联必须全部显示为 NV18，严禁出现跨插槽 SYS)
 nvidia-smi topo -m
 
-# 3. 锁定 GPUDirect 级别并导出拓扑文件
-export NCCL_NET_GDR_LEVEL=5
+# 3. 限制 GPUDirect RDMA 仅走同 PCIe Switch 直连路径 (PIX)，杜绝跨 Socket QPI/UPI 绕行
+export NCCL_NET_GDR_LEVEL=PIX
 export NCCL_TOPO_DUMP_FILE=/etc/ai-infra/nccl_topo.xml
 export NCCL_SET_STACK_SIZE=1
 ```
@@ -725,7 +720,10 @@ export NCCL_SET_STACK_SIZE=1
 
 ### 阶段三：DeepInfer 内核编译与生产容器镜像构建
 
-为了避免生产环境出现“动态链接库地狱”，推荐使用官方标准多阶段构建 Dockerfile 将专用算子矩阵（FlashMLA, DeepGEMM, DeepEP, TileLang）提前编译打包：
+> [!IMPORTANT] 开源边界核查说明：公开引擎 API vs. 内部分布式控制面
+> 截至目前，GitHub 官方开源仓库 **[deepseek-ai/DeepInfer](https://github.com/deepseek-ai/DeepInfer)** 仅开放了核心离线推理引擎（即 `deepinfer.entrypoints.llm.LLM` 与 `deepinfer.sampling_params.SamplingParams`）及底层加速算子，**并未包含开箱即用的 `deepinfer.entrypoints.server` 分布式 HTTP 服务端、跨机 P/D 路由守护进程与 RDMA KV 传输调度器**（这部分属于 DeepSeek 内部生产控制面设施）。因此在构建私有化集群时，需以官方 `LLM` 引擎与 `deepseek-recipe` 为内核，外包自研或企业内部 RPC Worker 与网关控制面。
+
+推荐使用多阶段构建 Dockerfile 将专用算子矩阵（FlashMLA, DeepGEMM, DeepEP, TileLang）与 `deepseek-recipe` 提前编译打包为基础运行镜像：
 
 ```dockerfile
 # syntax=docker/dockerfile:1.4
@@ -739,19 +737,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-# 1. 克隆并编译 DeepInfer 核心算子
+# 1. 克隆并编译公开版 DeepInfer 核心引擎与算子库
 RUN git clone --recursive https://github.com/deepseek-ai/DeepInfer.git /build/DeepInfer && \
     cd /build/DeepInfer && \
     pip install --no-cache-dir -r requirements.txt && \
     python3 setup.py bdist_wheel
 
-# 2. 编译 deepseek-recipe 协议包
+# 2. 编译 deepseek-recipe 协议包 (Rust + PyO3)
 RUN git clone https://github.com/deepseek-ai/deepseek-recipe.git /build/deepseek-recipe && \
     cd /build/deepseek-recipe && \
     cargo build --release && \
     python3 -m pip install maturin && maturin build --release
 
-# 运行时生产瘦身镜像
+# 运行时生产瘦身基础镜像
 FROM nvidia/cuda:13.0.0-runtime-ubuntu24.04
 WORKDIR /app
 
@@ -761,69 +759,88 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=builder /build/DeepInfer/dist/*.whl /tmp/
 COPY --from=builder /build/deepseek-recipe/target/wheels/*.whl /tmp/
-RUN pip install --no-cache-dir /tmp/*.whl && rm -rf /tmp/*.whl
+RUN pip install --no-cache-dir /tmp/*.whl fastapi uvicorn httpx && rm -rf /tmp/*.whl
 
 ENV PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True,max_split_size_mb:128"
-ENV NCCL_NET_GDR_LEVEL=5
-ENTRYPOINT ["python3", "-m", "deepinfer.entrypoints.server"]
+ENV NCCL_NET_GDR_LEVEL=PIX
+CMD ["python3"]
 ```
 
 ---
 
-### 阶段四：Prefill 节点池与 Decode 超节点分布式拉起
+### 阶段四：公开版 DeepInfer 引擎调用与内部 P/D 控制面等效配置
 
-在生产中，Prefill 节点池与 Decode 超节点池采用不同的启动参数与拓扑模式。
+#### 1. 开源 `DeepInfer` 核心引擎真实调用方式 (`run_deepinfer_engine.py`)
+在单节点或已配置好分布式环境的 Worker 内部，直接通过公开的 `deepinfer.entrypoints.llm.LLM` 与 `SamplingParams` 结合 `deepseek-recipe` 执行推理：
 
-#### 1. Prefill 节点池启动脚本 (`launch_prefill_pool.sh`)
-在 4 台 Prefill 物理节点（IP: `192.168.10.101 ~ 104`）上分别执行（以 Node 0 为例）：
-```bash
-#!/usr/bin/env bash
-# Prefill 节点：8 卡机内 TP=8，关闭 MoE 跨机通信，开启 RDMA KV 直推
-export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
-export HOST_IP=192.168.10.101
+```python
+from deepinfer.entrypoints.llm import LLM
+from deepinfer.sampling_params import SamplingParams
+from deepseek_recipe import (
+    ChatCompletionRequest,
+    ConversionOptions,
+    DeepseekV41Encoding,
+)
 
-numactl --interleave=all python3 -m deepinfer.entrypoints.server \
-    --model-path /models/DeepSeek-V4.1-Flash \
-    --role prefill \
-    --host 0.0.0.0 \
-    --port 8001 \
-    --tensor-parallel-size 8 \
-    --pipeline-parallel-size 1 \
-    --max-model-len 131072 \
-    --max-num-seqs 4 \
-    --gpu-memory-utilization 0.90 \
-    --kv-transfer-protocol rdma \
-    --rdma-device-names mlx5_0,mlx5_1,mlx5_2,mlx5_3,mlx5_4,mlx5_5,mlx5_6,mlx5_7
+# 1. 使用 deepseek-recipe 渲染 DeepSeek-V4.1-Flash 原生 Prompt
+req = ChatCompletionRequest({
+    "model": "deepseek-ai/DeepSeek-V4.1-Flash-1017",
+    "messages": [{"role": "user", "content": "推导 P/D 分离集群的 Little's Law 吞吐平衡条件。"}],
+})
+converted = req.convert(ConversionOptions())
+rendered = DeepseekV41Encoding().render_conversation(converted.conversation)
+
+# 2. 初始化公开版 DeepInfer 核心引擎并执行确定性采样或结构化输出 (so_args)
+llm = LLM(model="deepseek-ai/DeepSeek-V4.1-Flash-1017")
+sampling_params = SamplingParams(
+    temperature=0.0,
+    max_tokens=1024,
+)
+
+outputs = llm.generate([rendered.prompt], sampling_params)
+print(outputs[0].outputs[0].text)
 ```
 
-#### 2. Decode 64 卡超节点分布式启动脚本 (`launch_decode_supernode.sh`)
-Decode 超节点由 8 台物理机（IP: `192.168.10.111 ~ 118`）跨机联合启动，设置 `TP=8, EP=8`，并激活 DSpark 动态投机解码与 SWA 边界重放：
+#### 2. 内部生产控制面等效架构配置示意（Reference Control-Plane Spec）
+将 `LLM` 核心引擎封装进企业内部 P/D 分离分布式运行时后，4 台 Prefill 节点（`192.168.10.101 ~ 104`）与 8 台组成的 64 卡 Decode 超节点（`192.168.10.111 ~ 118`）对应的**内部控制面等效拓扑编排规范**（注：以下为内部控制面配置示意，非公开版 CLI）如下：
 
-```bash
-#!/usr/bin/env bash
-# 在 Decode Head 节点 (192.168.10.111) 与其余 7 台 Worker 协同执行
-# 启动 Ray / 集群主控并绑定跨机无阻通信
-export NCCL_SOCKET_IFNAME=eth0
-export NCCL_IB_GID_INDEX=3
-export NCCL_ALGO=Tree
+```yaml
+# reference_pd_cluster_spec.yaml — 内部控制面等效架构配置示意 (96-GPU 起步单元: 32P + 64D)
+model_path: /models/DeepSeek-V4.1-Flash-1017
 
-python3 -m deepinfer.entrypoints.server \
-    --model-path /models/DeepSeek-V4.1-Flash \
-    --role decode \
-    --host 0.0.0.0 \
-    --port 8002 \
-    --cluster-nodes 8 \
-    --tensor-parallel-size 8 \
-    --expert-parallel-size 8 \
-    --max-model-len 131072 \
-    --max-num-seqs 128 \
-    --gpu-memory-utilization 0.92 \
-    --dspark-enable \
-    --dspark-confidence-threshold 0.85 \
-    --dspark-max-draft-tokens 6 \
-    --swa-bounded-replay \
-    --kv-cache-ttl-hours 72 \
-    --tiered-kv-storage-path /mnt/nvme_tier3_kv/
+prefill_pool:
+  replicas: 4                        # 4 台独立 8 卡节点 (共 32 GPUs)
+  listen_port: 8001
+  parallelism:
+    tensor_parallel_size: 8          # 机内 NV18 全互联 TP=8
+    pipeline_parallel_size: 1
+  scheduler:
+    max_model_len: 131072
+    max_num_seqs: 4
+    gpu_memory_utilization: 0.90
+  kv_connector:
+    transport: gpudirect_rdma_write  # 1-to-1 同序号 GPU 单边直写
+    hca_devices: [mlx5_0, mlx5_1, mlx5_2, mlx5_3, mlx5_4, mlx5_5, mlx5_6, mlx5_7]
+
+decode_supernode:
+  nodes: 8                           # 8 台 8 卡服务器跨机组网 (共 64 GPUs)
+  listen_port: 8002
+  parallelism:
+    tensor_parallel_size: 8          # 机内 Attention TP=8
+    expert_parallel_size: 8          # 跨机 MoE Wide-EP=8
+  scheduler:
+    max_model_len: 131072
+    max_num_seqs: 128
+    gpu_memory_utilization: 0.92
+  dspark:
+    enabled: true
+    confidence_threshold: 0.85
+    max_draft_tokens: 4              # 与第八层长思考链熔断门控策略保持一致
+    abort_on_rollback_rate: 0.30
+  kv_governance:
+    csa2_swa_bounded_replay: true
+    ttl_hours: 72
+    tier3_nvme_path: /mnt/nvme_tier3_kv/
 ```
 
 #### 3. Kubernetes / KubeRay 生产声明式清单片段
@@ -841,7 +858,7 @@ spec:
       spec:
         containers:
         - name: ray-head
-          image: internal-registry.corp/deepinfer:v4.1
+          image: internal-registry.corp/deepinfer-worker:v4.1
           resources:
             limits:
               nvidia.com/gpu: "8"
@@ -863,102 +880,112 @@ spec:
 
 为了复现知乎报告中 **96% 的超高 KV Cache 命中率**，网关层必须具备**前缀哈希亲和性感知（Prefix-Aware Consistent Hashing）**。
 
-以下为基于 FastAPI + `deepseek-recipe` 构建的高性能生产网关核心源码：
+以下为基于 FastAPI + 官方 `deepseek-recipe` API 对接内部 P/D 控制面 RPC 的生产网关核心源码：
 
 ```python
 """
 production_affinity_gateway.py
-生产级 API 网关：前缀一致性哈希路由 + deepseek-recipe 协议桥接 + 流式解耦
+生产级 API 网关：前缀一致性哈希路由 + 官方 deepseek-recipe 协议桥接 + StreamProcessor 流式解耦
 """
 
 import hashlib
+import uuid
 from typing import List, Dict, Any
 from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse
 import httpx
-import deepseek_recipe as ds_recipe
+from deepseek_recipe import (
+    ChatCompletionRequest,
+    ConversionOptions,
+    DeepseekV41Encoding,
+    InferenceChunk,
+    InferenceFinishReason,
+    PromptUsage,
+    StreamProcessor,
+)
 
 app = FastAPI(title="DeepSeek Production Gateway")
+V41_ENCODING = DeepseekV41Encoding()
 
-# 4 台 Prefill 节点与 1 个 Decode 64 卡超节点入口
-PREFILL_NODES = [f"http://192.168.10.{i}:8001" for i in range(101, 105)]
+# 对接内部控制面封装的 4 台 Prefill Worker 与 1 个 64 卡 Decode Supernode RPC 入口
+PREFILL_WORKERS = [f"http://192.168.10.{i}:8001" for i in range(101, 105)]
 DECODE_SUPERNODE = "http://192.168.10.111:8002"
 
-def compute_prefix_hash(messages: List[Dict[str, str]]) -> str:
-    """
-    提取 System Prompt 与首轮对话文本，计算 64 位哈希指纹用于会话亲和性路由
-    """
+
+def compute_prefix_hash(messages: List[Dict[str, Any]]) -> str:
+    """提取 System Prompt 与首轮对话文本，计算 SHA-256 指纹用于会话亲和性路由"""
     prefix_str = ""
     for msg in messages:
-        if msg["role"] in ["system", "user"]:
+        if msg.get("role") in ("system", "user") and isinstance(msg.get("content"), str):
             prefix_str += msg["content"]
             if len(prefix_str) > 2048:
                 break
     return hashlib.sha256(prefix_str.encode("utf-8")).hexdigest()
 
+
 @app.post("/v1/chat/completions")
 async def chat_completions(request: Request):
     payload = await request.json()
     messages = payload.get("messages", [])
-    
-    # 1. 计算前缀指纹，一致性哈希选择固定的 Prefill 节点（最大化 Prefill 缓存复用）
-    p_hash = compute_prefix_hash(messages)
-    selected_p_node = PREFILL_NODES[int(p_hash[:8], 16) % len(PREFILL_NODES)]
-    
-    # 2. 调用 deepseek-recipe 将请求精准编译为原生 Token 结构与注意力 Mask
-    conversation = ds_recipe.Conversation()
-    conversation.set_reasoning_mode(payload.get("enable_thinking", True))
-    
-    for msg in messages:
-        if msg["role"] == "system":
-            conversation.add_system_message(msg["content"])
-        elif msg["role"] == "user":
-            conversation.add_user_message(msg["content"])
-        elif msg["role"] == "assistant":
-            conversation.add_assistant_message(
-                content=msg["content"],
-                reasoning_content=msg.get("reasoning_content", None)
-            )
+    model_name = payload.get("model", "DeepSeek-V4.1-Flash")
+    request_id = f"chatcmpl-{uuid.uuid4().hex[:12]}"
 
-    rendered_input = conversation.render_for_engine(
-        tokenizer_model="deepseek-ai/DeepSeek-V4.1-Flash",
-        add_generation_prompt=True
-    )
-    
-    # 3. 异步向 Prefill 节点发起计算，Prefill 算完后自动通过 RDMA 推送至 Decode 节点
+    # 1. 计算前缀指纹，一致性哈希路由至固定的内部 Prefill 节点（最大化前缀缓存复用）
+    p_hash = compute_prefix_hash(messages)
+    selected_p_node = PREFILL_WORKERS[int(p_hash[:8], 16) % len(PREFILL_WORKERS)]
+
+    # 2. 调用官方 deepseek-recipe Rust 内核完成协议转换与 V4.1 原生 Prompt 渲染
+    ds_req = ChatCompletionRequest(payload)
+    converted = ds_req.convert(ConversionOptions())
+    rendered = V41_ENCODING.render_conversation(converted.conversation)
+
+    # 3. 调用内部 Prefill Worker 完成预填充并通过 GPUDirect RDMA 将 KV 直推至 Decode 超节点
     async with httpx.AsyncClient(timeout=60.0) as client:
         p_resp = await client.post(
-            f"{selected_p_node}/execute_prefill",
+            f"{selected_p_node}/internal/prefill",
             json={
-                "tokens": rendered_input.token_ids,
+                "prompt": rendered.prompt,
                 "target_decode_node": DECODE_SUPERNODE,
-                "session_hash": p_hash
-            }
+                "session_hash": p_hash,
+            },
         )
         prefill_meta = p_resp.json()
 
-    # 4. 转向 Decode 超节点发起流式生成，并通过 deepseek-recipe 实时拆解 <think>
-    async def token_generator():
-        parser = ds_recipe.StreamOutputParser(tokenizer_model="deepseek-ai/DeepSeek-V4.1-Flash")
-        
+    # 4. 转向内部 Decode 超节点拉取增量输出，并通过 StreamProcessor 实时解耦 <think> 与 Tool Call
+    async def sse_generator():
+        chunk_gen = ChatCompletionRequest.chunk_generator(
+            converted, request_id, model_name
+        )
+        processor = StreamProcessor(chunk_gen, converted.parsing_options)
+
+        for ev in processor.push(
+            InferenceChunk.ready(
+                prompt_usage=PromptUsage(
+                    prompt_tokens=prefill_meta["prompt_tokens"],
+                    prompt_cache_hit_tokens=prefill_meta["cache_hit_tokens"],
+                )
+            )
+        ):
+            yield f"data: {ev.to_json()}\n\n"
+
         async with httpx.AsyncClient(timeout=300.0) as client:
             async with client.stream(
                 "POST",
-                f"{DECODE_SUPERNODE}/stream_decode",
-                json={"kv_session_id": prefill_meta["kv_session_id"]}
+                f"{DECODE_SUPERNODE}/internal/stream_decode",
+                json={"kv_session_id": prefill_meta["kv_session_id"]},
             ) as stream:
-                async for chunk in stream.aiter_bytes():
-                    # 假定 chunk 包含生成的 Token ID 序列
-                    token_ids = [int(x) for x in chunk.decode().split(",") if x]
-                    for tid in token_ids:
-                        ev = parser.step(tid)
-                        if ev.is_reasoning():
-                            yield f"data: {{\"choices\": [{{\"delta\": {{\"reasoning_content\": \"{ev.text()}\"}}}}]}}\n\n"
-                        elif ev.is_content():
-                            yield f"data: {{\"choices\": [{{\"delta\": {{\"content\": \"{ev.text()}\"}}}}]}}\n\n"
+                async for line in stream.aiter_lines():
+                    if not line:
+                        continue
+                    for ev in processor.push(InferenceChunk.text(line, token_count=1)):
+                        yield f"data: {ev.to_json()}\n\n"
+
+        for ev in processor.push(InferenceChunk.finish(InferenceFinishReason.Stop)):
+            yield f"data: {ev.to_json()}\n\n"
+        processor.finish()
         yield "data: [DONE]\n\n"
 
-    return StreamingResponse(token_generator(), media_type="text/event-stream")
+    return StreamingResponse(sse_generator(), media_type="text/event-stream")
 ```
 
 ---
@@ -967,15 +994,17 @@ async def chat_completions(request: Request):
 
 部署完成后，必须经过严格的生产基准压测方可切入真实流量。
 
-#### 1. 生产级基准压测打流命令
-使用 ShareGPT 真实对话轨迹，模拟长文本高并发混合负载：
+#### 1. 针对兼容 OpenAI 网关的生产级基准打流命令
+由于阶段五网关对外暴露了标准 `/v1/chat/completions` 接口，可直接使用社区通用的 OpenAI 兼容压测客户端（如 `vllm bench serve`）向网关发起高并发长上下文打流验收：
 ```bash
-# 启动 256 高并发打流，模拟 77K 输入与 800 Token 生成
-python3 -m deepinfer.benchmarks.benchmark_serving \
-    --backend deepinfer \
-    --host 127.0.0.1 \
-    --port 8000 \
+# 向本地 8000 端口生产网关发起 256 并发打流，验证长前缀命中与流式吐字延迟
+vllm bench serve \
+    --backend openai-chat \
+    --base-url http://127.0.0.1:8000 \
+    --endpoint /v1/chat/completions \
+    --model DeepSeek-V4.1-Flash \
     --dataset-name sharegpt \
+    --dataset-path ./ShareGPT_V3_unfiltered_cleaned_split.json \
     --num-prompts 2000 \
     --max-concurrency 256 \
     --request-rate 50
@@ -994,15 +1023,15 @@ python3 -m deepinfer.benchmarks.benchmark_serving \
 
 ### Q1: DeepInfer 为什么不直接在现有的 vLLM 或 SGLang 之上打补丁，而是要独立自研一套全新引擎？
 主流开源引擎（如 vLLM 和 SGLang）的设计初衷是服务于社区广泛的通用模型、单机或小规模集群部署，其架构需要兼容数百种不同的开源模型和多样化的执行硬件。这种“大而全”的历史包袱导致其难以针对单一极端工况做极致削减。
-DeepInfer 的使命完全不同：它是专为 **DeepSeek 自研模型架构（MLA、CSA+HCA、MoE）、万亿参数规模、跨节点 Wide-EP 超节点、以及英伟达/昇腾特定硬件** 定制生产的“专用利刃”。通过把与核心架构无关的中间抽象层、通用的运行时兼容全部剥离，DeepInfer 实现了代码体积精简、零冗余内存开销与算子端到端穿透，这也是其能在单机卡效上跑出 $38/小时营收的工程基础。
+DeepInfer 的使命完全不同：它是专为 **DeepSeek 自研模型架构（如 DeepSeek-V4.1-Flash 的 40 层 Causal Encoder-Decoder、CSA2+SWA、552B 非对称 MoE 乃至万亿级旗舰模型）、跨节点 Wide-EP 超节点、以及英伟达/昇腾特定硬件** 定制生产的“专用利刃”。通过把与核心架构无关的中间抽象层、通用的运行时兼容全部剥离，DeepInfer 实现了代码体积精简、零冗余内存开销与算子端到端穿透，这也是其能在单机卡效上跑出 $38/小时营收的工程基础。
 
 ### Q2: 为什么 deepseek-recipe 要用 Rust 编写并强制废弃 Jinja？在企业现有微服务网关中如何无缝迁移？
 Jinja 模板是解释执行的纯文本拼接工具，在面对复杂的长文本思考链（`<think>` 隔离）、多轮工具调用（Function Calling）以及精准 Token 上下文截断时，性能低下且极易发生转义错误。Rust 原生具备零成本抽象、无垃圾回收（No GC）与强类型内存安全特性，能够实现纳秒级的语法树解析与协议转换。
-在企业迁移上，官方通过 PyO3 打包发布了 PyPI 标准库（`pip install deepseek-recipe`）。现有的 Python 微服务网关（如基于 FastAPI 或 LiteLLM 构建的统一接入层）只需替换 Prompt 渲染模块，将其统一路由到 `deepseek_recipe.Conversation`，即可直接复刻官方完全一致的 Token 行为与思考链解析流，完全无需重构底层网络框架。
+在企业迁移上，官方通过 PyO3 打包发布了 PyPI 标准库（`pip install deepseek-recipe`）。现有的 Python 微服务网关（如基于 FastAPI 或 LiteLLM 构建的统一接入层）只需替换 Prompt 渲染与流式解析模块，将其统一路由到 `ChatCompletionRequest` / `DeepseekV41Encoding.render_conversation()` 与 `StreamProcessor`，即可直接复刻官方完全一致的 Token 行为与思考链解析流，完全无需重构底层网络框架。
 
 ### Q3: 华为昇腾 950 与英伟达 Blackwell 在运行 DeepInfer 时的核心算子实现差异与性能表现如何？
-- **硬件架构侧**：NVIDIA Blackwell 依托强大的第五代 Tensor Core、TMA 引擎与 10 TB/s 片内互联，在稠密 GEMM 与 FP4/FP8 纯计算吞吐上具备绝对优势；华为昇腾 950 则基于 DaVinci 架构的 3D Cube 矩阵计算单元与特化的向量 Vector 单元，并拥有极具竞争力的本地片上通信（HCCS）。
-- **算子调度侧**：DeepInfer 通过自研的 **TileLang** 领域特定语言，抹平了底层代码分歧。在英伟达端直接编译为极致优化的 SASS 指令；在昇腾端则编译为匹配 Ascend C 的并行指令，并充分调度昇腾片上存储（L0/L1 Buffer）。实测表明，在万亿 MoE 的 Decode 阶段（访存密集），得益于合理的 Wide-EP 切分，昇腾 950 集群的单字生成速度已可逼近英伟达主流旗舰算力水平，展现出强大的工程可用性与自主可控潜力。
+- **硬件架构侧**：NVIDIA Blackwell 依托强大的第五代 Tensor Core、TMA 引擎与 10 TB/s 片内互联，在稠密 GEMM 与 FP4/FP8 纯计算吞吐上具备显著优势；华为昇腾 950 系列则针对 P/D 分离原生提供 **950PR**（128GB HiBL 1.0, ~1.6 TB/s）与 **950DT**（144GB HiZQ 2.0, ~4.0 TB/s）差异化规格，依托 DaVinci 3D Cube + Vector 单元以及高达 2.0 TB/s 的 UnifiedBus / HCCS 超节点互联，精准匹配 Prefill 算力与 Decode 带宽诉求。
+- **算子调度侧**：DeepInfer 通过自研的 **TileLang** 领域特定语言，抹平了底层代码分歧。在英伟达端直接编译为极致优化的 SASS 指令；在昇腾端则编译为匹配 Ascend C 的并行指令，并充分调度昇腾片上存储（L0/L1 Buffer）。实测表明，在 **552B 总参数非对称 MoE（Prefill 激活 8B / Decode 激活 16B）** 的 Decode 阶段（访存密集），得益于合理的 Wide-EP 切分与 HiZQ 2.0 带宽，昇腾 950DT 超节点的单字生成速度已可逼近英伟达主流旗舰算力水平，展现出强大的工程可用性与自主可控潜力。
 
 ### Q4: 96% 的超高 KV Cache 命中率在普通企业的垂直业务中是否具备可复现性？
 **具备高度可复现性，但前提是业务范式与调度架构深度协同**。

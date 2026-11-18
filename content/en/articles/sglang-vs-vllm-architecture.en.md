@@ -18,9 +18,9 @@ updated: 2026-10-20
 ---
 
 > [!NOTE] Executive Summary (TL;DR)
-> - **Architectural Duel**: SGLang leverages native RadixAttention prefix tree reuse and runtime compilation for outstanding agent throughput; vLLM offers unmatched production ecosystem stability and multi-hardware support.
-> - **Benchmark Realities**: Workloads with substantial shared system prompts benefit significantly from SGLang's cache hit rates; broad multi-accelerator production clusters often deploy vLLM.
-> - **Further Exploration**: Explore [RadixAttention Internals](/en/articles/prefix-caching-radix-attention-internals/) and operational practices in [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
+> - **Prefix Reuse Data Structures**: SGLang organizes variable-length shared prefixes in a radix tree (`RadixAttention`), while vLLM APC uses prefix-chained block hashes; both reuse history prior to conversation branches, with real hit rates governed by granularity, eviction, capacity, and routing.
+> - **Controlled Replay Over Universal Rankings**: Both modern engines support continuous batching and grammar-constrained structured outputs; production selection requires workload-matched cold/warm-cache replay under explicit SLOs rather than unverified synthetic claims.
+> - **Further Exploration**: Explore [Prefix Caching & RadixAttention Internals](/en/articles/prefix-caching-radix-attention-internals/) and operational practices in the [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
 
 ## What Should You Compare?
 

@@ -110,7 +110,7 @@ Transformers dominated the industry for 8 years (for context on how they histori
 
 The "Everything in the Cloud" paradigm was shattered by exorbitant bandwidth costs and corporate privacy red lines. The 2026 doctrine is: "If it can run on the phone, never send it to the cloud."
 
-- **The Extreme Compression of SLMs (Small Language Models)**: 1B to 8B parameter models (like Llama-4-Scout-17B, Qwen-5-3B) became the undisputed protagonists of edge arrays.
+- **The Extreme Compression of SLMs (Small Language Models)**: 1B to 8B parameter models (such as Qwen3-4B, Llama-3.2-3B, Phi-4-mini, and Gemma-3-4B) became the undisputed protagonists of edge devices.
 - **Heterogeneous Compute & 4-Bit Quantization**:
   - On iOS and Android, developers use `MLX` or `ExecuTorch` to push models entirely offline.
   - Using extreme 4-bit or 3-bit quantization formats like **GGUF** or **EXL2** allows a 7B model to run comfortably within less than 4GB of mobile RAM.
@@ -202,13 +202,5 @@ Prompt engineering is not dying; it is evolving into **Context Engineering and s
 ### Q3: What is the recommended balance between open-source models and proprietary commercial APIs for enterprises?
 Industry best practice favors a **hybrid semantic routing architecture**. Enterprises should leverage commercial APIs for top-tier reasoning, multimodal vision, and complex code generation where development velocity is paramount, while deploying quantized open-source models (such as Llama 4 or Qwen) on-premises for privacy-sensitive data, offline batch ETL, and low-latency classification. For comprehensive pricing and performance benchmarks across the leading frontier engines, review our [2026 Mainstream Foundation Models Comparison](/en/articles/model-comparison-2026/).
 
-
----
-
-## Frequently Asked Questions (FAQ)
-
-### Q1: What are the trends for open-source vs. closed-source models in 2026?
-In 2026, the gap between open-source and closed-source models is rapidly closing. The open-source community has made significant breakthroughs in model architecture and training efficiency. Developers can refer to our [2026 Model Comparison](/en/articles/model-comparison-2026/) to choose the right model for their specific business scenarios. Closed-source models are focusing more on multimodal integration and massive parameter scale.
-
-### Q2: How should enterprises choose foundational models for localized markets?
-For localized markets, enterprises often prefer top-tier regional open-source or commercial models due to compliance and localization requirements. Before making a decision, it is advisable to evaluate different models' long-context capabilities and instruction-following performance. Check out our [Domestic LLM Comparison](/en/articles/domestic-llm-comparison-2026/) guide to find the best fit for your enterprise needs.
+### Q4: How should enterprises evaluate open-weight regional foundation models for strict compliance and self-hosted workloads?
+For data-residency and self-hosted deployments, evaluate candidate models by comparing hybrid attention cache footprints, native quantization checkpoint formats, and matching benchmark versions. Check out our [Kimi K3 vs GLM-5.3 vs DeepSeek-V4 Comparison](/en/articles/domestic-llm-comparison-2026/) for detailed architecture and deployment criteria.

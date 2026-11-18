@@ -112,12 +112,16 @@ Data Quality Guidelines:
 ### Step 2: Configure LoRA Training
 
 ```python
+import torch
 from peft import LoraConfig, get_peft_model
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+model_id = "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+
 # Load the base model
 model = AutoModelForCausalLM.from_pretrained(
-    "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+    model_id,
     torch_dtype=torch.bfloat16,
     device_map="auto",
 )
@@ -126,7 +130,7 @@ model = AutoModelForCausalLM.from_pretrained(
 lora_config = LoraConfig(
     r=16,                    # rank: 8~64, larger means stronger but slower
     lora_alpha=32,           # scaling factor, usually set to 2 * r
-    target_modules=[         # layers to inject LoRA into
+    target_modules=[         # target all 7 attention (q/k/v/o_proj) and MLP (gate/up/down_proj) linear projections
         "q_proj", "k_proj", "v_proj", "o_proj",
         "gate_proj", "up_proj", "down_proj",
     ],
@@ -138,7 +142,7 @@ lora_config = LoraConfig(
 # Apply LoRA
 model = get_peft_model(model, lora_config)
 model.print_trainable_parameters()
-# → trainable params: 13.6M || all params: 109B || 0.012% (when targeting core attention projection layers)
+# Prints exact trainable parameter count and ratio (~0.05%–0.5% depending on dense vs. MoE linear layers)
 ```
 
 ### Step 3: Large-Scale Multi-GPU Training (DeepSpeed ZeRO)
@@ -149,29 +153,31 @@ Single-GPU QLoRA is only suitable for small-scale validation. Once you move to p
 - **ZeRO-2**: Partitions both optimizer states + gradients. Ideal for 8x A100 single-node training with virtually no speed degradation.
 - **ZeRO-3**: Partitions optimizer states, gradients, **and the model parameters themselves**. Necessary for extreme cross-node training of models with billions/trillions of parameters, but will result in catastrophic slowdowns if the RDMA network is subpar due to hyper-frequent communication overhead.
 
-```json
+DeepSpeed configuration file `ds_config_zero2.json`:
 
+```json
 {
     "fp16": { "enabled": false },
     "bf16": { "enabled": true },
     "zero_optimization": {
-        "stage": 2, 
+        "stage": 2,
         "allgather_partitions": true,
         "allgather_bucket_size": 2e8,
-        "overlap_comm": true, 
+        "overlap_comm": true,
         "reduce_scatter": true,
         "reduce_bucket_size": 2e8
     },
     "gradient_accumulation_steps": 1,
-    "gradient_clipping": 1.0 
+    "gradient_clipping": 1.0
 }
 ```
 
 Training Launch Command:
 ```bash
-# Mandatory in production: --gradient_checkpointing True
+# Mandatory in production: --gradient_checkpointing True, pointing directly to ds_config_zero2.json
 accelerate launch \
-    --config_file accelerate_deepspeed_config.yaml \
+    --use_deepspeed \
+    --deepspeed_config_file ds_config_zero2.json \
     train.py \
     --gradient_checkpointing True \
     --learning_rate 2e-5
@@ -188,15 +194,23 @@ merged_model.save_pretrained("./merged_model")
 ### Step 5: Model Alignment (DPO Phase)
 After traditional Supervised Fine-Tuning (SFT), enterprise workflows typically add **Direct Preference Optimization (DPO)** to improve model safety or adjust tone preferences:
 ```python
-from trl import DPOTrainer
+from trl import DPOConfig, DPOTrainer
+
+dpo_config = DPOConfig(
+    output_dir="./dpo_output",
+    beta=0.1,
+    learning_rate=5e-6,
+    per_device_train_batch_size=2,
+    gradient_accumulation_steps=4,
+    bf16=True,
+)
 
 dpo_trainer = DPOTrainer(
-    model,
-    ref_model=None, # PEFT handles reference automatically
-    args=training_args,
-    beta=0.1,
+    model=model,
+    ref_model=None, # PEFT shares the frozen base model as reference automatically
+    args=dpo_config,
     train_dataset=preference_dataset, # Dataset with prompt, chosen, rejected
-    tokenizer=tokenizer,
+    processing_class=tokenizer,
 )
 dpo_trainer.train()
 ```

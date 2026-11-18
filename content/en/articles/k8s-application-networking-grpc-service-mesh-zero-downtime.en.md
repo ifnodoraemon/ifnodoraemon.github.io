@@ -104,15 +104,16 @@ func newProductionGRPCServer() *grpc.Server {
 }
 ```
 
-### Trap 2: Java JVM DNS TTL Defaulting to -1 (Permanent Caching)
-In Java Spring Boot microservices, the JVM Security Manager defaults DNS resolution caching to **forever (TTL = -1)**!
-- When backend Kubernetes Pods reschedule or restart, their IP addresses mutate to new allocations;
-- Java clients continue directing traffic to dead IPs because cached lookups never expire;
-- **Mandatory Container JVM JVM Arguments**:
+### Trap 2: Java JVM DNS TTL Caching and the Security Property Gotcha
+In Java Spring Boot microservices, DNS resolution caching presents a dual production trap:
+- **Stale Default TTLs**: Historically when a `SecurityManager` was active, the JVM cached positive DNS lookups forever (`TTL = -1`). Even in modern OpenJDK runtimes without `SecurityManager`, the default positive cache TTL is **30 seconds**—still long enough to route bursts of requests to dead Pod IPs during rapid Kubernetes rescheduling and failover;
+- **The Silent `-Dnetworkaddress.cache.ttl` Trap**: `networkaddress.cache.ttl` is a **Java Security Property**, *not* a standard JVM system property! Passing `-Dnetworkaddress.cache.ttl=5` on the command line is **silently ignored by the JVM**;
+- **Mandatory Container JVM Configuration**:
+  Configure `networkaddress.cache.ttl=5` (and `networkaddress.cache.negative.ttl=1`) inside a mounted security properties file passed via `-Djava.security.properties=...` (or call `java.security.Security.setProperty("networkaddress.cache.ttl", "5")` at the start of `main()` before any network initialization), optionally paired with the Oracle/OpenJDK fallback system property `-Dsun.net.inetaddr.ttl=5`:
   ```bash
-  -Dsun.net.inetaddr.ttl=5 -Dnetworkaddress.cache.ttl=5
+  java -Djava.security.properties=/etc/java/custom.security -Dsun.net.inetaddr.ttl=5 -jar app.jar
   ```
-  Caps DNS resolution cache validity to 5 seconds, ensuring rapid IP discovery after pod migrations.
+  This caps DNS resolution cache validity to 5 seconds, ensuring rapid IP discovery after pod migrations.
 
 ### Trap 3: Reconnection Storms (Thundering Herd on Reconnect)
 When a backend Pod reboots and severs hundreds of persistent sockets simultaneously, clients that reconnect without delay overwhelm the newly initialized Pod with connection surges.
@@ -123,11 +124,16 @@ Spreading reconnection intervals evenly across time shields recovering backends.
 ### Trap 4: Client-Side Load Balancing with Headless Services
 Pairing **Headless Services (`clusterIP: None`)** with client-side resolution is the lowest-overhead native pattern:
 ```go
-// Production Go client targeting a Headless Service with round-robin balancing
+import (
+    "google.golang.org/grpc"
+    "google.golang.org/grpc/credentials/insecure"
+)
+
+// Production Go client targeting a Headless Service with round-robin balancing (modern grpc-go API)
 target := "dns:///my-service-headless.default.svc.cluster.local:50051"
-conn, err := grpc.Dial(
+conn, err := grpc.NewClient(
     target,
-    grpc.WithInsecure(),
+    grpc.WithTransportCredentials(insecure.NewCredentials()),
     grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`),
 )
 ```

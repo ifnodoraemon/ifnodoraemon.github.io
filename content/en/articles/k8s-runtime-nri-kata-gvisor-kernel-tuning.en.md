@@ -39,7 +39,7 @@ While this "lightweight sharing" delivers microsecond startups and near-zero ove
 2. **Kubelet PLEG Periodic Polling Causing Node Flapping Outages**:
    On dense nodes running 100+ Pods, or during intensive image pulling and I/O congestion, Kubelet frequently triggers the dreaded alert: `PLEG is not healthy: pleg was last seen active 3m5s ago; threshold is 3m0s`. The node flips to `NotReady`, causing the control plane to initiate cascading pod evictions.
 3. **Crude Sysctl Bottlenecks and Brutal OOMKills**:
-   High-concurrency services must elevate TCP listen backlogs (`somaxconn`) to 4096, while standard Linux memory limits (`memory.max`) ruthlessly terminate processes on traffic spikes, lacking smooth throttling buffers.
+   High-concurrency services must elevate TCP listen backlogs (`somaxconn`) to 8192 (up from the Linux 5.4+ default of 4096, which itself replaced the legacy 128 ceiling), while standard Linux memory limits (`memory.max`) ruthlessly terminate processes on traffic spikes, lacking smooth throttling buffers.
 
 To permanently conquer these industrial challenges, platform engineers must descend into the worker node substrate to **re-architect Kubelet internals and container runtimes (CRI & OCI)**.
 
@@ -116,7 +116,6 @@ package main
 
 import (
     "context"
-    "fmt"
     "log"
 
     "github.com/containerd/nri/pkg/api"
@@ -265,7 +264,7 @@ Kubernetes divides Sysctls into two tiers:
      securityContext:
        sysctls:
        - name: net.core.somaxconn
-         value: "8192"           # Elevates listen backlog queue from 128 to 8192!
+         value: "8192"           # Elevates listen backlog to 8192 (Linux 5.4+ raised default from 128 to 4096)
        - name: net.ipv4.tcp_tw_reuse
          value: "1"
      containers:

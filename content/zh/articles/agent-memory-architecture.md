@@ -373,7 +373,7 @@ if __name__ == "__main__":
 
 记忆系统与状态机控制流是现代智能体工程的**“卧龙与凤雏”**。状态机负责**每一步的确定性拓扑流转**，而记忆系统负责**跨步骤、跨会话的知识沉淀与注意力保鲜**。
 
-读者可沿以下技术脉络，系统化通读本专栏全部 11 篇精研架构：
+读者可沿以下技术脉络，系统化通读本专栏全部 14 篇精研架构：
 
 1. **[第 1 篇 · Agent 执行循环与状态机设计：从 ReAct 到确定性控制流](/articles/agent-loop-state-machine/)**  
    *确立状态机、拓扑迁移与熔断降级的控制流基石。*
@@ -394,9 +394,15 @@ if __name__ == "__main__":
 9. **[第 9 篇 · Agent 可观测性与调试：从黑盒到白盒的进阶之路](/articles/agent-observability-debugging/)**  
    *引入 OpenTelemetry 与 Langfuse，建立全链路 Trajectory 评估与回放。*
 10. **[第 10 篇 · 环境缩放 (Environment Scaling) 如何重塑自主 Agent](/articles/environment-scaling-agent-guide/)**  
-    *后训练时代环境交互扩展，探索零逃逸安全容器沙箱。*
+    *聚焦可重置交互环境、独立验收器、容器生命周期清理与终端基准科学解读。*
 11. **[第 11 篇（本文）· AI Agent 记忆系统设计：从工作记忆到分层 Graph RAG](/articles/agent-memory-architecture/)**  
-    *构筑智能体长期演进的记忆金字塔与时序因果网络。*
+    *构筑智能体长期演进的记忆金字塔、来源权限治理与时序因果网络。*
+12. **[第 12 篇 · 从零手搓轻量级 Agent 框架：基于状态机与事件流的设计模式](/articles/build-lightweight-agent-framework/)**  
+    *基于 Python 标准库与 SQLite 实现审批检查点、单次消费恢复与异步事件流引擎。*
+13. **[第 13 篇 · Agent 开发中的 Tool Use 进阶：动态发现、沙箱隔离与错误恢复](/articles/advanced-agent-tool-use-and-function-calling/)**  
+    *落地动态工具检索、MCP 分页发现、gVisor 容器超时清理与有界异常修复。*
+14. **[第 14 篇 · 多 Agent 协作系统中的通信协议与并发控制实践](/articles/multi-agent-collaboration-and-concurrency/)**  
+    *基于 asyncio 实现 Actor 私有邮箱、有界投递背压、CAS 乐观锁提交与令牌桶限流。*
 
 ---
 

@@ -85,7 +85,7 @@ flowchart LR
    ```
    强制将用户声明的 `spec` 与控制器汇报的 `status` 物理隔离。普通用户只有修改 `spec` 的权限，唯有具备特定 RBAC 的 Operator 进程才能调用 `/status` 子资源更新运行状态，彻底杜绝状态被恶意篡改。
 3. **弹性伸缩子资源（`/scale` Subresource）**：
-   声明该 CRD 的副本字段路径（如 `.spec.replicas` 与 `.status.replicas`）。一旦开启，Kubernetes 原生的 **HPA（Horizontal Pod Autoscaler）** 即可直接挂载并根据业务指标对你的私有资源实施自动水平扩缩容！
+   声明该 CRD 的副本字段路径（如 `.spec.replicas` 与 `.status.readyReplicas`）。一旦开启，Kubernetes 原生的 **HPA（Horizontal Pod Autoscaler）** 即可直接挂载并根据业务指标对你的私有资源实施自动水平扩缩容！
 4. **多版本协同与 Conversion Webhook**：
    当 CRD 经历版本演化（`v1alpha1` $\to$ `v1beta1` $\to$ `v1`）时，借助 Conversion Webhook 可以在 apiserver 内存中实现多版本定义的无缝透明双向转换。
 
@@ -167,7 +167,6 @@ type RedisClusterStatus struct {
 // +kubebuilder:printcolumn:name="Replicas",type="integer",JSONPath=".spec.replicas"
 // +kubebuilder:printcolumn:name="Ready",type="integer",JSONPath=".status.readyReplicas"
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
-
 // RedisCluster 是 Redis 集群的 Schema 定义
 type RedisCluster struct {
     metav1.TypeMeta   `json:",inline"`
@@ -175,6 +174,14 @@ type RedisCluster struct {
 
     Spec   RedisClusterSpec   `json:"spec,omitempty"`
     Status RedisClusterStatus `json:"status,omitempty"`
+}
+
+// +kubebuilder:object:root=true
+// RedisClusterList 包含一组 RedisCluster 实例列表
+type RedisClusterList struct {
+    metav1.TypeMeta `json:",inline"`
+    metav1.ListMeta `json:"metadata,omitempty"`
+    Items           []RedisCluster `json:"items"`
 }
 ```
 
@@ -187,10 +194,8 @@ package controllers
 
 import (
     "context"
-    "fmt"
     "time"
 
-    corev1 "k8s.io/api/core/v1"
     "k8s.io/apimachinery/pkg/api/errors"
     ctrl "sigs.k8s.io/controller-runtime"
     "sigs.k8s.io/controller-runtime/pkg/client"

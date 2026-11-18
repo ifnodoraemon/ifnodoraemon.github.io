@@ -144,24 +144,24 @@ This is the most critical infrastructure for mastering AI. Without it, even the 
 | `.github/copilot-instructions.md` | Copilot global instructions | GitHub Copilot | ⭐ |
 | `.goosehints` | Goose instructions | Goose | ⭐ |
 
-What does a good `AGENTS.md` look like? Here's an example from my Hugo tech blog:
+What does a good `AGENTS.md` look like? Here's an example from this Node + Vite bilingual static tech blog:
 
 ```markdown
-# Project: ifnodoraemon.github.io (Hugo Tech Blog)
+# Project: ifnodoraemon.github.io (Bilingual Static Tech Blog)
 
 ## Tech Stack
-- Hugo SSG + Vanilla JS + CSS
-- Bilingual architecture: content/zh/ and content/en/
+- Node.js static build scripts + Vite 7 + Vue Islands + Vanilla CSS
+- Bilingual architecture: content/zh/articles/*.md and content/en/articles/*.en.md
 
 ## Key Commands
-- hugo server -D     # Local preview
-- npm run build      # Production build
+- npm run dev        # Local development preview
+- npm run build      # Production build (outputs to dist/)
 
 ## Article Standards
 - Chinese articles go in content/zh/articles/{slug}.md
 - English articles go in content/en/articles/{slug}.en.md
 - Frontmatter must include: title / slug / date / tag / tagClass / description
-- tagClass options: tag-blue / tag-green / tag-violet / tag-emerald
+- tagClass options: tag-purple / tag-cyan / tag-blue / tag-emerald / tag-amber
 
 ## Writing Style
 - Open with pain-point scenarios, never write "This article will introduce..."
@@ -169,7 +169,7 @@ What does a good `AGENTS.md` look like? Here's an example from my Hugo tech blog
 - Use mermaid diagrams and comparison tables
 
 ## Safety Boundaries
-- ❌ Never modify the public/ directory (build output)
+- ❌ Never manually edit the dist/ directory (build output)
 - ❌ Don't introduce new CSS frameworks
 - ❌ Don't modify .github/workflows/ CI configs
 ```
@@ -180,7 +180,7 @@ What does a good `AGENTS.md` look like? Here's an example from my Hugo tech blog
 
 1. **Keep it under 200 lines** — LLMs suffer from the ["lost-in-the-middle"](https://arxiv.org/abs/2307.03172) effect: attention to information in the middle of context is lowest. Overly long rules get ignored
 2. **Only write what AI can't infer** — Don't repeat what linters and type checkers already enforce. "Use TypeScript" is unnecessary; "API routes use kebab-case" is essential
-3. **Iterate through friction** — AI keeps making the same mistake (e.g., always forgetting `tagClass` in Hugo frontmatter)? Immediately encode it into the rule file
+3. **Iterate through friction** — AI keeps making the same mistake (e.g., always forgetting `tagClass` in article frontmatter)? Immediately encode it into the rule file
 4. **Provide benchmark file paths** — Instead of lengthy descriptions, "New articles should follow the format in `content/zh/articles/mcp-guide.md`" says it all
 
 Cross-tool universality is `AGENTS.md`'s killer advantage. Whether you use Cursor, Copilot, Claude Code, or Aider, they all automatically read this file from the project root. Configure once, effective everywhere. For modular domain capabilities and workflow automation, explore our deep dive on [Skills for AI Coding Assistants](/en/articles/skills-guide/).

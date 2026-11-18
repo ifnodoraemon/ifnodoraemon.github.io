@@ -96,7 +96,7 @@ The adoption of P/D disaggregation represents a rigorous progression from early 
 | **Splitwise** | ISCA 2024 (Microsoft Research) | First systematic formulation of separating Prefill and Decode onto distinct hardware tiers, demonstrating substantial TCO reductions | Pure conceptual proof-of-concept; relied on standard TCP/IP networking which bottlenecked TTFT under long contexts |
 | **DistServe** | OSDI 2024 (Peking University / UCSD) | Established explicit **decoupled TTFT vs. TPOT SLA** optimization targets, introducing independent Tensor Parallelism (TP) and Pipeline Parallelism (PP) tuning | Tailored primarily to intra-rack networking; cross-node KV transfers choked under context windows beyond 32k tokens |
 | **Mooncake** | 2024~2025 (Moonshot AI / Kimi) | Proposed a **KVCache-centric disaggregated architecture**, organizing cluster DRAM, NVMe SSDs, and GPU HBM into a unified, tiered memory pool | High architectural complexity; strong dependency on distributed metadata consistency |
-| **vLLM v1 Disaggregated** | 2025 (vLLM Open Source) | Re-architected core engine around an asynchronous C++ runner, natively integrating disaggregated prefill workflows via Ray/Nix backends | Requires strict network fabric topology tuning across heterogeneous multi-cloud environments |
+| **vLLM v1 Disaggregated** | 2025 (vLLM Open Source) | Re-architected around a multiprocess Python `EngineCore` isolated over ZeroMQ and a zero-overhead unified scheduler, integrating disaggregated KV transfer via NIXL / Mooncake backends | Requires strict network fabric topology tuning across heterogeneous multi-cloud environments |
 | **SGLang Disaggregated** | 2025 (SGLang Open Source) | Deeply couples [RadixAttention tree-based caching](/en/articles/prefix-caching-radix-attention-internals/) with RDMA-driven KV transfer, optimizing multi-turn prompt reuse | Complex multi-tier prefix routing table synchronization |
 
 ---
@@ -123,32 +123,35 @@ With $H_{kv}$ key-value heads and a per-head dimension of $D_{head}$, the total 
 $$\text{Bytes}_{\text{GQA/token/layer}} = 2 \times H_{kv} \times D_{head} \times 2 = 4 \times H_{kv} \times D_{head} \text{ bytes}$$
 
 For **LLaMA-3-70B** ($L = 80$, $H_{kv} = 8$, $D_{head} = 128$):
-$$\text{Bytes}_{\text{LLaMA-70B}} = 80 \times (4 \times 8 \times 128) = 327,680 \text{ bytes} \approx 320 \text{ KB}$$
+$$\text{Bytes}_{\text{LLaMA-70B}} = 80 \times (4 \times 8 \times 128) = 327,680 \text{ bytes} = 320 \text{ KiB} \quad (327.68 \text{ KB})$$
 
 When handling a modest **16,384 (16k)** sequence context, the total KV Cache size transferred is:
-$$\text{Size}_{\text{GQA-16k}} = 320 \text{ KB} \times 16,384 \approx 5.24 \text{ GB}$$
+$$\text{Size}_{\text{GQA-16k}} = 327,680 \text{ B} \times 16,384 = 5,368,709,120 \text{ B} = 5.00 \text{ GiB} \quad (\approx 5.37 \text{ GB})$$
 
-Over a **400 Gbps (effective ~45 GB/s throughput)** InfiniBand / RoCEv2 fabric, transmitting 5.24 GB requires:
-$$T_{\text{net}} \approx \frac{5.24 \text{ GB}}{45 \text{ GB/s}} \approx 116.4 \text{ ms}$$
+Over a **400 Gbps (50 GB/s line rate, effective ~45 GB/s throughput at 90% efficiency)** InfiniBand / RoCEv2 fabric, transmitting $5.37 \text{ GB}$ requires:
+$$T_{\text{net}} \approx \frac{5.37 \text{ GB}}{45 \text{ GB/s}} \approx 119.3 \text{ ms}$$
 
-This latency is prohibitive: adding over 110 ms solely for network transit negates the gains of fast prefill. If 10 concurrent requests finish simultaneously, the network interface saturates completely.
+This latency is prohibitive: adding nearly 120 ms solely for network transit negates the gains of fast prefill. If 10 concurrent requests finish simultaneously, the network interface saturates completely.
 
 #### Case B: Multi-Head Latent Attention (MLA, e.g., DeepSeek-V3)
 As derived in [Chapter 06 on DeepSeek MLA Matrix Absorption](/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/), MLA compresses the multi-head KV projection into a single latent vector $c_t^{KV} \in \mathbb{R}^{d_c}$ ($d_c = 512$) along with a decoupled RoPE key vector $k_t^R \in \mathbb{R}^{d_R}$ ($d_R = 64$).
 
 The scalar count stored and transferred per token per layer is merely $512 + 64 = 576$.
 For **DeepSeek-V3** ($L = 61$ layers):
-$$\text{Bytes}_{\text{MLA}} = 61 \times (576 \times 2) = 70,272 \text{ bytes} \approx 68.6 \text{ KB}$$
+$$\text{Bytes}_{\text{MLA}} = 61 \times (576 \times 2) = 70,272 \text{ bytes} \approx 68.6 \text{ KiB} \quad (70.27 \text{ KB})$$
 
 At the same **16,384 (16k)** sequence length, the data transferred drops to:
-$$\text{Size}_{\text{MLA-16k}} = 68.6 \text{ KB} \times 16,384 \approx 1.12 \text{ GB}$$
+$$\text{Size}_{\text{MLA-16k}} = 70,272 \text{ B} \times 16,384 = 1,151,336,448 \text{ B} \approx 1.07 \text{ GiB} \quad (\approx 1.15 \text{ GB})$$
+
+Over the same $45 \text{ GB/s}$ effective fabric bandwidth, transfer time drops to:
+$$T_{\text{net, MLA}} \approx \frac{1.15 \text{ GB}}{45 \text{ GB/s}} \approx 25.6 \text{ ms}$$
 
 ```text
 16k Context Cross-Node Transfer Volume Comparison:
-┌─────────────────────────────────────────────────────────────┐
-│ Classical GQA (LLaMA-3-70B):  ████████████████████ 5.24 GB  │
-│ DeepSeek MLA (671B):          ████ 1.12 GB (-78.6% Bandwidth)│
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│ Classical GQA (LLaMA-3-70B):  ████████████████████ 5.00 GiB / 5.37 GB (~119.3ms) │
+│ DeepSeek MLA (671B):          ████ 1.07 GiB / 1.15 GB (~25.6ms, -78.6% Traffic)  │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 **An immediate 78.6% reduction in network traffic!**
@@ -187,13 +190,13 @@ sequenceDiagram
     D_NIC->>D_GPU: 4. Direct PCIe DMA write into D-Worker GPU HBM (Zero-Copy)
     deactivate D_NIC
     
-    P_NIC-->>P_GPU: 5. Completion Queue Event (CQE)
-    D_NIC-->>D_GPU: 6. Event notification flag (Immediate Data)
+    P_NIC-->>P_GPU: 5. Send Completion Queue Event (CQE)
+    D_NIC-->>D_GPU: 6. Readiness notification (tail-flag / control-plane signal, or Write-with-Imm CQE)
 ```
 
 The key principles of GPUDirect RDMA include:
 - **Total CPU & Host RAM Bypass**: The network adapter accesses GPU memory directly over PCIe bus peer-to-peer (P2P) channels;
-- **One-Sided Operations**: The receiving node's GPU and CPU perform zero operational logic during transmission (`recv()` calls are unnecessary). The P-Worker writes directly into registered memory regions on the D-Worker using remote keys (`rkey`);
+- **One-Sided Operations (`RDMA Write`)**: The D-Worker pre-registers its PagedAttention physical blocks and shares remote keys (`rkey`) with the P-Worker. Pure one-sided `RDMA Write` streams KV blocks directly into target GPU HBM without any `recv()` calls, signaling readiness via a tail flag or lightweight control-plane metadata message; alternatively, `RDMA Write with Immediate` preserves zero-copy payload DMA while consuming a tiny pre-posted Receive WQE on the target NIC solely to generate a CQE wakeup without any CPU payload copy;
 - **Layer-by-Layer Pipelined Overlap**: While the P-Worker executes layer $i+1$, the KV Cache for layer $i$ is asynchronously dispatched across the network interface.
 
 ---

@@ -102,19 +102,20 @@ sequenceDiagram
     participant APIServer as kube-apiserver
     participant ExtProv as csi-provisioner
     participant ExtAttach as csi-attacher
+    participant CSIController as CSI Controller Plugin
     participant Kubelet as Kubelet (目标节点)
     participant CSINode as CSI Node Plugin
     participant Kernel as 宿主机操作系统 / 块设备
 
-    Note over APIServer,ExtProv: 阶段一：供给 (Provision)
+    Note over APIServer,CSIController: 阶段一：供给 (Provision)
     ExtProv->>APIServer: 发现未绑定的 PVC
-    ExtProv->>CSINode: 调用 CSI CreateVolume()
-    Note over ExtProv: 云 API 创建云硬盘 (如 100Gi SSD) 并生成 PV 对象
+    ExtProv->>CSIController: 调用 CSI CreateVolume()
+    Note over CSIController: 云 API 创建云硬盘 (如 100Gi SSD) 并由 ExtProv 生成 PV 对象
 
-    Note over APIServer,ExtAttach: 阶段二：挂载到宿主机 (Attach)
+    Note over APIServer,CSIController: 阶段二：挂载到宿主机 (Attach)
     APIServer->>ExtAttach: 调度器选定节点后，创建 VolumeAttachment 对象
-    ExtAttach->>CSINode: 调用 CSI ControllerPublishVolume()
-    Note over ExtAttach: 调用底层云厂商 API，将虚拟磁盘挂载至宿主机物理/虚拟机总线
+    ExtAttach->>CSIController: 调用 CSI ControllerPublishVolume()
+    Note over CSIController: 调用底层云厂商 API，将虚拟磁盘挂载至宿主机物理/虚拟机总线
 
     Note over Kubelet,Kernel: 阶段三：格式化与预挂载 (Stage)
     Kubelet->>CSINode: 调用 CSI NodeStageVolume()

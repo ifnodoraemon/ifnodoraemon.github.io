@@ -9,10 +9,10 @@ description: "From physical silicon foundations and kernel matrices to 1:1 PD di
 ---
 
 > [!NOTE] Executive Summary (TL;DR)
-> - **Silicon & Kernel Foundations**: DeepInfer is co-optimized for NVIDIA SM100 (Blackwell with NVLink 5) and Huawei Ascend 950 NPUs, leveraging custom kernels—FlashMLA (latent attention decoding), DeepGEMM (FP8/FP4 block-scaled GEMM), DeepEP (zero-bubble All-to-All communication), and TileKernels (TileLang domain-specific JIT compilation)—to eliminate hardware abstraction overhead.
-> - **Cluster Topology & 1:1 PD Disaggregation**: Breaking past single-node time-sharing limitations, the system establishes a symmetrical 1:1 ratio between 8-GPU compact Prefill nodes (compute-bound, high FLOPs density) and 64–128 GPU Wide-EP Decode supernodes (memory-bound, ultra-wide aggregate HBM bandwidth), supplemented by an isolated asynchronous Vision Encoder pipeline.
-> - **Triad Algorithmic Acceleration Suite**: Introduces **DSpark Confidence-Scheduled Speculative Decoding** (Confidence Head predicting adaptive verification trees, unlocking 4%–7% net throughput), **SWA Bounded Replay** (eliminating redundant recomputation across sliding window boundaries in long contexts), and **dynamic MoE load balancing** (resident core experts + on-demand redundant replicas to eliminate cross-node stragglers).
-> - **Protocol Revolution & Unit Economics**: Checkpoints officially discard traditional Jinja templates in favor of the Rust-native `deepseek-recipe` engine for zero-copy OpenAI/Anthropic protocol translation, `<think>` isolation, and tool-call parsing. The production report reveals single-cluster daily throughput of **155 Trillion Tokens**, average prompt lengths of 77K, a **96% KV Cache hit rate**, and **$38/GPU/hour (~254 RMB/GPU/h)** in off-peak revenue.
+> - **Silicon & Kernel Foundations**: DeepInfer is co-optimized for NVIDIA SM100 (Blackwell with NVLink 5) and Huawei Ascend 950 series NPUs (Ascend 950PR & 950DT with UnifiedBus / HCCS up to 2.0 TB/s), leveraging custom kernels—FlashMLA (latent attention decoding), DeepGEMM (FP8/FP4 block-scaled GEMM), DeepEP (zero-bubble All-to-All communication), and TileKernels (TileLang domain-specific JIT compilation)—to eliminate hardware abstraction overhead.
+> - **Cluster Topology & PD Disaggregation**: Breaking past single-node time-sharing limitations, the system decouples 8-GPU compact Prefill nodes (compute-bound, high FLOPs density) from 64–128 GPU Wide-EP Decode supernodes (memory-bound, high aggregate HBM bandwidth). By Little's Law throughput balance, the macro P/D card ratio scales dynamically with effective input-to-output length ratios—converging to 1:1 under high-concurrency 77K prompts at a 96% cache hit rate, or 1:2 in starter validation clusters—supplemented by an isolated asynchronous Vision Encoder pipeline.
+> - **Triad Algorithmic Acceleration Suite**: Built for **DeepSeek-V4.1-Flash (552B total-parameter asymmetric MoE, 40-layer Causal Encoder-Decoder activating 8B in Prefill and 16B in Decode)**, DeepInfer introduces **DSpark Confidence-Scheduled Speculative Decoding** (Confidence Head predicting adaptive verification trees, unlocking 4%–7% net throughput), **CSA2 + SWA Bounded Replay** (maintaining constant sliding-window KV memory in HBM, omitting local SWA KV from persistent storage, and bounding worst-case cache-miss recomputation to a fixed suffix window $n_{\text{win}}$), and **dynamic MoE load balancing** (resident core experts + on-demand redundant replicas to eliminate cross-node stragglers).
+> - **Protocol Revolution & Unit Economics**: Checkpoints officially discard traditional Jinja templates in favor of the Rust-native `deepseek-recipe` engine for protocol translation across OpenAI/Anthropic schemas, `<think>` isolation, and tool-call parsing. The production report reveals single-cluster daily throughput of **155 Trillion Tokens**, average prompt lengths of 77K, a **96% KV Cache hit rate**, and **$38/GPU/hour (~254 RMB/GPU/h)** in off-peak revenue.
 > - **Deep-Dive Cross References**: Inter-node RDMA transport is detailed in [P/D Disaggregation & Distributed KV Cache](/en/articles/pd-disaggregation-distributed-kv-cache/); speculative decoding theory is explored in [EAGLE Speculative Decoding](/en/articles/speculative-decoding-eagle-guide/); underlying attention mechanics are derived in [MLA Matrix Absorption](/en/articles/mha-gqa-mla-matrix-absorption-inference-engine/) and [MoE Expert Parallelism](/en/articles/moe-expert-parallelism-inference-engine/); high-performance networking is covered in [InfiniBand Production Tuning](/en/articles/infiniband-production-deployment-opensm-ofed-nccl-tuning/).
 
 ---
@@ -32,32 +32,39 @@ These achievements stem from a ground-up reconstruction of the entire inference 
 
 ---
 
-## Architectural Blueprint: The Eight-Layer DeepSeek Stack
+## Architectural Blueprint: The Nine-Layer DeepSeek Vertical Stack
 
-Before exploring micro-level mechanics, review the macro-level architecture spanning DeepInfer and `deepseek-recipe`:
+Before exploring micro-level mechanics, review the macro-level **nine-layer vertical stack** spanning DeepInfer and `deepseek-recipe` (aligned 1-to-1 with Layers 1 through 9 below):
 
 ```mermaid
 flowchart TD
-    subgraph Layer_Protocol["Layer 7: Protocol & API Intermediary (deepseek-recipe)"]
-        REC_In["OpenAI Chat / Anthropic Messages / Tool Call Requests"] --> REC_Core["deepseek-recipe (Rust Native Engine)"]
-        REC_Core --> REC_Parse["&lt;think&gt; Reasoning Isolation / Tool Calling Extraction / Prompt Formatting"]
+    subgraph Layer_Ops["Layers 6–9: Unit Economics, Cross-Engine Matrix, Playbooks & Delivery"]
+        L9["Layer 9: End-to-End Bare-Metal to KubeRay Implementation Blueprint"]
+        L8["Layer 8: Wide-EP Hash Polarization / RDMA Race / Eviction Storm Playbooks"]
+        L7["Layer 7: DeepInfer vs. vLLM / SGLang / TensorRT-LLM Matrix"]
+        L6["Layer 6: Cluster TCO Modeling & $38/GPU/h Unit Economics"]
     end
 
-    subgraph Layer_Scheduling["Layer 6: Algorithmic Scheduling & Acceleration"]
+    subgraph Layer_Protocol["Layer 5: Protocol & Gateway Layer (deepseek-recipe)"]
+        REC_In["OpenAI Chat & Responses / Anthropic Messages Requests"] --> REC_Core["deepseek-recipe (Rust Core + PyO3)"]
+        REC_Core --> REC_Parse["DeepseekV41Encoding Rendering / StreamProcessor Reasoning & Tool Demuxing"]
+    end
+
+    subgraph Layer_Scheduling["Layer 4: Triad Algorithmic Acceleration Suite & Tiered Cache"]
         SCH_DSpark["DSpark Confidence-Scheduled Speculative Decoding<br/>(Confidence Head Adaptive Tree Search)"]
-        SCH_SWA["SWA Bounded Replay<br/>(Sliding Window Boundary Anchor Replay)"]
+        SCH_SWA["CSA2 + SWA Bounded Replay<br/>(Constant Window HBM + Bounded n_win Suffix Recomputation)"]
         SCH_MoE["Dynamic MoE Load Balancing<br/>(Resident Core Experts + Dynamic Redundant Replicas)"]
-        SCH_KV["72h+ Tiered KV Cache Governance<br/>(96% Hit Rate / DRAM-NVMe Tiered Eviction)"]
+        SCH_KV["72h+ Tiered KV Cache Governance<br/>(96% Hit Rate / HBM-DRAM-NVMe Eviction)"]
     end
 
-    subgraph Layer_Disaggregation["Layer 5: 1:1 Physical PD Disaggregation"]
+    subgraph Layer_Disaggregation["Layer 3: Physical Cluster Topologies & Disaggregated Serving"]
         PD_Prefill["Prefill Pool (8-GPU Compact Nodes)<br/>Compute-Bound / High FLOPs Density / Large Context Throughput"]
-        PD_Decode["Decode Supernodes (64-128 GPU Wide-EP)<br/>Memory-Bound / Massive HBM Bandwidth / Breaking Single-Node Bandwidth Walls"]
+        PD_Decode["Decode Supernodes (64-128 GPU Wide-EP)<br/>Memory-Bound / Pooled HBM Bandwidth / Breaking Single-Node Bandwidth Walls"]
         PD_Vision["Isolated Vision Encoder Module<br/>Asynchronous Patch-Level Pre-encoding"]
-        PD_Prefill -- "GPUDirect RDMA One-Sided Zero-Copy KV Push" --> PD_Decode
+        PD_Prefill -- "GPUDirect RDMA 1-to-1 Zero-Copy KV Push" --> PD_Decode
     end
 
-    subgraph Layer_Kernel["Layer 4: High-Performance Kernels & Compilers (The Deep* Matrix)"]
+    subgraph Layer_Kernel["Layer 2: High-Performance Operators & Custom Compilers (The Deep* Matrix)"]
         K_FlashMLA["FlashMLA (Latent Space Attention Decoding)"]
         K_DeepGEMM["DeepGEMM (FP8 / MXFP4 Block-Scaled Matrix Multiplication)"]
         K_DeepEP["DeepEP (Zero-Bubble All-to-All MoE Communication)"]
@@ -65,12 +72,13 @@ flowchart TD
         K_DeepSelect["DeepSelect (Fused Top-K Gating Router)"]
     end
 
-    subgraph Layer_Hardware["Layer 3: Physical Silicon & Fabric Foundations"]
-        HW_NV["NVIDIA SM100 (Blackwell)<br/>NVLink 5 (1.8TB/s) / FP4 Tensor Cores"]
-        HW_Ascend["Huawei Ascend 950 NPU<br/>HCCS Mesh / DaVinci Cube+Vector Units"]
+    subgraph Layer_Hardware["Layer 1: Physical Silicon & Interconnect Foundations"]
+        HW_NV["NVIDIA SM100 (Blackwell)<br/>NVLink 5 (1.8 TB/s) / FP4 Tensor Cores"]
+        HW_Ascend["Huawei Ascend 950PR / 950DT<br/>UnifiedBus / HCCS (up to 2.0 TB/s) / HiBL 1.0 & HiZQ 2.0"]
         HW_Net["8x 400G/800G NDR InfiniBand & Lossless RoCEv2 (Leaf-Spine)"]
     end
 
+    Layer_Ops --> Layer_Protocol
     Layer_Protocol --> Layer_Scheduling
     Layer_Scheduling --> Layer_Disaggregation
     Layer_Disaggregation --> Layer_Kernel
@@ -83,24 +91,24 @@ flowchart TD
 
 Inference efficiency is bound by semiconductor physics. DeepInfer's design philosophy rejects generic hardware abstractions in favor of direct alignment with accelerator microarchitectures.
 
-### 1. Dual-Track Silicon: NVIDIA Blackwell SM100 vs. Huawei Ascend 950
+### 1. Dual-Track Silicon: NVIDIA Blackwell SM100 vs. Huawei Ascend 950 (950PR / 950DT)
 
-DeepSeek's production deployments officially embrace both NVIDIA and Huawei compute platforms:
+DeepSeek's production deployments embrace both NVIDIA and Huawei compute platforms, where the Ascend 950 family splits natively into **Ascend 950PR** (for Prefill) and **Ascend 950DT** (for Decode and Training):
 
-| Hardware Dimension | NVIDIA Blackwell (SM100) | Huawei Ascend 950 NPU |
+| Hardware Dimension | NVIDIA Blackwell (SM100) | Huawei Ascend 950 Series (950PR / 950DT) |
 | :--- | :--- | :--- |
-| **Process & Packaging** | TSMC 4NP Dual-Die CoWoS-L | 7nm Advanced System-in-Package (SiP) |
-| **Die-to-Die Interconnect** | 10 TB/s NV-HBI Fabric | Ultra-Wide On-Package Bus |
-| **Intra-Node P2P Bandwidth** | NVLink 5 (1.8 TB/s Bidirectional per GPU) | HCCS (1.2 TB/s Bidirectional per NPU) |
-| **Memory Subsystem** | 192GB–288GB HBM3e (8.0 TB/s Bandwidth) | 128GB–192GB HBM3 (3.8 TB/s Bandwidth) |
+| **Process & Packaging** | TSMC 4NP Dual-Die CoWoS-L | Multi-Chiplet Advanced System-in-Package (SiP) |
+| **Die-to-Die Interconnect** | 10 TB/s NV-HBI Fabric | Ultra-Wide On-Package Chiplet Bus |
+| **Scale-Up Interconnect** | NVLink 5 (1.8 TB/s Bidirectional per GPU) | UnifiedBus (UB) / HCCS (up to 2.0 TB/s Interconnect) |
+| **Memory Subsystem** | 192GB–288GB HBM3e (8.0 TB/s Bandwidth) | **950PR**: 128GB HiBL 1.0 (~1.6 TB/s, Prefill-optimized)<br/>**950DT**: 144GB HiZQ 2.0 (~4.0 TB/s, Decode/Training-optimized) |
 | **Compute Engines** | 5th-Gen Tensor Cores (Native FP4 / FP8) | DaVinci Architecture (Cube Matrix + Vector Units) |
 | **Driver & Toolchain** | CUDA 13.x / PTX / TileLang JIT | CANN 8.x / Ascend C / TileLang JIT |
 
 ```mermaid
 graph LR
     subgraph Chip_Interconnect["Physical Bandwidth Hierarchy (Orders of Magnitude Disparity)"]
-        L_SRAM["On-Chip SRAM<br/>~20-30 TB/s Ultra-Fast L1/L2"] --> L_HBM["On-Package HBM3e<br/>3.8 - 8.0 TB/s Memory Bandwidth"]
-        L_HBM --> L_NVLINK["Intra-Node NVLink 5 / HCCS<br/>1.2 - 1.8 TB/s Bidirectional Link"]
+        L_SRAM["On-Chip SRAM<br/>~20-30 TB/s Ultra-Fast L1/L2"] --> L_HBM["On-Package High-Bandwidth Memory (HBM3e / HiZQ / HiBL)<br/>1.6 - 8.0 TB/s Memory Bandwidth"]
+        L_HBM --> L_NVLINK["Scale-Up NVLink 5 / UnifiedBus<br/>1.8 - 2.0 TB/s Interconnect"]
         L_NVLINK --> L_NIC["Inter-Node 400G/800G RDMA<br/>50 - 100 GB/s Network Fabric"]
     end
 ```
@@ -143,7 +151,7 @@ FlashAttention-2/3 assumes standard multi-head formats and cannot absorb low-ran
 
 ### 2. DeepGEMM: Fine-Grained Block-Scaled Matrix Multiplication
 
-Large MoE checkpoints require low-precision quantization. However, coarse per-tensor quantization destroys numerical precision in reasoning tasks.
+Large sparse MoE checkpoints (such as 552B DeepSeek-V4.1-Flash and trillion-parameter flagships) require low-precision quantization. However, coarse per-tensor quantization destroys numerical precision in reasoning tasks.
 - **Block-Level Scaling**: DeepGEMM applies fine-grained 1x128 or 128x128 block quantization, maintaining independent FP8 E8M0 scale factors per block.
 - **Micro-Architecture Specialization**:
   On Blackwell, DeepGEMM compiles directly to native **MXFP4 (Microscaling FP4)** and FP8 Tensor Core assembly.
@@ -211,55 +219,41 @@ flowchart TB
 
 ---
 
-### 2. Queueing Theory & Roofline Proof: Why Cluster Card Ratios Converge to 1:1
+### 2. Little's Law & Throughput Equilibrium: How `N_P : N_D` Scales with `L_eff : L_out`
 
-A deeper question emerges: *Prefill requires only tens of milliseconds, whereas autoregressive Decode takes multiple seconds (a 64x duration difference). Intuition suggests long tasks should require 10x to 50x more hardware. Why does the optimal ratio mathematically converge to 1:1?*
+A deeper systems question emerges: *Prefill requires tens of milliseconds, whereas autoregressive Decode takes multiple seconds. Why do some clusters deploy a 1:8 ratio, Layer 9's 96-GPU validation unit use 1:2 (32P:64D), and DeepSeek's full-scale production report converge to 1:1?*
 
-The proof lies in the mathematical product of the **96% KV Cache hit rate** and **per-unit concurrency capacity**.
+The answer follows directly from **Little's Law steady-state throughput balance ($\lambda = \mu_{P\_pool} = \mu_{D\_pool}$)** across per-GPU request service rates, effective uncached prompt length $L_{\text{eff}}$, and Decode continuous batching concurrency $B_D$.
 
-#### (1) Input Workload Specifications (Production Telemetry)
-* Average prompt length: $L_{\text{prompt}} = 77,000$ tokens;
-* Production KV Cache hit rate: $H = 96\%$;
-* **Effective un-cached tokens requiring GPU forward passes**:
-  $$L_{\text{eff}} = L_{\text{prompt}} \times (1 - H) = 77,000 \times (1 - 0.96) = 3,080 \text{ tokens}$$
-* Average generated output length: $L_{\text{gen}} \approx 800$ tokens;
-* Global request arrival rate: $\lambda$ (req/s).
+#### (1) General Steady-State Throughput Equation
+Consider a cluster with $N_P$ Prefill GPUs ($N_P / 8$ standalone 8-GPU P-Nodes) and $N_D$ Decode GPUs ($N_D / 64$ distributed 64-GPU D-Supernodes) serving arrival rate $\lambda$ (req/s):
+* **Per-Node & Per-GPU Prefill Service Rate**: With instantaneous concurrency $B_P$ and forward latency $T_P(L_{\text{eff}})$ over uncached length $L_{\text{eff}} = L_{\text{in}} \cdot (1 - H)$:
+  $$\mu_{P\_node} = \frac{B_P}{T_P}, \quad r_P = \frac{\mu_{P\_node}}{8} = \frac{B_P}{8 \cdot T_P} \text{ req/(s}\cdot\text{GPU)}$$
+* **Per-Supernode & Per-GPU Decode Service Rate**: A 64-GPU supernode shards **DeepSeek-V4.1-Flash (552B total-parameter asymmetric MoE, 40-layer Causal Encoder-Decoder activating 8B in Prefill and 16B in Decode)** across all 64 GPUs, aggregating **$\approx 214\text{ TB/s}$** of HBM bandwidth on 64× H800/H100 or **$512\text{ TB/s}$** on 64× Blackwell B200. With continuous batching concurrency $B_D$, output length $L_{\text{out}}$, and per-stream decode velocity $V_D$, decode duration is $T_D = L_{\text{out}} / V_D$:
+  $$\mu_{D\_node} = \frac{B_D}{T_D}, \quad r_D = \frac{\mu_{D\_node}}{64} = \frac{B_D}{64 \cdot T_D} \text{ req/(s}\cdot\text{GPU)}$$
+* **Queue-Free Cluster Equilibrium ($\lambda = \mu_{P\_pool} = \mu_{D\_pool}$)**:
+  $$N_P \cdot r_P = N_D \cdot r_D \iff \frac{N_P}{8} \cdot \frac{B_P}{T_P} = \frac{N_D}{64} \cdot \frac{B_D}{T_D} \implies \frac{N_P}{N_D} = \frac{r_D}{r_P} = \frac{B_D \cdot T_P(L_{\text{eff}})}{8 \cdot B_P \cdot T_D(L_{\text{out}})}$$
 
-#### (2) Prefill Node Throughput Bounds
-In the Prefill stage (Compute-Bound):
-* An 8-GPU HGX node executes DeepSeek-V4.1-Flash across intra-node NVLink (TP=8), utilizing FP8/FP4 Tensor Cores for peak arithmetic intensity.
-* Processing $L_{\text{eff}} = 3,080$ tokens through full attention and FFN layers requires:
-  $$T_P \approx 50 \text{ ms} = 0.05 \text{ s}$$
-* Under extreme 77K context lengths, transient activations and KV allocation consume tens of gigabytes per request. Physical HBM constraints limit instantaneous concurrency per 8-GPU node to $B_P \approx 1$ (maximum 2).
-* Consequently, the **service rate of a single 8-GPU Prefill node** is:
-  $$\mu_{P\_node} = \frac{B_P}{T_P} = \frac{1 \text{ req}}{0.05 \text{ s}} = 20 \text{ req/s}$$
-* Across the 32-node Prefill pool (256 GPUs), aggregate prefill capacity is:
-  $$\mu_{P\_pool} = 32 \times \mu_{P\_node} = 32 \times 20 = 640 \text{ req/s}$$
+#### (2) Exact Solutions Across Three Production Regimes
 
-#### (3) Decode Supernode Throughput Bounds
-In the Decode stage (Memory-Bound):
-* A 64-GPU supernode (8 physical servers) shards trillion-parameter MoE weights across all 64 GPUs, activating over $1,000 \text{ TB/s}$ of aggregate HBM bandwidth per decoding step.
-* With generation velocity at $V_D = 250 \text{ tokens/s}$, emitting 800 tokens requires:
-  $$T_D = \frac{L_{\text{gen}}}{V_D} = \frac{800 \text{ tokens}}{250 \text{ tokens/s}} = 3.2 \text{ s}$$
-* Although $T_D (3.2\text{s})$ is **64x longer** than $T_P (0.05\text{s})$, **the 64-GPU supernode possesses 64 GPUs of pooled HBM. Leveraging MLA latent vector compression, each supernode sustains high-concurrency continuous batching of $B_D = 64$ (up to 128) concurrent streams simultaneously!**
-* Thus, the **service rate of a single 64-GPU Decode supernode** is:
-  $$\mu_{D\_node} = \frac{B_D}{T_D} = \frac{64 \text{ req}}{3.2 \text{ s}} = 20 \text{ req/s}$$
-* Across 4 Decode supernodes (256 GPUs), aggregate baseline capacity is:
-  $$\mu_{D\_pool} = 4 \times \mu_{D\_node} = 4 \times 20 = 80 \text{ req/s}$$
-  *(With continuous batching saturation at $B_D = 128 \sim 256$, saturated throughput reaches $160 \sim 320 \text{ req/s}$, matching Poisson arrival tails).*
+Evaluating the exact equation across real workload regimes eliminates any need for ad-hoc scaling multipliers:
 
-#### (4) Steady-State Equilibrium Formulation
-To prevent queue accumulation, the system balances arrival and processing capacities:
+1. **Regime A: Short Effective Input + Moderate Decode Concurrency ($L_{\text{eff}} \approx 3\text{k}\text{--}4\text{k}$ in, $800\text{--}1\text{k}$ out, $B_D = 64$)**
+   * Single 8-GPU P-Node ($B_P = 1, T_P = 0.05\text{ s}$): $\mu_{P\_node} = 20\text{ req/s}$ ($r_P = 2.5\text{ req/s/GPU}$); 32 nodes (256 GPUs) yield $\mu_{P\_pool} = 640\text{ req/s}$.
+   * Single 64-GPU D-Supernode at conservative concurrency $B_D = 64$, $V_D = 250\text{ tokens/s}$, $L_{\text{out}} = 800$ ($T_D = 3.2\text{ s}$): $\mu_{D\_node} = \frac{64}{3.2} = 20\text{ req/s}$ ($r_D = 0.3125\text{ req/s/GPU}$); 4 supernodes (256 GPUs) process $\mu_{D\_pool} = 80\text{ req/s}$.
+   * Exact equilibrium ratio: $\frac{N_P}{N_D} = \frac{0.3125}{2.5} = \mathbf{1 : 8}$ (only 4 P-Nodes = 32 Prefill GPUs are required to saturate 256 Decode GPUs).
+2. **Regime B: Enterprise Long-Context Starter Cluster (Matching Layer 9's 96-GPU Footprint: 32P : 64D = 1 : 2)**
+   * Under moderate initial cache hit rates where effective uncached prefill averages $L_{\text{eff}} \approx 10\text{k}\text{--}16\text{k}$ tokens ($T_P \approx 0.16\text{ s}, B_P = 1 \implies \mu_{P\_node} = 6.25\text{ req/s}, r_P \approx 0.78\text{ req/s/GPU}$), paired with 1 64-GPU Decode supernode running $B_D = 80, T_D = 3.2\text{ s}$ ($\mu_{D\_node} = 25\text{ req/s}, r_D \approx 0.39\text{ req/s/GPU}$):
+   * 4 P-Nodes (32 GPUs, $\mu_{P\_pool} = 25\text{ req/s}$) balance 1 D-Supernode (64 GPUs, $\mu_{D\_pool} = 25\text{ req/s}$), yielding $\frac{N_P}{N_D} = \frac{0.3906}{0.7813} = \mathbf{1 : 2}$! (Similarly, compute-heavy long-context workloads with $32\text{k}\text{--}64\text{k}$ uncached inputs and $512\text{--}1\text{k}$ outputs naturally approach **1:1 to 1:2**).
+3. **Regime C: DeepSeek Saturated Agent Workload (77K Input, 96% Hit Rate + CSA2 High Concurrency $B_D = 512$, Converging to 1 : 1)**
+   * With $L_{\text{in}} = 77,000$ tokens and $H = 96\%$, effective uncached prefill is $L_{\text{eff}} = 3,080$ tokens ($T_P \approx 0.05\text{ s}, B_P = 1 \implies \mu_{P\_node} = 20\text{ req/s}$, $r_P = 2.5\text{ req/s/GPU}$), giving $\mu_{P\_pool} = 640\text{ req/s}$ across 32 P-Nodes (256 GPUs).
+   * On Decode, because **CSA2 compresses global HBM KV Cache down to 890 Bytes/token**, a 64-GPU supernode packs **$B_D = 512$ concurrent active sequences** (just 8 streams/GPU). At $T_D = 3.2\text{ s}$, per-supernode throughput reaches $\mu_{D\_node} = \frac{512}{3.2} = 160\text{ req/s}$ ($r_D = 2.5\text{ req/s/GPU}$), so 4 supernodes (256 GPUs) deliver $\mu_{D\_pool} = 4 \times 160 = 640\text{ req/s}$!
+   * Substituting directly into the balance law:
+     $$\frac{N_P}{8} \times \frac{1}{0.05} = \frac{N_D}{64} \times \frac{512}{3.2} \iff 2.5 N_P = 2.5 N_D \iff N_P : N_D = \mathbf{1 : 1}$$
 
-$$\mu_{P\_pool} \approx \mu_{D\_pool} \iff \frac{N_P \text{ (GPUs)}}{8} \times \frac{B_P}{T_P} = \frac{N_D \text{ (GPUs)}}{64} \times \frac{B_D}{T_D}$$
-
-Substituting physical values:
-
-$$\frac{N_P}{8} \times \frac{1}{0.05} = \frac{N_D}{64} \times \frac{64}{3.2} \implies N_P \times 2.5 = N_D \times 0.3125 \times 8 \implies N_P \approx N_D$$
-
-> [!IMPORTANT] Physical Reality: 1:1 is Dictated by the 96% Cache Hit Rate
-> - **At 0% Cache Hit Rate**: $L_{\text{eff}} = 77,000$ tokens, ballooning Prefill time from 50ms to 1,200ms (a 24x increase). Maintaining a 1:1 ratio would trigger immediate prefill queue collapse, demanding 10x more Prefill cards than Decode cards.
-> - **At 96% Cache Hit Rate**: The compute workload is reduced by 96%, allowing a 50% GPU allocation on Prefill to feed a 50% GPU allocation on Decode. **The 1:1 ratio is not arbitrary symmetry—it is the exact mathematical equilibrium between long-cache reuse and HBM bandwidth limits.**
+> [!IMPORTANT] Physical Reality: P/D Ratios Are Governed by $L_{\text{eff}} : L_{\text{out}}$ and KV Compression
+> - **At 0% Cache Hit Rate**: $L_{\text{eff}} = 77,000$ tokens balloons Prefill latency from 50ms to ~1,200ms (24× slower, dropping $r_P$ to $0.104\text{ req/s/GPU}$). Sustaining high-concurrency Decode would trigger immediate prefill queue collapse unless Prefill GPUs outnumber Decode GPUs by an order of magnitude.
+> - **At 96% Cache Hit Rate + CSA2 Compression**: Cutting prefill compute by 24× while packing 512 concurrent decode streams per 64-GPU supernode aligns $r_P = r_D = 2.5\text{ req/s/GPU}$, producing the symmetrical 1:1 macro card ratio; for enterprise clusters with lower hit rates or smaller batch budgets, calibrating via $\frac{N_P}{N_D} = \frac{B_D T_P}{8 B_P T_D}$ (typically **1:2 to 1:4**) is essential.
 
 ---
 
@@ -365,16 +359,16 @@ $$\text{Depth}(T) = \max \left\{ m \in [1, K_{\max}] \;\middle|\; \prod_{j=1}^{m
 
 ---
 
-### 2. SWA Bounded Replay (Sliding Window Attention Boundary Anchoring)
+### 2. CSA2 + SWA Bounded Replay (Constant Window Memory & Bounded Suffix Recomputation)
 
-DeepSeek-V4.1-Flash employs Sliding Window Attention (SWA) to sustain efficiency across long contexts. In conversational turns, SWA typically encounters **Boundary Recomputation Penalties**:
-
-When the context window slides past length $W$, tokens outside the window lose cross-attention visibility. If historical context must be revisited or verified, the system is conventionally forced to re-execute prefill across earlier tokens.
+**DeepSeek-V4.1-Flash** is built on a **552B total-parameter asymmetric MoE backbone using a 40-layer Causal Encoder-Decoder (CED) split (20-layer Causal Encoder + 20-layer Decoder, activating 8B parameters in Prefill and 16B parameters in Decode)**, pairing **CSA2 (Compressed Sparse Attention 2)** with **Sliding Window Attention (SWA)**:
+- **CSA2 Cross-Layer Sharing & FP4 KV**: Compresses persistent global KV Cache in HBM down to **890 Bytes/token** (~1/4 the footprint of V4-Flash).
+- **The SWA External Persistence Dilemma**: During active decoding, SWA layers maintain a constant ring buffer of $n_{\text{win}}$ tokens in GPU HBM ($O(n_{\text{win}})$ memory). However, in 72-hour tiered prefix storage (Host DRAM / NVMe SSD), persisting local SWA KV tensors at every historical token offset to support arbitrary prefix-cache hits would bloat external storage and PCIe/RDMA bandwidth by multiples of the global CSA2 cache; conversely, naively dropping SWA states forces traditional engines to recompute the entire 77K prompt on an unaligned cache hit.
 
 **SWA Bounded Replay Mechanics**:
-1. **Boundary Anchoring**: At fixed window intervals $W$, the kernel snapshots an Attention Sink State Fingerprint in SRAM.
-2. **Localized Replay**: During context shifting, the engine recomputes a bounded slice (< 128 tokens) from the nearest anchor rather than reprocessing the entire 77K context.
-3. **Efficiency**: SWA Bounded Replay eliminates over **85% of redundant prefill computation** in multi-turn dialogues.
+1. **CSA2-Only External Persistence**: Tier 2/3 external caches **persist only compact global CSA2 KV representations** and omit local SWA window states altogether (rather than storing periodic full "Boundary Anchors" every $W$ tokens), shrinking persistent external KV storage to **~1/8** of the prior generation.
+2. **Bounded Suffix Replay ($n_{\text{win}}$)**: Because any SWA layer's state at an arbitrary prefix boundary depends strictly on the most recent $n_{\text{win}}$ tokens, upon a prefix-cache hit or session resume, DeepInfer leverages the cached global CSA2 KV states and replays **only a strictly bounded trailing suffix window of at most $n_{\text{win}}$ tokens** to reconstruct exact SWA states on the fly.
+3. **Efficiency**: Maintains constant $O(n_{\text{win}})$ sliding-window HBM usage while bounding worst-case cache-miss/resume recomputation to $O(n_{\text{win}})$ instead of $O(L_{\text{prompt}})$.
 
 ---
 
@@ -441,97 +435,90 @@ flowchart LR
 
 ### 3. Implementation Example: Protocol Bridging and Reasoning Extraction
 
-Installable via `pip install deepseek-recipe`, the following example demonstrates production API bridging:
+Installable via `pip install deepseek-recipe`, the Python bindings expose `ChatCompletionRequest` / `ResponsesRequest`, `ConversionOptions`, `DeepseekV41Encoding` (`render_conversation()`), and the stateful `StreamProcessor`. Below is a verified production integration matching the official `deepseek_recipe` API:
 
 ```python
 """
 production_gateway_recipe.py
-Production gateway integration using deepseek-recipe for protocol unification,
-reasoning trace separation, and function calling extraction.
+Production gateway integration using official deepseek-recipe APIs for protocol
+conversion, V4.1 prompt rendering, and streaming <think> / tool-call demuxing.
 """
 
-from typing import Dict, Any, List
-import deepseek_recipe as ds_recipe
+from typing import Dict, Any, Iterable, List
+from deepseek_recipe import (
+    ChatCompletionRequest,
+    ConversionOptions,
+    DeepseekV41Encoding,
+    InferenceChunk,
+    InferenceFinishReason,
+    PromptUsage,
+    StreamProcessor,
+)
 
-def handle_chat_completion_request(payload: Dict[str, Any]) -> ds_recipe.RenderedInput:
+# Reusable stateless V4.1 prompt encoder
+V41_ENCODING = DeepseekV41Encoding()
+
+
+def render_openai_request(payload: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Transforms standard OpenAI API payloads into native token streams via deepseek-recipe.
+    Converts standard OpenAI Chat Completions payloads (including tools, reasoning_effort,
+    and historical reasoning_content) into unified Conversations and V4.1 native prompts.
     """
-    # 1. Initialize structured conversation instance
-    conversation = ds_recipe.Conversation()
+    # 1. Ingest and validate API request (use ResponsesRequest for OpenAI Responses API)
+    request = ChatCompletionRequest(payload)
 
-    # 2. Configure thinking and reasoning behaviors
-    enable_thinking = payload.get("enable_thinking", True)
-    conversation.set_reasoning_mode(enable_thinking)
+    # 2. Normalize into internal Conversation AST + parsing options
+    converted = request.convert(ConversionOptions())
 
-    # 3. Bind client tool declarations
-    if "tools" in payload:
-        for tool in payload["tools"]:
-            conversation.register_tool(
-                name=tool["function"]["name"],
-                description=tool["function"].get("description", ""),
-                parameters=tool["function"].get("parameters", {})
-            )
+    # 3. Render exact DeepSeek-V4.1 prompt string (or token IDs when paired with PromptTokenizer)
+    rendered = V41_ENCODING.render_conversation(converted.conversation)
 
-    # 4. Ingest multi-turn message history
-    for msg in payload["messages"]:
-        role = msg["role"]
-        content = msg["content"]
-        
-        if role == "system":
-            conversation.add_system_message(content)
-        elif role == "user":
-            conversation.add_user_message(content)
-        elif role == "assistant":
-            # Preserve historical reasoning chains and tool calls cleanly
-            reasoning_content = msg.get("reasoning_content", None)
-            tool_calls = msg.get("tool_calls", None)
-            conversation.add_assistant_message(
-                content=content,
-                reasoning_content=reasoning_content,
-                tool_calls=tool_calls
-            )
-        elif role == "tool":
-            conversation.add_tool_result(
-                tool_call_id=msg["tool_call_id"],
-                result=content
-            )
-
-    # 5. Compile to native token arrays and attention masks via Rust engine
-    rendered_input = conversation.render_for_engine(
-        tokenizer_model="deepseek-ai/DeepSeek-V4.1-Flash",
-        add_generation_prompt=True
-    )
-    
-    return rendered_input
-
-
-def parse_engine_stream_output(raw_token_stream: List[int]) -> Dict[str, Any]:
-    """
-    Streams and demuxes raw token streams into <think> traces and content payloads.
-    """
-    parser = ds_recipe.StreamOutputParser(tokenizer_model="deepseek-ai/DeepSeek-V4.1-Flash")
-    
-    parsed_result = {
-        "reasoning_chunk": "",
-        "content_chunk": "",
-        "detected_tool_calls": []
+    return {
+        "converted": converted,
+        "prompt": rendered.prompt,
     }
 
-    for token_id in raw_token_stream:
-        event = parser.step(token_id)
-        
-        if event.is_reasoning():
-            # Encapsulated within <think> blocks
-            parsed_result["reasoning_chunk"] += event.text()
-        elif event.is_content():
-            # Primary user-facing generation
-            parsed_result["content_chunk"] += event.text()
-        elif event.is_tool_call_completed():
-            # Fully parsed structured function invocation
-            parsed_result["detected_tool_calls"].append(event.get_tool_call())
 
-    return parsed_result
+def stream_engine_chunks_to_sse(
+    converted: Any,
+    request_id: str,
+    model_name: str,
+    prompt_tokens: int,
+    cache_hit_tokens: int,
+    text_deltas: Iterable[str],
+) -> List[str]:
+    """
+    Demuxes raw backend output chunks via StreamProcessor, isolating <think>...</think>
+    traces and structured tool calls into OpenAI-compatible JSON chunks.
+    """
+    chunk_gen = ChatCompletionRequest.chunk_generator(
+        converted, request_id, model_name
+    )
+    processor = StreamProcessor(chunk_gen, converted.parsing_options)
+    sse_events: List[str] = []
+
+    # 1. Emit initial ready chunk with prompt & cache-hit token accounting
+    ready_events = processor.push(
+        InferenceChunk.ready(
+            prompt_usage=PromptUsage(
+                prompt_tokens=prompt_tokens,
+                prompt_cache_hit_tokens=cache_hit_tokens,
+            )
+        )
+    )
+    sse_events.extend(ev.to_json() for ev in ready_events)
+
+    # 2. Incrementally push backend text or token chunks (InferenceChunk.tokens / text)
+    for delta in text_deltas:
+        for ev in processor.push(InferenceChunk.text(delta, token_count=1)):
+            sse_events.append(ev.to_json())
+
+    # 3. Finalize finish reason and flush trailing parser state
+    for ev in processor.push(InferenceChunk.finish(InferenceFinishReason.Stop)):
+        sse_events.append(ev.to_json())
+    processor.finish()
+
+    return sse_events
 ```
 
 - **Robust Syntax Isolation**: The Rust parser guarantees strict syntactic tokenization, ensuring synthetic prompt injections (e.g., forged `<|fim_begin|>` or `<think>` tags) are safely escaped.
@@ -612,17 +599,20 @@ Based on multi-node supernode testing with DeepInfer, four critical failure mode
 - **Symptom**: Scaling Decode supernodes to 128 GPUs across multiple leaf switches triggers a 70% collapse in All-to-All throughput, with escalating packet drop counters (`rx_prio0_drop`).
 - **Root Cause**: Dense All-to-All collective exchanges cause Equal-Cost Multi-Path (ECMP) routing to suffer from **Hash Polarization**, directing multiple elephant flows onto identical spine uplinks and causing localized buffer exhaustion.
 - **Remediation**:
-  Enable **Adaptive Routing (AR)** on InfiniBand fabrics to dynamically steer packets around congested links. For RoCEv2 environments, enforce strict DSCP traffic class mappings and hardware-level PFC deadlock detection (`PFC_DEADLOCK_DETECTION_EN=1`).
+  Enable **Adaptive Routing (AR)** on InfiniBand fabrics to dynamically steer packets around congested links. For RoCEv2 environments, enforce strict DSCP traffic class mappings and hardware-level PFC deadlock detection (`PFC_DEADLOCK_DETECTION_EN=1`). To see how 72-GPU rack-scale NVLink copper backplanes eliminate inter-node PCIe/NIC bottlenecks for Wide-EP dispatch alongside NCCL NVLS/SHARP collectives, consult [Rack-Scale SuperPoD & Collective Communication: GB200 NVL72, NVLink 5 & NCCL Internals](/en/articles/rack-scale-superpod-nvl72-nccl-collectives/).
 
 ### 2. DSpark Confidence Score Drift on Extended Reasoning Traces
 - **Symptom**: During complex, multi-step code synthesis, speculative acceleration collapses from 1.6x down to 0.9x (slower than unspeculated baselines).
 - **Root Cause**: On deep reasoning chains, hidden representations deviate semantically from the draft model's training distribution. The Confidence Head overestimates acceptance probabilities, issuing low-quality draft sequences that trigger costly rollbacks.
 - **Remediation**:
-  Configure conservative dynamic rollback safety gates:
-  ```bash
-  --dspark-confidence-threshold 0.85 \
-  --dspark-max-draft-tokens 4 \
-  --dspark-abort-on-rollback-rate 0.30
+  Configure conservative dynamic rollback safety gates in the internal Decode scheduler configuration (capping `max_draft_tokens: 4` with an automatic rollback circuit breaker):
+  ```yaml
+  # Internal Decode Control-Plane DSpark Safety Gate (Reference Control-Plane Spec)
+  dspark:
+    enabled: true
+    confidence_threshold: 0.85
+    max_draft_tokens: 4
+    abort_on_rollback_rate: 0.30
   ```
   If rollbacks exceed 30% over three consecutive execution steps, the scheduler temporarily falls back to pure autoregressive generation.
 
@@ -657,7 +647,7 @@ flowchart LR
 
 ### Phase 1: Hardware Procurement, Rack Planning & Lossless Cabling
 
-To host DeepSeek-V4.1-Flash across a standard production validation footprint, the recommended baseline cluster comprises **96 GPUs (12 8-GPU physical servers)**, partitioned into 4 Prefill nodes and 1 64-GPU Decode supernode:
+To host **DeepSeek-V4.1-Flash (552B total-parameter asymmetric MoE, 40-layer Causal Encoder-Decoder activating 8B in Prefill and 16B in Decode)** across a standard production validation footprint, the recommended baseline cluster comprises **96 GPUs (12 8-GPU physical servers)**, partitioned into 4 Prefill nodes (32 GPUs) and 1 64-GPU Decode supernode (matching Layer 3's **1:2 starter validation ratio**):
 
 #### 1. Hardware Bill of Materials (BOM)
 * **Compute Nodes (12x HGX H100/B200 or Huawei Ascend 950 8-way Servers)**:
@@ -687,10 +677,9 @@ Ensure strict **PCIe local affinity between GPUs and NICs**, eliminating cross-s
 
 Apply uniform kernel and fabric tuning across all 12 physical nodes.
 
-#### 1. Kernel Network and Memory Configurations (`/etc/sysctl.d/99-ai-infra.conf`)
+#### 1. Kernel Network, Virtual Memory, and Transparent Hugepage (THP) Tuning
+Write socket buffer and memory-map parameters to `/etc/sysctl.d/99-ai-infra.conf`:
 ```ini
-# Disable transparent hugepage compaction to protect pinned GPU memory allocations
-vm.transparent_hugepage = never
 # Expand socket read/write buffers and network backlog
 net.core.rmem_max = 134217728
 net.core.wmem_max = 134217728
@@ -698,12 +687,18 @@ net.core.rmem_default = 67108864
 net.core.wmem_default = 67108864
 net.core.optmem_max = 67108864
 net.core.netdev_max_backlog = 250000
-# Enable ECN congestion notification
+# Enable TCP control-plane ECN (Note: RoCEv2 UDP-4791 ECN/DCQCN is configured via NIC QoS & switch profiles)
 net.ipv4.tcp_ecn = 1
-# Expand memory map limits
+# Expand virtual memory map limits for large checkpoint mmaps and tiered cache pools
 vm.max_map_count = 2621440
 ```
-Apply via: `sudo sysctl --system`
+Apply `sysctl` settings and configure Transparent Hugepages via Linux `sysfs` (THP is managed via `/sys/kernel/mm/transparent_hugepage/`, not `sysctl`):
+```bash
+sudo sysctl --system
+# Use madvise THP and disable synchronous compaction stalls on pinned GPU memory
+echo madvise | sudo tee /sys/kernel/mm/transparent_hugepage/enabled
+echo never | sudo tee /sys/kernel/mm/transparent_hugepage/defrag
+```
 
 #### 2. Hardware Topology & GPUDirect RDMA Verification
 Execute self-checks to ensure all 8 adapters operate at full bandwidth:
@@ -711,11 +706,11 @@ Execute self-checks to ensure all 8 adapters operate at full bandwidth:
 # 1. Verify InfiniBand/RoCEv2 adapter state and link speeds (400 Gbps Active)
 ibstat | grep -E "(CA '|State:|Physical state:|Rate:)"
 
-# 2. Verify GPU topology (All links must indicate NVLink NV18/NV9 interconnects)
+# 2. Verify Hopper/Blackwell 8-GPU NVSwitch topology (All GPU-GPU links must report NV18; never SYS)
 nvidia-smi topo -m
 
-# 3. Lock GPUDirect RDMA levels and export topology cache
-export NCCL_NET_GDR_LEVEL=5
+# 3. Restrict GPUDirect RDMA strictly to shared PCIe switch paths (PIX) to prevent cross-socket traversal
+export NCCL_NET_GDR_LEVEL=PIX
 export NCCL_TOPO_DUMP_FILE=/etc/ai-infra/nccl_topo.xml
 export NCCL_SET_STACK_SIZE=1
 ```
@@ -724,7 +719,10 @@ export NCCL_SET_STACK_SIZE=1
 
 ### Phase 3: DeepInfer Kernel Compilation & Container Image Packaging
 
-To avoid dependency conflicts in production, encapsulate custom kernels (FlashMLA, DeepGEMM, DeepEP, TileLang) in a multi-stage Docker build:
+> [!IMPORTANT] Open-Source Scope Verification: Public Engine API vs. Internal Distributed Control Plane
+> The public **[deepseek-ai/DeepInfer](https://github.com/deepseek-ai/DeepInfer)** repository open-sourced the core offline inference engine (`deepinfer.entrypoints.llm.LLM` and `deepinfer.sampling_params.SamplingParams`) alongside custom hardware kernels, while **distributed HTTP serving (`server`), P/D disaggregation routing, and RDMA KV transfer daemons remain internal to DeepSeek's proprietary infrastructure**. Private cluster deployments wrap the public `LLM` engine and `deepseek-recipe` inside internal RPC workers and an affinity-aware API gateway.
+
+Encapsulate custom kernels (FlashMLA, DeepGEMM, DeepEP, TileLang) and `deepseek-recipe` in a clean multi-stage Docker base image:
 
 ```dockerfile
 # syntax=docker/dockerfile:1.4
@@ -738,19 +736,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-# 1. Build DeepInfer custom kernels
+# 1. Build public DeepInfer core engine and custom kernels
 RUN git clone --recursive https://github.com/deepseek-ai/DeepInfer.git /build/DeepInfer && \
     cd /build/DeepInfer && \
     pip install --no-cache-dir -r requirements.txt && \
     python3 setup.py bdist_wheel
 
-# 2. Build deepseek-recipe protocol parser
+# 2. Build deepseek-recipe protocol parser (Rust + PyO3)
 RUN git clone https://github.com/deepseek-ai/deepseek-recipe.git /build/deepseek-recipe && \
     cd /build/deepseek-recipe && \
     cargo build --release && \
     python3 -m pip install maturin && maturin build --release
 
-# Production runtime image
+# Production runtime base image
 FROM nvidia/cuda:13.0.0-runtime-ubuntu24.04
 WORKDIR /app
 
@@ -760,68 +758,88 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=builder /build/DeepInfer/dist/*.whl /tmp/
 COPY --from=builder /build/deepseek-recipe/target/wheels/*.whl /tmp/
-RUN pip install --no-cache-dir /tmp/*.whl && rm -rf /tmp/*.whl
+RUN pip install --no-cache-dir /tmp/*.whl fastapi uvicorn httpx && rm -rf /tmp/*.whl
 
 ENV PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True,max_split_size_mb:128"
-ENV NCCL_NET_GDR_LEVEL=5
-ENTRYPOINT ["python3", "-m", "deepinfer.entrypoints.server"]
+ENV NCCL_NET_GDR_LEVEL=PIX
+CMD ["python3"]
 ```
 
 ---
 
-### Phase 4: Cluster Orchestration and Distributed Launch Scripts
+### Phase 4: Public DeepInfer Engine Invocation & Reference Control-Plane Spec
 
-Prefill nodes and Decode supernodes initialize with distinct topology roles.
+#### 1. Verified Public `DeepInfer` Engine Usage (`run_deepinfer_engine.py`)
+Inside worker processes, invoke the open-source `deepinfer.entrypoints.llm.LLM` and `SamplingParams` interfaces paired with `deepseek-recipe`:
 
-#### 1. Prefill Node Pool Launch Script (`launch_prefill_pool.sh`)
-Execute across 4 Prefill nodes (IPs: `192.168.10.101 ~ 104`):
-```bash
-#!/usr/bin/env bash
-# Prefill node: Intra-node TP=8, RDMA one-sided write enabled
-export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
-export HOST_IP=192.168.10.101
+```python
+from deepinfer.entrypoints.llm import LLM
+from deepinfer.sampling_params import SamplingParams
+from deepseek_recipe import (
+    ChatCompletionRequest,
+    ConversionOptions,
+    DeepseekV41Encoding,
+)
 
-numactl --interleave=all python3 -m deepinfer.entrypoints.server \
-    --model-path /models/DeepSeek-V4.1-Flash \
-    --role prefill \
-    --host 0.0.0.0 \
-    --port 8001 \
-    --tensor-parallel-size 8 \
-    --pipeline-parallel-size 1 \
-    --max-model-len 131072 \
-    --max-num-seqs 4 \
-    --gpu-memory-utilization 0.90 \
-    --kv-transfer-protocol rdma \
-    --rdma-device-names mlx5_0,mlx5_1,mlx5_2,mlx5_3,mlx5_4,mlx5_5,mlx5_6,mlx5_7
+# 1. Render exact DeepSeek-V4.1-Flash prompt via deepseek-recipe
+req = ChatCompletionRequest({
+    "model": "deepseek-ai/DeepSeek-V4.1-Flash-1017",
+    "messages": [{"role": "user", "content": "Derive Little's Law P/D equilibrium for disaggregated serving."}],
+})
+converted = req.convert(ConversionOptions())
+rendered = DeepseekV41Encoding().render_conversation(converted.conversation)
+
+# 2. Initialize the public DeepInfer LLM engine (supports seq_seed & structured output so_args)
+llm = LLM(model="deepseek-ai/DeepSeek-V4.1-Flash-1017")
+sampling_params = SamplingParams(
+    temperature=0.0,
+    max_tokens=1024,
+)
+
+outputs = llm.generate([rendered.prompt], sampling_params)
+print(outputs[0].outputs[0].text)
 ```
 
-#### 2. Decode 64-GPU Supernode Launch Script (`launch_decode_supernode.sh`)
-Execute across 8 Decode physical servers (IPs: `192.168.10.111 ~ 118`) with `TP=8, EP=8`:
+#### 2. Reference Control-Plane Architecture Spec (Internal Disaggregated Serving)
+When wrapping the `LLM` engine into an internal disaggregated P/D control plane across 4 Prefill nodes (`192.168.10.101 ~ 104`) and 1 64-GPU Decode supernode (`192.168.10.111 ~ 118`), the **Reference Control-Plane Spec** (illustrating internal worker parameters rather than a public CLI) is structured as follows:
 
-```bash
-#!/usr/bin/env bash
-# On Decode Head Node (192.168.10.111) and 7 companion workers
-export NCCL_SOCKET_IFNAME=eth0
-export NCCL_IB_GID_INDEX=3
-export NCCL_ALGO=Tree
+```yaml
+# reference_pd_cluster_spec.yaml — Reference Control-Plane Spec (96-GPU Starter Unit: 32P + 64D)
+model_path: /models/DeepSeek-V4.1-Flash-1017
 
-python3 -m deepinfer.entrypoints.server \
-    --model-path /models/DeepSeek-V4.1-Flash \
-    --role decode \
-    --host 0.0.0.0 \
-    --port 8002 \
-    --cluster-nodes 8 \
-    --tensor-parallel-size 8 \
-    --expert-parallel-size 8 \
-    --max-model-len 131072 \
-    --max-num-seqs 128 \
-    --gpu-memory-utilization 0.92 \
-    --dspark-enable \
-    --dspark-confidence-threshold 0.85 \
-    --dspark-max-draft-tokens 6 \
-    --swa-bounded-replay \
-    --kv-cache-ttl-hours 72 \
-    --tiered-kv-storage-path /mnt/nvme_tier3_kv/
+prefill_pool:
+  replicas: 4                        # 4 standalone 8-GPU servers (32 GPUs total)
+  listen_port: 8001
+  parallelism:
+    tensor_parallel_size: 8          # Intra-node NV18 full-mesh TP=8
+    pipeline_parallel_size: 1
+  scheduler:
+    max_model_len: 131072
+    max_num_seqs: 4
+    gpu_memory_utilization: 0.90
+  kv_connector:
+    transport: gpudirect_rdma_write  # 1-to-1 rank-matched GPU RDMA push
+    hca_devices: [mlx5_0, mlx5_1, mlx5_2, mlx5_3, mlx5_4, mlx5_5, mlx5_6, mlx5_7]
+
+decode_supernode:
+  nodes: 8                           # 8 interconnected 8-GPU servers (64 GPUs total)
+  listen_port: 8002
+  parallelism:
+    tensor_parallel_size: 8          # Intra-node Attention TP=8
+    expert_parallel_size: 8          # Inter-node MoE Wide-EP=8
+  scheduler:
+    max_model_len: 131072
+    max_num_seqs: 128
+    gpu_memory_utilization: 0.92
+  dspark:
+    enabled: true
+    confidence_threshold: 0.85
+    max_draft_tokens: 4              # Aligned with Layer 8 reasoning safety gate
+    abort_on_rollback_rate: 0.30
+  kv_governance:
+    csa2_swa_bounded_replay: true
+    ttl_hours: 72
+    tier3_nvme_path: /mnt/nvme_tier3_kv/
 ```
 
 #### 3. Kubernetes / KubeRay Manifest Configuration
@@ -839,7 +857,7 @@ spec:
       spec:
         containers:
         - name: ray-head
-          image: internal-registry.corp/deepinfer:v4.1
+          image: internal-registry.corp/deepinfer-worker:v4.1
           resources:
             limits:
               nvidia.com/gpu: "8"
@@ -859,102 +877,113 @@ spec:
 
 ### Phase 5: Production Gateway, Protocol Bridging & Prefix Affinity Routing
 
-To achieve the **96% KV Cache hit rate**, the gateway enforces prefix-aware consistent hashing:
+To achieve the **96% KV Cache hit rate**, the gateway enforces prefix-aware consistent hashing while using the official `deepseek-recipe` APIs to bridge external OpenAI requests to internal P/D RPC workers:
 
 ```python
 """
 production_affinity_gateway.py
-Production gateway: prefix-aware consistent hashing, deepseek-recipe protocol translation,
-and streaming reasoning demuxing.
+Production gateway: prefix-aware consistent hashing, official deepseek-recipe protocol
+translation, and StreamProcessor reasoning/tool-call demuxing.
 """
 
 import hashlib
+import uuid
 from typing import List, Dict, Any
 from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse
 import httpx
-import deepseek_recipe as ds_recipe
+from deepseek_recipe import (
+    ChatCompletionRequest,
+    ConversionOptions,
+    DeepseekV41Encoding,
+    InferenceChunk,
+    InferenceFinishReason,
+    PromptUsage,
+    StreamProcessor,
+)
 
 app = FastAPI(title="DeepSeek Production Gateway")
+V41_ENCODING = DeepseekV41Encoding()
 
-# 4 Prefill nodes and 1 64-GPU Decode supernode endpoint
-PREFILL_NODES = [f"http://192.168.10.{i}:8001" for i in range(101, 105)]
+# Internal RPC endpoints for 4 Prefill workers and 1 64-GPU Decode supernode
+PREFILL_WORKERS = [f"http://192.168.10.{i}:8001" for i in range(101, 105)]
 DECODE_SUPERNODE = "http://192.168.10.111:8002"
 
-def compute_prefix_hash(messages: List[Dict[str, str]]) -> str:
-    """
-    Computes a 64-bit prefix hash over System Prompt and initial turns for affinity routing.
-    """
+
+def compute_prefix_hash(messages: List[Dict[str, Any]]) -> str:
+    """Computes a SHA-256 prefix hash over System Prompt and initial turns for affinity routing."""
     prefix_str = ""
     for msg in messages:
-        if msg["role"] in ["system", "user"]:
+        if msg.get("role") in ("system", "user") and isinstance(msg.get("content"), str):
             prefix_str += msg["content"]
             if len(prefix_str) > 2048:
                 break
     return hashlib.sha256(prefix_str.encode("utf-8")).hexdigest()
 
+
 @app.post("/v1/chat/completions")
 async def chat_completions(request: Request):
     payload = await request.json()
     messages = payload.get("messages", [])
-    
-    # 1. Consistent hash routing for prefill reuse
-    p_hash = compute_prefix_hash(messages)
-    selected_p_node = PREFILL_NODES[int(p_hash[:8], 16) % len(PREFILL_NODES)]
-    
-    # 2. Tokenize and format using deepseek-recipe Rust core
-    conversation = ds_recipe.Conversation()
-    conversation.set_reasoning_mode(payload.get("enable_thinking", True))
-    
-    for msg in messages:
-        if msg["role"] == "system":
-            conversation.add_system_message(msg["content"])
-        elif msg["role"] == "user":
-            conversation.add_user_message(msg["content"])
-        elif msg["role"] == "assistant":
-            conversation.add_assistant_message(
-                content=msg["content"],
-                reasoning_content=msg.get("reasoning_content", None)
-            )
+    model_name = payload.get("model", "DeepSeek-V4.1-Flash")
+    request_id = f"chatcmpl-{uuid.uuid4().hex[:12]}"
 
-    rendered_input = conversation.render_for_engine(
-        tokenizer_model="deepseek-ai/DeepSeek-V4.1-Flash",
-        add_generation_prompt=True
-    )
-    
-    # 3. Asynchronously trigger Prefill computation (auto-pushes KV Cache to Decode node via RDMA)
+    # 1. Consistent hash routing to maximize prefix cache hits on internal Prefill workers
+    p_hash = compute_prefix_hash(messages)
+    selected_p_node = PREFILL_WORKERS[int(p_hash[:8], 16) % len(PREFILL_WORKERS)]
+
+    # 2. Convert protocol & render native V4.1 prompt via deepseek-recipe Rust core
+    ds_req = ChatCompletionRequest(payload)
+    converted = ds_req.convert(ConversionOptions())
+    rendered = V41_ENCODING.render_conversation(converted.conversation)
+
+    # 3. Trigger internal Prefill worker (pushes compressed KV to Decode supernode via RDMA)
     async with httpx.AsyncClient(timeout=60.0) as client:
         p_resp = await client.post(
-            f"{selected_p_node}/execute_prefill",
+            f"{selected_p_node}/internal/prefill",
             json={
-                "tokens": rendered_input.token_ids,
+                "prompt": rendered.prompt,
                 "target_decode_node": DECODE_SUPERNODE,
-                "session_hash": p_hash
-            }
+                "session_hash": p_hash,
+            },
         )
         prefill_meta = p_resp.json()
 
-    # 4. Stream response from Decode supernode with dynamic <think> demuxing
-    async def token_generator():
-        parser = ds_recipe.StreamOutputParser(tokenizer_model="deepseek-ai/DeepSeek-V4.1-Flash")
-        
+    # 4. Stream output from Decode supernode and demux <think> / tool calls via StreamProcessor
+    async def sse_generator():
+        chunk_gen = ChatCompletionRequest.chunk_generator(
+            converted, request_id, model_name
+        )
+        processor = StreamProcessor(chunk_gen, converted.parsing_options)
+
+        for ev in processor.push(
+            InferenceChunk.ready(
+                prompt_usage=PromptUsage(
+                    prompt_tokens=prefill_meta["prompt_tokens"],
+                    prompt_cache_hit_tokens=prefill_meta["cache_hit_tokens"],
+                )
+            )
+        ):
+            yield f"data: {ev.to_json()}\n\n"
+
         async with httpx.AsyncClient(timeout=300.0) as client:
             async with client.stream(
                 "POST",
-                f"{DECODE_SUPERNODE}/stream_decode",
-                json={"kv_session_id": prefill_meta["kv_session_id"]}
+                f"{DECODE_SUPERNODE}/internal/stream_decode",
+                json={"kv_session_id": prefill_meta["kv_session_id"]},
             ) as stream:
-                async for chunk in stream.aiter_bytes():
-                    token_ids = [int(x) for x in chunk.decode().split(",") if x]
-                    for tid in token_ids:
-                        ev = parser.step(tid)
-                        if ev.is_reasoning():
-                            yield f"data: {{\"choices\": [{{\"delta\": {{\"reasoning_content\": \"{ev.text()}\"}}}}]}}\n\n"
-                        elif ev.is_content():
-                            yield f"data: {{\"choices\": [{{\"delta\": {{\"content\": \"{ev.text()}\"}}}}]}}\n\n"
+                async for line in stream.aiter_lines():
+                    if not line:
+                        continue
+                    for ev in processor.push(InferenceChunk.text(line, token_count=1)):
+                        yield f"data: {ev.to_json()}\n\n"
+
+        for ev in processor.push(InferenceChunk.finish(InferenceFinishReason.Stop)):
+            yield f"data: {ev.to_json()}\n\n"
+        processor.finish()
         yield "data: [DONE]\n\n"
 
-    return StreamingResponse(token_generator(), media_type="text/event-stream")
+    return StreamingResponse(sse_generator(), media_type="text/event-stream")
 ```
 
 ---
@@ -963,14 +992,16 @@ async def chat_completions(request: Request):
 
 Before serving live user traffic, clusters must pass rigorous validation under simulated concurrency.
 
-#### 1. Automated Benchmark Execution
-Run standard ShareGPT conversational benchmarks with synthetic 77K context lengths:
+#### 1. OpenAI-Compatible Gateway Benchmark Execution
+Because the Phase 5 gateway exposes a standard `/v1/chat/completions` endpoint, drive high-concurrency ShareGPT acceptance traffic against `:8000` using standard OpenAI-compatible benchmark harnesses such as `vllm bench serve`:
 ```bash
-python3 -m deepinfer.benchmarks.benchmark_serving \
-    --backend deepinfer \
-    --host 127.0.0.1 \
-    --port 8000 \
+vllm bench serve \
+    --backend openai-chat \
+    --base-url http://127.0.0.1:8000 \
+    --endpoint /v1/chat/completions \
+    --model DeepSeek-V4.1-Flash \
     --dataset-name sharegpt \
+    --dataset-path ./ShareGPT_V3_unfiltered_cleaned_split.json \
     --num-prompts 2000 \
     --max-concurrency 256 \
     --request-rate 50
@@ -989,15 +1020,15 @@ Sign-off requires satisfying all operational thresholds:
 
 ### Q1: Why did DeepSeek build DeepInfer from scratch instead of contributing patches to vLLM or SGLang?
 General-purpose frameworks like vLLM and SGLang are designed to support hundreds of model architectures and diverse consumer and enterprise deployment scenarios. This broad compatibility necessitates generalized abstraction layers and complex multi-device runtime wrappers.
-DeepInfer was engineered with a focused objective: maximizing serving efficiency specifically for **DeepSeek architectures (MLA, CSA+HCA, MoE), massive parameters, Wide-EP topologies, and target Blackwell/Ascend silicon**. Removing extraneous abstractions yielded a lightweight codebase with zero memory overhead and direct kernel access, forming the operational foundation of its $38/GPU/h unit economics.
+DeepInfer was engineered with a focused objective: maximizing serving efficiency specifically for **DeepSeek architectures (such as DeepSeek-V4.1-Flash's 40-layer Causal Encoder-Decoder, CSA2+SWA, and 552B asymmetric MoE alongside trillion-parameter flagships), Wide-EP topologies, and target Blackwell/Ascend silicon**. Removing extraneous abstractions yielded a lightweight codebase with zero memory overhead and direct kernel access, forming the operational foundation of its $38/GPU/h unit economics.
 
 ### Q2: Why is deepseek-recipe implemented in Rust, and how can teams integrate it into existing API gateways?
 Jinja templates are interpreted dynamically as raw text. When handling multi-turn tool calling, complex system prompts, and strict `<think>` token isolation, Jinja incurs high CPU overhead and risks token escaping errors. Rust provides zero-cost abstractions, deterministic memory safety without a garbage collector, and high-throughput AST manipulation.
-For integration, the library is distributed via PyPI (`pip install deepseek-recipe`). Python gateways (e.g., built on FastAPI, Litestar, or LiteLLM) can replace prompt formatting modules by routing requests into `deepseek_recipe.Conversation`, achieving parity with official tokenization and reasoning separation without altering underlying network architectures.
+For integration, the library is distributed via PyPI (`pip install deepseek-recipe`). Python gateways (e.g., built on FastAPI, Litestar, or LiteLLM) can replace prompt formatting and stream parsing modules by routing requests through `ChatCompletionRequest`, `DeepseekV41Encoding.render_conversation()`, and `StreamProcessor`, achieving parity with official tokenization and reasoning separation without altering underlying network architectures.
 
 ### Q3: How do Huawei Ascend 950 and NVIDIA Blackwell compare when running DeepInfer?
-- **Compute Subsystem**: NVIDIA Blackwell excels in raw dense FP4/FP8 GEMM throughput due to its 5th-Gen Tensor Cores and TMA subsystem. Huawei Ascend 950 provides strong matrix throughput via its DaVinci 3D Cube cores and Vector units, backed by competitive HCCS intra-node interconnects.
-- **Software Alignment**: DeepInfer uses **TileLang** to abstract hardware differences. TileLang compiles to optimized SASS for NVIDIA platforms and corresponding native assembly for Ascend platforms, optimizing for Ascend's L0/L1 on-chip memory buffers. In memory-bound MoE decode phases utilizing Wide-EP sharding, Ascend 950 clusters demonstrate token generation throughput that closely tracks tier-one accelerators.
+- **Compute & Memory Subsystem**: NVIDIA Blackwell excels in raw dense FP4/FP8 GEMM throughput due to its 5th-Gen Tensor Cores and TMA subsystem. Huawei's Ascend 950 series directly mirrors P/D disaggregation in silicon—offering **Ascend 950PR** (128GB HiBL 1.0, ~1.6 TB/s) for Prefill and **Ascend 950DT** (144GB HiZQ 2.0, ~4.0 TB/s) for Decode/Training—backed by DaVinci 3D Cube + Vector cores and UnifiedBus / HCCS scale-up interconnects up to 2.0 TB/s.
+- **Software Alignment**: DeepInfer uses **TileLang** to abstract hardware differences. TileLang compiles to optimized SASS for NVIDIA platforms and corresponding native assembly for Ascend platforms, optimizing for Ascend's L0/L1 on-chip memory buffers. In memory-bound Decode phases on **552B asymmetric MoE (8B Prefill / 16B Decode active)** utilizing Wide-EP sharding and HiZQ 2.0 bandwidth, Ascend 950DT supernodes demonstrate token generation throughput that closely tracks tier-one accelerators.
 
 ### Q4: Can enterprise private deployments replicate the 96% KV Cache hit rate?
 **Yes, provided traffic patterns and gateway routing are architected appropriately.**

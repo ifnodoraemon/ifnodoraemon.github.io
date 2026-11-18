@@ -153,31 +153,41 @@ graph TD
 3. 匹配停止点所对应的所有物理 KV Cache 块直接被复用，**该请求的实际 Prefill 计算量被瞬间骤降为剩余的未匹配后缀（Suffix）**！
 
 ```python
-# RadixTree 匹配逻辑抽象伪代码
-def match_prefix(self, req_tokens: List[int]) -> Tuple[List[int], List[int]]:
+# RadixTree 匹配逻辑抽象伪代码 (以 page_size=1 逐 Token 槽位为例；块级分页下按 page_size 对齐截断)
+def _shared_prefix_len(a: List[int], b: List[int]) -> int:
+    limit = min(len(a), len(b))
+    i = 0
+    while i < limit and a[i] == b[i]:
+        i += 1
+    return i
+
+def match_prefix(self, req_tokens: List[int]) -> Tuple[List[int], List[int], TreeNode]:
     curr_node = self.root
     matched_kv_indices = []
     idx = 0
-    
+
     while idx < len(req_tokens):
-        matched_child = None
-        for child in curr_node.children:
-            edge_len = len(child.token_ids)
-            # 检查当前子节点边上的 Tokens 是否与请求对应区间完全重合
-            if req_tokens[idx : idx + edge_len] == child.token_ids:
-                matched_child = child
-                break
-        
-        if matched_child:
-            matched_kv_indices.extend(matched_child.kv_indices)
-            idx += len(matched_child.token_ids)
-            curr_node = matched_child
-        else:
-            # 无法全量匹配整条边，尝试部分匹配并准备分裂 (Split)
+        first_token = req_tokens[idx]
+        child = curr_node.children.get(first_token)
+        if child is None:
             break
-            
+
+        # 计算请求剩余序列与当前边上的最长公共前缀长度
+        prefix_len = _shared_prefix_len(req_tokens[idx:], child.token_ids)
+        if prefix_len < len(child.token_ids):
+            # 命中边内部分前缀：原地分裂节点 (Split)，复用前 prefix_len 个 KV 槽位后终止下探
+            curr_node = self._split_node(child, prefix_len)
+            matched_kv_indices.extend(curr_node.kv_indices)
+            idx += prefix_len
+            break
+
+        # 完整匹配整条边，继续向下一层深入
+        matched_kv_indices.extend(child.kv_indices)
+        idx += prefix_len
+        curr_node = child
+
     unmatched_suffix = req_tokens[idx:]
-    return matched_kv_indices, unmatched_suffix
+    return matched_kv_indices, unmatched_suffix, curr_node
 ```
 
 ### 3.2 原语二：节点分裂（`split_node`）
@@ -303,7 +313,7 @@ flowchart TD
 | **分支会话支持** | 极差 | 中等（大量冗余哈希存储） | **原生支持（天然对应树状分叉结构）** |
 | **驱逐控制机制** | 请求结束立即释放 | 粗粒度 LRU 物理块淘汰 | **细粒度引用计数 + 叶子节点优先 LRU 级联回收** |
 | **多轮对话 TTFT** | 随轮次线性甚至二次方恶化 | 大幅降低，但受限于块对齐 | **极致削减至 5ms~20ms（仅需前向未命中后缀）** |
-| **计算复杂度** | $O(L_{\text{prompt}}^2)$ | $O(\text{Hash}) + O(L_{\text{suffix}}^2)$ | $O(\text{Tree Depth}) + O(L_{\text{suffix}}^2)$ |
+| **计算复杂度** | $O(L_{\text{prompt}}^2)$ | $O(\text{Hash}) + O(L_{\text{suffix}} \cdot L_{\text{prompt}})$ | $O(\text{Tree Depth}) + O(L_{\text{suffix}} \cdot L_{\text{prompt}})$ |
 | **分布式路由适配** | 轮询即可 | 需要 Consistent Hash 兜底 | **原生配合 Radix-Aware Router 达到极致命中** |
 
 ---

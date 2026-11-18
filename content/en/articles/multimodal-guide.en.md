@@ -30,8 +30,8 @@ All foundational vision models operate on underlying **Vision Transformers (ViT)
 
 - **Base Token Overhead**: Using GPT-5.4 as an example, every image first deducts an initialization overhead of 85 base tokens.
 - **Patch Scaling**: Assuming it slices the image into 512x512 blocks (Tiles), each Tile corresponds to 170 tokens.
-- **The Cost Assassin**: If you upload a raw 4K resolution (3840 x 2160) giant image, it will be sliced into roughly `ceil(3840/512) * ceil(2160/512) = 8 * 5 = 40` Tiles.
-- **The Final Bill**: `85 + (6 * 170) = 1,105 Tokens`. Merely "glancing" at a high-res original image costs the equivalent of reading 10 pages of pure text!
+- **The Cost Assassin**: If you upload a raw 4K resolution (3840 × 2160) high-definition image, it is first proportionally scaled to fit within 2048 × 2048 (becoming 2048 × 1152), and then scaled again so the shortest side is 768px (becoming 1365 × 768). Sliced into 512 × 512 tiles, this produces `ceil(1365/512) * ceil(768/512) = 3 * 2 = 6` tiles.
+- **The Final Bill**: `85 + (6 * 170) = 1,105 Tokens`. That is just the starting cost of "glancing" at a single image! Without automatic downscaling (40 raw 512 × 512 tiles), the token bill would be astronomical.
 
 **Architect's Anti-Pitfall Guide**:
 In production environments, **it is absolutely forbidden for the frontend to upload high-definition raw images directly to the native API**.
@@ -41,7 +41,6 @@ You must execute intelligent Downscaling at the backend middleware layer: For in
 
 ```python
 from PIL import Image
-import anthropic
 import io
 
 # 1. The bankruptcy-prevention step: Force resize to max 1024px edge
@@ -62,21 +61,34 @@ def resize_for_llm(img_path, max_edge=1024):
 Gemini 3.1 Pro's video understanding capability is currently the most advanced:
 
 ```python
-import google.generativeai as genai
+import time
+from google import genai
 
-model = genai.GenerativeModel("gemini-3.1-pro")
+client = genai.Client()
 
-# Upload video file
-video = genai.upload_file("product_demo.mp4")
+# 1. Upload video file via the Files API
+video_file = client.files.upload(file="product_demo.mp4")
 
-# Analyze video content
-response = model.generate_content([
-    video,
-    "Please analyze this product demo video in detail:\n"
-    "1. What are the core features of the product?\n"
-    "2. What are the interaction highlights in the demo?\n"
-    "3. Any suggestions for improvement from a UX perspective?"
-])
+# 2. Poll until server-side video indexing transitions from PROCESSING to ACTIVE
+while video_file.state.name == "PROCESSING":
+    time.sleep(2)
+    video_file = client.files.get(name=video_file.name)
+
+if video_file.state.name != "ACTIVE":
+    raise RuntimeError(f"Video processing failed with state: {video_file.state.name}")
+
+# 3. Analyze video content (use gemini-3.1-pro or gemini-3.1-pro-preview per your account's model list)
+response = client.models.generate_content(
+    model="gemini-3.1-pro",
+    contents=[
+        video_file,
+        "Please analyze this product demo video in detail:\n"
+        "1. What are the core features of the product?\n"
+        "2. What are the interaction highlights in the demo?\n"
+        "3. Any suggestions for improvement from a UX perspective?",
+    ],
+)
+print(response.text)
 ```
 
 Typical use cases for video understanding:

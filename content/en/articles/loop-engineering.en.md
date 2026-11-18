@@ -102,8 +102,6 @@ From "how to say" to "when to stop", AI engineering is rapidly converging with t
 
 ---
 
----
-
 ## Frequently Asked Questions (FAQ)
 
 ### Q1: How should termination conditions be designed in Loop Engineering?

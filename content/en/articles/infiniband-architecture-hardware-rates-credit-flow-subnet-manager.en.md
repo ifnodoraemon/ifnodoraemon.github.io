@@ -7,7 +7,7 @@ tagClass: tag-indigo
 category: Computer Networking
 series: computer-networking
 seriesOrder: 10
-description: "InfiniBand hardware architecture: SDR to NDR/XDR link speeds, 4b/5b to PAM4 modulation, credit-based flow control, Virtual Lanes, and OpenSM subnet management."
+description: "InfiniBand hardware architecture: SDR to NDR/XDR link speeds, 8b/10b to PAM4 modulation, credit-based flow control, Virtual Lanes, and OpenSM subnet management."
 extraTags:
   - Computer Networking
   - InfiniBand
@@ -52,19 +52,19 @@ flowchart TD
 
 InfiniBand links typically aggregate 4 physical serial lanes (4x width). As SerDes and optical transceiver technologies advanced, per-lane signaling rates increased dramatically:
 
-| Generation | Acronym | Per-Lane Raw Rate | 4x Aggregate Bandwidth | Modulation / Encoding | Benchmark Switch Silicon | Production Era |
+| Generation | Acronym | Per-Lane Raw / Effective Rate | 4x Effective Data Rate (Raw) | Modulation / Encoding | Benchmark Switch Silicon | Production Era |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| Single Data Rate | **SDR** | 2.5 Gbps | 10 Gbps | 8b/10b NRZ | Early HPC Switches | 2001 |
-| Double Data Rate | **DDR** | 5.0 Gbps | 20 Gbps | 8b/10b NRZ | Early Mellanox Silicon | 2005 |
-| Quad Data Rate | **QDR** | 10.0 Gbps | 40 Gbps | 8b/10b NRZ | IS5000 Series | 2008 |
-| Fourteen Data Rate | **FDR** | 14.0625 Gbps | 56 Gbps | 64b/66b NRZ | SwitchX-2 | 2011 |
-| Enhanced Data Rate | **EDR** | 25.78125 Gbps | 100 Gbps | 64b/66b NRZ | Switch-IB / ConnectX-4 | 2014 |
-| High Data Rate | **HDR** | 50 Gbps | 200 Gbps | **PAM4** Modulation | Quantum-1 (QM8700) | 2018 |
-| Next Data Rate | **NDR** | 100 Gbps | **400 Gbps** | 100G PAM4 | **Quantum-2 (QM9700)** | 2022–2024 (Mainstream) |
-| eXtreme Data Rate | **XDR** | 200 Gbps | **800 Gbps** | 200G PAM4 | **Quantum-X800 (Q3400)** | **2026 (Flagship AI Superclusters)** |
+| Single Data Rate | **SDR** | 2.5 Gbps / 2.0 Gbps | 8 Gbps (10 Gbps raw) | 8b/10b NRZ | Early HPC Switches | 2001 |
+| Double Data Rate | **DDR** | 5.0 Gbps / 4.0 Gbps | 16 Gbps (20 Gbps raw) | 8b/10b NRZ | Early Mellanox Silicon | 2005 |
+| Quad Data Rate | **QDR** | 10.0 Gbps / 8.0 Gbps | 32 Gbps (40 Gbps raw) | 8b/10b NRZ | IS5000 Series | 2008 |
+| Fourteen Data Rate | **FDR** | 14.0625 Gbps / 13.64 Gbps | 54.54 Gbps (56.25 Gbps raw) | 64b/66b NRZ | SwitchX-2 | 2011 |
+| Enhanced Data Rate | **EDR** | 25.78125 Gbps / 25.0 Gbps | 100 Gbps (103.125 Gbps raw) | 64b/66b NRZ | Switch-IB / ConnectX-4 | 2014 |
+| High Data Rate | **HDR** | 53.125 Gbps / 50 Gbps | 200 Gbps (212.5 Gbps raw) | **PAM4** (26.5625 GBd) | Quantum-1 (QM8700) | 2018 |
+| Next Data Rate | **NDR** | 106.25 Gbps / 100 Gbps | **400 Gbps** (425 Gbps raw) | 100G PAM4 (53.125 GBd) | **Quantum-2 (QM9700)** | 2022–2024 (Mainstream) |
+| eXtreme Data Rate | **XDR** | 212.5 Gbps / 200 Gbps | **800 Gbps** (850 Gbps raw) | 200G PAM4 (106.25 GBd) | **Quantum-X800 (Q3400)** | **2026 (Flagship AI Superclusters)** |
 
 - **PAM4 Pulse Amplitude Modulation**: Starting with HDR, InfiniBand shifted from traditional two-level NRZ signaling to PAM4 (four voltage levels). Each clock cycle transmits 2 bits of data (00, 01, 10, 11), doubling effective bandwidth without doubling physical baud rates;
-- **2026 Industry Frontier**: Modern AI supercomputer nodes (such as DGX/HGX systems) house 8 dedicated ConnectX-8 HCAs connected to Quantum-X800 switches, driving aggregate bidirectional network throughput to **1600 Gbps (800G full-duplex)** per host!
+- **2026 Industry Frontier**: Modern AI supercomputer nodes (such as DGX/HGX systems) house 8 dedicated ConnectX-8 (800G XDR) HCAs connected to Quantum-X800 switches. With each HCA delivering 800 Gbps unidirectional (1.6 Tbps bidirectional), an **8-HCA host achieves an astonishing 6.4 Tbps (6,400 Gbps) unidirectional / 12.8 Tbps bidirectional aggregate network bandwidth**!
 
 ---
 
@@ -98,8 +98,8 @@ sequenceDiagram
 ```
 
 #### Core Principles
-- **Guaranteed Zero Packet Drops**: Every frame unit (Flit) must be debited against an available credit balance before it leaves the transmitter. If the receiver's buffer fills, the sender pauses transmission in hardware;
-- **Zero Deadlock Hazard**: Flow control operates purely hop-by-hop at the physical link layer based on dedicated receive buffer accounting, without relying on complex multi-hop queue backpressure. This eliminates the cascading deadlock and storm conditions common to Ethernet PFC.
+- **Zero Buffer-Overflow Packet Drops**: Every frame unit (Flit) must be debited against an available credit balance before it leaves the transmitter. If the receiver's buffer fills, the sender pauses transmission in hardware;
+- **Single-Hop Storm Immunity & Deadlock-Free Routing Synergy**: Link-level credit accounting eliminates buffer-overflow drops and reactive Ethernet PFC pause storms on each hop, while fabric-wide **credit loop deadlocks** across switches are prevented by OpenSM's deadlock-free routing engines (`ftree` / `updn`, as detailed in Chapter 11).
 
 ### 2.2 Cut-Through Switching: Sub-100 Nanosecond Forwarding
 
@@ -177,7 +177,7 @@ sequenceDiagram
 
 ### 3.3 High Availability: Master and Standby SM
 In production clusters, multiple SM instances run concurrently (e.g., hosted on dedicated management nodes or director switches):
-- Instances arbitrate via priority settings (`priority`) to elect a single active **Master SM**;
+- Instances arbitrate via priority settings (`sm_priority`) to elect a single active **Master SM**;
 - Remaining instances operate as **Standby SMs**, continuously synchronizing topology state. If the Master SM fails, a Standby SM takes over within milliseconds without disrupting active data plane traffic.
 
 ---
@@ -231,7 +231,7 @@ In Chapter 11 of our masterclass, we explore large-scale AI cluster networking: 
 ### Q1: How does InfiniBand's credit-based flow control guarantee zero packet drops without triggering PFC-style deadlocks?
 **The difference lies in localized accounting and buffer dependency isolation.**
 - **Ethernet PFC deadlock cause**: PFC is a reactive end-to-end mechanism. When a switch buffer fills, it sends Pause frames upstream; in cyclic topologies or multipath environments, circular wait conditions lock up buffers across switches;
-- **InfiniBand Credit mechanics**: Flow control operates purely point-to-point at the physical link layer. The sender tracks available buffer credits explicitly granted by the receiver. If no credits are available, the transmitter halts in hardware. Because buffer space is pre-allocated and routing topologies are strictly acyclic, data advances unidirectionally through the pipeline, eliminating circular dependencies.
+- **InfiniBand Credit & Routing Synergy**: Flow control operates point-to-point at the physical link layer. The sender tracks available buffer credits explicitly granted by the receiver; if credits reach zero, the transmitter halts in hardware without triggering reactive PFC pause storms. Paired with OpenSM's deadlock-free `FTree` / `Up-Down` routing tables, buffer wait graphs remain strictly acyclic across the fabric, eliminating circular credit-loop deadlocks.
 
 ### Q2: Why can an InfiniBand port have multiple LIDs via LMC, and how does this benefit high-performance fabrics?
 **Multiple LIDs enable hardware-level multipath traffic distribution.**

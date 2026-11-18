@@ -74,7 +74,7 @@ Kubernetes 1.34 snapshot caching additionally improves paginated and historical-
 
 ## 2. Managing etcd Capacity and Extending Storage: Aggregated APIServer Architecture
 
-When data domains exhibit the following operational characteristics, **CRDs must be abandoned in favor of an Aggregated APIServer**:
+When custom data domains exhibit the following operational characteristics, **teams can evaluate an Aggregated APIServer or a standalone domain API, factoring in compatibility, operational, and authorization overhead**:
 - Extreme volume (hundreds of thousands to tens of millions of records);
 - High-frequency mutations (sub-second telemetry updates, such as `metrics.k8s.io`);
 - Underlying storage requires specialized database engines (ClickHouse, PostgreSQL, or Cassandra).
@@ -186,8 +186,13 @@ spec:
         name: system:nodes
     resourceRules:
     - verbs: ["*"]
-      apiGroups: ["*"]
-      resources: ["nodes", "nodes/status", "leases"]
+      apiGroups: [""]
+      resources: ["nodes", "nodes/status"]
+      clusterScope: true
+    - verbs: ["*"]
+      apiGroups: ["coordination.k8s.io"]
+      resources: ["leases"]
+      namespaces: ["*"]
 ```
 
 ---
@@ -232,7 +237,7 @@ Configure dedicated event clustering in `kube-apiserver`:
 --heartbeat-interval=250      # 250ms heartbeat interval
 --election-timeout=1250       # 1250ms election timeout
 
-# 4. Elevated maximum request payload for large List operations
+# 4. Inbound write request ceiling (limits inbound Put/Txn request size to etcd; does NOT control outbound LIST response size)
 --max-request-bytes=33554432  # 32MB payload limit
 ```
 

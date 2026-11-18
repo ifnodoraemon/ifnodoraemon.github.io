@@ -7,7 +7,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -16,7 +16,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/about/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/about/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/about/" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -25,7 +25,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -39,6 +39,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/advanced-agent-tool-use-and-function-calling.png</image:loc>
+      <image:title>Agent 开发中的 Tool Use 进阶：动态发现、沙箱隔离与错误恢复</image:title>
+      <image:caption>实现 Agent 动态工具检索、MCP 初始化与分页发现、gVisor 容器执行及有限重试，重点解释超时后清理、错误分类与示例的实际边界。</image:caption>
     </image:image>
   </url>
   <url>
@@ -51,6 +53,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/agent-loop-state-machine.png</image:loc>
+      <image:title>Agent 执行循环与状态机设计：从 ReAct 到确定性控制流</image:title>
+      <image:caption>为什么单纯的 Prompt 链与自由 ReAct 无法支撑生产级系统？深度拆解 Agent 执行循环的四大失效模式、基于有限状态机 (FSM) 的图控流设计、Tool Calling 容错降级与熔断器机制，并提供生产级状态机实战代码。</image:caption>
     </image:image>
   </url>
   <url>
@@ -63,6 +67,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/agent-memory-architecture.png</image:loc>
+      <image:title>AI Agent 记忆系统设计：从工作记忆、情景记忆到分层 Graph RAG</image:title>
+      <image:caption>解析 Agent 工作、情景与长期记忆，结合 MemGPT 和 Generative Agents 解释检索与衰减，并补充来源追踪、权限过滤、冲突处理和删除传播的生产边界。</image:caption>
     </image:image>
   </url>
   <url>
@@ -75,6 +81,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/agent-observability-debugging.png</image:loc>
+      <image:title>Agent 可观测性与调试：从黑盒到白盒的进阶之路</image:title>
+      <image:caption>AI Agent 不再是传统软件，调试的是推理过程而非代码。本文详细探讨 Trajectory Evaluation、LLM-as-a-Judge 和主流 Agent 观测工具（LangSmith, Langfuse 等）的实战应用。</image:caption>
     </image:image>
   </url>
   <url>
@@ -87,6 +95,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/agent-orchestration-evals.png</image:loc>
+      <image:title>2026 AI 开发范式：对抗复合误差的分布式 Agent 编排与量化 Evals 体系</image:title>
+      <image:caption>当大模型走向复杂的企业级落地，如何通过分布式编排对抗链路误差复合？如何构建具有统计学置信度的 Evals 评估体系？本文带你从基础概念直击硬核底座。</image:caption>
     </image:image>
   </url>
   <url>
@@ -99,6 +109,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/agent-reflection-self-correction.png</image:loc>
+      <image:title>让模型在运行中进化：从基础反思到基于 MCTS 的 Test-Time Compute 搜索</image:title>
+      <image:caption>大语言模型的潜力不止于预训练参数。本文带你深入探讨 Test-Time Compute 的前沿：从 Actor-Critic 双边架构，一路深入到利用蒙特卡洛树搜索（MCTS）解码 Agent 的自我纠错极限。</image:caption>
     </image:image>
   </url>
   <url>
@@ -111,6 +123,22 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/agent-runtime-practices.png</image:loc>
+      <image:title>做 AI Agent 的 7 条运行时实践</image:title>
+      <image:caption>基于一个真实数据分析智能体项目，总结 7 条可复用的 Agent Runtime 实践，包括状态暴露、工具设计、上下文治理、guardrail、delegate 和 trace 审计。</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/agent-sandbox-firecracker-microvm-snapshot-isolation.png</image:loc>
+      <image:title>AI Agent 安全沙箱终极架构：从容器逃逸防御、Firecracker 微虚拟机毫秒级快照恢复到零信任环境隔离</image:title>
+      <image:caption>深入剖析面向 Coding Agent 与强化学习 Rollout 的 Firecracker MicroVM 安全沙箱架构：横评 gVisor 与硬件虚拟化，详解 Snapshot 与 userfaultfd 毫秒级恢复及状态分叉，并落地 virtio-vsock 零密钥凭证代填网关。</image:caption>
     </image:image>
   </url>
   <url>
@@ -123,6 +151,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/ai-coding-mastery.png</image:loc>
+      <image:title>AI 编程驾驭指南：从「帮我写个 XX」到架构编排者</image:title>
+      <image:caption>工具再多也没用——决定 AI 编程质量的是驾驭方法论。本文深入拆解六大核心方法（Spec-Driven、上下文工程、TDD 验证环、多 Agent 编排、高级 Prompt、会话卫生），附 20+ 工具矩阵、五大反模式避坑指南和完整实战工作流。</image:caption>
     </image:image>
   </url>
   <url>
@@ -135,6 +165,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/ai-history-choices.png</image:loc>
+      <image:title>AI 关键技术的历史抉择：为什么每次都选了「那一个」？</image:title>
+      <image:caption>回顾 AI 七十年发展史上的六次关键技术岔路口，剖析每一次「历史选择」背后的算力约束、数据红利与可扩展性逻辑。</image:caption>
     </image:image>
   </url>
   <url>
@@ -147,6 +179,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/ai-trends-2026.png</image:loc>
+      <image:title>2026 年 AI 大模型十一大趋势深度解析</image:title>
+      <image:caption>从 Thinking 推理模式到 Agent 化应用，深度剖析 2026 年 AI 大模型领域最值得关注的十一大核心发展趋势。</image:caption>
     </image:image>
   </url>
   <url>
@@ -159,6 +193,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/browser-use-agent-architecture.png</image:loc>
+      <image:title>突破 10 万 Star 的 Browser-use 架构深度剖析：DOM 树提纯、视觉定位与生产级网页 Agent 实战</image:title>
+      <image:caption>为什么传统 Selenium/Playwright 脚本在动态前端下频频崩溃？深度拆解斩获 10 万+ GitHub Star 的现象级项目 Browser-use 的底层架构：DOM 树智能提纯降噪、Set-of-Mark (SoM) 视觉坐标定位、状态机闭环容错，并手把手构建一个可生产落地的企业级网页自动化智能体。</image:caption>
     </image:image>
   </url>
   <url>
@@ -171,6 +207,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/build-ai-agent.png</image:loc>
+      <image:title>从零搭建 AI Agent 应用</image:title>
+      <image:caption>手把手教你使用 LangChain 和 Claude API 构建智能代理系统。包含完整代码与架构设计。</image:caption>
     </image:image>
   </url>
   <url>
@@ -183,6 +221,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/build-lightweight-agent-framework.png</image:loc>
+      <image:title>从零手搓轻量级 Agent 框架：基于状态机与事件流的设计模式</image:title>
+      <image:caption>从零实现 Python Agent 状态机：通过 SQLite 保存审批检查点，按挂起节点恢复、拒绝重复审批，并用异步事件流暴露执行过程和步数预算。</image:caption>
     </image:image>
   </url>
   <url>
@@ -195,6 +235,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/container-networking-veth-bridge-iptables.png</image:loc>
+      <image:title>容器网络全景解密：veth-pair、Linux Bridge、iptables NAT 与跨主机网络拓扑</image:title>
+      <image:caption>为什么隔离在独立 Network Namespace 中的容器能够与外界顺畅通信？深度拆解容器网络协议栈的底层传输机理：veth-pair 虚拟以太网对穿透隔离墙、Linux Bridge (docker0) 二层 MAC 学习与广播域隔离、iptables PREROUTING/POSTROUTING 端口映射与 MASQUERADE 动态源地址转换，全面对比 Host、Bridge、Macvlan 与 Overlay 跨主机网络拓扑性能与开销。</image:caption>
     </image:image>
   </url>
   <url>
@@ -207,6 +249,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/context-engineering-guide.png</image:loc>
+      <image:title>Context Engineering 实战指南：把上下文窗口当 RAM 管理</image:title>
+      <image:caption>2026 年最火的新概念，从 Prompt Engineering 进化到 Context Engineering。详解如何通过 Write/Select/Compress/Isolate 四大策略管理上下文窗口，解决长对话遗忘、幻觉与上下文污染。</image:caption>
     </image:image>
   </url>
   <url>
@@ -219,6 +263,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/continuous-batching-chunked-prefill-guide.png</image:loc>
+      <image:title>高并发批处理演进：从 Continuous Batching 到 Chunked Prefill 消除排头阻塞</image:title>
+      <image:caption>为什么在消除显存碎片后，高并发大模型服务依然会遭遇严重的单字时延（TPOT）剧烈抖动？深度解构从传统静态批处理到 Orca 迭代级连续批处理的状态机演进，揭秘超长 Prefill 霸占 GPU 引发排头阻塞（HoL Blocking）的物理根源，以及 Sarathi-Serve 和 vLLM 借助 Chunked Prefill 实现算力与访存动态拼车（Piggybacking）的底层机制。</image:caption>
     </image:image>
   </url>
   <url>
@@ -231,6 +277,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan.png</image:loc>
+      <image:title>现代数据中心网络架构第一性原理：Clos 拓扑、Leaf-Spine 组网、BGP Underlay 与 EVPN-VXLAN 大二层虚拟化</image:title>
+      <image:caption>为什么传统三层网络与 STP 生成树无法承载现代云计算与 AI 大规模算力集群？深度拆解数据中心网络演进史：从经典三层架构（接入 Access/汇聚 Aggregation/核心 Core）的 STP 阻塞与收敛比失衡痛点，到 1953 年 Charles Clos 电话交换理论与现代无阻塞 2-Tier / 3-Tier Leaf-Spine 拓扑数学建模；详解基于 RFC 7938 的 eBGP Underlay 路由设计、ECMP 等价多路径五元组哈希极化（Hash Polarization）破除方案；全面剖析大二层 Overlay 核心技术：VXLAN 报文 MAC-in-UDP 封装（VNI 24-bit/Jumbo Frame 9000 MTU）与 MP-BGP EVPN 控制平面 Type-2/Type-3/Type-5 路由交换机理。</image:caption>
     </image:image>
   </url>
   <url>
@@ -243,6 +291,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/deepinfer-deepseek-recipe-architecture.png</image:loc>
+      <image:title>解密 DeepSeek 推理印钞机：DeepInfer 与 deepseek-recipe 从硅基地基到协议顶层的生产全栈拆解</image:title>
+      <image:caption>从底层芯片与通信物理地基，到算子内核、PD 极致分离拓扑、DSpark 动态投机解码、SWA 边界重放，再到 deepseek-recipe 协议中间层与百万亿 Token 商业印钞机经济学，全景剖析 DeepSeek 最新开源生产推理全栈。</image:caption>
     </image:image>
   </url>
   <url>
@@ -255,6 +305,22 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/deepseek-v4-kimi-k3-deployment-guide.png</image:loc>
+      <image:title>2026 DeepSeek-V4 与 Kimi K3 生产级部署实战指南：四机 32 卡拓扑、显存数学与踩坑排障血泪史</image:title>
+      <image:caption>深入解析 DeepSeek-V4-Pro (CSA+HCA) 与 Kimi K3 (KDA+MLA) 生产级多机部署全流程：涵盖四机 32 卡 / 八机 64 卡硬件拓扑、逐卡显存数学建模、六大生产踩坑排障实录（NUMA穿透、MoE路由倾斜、CUDAGraph伪OOM、PFC死锁）、Ray与KubeRay云原生实战。</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/distributed-rl-post-training-verl-colocation.png</image:loc>
+      <image:title>大模型后训练分布式强化学习架构实战：基于 verl 与 3D-HybridEngine 的训推混布、秒级重分片与长尾异步调度</image:title>
+      <image:caption>深度剖析百卡级大模型后训练 RL 系统架构：从 Qwen2.5-72B 显存与算力第一性原理账本出发，拆解 verl 3D-HybridEngine 秒级权重重分片、vLLM Sleep Mode 虚拟显存卸载、DAPO 与 Partial Rollout 长尾消除及多机实战配置。</image:caption>
     </image:image>
   </url>
   <url>
@@ -267,6 +333,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/docker-internals-namespace-cgroups-overlayfs.png</image:loc>
+      <image:title>Docker 内核第一性原理：Namespace 进程隔离、cgroups v2 资源配额与 OverlayFS 联合文件系统底层解密</image:title>
+      <image:caption>为什么说容器根本不是轻量级虚拟机，而是一个被限制了视界与资源的普通 Linux 进程？从第一性原理深度拆解 Docker 底层三大支柱：C 语言系统调用 clone() 与六大 Linux Namespace 进程视界隔离、cgroups v2 单根树统一资源配额与 OOM 机制、OverlayFS 联合挂载分层镜像与写时复制（CoW），并剖析 OCI、containerd 与 runc 调用链路。</image:caption>
     </image:image>
   </url>
   <url>
@@ -279,6 +347,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/docker-swarm-architecture-raft-routing-mesh.png</image:loc>
+      <image:title>轻量级集群编排：Docker SwarmKit 架构、Raft 分布式共识与 Ingress Routing Mesh 服务发现</image:title>
+      <image:caption>为什么在 Kubernetes 一统天下的今天，中小团队依然视 Docker Swarm 为最高效的生产利器？深度拆解 SwarmKit 的架构哲学：Manager 与 Worker 节点拓扑、内置 Raft 协议的分布式强一致状态机、VXLAN 驱动的跨主机 Overlay 覆盖网络，以及基于 IPVS 的 Ingress Routing Mesh 负载均衡与服务发现，全面剖析 Swarm 与 K8s 的工程权衡分水岭。</image:caption>
     </image:image>
   </url>
   <url>
@@ -286,11 +356,13 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/domestic-llm-comparison-2026/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/domestic-llm-comparison-2026/" />
-    <lastmod>2026-10-20</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/domestic-llm-comparison-2026.png</image:loc>
+      <image:title>2026 年 11 月国产前沿大模型工程选型：Qwen4-Max、Kimi K3.1 Pro、DeepSeek-V4 与 MiniMax M3.1 / GLM-5.3</image:title>
+      <image:caption>截至 2026 年 11 月 18 日的国产大模型架构与选型指南：对比 Qwen4-Max、Kimi K3.1 Pro、DeepSeek-V4-Pro / V4.1-Flash、MiniMax M3.1 Flash 与 GLM-5.3 的稀疏架构、同版本基准、原生量化格式与生产验收方案。</image:caption>
     </image:image>
   </url>
   <url>
@@ -303,6 +375,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding.png</image:loc>
+      <image:title>局域网企业级基建：VLAN 划分 (802.1Q)、DHCP 动态分配与 NAT 端口映射机制</image:title>
+      <image:caption>为什么一台物理交换机能够切分成几十个互不干扰的虚拟局域网？深度拆解现代企业局域网三大核心基建：从广播风暴危害到 IEEE 802.1Q 帧标签结构（4 字节 Tag、12 位 VID、PCP 优先级）；全面理清 Access 口、Trunk 口与 PVID 剥离/插入全流程，对比单臂路由与三层交换机 SVI 虚接口；深入剖析 DHCP 动态主机配置协议 DORA 四步握手与跨网段 Relay 中继机理；并手把手揭秘 NAPT（网络地址端口转换）、SNAT、DNAT 端口映射与 Linux conntrack 连接跟踪表物理运转真相。</image:caption>
     </image:image>
   </url>
   <url>
@@ -315,6 +389,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/environment-scaling-agent-guide.png</image:loc>
+      <image:title>告别单纯 Prompt：2026 年“环境缩放 (Environment Scaling)”如何重塑自主 Agent</image:title>
+      <image:caption>解释 Agent 环境缩放的任务分布、状态复位与独立验收，正确解读 GLM-5.3 终端任务成绩，并演示带超时清理的容器执行接口。</image:caption>
     </image:image>
   </url>
   <url>
@@ -327,6 +403,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/fine-tuning-guide.png</image:loc>
+      <image:title>大模型微调全流程指南：底层工作原理、高价值落地用例与生产实战</image:title>
+      <image:caption>深入剖析大模型微调底层工作原理（交叉熵损失与 LoRA 机制），全景盘点 5 大企业级高 ROI 微调业务场景，对比 Full Fine-Tuning、LoRA 与 QLoRA，提供从数据清洗到 vLLM 部署的完整规范。</image:caption>
     </image:image>
   </url>
   <url>
@@ -339,6 +417,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/flashattention-flashinfer-kernel-evolution.png</image:loc>
+      <image:title>Attention 算子加速史：从 FlashAttention-1/2/3 的 SRAM Tiling 到 FlashInfer 统一异构核心</image:title>
+      <image:caption>为什么标准自注意力计算会随序列长度呈平方级拖垮显存带宽？深度解析现代 Attention 算子加速史：从 FlashAttention-1 的 SRAM 分块分片（Tiling）与 Online Softmax 动态局部重规约，到 FlashAttention-2 循环重构与 Warp 零通信调度，再到 FlashAttention-3 独占 Hopper 架构的 TMA 硬件异步搬运与 WGMMA 异步流水线。最后全面剖析专为大模型在线服务而生的 FlashInfer，揭秘其如何凭借 Paged KV Cache 原生寻址与 Split-K 解码并行，终结长文本 Decode 算力饥饿。</image:caption>
     </image:image>
   </url>
   <url>
@@ -351,6 +431,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/inference-engines-core-architecture-internals.png</image:loc>
+      <image:title>四大主流生产级推理引擎架构横评与调度器源码解密：vLLM v1 vs SGLang vs TensorRT-LLM vs llama.cpp</image:title>
+      <image:caption>从多进程异步隔离架构到 C++ 算子深度融合：深度拆解开源世界四大顶级推理底座的源码设计哲学。对比 vLLM v1 多进程 EngineCore 与统一零开销调度器、SGLang RadixAttention 树状层级执行环、TensorRT-LLM 原生算子深度融合与 In-Flight Batching，以及 llama.cpp 端侧无依赖极限定量化运行时，奉上生产级全景技术选型指南。</image:caption>
     </image:image>
   </url>
   <url>
@@ -363,6 +445,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/inference-roofline-prefill-decode.png</image:loc>
+      <image:title>从 model.generate() 说起：Roofline 模型、Prefill 与 Decode 的物理撕裂</image:title>
+      <image:caption>为什么 GPU 坐拥数百 TFLOPS 恐怖算力，跑大模型推理时 Tensor Core 利用率却常年低于 5%？深度解构自回归生成的双阶段物理本质，以严谨的 Roofline 模型推导 Prefill 算力受限与 Decode 访存受限的数学鸿沟，揭开 TTFT 与 TPOT 指标撕裂的底层根因。</image:caption>
     </image:image>
   </url>
   <url>
@@ -375,6 +459,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/infiniband-architecture-hardware-rates-credit-flow-subnet-manager.png</image:loc>
+      <image:title>InfiniBand 架构第一性原理：物理链路速率演进、Credit-Based 链路级流控与子网管理器 (Subnet Manager) 全局编排</image:title>
+      <image:caption>为什么在 2026 年全球顶尖的万卡 AI 算力集群与前沿超算中，原生 InfiniBand 依然牢牢统治着智算中心的核心动脉？深度拆解 InfiniBand 分层协议栈与物理层演进史：从 EDR 100G、HDR 200G、NDR 400G（Quantum-2）到 2026 规模量产的 XDR 800G（Quantum-X800/ConnectX-8）；剖析链路层第一性原理：基于 Flit 的 Credit-Based 信用度硬件级流控与 Cut-Through 直通交换纳秒级低时延机理；解密控制中枢子网管理器（Subnet Manager, OpenSM）全网拓扑发现、GUID/LID/LMC 动态编排与 LFT 线性转发表下发控制全流程。</image:caption>
     </image:image>
   </url>
   <url>
@@ -387,6 +473,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp.png</image:loc>
+      <image:title>InfiniBand 智算集群组网实战：Fat-Tree 胖树拓扑、Rail-Optimized 轨道优化设计、自适应路由 (AR) 与 SHARP 网内计算</image:title>
+      <image:caption>如何将成千上万台配备 8 卡 GPU 的服务器用万根光纤编织成一张无阻塞、零死锁的高性能互联网络？深入剖析万卡 AI 智算中心核心拓扑：从 1985 年 Leiserson 胖树（Fat-Tree）数学模型、端口数 k 与 2-Tier/3-Tier 最大节点数严格推导，到专为 DGX H100/H200/B200 量身定制的 Rail-Optimized（轨道优化）八独立平面物理组网；深入解析 FTree 与 Up/Down 算法如何通过禁止“先下后上”破除信用死锁环路；并解密自适应路由（Adaptive Routing）与 SHARP 交换机网内规约计算如何将 All-Reduce 集合通信带宽效率提升 2 倍。</image:caption>
     </image:image>
   </url>
   <url>
@@ -399,6 +487,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/infiniband-production-deployment-opensm-ofed-nccl-tuning.png</image:loc>
+      <image:title>InfiniBand 生产级集群落地运维与 NCCL 极限调优：OFED 驱动、OpenSM 主备高可用、ibdiagnet 巡检与 GPUDirect RDMA 实战</image:title>
+      <image:caption>从网络架构设计到万卡 AI 智算中心裸金属物理落地，工程师必须攻克哪些工程深水区？全景拆解 InfiniBand 生产落地实战：Mellanox OFED / DOCA 驱动栈与固件管理工具（flint/mlxlink）；搭建基于 OpenSM 的 Master/Standby 主备高可用子网管理架构；深入实战 ibdiagnet 全网巡检，秒级定位物理层 Symbol Error 脏光纤与降速协商链路；并深入 GPU 通信最底层，实战验证 GPUDirect RDMA（nvidia-peermem 驱动）与 NCCL 核心环境变量（NCCL_IB_HCA / NCCL_NET_GDR_LEVEL=5）极限压测调优。</image:caption>
     </image:image>
   </url>
   <url>
@@ -411,6 +501,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/ip-addressing-subnet-mask-cidr-default-gateway-routing.png</image:loc>
+      <image:title>IP 寻址全景数学推导：十进制/二进制转换、子网掩码 (Subnet Mask) 计算、CIDR 划分与默认网关第一性原理</image:title>
+      <image:caption>为什么有了物理 MAC 地址，全世界的计算机依然必须依赖 IP 地址通信？从零基础透视网络层第一性原理：IPv4 32 位二进制与点分十进制的数学本质；深度剖析子网掩码（Subnet Mask）核心机理，手把手推导二进制按位与（Bitwise AND）运算，以 192.168.1.130/26 为例推演网络地址、广播地址与有效主机 IP 范围（2^H - 2 减二真相）；详解 A/B/C 类地址历史缺陷、CIDR 无类别域间路由与私有保留网段；并彻底揭秘跨网段通信时默认网关（Default Gateway）的‘解封换壳’运转本质。</image:caption>
     </image:image>
   </url>
   <url>
@@ -423,6 +515,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/k8s-application-networking-grpc-service-mesh-zero-downtime.png</image:loc>
+      <image:title>业务软件在 K8s 上的网络架构实战：gRPC 长连接负载均衡陷阱、Service Mesh 与零停机平滑切流时序</image:title>
+      <image:caption>为什么我们的微服务搬上 Kubernetes 后，滚动发布总会出现偶发 502 报错，gRPC 流量更是死死钉在某一个 Pod 上完全不均衡？深度拆解业务软件在 K8s 上的网络工程实战：HTTP/2 多路复用导致四层 ClusterIP 负载均衡彻底失效的底层根因与 Headless Service / Envoy 网格解法；MaxConnectionAge、JVM DNS TTL 缓存机制与指数退避重连风暴四大生产陷阱；完整复盘 Pod 销毁与 EndpointSlice 异步切流的时序竞态冲突；并给出从 preStop 缓冲、平滑连接排空到 readinessGates 的生产级零停机发布实践。</image:caption>
     </image:image>
   </url>
   <url>
@@ -435,6 +529,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/k8s-control-plane-declarative-reconciliation.png</image:loc>
+      <image:title>Kubernetes 控制平面深度解密：声明式 API、etcd 状态机、调度器与控制器调谐循环 (Reconciliation Loop)</image:title>
+      <image:caption>为什么声明式 API 与控制理论能够成为现代云计算与分布式系统的终极事实标准？深度剖析 Kubernetes 控制平面架构底层：kube-apiserver 请求准入控制流水线（认证、鉴权、双准入 Webhook）、etcd v3 底层 MVCC 与 Watch 机制、kube-scheduler 过滤与打分双阶段调度、Informer 架构（Reflector、DeltaFIFO、Indexer、WorkQueue）与控制器水平触发调谐循环（Reconciliation Loop）工程机理。</image:caption>
     </image:image>
   </url>
   <url>
@@ -447,6 +543,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd.png</image:loc>
+      <image:title>对 K8s 控制面动刀：WatchCache 缓存穿透机理、Aggregated APIServer 聚合扩展、APF 洗牌分片流控与万级节点 etcd 调优</image:title>
+      <image:caption>为什么当自定义资源数量突破数百万级时，CRD 会直接把 etcd 撑爆导致整个 Kubernetes 集群瘫痪？深度拆解对 Kubernetes 控制面中枢的深水区改造：剖析 kube-apiserver 内部 WatchCache 环形缓冲区与 resourceVersion 三大语义机制；构建独立的 Aggregated APIServer（聚合 API 服务器）实现后端存储旁路解耦；深入剖析 API Priority and Fairness（APF）洗牌分片流控数学模型如何化解并发流量雪崩；并全面公开支撑上万节点超大规模集群的 etcd 物理双盘隔离与事件分库极限方案。</image:caption>
     </image:image>
   </url>
   <url>
@@ -459,6 +557,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/k8s-database-storage-local-nvme-tuning-fencing.png</image:loc>
+      <image:title>生产级分布式存储与数据库落地：Local NVMe 物理直通、RocksDB/WAL 刷盘调优与 Fencing 防脑裂架构</image:title>
+      <image:caption>为什么绝大多数互联网大厂在将核心数据库搬上 Kubernetes 时，坚决抛弃网络云盘而选用 Local NVMe？深度拆解生产级分布式存储与数据库在 K8s 上的工程落地：从云盘网络跳步瓶颈到 Local PV 裸盘物理直通架构；XFS 格式化参数与 Linux Page Cache 脏页积压引发 cgroups v2 OOM 崩溃的底层剖析；RocksDB 与 MySQL WAL Direct I/O、fdatasync 调优；以及分布式数据库最可怕的物理灾难 —— 节点网络分区脑裂与 Node Fencing / IPMI STONITH 隔离防护硬核防线。</image:caption>
     </image:image>
   </url>
   <url>
@@ -471,6 +571,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/k8s-gpu-operator-ai-inference-scheduling.png</image:loc>
+      <image:title>2026 AI 智算调度终局：Kubernetes GPU Operator、MIG 分割、拓扑感知调度与 vLLM/SGLang 集群弹性扩缩容</image:title>
+      <image:caption>为什么传统以 CPU/内存为核心的调度体系在大模型时代全面失效？深入拆解 2026 AI 时代 Kubernetes 智算基础设施调度架构：NVIDIA GPU Operator 驱动与运行时全自动纳管链路、MIG（多实例 GPU）硬件物理分割与时间切片方案；Kubelet Topology Manager 与 DRA（动态资源分配）如何解决跨 NUMA 节点与 NVLink 互联性能断崖；并实战构建基于 P/D 分离、KV Cache 负载指标与 KEDA 的生产级 vLLM / SGLang 大模型推理集群弹性扩缩容架构。</image:caption>
     </image:image>
   </url>
   <url>
@@ -483,6 +585,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/k8s-networking-cni-cilium-ebpf-gateway-api.png</image:loc>
+      <image:title>Kubernetes 网络模型全景：CNI 规范演进、Calico BGP、Cilium eBPF 与 Gateway API 架构解密</image:title>
+      <image:caption>为什么说容器网络是 Kubernetes 中最复杂、最容易踩坑的深水区？深度拆解云原生网络四大公理与 CNI（Container Network Interface）插件规范底层执行机理；全面对比 Flannel VXLAN 覆盖网络与 Calico 纯三层 (Layer-3) BGP 路由性能与开销；深入解密 Cilium 如何利用 Linux 内核 eBPF 与 sockops 套接字重定向彻底革新 kube-proxy 与 iptables 性能瓶颈；并剖析面向未来的 Gateway API 角色分离与流量治理架构。</image:caption>
     </image:image>
   </url>
   <url>
@@ -495,6 +599,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/k8s-operator-pattern-kubebuilder-crd.png</image:loc>
+      <image:title>Kubernetes 扩展核心：Operator 模式、CRD 自定义资源与 KubeBuilder 生产级实战</image:title>
+      <image:caption>为什么说 Operator 模式是 Kubernetes 能够统治整个现代基础架构软件生态的终极杀手锏？深度拆解 Operator 模式的核心哲学：如何将资深 SRE 的运维专家经验编码为代码；解密 CRD（自定义资源定义）在 apiextensions-apiserver 中的注册机理与 Status/Scale 子资源隔离；深入剖析 Controller-Runtime 与 KubeBuilder 生产级脚手架架构（Manager、Cache、Split Client、Reconcile 调谐与 Finalizer 安全清理机制），并通过完整的 Go 代码实现一个高可用分布式中间件 Operator。</image:caption>
     </image:image>
   </url>
   <url>
@@ -507,6 +613,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/k8s-runtime-nri-kata-gvisor-kernel-tuning.png</image:loc>
+      <image:title>对 K8s 节点与运行时动刀：PLEG 瓶颈突破、NRI 节点资源接口插件、Kata/gVisor 多安全沙箱运行时与 cgroups v2 调优</image:title>
+      <image:caption>为什么共享宿主机内核的传统 runc 容器无法抵御零日漏洞逃逸，物理节点又频频陷入 PLEG is not healthy 假死超时？深度解密对 Kubernetes 工作节点（Worker Node）与容器运行时的深水区内核改造：剖析 Kubelet syncLoop 核心主循环与 Evented PLEG 流式事件驱动革新；深入 containerd/CRI-O 原生 NRI（Node Resource Interface）插件架构并编写 Go 代码实现动态 CPU 绑核与 OCI 拦截；全景对比微虚拟机 Kata Containers 与用户态内核沙箱 gVisor 的底层架构与性能损耗；并掌握通过 RuntimeClass、安全 Sysctl 与 cgroups v2 PSI/memory.high 实施精细化内核防护。</image:caption>
     </image:image>
   </url>
   <url>
@@ -519,6 +627,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/k8s-scheduling-framework-custom-plugin-gang-scheduling.png</image:loc>
+      <image:title>对 K8s 调度器动刀：基于 Scheduling Framework 插件架构定制开发、Gang Scheduling 批处理调度与 Descheduler 重调度</image:title>
+      <image:caption>为什么 Kubernetes 默认调度器在面对大规模 AI 训练与分布式批处理时会陷入资源死锁？深度解密如何对 Kubernetes 调度中枢进行二次开发：剖析官方 Scheduling Framework 调度框架 12 大核心扩展点内部机理与 CycleState 状态共享；深入拆解 Volcano 核心 DRF（主导资源公平调度）数学模型与 PodGroup 状态机；实战编写一个基于 Go 语言的 Gang Scheduling（成组调度 / All-or-Nothing）自定义调度器插件；并深入解析如何利用 Descheduler 在生产集群中实施安全的二次动态重平衡。</image:caption>
     </image:image>
   </url>
   <url>
@@ -531,6 +641,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/k8s-storage-csi-statefulset-deep-dive.png</image:loc>
+      <image:title>Kubernetes 有状态存储中枢：CSI 插件规范、动态 PV/PVC 供给与 StatefulSet 拓扑保证</image:title>
+      <image:caption>为什么在 Kubernetes 上运行有状态数据库曾被视为运维禁区？深度拆解云原生存储体系的底层设计：StorageClass、PV 与 PVC 三层解耦模型与动态存储供给机制；CSI（Container Storage Interface）插件架构四阶段生命周期（Provision、Attach、Stage、Mount）与底层 Linux 挂载机理；StatefulSet 如何通过 Headless Service 确定性 DNS 与 volumeClaimTemplates 保证分布式数据库的拓扑唯一性与数据持久性。</image:caption>
     </image:image>
   </url>
   <url>
@@ -538,11 +650,13 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/" />
-    <lastmod>2026-10-20</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/kimi-kda-deepseek-mla-architecture.png</image:loc>
+      <image:title>Kimi KDA、DeepSeek MLA 与 V4 CSA/HCA：长上下文缓存原理与显存估算</image:title>
+      <image:caption>严谨拆解 Kimi Delta Attention (KDA) 门控增量循环状态、DeepSeek MLA 潜变量缓存与 V4 CSA/HCA 序列稀疏压缩，结合 Kimi K3/K3.1 混合层结构推导显存估算公式与可复现测量规范。</image:caption>
     </image:image>
   </url>
   <url>
@@ -555,6 +669,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/linux-kernel-networking-napi-ring-buffer-skbuff-xdp.png</image:loc>
+      <image:title>Linux 内核网络子系统硬核剖析：从网卡驱动、NAPI 机制、Ring Buffer 到 eBPF XDP 极速转发</image:title>
+      <image:caption>一个以太网电脉冲是如何最终变成应用程序内存中的数据的？深度剖析 Linux 操作系统内核网络协议栈全流程：从硬件网卡 RX Ring Buffer 描述符、PCIe DMA 零 CPU 搬运，到硬中断触发、NAPI 混合轮询机制与 ksoftirqd 软中断调度；全景透视 Linux 内核最核心的数据结构 sk_buff 指针拓扑与零拷贝内存流转；详解多核网卡 RSS 多队列与 RPS/RFS CPU 亲和性调优；并深入技术最前沿，剖析 eBPF XDP（eXpress Data Path）如何在网卡驱动层实现千万级 PPS 极速包转发与防 DDoS 机制。</image:caption>
     </image:image>
   </url>
   <url>
@@ -567,6 +683,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/llm-evaluation-guide.png</image:loc>
+      <image:title>拒绝榜单刷分：如何构筑契合业务的 LLM 评估体系</image:title>
+      <image:caption>不再迷恋堆砌代码，建立大模型评估思维才是核心。本文深度剖析 LLM-as-a-Judge 的底层偏差、Ragas 算分的数学机制，以及如何用概率思维重塑 CI/CD 防线。</image:caption>
     </image:image>
   </url>
   <url>
@@ -579,6 +697,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/loop-engineering.png</image:loc>
+      <image:title>深度解析 AI Agent 架构演进：从 Prompt 到 Loop 工程</image:title>
+      <image:caption>深度解析 AI Agent 架构演进，探讨从 Prompt、Context、Harness 到 Loop 工程的四层控制面外推，以及 ReAct 架构的四大顽疾。</image:caption>
     </image:image>
   </url>
   <url>
@@ -591,6 +711,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/mcp-guide.png</image:loc>
+      <image:title>MCP 协议深度解析：AI 的「USB-C 接口」</image:title>
+      <image:caption>从架构原理到实战开发，完整解析 Model Context Protocol。含 Python SDK 实战、安全机制、生态对比。</image:caption>
     </image:image>
   </url>
   <url>
@@ -603,6 +725,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/mha-gqa-mla-matrix-absorption-inference-engine.png</image:loc>
+      <image:title>模型架构反哺推理系统：从 MHA/GQA 到 DeepSeek MLA 矩阵吸收与显存极简主义</image:title>
+      <image:caption>为什么无论工程系统如何优化，长上下文推理依然会被海量 KV Cache 逼入绝境？深度解构从传统 MHA 到 GQA 分组折中，再到 DeepSeek 开创性 MLA（多头潜变量注意力）的技术演进。全面剖析低秩潜变量投影、解耦 RoPE 旋转位置编码，以及推理引擎在自回归 Decode 阶段借助矩阵吸收（Matrix Absorption）将 90% 以上多头张量物理凭空抹除的底层数学机理与 FlashMLA 工程落地。</image:caption>
     </image:image>
   </url>
   <url>
@@ -610,11 +734,13 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/model-comparison-2026/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/model-comparison-2026/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/model-comparison-2026/" />
-    <lastmod>2026-10-20</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/model-comparison-2026.png</image:loc>
+      <image:title>2026 年 11 月前沿大模型横评：GPT-6.2 Astra vs Claude Fable 5.2 vs Gemini 4 Carbon</image:title>
+      <image:caption>截至 2026 年 11 月 18 日的商用前沿大模型工程选型指南：对比 Claude Fable 5.2、GPT-6.2 Astra/Sol、Gemini 4 Carbon/Hydrogen 与 Muse Wonder 的 API 规格、定价梯度、SDK 调用与有效成本公式。</image:caption>
     </image:image>
   </url>
   <url>
@@ -627,6 +753,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/moe-expert-parallelism-inference-engine.png</image:loc>
+      <image:title>稀疏大模型 MoE 推理内核：专家并行 (EP)、动态路由门控与 All-to-All 通信重叠</image:title>
+      <image:caption>为什么 671B 参数的 DeepSeek-V3 每次解码仅激活 37B 参数，吞吐却常受制于跨节点网络？深度剖析稀疏大模型 MoE 推理内核：从动态门控与无辅助损失负载均衡，到专家并行 (EP) All-to-Allv 通信瓶颈，再到 CUTLASS Grouped GEMM 算子融合与 DualPipe 通信计算重叠终极优化。</image:caption>
     </image:image>
   </url>
   <url>
@@ -639,6 +767,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/multi-agent-collaboration-and-concurrency.png</image:loc>
+      <image:title>多 Agent 协作系统中的通信协议与并发控制实践</image:title>
+      <image:caption>用 Python asyncio 实现多 Agent 邮箱与消息总线，演示独立消息副本、投递背压、Actor 停机、CAS 文档提交和令牌桶限流。</image:caption>
     </image:image>
   </url>
   <url>
@@ -651,6 +781,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/multimodal-guide.png</image:loc>
+      <image:title>多模态大模型入门指南</image:title>
+      <image:caption>探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解能力，附带图像分析、视频理解等实际应用案例。</image:caption>
     </image:image>
   </url>
   <url>
@@ -663,6 +795,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/network-fundamentals-bits-cables-hubs-switches-mac-arp.png</image:loc>
+      <image:title>从零认识计算机网络：比特信号、网线介质、集线器冲突域到交换机 MAC 寻址第一性原理</image:title>
+      <image:caption>如果对计算机网络一无所知，该如何建立最直观、最坚实的底层认知？从零剖析网络通信第一性原理：计算机如何通过高低电平与光脉冲表示 0 和 1；双绞线为什么要‘拧成麻花’抗干扰、单模光纤与多模光纤的物理特性；集线器（Hub）时代全网共享信道、冲突域（Collision Domain）与 CSMA/CD 载波侦听退避算法；深度揭秘二层交换机（Switch）如何通过 MAC 地址表（CAM）自学习与以太网帧（Frame）彻底消灭冲突域；并详述 ARP 广播请求、单播应答、免费 ARP 与 ARP 欺骗防御机制。</image:caption>
     </image:image>
   </url>
   <url>
@@ -675,6 +809,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/network-layer-transport-layer-ip-routing-tcp-state-machine.png</image:loc>
+      <image:title>网络层与传输层精解：IP 路由选路、CIDR、TCP 三次握手/四次挥手状态机与滑动窗口第一性原理</image:title>
+      <image:caption>为什么在不可靠的不可信物理网络上，能够构建出绝对可靠、按序到达的数据流？深度拆解网络层与传输层核心机理：从 IPv4/IPv6 报文结构、CIDR 掩码划分到 Linux 内核最长前缀匹配（LPM）与 FIB/RIB 路由表查找；全景剖析 TCP 经典的 11 种状态变迁机理，深入解析三次握手防串包原理、SYN Flood 与 SYN Cookies 防御、四次挥手与 TIME_WAIT 状态设计哲学；并从第一性原理推导滑动窗口流量控制、零窗口探测与 TCP_NODELAY 生产级网络调优。</image:caption>
     </image:image>
   </url>
   <url>
@@ -687,6 +823,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/nvidia-gpu-package-architecture.png</image:loc>
+      <image:title>NVIDIA GPU 驱动栈全视野解析：从内核模块到容器运行时的包关系图谱</image:title>
+      <image:caption>深度拆解 Linux 下 NVIDIA GPU 烦杂的驱动包结构。本文为您详解 nvidia-dkms、libnvidia、nvidia-utils 与 driver metapackage 之间的五层架构，并按「Docker 模型服务器」、「个人桌面」、「DGX 算力集群」等核心场景提供企业级安装最佳实践和避坑指南。</image:caption>
     </image:image>
   </url>
   <url>
@@ -699,6 +837,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/pagedattention-memory-virtualization.png</image:loc>
+      <image:title>显存虚拟化革命：PagedAttention 内存池管理与显存碎片终结</image:title>
+      <image:caption>为什么传统大模型推理会浪费 60%~80% 的 GPU 显存？深度剖析 vLLM 开创的 PagedAttention 核心机制，解构逻辑块到物理块映射、动态显存池生命周期、Copy-on-Write 分叉复用与 CUDA 非连续访存内核，彻底终结显存碎片化顽疾。</image:caption>
     </image:image>
   </url>
   <url>
@@ -711,6 +851,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/pd-disaggregation-distributed-kv-cache.png</image:loc>
+      <image:title>P/D 分离 (Prefill-Decode Disaggregation) 架构：计算与访存解耦、RDMA 分布式 KV Cache 传输与集群池化调度</image:title>
+      <image:caption>为什么在 128k 超长上下文与长思考链时代，单机混合部署 Prefill 与 Decode 必然走向性能崩溃？深度剖析 P/D 分离 (Disaggregated Serving) 架构：从计算密集与访存密集的空间物理隔离、GQA 与 DeepSeek MLA 跨节点传输带宽推导，到 GPUDirect RDMA 单边零拷贝、全局 KV 池化调度与 P:D 节点最优比例数学建模。</image:caption>
     </image:image>
   </url>
   <url>
@@ -723,6 +865,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/prefix-caching-radix-attention-internals.png</image:loc>
+      <image:title>前缀缓存架构演进：从 Hash 块级寻址到 SGLang RadixAttention 树状缓存与动态驱逐</image:title>
+      <image:caption>为什么每次多轮对话或 Agent 交互，GPU 都要重复做成千上万次无意义的长文本前向计算？深度剖析前缀缓存（Prefix Caching）的核心原理，从 vLLM 的链式 Hash 块级寻址与边界惩罚，到 SGLang 独创的 RadixAttention 树状动态匹配、节点分裂与 LRU 叶子驱逐机制，彻底看透大模型状态复用的底层工程极限。</image:caption>
     </image:image>
   </url>
   <url>
@@ -735,6 +879,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/prompt-engineering-guide.png</image:loc>
+      <image:title>大模型提示工程实践指南</image:title>
+      <image:caption>深入探讨如何设计高效的提示词，提升大模型的输出质量与准确性。涵盖 Few-Shot、Chain-of-Thought、ReAct 等核心技巧与实战案例。</image:caption>
     </image:image>
   </url>
   <url>
@@ -747,6 +893,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/quantization-hands-on-guide.png</image:loc>
+      <image:title>大模型量化实战手册：从零开始，四条路线全覆盖</image:title>
+      <image:caption>告别理论焦虑，手把手教你大模型量化全流程实操：涵盖 GGUF 本地运行（Qwen3-8B-Q4_K_M.gguf、llama.cpp、Ollama）、AWQ 与 GPTQ 动手压缩，以及 vLLM FP8 生产部署与 QLoRA 微调，每条路线均附完整代码。</image:caption>
     </image:image>
   </url>
   <url>
@@ -759,6 +907,22 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/quantization-precision-guide.png</image:loc>
+      <image:title>大模型量化精度全景图：从 FP32 到 1-bit，精度损失到底有多大？</image:title>
+      <image:caption>区分 FP8、INT8、INT4、NF4 的权重、激活与 KV 量化，解释显存预算、加速条件和校准差异，并给出准确率、PPL 与业务验收的可复现评估方法。</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/articles/rack-scale-superpod-nvl72-nccl-collectives/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/rack-scale-superpod-nvl72-nccl-collectives/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/rack-scale-superpod-nvl72-nccl-collectives/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/rack-scale-superpod-nvl72-nccl-collectives/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/zh/rack-scale-superpod-nvl72-nccl-collectives.png</image:loc>
+      <image:title>机柜级超节点与集合通信全栈剖析：从 GB200/GB300 NVL72 铜缆背板、昇腾全光互联到 NCCL NVLS 与 MoE All-to-All 极限调优</image:title>
+      <image:caption>深度拆解 GB200/GB300 NVL72 铜缆背板与昇腾 CloudMatrix 384 全光超节点拓扑，严格推导 NCCL busbw 数学模型与 NVLS 网内多播规约，剖析 DeepEP IBGDA All-to-All 内核与 MNNVL 压测排障。</image:caption>
     </image:image>
   </url>
   <url>
@@ -771,6 +935,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/rag-in-practice.png</image:loc>
+      <image:title>RAG 检索增强生成实战：企业级检索策略与高并发工程最佳实践</image:title>
+      <image:caption>从向量数据库选型到 Embedding 策略，深度剖析 Naive RAG、混合检索、HyDE 与 GraphRAG 架构选型矩阵，总结 7 大企业级检索增强生成最佳实践，含 Pinecone 与 Weaviate 性能实测。</image:caption>
     </image:image>
   </url>
   <url>
@@ -783,6 +949,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless.png</image:loc>
+      <image:title>RDMA 高性能通信基石：Kernel Bypass、Zero-Copy、Queue Pair 机制与无损以太网 RoCEv2 (PFC/ECN) 全景透视</image:title>
+      <image:caption>为什么在 400G/800G 网络时代，传统的 TCP/IP 协议栈彻底沦为算力黑洞？深度拆解 RDMA（远程直接内存访问）第一性原理：Kernel Bypass（内核旁路）、Zero-Copy（硬件级零拷贝）与内存注册（Memory Registration/L_Key/R_Key）；剖析 ibverbs 核心架构：Queue Pair（SQ/RQ）、完成队列（CQ）以及双边操作（Send/Recv）与单边操作（RDMA Read/Write/Atomic）的微秒级机理；解密无损以太网 RoCEv2（UDP 端口 4791）如何通过 PFC 802.1Qbb 八优先级流控反压与 ECN/DCQCN 拥塞控制闭环解决丢包崩溃与死锁难题。</image:caption>
     </image:image>
   </url>
   <url>
@@ -795,6 +963,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/reasoning-test-time-compute-inference-future.png</image:loc>
+      <image:title>长思维链 (Reasoning / Test-Time Compute) 与大集群推理系统的未来终局</image:title>
+      <image:caption>当自回归思考步长从数百 Token 飙升至 128k 深度反思，大模型推理系统迎来了颠覆性的物理拐点。深度探讨长思考链 (Test-Time Compute) 时代的系统级重构：KV Cache 爆炸式显存雪崩对抗、树状搜索 (MCTS) 与投机解码协同调度、基于强化学习的动态思考预算治理，以及跨介质多级分层 (SRAM/HBM/CXL/NVMe-oF) 全球 KV 存储池的未来终局。</image:caption>
     </image:image>
   </url>
   <url>
@@ -807,6 +977,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/sglang-vs-vllm-architecture.png</image:loc>
+      <image:title>SGLang 与 vLLM 架构对比：前缀缓存、结构化输出与评测方法</image:title>
+      <image:caption>比较 SGLang RadixAttention 与 vLLM APC 的前缀复用机制、结构化输出和部署基线，并给出控制变量、冷暖缓存及延迟吞吐的可复现评测方法。</image:caption>
     </image:image>
   </url>
   <url>
@@ -819,6 +991,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/skills-guide.png</image:loc>
+      <image:title>Skills 深度解析：给 AI 编程助手装上「专业大脑」</image:title>
+      <image:caption>从核心原理到跨平台实战，完整解析 AI 编程助手的 Skills 系统。涵盖 SKILL.md 机制、六大平台对比、实战编写指南与最佳实践。</image:caption>
     </image:image>
   </url>
   <url>
@@ -831,6 +1005,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/speculative-decoding-eagle-guide.png</image:loc>
+      <image:title>投机采样 (Speculative Decoding) 生产实操：从 Draft Model 到 EAGLE-3 动态推测树实现 3x~5x 无损加速</image:title>
+      <image:caption>大模型解码阶段的核心物理瓶颈是什么？全面解密投机采样（Speculative Decoding）的数学无损证明、拒绝采样检验机制，深入剖析从双模型投机、Medusa 到清华开源爆款 EAGLE-2/3 动态自适应推测树的架构演进，并提供在 vLLM 与 SGLang 中开启生产级 3x~5x 加速的实操配置。</image:caption>
     </image:image>
   </url>
   <url>
@@ -843,6 +1019,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/tcp-congestion-control-reno-cubic-bbr-quic-http3.png</image:loc>
+      <image:title>TCP 拥塞控制演进史与高性能传输：从 Reno、Cubic 到 BBR 数学模型，以及 HTTP/2 到 HTTP/3 (QUIC) 协议栈革命</image:title>
+      <image:caption>为什么滑动窗口能防冲垮对端内存，却防不住互联网骨干路由器的崩溃？深度剖析拥塞控制三十年演进史：从基于丢包的经典 AIMD、Reno 状态机、Bufferbloat（缓冲区膨胀）到 Linux 默认 Cubic 的三次多项式数学推导；深入解密 Google BBR 基于最大交付率与最小往返时延的瓶颈物理建模（BtlBw/RTprop/Pacing Rate）；并对比分析从 HTTP/1.1、HTTP/2 多路复用线头阻塞（HoL Blocking）到基于 UDP 的 HTTP/3 (QUIC) 零 RTT 握手与连接迁移协议栈大一统革命。</image:caption>
     </image:image>
   </url>
   <url>
@@ -855,6 +1033,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/test-time-compute-grpo.png</image:loc>
+      <image:title>推理时扩展 (Test-Time Compute) 与 GRPO 强化学习实战：从 PPO 到无 Critic 策略优化</image:title>
+      <image:caption>深入剖析从预训练 Scaling Law 向推理时算力扩展 (Test-Time Scaling) 的范式转移。全面拆解 DeepSeek-R1 核心的 GRPO 组相对策略优化数学推导、无 Critic 架构优势、长思维链自我反思涌现机制，并提供完整的极简实战代码。</image:caption>
     </image:image>
   </url>
   <url>
@@ -867,6 +1047,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/transport-bridge-dns-sockets-ports-udp-vs-tcp.png</image:loc>
+      <image:title>应用层与传输层枢纽：DNS 解析全流程、Socket 套接字本质与 TCP/UDP 核心对比</image:title>
+      <image:caption>当你在浏览器敲下网址并回车时，数据到底是如何精准找到目标机器并钻进指定应用程序的？深度拆解应用层与传输层的衔接纽带：全景透视 DNS 树状解析体系（全球 13 组逻辑根域名服务器 Anycast 任播、TLD 顶级域、权威解析与递归/迭代查询机理）；从第一性原理推导端口（Port）与操作系统 Socket（套接字）本质，解密单台服务器单个 80 端口如何依靠五元组轻松承载百万并发长连接；并全面对比传输层双子星：UDP 8 字节极简报头与 TCP 20 字节可靠字节流的设计哲学分野。</image:caption>
     </image:image>
   </url>
   <url>
@@ -879,6 +1061,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/zh/vllm-serving-guide.png</image:loc>
+      <image:title>vLLM 在线推理服务实战：从架构原理到 Token 计费，一文搞定生产部署</image:title>
+      <image:caption>深入浅出解析 vLLM 核心架构（PagedAttention、连续批处理、APC 前缀缓存、推测解码），面向在线推理服务场景，手把手教你搭建 OpenAI 兼容 API、调优性能参数、搭建 Token 计费体系。附完整 Docker 部署方案与 Prometheus 监控配置。</image:caption>
     </image:image>
   </url>
   <url>
@@ -886,7 +1070,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -895,7 +1079,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/about/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/about/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/about/" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -904,7 +1088,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -918,6 +1102,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/advanced-agent-tool-use-and-function-calling.png</image:loc>
+      <image:title>Advanced Tool Use in Agent Architecture: Dynamic Discovery, Sandboxing, and Self-Healing Recovery</image:title>
+      <image:caption>Implement dynamic tool retrieval, MCP initialization and pagination, gVisor container execution, cleanup after timeouts, and bounded recovery with Python examples.</image:caption>
     </image:image>
   </url>
   <url>
@@ -930,6 +1116,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/agent-loop-state-machine.png</image:loc>
+      <image:title>Agentic Loops &amp; State Machine Design: From ReAct to Deterministic Control Flows</image:title>
+      <image:caption>Why prompt chaining and unconstrained ReAct loops fail in production AI systems. A deep architectural dissection of agent failure modes, Finite State Machine (FSM) graph flows, tool-calling resilience, and circuit breakers with runnable code.</image:caption>
     </image:image>
   </url>
   <url>
@@ -942,6 +1130,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/agent-memory-architecture.png</image:loc>
+      <image:title>AI Agent Memory Architecture: From Working Memory to Episodic Memory &amp; Hierarchical Graph RAG</image:title>
+      <image:caption>Design agent working, episodic, and long-term memory with sourced retrieval concepts, a clearly scoped Python prototype, provenance, ACLs, conflict handling, and deletion.</image:caption>
     </image:image>
   </url>
   <url>
@@ -954,6 +1144,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/agent-observability-debugging.png</image:loc>
+      <image:title>Agent Observability &amp; Debugging: The Path from Black Box to White Box</image:title>
+      <image:caption>AI Agents are not traditional software; we are debugging the reasoning process rather than the code itself. This article explores Trajectory Evaluation, LLM-as-a-Judge, and practical applications of mainstream Agent observability tools like LangSmith and Langfuse.</image:caption>
     </image:image>
   </url>
   <url>
@@ -966,6 +1158,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/agent-orchestration-evals.png</image:loc>
+      <image:title>2026 AI Paradigm Shift: Distributed Agent Orchestration &amp; Evals to Combat Error Compounding</image:title>
+      <image:caption>As LLMs move into complex enterprise production, how do we use distributed orchestration to combat error compounding? How do we build a statistically significant Evals system?</image:caption>
     </image:image>
   </url>
   <url>
@@ -978,6 +1172,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/agent-reflection-self-correction.png</image:loc>
+      <image:title>Evolving Models at Runtime: From Basic Reflection to MCTS-based Test-Time Compute</image:title>
+      <image:caption>The potential of LLMs extends beyond pre-trained parameters. We dive deep into the frontier of Test-Time Compute: from Actor-Critic architecture to leveraging Monte Carlo Tree Search (MCTS) to decode the limits of Agent self-correction.</image:caption>
     </image:image>
   </url>
   <url>
@@ -990,6 +1186,22 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/agent-runtime-practices.png</image:loc>
+      <image:title>7 Runtime Practices for Building AI Agents</image:title>
+      <image:caption>Based on a real data analysis agent project, this article distills 7 reusable Agent Runtime practices covering state exposure, tool design, context control, guardrails, delegation, and trace-driven iteration.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/agent-sandbox-firecracker-microvm-snapshot-isolation/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/agent-sandbox-firecracker-microvm-snapshot-isolation.png</image:loc>
+      <image:title>Architecting AI Agent Security Sandboxes: Container Escape Defense, Sub-15ms Firecracker MicroVM Snapshots, and Zero-Trust Isolation</image:title>
+      <image:caption>Architecting zero-trust Firecracker MicroVM sandboxes for Coding Agents and RL rollouts: benchmarking gVisor vs KVM isolation, sub-15ms snapshot forking via userfaultfd and CoW block storage, plus secretless virtio-vsock egress proxies.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1002,6 +1214,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/ai-coding-mastery.png</image:loc>
+      <image:title>AI Coding Mastery: From &apos;Build Me an X&apos; to Architecture Orchestrator</image:title>
+      <image:caption>Tools don&apos;t matter — methodology does. A deep dive into six core methods for mastering AI coding: Spec-Driven Development, Context Engineering, TDD Verification Loops, Multi-Agent Orchestration, Advanced Prompting, and Session Hygiene. Plus a 20+ tool matrix and five anti-patterns to avoid.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1014,6 +1228,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/ai-history-choices.png</image:loc>
+      <image:title>The Critical Crossroads in AI History: Why Was *That One* Chosen Every Time?</image:title>
+      <image:caption>A retrospective of six pivotal technology crossroads in AI&apos;s seventy-year history, dissecting the compute constraints, data dividends, and scalability logic behind each historical choice.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1026,6 +1242,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/ai-trends-2026.png</image:loc>
+      <image:title>Deep Dive into 11 AI Foundation Model Trends in 2026</image:title>
+      <image:caption>From Thinking reasoning modes to Agentic applications, a deep dive into the top 11 trends in AI foundation models for 2026.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1038,6 +1256,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/browser-use-agent-architecture.png</image:loc>
+      <image:title>Under the Hood of Browser-use (100k+ Stars): DOM Tree Distillation, Vision Grounding, and Production Web Agents</image:title>
+      <image:caption>Why do traditional Selenium and Playwright scripts constantly break against modern web frontends? We dissect the architecture of Browser-use, the breakout open-source project with over 100k GitHub stars: DOM tree pruning, Set-of-Mark (SoM) visual coordinate grounding, state machine resilience, and end-to-end production recipes.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1050,6 +1270,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/build-ai-agent.png</image:loc>
+      <image:title>Building AI Agent Applications from Scratch</image:title>
+      <image:caption>A step-by-step guide to building intelligent agent systems using LangChain and the Claude API. Includes complete code and architecture design.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1062,6 +1284,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/build-lightweight-agent-framework.png</image:loc>
+      <image:title>Building a Lightweight Agent Framework from Scratch: State Machines and Event Streams</image:title>
+      <image:caption>Build a Python agent state machine with SQLite approval checkpoints, restart recovery, single-use approvals, rejection handling, step budgets, and async events.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1074,6 +1298,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/container-networking-veth-bridge-iptables.png</image:loc>
+      <image:title>Container Networking Deep Dive: veth-pair, Linux Bridge, iptables NAT, and Cross-Host Topology</image:title>
+      <image:caption>Container networking from scratch: Network Namespaces, veth-pairs, Linux bridge docker0 forwarding, iptables DNAT/SNAT, and Host vs Bridge vs Macvlan comparisons.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1086,6 +1312,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/context-engineering-guide.png</image:loc>
+      <image:title>Context Engineering Guide: Managing Context Window like RAM</image:title>
+      <image:caption>The hottest concept in 2026, evolving from Prompt Engineering to Context Engineering. A deep dive into managing the context window through Write, Select, Compress, and Isolate strategies to solve long-context amnesia, hallucinations, and context poisoning.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1098,6 +1326,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/continuous-batching-chunked-prefill-guide.png</image:loc>
+      <image:title>Evolution of High-Concurrency Batching: From Continuous Batching to Chunked Prefill Eliminating Head-of-Line Blocking</image:title>
+      <image:caption>High-throughput LLM serving: Orca iteration-level continuous batching, head-of-line blocking mitigation, and Chunked Prefill with decode piggybacking in vLLM.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1110,6 +1340,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/datacenter-network-clos-leaf-spine-bgp-evpn-vxlan.png</image:loc>
+      <image:title>Modern Data Center Network Architecture First Principles: Clos Topologies, Leaf-Spine Fabrics, BGP Underlay, and EVPN-VXLAN Large Layer-2 Virtualization</image:title>
+      <image:caption>First-principles guide to datacenter networking: Clos topologies, 2-Tier/3-Tier Leaf-Spine fabrics, RFC 7938 eBGP Underlay, ECMP hashing, and EVPN-VXLAN large Layer-2 Overlay.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1122,6 +1354,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/deepinfer-deepseek-recipe-architecture.png</image:loc>
+      <image:title>Inside DeepSeek&apos;s Trillion-Token Engine: DeepInfer and deepseek-recipe Architecture from Silicon to Protocol Layer</image:title>
+      <image:caption>From physical silicon foundations and kernel matrices to 1:1 PD disaggregation topologies, DSpark dynamic speculative decoding, SWA bounded replay, deepseek-recipe protocol layers, and $38/GPU/h unit economics: a complete architectural dissection of DeepSeek&apos;s production inference stack.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1134,6 +1368,22 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/deepseek-v4-kimi-k3-deployment-guide.png</image:loc>
+      <image:title>Production Deployment of DeepSeek-V4 and Kimi K3: 32-GPU Topologies, Memory Math, and Real-World Troubleshooting</image:title>
+      <image:caption>Comprehensive production guide for hosting DeepSeek-V4-Pro (CSA+HCA) and Kimi K3 (KDA+MLA): covering 4-node/32-GPU and 8-node/64-GPU topologies, per-rank GPU memory budgeting, six hardcore production pitfalls (NUMA crossing, MoE routing skew, CUDAGraph pseudo-OOM, PFC deadlock), Ray and KubeRay orchestration.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/distributed-rl-post-training-verl-colocation/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/distributed-rl-post-training-verl-colocation/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/distributed-rl-post-training-verl-colocation.png</image:loc>
+      <image:title>Distributed RL Post-Training with verl: Colocation, Weight Resharding &amp; Async Rollouts</image:title>
+      <image:caption>Deep dive into multi-node LLM RL post-training systems: first-principles 72B VRAM math, verl 3D-HybridEngine zero-redundancy resharding, vLLM Sleep Mode cuMemUnmap offloading, DAPO, Partial Rollouts, and production configs.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1146,6 +1396,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/docker-internals-namespace-cgroups-overlayfs.png</image:loc>
+      <image:title>Docker Internals from First Principles: Linux Namespaces, cgroups v2, and OverlayFS Union Mounts Deep Dive</image:title>
+      <image:caption>Docker internals from first principles: Linux Namespaces isolation, cgroups v2 resource limits, OverlayFS layered union mounts with CoW, and OCI runc execution.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1158,6 +1410,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/docker-swarm-architecture-raft-routing-mesh.png</image:loc>
+      <image:title>Lightweight Cluster Orchestration: Docker SwarmKit Architecture, Raft Consensus, and Ingress Routing Mesh</image:title>
+      <image:caption>Docker Swarm architecture deep dive: SwarmKit Raft consensus, VXLAN cross-host overlay networking, IPVS Ingress Routing Mesh, and Kubernetes trade-offs.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1165,11 +1419,13 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/domestic-llm-comparison-2026/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/domestic-llm-comparison-2026/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/domestic-llm-comparison-2026/" />
-    <lastmod>2026-10-20</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/domestic-llm-comparison-2026.png</image:loc>
+      <image:title>November 2026 Chinese Frontier LLMs: Qwen4-Max, Kimi K3.1 Pro, DeepSeek-V4, MiniMax M3.1 &amp; GLM-5.3</image:title>
+      <image:caption>Engineering comparison of China&apos;s November 18, 2026 frontier LLMs—Qwen4-Max, Kimi K3.1 Pro, DeepSeek-V4-Pro / V4.1-Flash, MiniMax M3.1 Flash, and GLM-5.3—covering sparse architectures, matching benchmarks, checkpoint formats, and evaluation plans.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1182,6 +1438,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/enterprise-lan-vlan-8021q-dhcp-nat-port-forwarding.png</image:loc>
+      <image:title>Enterprise LAN Infrastructure: VLAN Segmentation (802.1Q), Dynamic DHCP, and NAT Port Forwarding</image:title>
+      <image:caption>Enterprise LAN infrastructure: IEEE 802.1Q VLAN trunking, DORA DHCP address pools, Router-on-a-Stick, L3 routing, and Linux iptables NAPT port forwarding.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1194,6 +1452,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/environment-scaling-agent-guide.png</image:loc>
+      <image:title>Beyond Simple Prompts: How Environment Scaling Is Reshaping Autonomous Agents in 2026</image:title>
+      <image:caption>Understand agent environment scaling through task diversity, reset and verification, a sourced GLM-5.3 result, and container execution with cleanup after timeouts.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1206,6 +1466,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/fine-tuning-guide.png</image:loc>
+      <image:title>LLM Fine-Tuning Guide: How It Works, Real-World Use Cases, and Workflows</image:title>
+      <image:caption>Discover how LLM fine-tuning works under the hood, explore proven enterprise use cases (LoRA, QLoRA, Full Fine-Tuning), and learn end-to-end workflows from data preparation to vLLM serving.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1218,6 +1480,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/flashattention-flashinfer-kernel-evolution.png</image:loc>
+      <image:title>Evolution of Attention Kernels: From FlashAttention-1/2/3 SRAM Tiling to FlashInfer Unified Heterogeneous Serving</image:title>
+      <image:caption>Deep dive into GPU attention kernels: FlashAttention-1 online softmax, FA-2 parallelism, FA-3 Hopper TMA asynchronous pipelines, and FlashInfer variable-length batching.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1230,6 +1494,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/inference-engines-core-architecture-internals.png</image:loc>
+      <image:title>Production LLM Inference Engines Teardown: vLLM v1 vs. SGLang vs. TensorRT-LLM vs. llama.cpp Internals</image:title>
+      <image:caption>Codebase teardown of top LLM inference engines: vLLM v1 multiprocess EngineCore &amp; unified scheduler, SGLang RadixAttention, TensorRT-LLM in-flight batching, and llama.cpp quantization.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1242,6 +1508,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/inference-roofline-prefill-decode.png</image:loc>
+      <image:title>From model.generate() to the Roofline Model: The Physics of Prefill and Decode Divergence</image:title>
+      <image:caption>Why do modern GPUs with hundreds of TFLOPS idle at less than 5% Tensor Core utilization during LLM inference? A first-principles exploration of the autoregressive loop, the Roofline model, and the mathematical divergence between compute-bound Prefill and memory-bound Decode.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1254,6 +1522,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/infiniband-architecture-hardware-rates-credit-flow-subnet-manager.png</image:loc>
+      <image:title>InfiniBand Architecture First Principles: Physical Link Rates, Credit-Based Link Flow Control, and Subnet Manager Fabric Orchestration</image:title>
+      <image:caption>InfiniBand hardware architecture: SDR to NDR/XDR link speeds, 8b/10b to PAM4 modulation, credit-based flow control, Virtual Lanes, and OpenSM subnet management.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1266,6 +1536,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/infiniband-fat-tree-rail-optimized-topology-adaptive-routing-sharp.png</image:loc>
+      <image:title>InfiniBand AI Cluster Networking in Practice: Fat-Tree Topologies, Rail-Optimized Architecture, Adaptive Routing (AR), and In-Network Reduction (SHARP)</image:title>
+      <image:caption>AI cluster fabric topologies: Non-blocking Fat-Trees, Rail-Optimized cabling, Adaptive Routing (AR), SHARP in-network aggregation, and congestion mitigation.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1278,6 +1550,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/infiniband-production-deployment-opensm-ofed-nccl-tuning.png</image:loc>
+      <image:title>Production InfiniBand Deployment, Cluster Operations, and NCCL Tuning: OFED Drivers, OpenSM HA, ibdiagnet Fabric Auditing, and GPUDirect RDMA</image:title>
+      <image:caption>Production InfiniBand cluster operations: MLNX_OFED driver stacks, OpenSM high availability, ibdiagnet fabric health auditing, and NCCL GPUDirect RDMA tuning.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1290,6 +1564,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/ip-addressing-subnet-mask-cidr-default-gateway-routing.png</image:loc>
+      <image:title>IP Addressing and Subnetting First Principles: Binary Arithmetic, Subnet Masks, CIDR, and Default Gateway Routing</image:title>
+      <image:caption>Deep dive into IP addressing: IPv4 32-bit binary representation, bitwise AND subnet masking, CIDR supernetting, default gateways, and Linux routing tables.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1302,6 +1578,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/k8s-application-networking-grpc-service-mesh-zero-downtime.png</image:loc>
+      <image:title>Application Networking on Kubernetes: The gRPC Load Balancing Trap, Service Mesh, and Zero-Downtime Draining Sequences</image:title>
+      <image:caption>Kubernetes application networking: HTTP/2 gRPC load balancing, Envoy service mesh architecture, xDS control planes, and zero-downtime rolling deployment strategies.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1314,6 +1592,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/k8s-control-plane-declarative-reconciliation.png</image:loc>
+      <image:title>Kubernetes Control Plane Deep Dive: Declarative APIs, etcd Consensus, Scheduler, and Controller Reconciliation Loops</image:title>
+      <image:caption>Kubernetes control plane architecture: declarative reconciliation loops, informers, workqueue patterns, and optimistic concurrency control with etcd.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1326,6 +1606,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/k8s-control-plane-hacking-aggregated-apiserver-apf-etcd.png</image:loc>
+      <image:title>Hacking the Kubernetes Control Plane: WatchCache Internals, Aggregated APIServers, APF Shuffle Sharding, and 10k-Node etcd Sharding</image:title>
+      <image:caption>Advanced Kubernetes control plane internals: Aggregated API Servers, API Priority and Fairness (APF) flow control, CRD scaling limits, and etcd performance tuning.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1338,6 +1620,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/k8s-database-storage-local-nvme-tuning-fencing.png</image:loc>
+      <image:title>Production Databases and Storage on Kubernetes: Local NVMe Passthrough, RocksDB/WAL Tuning, and Fencing Split-Brain Protection</image:title>
+      <image:caption>Running databases on Kubernetes: Local PV NVMe tuning, page cache dirty ratio optimization, RocksDB/MySQL WAL Direct I/O, and STONITH node fencing.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1350,6 +1634,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/k8s-gpu-operator-ai-inference-scheduling.png</image:loc>
+      <image:title>2026 AI Computing Infrastructure: Kubernetes GPU Operator, MIG Partitioning, Topology-Aware Scheduling, and Auto-scaling Inference Engines</image:title>
+      <image:caption>AI infrastructure on Kubernetes: NVIDIA GPU Operator automation, MIG slicing, Kubelet Topology Manager NUMA alignment, Dynamic Resource Allocation, and KEDA scaling.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1362,6 +1648,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/k8s-networking-cni-cilium-ebpf-gateway-api.png</image:loc>
+      <image:title>Kubernetes Networking Panorama: CNI Specification, Calico BGP, Cilium eBPF, and Gateway API Architecture</image:title>
+      <image:caption>Kubernetes CNI networking guide: Flannel vs Calico topologies, Cilium eBPF socket redirection to bypass kube-proxy, and modern Gateway API traffic governance.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1374,6 +1662,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/k8s-operator-pattern-kubebuilder-crd.png</image:loc>
+      <image:title>Kubernetes Extensibility: The Operator Pattern, Custom Resource Definitions (CRD), and KubeBuilder in Production</image:title>
+      <image:caption>Production Kubernetes Operator guide: Kubebuilder architecture, CRD OpenAPI validation, Controller-Runtime reconciliation, and custom Go stateful controllers.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1386,6 +1676,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/k8s-runtime-nri-kata-gvisor-kernel-tuning.png</image:loc>
+      <image:title>Hacking Kubernetes Nodes &amp; Runtimes: Breaking PLEG Bottlenecks, NRI Plugins, Kata/gVisor Sandboxes, and cgroups v2 Tuning</image:title>
+      <image:caption>Kubernetes node runtime internals: Kubelet syncLoop, Evented PLEG, containerd Node Resource Interface (NRI) plugins, Kata microVMs, and gVisor sandboxing.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1398,6 +1690,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/k8s-scheduling-framework-custom-plugin-gang-scheduling.png</image:loc>
+      <image:title>Hacking the Kubernetes Scheduler: Custom Plugins via Scheduling Framework, Volcano DRF Math, and Descheduler Dynamic Rebalancing</image:title>
+      <image:caption>Kubernetes custom scheduling: 12 core Scheduling Framework extension points, CycleState caching, Volcano DRF algorithms, and Go Gang Scheduling plugin implementation.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1410,6 +1704,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/k8s-storage-csi-statefulset-deep-dive.png</image:loc>
+      <image:title>Kubernetes Storage Architecture: CSI Specification, Dynamic PV/PVC Provisioning, and StatefulSet Guarantees</image:title>
+      <image:caption>Cloud-native storage architecture: StorageClass, PV/PVC decoupling, CSI provision/attach/stage/mount lifecycles, and StatefulSet deterministic volume binding.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1417,11 +1713,13 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/kimi-kda-deepseek-mla-architecture/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/kimi-kda-deepseek-mla-architecture/" />
-    <lastmod>2026-10-20</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/kimi-kda-deepseek-mla-architecture.png</image:loc>
+      <image:title>Kimi KDA, DeepSeek MLA and V4 CSA/HCA: Long-Context Cache Math and GPU Memory</image:title>
+      <image:caption>Rigorous breakdown of Kimi Delta Attention (KDA) gated delta-rule recurrent states, DeepSeek MLA latent caches, and V4 CSA/HCA sequence compression, with exact memory formulas for Kimi K3/K3.1 hybrids.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1434,6 +1732,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/linux-kernel-networking-napi-ring-buffer-skbuff-xdp.png</image:loc>
+      <image:title>Linux Kernel Networking Subsystem in Depth: From NIC Drivers, NAPI, and Ring Buffers to eBPF XDP Wire-Speed Forwarding</image:title>
+      <image:caption>Linux kernel networking internals: NIC RX Ring Buffers, DMA transfers, NAPI hybrid polling, sk_buff lifecycle, RSS multi-queue affinity, and eBPF XDP wire filtering.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1446,6 +1746,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/llm-evaluation-guide.png</image:loc>
+      <image:title>Reject Benchmark Hacking: How to Build an LLM Evaluation System for Your Business (LLM-as-a-Judge)</image:title>
+      <image:caption>Cease the obsession with writing more code; shift focus to deep evaluation thinking. We deconstruct LLM-as-a-Judge biases, the mathematics behind metrics, and reshaping CI/CD defenses for probabilistic systems.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1458,6 +1760,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/loop-engineering.png</image:loc>
+      <image:title>Deep Dive into AI Agent Architecture Evolution: From Prompt to Loop Engineering</image:title>
+      <image:caption>A deep dive into the evolution of AI Agent architectures, exploring the 4-layer control plane extrapolation from Prompt, Context, Harness to Loop Engineering, and the 4 diseases of the ReAct architecture.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1470,6 +1774,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/mcp-guide.png</image:loc>
+      <image:title>MCP Deep Dive: The USB-C Port for AI</image:title>
+      <image:caption>From architecture to hands-on development, a complete guide to the Model Context Protocol. Includes Python SDK tutorial, security mechanisms, and ecosystem comparison.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1482,6 +1788,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/mha-gqa-mla-matrix-absorption-inference-engine.png</image:loc>
+      <image:title>Model Architecture Driving Inference Systems: From MHA/GQA to DeepSeek MLA Matrix Absorption and Memory Minimalism</image:title>
+      <image:caption>Attention evolution for LLM serving: MHA memory bottlenecks, GQA grouping trade-offs, DeepSeek MLA low-rank latent projections, Decoupled RoPE, and Matrix Absorption.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1489,11 +1797,13 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/model-comparison-2026/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/model-comparison-2026/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/model-comparison-2026/" />
-    <lastmod>2026-10-20</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/model-comparison-2026.png</image:loc>
+      <image:title>November 2026 Frontier LLM Benchmark &amp; API Guide: GPT-6.2 Astra vs Claude Fable 5.2 vs Gemini 4 Carbon</image:title>
+      <image:caption>Production engineering guide to the November 18, 2026 frontier LLM lineup: comparing Claude Fable 5.2, GPT-6.2 Astra/Sol, Gemini 4 Carbon/Hydrogen, and Meta Muse Wonder across API specs, pricing tiers, SDKs, and TCO formulas.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1506,6 +1816,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/moe-expert-parallelism-inference-engine.png</image:loc>
+      <image:title>MoE Inference Internals: Expert Parallelism (EP), Dynamic Routing Gating, and All-to-All Overlapping</image:title>
+      <image:caption>MoE inference internals: DeepSeek-V3 gating, Expert Parallelism (EP) All-to-All communication, CUTLASS Grouped GEMM kernels, and DualPipe overlap schedules.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1518,6 +1830,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/multi-agent-collaboration-and-concurrency.png</image:loc>
+      <image:title>Communication Protocols and Concurrency Control in Multi-Agent Systems</image:title>
+      <image:caption>Build asyncio agent mailboxes and a message bus with isolated payload copies, bounded delivery, graceful shutdown, CAS document updates, and token-bucket limiting.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1530,6 +1844,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/multimodal-guide.png</image:loc>
+      <image:title>Multimodal AI Models Starter Guide</image:title>
+      <image:caption>Explore the vision and text capabilities of multimodal models like GPT-5.4 and Gemini 3.1 Pro, with practical use cases in image and video analysis.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1542,6 +1858,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/network-fundamentals-bits-cables-hubs-switches-mac-arp.png</image:loc>
+      <image:title>Computer Networking from Scratch: Bits, Physical Media, Hub Collision Domains, and Switch MAC Addressing First Principles</image:title>
+      <image:caption>Computer networking from scratch: physical voltages, twisted pairs, optical fibers, collision domains, Ethernet frames, Layer-2 switches, and ARP broadcast mechanics.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1554,6 +1872,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/network-layer-transport-layer-ip-routing-tcp-state-machine.png</image:loc>
+      <image:title>Network &amp; Transport Layers in Depth: IP Routing, CIDR, TCP 11-State Machine, and Sliding Window First Principles</image:title>
+      <image:caption>Layer 3 and Layer 4 networking: IPv4/IPv6 headers, Linux kernel LPM routing, TCP 11-state machine transitions, SYN cookies, and sliding window flow control.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1566,6 +1886,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/nvidia-gpu-package-architecture.png</image:loc>
+      <image:title>Mapping the NVIDIA GPU Driver Stack: From Kernel Modules to Container Runtimes</image:title>
+      <image:caption>A deep dive into the complex Linux NVIDIA GPU driver package structures. Understand the 5-layer architecture bridging nvidia-dkms, libnvidia, nvidia-utils, and driver metapackages. Plus, discover enterprise best practices and troubleshooting guides for 4 core deployment scenarios, including Docker model servers and DGX clusters.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1578,6 +1900,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/pagedattention-memory-virtualization.png</image:loc>
+      <image:title>Memory Virtualization in Inference Engines: PagedAttention and the Elimination of Memory Fragmentation</image:title>
+      <image:caption>Why did early LLM serving systems waste 60% to 80% of GPU memory? A deep architectural exploration of vLLM&apos;s PagedAttention, logical-to-physical block mapping, zero-copy Copy-on-Write sharing, and non-contiguous CUDA attention kernels.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1590,6 +1914,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/pd-disaggregation-distributed-kv-cache.png</image:loc>
+      <image:title>Prefill-Decode (P/D) Disaggregation Architecture: Compute-Memory Decoupling, RDMA Distributed KV Cache Transfer, and Cluster-Scale Pooling</image:title>
+      <image:caption>Prefill-Decode (P/D) Disaggregation architecture: compute vs memory isolation, MLA cross-node bandwidth modeling, GPUDirect RDMA KV transfers, and queuing theory.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1602,6 +1928,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/prefix-caching-radix-attention-internals.png</image:loc>
+      <image:title>Prefix Caching and State Reuse: From Hash Block Addressing to SGLang RadixAttention and Dynamic Tree Eviction</image:title>
+      <image:caption>LLM state reuse internals: vLLM hash-chained block caching vs SGLang RadixAttention tree-structured prefix matching, node splitting, and LRU leaf eviction.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1614,6 +1942,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/prompt-engineering-guide.png</image:loc>
+      <image:title>Prompt Engineering Practice Guide</image:title>
+      <image:caption>An in-depth exploration of designing effective prompts to improve model output quality. Covers core techniques like Few-Shot, Chain-of-Thought, and ReAct with practical examples.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1626,6 +1956,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/quantization-hands-on-guide.png</image:loc>
+      <image:title>LLM Quantization Hands-On Guide: Four Routes from Zero to Production</image:title>
+      <image:caption>Hands-on LLM quantization guide: download and run GGUF models (Qwen3-8B-Q4_K_M.gguf, llama.cpp, Ollama), quantize with AWQ/GPTQ, and deploy vLLM FP8 in production with copy-paste code.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1638,6 +1970,22 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/quantization-precision-guide.png</image:loc>
+      <image:title>LLM Quantization Precision Guide: From FP32 to 1-bit, How Much Quality Do You Actually Lose?</image:title>
+      <image:caption>Understand FP8, INT8, INT4, and NF4 across weights, activations, and KV cache, with complete memory budgets, speed tradeoffs, calibration, and quality evaluation.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://blog.llmgo.top/en/articles/rack-scale-superpod-nvl72-nccl-collectives/</loc>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/articles/rack-scale-superpod-nvl72-nccl-collectives/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/articles/rack-scale-superpod-nvl72-nccl-collectives/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/articles/rack-scale-superpod-nvl72-nccl-collectives/" />
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://blog.llmgo.top/og/en/rack-scale-superpod-nvl72-nccl-collectives.png</image:loc>
+      <image:title>Rack-Scale SuperPoD &amp; NCCL Collectives: GB200 NVL72, Optical Fabrics &amp; MoE All-to-All</image:title>
+      <image:caption>Dissecting NVIDIA GB200/GB300 NVL72 copper backplanes vs. Huawei CloudMatrix 384 optical UnifiedBus, NCCL busbw math, NVLS multimem in-switch reductions, DeepEP IBGDA All-to-All kernels, and MNNVL production tuning.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1650,6 +1998,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/rag-in-practice.png</image:loc>
+      <image:title>Retrieval-Augmented Generation (RAG) in Practice: Strategies &amp; Production Best Practices</image:title>
+      <image:caption>A complete guide on how to use retrieval-augmented generation strategies and production best practices. Covers vector databases, semantic chunking, ColBERT reranking, GraphRAG, and automated Ragas evaluation.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1662,6 +2012,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/rdma-kernel-bypass-zero-copy-queue-pair-rocev2-lossless.png</image:loc>
+      <image:title>RDMA High-Performance Networking Foundations: Kernel Bypass, Zero-Copy, Queue Pairs, and Lossless RoCEv2 (PFC/ECN) Architecture</image:title>
+      <image:caption>RDMA high-performance networking: Kernel bypass, hardware zero-copy, Queue Pair ibverbs verbs, and lossless RoCEv2 with 802.1Qbb PFC and DCQCN congestion control.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1674,6 +2026,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/reasoning-test-time-compute-inference-future.png</image:loc>
+      <image:title>The Future of LLM Inference: Test-Time Compute, Reasoning Scheduling, and Tiered Cluster Storage</image:title>
+      <image:caption>Inference architectures for reasoning models: Test-Time Compute scaling, MCTS speculative tree scheduling, thinking budget governors, and tiered KV cache pools.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1686,6 +2040,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/sglang-vs-vllm-architecture.png</image:loc>
+      <image:title>SGLang vs vLLM: Prefix Caching, Structured Outputs, and Reproducible Evaluation</image:title>
+      <image:caption>Compare SGLang RadixAttention and vLLM APC, structured-output backends, minimal serving baselines, and reproducible cold/warm-cache latency and throughput evaluation.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1698,6 +2054,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/skills-guide.png</image:loc>
+      <image:title>Skills Deep Dive: Give Your AI Coding Assistant a Professional Brain</image:title>
+      <image:caption>From core principles to cross-platform practice, a complete guide to the AI coding assistant Skills system. Covers SKILL.md mechanics, six-platform comparison, hands-on writing guide, and best practices.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1710,6 +2068,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/speculative-decoding-eagle-guide.png</image:loc>
+      <image:title>Speculative Decoding in Production: From Draft Models to EAGLE-3 Dynamic Trees for 3x-5x Lossless Acceleration</image:title>
+      <image:caption>Why is autoregressive LLM decoding fundamentally bottlenecked by memory bandwidth? We dissect the mathematical proof of lossless distribution invariance in speculative decoding, trace its evolution from dual-model drafts to EAGLE-2/3 dynamic draft trees, and provide production configurations in vLLM and SGLang.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1722,6 +2082,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/tcp-congestion-control-reno-cubic-bbr-quic-http3.png</image:loc>
+      <image:title>TCP Congestion Control Evolution &amp; High-Performance Transport: From Reno and Cubic to BBR Mathematical Models, and HTTP/2 to HTTP/3 (QUIC)</image:title>
+      <image:caption>TCP congestion control evolution: loss-based Reno, Linux default Cubic polynomial curves, Google BBR pacing models, and HTTP/3 QUIC 0-RTT transport.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1734,6 +2096,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/test-time-compute-grpo.png</image:loc>
+      <image:title>Test-Time Compute and GRPO in Practice: From PPO to Critic-Free Reinforcement Learning</image:title>
+      <image:caption>A deep dive into the paradigm shift from pre-training scaling laws to test-time compute. We deconstruct the mathematical derivation of DeepSeek-R1&apos;s Group Relative Policy Optimization (GRPO), critic-free architecture advantages, emergent self-reflection in long reasoning traces, and a complete, reproducible hands-on implementation.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1746,6 +2110,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/transport-bridge-dns-sockets-ports-udp-vs-tcp.png</image:loc>
+      <image:title>Application &amp; Transport Layer Bridges: DNS Resolution, Sockets, Ports, and UDP vs TCP Foundations</image:title>
+      <image:caption>Application and transport layer bridges: DNS recursive resolution, Anycast root servers, 5-tuple socket multiplexing, and architectural UDP vs TCP trade-offs.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1758,6 +2124,8 @@
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://blog.llmgo.top/og/en/vllm-serving-guide.png</image:loc>
+      <image:title>vLLM Online Inference in Production: From Architecture to Token Billing</image:title>
+      <image:caption>A deep dive into vLLM&apos;s core architecture (PagedAttention, continuous batching, APC prefix caching, speculative decoding) for online serving. Covers OpenAI-compatible API setup, performance tuning, token billing systems, and complete Docker deployment with Prometheus monitoring.</image:caption>
     </image:image>
   </url>
   <url>
@@ -1765,7 +2133,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/models/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/models/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/models/" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1774,7 +2142,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/projects/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/projects/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/projects/" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1783,7 +2151,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/tools/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/tools/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/tools/" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -1792,7 +2160,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/models/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/models/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/models/" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1801,7 +2169,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/projects/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/projects/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/projects/" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1810,7 +2178,7 @@
     <xhtml:link rel="alternate" hreflang="zh" href="https://blog.llmgo.top/tools/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blog.llmgo.top/en/tools/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://blog.llmgo.top/tools/" />
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

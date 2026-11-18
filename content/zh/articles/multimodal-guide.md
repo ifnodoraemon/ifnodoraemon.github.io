@@ -41,7 +41,6 @@ description: 探索 GPT-5.4、Gemini 3.1 Pro 等多模态模型的图文理解�
 
 ```python
 from PIL import Image
-import anthropic
 import io
 
 # 1. 前置防脱发操作：强制缩放限制最大边长为 1024px
@@ -62,21 +61,34 @@ def resize_for_llm(img_path, max_edge=1024):
 Gemini 3.1 Pro 的视频理解能力是当前最领先的：
 
 ```python
-import google.generativeai as genai
+import time
+from google import genai
 
-model = genai.GenerativeModel("gemini-3.1-pro")
+client = genai.Client()
 
-# 上传视频文件
-video = genai.upload_file("product_demo.mp4")
+# 1. 上传视频文件至 Files API
+video_file = client.files.upload(file="product_demo.mp4")
 
-# 分析视频内容
-response = model.generate_content([
-    video,
-    "请详细分析这个产品演示视频：\n"
-    "1. 产品有哪些核心功能？\n"
-    "2. 演示中有哪些交互亮点？\n"
-    "3. 从 UX 角度有什么改进建议？"
-])
+# 2. 轮询等待云端视频预处理完成（从 PROCESSING 进入 ACTIVE 状态）
+while video_file.state.name == "PROCESSING":
+    time.sleep(2)
+    video_file = client.files.get(name=video_file.name)
+
+if video_file.state.name != "ACTIVE":
+    raise RuntimeError(f"视频文件处理失败，当前状态: {video_file.state.name}")
+
+# 3. 分析视频内容（按账号实际模型列表使用 gemini-3.1-pro 或 gemini-3.1-pro-preview）
+response = client.models.generate_content(
+    model="gemini-3.1-pro",
+    contents=[
+        video_file,
+        "请详细分析这个产品演示视频：\n"
+        "1. 产品有哪些核心功能？\n"
+        "2. 演示中有哪些交互亮点？\n"
+        "3. 从 UX 角度有什么改进建议？",
+    ],
+)
+print(response.text)
 ```
 
 视频理解的典型应用场景：

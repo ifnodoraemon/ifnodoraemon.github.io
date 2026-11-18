@@ -153,7 +153,7 @@ flowchart TD
         direction TB
         S1["ImageLocality: Container image cached locally? (+points)"]
         S2["NodeResourcesBalancedAllocation: Balanced CPU/RAM utilization? (+points)"]
-        S3["NodeAffinityPriority: Soft affinity preference scores"]
+        S3["NodeAffinity: Soft affinity preference scores"]
         S1 --> S2 --> S3
     end
 
@@ -249,27 +249,30 @@ func (r *DeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
         return ctrl.Result{}, err
     }
 
-    // 2. Fetch the Observed State of child ReplicaSets matching the selector
+    // 2. Fetch the Observed State of child ReplicaSets in the target namespace matching the selector
     var rsList appsv1.ReplicaSetList
-    if err := r.List(ctx, &rsList, client.MatchingLabels(deployment.Spec.Selector.MatchLabels)); err != nil {
+    if err := r.List(ctx, &rsList, client.InNamespace(req.Namespace), client.MatchingLabels(deployment.Spec.Selector.MatchLabels)); err != nil {
         return ctrl.Result{}, err
     }
 
     // 3. Compute the delta between Desired and Observed states
-    desiredReplicas := *deployment.Spec.Replicas
+    desiredReplicas := int32(1)
+    if deployment.Spec.Replicas != nil {
+        desiredReplicas = *deployment.Spec.Replicas
+    }
     currentReplicas := computeActiveReplicas(rsList)
 
     // 4. Act: Execute idempotent mutations to eliminate the delta
     if currentReplicas < desiredReplicas {
         // Insufficient replicas: scale up
         if err := r.scaleUp(ctx, &deployment, desiredReplicas - currentReplicas); err != nil {
-            // Requeue with exponential backoff on failure
-            return ctrl.Result{Requeue: true}, err
+            // Returning a non-nil error triggers WorkQueue exponential backoff automatically
+            return ctrl.Result{}, err
         }
     } else if currentReplicas > desiredReplicas {
         // Redundant replicas: scale down
         if err := r.scaleDown(ctx, &deployment, currentReplicas - desiredReplicas); err != nil {
-            return ctrl.Result{Requeue: true}, err
+            return ctrl.Result{}, err
         }
     }
 

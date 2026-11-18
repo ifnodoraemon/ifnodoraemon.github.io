@@ -22,7 +22,7 @@ Deploying deep learning workstations or large language model (LLM) inference ser
 
 If you have ever downloaded a `.run` file directly from NVIDIA's website, mashed the enter key, and ended up with a broken desktop environment, or if an automatic Ubuntu kernel update suddenly triggered the dreaded `NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver` message, it means you haven't grasped the true packaging logic of NVIDIA distributions on Linux.
 
-When you type `apt search nvidia-driver` in the terminal, the hundred-line output featuring components like `ubuntu-drivers`, `nvidia-dkms`, `libnvidia-compute`, and various packages trailing with `-server` suffices is enough to make anyone dizzy.
+When you type `apt search nvidia-driver` in the terminal, the hundred-line output featuring components like `ubuntu-drivers`, `nvidia-dkms`, `libnvidia-compute`, and various packages trailing with `-server` suffixes is enough to make anyone dizzy.
 
 **To permanently cure this deployment anxiety, the only way out is to abandon the "one-click UI installer" mindset and truly understand the "5-Layer Relationship" of the NVIDIA driver stack in Linux.**
 
@@ -41,7 +41,7 @@ Before diving into complex system architecture diagrams, absolutely burn these f
 
 ## The Deep Dive: The 5-Layer NVIDIA Driver Architecture
 
-With the mantas memorized, let's look at how a signal travels from running a line of PyTorch Python code all the way down to the physical graphics card.
+With the mantras memorized, let's look at how a signal travels from running a line of PyTorch Python code all the way down to the physical graphics card.
 
 ```mermaid
 flowchart TD
@@ -85,28 +85,28 @@ This is the bedrock of all applications. Regardless of how many cutting-edge AI 
 * **Route B: Dynamic Compilation (`nvidia-dkms-xxx`)**: The king of DKMS (Dynamic Kernel Module Support). It automatically fetches driver source code (`nvidia-kernel-source`) and your current kernel headers (`linux-headers`) to compile the driver on your machine. **Highly recommended; this is your ultimate shield against kernel-update-induced breakage.**
 
 ### Layer 2: Userspace Libraries
-**Examples**: `libnvidia-compute-535`, `libnvidia-gl-535`, `libnvidia-decode-535`
+**Examples**: `libnvidia-compute-570`, `libnvidia-gl-570`, `libnvidia-decode-570`
 For LLM inference or AI training, you care most about `libnvidia-compute`. It exposes the crucial CUDA Driver API functions needed for compute tasks. Graphic engineers rely on `libnvidia-gl`.
-*Warning*: If manual intervention causes a version split (e.g., this layer is stuck at 530 while the Layer 1 kernel module upgraded to 535), your system will crash with the notorious error: `Driver/library version mismatch`.
+*Warning*: If manual intervention causes a version split (e.g., this layer is stuck at 550 while the Layer 1 kernel module upgraded to 570), your system will crash with the notorious error: `Driver/library version mismatch`.
 
 ### Layer 3: System Utilities
-**Examples**: `nvidia-utils-535` or `nvidia-utils-535-server`
+**Examples**: `nvidia-utils-570` or `nvidia-utils-570-server`
 Contains all CLI tools for debugging and monitoring.
 
 ### Layer 4: The Project Manager (Metapackage)
-**Examples**: `nvidia-driver-535` or `nvidia-driver-535-server`
-In daily operations, you simply instruct the package manager: `apt install nvidia-driver-535-server`. Think of it as a project manager pulling down all dependencies from the previous three layers using correct, mutually compatible versions, sparing you from manual matching.
+**Examples**: `nvidia-driver-570` or `nvidia-driver-570-server`
+In daily operations, you simply instruct the package manager: `apt install nvidia-driver-570-server`. Think of it as a project manager pulling down all dependencies from the previous three layers using correct, mutually compatible versions, sparing you from manual matching.
 
 ### 【Special Add-on Layer】 Highway Maintenance (Fabric / NVSwitch)
 **Examples**: `nvidia-fabricmanager-*`, `libnvidia-nscq-*`
-Exclusive to multi-GPU computing behemoths featuring **NVSwitch chips** (HGX/DGX systems).
-Regular consumer desktops or simple servers do not need this. On an HGX/DGX, if the Fabric Manager (a background daemon) isn't running and precisely version-aligned with the NVIDIA Driver, the extremely expensive NVLink interconnects function like severed fiber-optic cables, making inter-GPU high-speed communication impossible.
+Exclusive to multi-GPU computing behemoths featuring **NVSwitch chips** (HGX H100/H200/B200 nodes and rack-scale [GB200 NVL72 SuperPoDs](/en/articles/rack-scale-superpod-nvl72-nccl-collectives/)).
+Regular consumer desktops or PCIe-only servers do not need this. On an HGX/DGX node, if the Fabric Manager (a background daemon) isn't running and precisely version-aligned with the NVIDIA Driver, the high-bandwidth NVLink interconnects cannot initialize cross-GPU P2P routing.
 
 ---
 
 ## The Core Dilemma: `-server` Suffix vs. Un-suffixed Packages
 
-When running `apt search`, deciding between `nvidia-driver-535` and `nvidia-driver-535-server` triggers severe choice paralysis. Here is the golden rule:
+When running `apt search`, deciding between `nvidia-driver-570` and `nvidia-driver-570-server` triggers severe choice paralysis. Here is the golden rule:
 
 **If your monitor handles Chrome and Gaming, use the Un-suffixed branch; if your machine is locked in a server room crunching matrix multiplications or running Docker, use `-server`.**
 
@@ -134,8 +134,8 @@ Here are four of the most frequent enterprise and personal AI deployment setups,
 2. **Install the Foundation (Metapackage)**: 
    ```bash
    sudo apt update
-   # Highly recommended to use the -server suffix.
-   sudo apt install nvidia-driver-535-server
+   # Highly recommended to use the -server suffix (570+ LTS for Hopper / Blackwell).
+   sudo apt install nvidia-driver-570-server
    ```
 3. **Reboot and Verify**: 
    ```bash
@@ -155,10 +155,10 @@ Here are four of the most frequent enterprise and personal AI deployment setups,
    Do NOT install the massive host CUDA Toolkit. Pull images directly (and apply techniques from our [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/) to fit larger models into available VRAM):
    ```bash
    # If this outputs nvidia-smi stats from inside the container, the entire 5-layer pipeline is flawless.
-   docker run --rm --gpus all nvidia/cuda:12.1.1-base-ubuntu22.04 nvidia-smi
+   docker run --rm --gpus all nvidia/cuda:12.8.0-base-ubuntu24.04 nvidia-smi
    ```
 
-### Scenario 2: Personal AI Hacker Desktop — "One RTX 4090 For Coding & AI"
+### Scenario 2: Personal AI Hacker Desktop — "One RTX 4090 / 5090 For Coding & AI"
 
 **Characteristics**: A monitor is physically plugged into the GPU. You need the Ubuntu desktop GUI (X11/Wayland) while also experimenting with local LLMs on the terminal.
 
@@ -167,7 +167,7 @@ Here are four of the most frequent enterprise and personal AI deployment setups,
    ```bash
    sudo ubuntu-drivers autoinstall
    # Or specify manually
-   sudo apt install nvidia-driver-535
+   sudo apt install nvidia-driver-570
    ```
 2. **Install Host CUDA Toolkit** (Since you aren't strictly running Docker):
    Download and install the official `cuda-toolkit` matching your driver limits from NVIDIA. This places the `nvcc` compiler directly in your host's PATH for local Python compilation.
@@ -177,20 +177,20 @@ Here are four of the most frequent enterprise and personal AI deployment setups,
 **Characteristics**: A shared lab machine accessed via SSH by multiple researchers. Historical constraints prevent container use.
 
 **Deployment Logic**:
-This is an extension of **Scenario 1**: Deploy the 5-layer stack (`nvidia-driver-535-server`). Afterwards, you must layer the software stack onto the bare metal OS:
+This is an extension of **Scenario 1**: Deploy the 5-layer stack (`nvidia-driver-570-server`). Afterwards, you must layer the software stack onto the bare metal OS:
 Driver -> `CUDA Toolkit` -> `cuDNN` -> `TensorRT` -> `Python Env` -> `Frameworks`.
 
-**Fatal Flaw**: Because everything sits on the system layer, immediately tear-inducing conflicts arise when User A needs TensorFlow (old CUDA) and User B runs [vLLM](/en/articles/vllm-serving-guide/) (bleeding-edge CUDA). This is why Scenario 1 is drastically preferred.
+**Fatal Flaw**: Because everything sits on the system layer, immediate version conflicts arise when User A needs legacy kernels (older CUDA) and User B runs [vLLM](/en/articles/vllm-serving-guide/) (CUDA 12.8+). This is why Scenario 1 is strongly preferred.
 
 ### Scenario 4: The Data Center Behemoth — HGX / DGX NVSwitch Servers
 
-**Characteristics**: Multi-million-dollar 8-GPU enclosed systems. You cannot simply `apt install` and walk away.
+**Characteristics**: Multi-GPU HGX systems and multi-node NVLink fabrics (see [GB200 NVL72 Rack-Scale SuperPoD & NCCL Collectives](/en/articles/rack-scale-superpod-nvl72-nccl-collectives/)). You cannot simply `apt install` and walk away.
 
 1. **Deploy Standard Driver**: Complete everything in Scenario 1. 
 2. **Deploy Fabric Manager**:
    This package is mandatory, and its version must be a **pixel-perfect match (down to the minor version)** with your installed metapackage.
    ```bash
-   sudo apt install nvidia-fabricmanager-535
+   sudo apt install nvidia-fabricmanager-570
    sudo systemctl enable --now nvidia-fabricmanager
    ```
 3. If this step fails or has a misaligned version, the HGX cluster logs will spam initialization failures, causing cross-GPU Tensor Parallelism (TP>1) to crash catastrophically.
@@ -203,9 +203,9 @@ System environments in long-term operation will inevitably face tricky maintenan
 
 ### Mandatory Lesson: How to seamlessly upgrade from a low-version driver to a high-version one?
 
-**The Scenario**: Your existing driver is an older version (e.g., `525` or earlier). To run the latest model frameworks or match a new CUDA 12.x ecosystem, you must upgrade the foundational driver to a higher major version (like `535` or `550`).
+**The Scenario**: Your existing driver is an older version (e.g., `535` or `550`). To run modern Hopper/Blackwell kernels or match the CUDA 12.8+ ecosystem, you must upgrade the foundational driver to a higher major version (like `570`).
 
-**The Fatal Mistake**: Directly executing `apt install nvidia-driver-550-server` to overwrite the old one. This predictably causes the new packages to create dependency deadlocks when trying to overwrite the old ones. Specifically, Userspace and Kernel Modules frequently become a tangled mess, causing `dpkg` to enter an unrecoverable broken state.
+**The Fatal Mistake**: Directly executing `apt install nvidia-driver-570-server` to overwrite the old one. This predictably causes the new packages to create dependency deadlocks when trying to overwrite the old ones. Specifically, Userspace and Kernel Modules frequently become a tangled mess, causing `dpkg` to enter an unrecoverable broken state.
 
 **The True Enterprise 4-Step Seamless Upgrade**:
 1. **Stop Services and Purge the Old Battlefield**: You must uproot the old branch entirely.
@@ -224,32 +224,32 @@ System environments in long-term operation will inevitably face tricky maintenan
 3. **Install the Target Branch as if on a Fresh Machine**:
    ```bash
    sudo apt update
-   sudo apt install nvidia-driver-550-server   # Replace with your target version
+   sudo apt install nvidia-driver-570-server   # Replace with your target version
    ```
-   > Reminder: If you are an NVSwitch (Scenario 4) user, you must also install `nvidia-fabricmanager-550` simultaneously right now.
+   > Reminder: If you are an NVSwitch (Scenario 4) user, you must also install `nvidia-fabricmanager-570` simultaneously right now.
 4. **Reboot to Take Effect**: Changes to the kernel driver layer require a full `reboot`. Once restarted, type `nvidia-smi` to verify your glorious upgrade.
 
 ### Epic Fail 1: The Silent Linux Kernel Update
 
 **The Scene**:
-The server room operates perfectly. Over the weekend, an automated security cron job executes `apt-get upgrade`, silently shifting the Linux Kernel from `5.15.0-70` to `5.15.0-80`. After a server restart, `nvidia-smi` refuses to return calls.
+The server room operates perfectly. Over the weekend, an automated security cron job executes `apt-get upgrade`, silently shifting the Linux Kernel from `6.8.0-45` to `6.8.0-51`. After a server restart, `nvidia-smi` refuses to return calls.
 
-**Root Cause**: Pre-compiled `.ko` modules are strictly bound inside the old `/lib/modules/5.15.0-70/` path. The newly booted kernel searches its own directory and finds no NVIDIA driver hardware link.
+**Root Cause**: Pre-compiled `.ko` modules are strictly bound inside the old `/lib/modules/6.8.0-45/` path. The newly booted kernel searches its own directory and finds no NVIDIA driver hardware link.
 
 **The Fix**:
 * If you run DKMS, manually kickstart the compiler against the new headers:
   ```bash
   sudo apt install linux-headers-$(uname -r)
-  sudo dpkg-reconfigure nvidia-dkms-535
+  sudo dpkg-reconfigure nvidia-dkms-570-server
   ```
 * If you strictly use pre-compiled, inject the new package missing link:
   ```bash
-  sudo apt install linux-modules-nvidia-535-$(uname -r)
+  sudo apt install linux-modules-nvidia-570-server-$(uname -r)
   ```
 
 ### Epic Fail 2: The Bare-Metal Upgrade Taboo
 
-**Rule: NEVER forcefully upgrade Host CUDA Tollkits if your base driver cannot support them!**
+**Rule: NEVER forcefully upgrade Host CUDA Toolkits if your base driver cannot support them!**
 
 Whether migrating from 11.x to modern 12.x/13.x APIs, always **upgrade the foundational Driver Stack (Driver/Module layer) first**. Reboot to confirm GPU connectivity, *then* layer on the newer CUDA Toolkits. Bottom-layer drivers possess remarkable backward software compatibility, but attempting to run a modern AI software API on an aging kernel module results in terrible GPU utilization or catastrophic memory crashes.
 
@@ -265,7 +265,7 @@ Tape this to your monitor. When the deployment seems doomed, run these down the 
 | **Kernel Context** | `uname -r` | Memorize this number; it is the "identity badge" for driver compilation. |
 | **What did I install?** | `apt-mark showmanual \| grep nvidia` | Exposes which Metapackage is controlling the host, and if ghosting/orphan packages exist. |
 | **E2E Driver Health** | `nvidia-smi` | Output proves the entire 5-layer stack from kernel space up to userspace is communicating flawlessly. |
-| **Container Runtime Health** | `docker run --rm --gpus all nvidia/cuda:12.1.1-base-ubuntu22.04 nvidia-smi` | Output proves your `nvidia-ctk` daemon links seamlessly pierced Docker boundaries. |
+| **Container Runtime Health** | `docker run --rm --gpus all nvidia/cuda:12.8.0-base-ubuntu24.04 nvidia-smi` | Output proves your `nvidia-ctk` daemon links seamlessly pierced Docker boundaries. |
 
 Mastering this "5-Layer Perspective" transforms confusing tracebacks into simple manual checklists. May your terminal never print `version mismatch` again!
 
@@ -274,20 +274,13 @@ Mastering this "5-Layer Perspective" transforms confusing tracebacks into simple
 ## Frequently Asked Questions (FAQ)
 
 ### Q1: How do GPU host driver versions (Driver API) interact with application CUDA Toolkit versions (Runtime API)?
-The `CUDA Version` reported in `nvidia-smi` represents the maximum CUDA Driver API version supported by the host kernel module and `libnvidia-compute`, whereas `nvcc -V` reports the compiler toolchain Runtime API version. NVIDIA's driver architecture maintains strict backward compatibility, meaning a modern host driver (e.g., version 550.x) can execute containerized applications or Conda environments built against CUDA 12.1, 11.8, or earlier runtimes without modifying host packages. For high-throughput model serving environments, follow our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/) to deploy within standardized runtime containers.
+The `CUDA Version` reported in `nvidia-smi` represents the maximum CUDA Driver API version supported by the host kernel module and `libnvidia-compute`, whereas `nvcc -V` reports the compiler toolchain Runtime API version. NVIDIA's driver architecture maintains strict backward compatibility, meaning a modern host driver (e.g., version `570.x`) can execute containerized applications or Conda environments built against CUDA 12.8, 12.4, or 11.8 runtimes without modifying host packages. For high-throughput model serving environments, follow our [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/) to deploy within standardized runtime containers.
 
-### Q2: Why does nvidia-smi execute normally while PyTorch or CUDA workloads fail with "No CUDA GPUs are available"?
-This discrepancy usually occurs because user-space dynamic linking paths fail to resolve or file permissions on GPU device nodes are restricted. Verify that `LD_LIBRARY_PATH` includes paths to `libcuda.so` and `libnvidia-compute.so`, and ensure that non-root system users possess read/write permissions for `/dev/nvidia*` character devices. Inside Docker containers, verify that the NVIDIA Container Toolkit is installed and the container was launched with the `--gpus all` flag; additionally, if models run out of GPU memory during initial allocation, consult our [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/) to reduce memory footprint.
+### Q2: Why does `nvidia-smi` execute normally while PyTorch or CUDA workloads fail with "No CUDA GPUs are available" or "no kernel image is available"?
+"No kernel image is available" usually means the PyTorch wheel was compiled without the target GPU's SM architecture (for instance, running an older PyTorch wheel on Blackwell `sm_100`). "No CUDA GPUs are available" usually occurs when user-space dynamic linking paths fail to resolve (`libcuda.so` / `libnvidia-compute.so`) or file permissions on `/dev/nvidia*` character devices are restricted. Inside Docker containers, verify that `nvidia-container-toolkit` is configured and `--gpus all` was passed; if models run out of GPU memory during initial allocation, consult our [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/) to reduce memory footprint.
 
 ### Q3: What causes Docker container GPU passthrough errors like "Failed to initialize NVML" or "could not select device driver"?
-These errors most commonly arise following an automatic host Linux kernel update that disconnects pre-compiled kernel modules from userspace libraries. First, verify that `nvidia-ctk runtime configure --runtime=docker` has configured the Docker daemon and restart the Docker service. If the host kernel was recently patched, execute `sudo dpkg-reconfigure nvidia-dkms-<version>` or reinstall matching kernel headers to recompile the dynamic kernel module for your active kernel version.
+These errors most commonly arise following an automatic host Linux kernel update that disconnects pre-compiled kernel modules from userspace libraries. First, verify that `nvidia-ctk runtime configure --runtime=docker` has configured the Docker daemon and restart the Docker service. If the host kernel was recently patched, execute `sudo dpkg-reconfigure nvidia-dkms-<version>` or install matching kernel headers to recompile the dynamic kernel module for your active kernel version.
 
----
-
-## Frequently Asked Questions (FAQ)
-
-### Q1: What is the core difference between nvidia-dkms and linux-modules-nvidia?
-`nvidia-dkms` dynamically compiles the driver modules for the current system kernel, offering better compatibility with kernel upgrades, whereas `linux-modules-nvidia` is pre-compiled and breaks upon kernel updates. We recommend using DKMS in production, as outlined in the [vLLM Production Serving Guide](/en/articles/vllm-serving-guide/).
-
-### Q2: How do I fix the "Driver/library version mismatch" error?
-This is caused by a version mismatch between the kernel-mode driver modules and user-mode libraries (libnvidia-*). You must completely uninstall the existing drivers and reinstall matching versions. Before doing this, review the [Practical Quantization Guide](/en/articles/quantization-hands-on-guide/) for best practices on environment dependencies.
+### Q4: What is the core difference between `nvidia-dkms` and `linux-modules-nvidia`, and how do I fix "Driver/library version mismatch"?
+`nvidia-dkms` dynamically compiles the `.ko` kernel module against your active kernel headers, surviving minor kernel upgrades automatically, whereas `linux-modules-nvidia` ships pre-compiled binaries bound to an exact kernel build. A `Driver/library version mismatch` occurs when the kernel module currently loaded in RAM (`cat /proc/driver/nvidia/version`) differs from the upgraded user-space `libnvidia-*` libraries on disk—purging mismatched packages or rebooting into the aligned driver branch resolves it cleanly.

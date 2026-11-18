@@ -52,19 +52,19 @@ flowchart TD
 
 InfiniBand 物理链路通常采用 4 条物理通道（4x 聚合宽度）并行传输。随着电气与光子技术的发展，单通道速率经历了跨越式的演进：
 
-| 世代名称 | 缩写 | 单通道速率 (Per-Lane) | 4x 聚合物理带宽 | 编码/调制技术 | 交换芯片代表 | 工业落地时间节点 |
+| 世代名称 | 缩写 | 单通道信号率 / 有效速率 | 4x 有效数据带宽 (原始信号率) | 编码/调制技术 | 交换芯片代表 | 工业落地时间节点 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| Single Data Rate | **SDR** | 2.5 Gbps | 10 Gbps | 8b/10b NRZ | 早期 HPC 交换机 | 2001 |
-| Double Data Rate | **DDR** | 5.0 Gbps | 20 Gbps | 8b/10b NRZ | Mellanox 早期芯片 | 2005 |
-| Quad Data Rate | **QDR** | 10.0 Gbps | 40 Gbps | 8b/10b NRZ | IS5000 系列 | 2008 |
-| Fourteen Data Rate | **FDR** | 14.0625 Gbps | 56 Gbps | 64b/66b NRZ | SwitchX-2 | 2011 |
-| Enhanced Data Rate | **EDR** | 25.78125 Gbps | 100 Gbps | 64b/66b NRZ | Switch-IB / ConnectX-4 | 2014 |
-| High Data Rate | **HDR** | 50 Gbps | 200 Gbps | **PAM4** 调制 | Quantum-1 (QM8700) | 2018 |
-| Next Data Rate | **NDR** | 100 Gbps | **400 Gbps** | 100G PAM4 | **Quantum-2 (QM9700)** | 2022~2024 (主流主力) |
-| eXtreme Data Rate | **XDR** | 200 Gbps | **800 Gbps** | 200G PAM4 | **Quantum-X800 (Q3400)** | **2026 (顶尖超算标配)** |
+| Single Data Rate | **SDR** | 2.5 Gbps / 2.0 Gbps | 8 Gbps (10 Gbps raw) | 8b/10b NRZ | 早期 HPC 交换机 | 2001 |
+| Double Data Rate | **DDR** | 5.0 Gbps / 4.0 Gbps | 16 Gbps (20 Gbps raw) | 8b/10b NRZ | Mellanox 早期芯片 | 2005 |
+| Quad Data Rate | **QDR** | 10.0 Gbps / 8.0 Gbps | 32 Gbps (40 Gbps raw) | 8b/10b NRZ | IS5000 系列 | 2008 |
+| Fourteen Data Rate | **FDR** | 14.0625 Gbps / 13.64 Gbps | 54.54 Gbps (56.25 Gbps raw) | 64b/66b NRZ | SwitchX-2 | 2011 |
+| Enhanced Data Rate | **EDR** | 25.78125 Gbps / 25.0 Gbps | 100 Gbps (103.125 Gbps raw) | 64b/66b NRZ | Switch-IB / ConnectX-4 | 2014 |
+| High Data Rate | **HDR** | 53.125 Gbps / 50 Gbps | 200 Gbps (212.5 Gbps raw) | **PAM4** (26.5625 GBd) | Quantum-1 (QM8700) | 2018 |
+| Next Data Rate | **NDR** | 106.25 Gbps / 100 Gbps | **400 Gbps** (425 Gbps raw) | 100G PAM4 (53.125 GBd) | **Quantum-2 (QM9700)** | 2022~2024 (主流主力) |
+| eXtreme Data Rate | **XDR** | 212.5 Gbps / 200 Gbps | **800 Gbps** (850 Gbps raw) | 200G PAM4 (106.25 GBd) | **Quantum-X800 (Q3400)** | **2026 (顶尖超算标配)** |
 
 - **PAM4 脉冲幅度调制**：从 HDR 世代开始，InfiniBand 弃用传统的 NRZ 二电平调制，引入 PAM4（4 个电压电平），单个脉冲符号即可携带 2 位比特数据（00, 01, 10, 11），在物理波特率不变的前提下将传输速率直接翻倍；
-- **2026 工业前沿**：在最新的超算架构中，单台 DGX/HGX 节点配备 8 块 ConnectX-8 网卡，配合 Quantum-X800 交换机，双向带宽达到惊人的 **1600 Gbps（800G 全双工）**！
+- **2026 工业前沿**：在最新的超算架构中，单台 DGX/HGX 节点配备 8 块 ConnectX-8（800G XDR）网卡，配合 Quantum-X800 交换机，单卡提供 800 Gbps 单向（1.6 Tbps 双向）线速，**整机 8 卡聚合带宽高达惊人的 6.4 Tbps（6,400 Gbps）单向 / 12.8 Tbps 全双工双向**！
 
 ---
 
@@ -98,8 +98,8 @@ sequenceDiagram
 ```
 
 #### 数学铁律
-- **绝对无损（Zero Packet Drop）**：任何一个数据帧（Flit）向光纤链路打出之前，必须在发送端 ASIC 硬件计数器中完成信用抵扣。如果接收端缓冲区满，发送端物理停止发包；
-- **零死锁风险**：流控发生在最底层的点对点物理链路跳步之间，完全基于已分配缓冲区的精准循环计数，不涉及上层的有损网络排队，**天然免疫了以太网 PFC 机制中臭名昭著的拓扑死锁与风暴问题**。
+- **无缓冲溢出丢包（Zero Buffer-Overflow Drop）**：任何一个数据帧（Flit）向光纤链路打出之前，必须在发送端 ASIC 硬件计数器中完成信用抵扣。如果接收端缓冲区满，发送端物理停止发包；
+- **消除单跳 PFC 风暴与全局路由防死锁**：点对点物理链路信用机制消除了缓冲区溢出丢包与以太网反应式 PFC 暂停风暴；而跨多台交换机的全局**信用环路死锁（Credit Loop Deadlock）**，则由子网管理器（OpenSM）通过无死锁路由引擎（如第 11 讲详述的 `ftree` / `updn` 算法）在全局拓扑层面严密消除。
 
 ### 2.2 Cut-Through 直通交换：突破 100 纳秒极限
 
@@ -177,7 +177,7 @@ sequenceDiagram
 
 ### 3.3 主备高可用（Master / Standby SM）
 在大规模智算集群中，通常会有多个 SM 实例同时运行（例如部署在两台独立的 Head 节点或两台骨干 Director 交换机上）：
-- 各 SM 之间通过优先级参数（`priority`）进行仲裁，选出唯一的 **Master SM** 拥有全网控制权；
+- 各 SM 之间通过优先级参数（`sm_priority`）进行仲裁，选出唯一的 **Master SM** 拥有全网控制权；
 - 其余 SM 作为 **Standby SM** 实时同步拓扑。一旦 Master SM 崩溃超时，Standby SM 在毫秒级接管，全网现存的数据面通信完全不受干扰。
 
 ---
@@ -231,7 +231,7 @@ InfiniBand 以专为高性能计算而生的物理架构，构建了与以太网
 ### Q1: InfiniBand 的 Credit-Based 链路流控是如何在保证零丢包的同时，彻底免除以太网 PFC 死锁困扰的？
 **根本原因：流控作用域的局部确定性与基于缓冲区的因果隔离。**
 - **以太网 PFC 的死锁根源**：PFC 是反应式的端到端流控信号。当交换机队列满载时，交换机向上一跳发送 Pause 帧暂停整条优先级的发包；如果网络拓扑中存在横向链路或多路径循环，多个交换机相互等待对方释放队列，形成闭环等待死锁；
-- **InfiniBand Credit 流控的数学本质**：流控是点对点纯物理层硬件行为。每一跳的发送方严格维护一个剩余信用计数器，只有当下游明确发送流控包告知“我有 64 字节的空余物理 SRAM”时，计数器才增加。没有额度就绝对不出芯片。每一跳的物理缓冲区大小是固定的、确定的，配合严格的无环拓扑，数据包单向流水线式推进，从数学模型上杜绝了循环依赖与死锁。
+- **InfiniBand Credit 流控与路由协同的数学本质**：链路级流控是点对点纯物理层硬件行为。每一跳的发送方严格维护剩余信用计数器，只有当下游明确发送流控包告知“我有 64 字节的空余物理 SRAM”时，计数器才增加；没有额度就绝对不出芯片，消除了单跳缓冲区溢出与 PFC 风暴。与此同时，OpenSM 在全局下发严格的 `FTree` 或 `Up/Down` 无环路由转发表，确保数据包在缓冲依赖有向无环图（DAG）中单向推进，从而在链路与拓扑双层协同下彻底杜绝循环依赖与信用死锁。
 
 ### Q2: 为什么 InfiniBand 一个物理网卡端口可以配置多个 LID（通过 LMC 参数）？这对高性能通信有何关键价值？
 **核心价值在于硬件级多路径流量工程与无冲突散列。**

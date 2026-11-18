@@ -96,7 +96,7 @@ P/D 分离并非一蹴而就，而是经历了一场从学术原型到百万并�
 | **Splitwise** | ISCA 2024 (微软研究院) | 首次提出将 Prefill 与 Decode 物理节点隔离，利用廉价/旧卡跑 Decode，高性能卡跑 Prefill，证明了成本削减潜力 | 仅验证了理论可行性，网络传输走传统 TCP/IP，传输延迟严重拖垮首字体验 |
 | **DistServe** | OSDI 2024 (北京大学 / UCSD) | 首次确立了以 **TTFT SLA 与 TPOT SLA 解耦**为核心的调度目标，引入细粒度张量并行（TP）与流水线（PP）独立配置 | 依赖同机柜高带宽拓扑，面对超长上下文（>32k）时网络带宽成为硬瓶颈 |
 | **Mooncake** | 2024~2025 (月之暗面 Kimi) | 提出**以 KVCache 为中心的解耦架构**，将集群 DRAM、SSD、GPU 显存构建为分布式分层存储池，支撑海量长上下文并发 | 系统架构复杂，中心化元数据元节点的高可用要求极高 |
-| **vLLM v1 Disaggregated** | 2025 (vLLM 开源社区) | 基于全新 C++ 运行时与零开销调度器，原生支持 P/D 跨进程与跨机数据流，打通 Ray/Nix 分布式后端 | 跨多云环境下的异构网络自适应配置相对繁琐 |
+| **vLLM v1 Disaggregated** | 2025 (vLLM 开源社区) | 基于多进程隔离 Python `EngineCore`（ZeroMQ IPC）与零开销统一调度器，通过 `KVConnector` 打通 NIXL / Mooncake 跨机 KV 传输后端 | 跨多云环境下的异构网络自适应配置相对繁琐 |
 | **SGLang Disaggregated** | 2025 (SGLang 开源社区) | 深度结合 [RadixAttention 树状缓存](/articles/prefix-caching-radix-attention-internals/)，将前缀树路由与跨节点 KV RDMA 传输融为一体 | 需要维护全局多级前缀索引树与路由心跳一致性 |
 
 ---
@@ -124,15 +124,15 @@ $$\text{Bytes}_{\text{GQA/token/layer}} = 2 \times H_{kv} \times D_{head} \times
 
 以标准 **LLaMA-3-70B** 为例：$L = 80$，$H_{kv} = 8$，$D_{head} = 128$。
 单 Token 全量历史 KV Cache 大小为：
-$$\text{Bytes}_{\text{LLaMA-70B}} = 80 \times (4 \times 8 \times 128) = 327,680 \text{ 字节} \approx 320 \text{ KB}$$
+$$\text{Bytes}_{\text{LLaMA-70B}} = 80 \times (4 \times 8 \times 128) = 327,680 \text{ 字节} = 320 \text{ KiB} \quad (327.68 \text{ KB})$$
 
 当处理 **16,384（16k）** 上下文时，单次请求需要传输的 KV Cache 体积为：
-$$\text{Size}_{\text{GQA-16k}} = 320 \text{ KB} \times 16,384 \approx 5.24 \text{ GB}$$
+$$\text{Size}_{\text{GQA-16k}} = 327,680 \text{ B} \times 16,384 = 5,368,709,120 \text{ B} = 5.00 \text{ GiB} \quad (\approx 5.37 \text{ GB})$$
 
-如果在 **400 Gbps（约 50 GB/s 理论物理带宽）** 的 InfiniBand / RoCEv2 网络中传输这 5.24 GB 数据，即使网络吞吐打满 $90\%$ 效率（约 45 GB/s），纯网络传输耗时也将达到：
-$$T_{\text{net}} \approx \frac{5.24 \text{ GB}}{45 \text{ GB/s}} \approx 116.4 \text{ ms}$$
+如果在 **400 Gbps（理论线速 $50 \text{ GB/s}$，十进制口径）** 的 InfiniBand / RoCEv2 网络中传输这 $5.37 \text{ GB}$ 数据，即使网络吞吐打满 $90\%$ 有效效率（约 $45 \text{ GB/s}$），纯网络传输耗时也将达到：
+$$T_{\text{net}} \approx \frac{5.37 \text{ GB}}{45 \text{ GB/s}} \approx 119.3 \text{ ms}$$
 
-这是一个极具毁灭性的数字：单请求仅仅在网络传输上就要停滞超过 110 毫秒！如果有 10 个并发请求同时完成 Prefill，网络瞬间被堵塞瘫痪，TTFT 断崖式恶化。
+这是一个极具毁灭性的数字：单请求仅仅在网络传输上就要停滞近 120 毫秒！如果有 10 个并发请求同时完成 Prefill，网络瞬间被堵塞瘫痪，TTFT 断崖式恶化。
 
 #### 情况 B：采用低秩潜变量吸收的 DeepSeek MLA（如 DeepSeek-V3）
 我们在[专栏第六章《模型架构反哺推理系统：DeepSeek MLA 矩阵吸收》](/articles/mha-gqa-mla-matrix-absorption-inference-engine/)中推导过，MLA 将庞大的多头 KV Cache 压缩为低秩联合潜变量向量 $c_t^{KV} \in \mathbb{R}^{d_c}$（其中 $d_c = 512$）以及解耦的 RoPE 位置向量 $k_t^R \in \mathbb{R}^{d_R}$（其中 $d_R = 64$）。
@@ -140,17 +140,20 @@ $$T_{\text{net}} \approx \frac{5.24 \text{ GB}}{45 \text{ GB/s}} \approx 116.4 \
 单 Token 单层所需存储与传输的标量仅为 $512 + 64 = 576$ 个浮点数。
 以 **DeepSeek-V3** 为例：总层数 $L = 61$。
 单 Token 全量历史 KV Cache 传输体积为：
-$$\text{Bytes}_{\text{MLA}} = 61 \times (576 \times 2) = 70,272 \text{ 字节} \approx 68.6 \text{ KB}$$
+$$\text{Bytes}_{\text{MLA}} = 61 \times (576 \times 2) = 70,272 \text{ 字节} \approx 68.6 \text{ KiB} \quad (70.27 \text{ KB})$$
 
 同样在 **16,384（16k）** 上下文下，单次请求需要传输的数据量骤降为：
-$$\text{Size}_{\text{MLA-16k}} = 68.6 \text{ KB} \times 16,384 \approx 1.12 \text{ GB}$$
+$$\text{Size}_{\text{MLA-16k}} = 70,272 \text{ B} \times 16,384 = 1,151,336,448 \text{ B} \approx 1.07 \text{ GiB} \quad (\approx 1.15 \text{ GB})$$
+
+在相同 $45 \text{ GB/s}$ 有效带宽下，传输耗时骤降至：
+$$T_{\text{net, MLA}} \approx \frac{1.15 \text{ GB}}{45 \text{ GB/s}} \approx 25.6 \text{ ms}$$
 
 ```text
 16k 上下文跨机传输数据量断崖式对比：
-┌─────────────────────────────────────────────────────────────┐
-│ 经典 GQA (LLaMA-3-70B):  ████████████████████ 5.24 GB (116ms)│
-│ DeepSeek MLA (671B):     ████ 1.12 GB (25ms, -78.6% 带宽开销)│
-└─────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────┐
+│ 经典 GQA (LLaMA-3-70B):  ████████████████████ 5.00 GiB / 5.37 GB (~119.3ms) │
+│ DeepSeek MLA (671B):     ████ 1.07 GiB / 1.15 GB (~25.6ms, -78.6% 带宽开销)  │
+└────────────────────────────────────────────────────────────────────┘
 ```
 
 **78.6% 的网络带宽开销被直接砍掉！**
@@ -193,13 +196,13 @@ sequenceDiagram
     D_NIC->>D_GPU: 4. PCIe 直写 D-Worker 目标 GPU 物理显存 (Zero-Copy)
     deactivate D_NIC
     
-    P_NIC-->>P_GPU: 5. 传输完成中断/轮询就绪 (CQE)
-    D_NIC-->>D_GPU: 6. 远程写入完成事件通知 (Immediate Data)
+    P_NIC-->>P_GPU: 5. 发送端完成事件 (Send CQE)
+    D_NIC-->>D_GPU: 6. 就绪信号通知 (尾标志位轮询/控制面信令，或 Write-with-Imm 触发轻量 CQE)
 ```
 
 GPUDirect RDMA 的核心精髓在于 **单边操作（One-Sided RDMA Write）** 与 **全链路硬件直通**：
 - **绕过 Host CPU 与主机内存**：P-Worker 的网卡（NIC）直接利用 PCIe 总线发起 Peer-to-Peer 传输，读取 P-GPU 显存；数据包穿过光纤到达 D-Worker 的网卡后，D-Worker 网卡同样通过 PCIe 直接将字节流打入 D-GPU 显存；
-- **单边操作（One-Sided）**：D-Worker 端的 CPU 和 GPU 在传输过程中完全不需要执行任何接收线程（无需执行 `recv()` 调用）。D-Worker 只需在请求初始化时将目标 PagedAttention 显存物理块注册（Memory Registration）并授权一个远程内存密钥（rkey），P-Worker 即可自行完成“隔空移物”；
+- **单边操作（One-Sided）**：D-Worker 只需在初始化阶段将目标 PagedAttention 显存物理块完成内存注册（Memory Registration）并授权远程访问密钥（`rkey`）。纯单边 `RDMA Write` 在直写数 GB 的 KV Cache 负载时无需目标端调用 `recv()`，写入完毕后可通过尾标志位轮询（Tail-Flag）或控制面元数据信令通知 D-Worker 就绪；若采用 `RDMA Write with Immediate`，则在保持 KV 数据零拷贝 DMA 直写的同时，仅消耗目标端一个预投递的轻量接收描述符（Receive WQE）以产生硬件完成队列（CQE）唤醒，全程无任何 CPU 负载拷贝；
 - **传输与计算重叠（Overlap）**：在分块流水线模式下，P-Worker 可以在计算第 $i+1$ 层的同时，将第 $i$ 层的 KV Cache 异步交由网卡推向远程 D 节点。
 
 ---
@@ -335,7 +338,7 @@ flowchart LR
 2. 它在**硬件拓扑**上倒逼了网络协议栈向 GPUDirect RDMA 硬件直通全面升级，使分布式显存池化成为可能；
 3. 它在**算法演进**上与 DeepSeek MLA、KDA 等低显存占用注意力机制形成了绝妙的协同互哺。
 
-掌握了 P/D 分离与分布式显存池化，我们便拥有了驾驭成百上千卡大规模集群的核心内功。在接下来的**专栏第九章**中，我们将正式推开生产级推理引擎的源码大门，直面当今开源世界最受瞩目的四座高山：**《主流生产级推理引擎架构横评与调度器内核拆解：vLLM v1 vs SGLang vs TensorRT-LLM vs llama.cpp》**，深度解密它们在 C++ 调度器、执行引擎与运行时设计上的终极对决。
+掌握了 P/D 分离与分布式显存池化，我们便拥有了驾驭成百上千卡大规模集群的核心内功。在接下来的**专栏第九章**中，我们将正式推开生产级推理引擎的源码大门，直面当今开源世界最受瞩目的四座高山：**《主流生产级推理引擎架构横评与调度器内核拆解：vLLM v1 vs SGLang vs TensorRT-LLM vs llama.cpp》**，深度解密它们在异步调度器、执行引擎与底层算子运行时设计上的终极对决。
 
 ---
 

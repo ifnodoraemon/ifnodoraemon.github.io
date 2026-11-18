@@ -186,8 +186,13 @@ spec:
         name: system:nodes
     resourceRules:
     - verbs: ["*"]
-      apiGroups: ["*"]
-      resources: ["nodes", "nodes/status", "leases"]
+      apiGroups: [""]
+      resources: ["nodes", "nodes/status"]
+      clusterScope: true
+    - verbs: ["*"]
+      apiGroups: ["coordination.k8s.io"]
+      resources: ["leases"]
+      namespaces: ["*"]
 ```
 
 ---
@@ -232,7 +237,7 @@ etcd 内部的写入包含两个截然不同的物理阶段：
 --heartbeat-interval=250      # 心跳间隔调高至 250ms
 --election-timeout=1250       # 选举超时设为 1250ms (防止网络偶发抖动引发反复选主)
 
-# 4. 单次请求包上限调整 (限制提交到 etcd 的请求大小，不控制 LIST 响应大小)
+# 4. 单次写请求包上限调整 (限制提交到 etcd 的入站 Put/Txn 请求大小，不控制出站 LIST 响应大小)
 --max-request-bytes=33554432  # 提升至 32MB
 ```
 

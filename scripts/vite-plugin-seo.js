@@ -1,6 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
+import matter from 'gray-matter';
+
+function escapeXml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
 
 function getAllHtmlFiles(dirPath, arrayOfFiles) {
   const files = fs.readdirSync(dirPath);
@@ -19,30 +29,32 @@ function getAllHtmlFiles(dirPath, arrayOfFiles) {
   return arrayOfFiles;
 }
 
-function getArticleDate(slug, rootDir, gitDates = {}) {
+function getArticleMeta(slug, isEn, rootDir, gitDates = {}) {
   const zhPath = path.join(rootDir, 'content', 'zh', 'articles', `${slug}.md`);
-  const enPath = path.join(rootDir, 'content', 'en', 'articles', `${slug}.md`);
-  const targetPath = fs.existsSync(zhPath) ? zhPath : (fs.existsSync(enPath) ? enPath : null);
+  const enPath = path.join(rootDir, 'content', 'en', 'articles', `${slug}.en.md`);
+  const preferredPath = isEn ? enPath : zhPath;
+  const targetPath = fs.existsSync(preferredPath) ? preferredPath : (fs.existsSync(zhPath) ? zhPath : (fs.existsSync(enPath) ? enPath : null));
+
+  let date = null;
+  let title = '';
+  let description = '';
 
   if (targetPath) {
     try {
       const content = fs.readFileSync(targetPath, 'utf-8');
-      const lastmodMatch = content.match(/^(?:lastmod|updated):\s*['"]?([0-9]{4}-[0-9]{2}-[0-9]{2})/m);
-      if (lastmodMatch) return lastmodMatch[1];
+      const { data: fm } = matter(content);
+      title = fm.title || '';
+      description = fm.description || '';
+      const rawDate = fm.lastmod || fm.updated || gitDates[slug] || fm.date;
+      if (rawDate) {
+        date = new Date(rawDate).toISOString().split('T')[0];
+      }
     } catch (_) {}
   }
 
-  if (gitDates[slug]) return gitDates[slug];
+  if (!date && gitDates[slug]) date = gitDates[slug];
 
-  if (targetPath) {
-    try {
-      const content = fs.readFileSync(targetPath, 'utf-8');
-      const match = content.match(/^date:\s*['"]?([0-9]{4}-[0-9]{2}-[0-9]{2})/m);
-      if (match) return match[1];
-    } catch (_) {}
-  }
-
-  return null;
+  return { date, title, description };
 }
 
 export default function seoPlugin({ hostname }) {
@@ -134,10 +146,12 @@ export default function seoPlugin({ hostname }) {
           priority = '0.8';
           changefreq = 'monthly';
           const slug = url.replace(/^\/en\/articles\/|^\/articles\/|\/$/g, '');
-          const articleDate = getArticleDate(slug, rootDir, gitDates);
-          if (articleDate) lastmod = articleDate;
+          const meta = getArticleMeta(slug, isEn, rootDir, gitDates);
+          if (meta.date) lastmod = meta.date;
           const langSegment = isEn ? 'en' : 'zh';
-          imageXml = `\n    <image:image>\n      <image:loc>${hostname}/og/${langSegment}/${slug}.png</image:loc>\n    </image:image>`;
+          const titleTag = meta.title ? `\n      <image:title>${escapeXml(meta.title)}</image:title>` : '';
+          const captionTag = meta.description ? `\n      <image:caption>${escapeXml(meta.description)}</image:caption>` : '';
+          imageXml = `\n    <image:image>\n      <image:loc>${hostname}/og/${langSegment}/${slug}.png</image:loc>${titleTag}${captionTag}\n    </image:image>`;
         } else if (url === '/about/' || url === '/en/about/' || url === '/projects/' || url === '/en/projects/') {
           priority = '0.7';
           changefreq = 'monthly';
