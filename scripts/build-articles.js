@@ -73,6 +73,7 @@ const SERIES_DEFINITIONS = {
       'vllm-serving-guide',
       'deepseek-v4-kimi-k3-deployment-guide',
       'deepinfer-deepseek-recipe-architecture',
+      'heterogeneous-npu-llm-serving-ascend-mindie-migration',
       'reasoning-test-time-compute-inference-future',
     ],
   },

@@ -814,7 +814,7 @@ vllm serve /models/Qwen2.5-72B-Instruct \
 4. **Measure cache savings empirically**: Track `cached_tokens` together with GPU time and total serving cost, optimizing static prefix layout and affinity routing.
 5. **Bill at the gateway**: Keep vLLM unmodified and intercept `usage` cleanly at the gateway middleware layer.
 
-Stay updated via [official docs](https://docs.vllm.ai/) and [GitHub Releases](https://github.com/vllm-project/vllm/releases).
+Stay updated via [official docs](https://docs.vllm.ai/) and [GitHub Releases](https://github.com/vllm-project/vllm/releases). When extending production vLLM fleets across Huawei Ascend (`MindIE` / `vllm-ascend`) and Alibaba T-Head Zhenwu `PPU 810E` accelerators, continue to [Heterogeneous AI Serving: Migrating CUDA/vLLM to Ascend MindIE & Domestic NPUs](/en/articles/heterogeneous-npu-llm-serving-ascend-mindie-migration/).
 
 ---
 

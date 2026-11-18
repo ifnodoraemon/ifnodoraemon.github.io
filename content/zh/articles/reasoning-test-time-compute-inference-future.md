@@ -6,7 +6,7 @@ tag: 终局前瞻
 tagClass: tag-amber
 category: 推理系统
 series: llm-inference
-seriesOrder: 20
+seriesOrder: 21
 description: "说明变长思维链如何放大 KV Cache 占用，以及测试时计算、投机树调度和分层 KV 存储要在推理系统里解决什么问题。调度策略也要跟着改。"
 extraTags:
   - Test-Time Compute

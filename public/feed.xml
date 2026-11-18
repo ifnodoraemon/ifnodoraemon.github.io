@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/</link>
   <description>本站是大模型推理架构与系统工程笔记（更新至 2026.11）：覆盖 vLLM/SGLang/DeepInfer 推理、DeepSeek MLA、分布式 RL (verl)、Firecracker 沙箱、InfiniBand/NVL72 网络与前沿模型选型。</description>
   <language>zh-CN</language>
-  <pubDate>Wed, 18 Nov 2026 06:58:21 GMT</pubDate>
+  <pubDate>Wed, 18 Nov 2026 07:18:19 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>AI Agent 安全沙箱终极架构：从容器逃逸防御、Firecracker 微虚拟机毫秒级快照恢复到零信任环境隔离</title>
@@ -56,6 +56,16 @@
     <category>算子工程</category>
     <description>深入 GPU 寄存器、Shared Memory Bank 冲突与 CUDA Warp 原语，手写融合残差 RMSNorm + 动态 FP8 量化的 Triton 生产级算子并结合 Nsight 调优。</description>
     <enclosure url="https://blog.llmgo.top/og/zh/gpu-kernel-engineering-cuda-warp-triton-fused-ops.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>国产异构算力推理实战：从 CUDA/vLLM 迁移至昇腾 MindIE 与 PPU</title>
+    <link>https://blog.llmgo.top/articles/heterogeneous-npu-llm-serving-ascend-mindie-migration/</link>
+    <guid>https://blog.llmgo.top/articles/heterogeneous-npu-llm-serving-ascend-mindie-migration/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>异构算力</category>
+    <description>剖析达芬奇 Cube/Vector 架构与平头哥真武 PPU 810E 硬件差异，实战落地 MindIE 与 vllm-ascend 部署、msModelSlim W8A8 精度对齐、HCCL 调优及 K8s+GPUStack 混部。</description>
+    <enclosure url="https://blog.llmgo.top/og/zh/heterogeneous-npu-llm-serving-ascend-mindie-migration.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>K8s AI 推理编排：LeaderWorkerSet、推理网关与 KV 感知路由</title>

@@ -837,7 +837,7 @@ vllm serve /models/Qwen2.5-72B-Instruct \
 4. **缓存收益要实测**：持续追踪命中量、GPU 时间与业务成本，优化静态前缀与路由。
 5. **计费做在网关层**：不要改 vLLM 源码，在网关层拦截 `usage` 字段是最干净的方案。
 
-vLLM 的迭代速度极快（几乎每周都有新版本），建议持续关注其 [官方文档](https://docs.vllm.ai/) 和 [GitHub Releases](https://github.com/vllm-project/vllm/releases)。
+vLLM 的迭代速度极快（几乎每周都有新版本），建议持续关注其 [官方文档](https://docs.vllm.ai/) 和 [GitHub Releases](https://github.com/vllm-project/vllm/releases)。若需将线上 vLLM 服务进一步迁移适配至华为昇腾（`MindIE` / `vllm-ascend`）与阿里平头哥真武 `PPU 810E` 等国产异构算力集群，请继续阅读 [国产异构算力推理实战：从 CUDA/vLLM 迁移至昇腾 MindIE 与 PPU](/articles/heterogeneous-npu-llm-serving-ascend-mindie-migration/)。
 
 ---
 

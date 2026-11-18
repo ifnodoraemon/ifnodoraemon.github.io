@@ -5,7 +5,7 @@
   <link>https://blog.llmgo.top/en/</link>
   <description>Engineering notes on LLM inference (vLLM, SGLang, DeepInfer, MLA), distributed RL (verl), Firecracker Agent sandboxes, InfiniBand/NVL72 fabrics, and Nov 2026 frontier models.</description>
   <language>en</language>
-  <pubDate>Wed, 18 Nov 2026 06:58:21 GMT</pubDate>
+  <pubDate>Wed, 18 Nov 2026 07:18:19 GMT</pubDate>
   <atom:link href="https://blog.llmgo.top/en/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Architecting AI Agent Security Sandboxes: Container Escape Defense, Sub-15ms Firecracker MicroVM Snapshots, and Zero-Trust Isolation</title>
@@ -56,6 +56,16 @@
     <category>GPU Kernels</category>
     <description>Master GPU registers, Shared Memory bank conflicts, and CUDA warp shuffles, then build a production Triton fused Residual + RMSNorm + dynamic FP8 kernel.</description>
     <enclosure url="https://blog.llmgo.top/og/en/gpu-kernel-engineering-cuda-warp-triton-fused-ops.png" length="150000" type="image/png" />
+  </item>
+  <item>
+    <title>Heterogeneous AI Serving: Migrating CUDA/vLLM to Ascend MindIE &amp; Domestic NPUs</title>
+    <link>https://blog.llmgo.top/en/articles/heterogeneous-npu-llm-serving-ascend-mindie-migration/</link>
+    <guid>https://blog.llmgo.top/en/articles/heterogeneous-npu-llm-serving-ascend-mindie-migration/</guid>
+    <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+    <dc:creator>ifnodoraemon</dc:creator>
+    <category>Heterogeneous AI</category>
+    <description>First-principles guide to migrating LLM inference from CUDA/vLLM to Huawei Ascend (DaVinci Cube/Vector, MindIE, vllm-ascend, msModelSlim W8A8, HCCL) and Alibaba T-Head Zhenwu PPU 810E.</description>
+    <enclosure url="https://blog.llmgo.top/og/en/heterogeneous-npu-llm-serving-ascend-mindie-migration.png" length="150000" type="image/png" />
   </item>
   <item>
     <title>Kubernetes AI Serving: LeaderWorkerSet, Inference Gateway &amp; KV Routing</title>

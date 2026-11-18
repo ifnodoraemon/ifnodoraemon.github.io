@@ -1,14 +1,14 @@
 # 智算架构志 (LLM Systems Architecture)
 
 [![Live Site](https://img.shields.io/badge/Live_Site-blog.llmgo.top-6366f1?style=flat-square&logo=google-chrome)](https://blog.llmgo.top/)
-[![Bilingual Articles](https://img.shields.io/badge/Bilingual_Articles-78_Pairs_(156_Docs)-8b5cf6?style=flat-square)](https://blog.llmgo.top/articles/)
+[![Bilingual Articles](https://img.shields.io/badge/Bilingual_Articles-79_Pairs_(158_Docs)-8b5cf6?style=flat-square)](https://blog.llmgo.top/articles/)
 [![Curated Series](https://img.shields.io/badge/Curated_Series-5_Complete_Tracks-06b6d4?style=flat-square)](https://blog.llmgo.top/articles/)
 [![Technical SEO](https://img.shields.io/badge/Google_SEO-100%2F100-10b981?style=flat-square&logo=google)](https://blog.llmgo.top/)
 [![Robots.txt](https://img.shields.io/badge/Robots.txt-RFC_9309-blue?style=flat-square)](https://blog.llmgo.top/robots.txt)
 [![IndexNow](https://img.shields.io/badge/IndexNow-Enabled-0ea5e9?style=flat-square)](https://blog.llmgo.top/sitemap.xml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-Welcome to **LLM Systems Architecture (智算架构志)** — a bilingual (ZH/EN) systems engineering publication organizing **all 78 deep-dive technical articles (156 bilingual Markdown documents, 0 orphan standalone posts)** into **5 textbook-grade, end-to-end engineering series**.
+Welcome to **LLM Systems Architecture (智算架构志)** — a bilingual (ZH/EN) systems engineering publication organizing **all 79 deep-dive technical articles (158 bilingual Markdown documents, 0 orphan standalone posts)** into **5 textbook-grade, end-to-end engineering series**.
 
 🌐 **Live Blog (Chinese):** [blog.llmgo.top](https://blog.llmgo.top/)  
 🌐 **English Portal:** [blog.llmgo.top/en/](https://blog.llmgo.top/en/)  
@@ -17,12 +17,12 @@ Welcome to **LLM Systems Architecture (智算架构志)** — a bilingual (ZH/EN
 
 ---
 
-## 📚 Five Complete Curated Engineering Series (五大全闭环体系专栏 · 共 78 篇)
+## 📚 Five Complete Curated Engineering Series (五大全闭环体系专栏 · 共 79 篇)
 
-### 1. ⚡ 《大模型推理系统全栈：从算子内核、压缩加速到超节点部署》 (`llm-inference` · 20 Chapters)
-*GPU Driver Stack → Roofline → PagedAttention → Continuous Batching → RadixAttention → **CUDA/Triton Fused Kernels** → FlashAttention/FlashInfer → MLA & KDA/CSA → Quantization (FP8/INT4) → EAGLE-3 Speculative Decoding → MoE EP → P/D Disaggregation → Engine Internals → vLLM Prod → 32-GPU Debugging → DeepInfer Supernodes → Reasoning Endgame.*
+### 1. ⚡ 《大模型推理系统全栈：从算子内核、压缩加速到超节点部署》 (`llm-inference` · 21 Chapters)
+*GPU Driver Stack → Roofline → PagedAttention → Continuous Batching → RadixAttention → **CUDA/Triton Fused Kernels** → FlashAttention/FlashInfer → MLA & KDA/CSA → Quantization (FP8/INT4) → EAGLE-3 Speculative Decoding → MoE EP → P/D Disaggregation → Engine Internals → vLLM Prod → 32-GPU Debugging → DeepInfer Supernodes → **Ascend MindIE & Zhenwu PPU Heterogeneous Serving** → Reasoning Endgame.*
 
-* Start Reading: [Ch 01 · NVIDIA GPU 驱动栈](https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/) · [Ch 02 · Roofline 模型](https://blog.llmgo.top/articles/inference-roofline-prefill-decode/) · [Ch 06 · CUDA & Triton 融合算子实战](https://blog.llmgo.top/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/) · [Ch 19 · DeepInfer 超节点推理栈](https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/)
+* Start Reading: [Ch 01 · NVIDIA GPU 驱动栈](https://blog.llmgo.top/articles/nvidia-gpu-package-architecture/) · [Ch 06 · CUDA & Triton 融合算子实战](https://blog.llmgo.top/articles/gpu-kernel-engineering-cuda-warp-triton-fused-ops/) · [Ch 19 · DeepInfer 超节点推理栈](https://blog.llmgo.top/articles/deepinfer-deepseek-recipe-architecture/) · [Ch 20 · 昇腾 MindIE 与真武 PPU 异构推理实战](https://blog.llmgo.top/articles/heterogeneous-npu-llm-serving-ascend-mindie-migration/)
 
 ### 2. 🧬 《大模型分布式训练、强化学习对齐与评估工程手册》 (`llm-post-training` · 12 Chapters)
 *Prompting & Multimodal Baselines → Enterprise RAG → LoRA/QLoRA Fine-Tuning → **4D Distributed Training (`ZeRO/FSDP2`, `TP/SP`, `1F1B/DualPipe`, `ZigZag CP`)** → `GRPO` Critic-Free RL → **`verl` Rollout-Training Colocation & Async Rollouts** → Evals → Nov 2026 Frontier Benchmarks.*
